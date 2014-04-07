@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="fix bug described in  SSP-2301 postgresql" author="tony.arland" dbms="postgresql">
+    	<!-- back up the table in case all heck breaks loose -->
+		<sql>
+			create table map_term_note_SSP_2303_bak as select * from map_term_note
+		</sql>
+    	<!-- first pass templates-->
+    	<sql>
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                template_id, 
+                contact_notes,
+                is_important, 
+                student_notes 
+         FROM   map_term_note 
+         where template_id is not null
+         GROUP  BY term_code, 
+                   template_id,
+				   is_important, 	
+                   contact_notes, 
+                   student_notes) 
+---- 
+delete from map_term_note where template_id is not null and id in (
+SELECT id 
+FROM   map_term_note note2 
+       JOIN (SELECT Min(temp1.combo_count) AS min_count, 
+                    note.term_code, 
+                    note.template_id 
+             FROM   map_term_note note 
+                    JOIN counts_temp AS temp1 
+                      ON temp1.term_code = note.term_code 
+                         AND temp1.template_id = note.template_id 
+                         AND temp1.contact_notes = note.contact_notes 
+                         AND temp1.student_notes = note.student_notes 
+                         AND temp1.is_important = note.is_important 
+                         
+             GROUP  BY note.term_code, 
+                       note.template_id) minCount 
+         ON note2.term_code = minCount.term_code 
+            AND note2.template_id = minCount.template_id 
+       JOIN counts_temp AS temp2 
+         ON temp2.term_code = note2.term_code 
+            AND temp2.template_id = note2.template_id 
+            AND temp2.contact_notes = note2.contact_notes 
+            AND temp2.student_notes = note2.student_notes 
+            AND temp2.is_important = note2.is_important             
+WHERE  minCount.term_code = note2.term_code 
+       AND minCount.template_id = note2.template_id 
+       AND minCount.min_count = temp2.combo_count 
+       AND note2.template_id IS NOT NULL 
+       AND minCount.term_code = temp2.term_code 
+       AND minCount.template_id = temp2.template_id 
+       order by modified_date desc    	)	
+    	</sql>
+    	
+    	<!-- second pass templates -->
+    	<sql>
+
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                template_id 
+         FROM   map_term_note 
+         WHERE  template_id IS NOT NULL 
+         GROUP  BY term_code, 
+                   template_id) 
+----  
+DELETE FROM map_term_note 
+WHERE  template_id IS NOT NULL 
+       AND id NOT IN (SELECT Cast(max_id AS UUID) 
+                      FROM   (SELECT Max(Cast(note.id AS VARCHAR)) AS max_id, 
+                                     note.term_code, 
+                                     note.template_id 
+                              FROM   map_term_note note, 
+                                     counts_temp temp 
+                              WHERE  temp.term_code = note.term_code 
+                                     AND temp.template_id = note.template_id 
+                              GROUP  BY note.term_code, 
+                                        note.template_id) AS max_temp)     	
+    	</sql>
+    	<!-- first pass plans -->
+    	<sql>
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                plan_id, 
+                contact_notes, 
+                is_important,
+                student_notes 
+         FROM   map_term_note 
+         where plan_id is not null
+         GROUP  BY term_code, 
+                   plan_id, 
+                   is_important,
+                   contact_notes, 
+                   student_notes) 
+---- 
+delete from map_term_note where plan_id is not null and id in (
+SELECT id 
+FROM   map_term_note note2 
+       JOIN (SELECT Min(temp1.combo_count) AS min_count, 
+                    note.term_code, 
+                    note.plan_id 
+             FROM   map_term_note note 
+                    JOIN counts_temp AS temp1 
+                      ON temp1.term_code = note.term_code 
+                         AND temp1.plan_id = note.plan_id 
+                         AND temp1.contact_notes = note.contact_notes 
+                         AND temp1.student_notes = note.student_notes 
+                         AND temp1.is_important = note.is_important                          
+             GROUP  BY note.term_code, 
+                       note.plan_id) minCount 
+         ON note2.term_code = minCount.term_code 
+            AND note2.plan_id = minCount.plan_id 
+       JOIN counts_temp AS temp2 
+         ON temp2.term_code = note2.term_code 
+            AND temp2.plan_id = note2.plan_id 
+            AND temp2.contact_notes = note2.contact_notes 
+            AND temp2.student_notes = note2.student_notes 
+            AND temp2.is_important = note2.is_important                                      
+WHERE  minCount.term_code = note2.term_code 
+       AND minCount.plan_id = note2.plan_id 
+       AND minCount.min_count = temp2.combo_count 
+       AND note2.plan_id IS NOT NULL 
+       AND minCount.term_code = temp2.term_code 
+       AND minCount.plan_id = temp2.plan_id 
+       order by modified_date desc    	)	
+    	</sql>
+    	
+    	<!-- second pass templates -->
+    	<sql>
+
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                plan_id 
+         FROM   map_term_note 
+         WHERE  plan_id IS NOT NULL 
+         GROUP  BY term_code, 
+                   plan_id) 
+----  
+DELETE FROM map_term_note 
+WHERE  plan_id IS NOT NULL 
+       AND id NOT IN (SELECT Cast(max_id AS UUID) 
+                      FROM   (SELECT Max(Cast(note.id AS VARCHAR)) AS max_id, 
+                                     note.term_code, 
+                                     note.plan_id 
+                              FROM   map_term_note note, 
+                                     counts_temp temp 
+                              WHERE  temp.term_code = note.term_code 
+                                     AND temp.plan_id = note.plan_id 
+                              GROUP  BY note.term_code, 
+                                        note.plan_id) AS max_temp)     	
+    	</sql>    	
+    </changeSet>
+    <changeSet id="fix bug described in  SSP-2301 mssql" author="tony.arland" dbms="mssql">
+    	<!-- back up the table in case all heck breaks loose -->
+	   	<sql>
+    		select * into mtn_SSP_2303_bak  from map_term_note
+    	</sql>
+    	<!-- first pass templates-->
+    	<sql>
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                template_id, 
+                contact_notes, 
+                student_notes 
+         FROM   map_term_note 
+         GROUP  BY term_code, 
+                   template_id, 
+                   contact_notes, 
+                   student_notes) 
+---- 
+delete from map_term_note where template_id is not null and id not in (
+SELECT id 
+FROM   map_term_note note2 
+       JOIN (SELECT Min(temp1.combo_count) AS min_count, 
+                    note.term_code, 
+                    note.template_id 
+             FROM   map_term_note note 
+                    JOIN counts_temp AS temp1 
+                      ON temp1.term_code = note.term_code 
+                         AND temp1.template_id = note.template_id 
+                         AND temp1.contact_notes = note.contact_notes 
+                         AND temp1.student_notes = note.student_notes 
+             GROUP  BY note.term_code, 
+                       note.template_id) minCount 
+         ON note2.term_code = minCount.term_code 
+            AND note2.template_id = minCount.template_id 
+       JOIN counts_temp AS temp2 
+         ON temp2.term_code = note2.term_code 
+            AND temp2.template_id = note2.template_id 
+            AND temp2.contact_notes = note2.contact_notes 
+            AND temp2.student_notes = note2.student_notes 
+WHERE  minCount.term_code = note2.term_code 
+       AND minCount.template_id = note2.template_id 
+       AND minCount.min_count = temp2.combo_count 
+       AND note2.template_id IS NOT NULL 
+       AND minCount.term_code = temp2.term_code 
+       AND minCount.template_id = temp2.template_id 
+           	)	
+    	</sql> 
+    	<!-- second pass templates -->
+    	<sql>
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                template_id 
+         FROM   map_term_note 
+         WHERE  template_id IS NOT NULL 
+         GROUP  BY term_code, 
+                   template_id) 
+----  
+DELETE FROM map_term_note 
+WHERE  template_id IS NOT NULL 
+       AND id NOT IN (SELECT Cast(max_id AS uniqueidentifier) 
+                      FROM   (SELECT Max(Cast(note.id AS VARCHAR)) AS max_id, 
+                                     note.term_code, 
+                                     note.template_id 
+                              FROM   map_term_note note, 
+                                     counts_temp temp 
+                              WHERE  temp.term_code = note.term_code 
+                                     AND temp.template_id = note.template_id 
+                              GROUP  BY note.term_code, 
+                                        note.template_id) AS max_temp)     	
+    	</sql> 
+    	<!-- first pass plans-->
+    	<sql>
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                plan_id, 
+                contact_notes, 
+                student_notes 
+         FROM   map_term_note 
+         GROUP  BY term_code, 
+                   plan_id, 
+                   contact_notes, 
+                   student_notes) 
+---- 
+delete from map_term_note where plan_id is not null and id not in (
+SELECT id 
+FROM   map_term_note note2 
+       JOIN (SELECT Min(temp1.combo_count) AS min_count, 
+                    note.term_code, 
+                    note.plan_id 
+             FROM   map_term_note note 
+                    JOIN counts_temp AS temp1 
+                      ON temp1.term_code = note.term_code 
+                         AND temp1.plan_id = note.plan_id 
+                         AND temp1.contact_notes = note.contact_notes 
+                         AND temp1.student_notes = note.student_notes 
+             GROUP  BY note.term_code, 
+                       note.plan_id) minCount 
+         ON note2.term_code = minCount.term_code 
+            AND note2.plan_id = minCount.plan_id 
+       JOIN counts_temp AS temp2 
+         ON temp2.term_code = note2.term_code 
+            AND temp2.plan_id = note2.plan_id 
+            AND temp2.contact_notes = note2.contact_notes 
+            AND temp2.student_notes = note2.student_notes 
+WHERE  minCount.term_code = note2.term_code 
+       AND minCount.plan_id = note2.plan_id 
+       AND minCount.min_count = temp2.combo_count 
+       AND note2.plan_id IS NOT NULL 
+       AND minCount.term_code = temp2.term_code 
+       AND minCount.plan_id = temp2.plan_id 
+           	)	
+    	</sql> 
+    	<!-- second pass plans -->
+    	<sql>
+WITH counts_temp 
+     AS (SELECT Count(*) AS combo_count, 
+                term_code, 
+                plan_id 
+         FROM   map_term_note 
+         WHERE  plan_id IS NOT NULL 
+         GROUP  BY term_code, 
+                   plan_id) 
+----  
+DELETE FROM map_term_note 
+WHERE  plan_id IS NOT NULL 
+       AND id NOT IN (SELECT Cast(max_id AS uniqueidentifier) 
+                      FROM   (SELECT Max(Cast(note.id AS VARCHAR)) AS max_id, 
+                                     note.term_code, 
+                                     note.plan_id 
+                              FROM   map_term_note note, 
+                                     counts_temp temp 
+                              WHERE  temp.term_code = note.term_code 
+                                     AND temp.plan_id = note.plan_id 
+                              GROUP  BY note.term_code, 
+                                        note.plan_id) AS max_temp)     	
+    	</sql>    	     	   	   	
+    </changeSet>
+</databaseChangeLog>
