@@ -8,7 +8,7 @@ import org.jasig.ssp.transferobject.EarlyAlertResponseTO;
 public class EarlyAlertResponseMessageTemplateTO extends EarlyAlertResponseTO {
 
 	private static final long serialVersionUID = 1L;
-	private CoachPersonLiteTO creator;
+	private CoachPersonLiteMessageTemplateTO creator;
 	
 	public EarlyAlertResponseMessageTemplateTO() {
 	}
@@ -16,14 +16,14 @@ public class EarlyAlertResponseMessageTemplateTO extends EarlyAlertResponseTO {
 
 	public EarlyAlertResponseMessageTemplateTO(EarlyAlertResponse model, final Person creator) {
 		super(model);
-		this.creator = new CoachPersonLiteTO(creator);
+		this.creator = new CoachPersonLiteMessageTemplateTO(creator);
 	}
 
-	public CoachPersonLiteTO getCreator() {
+	public CoachPersonLiteMessageTemplateTO getCreator() {
 		return creator;
 	}
 
-	public void setCreator(CoachPersonLiteTO creator) {
+	public void setCreator(CoachPersonLiteMessageTemplateTO creator) {
 		this.creator = creator;
 	}
 

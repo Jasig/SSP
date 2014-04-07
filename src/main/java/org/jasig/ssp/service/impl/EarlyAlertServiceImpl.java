@@ -67,6 +67,7 @@ import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
@@ -660,9 +661,29 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				}
 			}
 		}
-
-		templateParameters.put("earlyAlert", earlyAlert);
+		Person creator = null;
+		try{
+			creator = personService.get(earlyAlert.getCreatedBy());
+		}catch(ObjectNotFoundException exp)	{
+			LOGGER.error("Early Alert Creator Not found sending message for early alert:" + earlyAlert.getId(), exp);
+		}
+		
+		EarlyAlertMessageTemplateTO eaMTO = new EarlyAlertMessageTemplateTO(earlyAlert,creator);
+		
+		//Only early alerts response late messages sent to coaches
+		if(eaMTO.getCoach() == null){
+			try{
+				// if no earlyAlert.getCampus()  error thrown by design, should never not be a campus.
+				eaMTO.setCoach(new CoachPersonLiteMessageTemplateTO(personService.get(earlyAlert.getCampus().getEarlyAlertCoordinatorId())));
+			}catch(ObjectNotFoundException exp){
+				LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
+			}
+		}
+		
+		templateParameters.put("earlyAlert", eaMTO);
 		templateParameters.put("termToRepresentEarlyAlert",
+				configService.getByNameEmpty("term_to_represent_early_alert"));
+		templateParameters.put("TermToRepresentEarlyAlert",
 				configService.getByNameEmpty("term_to_represent_early_alert"));
 		templateParameters.put("linkToSSP",
 				configService.getByNameEmpty("serverExternalPath"));
@@ -670,6 +691,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				configService.getByNameEmpty("app_title"));
 		templateParameters.put("institutionName",
 				configService.getByNameEmpty("inst_name"));
+		
+		templateParameters.put("FirstName", eaMTO.getPerson().getFirstName());
+		templateParameters.put("LastName", eaMTO.getPerson().getLastName());
+		templateParameters.put("CourseName", eaMTO.getCourseName());
 
 		return templateParameters;
 	}

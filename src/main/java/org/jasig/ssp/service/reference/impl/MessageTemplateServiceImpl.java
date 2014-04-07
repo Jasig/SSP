@@ -44,6 +44,7 @@ import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +151,7 @@ public class MessageTemplateServiceImpl extends
 	}
 
 	@Override
-	public SubjectAndBody createActionPlanStepMessage(final Task task) {
+	public SubjectAndBody createActionPlanStepMessage(final TaskMessageTemplateTO task) {
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("task", task);
 		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));
@@ -159,7 +160,7 @@ public class MessageTemplateServiceImpl extends
 	}
 
 	@Override
-	public SubjectAndBody createCustomActionPlanTaskMessage(final Task task) {
+	public SubjectAndBody createCustomActionPlanTaskMessage(final TaskMessageTemplateTO task) {
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("task", task);
 		messageParams.put("dueDateFormatted", formatDate(task.getDueDate()));

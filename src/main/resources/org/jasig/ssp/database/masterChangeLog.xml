@@ -232,4 +232,6 @@
 
 	<!-- Temporarily removed pending additional discussion of tie-breaks in SSP-2303 -->
 	<!--include file="org/jasig/ssp/database/changesets/000116.xml" /-->	
+	
+	<include file="org/jasig/ssp/database/changesets/000117.xml" />
 </databaseChangeLog>

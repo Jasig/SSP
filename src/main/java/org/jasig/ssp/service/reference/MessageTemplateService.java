@@ -35,6 +35,7 @@ import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 
@@ -47,9 +48,9 @@ public interface MessageTemplateService extends
 	SubjectAndBody createContactCoachMessage(String body, String subject,
 			Person student);
 
-	SubjectAndBody createActionPlanStepMessage(final Task task);
+	SubjectAndBody createActionPlanStepMessage(final TaskMessageTemplateTO task);
 
-	SubjectAndBody createCustomActionPlanTaskMessage(final Task task);
+	SubjectAndBody createCustomActionPlanTaskMessage(final TaskMessageTemplateTO task);
 
 	SubjectAndBody createActionPlanMessage(Person student,
 			List<TaskTO> taskTOs, List<GoalTO> goalTOs,  List<StrengthTO> strengthTOs);

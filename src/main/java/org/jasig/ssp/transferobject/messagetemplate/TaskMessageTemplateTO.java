@@ -2,27 +2,38 @@ package org.jasig.ssp.transferobject.messagetemplate;
 
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.model.Task;
+import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.TaskTO;
 
-public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
+public class TaskMessageTemplateTO extends TaskTO {
 
-
-	private static final long serialVersionUID = 1432740352046594692L;
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7548769326538860374L;
+
 	private CoachPersonLiteMessageTemplateTO person;
 	
 	private CoachPersonLiteMessageTemplateTO coach;
 	
 	private CoachPersonLiteMessageTemplateTO creator;
 	
-	public EarlyAlertMessageTemplateTO(EarlyAlert earlyAlert, Person creator) {
-		super(earlyAlert);
-		if(creator != null)
-			this.creator = new CoachPersonLiteMessageTemplateTO(creator);
+	public TaskMessageTemplateTO() {
 	}
 
-	public EarlyAlertMessageTemplateTO(EarlyAlert earlyAlert) {
-		super(earlyAlert);
+	public TaskMessageTemplateTO(Task task) {
+		super(task);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public TaskMessageTemplateTO(Task task, Person creator) {
+		super(task);
+		if(creator != null)
+		this.creator = new CoachPersonLiteMessageTemplateTO(creator);
 	}
 	
 	public CoachPersonLiteMessageTemplateTO getPerson() {
@@ -50,7 +61,7 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 	}
 
 	@Override
-	public final void from(EarlyAlert model){
+	public final void from(Task model){
 		super.from(model);
 		person = new CoachPersonLiteMessageTemplateTO(model.getPerson());
 		if(model.getPerson().getCoach() != null){

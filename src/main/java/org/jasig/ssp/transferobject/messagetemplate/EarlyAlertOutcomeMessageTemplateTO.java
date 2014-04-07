@@ -9,7 +9,7 @@ import org.jasig.ssp.transferobject.reference.EarlyAlertOutcomeTO;
 
 public class EarlyAlertOutcomeMessageTemplateTO extends EarlyAlertOutcomeTO {
 
-	private CoachPersonLiteTO creator;
+	private CoachPersonLiteMessageTemplateTO creator;
 	
 	public EarlyAlertOutcomeMessageTemplateTO() {
 		// TODO Auto-generated constructor stub
@@ -28,14 +28,14 @@ public class EarlyAlertOutcomeMessageTemplateTO extends EarlyAlertOutcomeTO {
 
 	public EarlyAlertOutcomeMessageTemplateTO(EarlyAlertOutcome model, Person creator) {
 		super(model);
-		this.setCreator(new CoachPersonLiteTO(creator));
+		this.setCreator(new CoachPersonLiteMessageTemplateTO(creator));
 	}
 
-	public CoachPersonLiteTO getCreator() {
+	public CoachPersonLiteMessageTemplateTO getCreator() {
 		return creator;
 	}
 
-	public void setCreator(CoachPersonLiteTO creator) {
+	public void setCreator(CoachPersonLiteMessageTemplateTO creator) {
 		this.creator = creator;
 	}
 

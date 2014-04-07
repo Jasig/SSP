@@ -46,6 +46,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TaskMessageEnqueueService;
 import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
@@ -57,6 +58,7 @@ import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailAddress;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
+import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.DateTimeUtils;
@@ -86,6 +88,9 @@ public class TaskServiceImpl
 
 	@Autowired
 	private transient MessageService messageService;
+	
+	@Autowired
+	private transient PersonService personService;
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
@@ -425,12 +430,13 @@ public class TaskServiceImpl
 
 
 		SubjectAndBody subjAndBody;
+		Person creator = personService.get(task.getCreatedBy());
 		if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
 			subjAndBody = messageTemplateService
-					.createCustomActionPlanTaskMessage(task);
+					.createCustomActionPlanTaskMessage(new TaskMessageTemplateTO(task, creator));
 		} else {
 			subjAndBody = messageTemplateService
-					.createActionPlanStepMessage(task);
+					.createActionPlanStepMessage(new TaskMessageTemplateTO(task, creator));
 		}
 
 		Message message = messageService.createMessage(task.getPerson(), null,

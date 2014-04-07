@@ -283,6 +283,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 					course.setFacultyName(person.getFullName());
 			}catch(ObjectNotFoundException e)
 			{
+				course.setFacultyName("None Listed");
 				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
 			}
 			

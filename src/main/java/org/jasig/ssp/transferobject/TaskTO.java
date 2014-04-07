@@ -79,7 +79,7 @@ public class TaskTO
 	}
 
 	@Override
-	public final void from(final Task task) {
+	public void from(final Task task) {
 		super.from(task);
 
 		type = task.getType();

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="Update Action Plan Step Email body handle nulls" author="jim.stanley">
+         <!--<preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="aec07252-1ff0-479d-a2ef-c0e017e1c05d"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition>
+        </preConditions>-->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="aec07252-1ff0-479d-a2ef-c0e017e1c05d"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[
+                <html><body>
+                ${task.person.firstName},
+                <br/>An Action Item identified through the ${institutionName} ${applicationTitle} application needs your attention. #if($!{linkToSSP})Please login to your account at <a href="$!{linkToSSP}">$!{linkToSSP}</a> to review and complete the assigned item.#end
+                <br/><br/>The following item is due for review:
+                #if ( ${task.name} && ${task.name.trim()} != "" )
+                        Task: ${task.name}<br/>
+                   #else
+                        Task: Custom Task <br/>
+                #end
+                #if(${task.description} && ${task.description.trim()} != "" )Description: $!{task.description}<br/>#end
+                #if(${task.challenge.name} && ${task.challenge.name.trim()} != "" )<br/>Challenge: ${task.challenge.name}#end
+                #if(${task.challengeReferral.name} && ${task.challengeReferral.name.trim()} != "" )<br/>Referral: ${task.challengeReferral.name}<br/>#end
+                #if(${task.link} && ${task.link.trim()} != "" )Link: ${task.link}<br/>#end
+                #if(${dueDateFormatted} && ${dueDateFormatted} != "" )Due Date: ${dueDateFormatted}#end
+                 </body></html>
+                ]]></param>
+            </customChange>
+    </changeSet>
+    
+    <changeSet id="Update Action Plan Email body to handle nulls" author="jim.stanley">
+        <!-- <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="5d183f35-023d-40ea-b8d9-66fbe190fffb"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>-->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="5d183f35-023d-40ea-b8d9-66fbe190fffb"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>Dear ${fullName},<br/><br/>
+                The following resources and goals have been identified to assist with achieving your success.<br/><br/><br/>
+                #foreach($taskTO in $taskTOs)
+                    <b>Resource:</b> ${taskTO.name}<br/>
+                    #if(${taskTO.description} && ${taskTO.description.trim()} != "" )<b>Description:</b> ${taskTO.description}<br/>#end
+                    #if(${taskTO.link} && ${taskTO.link.trim()} != "" )<b>Link:</b> ${taskTO.link}<br/>#end
+                #end <br/>
+                #if($goalTOs && $goalTOs.size() > 0)
+                    #foreach($goalTO in $goalTOs)
+                        <b>Goal:</b> ${goalTO.name}<br/>
+                        #if(${goalTO.description} && ${goalTO.description.trim()} != "" )<b>Description:</b> ${goalTO.description}<br/>#end
+                    #end 
+                #end<br/>
+                #if($strengthTOs && $strengthTOs.size() > 0)
+                    #foreach($strengthTO in $strengthTOs)
+                        <b>Strength:</b> ${strengthTO.name}<br/>
+                        #if(${strengthTO.description} && ${strengthTO.description.trim()} != "" )<b>Description:</b> ${strengthTO.description}<br/>#end
+                    #end<br/>
+                #end
+                If you have any questions concerning the resources or goals, please contact the resource in question or your coach/advisor.<br/><br/>
+                Thank you.</body></html>]]></param>
+            </customChange>
+    </changeSet>
+    
+    
+    <changeSet id="Update EA Sent to Student to handle nulls move to TO" author="jim.stanley">
+        <!-- <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f8ef40e"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>-->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f8ef40e"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>
+                                    <p>Dear $earlyAlert.person.getFullName()</p>
+                        <p>Your instructor for #if( $earlyAlert.courseName )$earlyAlert.courseName#else<COURSE NAME UNAVAILABLE>#end notified me that you are experiencing issues that might affect your success#if( $institutionName ) at $institutionName#end. An academic advisor, counselor or coach will contact you soon to discuss your situation.</p>
+                        <table>
+                        <tr><th>Instructor</th><td>$earlyAlert.creator.getFullName()</td></tr>
+                        #if( $earlyAlert.creator.workPhone )<tr><th>Phone</th><td>$earlyAlert.creator.workPhone</td></tr>#end
+                        #if( $earlyAlert.creator.primaryEmailAddress )<tr><th>Email</th><td>$earlyAlert.creator.primaryEmailAddress</td></tr>
+                        #elseif( $earlyAlert.creator.secondaryEmailAddress )
+                            <tr><th>Email</th><td>$earlyAlert.creator.secondaryEmailAddress</td></tr>
+                        #end
+                        </table>
+                    <p>We value you as a student #if( $institutionName ) at $institutionName#end and want to support your success. If you have not been contacted by someone within a week, please feel free to speak with me.</p>
+                    <p>Sincerely,</p>
+                    #if($!earlyAlert.coach)
+                    <p>$!earlyAlert.coach.getfullName()<br />
+                    #if( $earlyAlert.coach.title ) $!earlyAlert.coach.title<br/>#end
+                    #if( $earlyAlert.coach.officeLocation )$earlyAlert.coach.officeLocation<br />#end
+                    #if( $earlyAlert.coach.workPhone )$earlyAlert.coach.workPhone<br />#end
+                     #if( $earlyAlert.coach.primaryEmailAddress )$earlyAlert.coach.primaryEmailAddress
+                     #elseif( $earlyAlert.coach.secondaryEmailAddress )$earlyAlert.coach.secondaryEmailAddress#end
+                     </p>
+                     #end
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>]]></param>
+            </customChange>
+    </changeSet>
+    
+     <changeSet id="Update EA Sent to Student to handle nulls move TO subject" author="jim.stanley">
+        <!-- <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f8ef40e"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>-->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f8ef40e"/>
+                <param name="columnName" value="subject"/>
+                <param name="columnValue" value="Student $!TermToRepresentEarlyAlert Notice - $!FirstName $!LastName : $!CourseName"/>
+            </customChange>
+    </changeSet>
+
+     <changeSet id="Update EA Conformation nulls and move to TO subject" author="jim.stanley">
+        <!-- <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f8ef40e"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>-->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-09eb5f8ef55f"/>
+                <param name="columnName" value="subject"/>
+                <param name="columnValue" value="Student $!termToRepresentEarlyAlert Confirmation Notice - $earlyAlert.person.firstName $earlyAlert.person.lastName#if( $earlyAlert.courseName) : $earlyAlert.courseName#end"/>
+            </customChange>
+    </changeSet>
+
+    <changeSet id="Update EA Confirmation to Advisor to handle nulls move to TO" author="jim.stanley">
+        <!-- <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f7ee3fc"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition>
+        </preConditions> -->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f7ee3fc"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+
+<table>
+<tr><th>Student Name</th><td>$!earlyAlert.person.getFullName()</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>Student Phone</th><td>$!earlyAlert.person.homePhone</td></tr>
+<tr><th>Student Email</th><td>$!earlyAlert.person.primaryEmailAddress</td></tr>
+#if( $earlyAlert.person.addressLine1 || $earlyAlert.person.addressLine2)<tr><th>Address</th><td>$!earlyAlert.person.addressLine1, $!earlyAlert.person.addressLine2 $!earlyAlert.person.city, $!earlyAlert.person.state, $!earlyAlert.person.zipCode</td></tr>#end
+#if($!earlyAlert.courseName)<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>#end
+#if($earlyAlert.creator.getFullName())<tr><th>Instructor</th><td>$earlyAlert.creator.getFullName()</td></tr>#end
+<tr><th>Campus</th><td>$!earlyAlert.campus.name</td></tr>
+#if($!earlyAlert.creator.officeLocation)<tr><th>Instructor Office Location</th><td>$!earlyAlert.creator.officeLocation</td></tr>#end
+#if($!earlyAlert.creator.primaryEmailAddress)<tr><th>Instructor Email</th><td>$!earlyAlert.creator.primaryEmailAddress</td></tr>#end
+#if($!earlyAlert.creator.workPhone)<tr><th>Instructor Phone</th><td>$!earlyAlert.creator.workPhone</td></tr>#end
+<tr><th>Advisor</th><td>$!earlyAlert.coach.getFullName()</td></tr>
+</table>
+
+#if($earlyAlert.earlyAlertReasonTOs && $earlyAlert.earlyAlertReasonTOs.size() > 0)
+<p><b>Student has been identified by his/her instructor for the following reason:</b></p>
+<ul>
+#foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonTOs )
+<li>$earlyAlertReason.name</li>
+#end
+</ul>
+#end
+
+#if($earlyAlert.earlyAlertSuggestionTOs && $earlyAlert.earlyAlertSuggestionTOs.size() > 0)
+<p><b>The faculty suggestions are:</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionTOs )
+<li>$earlyAlertSuggestion.name</li>
+#end
+</ul>
+#end
+
+#if( $earlyAlert.comment )
+<p>
+******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+<p>
+#end
+
+<p>To access additional information or respond to this alert, log-in#if( $applicationTitle ) to $applicationTitle#end#if( $termForEarlyAlert ) and view the student&apos;s $termForEarlyAlert Tool#end.  $!linkToSSP </p>
+
+<p>Email generated by $!applicationTitle $!termForEarlyAlert</p>
+</body></html>]]></param>
+            </customChange>
+    </changeSet>
+    
+    
+    <changeSet id="Update EA Confirmation to Faculty to handle nulls move to TO" author="jim.stanley">
+        <!-- <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-09eb5f8ef55f"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>-->
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-09eb5f8ef55f"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>
+<p><b>STUDENT $!termToRepresentEarlyAlert SYSTEM MESSAGE</b></p>
+<table>
+<tr><th>Student Name</th><td>$!earlyAlert.person.getFullName()</td></tr>
+<tr><th>Student ID</th><td>$!earlyAlert.person.schoolId</td></tr>
+<tr><th>Student Phone</th><td>$!earlyAlert.person.homePhone</td></tr>
+<tr><th>Student Email</th><td>$!earlyAlert.person.primaryEmailAddress</td></tr>
+#if( $earlyAlert.person.addressLine1 || $earlyAlert.person.addressLine2)<tr><th>Address</th><td>$!earlyAlert.person.addressLine1, $!earlyAlert.person.addressLine2 $!earlyAlert.person.city, $!earlyAlert.person.state $!earlyAlert.person.zipCode</td></tr>#end
+#if($!earlyAlert.courseName)<tr><th>In the class</th><td>$!earlyAlert.courseName</td></tr>#end
+#if($earlyAlert.creator.getFullName())<tr><th>Instructor</th><td>$earlyAlert.creator.getFullName()</td></tr>#end
+<tr><th>Campus</th><td>$!earlyAlert.campus.name</td></tr>
+#if($!earlyAlert.creator.officeLocation)<tr><th>Instructor Office Location</th><td>$!earlyAlert.creator.officeLocation</td></tr>#end
+#if($!earlyAlert.creator.primaryEmailAddress)<tr><th>Instructor Email</th><td>$!earlyAlert.creator.primaryEmailAddress</td></tr>#end
+#if($!earlyAlert.creator.workPhone)<tr><th>Instructor Phone</th><td>$!earlyAlert.creator.workPhone</td></tr>#end
+<tr><th>Advisor</th><td>$!earlyAlert.coach.getFullName()</td></tr>
+</table>
+#if($earlyAlert.earlyAlertReasonTOs && $earlyAlert.earlyAlertReasonTOs.size() > 0)
+<p>Student has been identified by his/her instructor for the following reason:</ul>
+
+<ul>
+#foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonTOs )
+<li>$earlyAlertReason.name</li>
+#end
+</ul>
+#end
+#if($earlyAlert.earlyAlertSuggestionTOs && $earlyAlert.earlyAlertSuggestionTOs.size() > 0)
+<p><b>The faculty suggestions are</b></p>
+<ul>
+#foreach( $earlyAlertSuggestion in $earlyAlert.earlyAlertSuggestionTOs )
+<li>$earlyAlertSuggestion.name</li>
+#end
+</ul>
+#end
+
+#if( $earlyAlert.comment )
+<p>
+******************* INSTRUCTOR COMMENTS *******************
+<br />
+$earlyAlert.comment
+<br />
+******************* INSTRUCTOR COMMENTS *******************
+</p>
+#end
+
+
+<p>Email generated by $!institutionName $!applicationTitle $!termToRepresentEarlyAlert</p>
+
+<p>This is a system generated email. Please do not reply to this confirmation.</p>
+</body></html>]]></param>
+            </customChange>
+    </changeSet>
+</databaseChangeLog>

@@ -369,4 +369,8 @@ public class CoachPersonLiteTO implements Serializable {
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
 	}
+	
+	public String getFullName(){
+		return firstName + " " + lastName;
+	}
 }
