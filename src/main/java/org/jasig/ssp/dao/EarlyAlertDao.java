@@ -271,24 +271,28 @@ public class EarlyAlertDao extends
 
 		if(ids.size() <= 0)
 			return null;
-		
+		List<List<UUID>> batches = prepareBatches(ids);
+		List<EarlyAlertStudentReportTO> set = new ArrayList<EarlyAlertStudentReportTO>();
+		for(List<UUID> batch:batches){
 		final Criteria collectionQuery = createCriteria(sAndP);
 		
-		collectionQuery.add(Restrictions.in("id", ids));		
+			collectionQuery.add(Restrictions.in("id", batch));		
+			
+			ProjectionList projections = Projections.projectionList()
+				.add(Projections.countDistinct("id").as("earlyalert_total"))
+				.add(Projections.countDistinct("closedBy").as("earlyalert_closed"));
+			
+			addBasicStudentProperties(projections, collectionQuery); 
+			
+			projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
+			collectionQuery.setProjection(projections);
+			collectionQuery.setResultTransformer(
+					new NamespacedAliasToBeanResultTransformer(
+							EarlyAlertStudentReportTO.class, "earlyalert_"));
+				set.addAll(collectionQuery.list());
+		}
 		
-		ProjectionList projections = Projections.projectionList()
-			.add(Projections.countDistinct("id").as("earlyalert_total"))
-			.add(Projections.countDistinct("closedBy").as("earlyalert_closed"));
-		
-		addBasicStudentProperties(projections, collectionQuery); 
-		
-		projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
-		collectionQuery.setProjection(projections);
-		collectionQuery.setResultTransformer(
-				new NamespacedAliasToBeanResultTransformer(
-						EarlyAlertStudentReportTO.class, "earlyalert_"));
-		
-		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, (List<EarlyAlertStudentReportTO>)collectionQuery.list());
+		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, set);
 	}
 	
 	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
