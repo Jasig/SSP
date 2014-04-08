@@ -273,7 +273,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		buildBirthDate(personSearchRequest,filterTracker, stringBuilder);
 		
 		appendAndOrWhere(stringBuilder, filterTracker);
-		stringBuilder.append(" p.studentType != null ");
+		stringBuilder.append(" p.studentType is not null ");
 		stringBuilder.append(" and p.objectStatus = :activeObjectStatus ");
 		stringBuilder.append(" and programStatuses.expirationDate IS NULL");
 	}
@@ -454,7 +454,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
-			query.setEntity("currentTerm", currentTerm);
+			query.setString("currentTerm", currentTerm.getCode());
 		}
 		
 		if(hasMyPlans(personSearchRequest))
