@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.jasig.ssp.dao.external.ExternalCourseDao;
 import org.jasig.ssp.model.external.ExternalCourse;
-import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.service.external.ExternalCourseService;
 import org.jasig.ssp.transferobject.external.SearchExternalCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +55,16 @@ public class ExternalCourseServiceImpl extends AbstractExternalReferenceDataServ
 		//Shirt Circut:  As per SSP-1923.  If the is table is empty
 		//we assume the implementor does not want this validation and there for we will
 		//not spam the UI with validation errors in this case
-		if(!dao.hasCourseTerms())
+		if(!hasCourseTerms())
 		{
 			 return true;
 		}
 		return dao.validateCourseForTerm( courseCode,  termCode);
+	}
+
+	@Override
+	public Boolean hasCourseTerms() {
+		return dao.hasCourseTerms();
 	}
 
 	@Override
