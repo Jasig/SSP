@@ -172,22 +172,24 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				coursesByTerm.put(course.getTermCode(), termCourses);
 			}
 		}
-		for(Map.Entry<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> entry: coursesByTerm.entrySet()){
-			final String termCode = entry.getKey();
-			final List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> coursesInTerm = entry.getValue();
-			final List<String> courseCodesInTerm = Lists.newArrayListWithCapacity(coursesInTerm.size());
-			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
-				courseCodesInTerm.add(course.getCourseCode());
-			}
-			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
-			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
-				//validCourseCodes.isEmpty() is short circuiting logic as per SSP-1923
-				if(validCourseCodes.isEmpty() || validCourseCodes.contains(course.getCourseCode())){
-					continue;
-				}else{
-					  course.setIsValidInTerm(false);
-					  model.setIsValid(false);
-					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
+		final Boolean areAnyCourseTerms = courseService.hasCourseTerms();
+		if ( areAnyCourseTerms != null && areAnyCourseTerms ) {
+			for(Map.Entry<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> entry: coursesByTerm.entrySet()){
+				final String termCode = entry.getKey();
+				final List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> coursesInTerm = entry.getValue();
+				final List<String> courseCodesInTerm = Lists.newArrayListWithCapacity(coursesInTerm.size());
+				for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+					courseCodesInTerm.add(course.getCourseCode());
+				}
+				final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
+				for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+					if(validCourseCodes.contains(course.getCourseCode())){
+						continue;
+					}else{
+						  course.setIsValidInTerm(false);
+						  model.setIsValid(false);
+						  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
+					}
 				}
 			}
 		}
