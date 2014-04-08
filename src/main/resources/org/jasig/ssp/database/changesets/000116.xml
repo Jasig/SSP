@@ -185,7 +185,7 @@ WHERE  minCount.term_code = note2.term_code
        AND note2.plan_id IS NOT NULL 
        AND minCount.term_code = temp2.term_code 
        AND minCount.plan_id = temp2.plan_id 
-       order by modified_date desc    	)	
+          	)	
     	</sql>
     	
     	<!-- second pass plans: prune notes that are not the 'latest' -->
@@ -264,6 +264,7 @@ WITH counts_temp
                    plan_id, 
                    is_important,
                    contact_notes, 
+               	   is_important,
                    student_notes) 
 ---- 
 delete from map_term_note where plan_id is not null and id not  in (
@@ -278,7 +279,7 @@ FROM   map_term_note note2
                          AND temp1.plan_id = note.plan_id 
                          AND temp1.contact_notes = note.contact_notes 
                          AND temp1.student_notes = note.student_notes 
-                         AND temp1.is_important = note.is_important                          
+                         AND temp1.is_important = note.is_important 
              GROUP  BY note.term_code, 
                        note.plan_id) minCount 
          ON note2.term_code = minCount.term_code 
@@ -288,7 +289,7 @@ FROM   map_term_note note2
             AND temp2.plan_id = note2.plan_id 
             AND temp2.contact_notes = note2.contact_notes 
             AND temp2.student_notes = note2.student_notes 
-            AND temp2.is_important = note2.is_important                                      
+            AND temp2.is_important = note2.is_important 
 WHERE  minCount.term_code = note2.term_code 
        AND minCount.plan_id = note2.plan_id 
        AND minCount.min_count = temp2.combo_count 
@@ -358,14 +359,17 @@ WITH counts_temp
                 term_code, 
                 plan_id, 
                 contact_notes, 
+                is_important,
                 student_notes 
          FROM   map_term_note 
+         where plan_id is not null
          GROUP  BY term_code, 
                    plan_id, 
+                   is_important,
                    contact_notes, 
                    student_notes) 
 ---- 
-delete from map_term_note where plan_id is not null and id not in (
+delete from map_term_note where plan_id is not null and id not  in (
 SELECT id 
 FROM   map_term_note note2 
        JOIN (SELECT Min(temp1.combo_count) AS min_count, 
@@ -377,6 +381,7 @@ FROM   map_term_note note2
                          AND temp1.plan_id = note.plan_id 
                          AND temp1.contact_notes = note.contact_notes 
                          AND temp1.student_notes = note.student_notes 
+                         AND temp1.is_important = note.is_important 
              GROUP  BY note.term_code, 
                        note.plan_id) minCount 
          ON note2.term_code = minCount.term_code 
@@ -386,13 +391,14 @@ FROM   map_term_note note2
             AND temp2.plan_id = note2.plan_id 
             AND temp2.contact_notes = note2.contact_notes 
             AND temp2.student_notes = note2.student_notes 
+            AND temp2.is_important = note2.is_important                                      
 WHERE  minCount.term_code = note2.term_code 
        AND minCount.plan_id = note2.plan_id 
        AND minCount.min_count = temp2.combo_count 
        AND note2.plan_id IS NOT NULL 
        AND minCount.term_code = temp2.term_code 
        AND minCount.plan_id = temp2.plan_id 
-           	)	
+          	)	
     	</sql> 
     	<!-- second pass plans: prune notes that are not the 'latest' -->
 		<sql>
