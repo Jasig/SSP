@@ -84,10 +84,14 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     
 	onUpdateCurrentMapPlan: function(){
 		var me = this;
+		me.getView().setLoading(true);
+		me.getView().loadRecord(me.currentMapPlan);
         if ( me.guardPlanStatusLookup() ) {
-            me.getView().setLoading(true);
-            me.getView().loadRecord(me.currentMapPlan);
             me.updatePlanStatus();
+        }
+        else
+        {
+    		me.getView().setLoading(false);
         }
 	},
 
