@@ -28,6 +28,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonLiteTO;
@@ -83,6 +84,9 @@ public class PersonController extends AbstractBaseController {
 	
 	@Autowired
 	private WithTransaction withTransaction;
+
+	@Autowired
+	private ExternalPersonService externalPersonService;
 
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
