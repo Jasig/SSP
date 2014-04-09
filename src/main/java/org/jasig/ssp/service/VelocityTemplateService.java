@@ -77,6 +77,7 @@ public class VelocityTemplateService {
 		// Process the template, and extract string
 		final StringWriter writer = new StringWriter();
 		template.merge(context, writer);
+		writer.flush();
 		return writer.toString();
 	}
 
