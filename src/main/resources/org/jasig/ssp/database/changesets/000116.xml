@@ -342,7 +342,7 @@ WITH counts_temp
 DELETE FROM map_term_note 
 WHERE  template_id IS NOT NULL 
        AND id NOT IN (SELECT Cast(max_id AS uniqueidentifier) 
-                      FROM   (SELECT Max(Cast(note.id AS VARCHAR)) AS max_id, 
+                      FROM   (SELECT Max(Cast(note.id AS VARCHAR(36))) AS max_id,
                                      note.term_code, 
                                      note.template_id 
                               FROM   map_term_note note, 
@@ -443,7 +443,7 @@ WITH counts_temp
 DELETE FROM map_term_note 
 WHERE  plan_id IS NOT NULL 
        AND id NOT IN (SELECT Cast(max_id AS uniqueidentifier) 
-                      FROM   (SELECT Max(Cast(note.id AS VARCHAR)) AS max_id, 
+                      FROM   (SELECT Max(Cast(note.id AS VARCHAR(36))) AS max_id,
                                      note.term_code, 
                                      note.plan_id 
                               FROM   map_term_note note, 
