@@ -29,6 +29,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
@@ -129,8 +131,14 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 		} else{
 			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
 			String schoolId = personService.get(personID).getSchoolId();
-			planOutputDataTO.setFinancialAid(new ExternalStudentFinancialAidTO(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId)));
-			planOutputDataTO.setGpa(new ExternalStudentTranscriptTO(externalStudentTranscriptService.getRecordsBySchoolId(schoolId)));
+			ExternalStudentFinancialAid fa = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId);
+			
+			if(fa != null)
+				planOutputDataTO.setFinancialAid(new ExternalStudentFinancialAidTO(fa));
+			
+			ExternalStudentTranscript st = externalStudentTranscriptService.getRecordsBySchoolId(schoolId);
+			if(st != null)
+				planOutputDataTO.setGpa(new ExternalStudentTranscriptTO(st));
 			output = createFullOutput(planOutputDataTO);
 		}
 
