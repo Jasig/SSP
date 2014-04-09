@@ -26,6 +26,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.RestrictedPersonAssocAuditable;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
@@ -69,8 +70,8 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 		}
 		criteria.add(Restrictions.or(
 				Restrictions.in("confidentialityLevel", levels),
-				Restrictions.eq("createdBy", requestor.getPerson()
-						.getId())));
+				Restrictions.eq("createdBy", new AuditPerson(requestor.getPerson()
+						.getId()))));
 		LOGGER.debug("Number of Confidentiality Levels for user {}",
 				levels.size());
 	}

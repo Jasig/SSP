@@ -34,6 +34,7 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.Person;
@@ -104,7 +105,7 @@ public class EarlyAlertResponseDao extends
 		}		
 
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", coach.getId()));
+		query.add(Restrictions.eq("createdBy", new AuditPerson(coach.getId())));
 
 		if (createDateFrom != null) {
 			query.add(Restrictions.ge("createdDate",
@@ -478,9 +479,9 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 
 		final Criteria query = createCriteria();
 		List<Person> coaches = form.getCoaches();
-		List<UUID> coachIds = new ArrayList<UUID>();
+		List<AuditPerson> auditCoaches = new ArrayList<AuditPerson>();
 		for (Person person : coaches) {
-			coachIds.add(person.getId());
+			auditCoaches.add(new AuditPerson(person.getId()));
 		}
 		
 		if (form.getCreateDateFrom() != null) {
@@ -495,7 +496,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		
 		query.createAlias("earlyAlert", "earlyAlert");
 		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
-		personCriteria.add(Restrictions.in("earlyAlert.createdBy", coachIds));
+		personCriteria.add(Restrictions.in("earlyAlert.createdBy", auditCoaches));
 		
 		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
 			personCriteria.add(Restrictions

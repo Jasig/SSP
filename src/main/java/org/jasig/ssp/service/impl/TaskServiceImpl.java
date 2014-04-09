@@ -430,7 +430,7 @@ public class TaskServiceImpl
 
 
 		SubjectAndBody subjAndBody;
-		Person creator = personService.get(task.getCreatedBy());
+		Person creator = personService.get(task.getCreatedBy().getId());
 		if (task.getType().equals(Task.CUSTOM_ACTION_PLAN_TASK)) {
 			subjAndBody = messageTemplateService
 					.createCustomActionPlanTaskMessage(new TaskMessageTemplateTO(task, creator));

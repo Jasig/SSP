@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.Task;
 
 public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
@@ -35,7 +36,7 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 	private String challengeName;
 	private String challengeReferralName;
 	private String description;
-	private UUID createdBy;
+	private AuditPerson createdBy;
 	private Date dueDate;
 
 	/**
@@ -108,11 +109,11 @@ public class TaskReportTO implements Comparable<TaskReportTO>, Serializable {
 		this.dueDate = dueDate == null ? null : new Date(dueDate.getTime());
 	}
 
-	public UUID getCreatedBy() {
+	public AuditPerson getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(final UUID createdBy) {
+	public void setCreatedBy(final AuditPerson createdBy) {
 		this.createdBy = createdBy;
 	}
 

@@ -150,11 +150,11 @@ public abstract class AbstractAuditableTO<T extends Auditable>
 	public void from(final T model) {
 		id = model.getId();
 		if (model.getCreatedBy() != null) {
-			createdBy = new PersonLiteTO(model.getCreatedBy(),model.getCreatedByFirstName(),model.getCreatedByLastName());
+			createdBy = new PersonLiteTO(model.getCreatedBy().getId(),model.getCreatedBy().getFirstName(),model.getCreatedBy().getLastName());
 		}
 		
 		if (model.getModifiedBy() != null) {
-			modifiedBy = new PersonLiteTO(model.getModifiedBy(),model.getModifiedByFirstName(),model.getModifiedByLastName());
+			modifiedBy = new PersonLiteTO(model.getModifiedBy().getId(),model.getModifiedBy().getFirstName(),model.getModifiedBy().getLastName());
 		}
 
 		createdDate = model.getCreatedDate();

@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.security.SspUser;
@@ -152,7 +154,7 @@ public class TaskDao
 		setCriteria(query, form);
 		
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", coach.getId()));
+		query.add(Restrictions.eq("createdBy", new AuditPerson(coach.getId())));
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
@@ -186,8 +188,11 @@ public class TaskDao
 		final Criteria query = createCriteria();
  
 		setCriteria( query,  form);
-		
-		query.add(Restrictions.in("createdBy", form.getCoaches()));
+		List<AuditPerson> auditCoaches = new ArrayList<AuditPerson>();
+		for (Person person : form.getCoaches()) {
+			auditCoaches.add(new AuditPerson(person.getId()));
+		}		
+		query.add(Restrictions.in("createdBy", auditCoaches));
 		// item count
 		Long totalRows = 0L;
 		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {

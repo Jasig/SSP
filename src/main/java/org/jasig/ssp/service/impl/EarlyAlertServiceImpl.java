@@ -35,6 +35,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertDao;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.Message;
@@ -545,7 +546,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
 		}
 
-		final UUID personId = earlyAlert.getCreatedBy();
+		final UUID personId = earlyAlert.getCreatedBy().getId();
 		Person person = personService.get(personId);
 		if ( person == null ) {
 			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
@@ -583,20 +584,19 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		// ensure earlyAlert.createdBy is populated
-		if ((earlyAlert.getCreatedByFirstName() == null)
-				|| (earlyAlert.getCreatedByFirstName() == null)) {
+		if ((earlyAlert.getCreatedBy() == null)
+				|| (earlyAlert.getCreatedBy().getFirstName() == null)) {
 			if (earlyAlert.getCreatedBy() == null) {
 				throw new IllegalArgumentException(
 						"EarlyAlert.CreatedBy is missing.");
 			}
-
-			try {
-				earlyAlert.setCreatedBy(personService.get(earlyAlert
-						.getCreatedBy()).getId());
-			} catch (final ObjectNotFoundException e) {
-				throw new IllegalArgumentException(
-						"EarlyAlert.CreatedBy.Id could not be loaded.", e);
-			}
+//
+//			try {
+//				//earlyAlert.setCreatedBy(new AuditPerson(personService.get(earlyAlert.getCreatedBy().getId())).getId());
+//			} catch (final ObjectNotFoundException e) {
+//				throw new IllegalArgumentException(
+//						"EarlyAlert.CreatedBy.Id could not be loaded.", e);
+//			}
 		}
 
 		final Map<String, Object> templateParameters = Maps.newHashMap();
@@ -605,7 +605,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if ( StringUtils.isNotBlank(courseName) ) {
 			Person creator;
 			try {
-				creator = personService.get(earlyAlert.getCreatedBy());
+				creator = personService.get(earlyAlert.getCreatedBy().getId());
 			} catch (ObjectNotFoundException e1) {
 				throw new IllegalArgumentException(
 						"EarlyAlert.CreatedBy.Id could not be loaded.", e1);
@@ -663,7 +663,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 		Person creator = null;
 		try{
-			creator = personService.get(earlyAlert.getCreatedBy());
+			creator = personService.get(earlyAlert.getCreatedBy().getId());
 		}catch(ObjectNotFoundException exp)	{
 			LOGGER.error("Early Alert Creator Not found sending message for early alert:" + earlyAlert.getId(), exp);
 		}
@@ -804,7 +804,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach);
 				Person creator = null;
 				try{
-					 creator = personService.get(earlyAlert.getCreatedBy());
+					 creator = personService.get(earlyAlert.getCreatedBy().getId());
 				}catch(ObjectNotFoundException exp){
 					LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid creator: " + earlyAlert.getCreatedBy(), exp);
 				}

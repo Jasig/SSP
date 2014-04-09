@@ -344,7 +344,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		if (earlyAlertResponse.getEarlyAlert().getPerson() == null) {
 			throw new IllegalArgumentException("EarlyAlert Person is missing.");
 		}
-		final Person person = personService.get(earlyAlertResponse.getEarlyAlert().getCreatedBy());
+		final Person person = personService.get(earlyAlertResponse.getEarlyAlert().getCreatedBy().getId());
 		if ( person == null ) {
 			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
 					+ " response email to faculty.",
@@ -459,19 +459,19 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		
 		Person creator = null;
 		if(earlyAlert.getPerson().getCreatedBy() != null)
-			creator = personService.get(earlyAlert.getCreatedBy());
+			creator = personService.get(earlyAlert.getCreatedBy().getId());
 		
 		templateParameters.put("earlyAlert", 
 				new EarlyAlertMessageTemplateTO(earlyAlert, creator));
 		// add early alert response to the parameter list
 		templateParameters.put("earlyAlertResponse", new EarlyAlertResponseMessageTemplateTO(earlyAlertResponse, 
-				personService.get(earlyAlertResponse.getCreatedBy())));
+				personService.get(earlyAlertResponse.getCreatedBy().getId())));
 		templateParameters.put("earlyAlertReferral", 
 				new EarlyAlertReferralTO(earlyAlertReferral));
 		
 		EarlyAlertOutcome earlyAlertOutcome = earlyAlertResponse.getEarlyAlertOutcome();
 		templateParameters.put("earlyAlertOutcome",  new EarlyAlertOutcomeMessageTemplateTO(earlyAlertOutcome, 
-				personService.get(earlyAlertOutcome.getCreatedBy())));
+				personService.get(earlyAlertOutcome.getCreatedBy().getId())));
  
 		return templateParameters;
 	}

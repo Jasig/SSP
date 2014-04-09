@@ -36,6 +36,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -157,7 +158,7 @@ public class MessageServiceImpl implements MessageService {
 		}
 
 		message.setSender(person);
-		message.setCreatedBy(person.getId());
+		message.setCreatedBy(new AuditPerson(person.getId()));
 		return message;
 	}
 

@@ -66,18 +66,6 @@ import org.jasig.ssp.util.uuid.UUIDCustomType;
 @TypeDef(name = "uuid-custom", typeClass = UUIDCustomType.class)
 public abstract class AbstractAuditable implements Auditable { // NOPMD
 	
-	private static final String CREATED_BY_FIRST_NAME_FORMULA = " ( select p.first_name from person p" +
-			" where p.id = CREATED_BY) ";
-
-	private static final String CREATED_BY_LAST_NAME_FORMULA = " ( select p.last_name from person p" +
-			" where p.id = CREATED_BY) ";
-	
-	private static final String MODIFIED_BY_FIRST_NAME_FORMULA = " ( select p.first_name from person p" +
-			" where p.id = MODIFIED_BY ) ";
-
-	private static final String MODIFIED_BY_LAST_NAME_FORMULA = " ( select p.last_name from person p" +
-			" where p.id = MODIFIED_BY) ";
-	
 	@Id
 	@Type(type = "uuid-custom")
 	@GeneratedValue(generator = "uuid")
@@ -100,20 +88,10 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses {@link AbstractAuditable} transfer objects).
 	 */
-	@Type(type = "uuid-custom")
-	private UUID createdBy;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(nullable = false, updatable = false)
+	private AuditPerson createdBy;
 	
-	@Formula(CREATED_BY_FIRST_NAME_FORMULA)
-	private String createdByFirstName;
-	
-	@Formula(CREATED_BY_LAST_NAME_FORMULA)
-	private String createdByLastName;
-	
-	@Formula(MODIFIED_BY_FIRST_NAME_FORMULA)
-	private String modifiedByFirstName;
-	
-	@Formula(MODIFIED_BY_LAST_NAME_FORMULA)
-	private String modifiedByLastName;
 
 	/**
 	 * Most recent modification time stamp.
@@ -131,8 +109,9 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses AbstractAuditable transfer objects).
 	 */
-	@Type(type = "uuid-custom")
-	private UUID modifiedBy;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(nullable = false, updatable = false)
+	private AuditPerson modifiedBy;
 
 	/**
 	 * Entity status.
@@ -267,12 +246,12 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	}
 
 	@Override
-	public UUID getCreatedBy() {
+	public AuditPerson getCreatedBy() {
 		return createdBy;
 	}
 
 	@Override
-	public void setCreatedBy(final UUID createdBy) {
+	public void setCreatedBy(final AuditPerson createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -288,12 +267,12 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	}
 
 	@Override
-	public UUID getModifiedBy() {
+	public AuditPerson getModifiedBy() {
 		return modifiedBy;
 	}
 
 	@Override
-	public void setModifiedBy(final UUID modifiedBy) {
+	public void setModifiedBy(final AuditPerson modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -351,37 +330,4 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 		}
 		return true;
 	}
-	@Override
-	public String getCreatedByFirstName() {
-		return createdByFirstName;
-	}
-	@Override
-	public void setCreatedByFirstName(String createdByFirstName) {
-		this.createdByFirstName = createdByFirstName;
-	}
-	@Override
-	public String getCreatedByLastName() {
-		return createdByLastName;
-	}
-	@Override
-	public void setCreatedByLastName(String createdByLastName) {
-		this.createdByLastName = createdByLastName;
-	}
-	@Override
-	public String getModifiedByFirstName() {
-		return modifiedByFirstName;
-	}
-	@Override
-	public void setModifiedByFirstName(String modifiedByFirstName) {
-		this.modifiedByFirstName = modifiedByFirstName;
-	}
-	@Override
-	public String getModifiedByLastName() {
-		return modifiedByLastName;
-	}
-	@Override
-	public void setModifiedByLastName(String modifiedByLastName) {
-		this.modifiedByLastName = modifiedByLastName;
-	}
-
 }

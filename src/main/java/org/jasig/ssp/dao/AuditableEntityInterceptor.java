@@ -24,6 +24,7 @@ import java.util.Date;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 import org.jasig.ssp.model.AbstractAuditable;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
@@ -136,7 +137,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements // N
 			}
 
 			if ("createdBy".equals(property) && (state[i] == null)) {
-				state[i] = current.getId();
+				state[i] = new AuditPerson(current.getId());
 				continue;
 			}
 
@@ -151,7 +152,7 @@ public class AuditableEntityInterceptor extends EmptyInterceptor implements // N
 			}
 
 			if ("modifiedBy".equals(property)) {
-				state[i] = current.getId();
+				state[i] = new AuditPerson(current.getId());
 				continue;
 			}
 		}

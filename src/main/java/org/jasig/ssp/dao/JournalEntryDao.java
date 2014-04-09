@@ -32,6 +32,7 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
@@ -69,7 +70,7 @@ public class JournalEntryDao
 		setCriteria( query,  form);
 		
 		// restrict to coach
-		query.add(Restrictions.eq("createdBy", coach));
+		query.add(Restrictions.eq("createdBy", new AuditPerson(coach.getId())));
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
@@ -103,12 +104,12 @@ public class JournalEntryDao
 
 		final Criteria query = createCriteria();
 		List<Person> coaches = form.getCoaches();
-		List<UUID> coachIds = new ArrayList<UUID>();
+		List<AuditPerson> auditCoaches = new ArrayList<AuditPerson>();
 		for (Person person : coaches) {
-			coachIds.add(person.getId());
-		} 
+			auditCoaches.add(new AuditPerson(person.getId()));
+		}
 		setCriteria(query, form);
-		query.add(Restrictions.in("createdBy", coachIds));
+		query.add(Restrictions.in("createdBy", auditCoaches));
 		// item count
 		Long totalRows = 0L;
 		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
