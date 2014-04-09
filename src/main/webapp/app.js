@@ -251,6 +251,7 @@ Ext.require([
 	'Ssp.model.PersonStrength',
 	'Ssp.model.SearchChallengeReferral',
 	'Ssp.model.PersonLite',	
+	'Ssp.model.ContactPerson',	
 	'Ssp.model.Placement',
 	'Ssp.model.PersonProgramStatus',
 	'Ssp.model.CourseTranscript',
@@ -641,6 +642,12 @@ Ext.onReady(function(){
 				    personLite: {
 				    	fn: function(){
 				    		return new Ssp.model.PersonLite({id:""});
+				    	},
+				    	singleton: true
+				    },
+					contactPerson: {
+				    	fn: function(){
+				    		return new Ssp.model.ContactPerson({id:""});
 				    	},
 				    	singleton: true
 				    },
@@ -1075,6 +1082,7 @@ Ext.onReady(function(){
 					caseloadStore: 'Ssp.store.Caseload',
 					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
+					contactPersonStore: 'Ssp.store.ContactPerson',
 					challengesStore: 'Ssp.store.reference.Challenges',
 					challengesAllStore: {
 				    	fn: function(){

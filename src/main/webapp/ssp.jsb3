@@ -1982,6 +1982,11 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.ContactPerson",
+                    "name": "ContactPerson.js",
+                    "path": "/app/model/"
+                },
+                {
                     "clsName": "Ssp.model.Person",
                     "name": "Person.js",
                     "path": "/app/model/"
@@ -2294,6 +2299,11 @@
                 {
                     "clsName": "Ssp.store.People",
                     "name": "People.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.ContactPerson",
+                    "name": "ContactPerson.js",
                     "path": "/app/store/"
                 },
                 {

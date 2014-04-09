@@ -21,7 +21,10 @@ Ext.define('Ssp.controller.MainViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	appEventsController: 'appEventsController',
-        formUtils: 'formRendererUtils'
+        formUtils: 'formRendererUtils',
+		personService: 'personService',
+		authenticatedPerson: 'authenticatedPerson',
+		contactPersonStore: 'contactPersonStore'
     },
     config: {
     	personButtonsVisible: true
@@ -40,12 +43,31 @@ Ext.define('Ssp.controller.MainViewController', {
 		var me=this;
 		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
 		me.displayStudentRecordView();
+		
+		me.personService.get( me.authenticatedPerson.get('id'), {
+				success: me.getContactPersonSuccess,
+				failure: me.getContactPersonFailure,
+				scope: me			
+			});
+			
+			
 		return this.callParent(arguments);
     },
 
     destroy: function() {
 	   	this.appEventsController.removeEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
         return this.callParent( arguments );
+    },
+	
+	getContactPersonSuccess: function( r, scope ){
+    	var me=scope;
+		var data = [];
+		data.push(r);
+		me.contactPersonStore.loadData(data);
+	},
+		
+   getContactPersonFailure: function( response, scope ){
+    	
     },
     
     onDisplayStudentRecordView: function(){

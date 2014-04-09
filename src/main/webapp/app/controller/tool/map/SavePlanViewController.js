@@ -23,7 +23,9 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
-        programsStore: 'programsFacetedStore'
+        programsStore: 'programsFacetedStore',
+		authenticatedPerson: 'authenticatedPerson',
+		contactPersonStore: 'contactPersonStore'
     },
     
 	control: {
@@ -51,10 +53,43 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
 		me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
 		me.programsStore.load();
+		
+		if (me.getView().saveAs == false) {
+			if (me.checkEmpty(me.currentMapPlan.get('id')) || me.checkEmpty(me.getView().query('textfield[name="contactName"]')[0].getValue())) {
+				
+					me.contactPersonStore.each(function(rec){
+					var displayFullName = rec.get('displayFullName');
+					var primaryEmailAddress = rec.get('primaryEmailAddress');
+					var workPhone = rec.get('workPhone');
+					
+					me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
+					me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
+					me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
+					
+				});
+			}
+			
+		
+			
+		}
+		
 
 		return me.callParent(arguments);
     },
-   
+	
+	checkEmpty: function(str){
+    	return !str || !/[^\s]+/.test(str);
+	},
+	
+   getContactPersonSuccess: function( r, scope ){
+    	var me=scope;
+		},
+		
+   getContactPersonFailure: function( response, scope ){
+    	var me=scope;
+    	me.getView().setLoading( false );  	
+    },
+	
     onCancelClick: function(){
     	me = this;
     	me.getView().close();

@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
-        divisionsStore: 'divisionsStore'
+        divisionsStore: 'divisionsStore',
+		contactPersonStore: 'contactPersonStore'
     },
     
 	control: {
@@ -56,9 +57,32 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		}else{
 			me.getVisibilityField().setDisabled(false);
 		}
+		
+	
 
 		return me.callParent(arguments);
     },
+	
+	checkEmpty: function(str){
+    	return !str || !/[^\s]+/.test(str);
+	},
+	
+	checkForContactInfo: function(){
+		var me = this;
+			
+			if (me.checkEmpty(me.getView().query('textfield[name="contactName"]')[0].getValue())) {
+			
+				me.contactPersonStore.each(function(rec){
+				var displayFullName = rec.get('displayFullName');
+				var primaryEmailAddress = rec.get('primaryEmailAddress');
+				var workPhone = rec.get('workPhone');
+				
+				me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
+				me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
+				me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
+			});
+		}
+	},
 
     onCancelClick: function(){
     	me = this;
@@ -157,8 +181,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     },
     onShow: function(){
     	var me=this;
+		
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
+		
 	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
 	    if (!me.currentMapPlan.get('id') || !(me.currentMapPlan.get('isTemplate')) || me.getView().saveAs) {
 	        activenessCheckbox.setValue(false); // Create mode. New Templates intentionally
@@ -174,6 +200,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    	if(me.getVisibilityField().getValue() == null || me.getVisibilityField().getValue() == '')
 	    		me.getVisibilityField().setValue('AUTHENTICATED');
 	    }
+		me.checkForContactInfo();
     },
 
 	setCheckBox: function(query, fieldName){
