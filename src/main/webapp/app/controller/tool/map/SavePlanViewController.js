@@ -65,6 +65,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 					me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
 					me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
 					me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
+					me.getView().query('textfield[name="contactTitle"]')[0].setValue('Academic Advisor');
 					
 				});
 			}
