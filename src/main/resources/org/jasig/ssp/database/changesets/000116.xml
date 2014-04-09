@@ -249,54 +249,54 @@ WHERE  plan_id IS NOT NULL
 	   	<sql>
     		select * into mtn_SSP_2303_bak  from map_term_note
     	</sql>
-    	<!-- first pass templates:  prune plan notes that are not 'least occuring' -->
+    	<!-- first pass templates:  prune  notes that are not 'least occuring' -->
     	<sql>
 WITH counts_temp 
      AS (SELECT Count(*) AS combo_count, 
                 term_code, 
-                plan_id, 
-                contact_notes, 
-                is_important,
+                template_id, 
+                contact_notes,
+                is_important, 
                 student_notes 
          FROM   map_term_note 
-         where plan_id is not null
+         where template_id is not null
          GROUP  BY term_code, 
-                   plan_id, 
-                   is_important,
+                   template_id,
+				   is_important, 	
                    contact_notes, 
-               	   is_important,
                    student_notes) 
 ---- 
-delete from map_term_note where plan_id is not null and id not  in (
+delete from map_term_note where template_id is not null and id not in (
 SELECT id 
 FROM   map_term_note note2 
        JOIN (SELECT Min(temp1.combo_count) AS min_count, 
                     note.term_code, 
-                    note.plan_id 
+                    note.template_id 
              FROM   map_term_note note 
                     JOIN counts_temp AS temp1 
                       ON temp1.term_code = note.term_code 
-                         AND temp1.plan_id = note.plan_id 
+                         AND temp1.template_id = note.template_id 
                          AND temp1.contact_notes = note.contact_notes 
                          AND temp1.student_notes = note.student_notes 
                          AND temp1.is_important = note.is_important 
+                         
              GROUP  BY note.term_code, 
-                       note.plan_id) minCount 
+                       note.template_id) minCount 
          ON note2.term_code = minCount.term_code 
-            AND note2.plan_id = minCount.plan_id 
+            AND note2.template_id = minCount.template_id 
        JOIN counts_temp AS temp2 
          ON temp2.term_code = note2.term_code 
-            AND temp2.plan_id = note2.plan_id 
+            AND temp2.template_id = note2.template_id 
             AND temp2.contact_notes = note2.contact_notes 
             AND temp2.student_notes = note2.student_notes 
-            AND temp2.is_important = note2.is_important 
+            AND temp2.is_important = note2.is_important             
 WHERE  minCount.term_code = note2.term_code 
-       AND minCount.plan_id = note2.plan_id 
+       AND minCount.template_id = note2.template_id 
        AND minCount.min_count = temp2.combo_count 
-       AND note2.plan_id IS NOT NULL 
+       AND note2.template_id IS NOT NULL 
        AND minCount.term_code = temp2.term_code 
-       AND minCount.plan_id = temp2.plan_id 
-      	)	
+       AND minCount.template_id = temp2.template_id 
+           	)		
     	</sql>
     	<!-- second pass templates: prune notes that are not the 'latest' -->
     	<sql>
