@@ -98,4 +98,14 @@
 ]]>
         </sql>
       </changeSet>
+      
+      <changeSet  id="set initial checksums for message templates msql" author="jim.stanley"  dbms="mssql">
+        <sql>
+<![CDATA[
+            update message_template set body_checksum = '32821d14a4658b4160bb3f940b65eb11dfc475ca' where id = '5d183f35-023d-40ea-b8d9-66fbe190fffb';
+            update message_template set body_checksum = '43e1e12c8d710636f7955be1c87d690eb756eb7b' where id = 'bcc180b0-3a8b-11e3-aa6e-0800200c9a66';
+            
+        ]]>
+        </sql>
+    </changeSet>
 </databaseChangeLog>
