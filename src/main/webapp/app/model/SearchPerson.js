@@ -36,7 +36,12 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'studentIntakeComplete', type: 'boolean'},
              {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},
              {name: 'currentProgramStatusName', type: 'string'},
-
+             {
+            	 name: 'fullName',
+            	 convert: function(value, record) {
+            		 return record.get('firstName') + ' '+ record.get('lastName');
+            	 }
+             },
 			 {name:'coachId', type: 'string'},
              {name: 'coach', type: 'auto'},
              {
