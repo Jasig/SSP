@@ -72,7 +72,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					    	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
 							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
 							if ( isImportant ) {
-								metaData.tdAttr = 'data-qtip="Orange indicates Course is Important"';
+								metaData.tdAttr = 'data-qtip="Orange indicates course is important"';
 							}
 					     }		            
 					},
@@ -89,9 +89,9 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 							
 							if ( isTranscript ) {
 								if(!duplicateOfTranscript)
-									metaData.tdAttr = 'data-qtip="Yellow indicates course is already on students\' transcript"';
+									metaData.tdAttr = 'data-qtip="Yellow indicates course is already on this student\'s transcript"';
 								else{
-									metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on students\' transcript but in a different term."';
+									metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on this student\'s transcript but in a different term"';
 								}
 							}
 							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
@@ -110,7 +110,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					    	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
 							metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
 							if ( elective ) {
-								metaData.tdAttr = 'data-qtip="This is an elective. Elective code: ' + elective.get('code') + '"';
+								metaData.tdAttr = 'data-qtip="Course is an elective with code: ' + elective.get('code') + '"';
 							}
 							return elective;						
 					     }		            
@@ -125,7 +125,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					        	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
 								metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
 								if ( isDev ) {
-									metaData.tdAttr = 'data-qtip="Red indicates course is a dev course."';
+									metaData.tdAttr = 'data-qtip="Red indicates course is a developmental course"';
 								}					
 					     }		            
 					}
