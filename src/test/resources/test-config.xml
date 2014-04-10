@@ -23,13 +23,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/task     http://www.springframework.org/schema/task/spring-task-3.2.xsd
 		http://www.springframework.org/schema/tx       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
 		http://www.springframework.org/schema/util     http://www.springframework.org/schema/util/spring-util-3.2.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
 	<!-- Properties file configuration of existing beans -->
 	<bean id="configProperties" class="org.jasig.ssp.config.ConfigPostProcessingPropertiesFactoryBean">
@@ -78,12 +80,18 @@
 		<property name="changeLogParameters">
 			<util:map>
 				<entry key="database.name" value="#{configProperties.db_name}" />
-				<entry key="database.app.username" value="#{configProperties.db_username}" />
+				<entry key="database.app.username" value="#{configProperties.db_username_liquibase}" />
 				<entry key="database.admin.username" value="#{configProperties.db_admin_username}" />
 				<entry key="set.mssql.snapshot.isolation" value="#{configProperties.db_liquibase_set_mssql_snapshot_isolation}" />
+				<entry key="strip.journal.comment.markup" value="#{configProperties.db_liquibase_strip_journal_comment_markup}" />
+				<entry key="strip.tuition.paid.is.y" value="#{configProperties.db_liquibase_strip_tuition_paid_is_y}" />
+				<entry key="external.fa.not.null.drop.y" value="#{configProperties.db_liquibase_external_fa_not_null_drop_y}" />
+				<entry key="external.apply.natural.keys" value="#{configProperties.db_liquibase_external_apply_natural_keys}" />
+				<entry key="convert.external.term.timestamps" value="#{configProperties.db_liquibase_convert_external_term_timestamps}" />
 				<entry key="database.timezone.legacy" value="#{configProperties.db_time_zone_legacy}" />
 				<entry key="database.timezone" value="#{configProperties.db_time_zone}" />
 				<entry key="database.schema" value="#{configProperties['db_schema']?:(configProperties.db_dialect matches '^.*Postgre.*$' ? 'public' : 'dbo')}" />
+				<entry key="manage.external.database.by.default" value="#{configProperties.db_liquibase_manage_external_database_by_default}" />
 			</util:map>
 		</property>
 		<property name="defaultSchema" value="#{configProperties['db_schema']?:(configProperties.db_dialect matches '^.*Postgre.*$' ? 'public' : 'dbo')}" />
@@ -206,6 +214,10 @@
 	
 	<bean id="ldapPersonAttributesService" 
 			class="org.jasig.ssp.service.impl.LdapPersonAttributesService"/>
+
+	<security:authentication-manager alias="authenticationManager">
+		<!--<security:authentication-provider ref="runAsAuthenticationProvider" />-->
+	</security:authentication-manager>
 
 	<bean id="taskScheduler" class="org.jasig.ssp.util.spring.StubTaskScheduler"/>
 			
