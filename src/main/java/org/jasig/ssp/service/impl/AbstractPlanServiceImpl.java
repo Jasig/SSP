@@ -235,7 +235,14 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			
 			if(!termCodeTerm.containsKey(course.getTermCode())){
-				termCodeTerm.put(course.getTermCode(), getTermService().getByCode(course.getTermCode()));
+				try {
+					termCodeTerm.put(course.getTermCode(), getTermService().getByCode(course.getTermCode()));
+				} catch ( ObjectNotFoundException e ) {
+					// nothing to be done
+					// (this sort of failed lookup has been in the field, e.g. where you're looking up an existing
+					// MAP while the back-end ETL job had truncated external_term and hadn't gotten around to
+					// filling it again
+				}
 			}
 			courseCodeTermCode.put(course.getCourseCode(), course.getTermCode());
 			courseCodeCourse.put(course.getCourseCode(), course);
@@ -263,13 +270,17 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				Term requireingTerm = termCodeTerm.get(requireingTermCode);
 				requiringCourse.setInvalidReasons(null);
 				if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)){
-					if(!requiredTerm.getCode().equals(requireingTerm.getCode())){
+					if(!requiredTermCode.equals(requireingTermCode)){
 						requiringCourse.setHasCorequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Corequisite " + requiredCourse.getFormattedCourse() + " is not in same term.");
 					}		
 				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE_CO)){
-					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
+					if(requiredTermCode.equals(requireingTermCode)){
+						continue;
+					}
+					if ( requiredTerm == null || requireingTerm == null ) {
+						// no guarantee that we can resolve term codes
 						continue;
 					}
 					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
@@ -279,7 +290,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 						requiringCourse.setInvalidReasons(" Pre/Corequisite " + requiredCourse.getFormattedCourse() + " is not in previous term.");
 					}
 				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE)){
-					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
+					if(requiredTermCode.equals(requireingTermCode)){
 						requiringCourse.setHasPrerequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Prerequisite " + requiredCourse.getFormattedCourse() + " is in same term.");
