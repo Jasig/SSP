@@ -251,7 +251,7 @@ $earlyAlert.comment
 <tr><th>Advisor</th><td>$!earlyAlert.coach.getFullName()</td></tr>
 </table>
 #if($earlyAlert.earlyAlertReasonTOs && $earlyAlert.earlyAlertReasonTOs.size() > 0)
-<p>Student has been identified by his/her instructor for the following reason:</ul>
+<p><b>Student has been identified by his/her instructor for the following reason:</b></ul>
 
 <ul>
 #foreach( $earlyAlertReason in $earlyAlert.earlyAlertReasonTOs )
