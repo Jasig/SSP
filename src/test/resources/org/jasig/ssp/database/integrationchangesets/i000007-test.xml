@@ -21,20 +21,7 @@
 -->
 <databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd'>
   <changeSet author='james.stanley' id='Adding Set of External Data'>
-    <insert tableName='external_course_section'>
-      <column name='formatted_course'>Freshman Math</column>
-      <column name='subject_abbreviation'>MATH101</column>
-      <column name='number'>1001M</column>
-      <column name='section_number'>A10</column>
-      <column name='credit_value'>52</column>
-      <column name='term_code'>FA12</column>
-      <column name='description'>descriptionFreshman Math</column>
-    </insert>
-    <rollback>
-      <delete tableName='external_course_section'>
-        <where>formatted_course='Freshman Math'</where>
-      </delete>
-    </rollback>
+
     <insert tableName='external_faculty_course'>
       <column name='faculty_school_id'>coach1</column>
       <column name='term_code'>FA12</column>
@@ -48,20 +35,6 @@
         <where>faculty_school_id='coach1'</where>
       </delete>
     </rollback>
-    <insert tableName='external_course_section'>
-      <column name='formatted_course'>Freshman Biology</column>
-      <column name='subject_abbreviation'>BIO101</column>
-      <column name='number'>1001B</column>
-      <column name='section_number'>B21</column>
-      <column name='credit_value'>52</column>
-      <column name='term_code'>FA12</column>
-      <column name='description'>descriptionFreshman Biology</column>
-    </insert>
-    <rollback>
-      <delete tableName='external_course_section'>
-        <where>formatted_course='Freshman Biology'</where>
-      </delete>
-    </rollback>
     <insert tableName='external_faculty_course'>
       <column name='faculty_school_id'>coach1</column>
       <column name='term_code'>FA12</column>
@@ -73,20 +46,6 @@
     <rollback>
       <delete tableName='external_faculty_course'>
         <where>faculty_school_id='coach1'</where>
-      </delete>
-    </rollback>
-    <insert tableName='external_course_section'>
-      <column name='formatted_course'>Freshman Chemistry</column>
-      <column name='subject_abbreviation'>CHEM101</column>
-      <column name='number'>1001C</column>
-      <column name='section_number'>C32</column>
-      <column name='credit_value'>52</column>
-      <column name='term_code'>FA12</column>
-      <column name='description'>descriptionFreshman Chemistry</column>
-    </insert>
-    <rollback>
-      <delete tableName='external_course_section'>
-        <where>formatted_course='Freshman Chemistry'</where>
       </delete>
     </rollback>
     <insert tableName='external_faculty_course'>
@@ -1347,20 +1306,6 @@
         <where>school_id='coach1student4'</where>
       </delete>
     </rollback>
-    <insert tableName='external_course_section'>
-      <column name='formatted_course'>Freshman Math</column>
-      <column name='subject_abbreviation'>MATH101</column>
-      <column name='number'>1001M</column>
-      <column name='section_number'>A10</column>
-      <column name='credit_value'>52</column>
-      <column name='term_code'>FA12</column>
-      <column name='description'>descriptionFreshman Math</column>
-    </insert>
-    <rollback>
-      <delete tableName='external_course_section'>
-        <where>formatted_course='Freshman Math'</where>
-      </delete>
-    </rollback>
     <insert tableName='external_faculty_course'>
       <column name='faculty_school_id'>coach2</column>
       <column name='term_code'>FA12</column>
@@ -1374,20 +1319,6 @@
         <where>faculty_school_id='coach2'</where>
       </delete>
     </rollback>
-    <insert tableName='external_course_section'>
-      <column name='formatted_course'>Freshman Biology</column>
-      <column name='subject_abbreviation'>BIO101</column>
-      <column name='number'>1001B</column>
-      <column name='section_number'>B21</column>
-      <column name='credit_value'>52</column>
-      <column name='term_code'>FA12</column>
-      <column name='description'>descriptionFreshman Biology</column>
-    </insert>
-    <rollback>
-      <delete tableName='external_course_section'>
-        <where>formatted_course='Freshman Biology'</where>
-      </delete>
-    </rollback>
     <insert tableName='external_faculty_course'>
       <column name='faculty_school_id'>coach2</column>
       <column name='term_code'>FA12</column>
@@ -1399,20 +1330,6 @@
     <rollback>
       <delete tableName='external_faculty_course'>
         <where>faculty_school_id='coach2'</where>
-      </delete>
-    </rollback>
-    <insert tableName='external_course_section'>
-      <column name='formatted_course'>Freshman Chemistry</column>
-      <column name='subject_abbreviation'>CHEM101</column>
-      <column name='number'>1001C</column>
-      <column name='section_number'>C32</column>
-      <column name='credit_value'>52</column>
-      <column name='term_code'>FA12</column>
-      <column name='description'>descriptionFreshman Chemistry</column>
-    </insert>
-    <rollback>
-      <delete tableName='external_course_section'>
-        <where>formatted_course='Freshman Chemistry'</where>
       </delete>
     </rollback>
     <insert tableName='external_faculty_course'>
