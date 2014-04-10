@@ -63,6 +63,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+import javax.mail.SendFailedException;
+
 /**
  * {@link PersonController} tests
  * 
@@ -312,7 +314,7 @@ public class PersonControllerIntegrationTest {
 
 	@Test
 	public void testUpdateReplacesServiceReasons()
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		final PersonTO person1 = new PersonTO(createPerson());
 		final List<ReferenceLiteTO<ServiceReason>> serviceReasons = Lists
 				.newArrayList();
@@ -389,7 +391,7 @@ public class PersonControllerIntegrationTest {
 	// and null ServiceReason collections aren't ignored
 	@Test
 	public void testUpdateCanDeleteAllServiceReasons()
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		final PersonTO person1 = new PersonTO(createPerson());
 		final List<ReferenceLiteTO<ServiceReason>> serviceReasons1 = Lists
 				.newArrayList();
@@ -508,7 +510,7 @@ public class PersonControllerIntegrationTest {
 
 	@Test
 	public void testUpdateReplacesSpecialServiceGroups()
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		final PersonTO person1 = new PersonTO(createPerson());
 		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups = Lists
 				.newArrayList();
@@ -583,7 +585,7 @@ public class PersonControllerIntegrationTest {
 
 	@Test
 	public void testUpdateCanDeleteAllSpecialServiceGroups()
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		final PersonTO person1 = new PersonTO(createPerson());
 		final List<ReferenceLiteTO<SpecialServiceGroup>> serviceGroups1 = Lists
 				.newArrayList();
@@ -702,7 +704,7 @@ public class PersonControllerIntegrationTest {
 
 	@Test
 	public void testUpdateReplacesReferralSources()
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		final PersonTO person1 = new PersonTO(createPerson());
 		final List<ReferenceLiteTO<ReferralSource>> referralSources = Lists
 				.newArrayList();
@@ -777,7 +779,7 @@ public class PersonControllerIntegrationTest {
 
 	@Test
 	public void testUpdateCanDeleteAllReferralSources()
-			throws ObjectNotFoundException, ValidationException {
+			throws ObjectNotFoundException, ValidationException, SendFailedException {
 		final PersonTO person1 = new PersonTO(createPerson());
 		final List<ReferenceLiteTO<ReferralSource>> referralSources1 = Lists
 				.newArrayList();
