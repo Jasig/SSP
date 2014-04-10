@@ -18,11 +18,7 @@
  */
 package org.jasig.ssp.web.api.tool; // NOPMD by jon.adams
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -237,7 +233,11 @@ public class IntakeController extends AbstractBaseController {
 		refData.put("employmentShifts", EmploymentShifts.values());
 		refData.put("genders", Genders.values());
 		refData.put("states", States.values());
-		refData.put("futureTerms",termService.getCurrentAndFutureTerms());
+		try {
+			refData.put("futureTerms",termService.getCurrentAndFutureTerms());
+		} catch ( ObjectNotFoundException e ) {
+			refData.put("futureTerms", Collections.EMPTY_LIST);
+		}
 		refData.put("registrationLoads", registrationLoadReferenceDataFor(formTO, sAndP));
 		refData.put("courseworkHours", courseworkHoursReferenceDataFor(formTO, sAndP));
 		return refData;

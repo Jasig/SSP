@@ -25,6 +25,7 @@ import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.*;
+import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -110,7 +111,7 @@ public class ScheduledTaskWrapperServiceImpl
 	private transient MapStatusReportCalcTask mapStatusReportCalcTask;
 
 	@Autowired
-	private transient MessageService messageService;
+	private transient SendQueuedMessagesTask sendQueuedMessagesTask;
 
 	@Autowired
 	private transient PersonService personService;
@@ -636,6 +637,10 @@ public class ScheduledTaskWrapperServiceImpl
 		return new Runnable() {
 			@Override
 			public void run() {
+				if ( StringUtils.isBlank(taskName) ) {
+					work.run();
+					return;
+				}
 				final String currentThreadName = Thread.currentThread().getName();
 				final String currentMdcEntry = MDC.get(TASK_NAME_MDC_KEY);
 				try {
@@ -680,16 +685,67 @@ public class ScheduledTaskWrapperServiceImpl
 		withTaskContext(taskName, work).run();
 	}
 
+	/**
+	 * Basically a deferred form of {@link #execWithTaskContext(Runnable)}.
+	 * Useful when you have a scheduled job that does its work in batches and
+	 * you'd like the effect of {@link #execWithTaskContext(Runnable)}
+	 * (except for the thread naming decoration) applied
+	 * independently for each batch. This is advisable for any long-running
+	 * job (which is probably why it was batched in the first place) b/c
+	 * otherwise you can end up with a system doing a great impression of
+	 * a memory leak as the Hib session grows indefinitely.
+	 *
+	 * <p>Batched jobs often need results from each batch to know what to
+	 * do next, hence the use of {@code Callable} rather than
+	 * {@link Runnable} here.</p>
+	 *
+	 * <p>Since thread naming needs to happen prior to individual batch
+	 * executions, the caller is responsible for wrapping the actual
+	 * task invocation with that behavior, if necessary. E.g. see
+	 * {@link #execBatchedTaskWithName(String, org.jasig.ssp.service.external.BatchedTask)}</p>
+	 *
+	 * @param batchReturnType
+	 * @param <T>
+	 * @return
+	 */
+	protected <T> CallableExecutor<T> newTaskBatchExecutor(final Class<T> batchReturnType) {
+		return new CallableExecutor<T>() {
+			@Override
+			public T exec(final Callable<T> work) throws Exception {
+				final AtomicReference<T> resultHolder = new AtomicReference<T>();
+				final AtomicReference<Exception> exceptionHolder = new AtomicReference<Exception>();
+				execWithTaskContext(null, new Runnable() {
+					@Override
+					public void run() {
+						try {
+							resultHolder.set(work.call());
+						} catch (Exception e) {
+							exceptionHolder.set(e);
+						}
+					}
+				});
+				if ( exceptionHolder.get() != null ) {
+					throw exceptionHolder.get();
+				}
+				return resultHolder.get();
+			}
+		};
+	}
+
+	protected void execBatchedTaskWithName(final String syncExternalPersonsTaskName, final BatchedTask batchedTask) {
+		withTaskName(syncExternalPersonsTaskName, new Runnable() {
+			@Override
+			public void run() {
+				batchedTask.exec(newTaskBatchExecutor(batchedTask.getBatchExecReturnType()));
+			}
+		}).run();
+	}
+
 	@Override
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendMessages() {
-		execWithTaskContext(SEND_MESSAGES_TASK_NAME, new Runnable() {
-			@Override
-			public void run() {
-				messageService.sendQueuedMessages();
-			}
-		});
+		execBatchedTaskWithName(SEND_MESSAGES_TASK_NAME, sendQueuedMessagesTask);
 	}
 
 	@Override
@@ -717,38 +773,12 @@ public class ScheduledTaskWrapperServiceImpl
 	 */
 	@Override
 	public void syncExternalPersons() {
-		externalPersonSyncTask.exec(new CallableExecutor<Pair<Long, Long>>() {
-			@Override
-			public Pair<Long, Long> exec(final Callable<Pair<Long, Long>> work) throws Exception {
-				final AtomicReference<Pair<Long, Long>> resultHolder = new AtomicReference<Pair<Long, Long>>();
-				final AtomicReference<Exception> exceptionHolder = new AtomicReference<Exception>();
-				execWithTaskContext(SYNC_EXTERNAL_PERSONS_TASK_NAME, new Runnable() {
-					@Override
-					public void run() {
-						try {
-							resultHolder.set(work.call());
-						} catch (Exception e) {
-							exceptionHolder.set(e);
-						}
-					}
-				});
-				if ( exceptionHolder.get() != null ) {
-					throw exceptionHolder.get();
-				}
-				return resultHolder.get();
-			}
-		});
-
+		execBatchedTaskWithName(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask);
 	}
 
 	@Override
 	public void calcMapStatusReports() {
-		execWithTaskContext(CALC_MAP_STATUS_REPORTS_TASK_NAME,new Runnable() {
-			@Override
-			public void run() {
-				mapStatusReportCalcTask.exec();
-			}
-		});
+		execBatchedTaskWithName(CALC_MAP_STATUS_REPORTS_TASK_NAME, mapStatusReportCalcTask);
 	}
 	
 	@Override

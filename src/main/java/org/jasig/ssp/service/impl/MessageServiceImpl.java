@@ -18,21 +18,7 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
-import javax.mail.internet.MimeMessage;
-import javax.validation.constraints.NotNull;
-
 import com.google.common.collect.Lists;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
@@ -45,9 +31,9 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -58,9 +44,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
+import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.NotNull;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Message service implementation for sending e-mails (messages) to various
@@ -201,7 +194,12 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public void sendQueuedMessages() {
+	public Pair<PagingWrapper<Message>, Collection<Throwable>> getSendQueuedMessagesBatchExecReturnType() {
+		return new Pair<PagingWrapper<Message>, Collection<Throwable>>(null,null);
+	}
+
+	@Override
+	public void sendQueuedMessages(CallableExecutor<Pair<PagingWrapper<Message>, Collection<Throwable>>> batchExec) {
 
 		LOGGER.info("BEGIN : sendQueuedMessages()");
 
@@ -226,15 +224,24 @@ public class MessageServiceImpl implements MessageService {
 
 			LOGGER.info("Before message queue processing transaction at start row {}",
 					sap.get().getFirstResult());
-			Pair<PagingWrapper<Message>, Collection<Throwable>> rslt =
-					withTransaction.withTransactionAndUncheckedExceptions(
-					new Callable<Pair<PagingWrapper<Message>, Collection<Throwable>>>() {
-				@Override
-				public Pair<PagingWrapper<Message>, Collection<Throwable>> call()
-						throws Exception {
-					return sendQueuedMessageBatch(sap.get());
+			Pair<PagingWrapper<Message>, Collection<Throwable>> rslt = null;
+
+			try {
+				if ( batchExec == null ) {
+					rslt = sendQueuedMessageBatchInTransaction(sap.get());
+				} else {
+					rslt = batchExec.exec(new Callable<Pair<PagingWrapper<Message>, Collection<Throwable>>>() {
+						@Override
+						public Pair<PagingWrapper<Message>, Collection<Throwable>> call() throws Exception {
+							return sendQueuedMessageBatchInTransaction(sap.get());
+						}
+					});
 				}
-			});
+			} catch (RuntimeException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 
 			if ( Thread.currentThread().isInterrupted() ) {
 				LOGGER.info("Abandoning sendQueuedMessages because of thread interruption");
@@ -281,6 +288,17 @@ public class MessageServiceImpl implements MessageService {
 		}
 
 		LOGGER.info("END : sendQueuedMessages()");
+	}
+
+	private Pair<PagingWrapper<Message>, Collection<Throwable>> sendQueuedMessageBatchInTransaction(final SortingAndPaging sap) {
+		return withTransaction.withTransactionAndUncheckedExceptions(
+				new Callable<Pair<PagingWrapper<Message>, Collection<Throwable>>>() {
+					@Override
+					public Pair<PagingWrapper<Message>, Collection<Throwable>> call()
+							throws Exception {
+						return sendQueuedMessageBatch(sap);
+					}
+				});
 	}
 
 	private Pair<PagingWrapper<Message>, Collection<Throwable>>

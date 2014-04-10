@@ -52,6 +52,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
 import org.jasig.ssp.transferobject.reports.PlanIdPersonIdPair;
+import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -96,11 +97,14 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	
 	private static String CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS = "CREDIT_HOURS";
 
+	public Class<Void> getBatchExecReturnType() {
+		return Void.TYPE;
+	}
 
 	// intentionally not transactional... this is the main loop, each iteration
 	// of which should be its own transaction.
 	@Override
-	public void exec() {
+	public void exec(CallableExecutor<Void> batchExecutor) {
 
 		if ( Thread.currentThread().isInterrupted() ) {
 			LOGGER.info("Abandoning external person sync because of thread interruption");
@@ -117,29 +121,48 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		
 		
 		//Load up and normalize our configs
-		Set<String> gradesSet = new HashSet<String>();
+		final Set<String> gradesSet = new HashSet<String>();
 		initPassingGrades(gradesSet);
 		
-		Set<String> additionalCriteriaSet = new HashSet<String>();
+		final Set<String> additionalCriteriaSet = new HashSet<String>();
 		initAdditionalCriteria(additionalCriteriaSet);
 		
 		//Lets get the cutoff term and passing grades from the config table
-		Term cutoffTerm = deriveCuttoffTerm();
+		final Term cutoffTerm = deriveCuttoffTerm();
 		LOGGER.info("BEGIN : MAPSTATUS REPORT ");
 		
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
 		List<PlanIdPersonIdPair> allActivePlans = planService.getAllActivePlanIds();
 		LOGGER.info("Starting report calculations for {} plans",allActivePlans.size());
 		
-		List<Term> allTerms = termService.getAll();
+		final List<Term> allTerms = termService.getAll();
 		//Sort terms by startDate, we do this here so we have no dependency to the default sort order in termService.getAll()
 		sortTerms(allTerms);
 		
 		//Iterate through the active plans.  A transaction is committed after each plan
-		for (PlanIdPersonIdPair planIdPersonIdPair : allActivePlans) {
-			evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 
-					allTerms, planIdPersonIdPair);
+		for (final PlanIdPersonIdPair planIdPersonIdPair : allActivePlans) {
+			if (batchExecutor == null) {
+				evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm,
+						allTerms, planIdPersonIdPair);
+			} else {
+				try {
+					batchExecutor.exec(new Callable<Void>() {
+						@Override
+						public Void call() throws Exception {
+							evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm,
+									allTerms, planIdPersonIdPair);
+							return null;
+						}
+					});
+				} catch ( RuntimeException e ) {
+					throw e;
+				} catch ( Exception e ) {
+					throw new RuntimeException(e);
+				}
+			}
+
 		}
+		LOGGER.info("END : MAPSTATUS REPORT ");
 	}
 
 	private void initAdditionalCriteria(Set<String> additionalCriteriaSet) {

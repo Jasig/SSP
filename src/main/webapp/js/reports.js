@@ -279,7 +279,6 @@ var ssp = ssp || {};
 					loadPage();
 		        }
 		 }
-
 		    
 		
 		var initializeDateRange = function(){
@@ -358,15 +357,6 @@ var ssp = ssp || {};
 					container.html('');
 					addSelectItem("", "Not Used", container);
 				}
-				/*
-				if(value && value.length > 0){
-					loadFormattedCourseInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
-							.locate('formattedCourseGroup'));
-				}else{
-					var container = that.locate('formattedCourseGroup');
-					container.html('');
-					addSelectItem("", "Not Used", container);
-				}*/
 				
 			});
 			
@@ -398,66 +388,38 @@ var ssp = ssp || {};
 		loadingMessage.slideDown(easeRate, function() {
 			loadForm();	
 		});
+		
+		var getReportsList = function() {
+        	var rslt = [];
+            $.ajax({
+                url: '/ssp/api/1/report',
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data.reports;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
         	
 		function loadPage(){
 		//add here to include in drop down
-		reportsSelect
-				.append('<option value="generalStudentForm">General Student Report</option>');
-		reportsSelect
-                .append('<option value="caseLoadForm">Current Caseload Statuses Report</option>');		
-		reportsSelect
-                .append('<option value="caseloadActivityReport">Caseload Activity Report</option>');			
-		reportsSelect
-		        .append('<option value="confidentialityAgreementForm">Confidentiality Agreement</option>');		
-		reportsSelect
-		        .append('<option value="counselingRefGuideForm">Counseling Reference Guide</option>');		
-		reportsSelect
-				.append('<option value="counselorCaseManagementReport">Counselor Case Management Report</option>');
-		reportsSelect
-				.append('<option value="specialServicesForm">Special Services Report</option>');
-		
-		reportsSelect
-		.append('<option value="disabilityServices">Disability Services Report</option>');
-		
-		reportsSelect
-				.append('<option value="" disabled >- Early Alert Reports -</option>');
-		reportsSelect
-				.append('<option value="earlyAlertCaseCounts">Early Alert Case Counts Report</option>');
-		
-		reportsSelect
-		.append('<option value="earlyAlertStudent">Early Alert Student Report</option>');
-		
-		reportsSelect
-		.append('<option value="earlyAlertStudentReferral">Early Alert Student Referral Report</option>');
-		
-		reportsSelect
-		.append('<option value="earlyAlertStudentProgress">Early Alert Student Progress Report</option>');
-		
-		reportsSelect
-		.append('<option value="earlyAlertStudentOutreach">Early Alert Student Outreach Report</option>');
-		
-		reportsSelect
-		.append('<option value="earlyAlertStudentOutcome">Early Alert Student Outcome Report</option>');
-		
-		reportsSelect
-		.append('<option value="" disabled >- Journal/Task Reports -</option>');
-		
-		reportsSelect
-		.append('<option value="journalSessionDetail">Journal Step Detail Report</option>');
-		
-		reportsSelect
-		.append('<option value="" disabled >- MAP Reports -</option>');
-		
-		reportsSelect
-		.append('<option value="numberCoursesInPlan">Number of Courses in Plans</option>');
-		
-		reportsSelect
-		.append('<option value="numberPlansByAdvisor">Number of Plans by Advisor</option>');
-		
-		reportsSelect
-		.append('<option value="numberStudentsByStatus">Number of Students by Status</option>');
-		reportsSelectChange();
-		loadingMessage.slideUp(easeRate);
+			var reports = getReportsList();
+			
+			if (reports && reports.length != 0) {
+	            $(reports).each(function(index, report) {
+	            	if(report.first)
+	            		reportsSelect.append('<option value="' + report.first  + '">' + report.second + '</option>');
+	            	else
+	            		reportsSelect.append('<option value="" disabled >' + report.second + '</option>');
+	            });
+			}
+			reportsSelectChange();
+			loadingMessage.slideUp(easeRate);
 		}
 		
 		//TODO Controller Generated but DAO's incomplete at this time.

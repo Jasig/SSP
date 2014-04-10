@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -43,8 +44,8 @@ public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 	
 	private Term term;
 	private List<AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> courses;
-	private Float totalCreditHours;
-	private Float totalDevCreditHours;
+	private BigDecimal totalCreditHours;
+	private BigDecimal totalDevCreditHours;
 	private String contactNotes;
 	private String studentNotes;
 	private Boolean isImportant;
@@ -83,12 +84,12 @@ public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 	}
 	
 	private void updateCreditHours(){
-		totalCreditHours = new Float(0);
-		totalDevCreditHours = new Float(0);
+		totalCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
+		totalDevCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
 		for(AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>> course:courses){
-			totalCreditHours = totalCreditHours + course.getCreditHours().floatValue();
+			totalCreditHours = totalCreditHours.add(course.getCreditHours());
 			if(course.isDev())
-				totalDevCreditHours = totalDevCreditHours + course.getCreditHours().floatValue();
+				totalDevCreditHours = totalDevCreditHours.add(course.getCreditHours());
 		}
 	}
 	/**
@@ -103,28 +104,28 @@ public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 	/**
 	 * @return the totalCreditHours
 	 */
-	public Float getTotalCreditHours() {
+	public BigDecimal getTotalCreditHours() {
 		return totalCreditHours;
 	}
 	
 	/**
 	 * @param totalDevCreditHours the totalDevCreditHours to set
 	 */
-	public void setTotalDevHours(Float totalDevCreditHours) {
+	public void setTotalDevHours(BigDecimal totalDevCreditHours) {
 		this.totalDevCreditHours = totalDevCreditHours;
 	}
 	
 	/**
 	 * @return the totalDevCreditHours
 	 */
-	public Float getTotalDevCreditHours() {
+	public BigDecimal getTotalDevCreditHours() {
 		return totalDevCreditHours;
 	}
 	
 	/**
 	 * @param totalCreditHours the totalCreditHours to set
 	 */
-	public void setTotalCreditHours(Float totalCreditHours) {
+	public void setTotalCreditHours(BigDecimal totalCreditHours) {
 		this.totalCreditHours = totalCreditHours;
 	}
 	/**
@@ -178,7 +179,7 @@ public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 	/**
 	 * @param totalDevCreditHours the totalDevCreditHours to set
 	 */
-	public void setTotalDevCreditHours(Float totalDevCreditHours) {
+	public void setTotalDevCreditHours(BigDecimal totalDevCreditHours) {
 		this.totalDevCreditHours = totalDevCreditHours;
 	}
 

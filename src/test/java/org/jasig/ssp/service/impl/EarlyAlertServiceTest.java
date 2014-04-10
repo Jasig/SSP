@@ -149,7 +149,7 @@ public class EarlyAlertServiceTest {
 		sessionFactory.getCurrentSession().flush();
 
 		// Try to send all messages to the fake server.
-		messageService.sendQueuedMessages();
+		messageService.sendQueuedMessages(null);
 
 		// assert
 		assertEquals("Sent message count did not match.", 2,
@@ -270,7 +270,7 @@ public class EarlyAlertServiceTest {
 		sessionFactory.getCurrentSession().flush();
 
 		// Try to send all messages to the fake server.
-		messageService.sendQueuedMessages();
+		messageService.sendQueuedMessages(null);
 
 		// assert
 		assertEquals(
@@ -296,7 +296,7 @@ public class EarlyAlertServiceTest {
 		sessionFactory.getCurrentSession().flush();
 
 		// Send all messages to the fake server.
-		messageService.sendQueuedMessages();
+		messageService.sendQueuedMessages(null);
 
 		// assert
 		assertEquals(
@@ -333,7 +333,7 @@ public class EarlyAlertServiceTest {
 		sessionFactory.getCurrentSession().flush();
 
 		// Try to send all messages to the fake server.
-		messageService.sendQueuedMessages();
+		messageService.sendQueuedMessages(null);
 
 		// assert
 		assertEquals("Sent message count did not match.", 2,

@@ -36,4 +36,5 @@ public interface ExternalCourseService extends ExternalReferenceDataService<Exte
 
 	void flushCache();
 
+	Boolean hasCourseTerms();
 }
