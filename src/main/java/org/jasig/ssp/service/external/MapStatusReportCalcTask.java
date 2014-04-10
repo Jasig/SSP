@@ -18,9 +18,8 @@
  */
 package org.jasig.ssp.service.external;
 
-public interface MapStatusReportCalcTask {
-	/**
-	 * Calculate Map Plan Status for all active plans
-	 */
-	void exec();
+import org.jasig.ssp.util.CallableExecutor;
+
+public interface MapStatusReportCalcTask extends BatchedTask<Void> {
+
 }
