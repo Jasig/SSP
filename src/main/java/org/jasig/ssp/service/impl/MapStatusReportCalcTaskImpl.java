@@ -46,6 +46,7 @@ import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
+import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.transaction.WithTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MapStatusReportCalcTaskImpl.class);
-	
+
 	@Autowired 
 	private transient PlanService planService;
 	
@@ -81,13 +82,15 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	
 	@Autowired
 	protected transient MessageTemplateService  messageTemplateService;
-	
 
+	public Class<Void> getBatchExecReturnType() {
+		return Void.TYPE;
+	}
 
-	// intentionally not transactional... this is the main loop, each iteration
+		// intentionally not transactional... this is the main loop, each iteration
 	// of which should be its own transaction.
 	@Override
-	public void exec() {
+	public void exec(CallableExecutor<Void> batchExecutor) {
 
 		if ( Thread.currentThread().isInterrupted() ) {
 			LOGGER.info("Abandoning map status report calculation because of thread interruption");
@@ -107,27 +110,27 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		mapStatusReportService.deleteAllOldReports();
 		
 		
-		Collection<ExternalSubstitutableCourse> allSubstitutableCourses = mapStatusReportService.getAllSubstitutableCourses();
+		final Collection<ExternalSubstitutableCourse> allSubstitutableCourses = mapStatusReportService.getAllSubstitutableCourses();
 		
 		//Load up our configs
-		Set<String> gradesSet = mapStatusReportService.getPassingGrades();
-		Set<String> additionalCriteriaSet = mapStatusReportService.getAdditionalCriteria();
-		boolean termBound = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_term_bound_strict").trim());
-		boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
+		final Set<String> gradesSet = mapStatusReportService.getPassingGrades();
+		final Set<String> additionalCriteriaSet = mapStatusReportService.getAdditionalCriteria();
+		final boolean termBound = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_term_bound_strict").trim());
+		final boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
 		
 		//Lets figure out our cutoff term
-		Term cutoffTerm = mapStatusReportService.deriveCuttoffTerm();
+		final Term cutoffTerm = mapStatusReportService.deriveCuttoffTerm();
 		
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
 		List<MapStatusReportPerson> allActivePlans = planService.getAllActivePlanIds();
 		LOGGER.info("Starting report calculations for {} plans",allActivePlans.size());
 		
-		List<Term> allTerms = termService.getAll();
+		final List<Term> allTerms = termService.getAll();
 		//Sort terms by startDate, we do this here so we have no dependency on the default sort order in termService.getAll()
 		sortTerms(allTerms);
 		
 		//Iterate through the active plans.  A transaction is committed after each plan
-		for (MapStatusReportPerson planIdPersonIdPair : allActivePlans) {
+		for (final MapStatusReportPerson planIdPersonIdPair : allActivePlans) {
 			
 			if ( Thread.currentThread().isInterrupted() ) {
 				LOGGER.info("Abandoning map status report calculation because of thread interruption");
@@ -135,11 +138,28 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			}
 			
 			LOGGER.info("MAP STATUS REPORT CALCULATION STARTING FOR: "+planIdPersonIdPair.getSchoolId());
+
+			if (batchExecutor == null) {
+				evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm,
+						allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
+			} else {
+				try {
+					batchExecutor.exec(new Callable<Void>() {
+						@Override
+						public Void call() throws Exception {
+							evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm,
+									allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
+							return null;
+						}
+					});
+				} catch ( RuntimeException e ) {
+					throw e;
+				} catch ( Exception e ) {
+					throw new RuntimeException(e);
+				}
+			}
 			
-			evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 
-					allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
-			
-			LOGGER.info("FINISHED MAP STATUS REPORT CALCULATION FOR: "+planIdPersonIdPair.getSchoolId());
+			LOGGER.info("FINISHED MAP STATUS REPORT CALCULATION FOR: " + planIdPersonIdPair.getSchoolId());
 		}
 		summary.setEndTime(Calendar.getInstance());
 		summary.setStudentsInScope(allActivePlans.size());

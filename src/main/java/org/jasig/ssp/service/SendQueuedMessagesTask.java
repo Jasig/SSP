@@ -16,11 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.external;
+package org.jasig.ssp.service;
 
-import org.jasig.ssp.util.CallableExecutor;
+
+import org.jasig.ssp.model.Message;
+import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.sort.PagingWrapper;
 
-public interface ExternalPersonSyncTask extends BatchedTask<Pair<Long,Long>> {
+import java.util.Collection;
 
+public interface SendQueuedMessagesTask extends BatchedTask<Pair<PagingWrapper<Message>, Collection<Throwable>>> {
 }
