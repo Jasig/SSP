@@ -285,7 +285,8 @@ public class MessageTemplateServiceImpl extends
 				totalPlanCreditHours,
 				termCourses,
 				institutionName);
- 
+
+		messageParams.put("printParams", planOutput);
 		messageParams.put("isPrivate", planOutput.getIsPrivate());
 		messageParams.put("includeCourseDescription", planOutput.getIncludeCourseDescription());
 		messageParams.put("includeFinancialAidInformation", planOutput.getIncludeFinancialAidInformation());
