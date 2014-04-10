@@ -50,6 +50,8 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalPersonSyncTaskImpl.class);
 
+	private static final Class<Pair<Long, Long>> BATCH_RETURN_TYPE =
+			(Class<Pair<Long, Long>>) new Pair<Long,Long>(null,null).getClass();
 
 	private static final String BATCH_SIZE_CONFIG_NAME = "task_external_person_sync_batch_size";
 	private static final int DEFAULT_BATCH_SIZE = 100;
@@ -211,6 +213,11 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 
 		LOGGER.info("END : External person sync.");
+	}
+
+	@Override
+	public Class<Pair<Long, Long>> getBatchExecReturnType() {
+		return BATCH_RETURN_TYPE;
 	}
 
 	protected Pair<Long, Long> syncWithPersonInTransaction(final SortingAndPaging sAndP) throws Exception {

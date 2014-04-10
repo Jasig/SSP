@@ -188,8 +188,8 @@ public class MessageServiceTest {
 		}
 
 		// intentionally call twice. see comments above.
-		service.sendQueuedMessages();
-		service.sendQueuedMessages();
+		service.sendQueuedMessages(null);
+		service.sendQueuedMessages(null);
 
 		assertNotNull("Valid message not flagged as sent",
 				messageDao.get(validMsg.getId()).getSentDate());

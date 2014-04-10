@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -153,8 +154,8 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		
 		
 		List<TermCourses<T,TO>> courses = collectTermCourses(plan);
-		Float totalPlanCreditHours = calculateTotalPlanHours(courses);
-		Float totalPlanDevHours = calculateTotalPlanDevHours(courses);
+		BigDecimal totalPlanCreditHours = calculateTotalPlanHours(courses);
+		BigDecimal totalPlanDevHours = calculateTotalPlanDevHours(courses);
 		
 		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
 				planOutput, 
@@ -182,21 +183,24 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				coursesByTerm.put(course.getTermCode(), termCourses);
 			}
 		}
-		for(Map.Entry<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> entry: coursesByTerm.entrySet()){
-			final String termCode = entry.getKey();
-			final List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> coursesInTerm = entry.getValue();
-			final List<String> courseCodesInTerm = Lists.newArrayListWithCapacity(coursesInTerm.size());
-			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
-				courseCodesInTerm.add(course.getCourseCode());
-			}
-			final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
-			for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
-				if(validCourseCodes.isEmpty() || validCourseCodes.contains(course.getCourseCode())){
-					continue;
-				}else{
-					  course.setIsValidInTerm(false);
-					  model.setIsValid(false);
-					  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
+		final Boolean areAnyCourseTerms = courseService.hasCourseTerms();
+		if ( areAnyCourseTerms != null && areAnyCourseTerms ) {
+			for(Map.Entry<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> entry: coursesByTerm.entrySet()){
+				final String termCode = entry.getKey();
+				final List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> coursesInTerm = entry.getValue();
+				final List<String> courseCodesInTerm = Lists.newArrayListWithCapacity(coursesInTerm.size());
+				for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+					courseCodesInTerm.add(course.getCourseCode());
+				}
+				final List<String> validCourseCodes = getCourseService().getValidCourseCodesForTerm(termCode, courseCodesInTerm);
+				for ( AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : coursesInTerm ) {
+					if(validCourseCodes.contains(course.getCourseCode())){
+						continue;
+					}else{
+						  course.setIsValidInTerm(false);
+						  model.setIsValid(false);
+						  course.setInvalidReasons("Course: " + course.getFormattedCourse() + " is not currently offered in the selected term.");
+					}
 				}
 			}
 		}
@@ -231,7 +235,14 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			
 			if(!termCodeTerm.containsKey(course.getTermCode())){
-				termCodeTerm.put(course.getTermCode(), getTermService().getByCode(course.getTermCode()));
+				try {
+					termCodeTerm.put(course.getTermCode(), getTermService().getByCode(course.getTermCode()));
+				} catch ( ObjectNotFoundException e ) {
+					// nothing to be done
+					// (this sort of failed lookup has been in the field, e.g. where you're looking up an existing
+					// MAP while the back-end ETL job had truncated external_term and hadn't gotten around to
+					// filling it again
+				}
 			}
 			courseCodeTermCode.put(course.getCourseCode(), course.getTermCode());
 			courseCodeCourse.put(course.getCourseCode(), course);
@@ -259,13 +270,17 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				Term requireingTerm = termCodeTerm.get(requireingTermCode);
 				requiringCourse.setInvalidReasons(null);
 				if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)){
-					if(!requiredTerm.getCode().equals(requireingTerm.getCode())){
+					if(!requiredTermCode.equals(requireingTermCode)){
 						requiringCourse.setHasCorequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Corequisite " + requiredCourse.getFormattedCourse() + " is not in same term.");
 					}		
 				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE_CO)){
-					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
+					if(requiredTermCode.equals(requireingTermCode)){
+						continue;
+					}
+					if ( requiredTerm == null || requireingTerm == null ) {
+						// no guarantee that we can resolve term codes
 						continue;
 					}
 					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
@@ -275,7 +290,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 						requiringCourse.setInvalidReasons(" Pre/Corequisite " + requiredCourse.getFormattedCourse() + " is not in previous term.");
 					}
 				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE)){
-					if(requiredTerm.getCode().equals(requireingTerm.getCode())){
+					if(requiredTermCode.equals(requireingTermCode)){
 						requiringCourse.setHasPrerequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Prerequisite " + requiredCourse.getFormattedCourse() + " is in same term.");
@@ -304,18 +319,18 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 
 	protected abstract UUID getPersonIdPlannedFor(TO model);
 
-	private Float calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {
-		Float totalDevCreditHours = new Float(0);
+	private BigDecimal calculateTotalPlanDevHours(List<TermCourses<T, TO>> courses) {
+		BigDecimal totalDevCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
 		for(TermCourses<T,TO> termCourses : courses){
-			totalDevCreditHours = totalDevCreditHours + termCourses.getTotalDevCreditHours();
+			totalDevCreditHours = totalDevCreditHours.add(termCourses.getTotalDevCreditHours());
 		}
 		return totalDevCreditHours;
 	}
 
-	private Float calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
-		Float totalPlanCreditHours = new Float(0);
+	private BigDecimal calculateTotalPlanHours(List<TermCourses<T,TO>> courses) {
+		BigDecimal totalPlanCreditHours = new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP);
 		for(TermCourses<T,TO> termCourses : courses){
-			totalPlanCreditHours = totalPlanCreditHours + termCourses.getTotalCreditHours();
+			totalPlanCreditHours = totalPlanCreditHours.add(termCourses.getTotalCreditHours());
 		}
 		return totalPlanCreditHours;
 	}

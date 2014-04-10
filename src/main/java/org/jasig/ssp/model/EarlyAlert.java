@@ -294,6 +294,11 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	public Set<EarlyAlertReason> getEarlyAlertReasons() {
 		return earlyAlertReasonIds;
 	}
+	
+	//TODO ELIMINATE WITH 2.4 For Compatibility with Velocity Templates
+	public Set<EarlyAlertReason> getEarlyAlertReasonIds() {
+		return earlyAlertReasonIds;
+	}
 
 	/**
 	 * @param earlyAlertReasonIds
@@ -308,6 +313,14 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	 * @return the earlyAlertSuggestionIds
 	 */
 	public Set<EarlyAlertSuggestion> getEarlyAlertSuggestions() {
+		return earlyAlertSuggestions;
+	}
+	
+	/**
+	 * @return the earlyAlertSuggestionIds
+	 */
+	//TODO ELIMINATE WITH 2.4 For Compatibility with Velocity Templates
+	public Set<EarlyAlertSuggestion> getEarlyAlertSuggestionIds() {
 		return earlyAlertSuggestions;
 	}
 

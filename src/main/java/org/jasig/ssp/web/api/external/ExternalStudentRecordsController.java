@@ -272,9 +272,10 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		String defaultStatusCode = getDefaultStatusCode(mappings);
 		
 		for(ExternalStudentTranscriptCourseTO course:courses){
-			Person person = null;
 			try{
-				person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId(),false);
+				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId(),false);
+				if(person != null)
+					course.setFacultyName(person.getFullName());
 			}catch(ObjectNotFoundException e)
 			{
 				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Factulty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());

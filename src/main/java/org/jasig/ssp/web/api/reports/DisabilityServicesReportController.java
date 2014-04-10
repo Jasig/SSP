@@ -121,7 +121,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REPORT_READ)
+	@PreAuthorize("(hasRole(Permission.SECURITY_REPORT_READ) and hasRole('ROLE_ACCOMMODATION_READ'))")
 	@ResponseBody
 	public void getDisabilityServicesReport(
 			final HttpServletResponse response,

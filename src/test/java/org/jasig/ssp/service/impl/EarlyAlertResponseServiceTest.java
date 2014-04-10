@@ -185,7 +185,7 @@ public class EarlyAlertResponseServiceTest {
 		sessionFactory.getCurrentSession().flush();
 
 		// Try to send all messages to the fake server.
-		messageService.sendQueuedMessages();
+		messageService.sendQueuedMessages(null);
 
 		// assert
 		assertEquals("Sent message count did not match.", 3,
