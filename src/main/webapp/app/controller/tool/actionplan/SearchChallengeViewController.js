@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
         searchChallengeReferralService: 'searchChallengeReferralService',
         store: 'addTasksStore',
-        task: 'currentTask',
+        task: 'currentTask'
     },
     
     config: {
@@ -41,6 +41,9 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
     },
     
     control: {
+		view: {
+			render: 'onRender'
+		},
         categoryNameCombo: {
             selector: '#categoryNameCombo',
             listeners: {
@@ -71,6 +74,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             itemdblclick: 'onItemDblClick'
         },
         
+        challengeGridPager: '#challengeGridPager',
+        
         saveBulkActionPlanButton: {
             click: 'onSaveBulkActionPlanButtonClick'
         },
@@ -79,31 +84,14 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             click: 'onCancelClick'
         },
         
-        'categoryCancel': {
-            selector: '#categoryCancel',
-            hidden: true,
+        'resetChallengesButton': {
+            selector: '#resetChallengesButton',
             listeners: {
-                click: 'onCategoryCancelClick'
+                click: 'onResetChallengesButtonClick'
             }
         },
         
-        'challengeCancel': {
-            selector: '#challengeCancel',
-            hidden: true,
-            listeners: {
-                click: 'onChallengeCancelClick'
-            }
-        },
-        
-        'searchCancel': {
-            selector: '#searchCancel',
-            hidden: true,
-            listeners: {
-                click: 'onSearchCancelClick'
-            }
-        },
-		
-		searchKeyword: '#searchKeyword'
+        searchKeyword: '#searchKeyword'
     
     
     
@@ -112,82 +100,123 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
     init: function(){
         var me = this;
         
-        me.challengeCategoriesStore.load();
+        me.challengeCategoriesStore.load({
+            callback: function(records, operation, success){
+                var newStIntake = new Ssp.model.reference.ChallengeCategory();
+                
+                newStIntake.set('name', 'Student Intake Challenges');
+                newStIntake.set('description', '');
+                newStIntake.set('objectStatus', '');
+                newStIntake.set('modifiedBy', '');
+                newStIntake.set('modifiedDate', '');
+                newStIntake.set('id', '1234');
+                newStIntake.set('createdDate', '');
+                newStIntake.set('createdBy', '');
+                var data = [];
+                data.push(newStIntake);
+                me.challengeCategoriesStore.insert(0, data);
+                me.challengeCategoriesStore.commitChanges();
+            }
+        });
         
+        me.challengesStore.clearFilter();
         me.challengesStore.load();
-        
         me.url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('personTask'));
         me.url = me.url.replace('{id}', me.personLite.get('id'));
         
-		me.appEventsController.assignEvent({eventName: 'onSearchKeyword', callBackFunc: me.onSearchKeywordClick, scope: me});
+        
+        me.appEventsController.assignEvent({
+            eventName: 'onSearchKeyword',
+            callBackFunc: me.onSearchKeywordClick,
+            scope: me
+        });
+        
+        
         
         return me.callParent(arguments);
     },
 	
-	destroy: function() {
-    	var me=this;  	
-
-		me.appEventsController.removeEvent({eventName: 'onSearchKeyword', callBackFunc: me.onSearchKeywordClick, scope: me});
-    	
-        return me.callParent( arguments );
+	onRender: function() {
+		var me = this;
+		me.reset();
+	},
+    
+    destroy: function(){
+        var me = this;
+        
+        me.appEventsController.removeEvent({
+            eventName: 'onSearchKeyword',
+            callBackFunc: me.onSearchKeywordClick,
+            scope: me
+        });
+        
+        return me.callParent(arguments);
     },
+    
+    successFunc: function(response, view){
+       
+    },
+    
+   
     
     onSearchKeywordClick: function(button){
         var me = this;
-		me.searchChallenege();
+        me.searchChallenege();
     },
-	
-	searchChallenege: function(){
-		var me = this;
+    
+    searchChallenege: function(){
+        var me = this;
         var selectedCategoryId = '';
         var selectedChallengeId = '';
-		var searchText = '';
-        if (me.getCategoryNameCombo().getValue() !== null) {
+        var searchText = '';
+        if (me.getCategoryNameCombo().getValue() !== null && me.getCategoryNameCombo().getValue() != '1234'){
+			
             selectedCategoryId = me.getCategoryNameCombo().getValue();
         }
         if (me.getCategoryChallengeNameCombo().getValue() !== null) {
             selectedChallengeId = me.getCategoryChallengeNameCombo().getValue();
+			
         }
-		if(me.getView().query('textfield[name=searchKeyword]')[0].value != '')
-		{
-			searchText = me.getView().query('textfield[name=searchKeyword]')[0].value;
-		}
-		if (selectedCategoryId != '' || selectedChallengeId != '' || searchText != '') {
-			me.searchChallengeReferralService.search(selectedCategoryId, selectedChallengeId, searchText, {
-				success: me.searchSuccess,
-				failure: me.searchFailure,
-				scope: me
-			});
-		}
-		else
-			me.searchChallengeReferralStore.removeAll();
-	},
-    
-    onCategoryCancelClick: function(button){
-        var me = this;
-        me.getCategoryNameCombo().setValue("");
-        me.handleSelect(me);
-		
+        if (me.getView().query('textfield[name=searchKeyword]')[0].value != '') {
+            searchText = me.getView().query('textfield[name=searchKeyword]')[0].value;
+			
+        }
+        if (selectedCategoryId != '' || selectedChallengeId != '' || searchText != '') {
+			
+            me.searchChallengeReferralService.search(selectedCategoryId, selectedChallengeId, searchText, {
+                success: me.searchSuccess,
+                failure: me.searchFailure,
+                scope: me
+            });
+        }
+        else 
+            me.searchChallengeReferralStore.removeAll();
     },
     
-    onChallengeCancelClick: function(button){
+    
+    
+    onResetChallengesButtonClick: function(button){
         var me = this;
+        me.reset();
+        
+    },
+    
+    reset: function(){
+        var me = this;
+        
         me.getCategoryChallengeNameCombo().setValue("");
-        me.handleSelect(me);
-		me.searchChallengeReferralStore.removeAll();
-    },
-	
-	onSearchCancelClick: function(button){
-        var me = this;
         me.getSearchKeyword().setValue("");
-		 if (me.getCategoryChallengeNameCombo().getValue() !== null) {
-		 	me.searchChallenege();
-		 }
-		 else
-		 {
-		 	me.searchChallengeReferralStore.removeAll();
-		 }
+        me.challengesStore.clearFilter();
+        me.searchChallengeReferralStore.clearFilter();
+        me.searchChallengeReferralStore.removeAll();
+        me.searchChallengeReferralStore.totalCount = 0;
+        me.getChallengeGridPager().onLoad();
+        me.handleSelect(me);
+		me.getCategoryNameCombo().reset();
+        
     },
+    
+    
     
     handleSelect: function(me){
         var params = me.getAllParams();
@@ -196,20 +225,20 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         });
         var params = me.getAllParams();
         me.doFaceting(params);
-		
+        
     },
     
     getAllParams: function(){
         var me = this;
         var params = {};
-        me.setParam(params, me.getCategoryNameCombo(), 'id');
+       
         me.setParam(params, me.getCategoryChallengeNameCombo(), 'id');
         return params;
     },
     
     doFaceting: function(params){
         var me = this;
-        var facets = [me.getCategoryNameCombo(), me.getCategoryChallengeNameCombo()];
+        var facets = [me.getCategoryChallengeNameCombo()];
         facets.forEach(function(facet){
             facet.getStore().load({
                 params: params
@@ -226,7 +255,7 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
     
     searchSuccess: function(r, scope){
         var me = scope;
-        
+      
         me.getView().setLoading(false);
         
     },
@@ -236,17 +265,25 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         me.getView().setLoading(false);
     },
     
+    
+    
     onCategoryNameComboSelect: function(comp, records, eOpts){
         var me = this;
         var baseUrl = me.apiProperties.createUrl(me.apiProperties.getItemUrl('challengeCategoriesStore'));
-        
-        
-        me.apiProperties.makeRequest({
-            url: baseUrl + 'reference/category/' + comp.getValue() + '/challenge',
-            method: 'GET',
-            successFunc: me.successCategoryFunc
-        });
-        
+        //clearfilter
+		me.challengesStore.clearFilter();
+		
+		if (Ext.ComponentQuery.query('#categoryNameCombo')[0].getRawValue() == 'Student Intake Challenges') {
+			me.challengesStore.load();
+			me.challengesStore.filter('showInStudentIntake', true);
+		}
+		else {
+			me.apiProperties.makeRequest({
+				url: baseUrl + 'reference/category/' + comp.getValue() + '/challenge',
+				method: 'GET',
+				successFunc: me.successCategoryFunc
+			});
+		}
         
     },
     
@@ -259,11 +296,13 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         combo.getStore().removeAll();
         combo.getStore().loadData(data);
         
+        
     },
     
     onCategoryChallengeNameComboSelect: function(comp, records, eOpts){
         var me = this;
-        if (me.getCategoryNameCombo().getValue() == null) {
+        if (me.getCategoryNameCombo().getValue() == null || me.getCategoryNameCombo().getRawValue() == 'Student Intake Challenges') {
+			
             me.searchChallengeReferralService.search('', comp.getValue(), '', {
                 success: me.searchSuccess,
                 failure: me.searchFailure,
@@ -278,6 +317,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             });
         }
     },
+    
+    
     
     onAddChallengeReferralButtonClick: function(button){
         var me = this;
@@ -302,6 +343,7 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         
         var sAll = Ext.ComponentQuery.query('.challengesgrid')[0].getView().getSelectionModel().selectAll();
         var s = Ext.ComponentQuery.query('.challengesgrid')[0].getView().getSelectionModel().getSelection();
+       
         Ext.each(s, function(item){
             var task = new Ssp.model.tool.actionplan.Task();
             task.set('name', item.data.challengeReferralName);
@@ -337,14 +379,16 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         me.getView().setLoading(true);
         var data = [];
         me.store.each(function(item, index, count){
-           
+        
             item.set('type', 'SSP');
             item.set('personId', me.personLite.get('id'));
-			item.set('confidentialityLevel',{id: item.data.confidentialityLevel.id});
-         
+            item.set('confidentialityLevel', {
+                id: item.data.confidentialityLevel.id
+            });
+            
             data.push(item.getData());
         });
-		
+        
         successFunc = function(response, view){
         
             me.getView().setLoading(false);

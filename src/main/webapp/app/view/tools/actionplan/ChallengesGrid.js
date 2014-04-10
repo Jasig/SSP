@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
         apiProperties: 'apiProperties',
         columnRendererUtils: 'columnRendererUtils'
     },
-    width: 495,
+    width: 450,
     border: 0,
     itemId: 'challengesGrid',
     fullReferralDescription: function(){
@@ -73,12 +73,22 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
                 xtype: 'pagingtoolbar',
                 dock: 'bottom',
                 displayInfo: true,
+				itemId: 'challengeGridPager',
 				store: this.searchChallengeReferralStore,
-                pageSize: me.apiProperties.getPagingSize()
+                //pageSize: me.apiProperties.getPagingSize(),
+               listeners: {
+                    afterrender: function(){
+                        var a = Ext.query("button[data-qtip=Refresh]");
+                        for (var x = 0; x < a.length; x++) {
+                            a[x].style.display = "none";
+                        }
+                    }
+                }
             }],
-           
+           multiSelect: true,
             viewConfig: {
                 copy: true,
+				
                 plugins: {
                     ptype: 'gridviewdragdrop',
 		                  dragGroup: 'gridtogrid',

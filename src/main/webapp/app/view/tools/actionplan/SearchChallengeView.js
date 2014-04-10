@@ -48,59 +48,48 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                 padding: '0 0 0 15',
                 width: '100%',
                 height: '100%',
-                items: [ {
-                    xtype: 'label',
-                    padding: '0 0 2 3',
-                    text: 'Filter Category, Challenge or Keyword'
-                }, 
-				 {
-				 	xtype: 'fieldset',
-				 	border: 0,
-				 	title: '',
-				 	margin: '0 0 0 0',
-				 	padding: '5 0 0 5',
-				 	layout: 'hbox',
-				 	defaults: {
-				 		anchor: '100%'
-				 	},
-				 	items: [{
-				 		xtype: 'combobox',
-				 		fieldLabel: '',
-				 		itemId: 'categoryNameCombo',
-				 		name: 'categoryNameCombo',
-				 		fieldLabel: '',
-				 		emptyText: 'Filter by Category',
-				 		store: me.challengeCategoriesStore,
-				 		valueField: 'id',
-				 		displayField: 'name',
-				 		mode: 'local',
-				 		typeAhead: true,
-				 		queryMode: 'local',
-				 		allowBlank: true,
-				 		width: 455,
-				 		padding: '0 0 0 10'
-				 	}, {
-				 		tooltip: 'Reset',
-				 		text: '',
-				 		width: 23,
-				 		height: 25,
-				 		name: 'categoryCancel',
-				 		cls: 'mapClearSearchIcon',
-				 		xtype: 'button',
-				 		itemId: 'categoryCancel'
-				 	}]
-				 },
-				 {
-				 	xtype: 'fieldset',
-				 	border: 0,
-				 	title: '',
-				 	margin: '0 0 0 0',
-				 	padding: '5 0 0 5',
-				 	layout: 'hbox',
-				 	defaults: {
-				 		anchor: '100%'
-				 	},
-				 	items: [ {
+                items: [{
+                    xtype: 'fieldset',
+                    border: 0,
+                    title: '',
+                    margin: '0 0 5 0',
+                    padding: '5 0 0 5',
+                    layout: 'hbox',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    items: [{
+                        xtype: 'label',
+                        padding: '0 0 2 3',
+                        text: 'Filter Category, Challenge or Keyword'
+                    }, {
+                        xtype: 'tbspacer',
+                        width: 195
+                    }, {
+                        tooltip: 'Reset',
+                        text: 'Reset',
+                        type: 'refresh',
+                        xtype: 'button',
+                        padding: '0 0 2 3',
+                        itemId: 'resetChallengesButton'
+                    }]
+                }, {
+                    xtype: 'combobox',
+                    fieldLabel: '',
+                    itemId: 'categoryNameCombo',
+                    name: 'categoryNameCombo',
+                    fieldLabel: '',
+                    emptyText: 'Filter by Category',
+                    store: me.challengeCategoriesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    typeAhead: true,
+                    queryMode: 'local',
+                    allowBlank: true,
+                    width: 430,
+                    padding: '0 0 0 10'
+                }, {
                     xtype: 'combobox',
                     fieldLabel: '',
                     itemId: 'categoryChallengeNameCombo',
@@ -114,19 +103,9 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                     typeAhead: true,
                     queryMode: 'local',
                     allowBlank: true,
-                    width: 455,
+                    width: 430,
                     padding: '0 0 0 10'
                 }, {
-				 		tooltip: 'Reset',
-				 		text: '',
-				 		width: 23,
-				 		height: 25,
-				 		name: 'challengeCancel',
-				 		cls: 'mapClearSearchIcon',
-				 		xtype: 'button',
-				 		itemId: 'challengeCancel'
-				 	}]
-					}, {
                     xtype: 'fieldcontainer',
                     margin: '0 0 0 10',
                     layout: {
@@ -147,35 +126,26 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                         itemId: 'searchKeyword',
                         name: 'searchKeyword',
                         margin: ' 0 0 0 20',
-                        width: 405,
-                    enableKeyEvents: true,
-                    listeners: {
-                        afterrender: function(field){
-                            field.focus(false, 0);
-                        },
-                        specialkey: {
-                            scope: me,
-                            fn: function(field, el){
-                                if (el.getKey() == Ext.EventObject.ENTER) {
-                                    this.appEventsController.getApplication().fireEvent("onSearchKeyword");
+                        width: 380,
+                        enableKeyEvents: true,
+                        listeners: {
+                            afterrender: function(field){
+                                field.focus(false, 0);
+                            },
+                            specialkey: {
+                                scope: me,
+                                fn: function(field, el){
+                                    if (el.getKey() == Ext.EventObject.ENTER) {
+                                        this.appEventsController.getApplication().fireEvent("onSearchKeyword");
+                                    }
                                 }
                             }
                         }
-                    }
-                    }, {
-				 		tooltip: 'Reset',
-				 		text: '',
-				 		width: 23,
-				 		height: 25,
-				 		name: 'searchCancel',
-				 		cls: 'mapClearSearchIcon',
-				 		xtype: 'button',
-				 		itemId: 'searchCancel'
-				 	}]
+                    }]
                 }, {
                     xtype: 'fieldset',
                     width: '100%',
-					padding: '0 350 0 10',
+                    padding: '0 305 0 10',
                     margin: '2',
                     layout: {
                         align: 'stretch',
@@ -185,39 +155,39 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                     items: [{
                         xtype: 'button',
                         text: 'Add',
-						itemId: 'addChallengeReferralButton'
+                        itemId: 'addChallengeReferralButton'
                     }, {
                         xtype: 'tbspacer',
                         width: 10
                     }, {
                         xtype: 'button',
                         text: 'Add All',
-						itemId: 'addAllChallengeReferralButton'
+                        itemId: 'addAllChallengeReferralButton'
                     }]
                 }, {
                     xtype: 'challengesgrid',
                     flex: 1,
-					itemId: 'challengesgrid'
+                    itemId: 'challengesgrid'
                 }]
             }],
-			dockedItems: [{
-                    xtype: 'fieldcontainer',
-                    layout: {
-                        align: 'stretch',
-                        type: 'hbox'
-                    },
-                    fieldLabel: '',
-                    items: [{
-                        xtype: 'button',
-                        text: 'Save',
-                        itemId: 'saveBulkActionPlanButton'
-                    }, {
-                        xtype: 'button',
-                        text: 'Cancel',
-						itemId: 'cancelButton'
-                       
-                    }]
+            dockedItems: [{
+                xtype: 'fieldcontainer',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                fieldLabel: '',
+                items: [{
+                    xtype: 'button',
+                    text: 'Save',
+                    itemId: 'saveBulkActionPlanButton'
+                }, {
+                    xtype: 'button',
+                    text: 'Cancel',
+                    itemId: 'cancelButton'
+                
                 }]
+            }]
         
         
         });

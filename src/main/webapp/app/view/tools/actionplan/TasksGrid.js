@@ -90,7 +90,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 renderer: me.fullReferralDescription()
             }, {
                 header: 'Link',
-                flex: .35,
+                flex: .45,
                 dataIndex: 'link',
                 rowEditable: true,
                 field: {

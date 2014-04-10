@@ -30,7 +30,7 @@ Ext.define('Ssp.view.tools.actionplan.AddAPTask', {
         Ext.apply(this, {
             items: [{
                 xtype: 'searchchallengeview',
-                width: 500
+                width: 455
             }, {
                 xtype: 'tbspacer',
                 width: 20

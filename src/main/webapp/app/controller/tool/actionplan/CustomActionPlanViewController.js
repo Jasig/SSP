@@ -52,16 +52,23 @@ Ext.define('Ssp.controller.tool.actionplan.CustomActionPlanViewController', {
         
         var customForm = form.getForm();
 		
-		var task = new Ssp.model.tool.actionplan.Task();
-            task.set('name', customForm.findField('name').getValue());
-            task.set('description', customForm.findField('description').getValue());
-            task.set('link', customForm.findField('link').getValue());
-			task.set('dueDate' , customForm.findField('dueDate').getValue());
-			task.set('confidentialityLevel' , customForm.findField('confidentialityLevelId').lastSelection[0].data);
-			
-            me.store.add(task);
-			Ext.ComponentQuery.query('.customactionplan')[0].close();
+		var validateResult = me.formUtils.validateForms( customForm );
 		
+		if (validateResult.valid) {
+		
+			var task = new Ssp.model.tool.actionplan.Task();
+			task.set('name', customForm.findField('name').getValue());
+			task.set('description', customForm.findField('description').getValue());
+			task.set('link', customForm.findField('link').getValue());
+			task.set('dueDate', customForm.findField('dueDate').getValue());
+			task.set('confidentialityLevel', customForm.findField('confidentialityLevelId').lastSelection[0].data);
+			
+			me.store.add(task);
+			Ext.ComponentQuery.query('.customactionplan')[0].close();
+		}
+		else{
+			me.formUtils.displayErrors( validateResult.fields );
+		}
         
     }
 });

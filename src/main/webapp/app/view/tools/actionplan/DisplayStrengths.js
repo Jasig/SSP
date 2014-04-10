@@ -84,7 +84,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 				field: {
                     xtype: 'textfield',
 					fieldStyle: "margin-bottom:12px;",
-					maxLength: 2000
+					maxLength: 2000,
+					allowBlank: false
                 }
             }, {
                 header: 'Confidentiality',
