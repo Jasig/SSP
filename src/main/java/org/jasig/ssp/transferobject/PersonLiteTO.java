@@ -178,8 +178,5 @@ public class PersonLiteTO implements Serializable {
 	public void setLastName(@NotNull final String lastName) {
 		this.lastName = lastName;
 	}
-	
-	public String getFullName() {
-		return firstName + " " + lastName;
-	}
+
 }

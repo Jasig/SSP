@@ -151,5 +151,9 @@ public class CoachPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	public String getFullName(){
+		return getFirstName() + " " + getLastName();
+	}
 
 }

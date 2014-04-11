@@ -27,6 +27,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 
@@ -370,7 +371,4 @@ public class CoachPersonLiteTO implements Serializable {
 		this.photoUrl = photoUrl;
 	}
 	
-	public String getFullName(){
-		return firstName + " " + lastName;
-	}
 }
