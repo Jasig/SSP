@@ -696,7 +696,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     destroy: function() {
         var me=this;
-        this.studentTypesStore.clearFilter(true);    
+        me.studentTypesStore.clearFilter(true);    
 		return me.callParent( arguments );
     }
 });
