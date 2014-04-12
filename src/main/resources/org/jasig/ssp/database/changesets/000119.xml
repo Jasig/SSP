@@ -1,0 +1,55 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+  
+    <changeSet author='jim.stanley' id='seeding early alert reminder configs 2' >
+        <insert tableName="config">
+            <column name="id" value="f7156093-2250-4b03-bab7-3af831710b80" />
+            <column name="name" value="task_scheduler_early_alert_trigger" />
+            <column name="description"
+                value="Early Alert Tasks Config:  Drives the frequency of the cron job that will send out scheduled reminders. Currently, reminders to Coaches about outstanding Early Alerts." />
+            <column name="value" value="0 0 4 * * *" /> 
+            <column name="default_value" value="0 0 4 * * *" />           
+            <column name="created_date" valueDate="2014-04-11T12:00:00" />
+            <column name="modified_date" valueDate="2014-04-11T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="660" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='f7156093-2250-4b03-bab7-3af831710b80'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='f7156093-2250-4b03-bab7-3af831710b80'</where>
+            </delete>
+        </rollback>     
+    </changeSet>                                                                                                                          
+</databaseChangeLog>

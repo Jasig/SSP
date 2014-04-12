@@ -18,6 +18,17 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
@@ -58,20 +69,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class ScheduledTaskWrapperServiceImpl
@@ -86,9 +87,11 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SYNC_EXTERNAL_PERSONS_TASK_NAME = "sync-external-persons";
 	public static final String CALC_MAP_STATUS_REPORTS_TASK_NAME = "calc-map-status-reports";
 	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
+	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
 
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
+	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
 	private static final String FIFTEEN_MINUTES_IN_MILLIS = 15 * 60 * 1000 + "";
 
 	// Not a fan of the underscores but matches convention for existing
@@ -105,6 +108,10 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String MAP_STATUS_REPORT_CALC_TASK_ID = "task_map_plan_status_calc";
 	private static final String MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_map_plan_status_calculation_trigger";
 	private static final String MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER = EVERY_DAY_3_AM;
+	
+	private static final String EARLY_ALERT_TASK_ID = "task_early_alert_scheduled_tasks";
+	private static final String EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_early_alert_trigger";
+	private static final String EARLY_ALERT_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
 
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
@@ -189,6 +196,16 @@ public class ScheduledTaskWrapperServiceImpl
 				},
 				SCHEDULER_CONFIG_POLL_TASK_DEFAULT_TRIGGER,
 				SCHEDULER_CONFIG_POLL_TASK_TRIGGER_CONFIG_NAME));
+		
+		this.tasks.put(EARLY_ALERT_TASK_ID, new Task(EARLY_ALERT_TASK_ID,
+				new Runnable() {
+					@Override
+					public void run() {
+						sendEarlyAlertReminders();
+					}
+				},
+				EARLY_ALERT_TASK_DEFAULT_TRIGGER,
+				EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME));
 
 		// Can't interrupt this on cancel b/c it's responsible for rescheduling
 		// itself. A scheduling attempt on an interrupted thread is very
@@ -348,9 +365,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	protected Pair<String,Trigger> configuredOrDefaultTrigger(Task task) {
 		if ( task.configuredTrigger == null || task.configuredTrigger instanceof BadConfigTrigger ) {
-			return new Pair(task.defaultTriggerExpression, task.defaultTrigger);
+			return new Pair<String,Trigger>(task.defaultTriggerExpression, task.defaultTrigger);
 		}
-		return new Pair(task.configuredTriggerExpression, task.configuredTrigger);
+		return new Pair<String,Trigger>(task.configuredTriggerExpression, task.configuredTrigger);
 	}
 
 	protected Pair<String,Trigger> readNewTriggerConfig(String configName)
@@ -802,14 +819,13 @@ public class ScheduledTaskWrapperServiceImpl
 	}
 	
 	@Override
-	@Scheduled(cron = "0 0 2 * * *")
-	// run at 2 am every day
 	public void sendEarlyAlertReminders() {
-		try {
-			earlyAlertService.sendAllEarlyAlertReminderNotifications();
-		} finally {
-			securityService.afterRequest();
-		}
+		execWithTaskContext(SEND_EARLY_ALERT_REMINDERS_TASK_NAME, new Runnable() {
+			@Override
+			public void run() {
+				earlyAlertService.sendAllEarlyAlertReminderNotifications();
+			}
+		});
 	}
 
 	protected static class Task {
