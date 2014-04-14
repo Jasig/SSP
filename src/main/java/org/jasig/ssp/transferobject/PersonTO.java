@@ -24,7 +24,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
+import javax.persistence.Column;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -32,6 +36,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonReferralSource;
 import org.jasig.ssp.model.PersonServiceReason;
@@ -46,10 +51,11 @@ import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
-import org.jasig.ssp.util.DateTimeUtils;
-import org.jasig.ssp.util.collections.Pair;
 
 import com.google.common.collect.Lists;
+
+import org.jasig.ssp.util.DateTimeUtils;
+import org.jasig.ssp.util.collections.Pair;
 
 /**
  * Person transfer object
@@ -152,6 +158,10 @@ public class PersonTO // NOPMD
 	private Integer activeAlertsCount;
 
 	private Integer closedAlertsCount;
+	
+	private String paymentStatus;
+	
+	private String registeredTerms;
 	
 	private String residencyCounty;
 	
@@ -809,6 +819,22 @@ public class PersonTO // NOPMD
 
 	public void setActiveAlertsCount(Integer activeAlertsCount) {
 		this.activeAlertsCount = activeAlertsCount;
+	}
+
+	public String getRegisteredTerms() {
+		return registeredTerms;
+	}
+
+	public void setRegisteredTerms(String registeredTerms) {
+		this.registeredTerms = registeredTerms;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 	/**
