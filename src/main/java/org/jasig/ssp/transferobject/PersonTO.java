@@ -357,35 +357,6 @@ public class PersonTO // NOPMD
 		}
 	}
 
-	private String getCurrentAndFutureTerms(Person model) {
-		List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses = model.getCurrentAndFutureRegistrationStatuses();
-		if(currentAndFutureRegistrationStatuses == null)
-		{
-			return "";
-		}
-		StringBuilder builder = new StringBuilder();
-		for (RegistrationStatusByTerm registrationStatusByTerm : currentAndFutureRegistrationStatuses) 
-		{
-			builder.append(registrationStatusByTerm.getTermCode()+" ");
-		}
-		return builder.toString().trim();
-	}
-	
-	private String getCurrentAndFuturePaymentStatuses(Person model) {
-		List<RegistrationStatusByTerm> currentAndFutureRegistrationStatuses = model.getCurrentAndFutureRegistrationStatuses();
-		if(currentAndFutureRegistrationStatuses == null)
-		{
-			return "N";
-		}
-		StringBuilder builder = new StringBuilder();
-		for (RegistrationStatusByTerm registrationStatusByTerm : currentAndFutureRegistrationStatuses) 
-		{
-			if(registrationStatusByTerm.getTuitionPaid() != null && !registrationStatusByTerm.getTuitionPaid().trim().isEmpty())
-				builder.append(registrationStatusByTerm.getTermCode() + "=" + registrationStatusByTerm.getTuitionPaid() + " ");
-		}
-		return builder.toString().trim();
-	}	
-
 	/**
 	 * Convert a collection of models to a List of equivalent transfer objects.
 	 * 

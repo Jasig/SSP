@@ -29,7 +29,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="366"/>
-	<parameter name="studentTO" class="org.jasig.ssp.transferobject.PersonTO"/>
+	<parameter name="studentTO" class="org.jasig.ssp.transferobject.reports.PersonReportTO"/>
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="studentRecordTO" class="org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO"/>
 	<parameter name="studentPlanTO" class="org.jasig.ssp.transferobject.PlanTO"/>

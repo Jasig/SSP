@@ -25,6 +25,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
@@ -33,6 +34,8 @@ import com.google.common.collect.Lists;
 
 public class PersonReportTO extends PersonTO {
 
+	
+	private List<RegistrationStatusByTerm> registrationStatusByTerms;
 	/**
 	 * Construct a transfer object from a related model instance
 	 * 
@@ -81,7 +84,49 @@ public class PersonReportTO extends PersonTO {
 		sb.append("\n");
 
 		return sb.toString();
+	}
+	
+	public List<RegistrationStatusByTerm> getRegistrationStatusByTersm(){
+		return registrationStatusByTerms;
+	}
 
+	
+	public void setRegistrationStatusByTerm(List<RegistrationStatusByTerm> registrationStatusByTerms){
+		 this.registrationStatusByTerms = registrationStatusByTerms;
+	}
+	
+	
+	public String getRegisteredTerms(){
+		StringBuilder registeredTerms = new StringBuilder("");
+		String space = "";
+		if(registrationStatusByTerms != null && registrationStatusByTerms.size() > 0){
+			for(RegistrationStatusByTerm status:registrationStatusByTerms){
+				registeredTerms.append(space);
+				registeredTerms.append(status.getTermCode());
+				space = " ";
+			}
+		}
+		return registeredTerms.toString();
+	}
+	
+	public String getPaymentStatus(){
+		if(registrationStatusByTerms == null)
+		{
+			return "N";
+		}
+		StringBuilder builder = new StringBuilder("");
+		String space = "";
+		for (RegistrationStatusByTerm status : registrationStatusByTerms) 
+		{
+			if(status.getTuitionPaid() != null && !status.getTuitionPaid().trim().isEmpty()){
+				builder.append(space).
+				append(status.getTermCode())
+				.append("=")
+				.append(status.getTuitionPaid());
+				space = " ";
+			}
+		}
+		return builder.toString();
 	}
 
 }

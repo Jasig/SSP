@@ -51,9 +51,11 @@ import org.jasig.ssp.service.external.ExternalStudentFinancialAidAwardTermServic
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
+import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
+import org.jasig.ssp.transferobject.reports.PersonReportTO;
 import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -116,6 +118,8 @@ public class PersonHistoryReportController extends ReportBaseController {
 	private transient ExternalStudentFinancialAidAwardTermService externalStudentFinancialAidAwardTermService;
 	@Autowired
 	private transient ExternalStudentFinancialAidFileService externalStudentFinancialAidFileService;
+	@Autowired
+	private transient RegistrationStatusByTermService registrationStatusByTermService;
     @Autowired
     private transient ExternalPersonPlanStatusService planStatusService;
     @Autowired
@@ -133,9 +137,11 @@ public class PersonHistoryReportController extends ReportBaseController {
 			throws ObjectNotFoundException, JRException, IOException {
 
 		final Person person = personService.get(personId);
-		final PersonTO personTO = personTOFactory.from(person);
+		final PersonReportTO personTO = new PersonReportTO(person);
 		final SspUser requestor = securityService.currentUser();
         final String schoolId = person.getSchoolId();
+        
+        personTO.setRegistrationStatusByTerm(registrationStatusByTermService.getCurrentAndFutureTerms(person));
 
 		LOGGER.debug("Requester id: " + requestor.getPerson().getId());
 		// get all the journal entries for this person
