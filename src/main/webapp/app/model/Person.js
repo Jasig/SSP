@@ -59,8 +59,6 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
     		 {name: 'formattedStudentIntakeCompleteDate', type: 'date', dateFormat: 'c'},
     		 {name: 'currentProgramStatusName', type: 'auto'},
-    		 {name: 'registeredTerms', type: 'string'},
-    		 {name: 'paymentStatus', type: 'string'},
     		 {name: 'residencyCounty', type: 'string'},
     		 {name: 'f1Status', type: 'string'},
              {name: 'activeAlertsCount', type: 'int'},

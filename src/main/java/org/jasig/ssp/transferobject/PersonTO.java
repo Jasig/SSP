@@ -347,8 +347,6 @@ public class PersonTO // NOPMD
 		this.activeAlertsCount = model.getActiveAlertsCount() == null ? 0 : model.getActiveAlertsCount().intValue();
 		this.closedAlertsCount = model.getClosedAlertsCount() == null ? 0 : model.getClosedAlertsCount().intValue();
 		
-		this.paymentStatus = getCurrentAndFuturePaymentStatuses(model);
-		this.registeredTerms = getCurrentAndFutureTerms(model);
 		Set<Task> tasks = model.getTasks();
 		if(tasks != null && !tasks.isEmpty())
 			setActionPlanCountsAndDate(tasks);
