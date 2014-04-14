@@ -27,6 +27,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
         divisionsStore: 'divisionsStore',
+        catalogYearsStore: 'catalogYearsStore',
 		contactPersonStore: 'contactPersonStore'
     },
     
@@ -47,6 +48,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    me.programsStore.addListener("load", me.onShow, me, {single:true});
 		me.departmentsStore.addListener("load", me.onShow,me, {single:true});
 		me.divisionsStore.addListener("load", me.onShow, me, {single:true});
+		me.catalogYearsStore.addListener("load", me.onShow, me, {single:true});
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
@@ -114,6 +116,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     			var departmentCode = me.getView().query('combobox[name="departmentCode"]')[0].getValue();
 				var noProgramCode = (programCode == null || programCode.length <= 1);
 				var noDepartmentCode = (departmentCode == null || departmentCode.length <= 1);
+				
     			if( noProgramCode || noDepartmentCode){
     				var messageBox = Ext.Msg.confirm({
             		     title:'Save Template No Program/Department Selected',

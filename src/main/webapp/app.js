@@ -404,6 +404,7 @@ Ext.require([
 	'Ssp.store.external.ProgramsFaceted',
 	'Ssp.store.external.Departments',
 	'Ssp.store.external.Divisions',
+	'Ssp.store.external.CatalogYears',
     'Ssp.store.external.Courses',
     'Ssp.store.external.CourseRequisites',
     'Ssp.store.RegistrationStatusByTerm',    
@@ -577,6 +578,7 @@ var apiUrls = [
   {name: 'programfaceted', url: 'reference/program/facet'},
   {name: 'department', url: 'reference/department/all'},//TODO Change to facets.
   {name: 'division', url: 'reference/division/all'},
+  {name: 'catalogYear', url: 'reference/catalogYear/all'},
   {name: 'tag', url: 'reference/tag'},
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
@@ -1710,6 +1712,7 @@ Ext.onReady(function(){
 				    programsStore:'Ssp.store.external.Programs',
 					programsFacetedStore:'Ssp.store.external.ProgramsFaceted',
 				    divisionsStore:'Ssp.store.external.Divisions',
+				    catalogYearsStore:'Ssp.store.external.CatalogYears',
 				    personNotesStore:'Ssp.store.external.PersonNotes',
 				    departmentsStore:'Ssp.store.external.Departments',
 					coursesStore:'Ssp.store.external.Courses',

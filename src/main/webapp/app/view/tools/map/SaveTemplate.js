@@ -26,7 +26,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
-        divisionsStore: 'divisionsStore'
+        divisionsStore: 'divisionsStore',
+        catalogYearsStore: 'catalogYearsStore'
     },
     height: 580,
     width: 850,
@@ -120,7 +121,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        typeAhead: true,
         	                        queryMode: 'local',
         	                        allowBlank: true,
-        	                        width: 250
+        	                        width: 190
         	                    },
         	                    {
                                     xtype: 'tbspacer',
@@ -138,7 +139,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        mode: 'local',
         	                        typeAhead: true,
         	                        allowBlank: true,
-        	                        width: 250
+        	                        width: 190
         	                    },
         	                    {
                                     xtype: 'tbspacer',
@@ -156,8 +157,26 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        mode: 'local',
         	                        typeAhead: true,
         	                        allowBlank: true,
-        	                        width: 250
-        	                    }
+        	                        width: 190
+        	                    },
+        	                    {
+                                    xtype: 'tbspacer',
+                                    width: 10
+                                },
+        	                    {
+        	                        xtype: 'combobox',
+        	                        name: 'catalogYearCode',
+									store: me.catalogYearsStore,
+        	                        fieldLabel: 'Catalog Year',
+									labelAlign: "top",
+        	                        emptyText: 'Specific Cat Year',
+        	                        valueField: 'code',
+        	                        displayField: 'name',
+        	                        mode: 'local',
+        	                        typeAhead: true,
+        	                        allowBlank: true,
+        	                        width: 190
+        	                    }        	                    
         	                    ]},
         			    	{
                             xtype: 'container',

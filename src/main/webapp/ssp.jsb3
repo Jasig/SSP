@@ -1240,6 +1240,11 @@
                     "path": "/app/store/external/"
                 },
                 {
+                    "clsName": "Ssp.store.external.CatalogYears",
+                    "name": "CatalogYears.js",
+                    "path": "/app/store/external/"
+                },                
+                {
                     "clsName": "Ssp.store.external.Courses",
                     "name": "Courses.js",
                     "path": "/app/store/external/"

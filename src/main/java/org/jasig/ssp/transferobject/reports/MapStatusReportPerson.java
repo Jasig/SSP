@@ -23,13 +23,14 @@ import java.util.UUID;
 public class MapStatusReportPerson {
 
 
-	public MapStatusReportPerson(UUID planId, UUID personId, String schoolId, String programCode,String firstName, String lastName) {
+	public MapStatusReportPerson(UUID planId, UUID personId, String schoolId, String programCode,String catalogYearCode, String firstName, String lastName) {
 		super();
 		this.planId = planId;
 		this.personId = personId;
 		this.schoolId = schoolId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.catalogYearCode = catalogYearCode;
 	}
 
 	private UUID planId;
@@ -38,6 +39,7 @@ public class MapStatusReportPerson {
 	private String programCode;
 	private String firstName;
 	private String lastName;
+	private String catalogYearCode;
 	
 	/**
 	 * 
@@ -92,5 +94,13 @@ public class MapStatusReportPerson {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getCatalogYearCode() {
+		return catalogYearCode;
+	}
+
+	public void setCatalogYearCode(String catalogYearCode) {
+		this.catalogYearCode = catalogYearCode;
 	}
 }

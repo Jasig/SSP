@@ -84,7 +84,7 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 
 	@SuppressWarnings("unchecked")
 	public List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner) {
-		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.person.firstName,plan.person.lastName) "
+		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.catalogYearCode,plan.person.firstName,plan.person.lastName) "
 									   + "from org.jasig.ssp.model.Plan plan , MapStatusReport msr "
 									   + "where  msr.plan = plan and msr.planStatus = :planStatus and plan.owner = :owner";
 		Query query = createHqlQuery(getAllActivePlanIdQuery);

@@ -94,6 +94,10 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	@Column(length = 500)
 	@Size(max = 500)
 	private String careerLink;
+
+	@Column(length = 50)
+	@Size(max = 50)
+	private String catalogYearCode;
 	
 	@Transient
 	private transient Boolean isValid = true;
@@ -280,6 +284,14 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 
 	public void setProgramCode(String programCode) {
 		this.programCode = programCode;
+	}
+
+	public String getCatalogYearCode() {
+		return catalogYearCode;
+	}
+
+	public void setCatalogYearCode(String catalogYearCode) {
+		this.catalogYearCode = catalogYearCode;
 	}
 
 }

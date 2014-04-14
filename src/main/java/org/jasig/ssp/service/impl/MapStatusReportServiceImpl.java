@@ -177,7 +177,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 						evaluateTerm(gradesSet, criteriaSet, report,
 								reportCourseDetails, transcriptCoursesByTerm,
 								term, planCoursesForTerm,courseReportsByTerm,transcript,allSubstitutableCourses,
-								reportSubstitutionDetails);
+								reportSubstitutionDetails,planAndPersonInfo);
 						 
 					}
 				}
@@ -393,7 +393,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			Map<String, List<MapStatusReportCourseDetails>> courseReportsByTerm, 
 			List<ExternalStudentTranscriptCourse> transcript, 
 			Collection<ExternalSubstitutableCourse> allSubstitutableCourses, 
-			List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails) 
+			List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails, 
+			MapStatusReportPerson planAndPersonInfo) 
 	{
 		
 		List<ExternalStudentTranscriptCourse> transcriptCoursesForTerm = transcriptCoursesByTerm.get(term.getCode());
@@ -417,7 +418,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			if(matchedTranscriptCourse == null)
 			{
 				//Third try to find a substitutable course
-				matchedTranscriptCourse = findTranscriptCourseMatchSubstitutableCourse(mapPlanStatusReportCourse,transcript,criteriaSet,allSubstitutableCourses);
+				matchedTranscriptCourse = findTranscriptCourseMatchSubstitutableCourse(mapPlanStatusReportCourse,transcript,criteriaSet,allSubstitutableCourses,planAndPersonInfo);
 				if(matchedTranscriptCourse != null)
 				{
 					//If we find a substitution match, create an substitution entry
@@ -455,7 +456,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	private ExternalStudentTranscriptCourse findTranscriptCourseMatchSubstitutableCourse(
 			MapPlanStatusReportCourse mapPlanStatusReportCourse,
 			List<ExternalStudentTranscriptCourse> transcript,
-			Set<String> criteriaSet, Collection<ExternalSubstitutableCourse> allSubstitutableCourses) 
+			Set<String> criteriaSet, Collection<ExternalSubstitutableCourse> allSubstitutableCourses, MapStatusReportPerson planAndPersonInfo) 
 	{
 		if(allSubstitutableCourses == null || allSubstitutableCourses.isEmpty())
 			return null;
@@ -467,8 +468,10 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE) || mapPlanStatusReportCourse.getCourseTitle().trim().equalsIgnoreCase(substitutableCourse.getSourceCourseCode())) &&
 				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS) || mapPlanStatusReportCourse.getCreditHours().equals(substitutableCourse.getSourceCreditHours())) &&
 				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE) || mapPlanStatusReportCourse.getCourseCode().trim().equals(substitutableCourse.getSourceCourseCode()))) 
-			   && (substitutableCourse.getTermCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
-		       && (substitutableCourse.getProgramCode() == null || mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim()))					)
+			   && (substitutableCourse.getTermCode() == null || (mapPlanStatusReportCourse.getTermCode() != null && mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim())))
+		       && (substitutableCourse.getProgramCode() == null || (planAndPersonInfo.getProgramCode() != null && planAndPersonInfo.getProgramCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim())))					
+			   && (substitutableCourse.getCatalogYearCode() == null || (planAndPersonInfo.getCatalogYearCode() != null &&  planAndPersonInfo.getCatalogYearCode().trim().equalsIgnoreCase(substitutableCourse.getCatalogYearCode().trim())))					)
+				
 			{
 				//if a substitution is found, check to see if the student has taken the target course
 				for(ExternalStudentTranscriptCourse transcriptCourse : transcript)
@@ -478,7 +481,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 							(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS) || transcriptCourse.getCreditEarned().equals(substitutableCourse.getTargetCreditHours())) &&
 							(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE) || transcriptCourse.getCourseCode().trim().equals(substitutableCourse.getTargetCourseCode()))) 
 							&& (substitutableCourse.getTermCode() == null || transcriptCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
-							&& (substitutableCourse.getProgramCode() == null || transcriptCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim()))							)
+							&& (substitutableCourse.getProgramCode() == null || planAndPersonInfo.getProgramCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim())
+							&& (substitutableCourse.getCatalogYearCode() == null || planAndPersonInfo.getCatalogYearCode().trim().equalsIgnoreCase(substitutableCourse.getCatalogYearCode().trim())))
+							)
 					return transcriptCourse;
 						
 				}

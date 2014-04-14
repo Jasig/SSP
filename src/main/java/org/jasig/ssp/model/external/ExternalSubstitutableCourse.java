@@ -51,7 +51,7 @@ public class ExternalSubstitutableCourse  implements ExternalData, Serializable 
 	@Column(nullable = false, length = 50)
 	private String sourceCourseCode;	
 
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 100)
 	private String sourceCourseTitle;	
 	
 	@Column
@@ -66,8 +66,11 @@ public class ExternalSubstitutableCourse  implements ExternalData, Serializable 
 	@Column(nullable = false, length = 50)
 	private String targetCourseCode;	
 
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 100)
 	private String targetCourseTitle;
+	
+	@Column(length = 50)
+	private String catalogYearCode;
 	
 	@Id
 	@Type(type = "string")
@@ -162,5 +165,13 @@ public class ExternalSubstitutableCourse  implements ExternalData, Serializable 
 
 	public void setTargetCreditHours(BigDecimal targetCreditHours) {
 		this.targetCreditHours = targetCreditHours;
+	}
+
+	public String getCatalogYearCode() {
+		return catalogYearCode;
+	}
+
+	public void setCatalogYearCode(String catalogYearCode) {
+		this.catalogYearCode = catalogYearCode;
 	}	
 }

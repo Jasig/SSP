@@ -259,7 +259,7 @@ public class MapStatusReportController  extends AbstractBaseController {
 		if(plan == null)
 			return false;
 		
-		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName());
+		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(),plan.getCatalogYearCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName());
 		List<Term> allTerms = termService.getAll();
 		
 		MapStatusReport report = mapStatusReportService.evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 

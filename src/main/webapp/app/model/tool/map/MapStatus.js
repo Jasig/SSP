@@ -52,6 +52,7 @@ Ext.define('Ssp.model.tool.map.MapStatus', {
 		me.set('academicLink','');
 		me.set('departmentCode','');
 		me.set('divisionCode','');
+		me.set('catalogYearCode','');
 		me.set('isPrivate',false);
 		me.set('visibility','AUTHENTICATED');
 		me.set('programCode','');

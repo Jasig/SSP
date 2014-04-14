@@ -46,6 +46,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	
 	private String contactNotes;
 	
+	private String catalogYearCode;
+	
 	private String studentNotes;
 	
 	private Boolean isFinancialAid = false;
@@ -93,6 +95,7 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setStudentNotes(model.getStudentNotes());
 		this.setIsValid(model.getIsValid());
 		this.setProgramCode(model.getProgramCode());
+		this.setCatalogYearCode(model.getCatalogYearCode());
 	}
 	
 	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
@@ -249,4 +252,13 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.programCode = programCode;
 	}
 
+
+	public String getCatalogYearCode() {
+		return catalogYearCode;
+	}
+
+
+	public void setCatalogYearCode(String catalogYearCode) {
+		this.catalogYearCode = catalogYearCode;
+	}
 }

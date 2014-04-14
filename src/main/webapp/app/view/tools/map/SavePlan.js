@@ -25,6 +25,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         columnRendererUtils: 'columnRendererUtils',
 		appEventsController: 'appEventsController',
         programsStore: 'programsFacetedStore',
+        catalogYearsStore: 'catalogYearsStore',
 		currentMapPlan: 'currentMapPlan'
     },
     height: 554,
@@ -149,8 +150,21 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         	                        mode: 'local',
         	                        typeAhead: true,
         	                        queryMode: 'local',
+									width: '80%',
         	                        allowBlank: true,
-        	                    },{
+        	                    },{        	                    
+        	                        xtype: 'combobox',
+        	                        name: 'catalogYearCode',
+									store: me.catalogYearsStore,
+        	                        fieldLabel: 'Catalog Year',
+        	                        emptyText: 'Specific Cat Year',
+        	                        valueField: 'code',
+        	                        displayField: 'name',
+        	                        mode: 'local',
+        	                        typeAhead: true,
+									width: '80%',
+        	                        allowBlank: true,
+        	                    } ,{
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',
             				        itemId: 'contactName',

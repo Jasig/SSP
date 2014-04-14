@@ -39,6 +39,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			{name:'departmentCode',type:'string'},
 			{name:'programCode',type:'string'},
 			{name:'divisionCode',type:'string'},
+			{name:'divisionCode',type:'string'},
+			{name:'catalogYearCode',type:'string'},
 			{name:'isPrivate',type:'boolean'},
 			{name:'visibility',type:'string'},
 			{name:'isValid',type:'boolean'},
@@ -193,6 +195,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.set('academicLink','');
 		me.set('departmentCode','');
 		me.set('divisionCode','');
+		me.set('catalogYearCode','');
 		me.set('isPrivate',false);
 		me.set('visibility','AUTHENTICATED');
 		me.set('programCode','');
@@ -266,6 +269,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.modifiedDate = me.get('modifiedDate');
 		simpleData.isValid = me.get('isValid');
 		simpleData.programCode = me.get('programCode');
+		simpleData.catalogYearCode = me.get('catalogYearCode');
 		
 		if(me.get('isTemplate')){
 			simpleData.templateCourses = me.get('planCourses');
