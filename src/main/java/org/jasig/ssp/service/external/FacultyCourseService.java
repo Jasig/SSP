@@ -23,6 +23,8 @@ import java.util.List;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
+import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 
 /**
  * FacultyCourse service
@@ -95,6 +97,7 @@ public interface FacultyCourseService extends
 			String termCode)
 	throws ObjectNotFoundException;
 
+
 	/**
 	 * Gets a single enrollment in a course identified by instructor, course
 	 * code, and term.
@@ -115,6 +118,22 @@ public interface FacultyCourseService extends
 			String formattedCourse,
 			String termCode,
 			String studentSchoolId)
+	throws ObjectNotFoundException;
+	
+	/**
+	 * Gets a single enrollment in a course identified by instructor, course
+	 * code, and term.
+	 *
+	 * <p>Note that under the current implementation the
+	 * {@link ObjectNotFoundException} in the signature is used to represent
+	 * an invalid argument rather than an empty result set. Do not rely on
+	 * it as a guard against null results.</p>
+	 *
+	 * @param searchStudentCourseTO
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	ExternalFacultyCourseRoster getEnrollment(SearchStudentCourseTO searchStudentCourseTO)
 	throws ObjectNotFoundException;
 
 	/**
@@ -153,5 +172,15 @@ public interface FacultyCourseService extends
 	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
 			String facultySchoolId, final String formattedCourse,
 			final String termCode) throws ObjectNotFoundException;
+	
+	/**
+	 * Same as {@link #getCourseByFacultySchoolIdAndFormattedCourse(String, String)}
+	 * but with a term code parameter that eliminates the former's ambiguity.
+	 *
+	 * @param searchFacultyCourse
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	FacultyCourse getCourseBySearchFacultyCourseTO(SearchFacultyCourseTO searchFacultyCourse) throws ObjectNotFoundException;
 
 }

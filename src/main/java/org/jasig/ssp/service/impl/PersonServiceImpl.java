@@ -413,6 +413,30 @@ public class PersonServiceImpl implements PersonService {
 			return person;
 		}
 	}
+	
+	@Override
+	public Person getByUsername(final String username, final Boolean commitPerson)
+			throws ObjectNotFoundException {
+
+		final Person obj = dao.fromUsername(username);
+		if(obj != null)
+			return obj;
+
+
+		final ExternalPerson externalPerson = externalPersonService
+				.getByUsername(username);
+		if (externalPerson == null) {
+			throw new ObjectNotFoundException( // NOPMD
+					"Unable to find person by username: " + username,
+					"Person");
+		}
+
+		final Person person = new Person();
+		evict(person);
+		externalPersonService.updatePersonFromExternalPerson(person,
+				externalPerson, commitPerson);
+		return person;
+	}
 
 	@Override
 	public Person personFromUsername(final String username)

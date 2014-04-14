@@ -26,6 +26,8 @@ import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.FacultyCourseService;
+import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
+import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,6 +81,12 @@ public class FacultyCourseServiceImpl extends
 		return externalFacultyCourseRosterDao.getRosterByFacultySchoolIdAndCourseAndTermCode(
 				facultySchoolId, formattedCourse, termCode);
 	}
+	
+	@Override
+	public ExternalFacultyCourseRoster getEnrollment(SearchStudentCourseTO searchStudentCourse)
+			throws ObjectNotFoundException {
+		return externalFacultyCourseRosterDao.getEnrollment(searchStudentCourse);
+	}
 
 	@Override
 	public ExternalFacultyCourseRoster getEnrollment(String facultySchoolId,
@@ -102,6 +110,12 @@ public class FacultyCourseServiceImpl extends
 			throws ObjectNotFoundException {
 		return dao.getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
 				facultySchoolId, formattedCourse, termCode);
+	}
+	
+	@Override
+	public FacultyCourse getCourseBySearchFacultyCourseTO(SearchFacultyCourseTO searchFacultyCourse)
+			throws ObjectNotFoundException {
+		return dao.getCourseBySearchFacultyCourseTO(searchFacultyCourse);
 	}
 
 }

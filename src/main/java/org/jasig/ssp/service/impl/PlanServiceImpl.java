@@ -72,6 +72,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 
 	@Autowired
 	private ConfigService configService;
+	
 
 	@Autowired
 	private ExternalStudentFinancialAidService externalStudentFinancialAidService;

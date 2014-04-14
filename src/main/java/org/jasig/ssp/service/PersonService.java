@@ -121,6 +121,20 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return The specified Person instance.
 	 */
 	Person getBySchoolId(String studentId,boolean commitPerson) throws ObjectNotFoundException;
+	
+	/**
+	 * Retrieves the specified Person by their User name (userName).
+	 * 
+	 * @param username
+	 *            Required school identifier for the Person to retrieve. Can not
+	 *            be null.
+	 *            Also searches the External Database for the identifier,
+	 *            creating a Person if an ExternalPerson record exists..
+	 * @exception ObjectNotFoundException
+	 *                If the supplied identifier does not exist in the database.
+	 * @return The specified Person instance.
+	 */
+	Person getByUsername(final String username, final Boolean commit) throws ObjectNotFoundException;
 
 	/**
 	 * Gets a list of {@link Person} objects based on specified criteria

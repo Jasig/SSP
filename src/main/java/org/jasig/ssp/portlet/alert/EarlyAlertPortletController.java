@@ -20,9 +20,11 @@ package org.jasig.ssp.portlet.alert;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.portlet.PortletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
@@ -32,12 +34,13 @@ import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.FacultyCourseService;
+import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
+import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -122,8 +125,10 @@ public final class EarlyAlertPortletController {
 
 	@RenderMapping(params = "action=enterAlert")
 	public ModelAndView showForm(final PortletRequest req, 
-			@RequestParam final String schoolId, 
-			@RequestParam final String formattedCourse,
+			@RequestParam(required = false) final String schoolId, 
+			@RequestParam(required = false) final String formattedCourse,
+			@RequestParam(required = false) final String studentUserName, 
+			@RequestParam(required = false) final String sectionCode,
 			@RequestParam(required = false) final String termCode,
 			ModelMap model) {
 		// Do not use a @ModelAttribute-annotated argument to get the user
@@ -131,6 +136,15 @@ public final class EarlyAlertPortletController {
 		// by matching up request param names. This will overwrite user.schoolId
 		// with the method param of that name, effectively copying the student's
 		// school ID into the faculty user's record.
+		if(!StringUtils.isNotBlank(schoolId) &&  !StringUtils.isNotBlank(studentUserName)){
+			throw new RuntimeException("Missing student identifier."
+					+ req.getRemoteUser());
+		}
+		
+		if(!StringUtils.isNotBlank(formattedCourse) &&  !StringUtils.isNotBlank(sectionCode)){
+			throw new RuntimeException("Missing or regquired course information."
+					+ req.getRemoteUser());
+		}
 		Person user = (Person)model.get("user");
 		if ( user == null ) {
 			throw new RuntimeException("Missing or deactivated account for remote user "
@@ -146,16 +160,14 @@ public final class EarlyAlertPortletController {
 			// codes when deep linking to the EA form *and* this just happens to
 			// work b/c their formattedCourse values are globally unique. So
 			// we preserve the option of not filtering by term code.
-			if ( !(StringUtils.hasText(termCode)) ) {
-				course = facultyCourseService.getCourseByFacultySchoolIdAndFormattedCourse(
-						user.getSchoolId(), formattedCourse);
-			} else {
-				course = facultyCourseService.getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
-						user.getSchoolId(), formattedCourse, termCode);
-			}
+			course = facultyCourseService.getCourseBySearchFacultyCourseTO(new SearchFacultyCourseTO( user.getSchoolId(),  
+					termCode, 
+					sectionCode,  
+					formattedCourse));
+
 
 			if ( course == null ) {
-				throw new IllegalStateException(buildErrorMesssage("Course not found for current instructor:", user.getSchoolId(), null, formattedCourse, termCode));
+				throw new IllegalStateException(buildErrorMesssage("Course not found for current instructor:", user.getSchoolId(), null, formattedCourse, termCode, sectionCode));
 			}
 
 			/*
@@ -163,21 +175,28 @@ public final class EarlyAlertPortletController {
 			 * UUID) at this point in the Early Alert process.  Previous APIs 
 			 * user the former where following APIs use the later.
 			 */
-			student = personService.getBySchoolId(schoolId,true);  // TODO:  Handle error better??
+			if(StringUtils.isNotBlank(schoolId))
+				student = personService.getBySchoolId(schoolId, true);  // TODO:  Handle error better??
+			else
+				student = personService.getByUsername(studentUserName, true);
 
 			if ( student == null ) {
 				throw new IllegalStateException("Student not found: " + schoolId);
 			}
 			
-			enrollment = facultyCourseService.getEnrollment(user.getSchoolId(),
-					formattedCourse, course.getTermCode(), schoolId);
+			enrollment = facultyCourseService.getEnrollment(new SearchStudentCourseTO(user.getSchoolId(),
+					termCode,
+					sectionCode,
+					formattedCourse,  
+					schoolId));
 
 			if ( enrollment == null ) {
 				throw new IllegalStateException(buildErrorMesssage("Enrollment not found for: ", 
 						user.getSchoolId(), 
 						schoolId, 
 						formattedCourse, 
-						termCode));
+						termCode,
+                        sectionCode));
 			}
 
 		} catch (ObjectNotFoundException e) {
@@ -185,7 +204,8 @@ public final class EarlyAlertPortletController {
 					user.getSchoolId(), 
 					schoolId, 
 					formattedCourse, 
-					termCode), e);
+					termCode,
+                    sectionCode), e);
 		}
 		/*
 		 *  SANITY CHECK (is this even necessary?  wanted?)
@@ -197,7 +217,8 @@ public final class EarlyAlertPortletController {
 					user.getSchoolId(), 
 					null, 
 					formattedCourse, 
-					termCode));
+					termCode,
+                    sectionCode));
 		}
 		model.put(KEY_STUDENT_ID, student.getId());  // Student UUID
 		model.put(KEY_COURSE, course);
@@ -230,8 +251,8 @@ public final class EarlyAlertPortletController {
 		if ( userInfo != null ) {
 			username = userInfo.get(PortletRequest.P3PUserInfos.USER_LOGIN_ID.toString());
 		}
-		username = StringUtils.hasText(username) ? username : req.getRemoteUser();
-		if ( !(StringUtils.hasText(username)) ) {
+		username = StringUtils.isNotBlank(username) ? username : req.getRemoteUser();
+		if ( !(StringUtils.isNotBlank(username)) ) {
 			throw new IllegalArgumentException(
 					"Cannot lookup nor create an account without a username");
 		}
@@ -266,7 +287,7 @@ public final class EarlyAlertPortletController {
 		return person;
 	}
 	
-	private String buildErrorMesssage(String prefix, String facultySchoolId, String studentSchoolId, String formattedCourse, String termCode){
+	private String buildErrorMesssage(String prefix, String facultySchoolId, String studentSchoolId, String formattedCourse, String termCode, String sectionCode){
 		StringBuilder errorMsg = new StringBuilder(prefix);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(facultySchoolId))
 			errorMsg.append(" Faculty School ID:").append(facultySchoolId);
@@ -275,8 +296,9 @@ public final class EarlyAlertPortletController {
 		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
 			errorMsg.append(" Formatted Course:").append(formattedCourse);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			errorMsg.append(" TermCode:").append(termCode);
-		errorMsg.append("\n\n");
+			errorMsg.append(" Term Code:").append(termCode);
+		if(org.apache.commons.lang.StringUtils.isNotBlank(sectionCode))
+			errorMsg.append(" Section Code:").append(sectionCode);
 		return errorMsg.toString();
 	}
 }

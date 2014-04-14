@@ -26,6 +26,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -145,6 +146,30 @@ public class ExternalFacultyCourseRosterDao extends
 				.add(Restrictions.eq("formattedCourse", formattedCourse))
 				.add(Restrictions.eq("termCode", termCode))
 				.add(Restrictions.eq("schoolId", studentSchoolId)).list();
+		return result.size() > 0 ? result.get(0) : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ExternalFacultyCourseRoster getEnrollment(SearchStudentCourseTO requestTO)
+			throws ObjectNotFoundException {
+		Criteria criteria = createCriteria();
+		
+		criteria.add(Restrictions.eq("facultySchoolId", requestTO.getFacultySchoolId()));
+		
+		if(requestTO.hasFormattedCourse())
+			criteria.add(Restrictions.eq("formattedCourse", requestTO.getFormattedCourse()));
+		
+		if(requestTO.hasSectionCode())
+			criteria.add(Restrictions.eq("sectionCode", requestTO.getSectionCode()));
+		
+		if(requestTO.hasStudentSchoolId())
+			criteria.add(Restrictions.eq("schoolId", requestTO.getStudentSchoolId()));
+		
+		if(requestTO.hasTermCode())
+			criteria.add(Restrictions.eq("termCode", requestTO.getTermCode()));
+
+		
+		List<ExternalFacultyCourseRoster> result = criteria.list();
 		return result.size() > 0 ? result.get(0) : null;
 	}
 }

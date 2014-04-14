@@ -21,9 +21,13 @@ package org.jasig.ssp.dao.external;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
+import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -100,5 +104,26 @@ public class FacultyCourseDao extends AbstractExternalDataDao<FacultyCourse> {
 		return result.size() > 0 ? result.get(0) : null;
 		//END KLUDGE
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public FacultyCourse  getCourseBySearchFacultyCourseTO(SearchFacultyCourseTO requestTO)
+			throws ObjectNotFoundException {
+		Criteria criteria = createCriteria();
+		
+		criteria.add(Restrictions.eq("facultySchoolId", requestTO.getFacultySchoolId()));
+		
+		if(requestTO.hasFormattedCourse())
+			criteria.add(Restrictions.eq("formattedCourse", requestTO.getFormattedCourse()));
+		
+		if(requestTO.hasSectionCode())
+			criteria.add(Restrictions.eq("sectionCode", requestTO.getSectionCode()));
+		
+		if(requestTO.hasTermCode())
+			criteria.add(Restrictions.eq("termCode", requestTO.getTermCode()));
+
+		
+		List<FacultyCourse> result = criteria.list();
+		return result.size() > 0 ? result.get(0) : null;
 	}
 }
