@@ -51,6 +51,9 @@ public class Config
 	 */
 	@Column(nullable = true)
 	private String valueValidation;
+	
+	@Column(nullable = true)
+	private Boolean isSecret = false;
 
 	@Column(nullable = false)
 	@NotNull
@@ -133,6 +136,14 @@ public class Config
 
 	public void setDefaultValue(@NotNull final String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	public Boolean getIsSecret() {
+		return isSecret;
+	}
+
+	public void setIsSecret(Boolean isSecret) {
+		this.isSecret = isSecret;
 	}
 
 	/**

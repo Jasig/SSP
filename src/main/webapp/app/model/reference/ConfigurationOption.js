@@ -18,5 +18,6 @@
  */
 Ext.define('Ssp.model.reference.ConfigurationOption', {
     extend: 'Ssp.model.reference.AbstractReference',
-    fields: [{name:'value',type:'string'}]
+    fields: [{name:'value',type:'string'},
+             {name:'isSecret',type:'boolean'}]
 });

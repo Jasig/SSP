@@ -66,6 +66,7 @@ public class ConfigTOFactoryImpl extends
 		model.setSortOrder(tObject.getSortOrder());
 		model.setValue(tObject.getValue());
 		model.setValueValidation(tObject.getValueValidation());
+		model.setIsSecret(tObject.getIsSecret());
 
 		/*
 		 * Don't allow default value to be set with NEW data, so copy from

@@ -167,10 +167,6 @@ public class ConfigController
 	// make sense b/c the config *values* (trusted IPs) need to be readable
 	// there, even if the current user can't change those values.
 	private PagedResponse<ConfigTO> filterSensitiveValues(PagedResponse<ConfigTO> rsp) {
-		if ( securityService.hasAuthority(Permission.REFERENCE_WRITE) ) {
-			return rsp;
-		}
-
 		for ( ConfigTO configTO : rsp.getRows() ) {
 			filterSensitiveValues(configTO);
 		}
@@ -182,6 +178,8 @@ public class ConfigController
 		if ( !(securityService.hasAuthority(Permission.REFERENCE_WRITE)) ) {
 			requestTrustService.obfuscateSensitiveConfig(configTO);
 		}
+		if(configTO.getIsSecret())
+			configTO.setValue("**********");
 		return configTO;
 	}
 

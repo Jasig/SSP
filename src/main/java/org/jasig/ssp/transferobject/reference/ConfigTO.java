@@ -39,6 +39,7 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 
 	private String value, valueValidation, defaultValue;
 	private short sortOrder; // NOPMD by jon on 5/4/12 11:16
+	private Boolean isSecret;
 
 	/**
 	 * Empty constructor
@@ -106,6 +107,7 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 		sortOrder = model.getSortOrder();
 		value = model.getValue();
 		defaultValue = model.getDefaultValue();
+		isSecret = model.getIsSecret();
 	}
 
 	/**
@@ -151,6 +153,14 @@ public class ConfigTO extends AbstractReferenceTO<Config>
 
 	public void setDefaultValue(@NotNull final String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	public Boolean getIsSecret() {
+		return isSecret;
+	}
+
+	public void setIsSecret(Boolean isSecret) {
+		this.isSecret = isSecret;
 	}
 
 	/**
