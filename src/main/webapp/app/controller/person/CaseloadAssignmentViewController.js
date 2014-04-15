@@ -58,20 +58,21 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
 	init: function() {
 		var me=this;
-		
-		
-		
-		me.resetAppointmentModels();
 
-		var id = me.personLite.get('id');
+		me.resetAppointmentModels();
 		
 		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
+		me.studentTypesStore.addListener("load", me.onStoreLoaded, me, {single:true});
+		me.getView().setLoading(true);
 		me.studentTypesStore.load(); 
 		
-		
-		
-		
-		
+		return this.callParent(arguments);
+    },
+
+	onStoreLoaded: function(){
+		var me = this;
+		me.getView().setLoading(false);
+		var id = me.personLite.get('id');
 		me.panelKids = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
         		   items: [{xtype: 'student'}]
@@ -104,9 +105,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		}
 		
 		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this}); 
-		me.appEventsController.assignEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});    
-		return this.callParent(arguments);
-    },
+		me.appEventsController.assignEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});
+	},
 
 	resetAppointmentModels: function() {
 		var me=this;
