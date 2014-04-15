@@ -541,9 +541,10 @@ public class StudentIntakeFormManager { // NOPMD
 
 		/* Demographics */
 
-		if (student.getDemographics() != null) {
-			formSectionTO = formTO.getFormSectionById(SECTION_DEMOGRAPHICS_ID);
-
+		if (student.getDemographics() == null) {
+			student.setDemographics(new PersonDemographics());
+		}
+		formSectionTO = formTO.getFormSectionById(SECTION_DEMOGRAPHICS_ID);
 			// Marital Status
 			if (student.getDemographics().getMaritalStatus() == null) {
 				formSectionTO
@@ -613,6 +614,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 			// Citizenship
 			if (student.getDemographics().getCitizenship() == null) {
+				
 				formSectionTO
 						.getFormQuestionById(
 								SECTION_DEMOGRAPHICS_QUESTION_CITIZENSHIP_ID)
@@ -630,7 +632,9 @@ public class StudentIntakeFormManager { // NOPMD
 						student.getDemographics().getCitizenship().getId()
 								.toString());
 			}
-
+			formSectionTO
+			.getFormQuestionById(
+					SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID).setMaximumLength("50");
 			formSectionTO
 					.getFormQuestionById(
 							SECTION_DEMOGRAPHICS_QUESTION_COUNTRYOFCITIZENSHIP_ID)
@@ -762,10 +766,11 @@ public class StudentIntakeFormManager { // NOPMD
 							student.getDemographics()
 									.getTotalHoursWorkedPerWeek());
 
-		}
 
 		/* Education Plan */
-		if (student.getEducationPlan() != null) {
+		if (student.getEducationPlan() == null) {
+			student.setEducationPlan(new PersonEducationPlan());
+		}
 
 			formSectionTO = formTO.getFormSectionById(SECTION_EDUCATIONPLAN_ID);
 
@@ -797,7 +802,6 @@ public class StudentIntakeFormManager { // NOPMD
 					.setValue(
 							student.getEducationPlan()
 									.getGradeTypicallyEarned());
-		}
 
 		/* Education Level */
 
@@ -885,8 +889,9 @@ public class StudentIntakeFormManager { // NOPMD
 
 		/* Education Goal */
 
-		if (student.getEducationGoal() != null) {
-
+		if (student.getEducationGoal() == null) {
+			student.setEducationGoal(new PersonEducationGoal());
+		}
 			formSectionTO = formTO.getFormSectionById(SECTION_EDUCATIONGOAL_ID);
 
 			// Goal
@@ -916,7 +921,7 @@ public class StudentIntakeFormManager { // NOPMD
 			// Sure of Major
 			formSectionTO.getFormQuestionById(
 					SECTION_EDUCATIONGOAL_QUESTION_SUREOFMAJOR_ID).setValueInt(
-					student.getEducationGoal().getHowSureAboutMajor());
+					student.getEducationGoal().getHowSureAboutMajor()== null ? 0 : student.getEducationGoal().getHowSureAboutMajor());
 
 			// Career Goal
 			formSectionTO.getFormQuestionById(
@@ -932,18 +937,18 @@ public class StudentIntakeFormManager { // NOPMD
 			
 			// Career Decided
 			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_DECIDED_ID)
-					.setValue(student.getEducationGoal().getCareerDecided().toString());
+					.setValue(student.getEducationGoal().getCareerDecided() == null ? null : student.getEducationGoal().getCareerDecided().toString());
 			// Career Sure of
 			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_SUREOF_ID)
-					.setValue(student.getEducationGoal().getHowSureAboutOccupation().toString());
+					.setValue(student.getEducationGoal().getHowSureAboutOccupation() == null ? null : student.getEducationGoal().getHowSureAboutOccupation().toString());
 			
 			// Career Compatibility 
 			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_CAREERGOAL_COMPATIBLE_ID)
-					.setValue(student.getEducationGoal().getConfidentInAbilities().toString());
+					.setValue(student.getEducationGoal().getConfidentInAbilities() == null ? null : student.getEducationGoal().getConfidentInAbilities().toString());
 			
 			// Career Additional Info
 			formSectionTO.getFormQuestionById(SECTION_EDUCATIONGOAL_QUESTION_ADDITIONAL_INFO_ID)
-					.setValue(student.getEducationGoal().getAdditionalAcademicProgramInformationNeeded().toString());
+					.setValue(student.getEducationGoal().getAdditionalAcademicProgramInformationNeeded() == null ? null : student.getEducationGoal().getAdditionalAcademicProgramInformationNeeded().toString());
 		}
 
 		/* Funding Sources */
@@ -989,7 +994,6 @@ public class StudentIntakeFormManager { // NOPMD
 		}
 
 		challengeQuestion.setValues(challengeQuestionValues);
-        }
 		return formTO;
 	}
 	public Person save(final FormTO formTO) throws ObjectNotFoundException { // NOPMD
@@ -1313,7 +1317,8 @@ public class StudentIntakeFormManager { // NOPMD
 		final FormQuestionTO veteranStatusQuestion = demographicsSection
 				.getFormQuestionById(SECTION_DEMOGRAPHICS_QUESTION_VETERANSTATUS_ID);
 
-		if (veteranStatusQuestion.getValue() == null) {
+		if (veteranStatusQuestion.getValue() == null || DEFAULT_DROPDOWN_LIST_VALUE.equals(veteranStatusQuestion
+				.getValue())) {
 			demographics.setVeteranStatus(null);
 		} else {
 			demographics.setVeteranStatus(veteranStatusService
