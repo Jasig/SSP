@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.model; // NOPMD
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -720,16 +721,6 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		return firstName + " " + lastName;
 	}
 
-	/**
-	 * Gets the e-mail address with the full name in the standard full e-mail
-	 * address syntax.
-	 * 
-	 * @return The e-mail address with the full name.
-	 */
-	public String getEmailAddressWithName() {
-		return getFullName() + " <" + primaryEmailAddress + ">";
-	}
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -777,6 +768,23 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	public void setSecondaryEmailAddress(final String secondaryEmailAddress) {
 		this.secondaryEmailAddress = secondaryEmailAddress;
+	}
+	
+	public List<String> getEmailAddresses(){
+		List<String> emailAddresses = new ArrayList<String>();
+		if(StringUtils.isNotBlank(this.primaryEmailAddress))
+			emailAddresses.add(this.primaryEmailAddress);
+		if(StringUtils.isNotBlank(this.secondaryEmailAddress))
+			emailAddresses.add(this.secondaryEmailAddress);
+		return emailAddresses;
+	}
+	
+	public Boolean hasEmailAddresses(){
+		if(StringUtils.isNotBlank(this.primaryEmailAddress))
+			return true;
+		if(StringUtils.isNotBlank(this.secondaryEmailAddress))
+			return true;
+		return false;
 	}
 
 	public String getUsername() {
