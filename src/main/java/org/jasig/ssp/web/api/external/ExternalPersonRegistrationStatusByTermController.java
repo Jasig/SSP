@@ -21,6 +21,7 @@ package org.jasig.ssp.web.api.external;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import org.jasig.ssp.factory.external.ExternalPersonNoteTOFactory;
 import org.jasig.ssp.factory.external.ExternalTOFactory;
 import org.jasig.ssp.factory.external.RegistrationStatusByTermTOFactory;
@@ -93,7 +94,11 @@ public class ExternalPersonRegistrationStatusByTermController extends AbstractBa
 
 		Person person = new Person(id);
 		person.setSchoolId(personService.getSchoolIdForPersonId(id));
-		final List<RegistrationStatusByTerm> list = getService().getCurrentAndFutureTerms(person);
-		return factory.asTOList(list);
+		try {
+			final List<RegistrationStatusByTerm> list = getService().getCurrentAndFutureTerms(person);
+			return factory.asTOList(list);
+		} catch ( ObjectNotFoundException e ) {
+			return Lists.newArrayListWithCapacity(0);
+		}
 	}
 }

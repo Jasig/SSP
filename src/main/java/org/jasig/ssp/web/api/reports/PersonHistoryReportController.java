@@ -140,8 +140,12 @@ public class PersonHistoryReportController extends ReportBaseController {
 		final PersonReportTO personTO = new PersonReportTO(person);
 		final SspUser requestor = securityService.currentUser();
         final String schoolId = person.getSchoolId();
-        
-        personTO.setRegistrationStatusByTerm(registrationStatusByTermService.getCurrentAndFutureTerms(person));
+
+		try {
+			personTO.setRegistrationStatusByTerm(registrationStatusByTermService.getCurrentAndFutureTerms(person));
+		} catch ( ObjectNotFoundException e ) {
+			// nothing to be done... either no current/future terms or person has no registrations in them
+		}
 
 		LOGGER.debug("Requester id: " + requestor.getPerson().getId());
 		// get all the journal entries for this person
