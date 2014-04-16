@@ -28,7 +28,7 @@ namespace 'mygps.viewmodel'
 				@taskService = taskService
 				
 				@tasks = ko.observableArray( [] )
-				@taskFilters = ko.observableArray( mygps.enumeration.TaskFilter.enumerators )
+				@taskFilters = ko.observableArray( mygps.enumeration.TaskFilter.enumerators() )
 				@selectedTaskFilter = ko.observable( mygps.enumeration.TaskFilter.ACTIVE )
 				@filteredTasks = ko.dependentObservable( @filterTasks, this )
 				@printingTasks = ko.observable( false )	

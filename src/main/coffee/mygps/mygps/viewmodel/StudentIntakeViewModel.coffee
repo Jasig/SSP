@@ -78,7 +78,7 @@ namespace 'mygps.viewmodel'
 							callbacks?.result?( result )
 						fault: ( fault ) =>
 							@savingForm( false )
-							alert( fault.responseText )
+							alert( 'There was an error with your submission.  Please contact the system Administrator' )
 							callbacks?.fault?( fault )
 					)
 				else

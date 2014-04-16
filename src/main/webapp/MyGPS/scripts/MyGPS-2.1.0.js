@@ -1962,7 +1962,7 @@
             },
             fault: function(fault) {
               _this.savingForm(false);
-              alert(fault.responseText);
+              alert('There was an error with your submission.  Please contact the system Administrator');
               return callbacks != null ? typeof callbacks.fault === "function" ? callbacks.fault(fault) : void 0 : void 0;
             }
           });
