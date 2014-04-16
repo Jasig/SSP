@@ -266,6 +266,8 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		clone.setStudentNotes(this.getStudentNotes());
 		clone.setName(this.getName());
 		clone.setIsValid(this.getIsValid());
+		clone.setProgramCode(this.getProgramCode());
+		clone.setCatalogYearCode(this.getCatalogYearCode());
 		//Copying person by should be changed if we're cloning on saving with a new advisor
 		clone.setOwner(this.getOwner());
 	}
