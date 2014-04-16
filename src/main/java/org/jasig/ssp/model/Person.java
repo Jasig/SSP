@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
+import javax.mail.internet.InternetAddress;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -711,27 +712,6 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	public String getFullName() {
 		return firstName + " " + lastName;
 	}
-
-	/**
-	 * Gets the e-mail address with the full name in the standard full e-mail
-	 * address syntax.
-	 * 
-	 * @return The e-mail address with the full name.
-	 */
-	public String getEmailAddressWithName() {
-		
-		return getFullName() + " <" + primaryEmailAddress + ">";
-	}
-	
-	public List<String> getEmailAddressesWithName() {
-		List<String> emailAddresses = new ArrayList<String>();
-		if(StringUtils.isNotBlank(primaryEmailAddress)){
-			emailAddresses.add(getEmailAddressWithName());
-		}
-		if(StringUtils.isNotBlank(secondaryEmailAddress))
-			emailAddresses.add(getFullName() + " <" + secondaryEmailAddress + ">");
-		return emailAddresses;
-	}
 	
 	public List<String> getEmailAddresses() {
 		List<String> emailAddresses = new ArrayList<String>();
@@ -742,6 +722,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 			emailAddresses.add(secondaryEmailAddress);
 		return emailAddresses;
 	}
+	
 	
 	public Boolean hasEmailAddresses(){
 		if(StringUtils.isNotBlank(primaryEmailAddress) || StringUtils.isNotBlank(secondaryEmailAddress))

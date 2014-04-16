@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
 import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
@@ -50,14 +51,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -170,12 +175,20 @@ public class MessageServiceImpl implements MessageService {
 		if (to == null) {
 			throw new ValidationException("Recipient missing.");
 		}
+		String toAddress = to.getPrimaryEmailAddress();
+		if(StringUtils.isBlank(toAddress))
+			toAddress = to.getSecondaryEmailAddress();
 
-		if (to.getPrimaryEmailAddress() == null) {
+		if (StringUtils.isBlank(toAddress)) {
 			throw new ValidationException(
 					"Recipient primary e-mail address is missing.");
 		}
-
+		
+		if(!validateEmail(toAddress)){
+			throw new ValidationException(
+				"Recipient primary e-mail address is invalid.");
+		}
+		
 		final Message message = createMessage(subjAndBody);
 
 		message.setRecipient(to);
@@ -359,6 +372,9 @@ public class MessageServiceImpl implements MessageService {
 	 */
 	protected boolean validateEmail(final String email) {
 		final EmailValidator emailValidator = EmailValidator.getInstance();
+		if(email.indexOf("<") != -1){
+			email.split("<");
+		}
 		return emailValidator.isValid(email);
 	}
 	
@@ -389,101 +405,70 @@ public class MessageServiceImpl implements MessageService {
 			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
  
-			String adminAddress = personService.get(
-					Person.SYSTEM_ADMINISTRATOR_ID).getEmailAddressWithName();
-			mimeMessageHelper.setFrom(adminAddress);
-			message.setSentFromAddress(adminAddress);
+			// WILL FIND FIRST VALID EMAIL 
+			InternetAddress[] froms = getEmailAddresses( personService.get(Person.SYSTEM_ADMINISTRATOR_ID), "from:",message.getId());
+			
+			
+			if(froms.length > 0){
+				mimeMessageHelper.setFrom(froms[0]);
+				message.setSentFromAddress(froms[0].toString());
+			}
 			// We just happen to know that getEmailAddressWithName() uses the
 			// primary address. This could probably be handled better. W/o
 			// the blank string check, though, javax.mail will blow up
 			// w/ a AddressException
 			if(message.getSender().hasEmailAddresses()){
-				String replyTo = message.getSender()
-						.getEmailAddressesWithName().get(0);
-				mimeMessageHelper.setReplyTo(replyTo);
-				message.setSentReplyToAddress(replyTo);
+				InternetAddress[] replyTos = getEmailAddresses(message.getSender(), "repyTO:",message.getId());
+				if(replyTos.length > 0){
+					mimeMessageHelper.setReplyTo(replyTos[0]);
+					message.setSentReplyToAddress(replyTos[0].toString());
+				}
 			}
-			
-			if (message.getRecipient() != null && 
-					!validateEmails(message.getRecipient().getEmailAddresses())) {
-				throw new SendFailedException(addMessageIdToError(message) + "A Recipient Email Address '"
-						+ StringUtils.join(message.getRecipient().getEmailAddresses(),", ") + "' is invalid");
-			}
-			else if (!validateEmail(message.getRecipientEmailAddress())) {
-				throw new SendFailedException(addMessageIdToError(message) + "Recipient Email Address '"
-						+ message.getRecipientEmailAddress() + "' is invalid");
-			}
-			
-			//As per SSP-693 we set the configured BCC on all outbound messages
-			String configBCC = getBcc(); 
-			if(StringUtils.isNotBlank(configBCC))
-			{
-				mimeMessageHelper.addBcc(configBCC);
-				message.setSentBccAddresses(configBCC);
-			}
+			InternetAddress[] tos = null;
 			if ( message.getRecipient() != null && message.getRecipient().hasEmailAddresses()) { // NOPMD by jon.adams			{
-				    List<String> addresseses = message.getRecipient().getEmailAddressesWithName();
-					mimeMessageHelper.setTo(addresseses.toArray(new String[addresseses.size()]));
-					message.setSentToAddresses(StringUtils.join(message.getRecipient().getEmailAddresses(), ","));
-			} else if ( StringUtils.isNotBlank(message.getRecipientEmailAddress()) ) { // NOPMD
-				mimeMessageHelper.setTo(message.getRecipientEmailAddress());
-				message.setSentToAddresses(message.getRecipientEmailAddress());
-			} else {
+				tos = getEmailAddresses(message.getRecipient(), "to:",message.getId());
+			} else { 
+				tos = getEmailAddresses(message.getRecipientEmailAddress(), "to:", message.getId());
+			}
+			
+			if(tos.length > 0){
+				mimeMessageHelper.setTo(tos);
+				message.setSentToAddresses(StringUtils.join(tos,","));
+			}else {
 				StringBuilder errorMsg = new StringBuilder();
 				
-				errorMsg.append(addMessageIdToError(message) + " Message " +message.toString() 
-						+" could not be sent. Invalid recipient email address of '");				
+				errorMsg.append(addMessageIdToError(message) + " Message " + message.toString() 
+						+" could not be sent. No valid recipient email address found: '");				
 				
 				if (message.getRecipient() != null) {
 						errorMsg.append(message.getRecipient().getPrimaryEmailAddress());
 				} else {
 					errorMsg.append(message.getRecipientEmailAddress());
 				}
-				errorMsg.append("'.");
 				LOGGER.error(errorMsg.toString());
 				
 				return false;
 			}
-
-			String carbonCopy = message.getCarbonCopy();
-			if (!StringUtils.isEmpty(carbonCopy)) { // NOPMD
-				try {
-					
-					//check for multiple addresses seperated by a comma
-					if(carbonCopy.indexOf(",") != -1)
-					{
-						StringTokenizer tokenizer = new StringTokenizer(carbonCopy,",");
-						List<String> carbonCopies = new ArrayList<String>();
-						while(tokenizer.hasMoreTokens())
-						{
-							String token = tokenizer.nextToken();
-							mimeMessageHelper.addCc(token);
-							carbonCopies.add(token);
-						}
-						message.setSentCcAddresses(StringUtils.join(carbonCopies,","));
-					}
-					else
-					{
-						mimeMessageHelper.setCc(carbonCopy);
-						message.setSentCcAddresses(carbonCopy);
-					}
-					
-				} catch ( MessagingException e ) {
-					LOGGER.warn(addMessageIdToError(message) + "Invalid carbon copy address: '{}'. Will"
-							+ " attempt to send message anyway.",
-							carbonCopy, e);
+			try{
+				InternetAddress[] bccs = getEmailAddresses(getBcc(), "bcc:", message.getId());
+				if(bccs.length > 0){
+					mimeMessageHelper.setBcc(bccs);
+					message.setSentBccAddresses(StringUtils.join(bccs,","));
 				}
-			} else if (!StringUtils.isEmpty(configBCC)) {
-				final String bcc = configBCC;
-				try {
-					mimeMessageHelper.setBcc(bcc);
-					message.setSentBccAddresses(bcc);
-				} catch ( MessagingException e ) {
-					LOGGER.warn(addMessageIdToError(message) + "Invalid BCC address: '{}'. Will"
-							+ " attempt to send message anyway.", bcc, e);
-				}
+			}catch(Exception exp){
+				LOGGER.warn("Unrecoverable errors were generated adding carbon copy to message: " + message.getId() + "Attempt to send message still initiated.", exp);
 			}
-
+			
+			try{	
+				InternetAddress[] carbonCopies = getEmailAddresses(message.getCarbonCopy(), "cc:", message.getId());
+				if(carbonCopies.length > 0){
+					mimeMessageHelper.setCc(carbonCopies);
+					message.setSentCcAddresses(StringUtils.join(carbonCopies,","));
+				}
+			}catch(Exception exp){
+				LOGGER.warn("Unrecoverable errors were generated adding bcc to message: " + message.getId() + "Attempt to send message still initiated.", exp);
+			}
+			
 			mimeMessageHelper.setSubject(message.getSubject());
 			mimeMessageHelper.setText(message.getBody());
 			mimeMessage.setContent(message.getBody(), "text/html");
@@ -525,5 +510,86 @@ public class MessageServiceImpl implements MessageService {
 		} else {
 			LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent.  To enable mail, update the configuration of the app.");
 		}
+	}
+	
+	private InternetAddress[] getEmailAddresses(List<String> emailAddressses, String type, UUID messageId){
+		List<InternetAddress> validAddresses = new ArrayList<InternetAddress>();
+		for(String emailAddress:emailAddressses){
+			validAddresses.addAll(Lists.newArrayList(getEmailAddresses(emailAddress,  type,  messageId)));
+		}
+		
+		return validAddresses.toArray(new InternetAddress[validAddresses.size()]);
+	}
+	
+	private InternetAddress[] getEmailAddresses(String emailAddress, String type, UUID messageId){
+		if(StringUtils.isBlank(emailAddress)){
+			return new InternetAddress[0];
+		}
+		List<InternetAddress> emailAddresses = new ArrayList<InternetAddress>();
+		if(emailAddress.indexOf(",") != -1)
+		{
+			StringTokenizer tokenizer = new StringTokenizer(emailAddress,",");
+			while(tokenizer.hasMoreTokens())
+			{
+				String token = tokenizer.nextToken();
+				if(StringUtils.isBlank(token))
+					continue;
+				InternetAddress address = getInternetAddress(token, type, messageId);
+				if(address != null){
+					if(validateEmail(address.getAddress()))
+						emailAddresses.add(address);
+					else
+						LOGGER.warn("Invalid email address found: " + token  + " for " + type +  "of message " + messageId);
+				}
+			}
+		}
+		else
+		{
+			InternetAddress address = getInternetAddress(emailAddress, type, messageId);
+			if(address != null){
+				if(validateEmail(address.getAddress()))
+					emailAddresses.add(address);
+				else
+					LOGGER.warn("Invalid email address found: " + emailAddress + " for " + type +  "of message " + messageId);
+			}
+		}
+		
+		return emailAddresses.toArray(new InternetAddress[emailAddresses.size()]);
+	}
+	
+	private InternetAddress[] getEmailAddresses(Person person, String type, UUID messageId){
+		List<InternetAddress> validAddresses = new ArrayList<InternetAddress>();
+		
+		if(person.hasEmailAddresses()){
+			InternetAddress[] addresses = getEmailAddresses(person.getEmailAddresses(), "to:", messageId);
+			 for(InternetAddress address:addresses){
+				 try {
+					validAddresses.add(new InternetAddress(address.getAddress(), person.getFullName()));
+				} catch (UnsupportedEncodingException e) {
+					LOGGER.warn("Invalid email address found: " + address.toString() + " for " + type +  "of message " + messageId, e);
+				}
+			 }
+		}
+		
+		return validAddresses.toArray(new InternetAddress[validAddresses.size()]);
+	}
+	
+	InternetAddress getInternetAddress(String address, String type, UUID messageId){
+		try {
+			String emailAddress = address;
+			String personal = "";
+			if(address.indexOf("<") != -1 && address.indexOf(">") > address.indexOf("<"))
+			{
+				String[] components = address.split("<");
+				//replace quotes
+				personal = components[0].replace("\"", "").replace("'", "");
+				personal = components[0].trim();
+				emailAddress = components[1].split(">")[0].trim();
+			}
+			return new InternetAddress(emailAddress, personal);
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.warn("Invalid email address found: " + address + " for " + type +  "of message " + messageId, e);
+		}
+		return null;
 	}
 }
