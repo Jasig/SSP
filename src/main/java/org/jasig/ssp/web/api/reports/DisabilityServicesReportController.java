@@ -121,7 +121,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize("(hasRole(Permission.SECURITY_REPORT_READ) and hasRole('ROLE_ACCOMMODATION_READ'))")
+	@PreAuthorize("(hasRole('ROLE_REPORT_READ') and hasRole('ROLE_ACCOMMODATION_READ'))")
 	@ResponseBody
 	public void getDisabilityServicesReport(
 			final HttpServletResponse response,
@@ -151,7 +151,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addOdsCoach(odsCoachId, parameters, personSearchForm, personService, personTOFactory);
-		
+
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
 				referralSourcesIds,
