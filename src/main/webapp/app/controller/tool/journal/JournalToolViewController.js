@@ -91,7 +91,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		me.journalEntriesStore.removeAll();
 		
 		me.service.getAll( me.personLite.get('id'), {
-			success: me.getAllJournalEntriesSuccess,
+			success: me.getAllInitialJournalEntriesSuccess,
 			failure: me.getAllJournalEntriesFailure,
 			scope: me
 		});

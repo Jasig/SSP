@@ -692,5 +692,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     loadStudentToolsView: function(){
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
+    },
+    
+    destroy: function() {
+        var me=this;
+        me.studentTypesStore.clearFilter(true);    
+		return me.callParent( arguments );
     }
 });
