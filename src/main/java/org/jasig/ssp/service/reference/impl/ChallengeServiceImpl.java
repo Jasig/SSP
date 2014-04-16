@@ -102,7 +102,7 @@ public class ChallengeServiceImpl extends AbstractReferenceService<Challenge>
 	public PagingWrapper<Challenge> getAllForPerson(
 			final Person person,
 			final SortingAndPaging sAndP) {
-		return dao.getAllForPerson(person.getId(), sAndP);
+		return getDao().getAllForPerson(person.getId(), sAndP);
 	}
 
 	@Override

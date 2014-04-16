@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -153,13 +154,17 @@ public class PersonChallengeController extends
 		checkPermissionForOp("READ");
 
 		final Person person = personService.get(personId);
-		final PagingWrapper<Challenge> data = challengeService.getAllForPerson(
-				person,
-				SortingAndPaging.createForSingleSortWithPaging(status, start,
-						limit, sort, sortDirection, null));
-
+		final PagingWrapper<PersonChallenge> data = getService()
+				.getAllForPerson(person,
+						SortingAndPaging.createForSingleSortWithPaging(status, start,
+								limit, sort, sortDirection, null));
+		
+		List<Challenge> challenges = new ArrayList<Challenge>();
+		for(PersonChallenge pc:data.getRows()){
+			challenges.add(pc.getChallenge());
+		}
 		return new PagedResponse<ChallengeTO>(true, data.getResults(),
-				challengeTOFactory.asTOList(data.getRows()));
+				challengeTOFactory.asTOList(challenges));
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)

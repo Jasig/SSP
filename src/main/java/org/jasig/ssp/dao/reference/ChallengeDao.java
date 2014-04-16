@@ -211,9 +211,9 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	public PagingWrapper<Challenge> getAllForPerson(final UUID personId,
 			final SortingAndPaging sAndP) {
 		final Criteria query = createCriteria();
-		final Criteria subQuery = query.createCriteria("peopleWithChallenge");
+		/*final Criteria subQuery = query.createCriteria("peopleWithChallenge");
 		subQuery.add(Restrictions.eq("person.id", personId));
-		sAndP.addStatusFilterToCriteria(subQuery);
+		sAndP.addStatusFilterToCriteria(subQuery);*/
 		return processCriteriaWithStatusSortingAndPaging(query, sAndP);
 	}
 	
