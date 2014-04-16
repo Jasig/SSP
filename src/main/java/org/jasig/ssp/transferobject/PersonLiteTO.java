@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.Person;
 
 import com.google.common.collect.Lists;
@@ -93,6 +94,16 @@ public class PersonLiteTO implements Serializable {
 		id = coachTO.getId();
 		firstName = coachTO.getFirstName();
 		lastName = coachTO.getLastName();
+	}
+	
+	public PersonLiteTO(@NotNull final AuditPerson auditPerson) {
+		if ( auditPerson == null ) {
+			throw new IllegalArgumentException(
+					"Audit Person required when construcing a new simple PersonLiteTO.");
+		}
+		id = auditPerson.getId();
+		firstName = auditPerson.getFirstName();
+		lastName = auditPerson.getLastName();
 	}
 
 	/**

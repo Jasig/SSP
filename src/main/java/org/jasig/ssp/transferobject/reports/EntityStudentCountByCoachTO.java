@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
@@ -70,6 +71,15 @@ public class EntityStudentCountByCoachTO {
 	}
 	public void setCoach(Person coach) {
 		this.coach =  new CoachPersonLiteTO(coach);
+	}
+	
+	public void setCoach(AuditPerson coach) {
+		this.coach =  new CoachPersonLiteTO(coach);
+	}
+	
+	public void setCoach(UUID coach) {
+		this.coach =  new CoachPersonLiteTO();
+		this.coach.setId(coach);
 	}
 	
 }

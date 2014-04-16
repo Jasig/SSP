@@ -28,6 +28,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 
@@ -198,6 +199,17 @@ public class CoachPersonLiteTO implements Serializable {
 		}
 		// officeLocation = null; // TODO: load data from external source
 		// departmentName = null; // TODO: load data from external source
+	}
+	
+	public CoachPersonLiteTO(@NotNull final AuditPerson person) {
+		if (person == null) {
+			throw new IllegalArgumentException(
+					"Person required when construcing a new simple PersonLiteTO.");
+		}
+
+		id = person.getId();
+		firstName = person.getFirstName();
+		lastName = person.getLastName();
 	}
 
 	/**
