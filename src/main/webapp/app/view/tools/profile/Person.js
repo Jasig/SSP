@@ -45,8 +45,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 fieldLabel: '',
                 src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
                 itemId: 'studentPhoto',
-                width:150,
-                height:150
+                width:150
             }, {
                 xtype: 'fieldset',
                 border: 0,
