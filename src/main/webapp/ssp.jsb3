@@ -2147,6 +2147,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.store.SearchChallengeReferral",
+                    "name": "SearchChallengeReferral.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.model.reference.Challenge",
                     "name": "Challenge.js",
                     "path": "/app/model/reference/"
