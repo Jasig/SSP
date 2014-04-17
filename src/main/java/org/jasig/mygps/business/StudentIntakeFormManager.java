@@ -2603,6 +2603,7 @@ public class StudentIntakeFormManager { // NOPMD
 				.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.highest-grade"));
 		noDiplomaHighestGradeCompletedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaHighestGradeCompletedQuestion.setRequired(true);
+		noDiplomaHighestGradeCompletedQuestion.setMaximumLength("3");
 		// DEPENDENCY -> noDiplomaHighestGradeCompletedQuestion shown when
 		// educationLevelCompletedQuestion value is
 		// 5d967ba0-e086-4426-85d5-29bc86da9295
