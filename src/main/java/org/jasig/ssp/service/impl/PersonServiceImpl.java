@@ -207,13 +207,25 @@ public class PersonServiceImpl implements PersonService {
 		}
 
 		ExternalPerson byUsername = null;
-		if ( person.getSchoolId() == null ) {
-			final String username = person.getUsername();
-			try {
-				byUsername = externalPersonService.getByUsername(username);
-			} catch ( ObjectNotFoundException e ) {
-				// handled below in the null check
+		final String username = person.getUsername();
+		if ( person.getSchoolId() == null || person.getFirstName() == null || person.getLastName() == null || person.getPrimaryEmailAddress() == null ) {
+			if ( person.getSchoolId() != null ) {
+				try {
+					byUsername = externalPersonService.getBySchoolId(person.getSchoolId());
+				} catch ( ObjectNotFoundException e ) {
+					// handled below in the null check
+				}
 			}
+			if ( byUsername == null ) {
+				try {
+					byUsername = externalPersonService.getByUsername(username);
+				} catch ( ObjectNotFoundException e ) {
+					// handled below in the null check
+				}
+			}
+		}
+
+		if ( person.getSchoolId() == null ) {
 			if ( byUsername == null ) {
 				// Again, the idea here is that we trust that the person in question
 				// is fundamentally "valid", but just might be missing required
