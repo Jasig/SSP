@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Template;
@@ -158,7 +159,7 @@ public class TemplateDaoTest {
 				course.setFormattedCourse("TEST"+i);
 				course.setOrderInTerm(new Integer(i));
 				course.setIsDev(false);
-				course.setCreatedBy(person);
+				course.setCreatedBy(new AuditPerson(person.getId()));
 				course.setTemplate(template);
 				course.setCreditHours(new BigDecimal(3.0));
 				course.setTermCode(term.getCode());
@@ -195,7 +196,7 @@ public class TemplateDaoTest {
 		course.setTermCode("SP13");
 		course.setIsDev(true);
 		course.setOrderInTerm(1);
-		course.setCreatedBy(person);
+		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setTemplate(template);
 		course.setCreditHours(new BigDecimal(4.0));
 		
@@ -238,7 +239,7 @@ public class TemplateDaoTest {
 		course.setOrderInTerm(1);
 		course.setIsDev(true);
 		course.setOrderInTerm(1);
-		course.setCreatedBy(person);
+		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setTemplate(template);
 		course.setCreditHours(new BigDecimal(4.0));
 		template.getTemplateCourses().add(course);
@@ -286,7 +287,7 @@ public class TemplateDaoTest {
 		course.setOrderInTerm(new Integer(1));
 		course.setIsDev(true);
 		course.setOrderInTerm(new Integer(1));
-		course.setCreatedBy(person);
+		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setTemplate(template);
 		course.setCreditHours(new BigDecimal(3.0));
 		template.getTemplateCourses().add(course);

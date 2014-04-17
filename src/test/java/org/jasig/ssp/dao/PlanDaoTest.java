@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
@@ -165,7 +166,7 @@ public class PlanDaoTest {
 				course.setFormattedCourse("TEST"+i);
 				course.setOrderInTerm(new Integer(i));
 				course.setIsDev(false);
-				course.setCreatedBy(person);
+				course.setCreatedBy(new AuditPerson(person.getId()));
 				course.setPlan(plan);
 				course.setPerson(person);
 				course.setCreditHours(new BigDecimal(3.0));
@@ -204,7 +205,7 @@ public class PlanDaoTest {
 		course.setTermCode("SP13");
 		course.setIsDev(true);
 		course.setOrderInTerm(1);
-		course.setCreatedBy(person);
+		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setPlan(plan);
 		course.setPerson(person);
 		course.setCreditHours(new BigDecimal(4.0));
@@ -249,7 +250,7 @@ public class PlanDaoTest {
 		course.setOrderInTerm(1);
 		course.setIsDev(true);
 		course.setOrderInTerm(1);
-		course.setCreatedBy(person);
+		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setPlan(plan);
 		course.setPerson(person);
 		course.setCreditHours(new BigDecimal(4.0));
@@ -292,7 +293,7 @@ public class PlanDaoTest {
 		course.setOrderInTerm(new Integer(1));
 		course.setIsDev(true);
 		course.setOrderInTerm(new Integer(1));
-		course.setCreatedBy(person);
+		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setPlan(plan);
 		course.setPerson(person);
 		course.setCreditHours(new BigDecimal(3.0));

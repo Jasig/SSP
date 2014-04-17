@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -206,7 +207,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		earlyAlert.setPerson(jamesDoe);
 		earlyAlert.setClosedBy(null);
 		earlyAlert.setClosedDate(null);
-		earlyAlert.setCreatedBy(kevinSmith); //otherwise will be the system user
+		earlyAlert.setCreatedBy(new AuditPerson(kevinSmith.getId())); //otherwise will be the system user
 		earlyAlertService.create(earlyAlert);
 
 		sessionFactory.getCurrentSession().flush();

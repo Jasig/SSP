@@ -37,6 +37,7 @@ import javax.mail.SendFailedException;
 
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.config.MockMailService;
+import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertRouting;
 import org.jasig.ssp.model.ObjectStatus;
@@ -326,7 +327,7 @@ public class EarlyAlertServiceTest {
 
 		final EarlyAlert obj = Stubs.arrangeEarlyAlert(personService, campusService);
 		obj.setCourseName("MTH101"); // will resolve to v_external_course record
-		obj.setCreatedBy(personService.get(kenId()));
+		obj.setCreatedBy(new AuditPerson(kenId()));
 
 		// act
 		earlyAlertService.create(obj);
