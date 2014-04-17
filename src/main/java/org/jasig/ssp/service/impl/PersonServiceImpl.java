@@ -196,6 +196,61 @@ public class PersonServiceImpl implements PersonService {
 
 	}
 
+	private void ensureRequiredFieldsForDirectoryPerson(Person person) {
+		if ( person.getUsername() == null ) {
+			// This method is currently focused solely on serving the needs of
+			// createUserAccount(), in which case a username is always known. So
+			// if you pass a Person with no username, we can treat it as a programmer
+			// error and don't need to worry about writing more username/schoolId
+			// external person lookup fallback logic
+			throw new IllegalArgumentException("Person has no username");
+		}
+
+		ExternalPerson byUsername = null;
+		if ( person.getSchoolId() == null ) {
+			final String username = person.getUsername();
+			try {
+				byUsername = externalPersonService.getByUsername(username);
+			} catch ( ObjectNotFoundException e ) {
+				// handled below in the null check
+			}
+			if ( byUsername == null ) {
+				// Again, the idea here is that we trust that the person in question
+				// is fundamentally "valid", but just might be missing required
+				// fields in the directory. We don't just want to set schoolId=username, though
+				// because whatever we do, we don't want to accidentally create collisions
+				// with "real" accounts.
+				final String generatedSchoolId = UUID.randomUUID().toString();
+				LOGGER.info("Person with username {} had no schoolId and also couldn't be found in external data"
+						+ " by username. Assigning a generated schoolId {}.", username, generatedSchoolId);
+				person.setSchoolId(generatedSchoolId);
+			} else {
+				person.setSchoolId(byUsername.getSchoolId());
+			}
+		}
+		if ( person.getFirstName() == null ) {
+			if ( byUsername == null || byUsername.getFirstName() == null ) {
+				person.setFirstName("Unknown");
+			} else {
+				person.setFirstName(byUsername.getFirstName());
+			}
+		}
+		if ( person.getLastName() == null ) {
+			if ( byUsername == null || byUsername.getLastName() == null ) {
+				person.setLastName("Unknown");
+			} else {
+				person.setLastName(byUsername.getLastName());
+			}
+		}
+		if ( person.getPrimaryEmailAddress() == null ) {
+			if ( byUsername == null || byUsername.getPrimaryEmailAddress() == null ) {
+				person.setPrimaryEmailAddress(person.getSchoolId() + "@unknown.domain");
+			} else {
+				person.setPrimaryEmailAddress(byUsername.getPrimaryEmailAddress());
+			}
+		}
+	}
+
 	private Person createUserAccount(String username,
 			Collection<GrantedAuthority> authorities,
 			PersonAttributesLookup personAttributesLookup) {
@@ -216,7 +271,7 @@ public class PersonServiceImpl implements PersonService {
 				person.setLastName(attr.getLastName());
 				person.setPrimaryEmailAddress(attr.getPrimaryEmailAddress());
 
-				// try to create the person
+				ensureRequiredFieldsForDirectoryPerson(person);
 				person = create(person);
 				externalPersonService.updatePersonFromExternalPerson(person);
 				LOGGER.info("Successfully Created Account for {}", username);
