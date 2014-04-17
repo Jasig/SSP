@@ -40,20 +40,12 @@ public class EntityStudentCountByCoachTO {
 	
 	private long studentCount;
 	private long entityCount;
-	private CoachPersonLiteTO coach;
+	private AuditPerson coach;
 	
 	public EntityStudentCountByCoachTO(){
 		
 	}
-	public EntityStudentCountByCoachTO(long studentCount, long journalCount,
-			Person coach) {
-		super();
-		this.studentCount = studentCount;
-		this.entityCount = journalCount;
-		this.coach = new CoachPersonLiteTO(coach);
-	}
-	
-	
+
 	public long getStudentCount() {
 		return studentCount;
 	}
@@ -66,20 +58,12 @@ public class EntityStudentCountByCoachTO {
 	public void setEntityCount(long entityCount) {
 		this.entityCount = entityCount;
 	}
-	public CoachPersonLiteTO getCoach() {
+	public AuditPerson getCoach() {
 		return coach;
 	}
-	public void setCoach(Person coach) {
-		this.coach =  new CoachPersonLiteTO(coach);
-	}
-	
 	public void setCoach(AuditPerson coach) {
-		this.coach =  new CoachPersonLiteTO(coach);
+		this.coach = coach;
 	}
-	
-	public void setCoach(UUID coach) {
-		this.coach =  new CoachPersonLiteTO();
-		this.coach.setId(coach);
-	}
+		
 	
 }
