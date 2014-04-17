@@ -891,7 +891,7 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId) throws ObjectNotFoundException, SendFailedException, ValidationException {
 		
-		if(oldCoachId == null || model.getCoach() == null || StringUtils.isEmpty(model.getCoach().getPrimaryEmailAddress()))
+		if(oldCoachId == null || model.getCoach() == null || !model.getCoach().hasEmailAddresses())
 			return;
 		Person oldCoach = get(oldCoachId);
 		String appTitle = configService.getByNameEmpty("app_title");
@@ -901,6 +901,12 @@ public class PersonServiceImpl implements PersonService {
 		String subject = "A coaching assignment has changed in "+appTitle;
 
 		SubjectAndBody subjectAndBody = new SubjectAndBody(subject, message);
-		messageService.createMessage(model.getCoach().getPrimaryEmailAddress(), oldCoach.getPrimaryEmailAddress(), subjectAndBody);
+		if(oldCoach.hasEmailAddresses()){
+			messageService.createMessage(model.getCoach(), 
+				StringUtils.arrayToCommaDelimitedString(oldCoach.getEmailAddresses()
+						.toArray(new String[oldCoach.getEmailAddresses().size()])), subjectAndBody);
+		}else{
+			messageService.createMessage(model.getCoach(),"", subjectAndBody);
+		}
 	}
 }
