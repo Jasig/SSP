@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.EarlyAlert;
@@ -360,7 +361,10 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("ownerPhone", owner.getWorkPhone());
 		messageParams.put("ownerFullName", owner.getFullName());
 		messageParams.put("ownerEmail", owner.getPrimaryEmailAddress());
-		messageParams.put("emailNotes", emailNotes);
+		if(StringUtils.isNotBlank(emailNotes))
+			messageParams.put("emailNotes", emailNotes.trim());
+		else
+			messageParams.put("emailNotes", "");
 		
 		messageParams.put("totalPlanHours", totalPlanCreditHours);
 		messageParams.put("institution", institutionName);
