@@ -170,7 +170,7 @@
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Journal Session Detail Report]]></text>
+				<text><![CDATA[Journal Step Detail Report]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

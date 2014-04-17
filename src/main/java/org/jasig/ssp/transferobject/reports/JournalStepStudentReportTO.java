@@ -58,4 +58,12 @@ public class JournalStepStudentReportTO extends BaseStudentReportTO {
 	public void setJournalStepDetailName(String journalStepDetailName) {
 		this.journalStepDetailName = journalStepDetailName;
 	}
+
+	public UUID getJournalEntryDetailId() {
+		return journalEntryDetailId;
+	}
+
+	public void setJournalEntryDetailId(UUID journalEntryDetailId) {
+		this.journalEntryDetailId = journalEntryDetailId;
+	}
 }

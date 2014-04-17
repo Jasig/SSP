@@ -74,7 +74,7 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/journalsessiondetail")
 public class JournalSessionDetailsReportController extends ReportBaseController {
 	private static String REPORT_URL = "/reports/journalSessionDetailReport.jasper";
-	private static String REPORT_FILE_TITLE = "Journal_Session_Details_Report";
+	private static String REPORT_FILE_TITLE = "Journal_Step_Details_Report";
 	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
 	
 	private static final Logger LOGGER = LoggerFactory

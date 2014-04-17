@@ -19,8 +19,13 @@
 package org.jasig.ssp.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
@@ -35,6 +40,7 @@ import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -45,6 +51,8 @@ import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
+
+import com.google.common.collect.Lists;
 
 @Repository
 public class JournalEntryDao
@@ -218,6 +226,40 @@ public class JournalEntryDao
 		criteria.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
 						JournalStepStudentReportTO.class, "journalentry_"));
+		if(criteria.list().size() > 1){
+			List<JournalStepStudentReportTO> reports = criteria.list();
+			Map<UUID, JournalStepStudentReportTO> cleanReports = new HashMap<UUID, JournalStepStudentReportTO>();
+			for(JournalStepStudentReportTO report:reports){
+				if(!cleanReports.containsKey(report.getJournalEntryDetailId())){
+					cleanReports.put(report.getJournalEntryDetailId(), report);
+				}
+			}
+			List<JournalStepStudentReportTO> sortReports = Lists.newArrayList(cleanReports.values());
+			Collections.sort(sortReports, new Comparator<JournalStepStudentReportTO>() {
+		        public int compare(JournalStepStudentReportTO o1, JournalStepStudentReportTO o2) {
+		        	JournalStepStudentReportTO p1 = (JournalStepStudentReportTO) o1;
+		        	JournalStepStudentReportTO p2 = (JournalStepStudentReportTO) o2;
+		        	int value = p1.getLastName().compareToIgnoreCase(
+		     	                    p2.getLastName());
+		        	if(value != 0)
+		        		return value;
+		        	
+		        	value = p1.getFirstName().compareToIgnoreCase(
+     	                    p2.getFirstName());
+			       if(value != 0)
+	        		 return value;
+			       if(p1.getMiddleName() == null && p2.getMiddleName() == null)
+			    	   return 0;
+			       if(p1.getMiddleName() == null)
+			    	   return -1;
+			       if(p2.getMiddleName() == null)
+			    	   return 1;
+			       return p1.getMiddleName().compareToIgnoreCase(
+    	                    p2.getMiddleName());
+		        }
+		    });
+			return  new PagingWrapper<JournalStepStudentReportTO>(sortReports.size(), sortReports);
+		}
 		return  new PagingWrapper<JournalStepStudentReportTO>(criteria.list().size(), (List<JournalStepStudentReportTO>)criteria.list());
 	}
 	
