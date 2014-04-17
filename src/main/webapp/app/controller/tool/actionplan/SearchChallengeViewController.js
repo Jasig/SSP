@@ -270,12 +270,17 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
     onCategoryNameComboSelect: function(comp, records, eOpts){
         var me = this;
         var baseUrl = me.apiProperties.createUrl(me.apiProperties.getItemUrl('challengeCategoriesStore'));
-        //clearfilter
-		me.challengesStore.clearFilter();
 		
 		if (Ext.ComponentQuery.query('#categoryNameCombo')[0].getRawValue() == 'Student Intake Challenges') {
-			me.challengesStore.load();
-			me.challengesStore.filter('showInStudentIntake', true);
+			var personChallengeUrl = me.apiProperties.createUrl(me.apiProperties.getItemUrl('personChallenge'));
+        	personChallengeUrl = personChallengeUrl.replace('{id}', me.personLite.get('id'));
+			
+			me.apiProperties.makeRequest({
+				url: personChallengeUrl,
+				method: 'GET',
+				successFunc: me.successPersonChallengeFunc
+			});
+			
 		}
 		else {
 			me.apiProperties.makeRequest({
@@ -284,6 +289,18 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
 				successFunc: me.successCategoryFunc
 			});
 		}
+        
+    },
+	
+	successPersonChallengeFunc: function(r, scope){
+        var me = scope;
+        
+        var data = Ext.JSON.decode(r.responseText).rows;
+        
+        var combo = Ext.ComponentQuery.query('#categoryChallengeNameCombo')[0];
+        combo.getStore().removeAll();
+        combo.getStore().loadData(data);
+        
         
     },
     
