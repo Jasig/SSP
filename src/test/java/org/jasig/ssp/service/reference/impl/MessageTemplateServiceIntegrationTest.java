@@ -46,6 +46,7 @@ import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.util.service.stub.Stubs;
 import org.junit.Before;
 import org.junit.Test;
@@ -154,8 +155,9 @@ public class MessageTemplateServiceIntegrationTest {
 	@Test
 	public void createActionPlanStepMessage() throws ObjectNotFoundException {
 		final SubjectAndBody subjAndBody = service.createActionPlanStepMessage(
+				new TaskMessageTemplateTO(
 				taskService.get(UUID
-						.fromString("4a24c8c2-b568-11e1-b82e-0026b9e7ff4c")));
+						.fromString("4a24c8c2-b568-11e1-b82e-0026b9e7ff4c"))));
 		assertSubjectAndBody(subjAndBody, "An Action Item is Due for Review",
 				"Kenneth,<br/>An Action Item ");
 	}
@@ -164,8 +166,8 @@ public class MessageTemplateServiceIntegrationTest {
 	public void createCustomActionPlanTaskMessage()
 			throws ObjectNotFoundException {
 		final SubjectAndBody subjAndBody = service
-				.createCustomActionPlanTaskMessage(taskService
-						.get(TEST_TASK_ID));
+				.createCustomActionPlanTaskMessage(new TaskMessageTemplateTO(taskService
+						.get(TEST_TASK_ID)));
 		assertSubjectAndBody(subjAndBody, "An Action Item is Due for Review",
 				"Kenneth,<br/>An Action Item ");
 	}
