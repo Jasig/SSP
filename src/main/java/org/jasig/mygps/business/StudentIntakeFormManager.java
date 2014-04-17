@@ -2366,6 +2366,7 @@ public class StudentIntakeFormManager { // NOPMD
 		employerQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_EMPLOYER_ID);
 		employerQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.place-of-employment"));
 		employerQuestion.setType(FORM_TYPE_TEXTINPUT);
+		employerQuestion.setMaximumLength("50");
 		// DEPENDENCY -> employerQuestion shown when employedQuestion selection
 		// matches "Yes"
 		employerQuestion.setVisibilityExpression("hasValueForQuestionId('Y', '"
@@ -2403,6 +2404,7 @@ public class StudentIntakeFormManager { // NOPMD
 		wageQuestion.setId(SECTION_DEMOGRAPHICS_QUESTION_WAGE_ID);
 		wageQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.wage"));
 		wageQuestion.setType(FORM_TYPE_TEXTINPUT);
+		wageQuestion.setMaximumLength("50");
 		// DEPENDENCY -> wageQuestion shown when employedQuestion selection
 		// matches "Yes"
 		wageQuestion.setVisibilityExpression("hasValueForQuestionId('Y', '"
@@ -2417,6 +2419,7 @@ public class StudentIntakeFormManager { // NOPMD
 				.setId(SECTION_DEMOGRAPHICS_QUESTION_HOURSWORKEDPERWEEK_ID);
 		hoursWorkedPerWeekQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab2.label.total-hours-worked"));
 		hoursWorkedPerWeekQuestion.setType(FORM_TYPE_TEXTINPUT);
+		hoursWorkedPerWeekQuestion.setMaximumLength("3");
 		// DEPENDENCY -> hoursWorkedPerWeekQuestion shown when employedQuestion
 		// selection matches "Yes"
 		hoursWorkedPerWeekQuestion
