@@ -50,4 +50,10 @@
 	    	<column name="person_id"></column>
 	    </createIndex>
 	 </changeSet>
+	 
+	 <changeSet id="add index to to early_alert.person_id" author="tony.arland">
+	 	<createIndex tableName="early_alert" indexName="early_alert_pid_idx">
+	    	<column name="person_id"></column>
+	    </createIndex>
+	 </changeSet>
 </databaseChangeLog>
