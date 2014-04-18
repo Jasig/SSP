@@ -29,7 +29,6 @@
     
     <include file="org/jasig/ssp/database/apiTestChangesets/api_test_2.xml" />
     <include file="org/jasig/ssp/database/apiTestChangesets/api_test_3.xml" />
+    <include file="org/jasig/ssp/database/apiTestChangesets/update_message_templates_cheksums.xml" />
     <include file="org/jasig/ssp/database/apiTestChangesets/api_test_normalize_dates_last.xml" />
-    
-
 </databaseChangeLog>
