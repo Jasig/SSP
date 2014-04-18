@@ -19,7 +19,7 @@
     under the License.
 
 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="journalSessionDetailReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="15735a24-a671-4aef-89ac-27a8bbd020a8">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="journalSessionDetailReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="15735a24-a671-4aef-89ac-27a8bbd020a8">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.3" value="columnHeader"/>
@@ -161,12 +161,12 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="555" height="28" backcolor="#70C2E7"/>
+				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="802" height="28" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="199" y="6" width="198" height="20"/>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="318" y="8" width="166" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -175,7 +175,7 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="19" splitType="Stretch">
+		<band height="17" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="9cf5fcee-9d5c-407e-98b8-76c052e3da13" x="0" y="0" width="102" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -198,21 +198,21 @@
 				<text><![CDATA[MIDDLE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e2cd19cc-8034-416c-b635-0aae60e282b2" x="247" y="0" width="100" height="16"/>
+				<reportElement uuid="e2cd19cc-8034-416c-b635-0aae60e282b2" x="247" y="0" width="117" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[LAST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="347" y="0" width="100" height="16"/>
+				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="364" y="0" width="163" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[COACH]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="124ebeaf-0e33-4be5-8b4a-4aec9524882d" x="447" y="0" width="99" height="16"/>
+				<reportElement uuid="124ebeaf-0e33-4be5-8b4a-4aec9524882d" x="527" y="0" width="273" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -221,9 +221,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="0" width="546" height="22" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="30" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -231,33 +231,36 @@
 				</graphicElement>
 			</rectangle>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="9d86dad3-a495-4572-b035-8cc26ec74858" x="0" y="4" width="102" height="16"/>
+				<reportElement uuid="9d86dad3-a495-4572-b035-8cc26ec74858" x="2" y="3" width="102" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{schoolId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="deb0ead1-9e11-4959-81c5-e3964898b4ea" x="102" y="4" width="86" height="16"/>
+				<reportElement uuid="deb0ead1-9e11-4959-81c5-e3964898b4ea" x="102" y="3" width="86" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="e906a26a-e21e-4838-93c6-bdbfd1ede135" x="188" y="4" width="59" height="16"/>
+				<reportElement uuid="e906a26a-e21e-4838-93c6-bdbfd1ede135" x="188" y="3" width="59" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{middleName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="05905d2c-578c-4d06-85ad-beaeabcfac74" x="247" y="4" width="100" height="16"/>
+				<reportElement uuid="05905d2c-578c-4d06-85ad-beaeabcfac74" x="247" y="3" width="117" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="aeafd4b8-8098-4594-bdf7-7cce8b9f584a" x="347" y="4" width="100" height="16"/>
+				<reportElement uuid="aeafd4b8-8098-4594-bdf7-7cce8b9f584a" x="364" y="3" width="163" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="2886a606-8169-45aa-b01e-eaaea09f3ba6" x="447" y="4" width="99" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement uuid="2886a606-8169-45aa-b01e-eaaea09f3ba6" x="527" y="3" width="273" height="27"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="10"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{journalStepDetailName}]]></textFieldExpression>
 			</textField>
 		</band>
