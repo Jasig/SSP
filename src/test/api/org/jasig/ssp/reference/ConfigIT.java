@@ -71,6 +71,7 @@ public class ConfigIT extends AbstractReferenceTest {
         expectedResult1.put("createdDate", getDefaultCreatedModifiedByDate());
         expectedResult1.put("modifiedDate", getDefaultCreatedModifiedByDate());
         expectedResult1.put("value", "false");
+        expectedResult1.put("isSecret", false);
         expectedResult1.put("valueValidation", null);
         expectedResult1.put("sortOrder", 502);
         expectedResult1.put("defaultValue", "false");
@@ -87,6 +88,7 @@ public class ConfigIT extends AbstractReferenceTest {
         expectedResult2.put("createdDate", getDefaultCreatedModifiedByDate());
         expectedResult2.put("modifiedDate", getDefaultCreatedModifiedByDate());
         expectedResult2.put("value", "SSP");
+        expectedResult2.put("isSecret", false);
         expectedResult2.put("valueValidation", null);
         expectedResult2.put("sortOrder", 100);
         expectedResult2.put("defaultValue", "SSP");
@@ -103,6 +105,7 @@ public class ConfigIT extends AbstractReferenceTest {
         expectedResult3.put("createdDate", getDefaultCreatedModifiedByDate());
         expectedResult3.put("modifiedDate", getDefaultCreatedModifiedByDate());
         expectedResult3.put("value", "noone@test.com");
+        expectedResult3.put("isSecret", false);
         expectedResult3.put("valueValidation", null);
         expectedResult3.put("sortOrder", 100);
         expectedResult3.put("defaultValue", "noone@test.com");
@@ -119,6 +122,7 @@ public class ConfigIT extends AbstractReferenceTest {
         expectedResult4.put("createdDate", getDefaultCreatedModifiedByDate());
         expectedResult4.put("modifiedDate", getDefaultCreatedModifiedByDate());
         expectedResult4.put("value", "false");
+        expectedResult4.put("isSecret", false);
         expectedResult4.put("valueValidation", null);
         expectedResult4.put("sortOrder", 600);
         expectedResult4.put("defaultValue", "false");
@@ -135,6 +139,7 @@ public class ConfigIT extends AbstractReferenceTest {
         expectedResult5.put("createdDate", getDefaultCreatedModifiedByDate());
         expectedResult5.put("modifiedDate", getDefaultCreatedModifiedByDate());
         expectedResult5.put("value", "20");
+        expectedResult5.put("isSecret", false);
         expectedResult5.put("valueValidation", null);
         expectedResult5.put("sortOrder", 501);
         expectedResult5.put("defaultValue", "20");
@@ -169,11 +174,11 @@ public class ConfigIT extends AbstractReferenceTest {
                     .contentType("application/json")
                     .statusCode(200)
                     .log().ifError()
-                    .body("results", equalTo(40))
+                    .body("results", equalTo(44))
                     .and()
                     .body("success", equalTo("true"))
                     .and()
-                    .body("rows", hasSize(40))
+                    .body("rows", hasSize(44))
                     .and();
 
         spec = expectListResponseObjectAtIndex(spec, 0, CONFIG_ROWS);
