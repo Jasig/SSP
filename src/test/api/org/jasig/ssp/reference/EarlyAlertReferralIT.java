@@ -56,6 +56,9 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_AC.put("description", "");
         EARLY_ALERT_REFERRAL_AC.put("sortOrder", 1);
         EARLY_ALERT_REFERRAL_AC.put("acronym", "AC");
+        EARLY_ALERT_REFERRAL_AC.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_AC.put("carbonCopy", null);
+        
 
         EARLY_ALERT_REFERRAL_ATH = new JSONObject();
         EARLY_ALERT_REFERRAL_ATH.put("id", "b2d112b8-5056-a51a-8067-1fda2849c3e5");
@@ -68,6 +71,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_ATH.put("description", "");
         EARLY_ALERT_REFERRAL_ATH.put("sortOrder", 2);
         EARLY_ALERT_REFERRAL_ATH.put("acronym", "ATH");
+        EARLY_ALERT_REFERRAL_ATH.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_ATH.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_CAP = new JSONObject();
@@ -81,6 +86,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_CAP.put("description", "");
         EARLY_ALERT_REFERRAL_CAP.put("sortOrder", 8);
         EARLY_ALERT_REFERRAL_CAP.put("acronym", "CAP");
+        EARLY_ALERT_REFERRAL_CAP.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_CAP.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_DC = new JSONObject();
@@ -94,6 +101,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_DC.put("description", "");
         EARLY_ALERT_REFERRAL_DC.put("sortOrder", 3);
         EARLY_ALERT_REFERRAL_DC.put("acronym", "DC");
+        EARLY_ALERT_REFERRAL_DC.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_DC.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_ECED = new JSONObject();
@@ -107,6 +116,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_ECED.put("description", "");
         EARLY_ALERT_REFERRAL_ECED.put("sortOrder", 4);
         EARLY_ALERT_REFERRAL_ECED.put("acronym", "ECED");
+        EARLY_ALERT_REFERRAL_ECED.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_ECED.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_ESL = new JSONObject();
@@ -120,6 +131,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_ESL.put("description", "");
         EARLY_ALERT_REFERRAL_ESL.put("sortOrder", 5);
         EARLY_ALERT_REFERRAL_ESL.put("acronym", "ESL");
+        EARLY_ALERT_REFERRAL_ESL.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_ESL.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_FAO = new JSONObject();
@@ -133,6 +146,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_FAO.put("description", "");
         EARLY_ALERT_REFERRAL_FAO.put("sortOrder", 6);
         EARLY_ALERT_REFERRAL_FAO.put("acronym", "FAO");
+        EARLY_ALERT_REFERRAL_FAO.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_FAO.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_IC = new JSONObject();
@@ -146,6 +161,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_IC.put("description", "");
         EARLY_ALERT_REFERRAL_IC.put("sortOrder", 7);
         EARLY_ALERT_REFERRAL_IC.put("acronym", "IC");
+        EARLY_ALERT_REFERRAL_IC.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_IC.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_REG = new JSONObject();
@@ -159,6 +176,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_REG.put("description", "");
         EARLY_ALERT_REFERRAL_REG.put("sortOrder", 10);
         EARLY_ALERT_REFERRAL_REG.put("acronym", "REG");
+        EARLY_ALERT_REFERRAL_REG.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_REG.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_MC = new JSONObject();
@@ -172,6 +191,8 @@ public class EarlyAlertReferralIT extends AbstractReferenceTest {
         EARLY_ALERT_REFERRAL_MC.put("description", "");
         EARLY_ALERT_REFERRAL_MC.put("sortOrder", 9);
         EARLY_ALERT_REFERRAL_MC.put("acronym", "MC");
+        EARLY_ALERT_REFERRAL_MC.put("recipientEmailAddress", null);
+        EARLY_ALERT_REFERRAL_MC.put("carbonCopy", null);
 
 
         EARLY_ALERT_REFERRAL_ROWS = new JSONArray();
