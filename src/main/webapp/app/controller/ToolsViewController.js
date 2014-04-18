@@ -47,6 +47,11 @@ Ext.define('Ssp.controller.ToolsViewController', {
             scope: me
         });
         me.appEventsController.assignEvent({
+            eventName: 'loadIntake',
+            callBackFunc: me.onLoadIntake,
+            scope: me
+        });
+        me.appEventsController.assignEvent({
             eventName: 'transitionStudent',
             callBackFunc: me.onTransitionStudent,
             scope: me
@@ -66,6 +71,11 @@ Ext.define('Ssp.controller.ToolsViewController', {
             scope: me
         });
         me.appEventsController.removeEvent({
+            eventName: 'loadIntake',
+            callBackFunc: me.onLoadIntake,
+            scope: me
+        });        
+        me.appEventsController.removeEvent({
             eventName: 'transitionStudent',
             callBackFunc: me.onTransitionStudent,
             scope: me
@@ -78,6 +88,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
         this.loadPerson();
     },
     
+    onLoadIntake: function(){
+        this.loadIntake();
+    },    
     onTransitionStudent: function(){
         this.selectTool('journal');
         this.loadTool('journal');
@@ -87,7 +100,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
         this.selectTool('profile');
         this.loadTool('profile');
     },
-    
+    loadIntake: function(){
+        this.selectTool('studentintake');
+        this.loadTool('studentintake');
+    },
     selectTool: function(toolType){
         var tool = this.toolsStore.find('toolType', toolType)
         this.getView().getSelectionModel().select(tool);

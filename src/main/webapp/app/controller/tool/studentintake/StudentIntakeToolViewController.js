@@ -583,9 +583,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		
 		if( r.success ) {
 			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
-			if ( newSaveFlag ) {
-				me.onCancelClick(); //rebuild view for new save to show date
-			}
+	        me.appEventsController.getApplication().fireEvent('loadIntake');  
 		}								
 	},
 	
