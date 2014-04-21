@@ -50,14 +50,14 @@
 				<text><![CDATA[STUDENT ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="130" y="0" width="130" height="16" backcolor="#E4E4E4"/>
+				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="130" y="0" width="153" height="16" backcolor="#E4E4E4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[PLAN STATUS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="260" y="0" width="312" height="16" backcolor="#E4E4E4"/>
+				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="283" y="0" width="289" height="16" backcolor="#E4E4E4"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true" isItalic="false"/>
 					<paragraph leftIndent="10"/>
@@ -78,18 +78,18 @@
 			</rectangle>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="0" y="0" width="130" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<paragraph leftIndent="5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{studentId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="130" y="0" width="130" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="130" y="0" width="153" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{planStatus}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="260" y="0" width="312" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="283" y="0" width="289" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement verticalAlignment="Top">
 					<paragraph leftIndent="10"/>
 				</textElement>
