@@ -52,7 +52,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
-		
+		me.catalogYearsStore.load();
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getVisibilityField().setValue('PRIVATE');
 			me.getVisibilityField().setDisabled(true);
