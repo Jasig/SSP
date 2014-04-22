@@ -193,6 +193,7 @@ public class CoachPersonLiteTO implements Serializable {
 		lastName = person.getLastName();
 		primaryEmailAddress = person.getPrimaryEmailAddress();
 		photoUrl =  person.getPhotoUrl();
+		workPhone = person.getWorkPhone();
 		if(person.getStaffDetails() != null){
 			officeLocation = person.getStaffDetails().getOfficeLocation();
 			departmentName = person.getStaffDetails().getDepartmentName();
