@@ -50,7 +50,8 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
                                 xtype: 'textfield',
                                 fieldLabel: 'Records Requested From',
         		                labelWidth: 150,
-                                name: 'recordsRequestedFrom'
+                                name: 'recordsRequestedFrom',
+								maxLength: 50
                             },
                             {
                                 xtype: 'checkboxfield',
@@ -61,7 +62,8 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
                                 xtype: 'textfield',
                                 fieldLabel: 'Documents Requested From',
                                 labelWidth: 180,
-                                name: 'documentsRequestedFrom'
+                                name: 'documentsRequestedFrom',
+								maxLength: 50
                             },
                             {
                                 xtype: 'checkboxfield',

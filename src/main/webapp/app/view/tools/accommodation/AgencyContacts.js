@@ -48,7 +48,8 @@ Ext.define('Ssp.view.tools.accommodation.AgencyContacts', {
 					    items: [{
 	                        xtype: 'textfield',
 	                        fieldLabel: 'Name of Contact',
-	                        name: 'contactName'
+	                        name: 'contactName',
+							maxLength: 50
 	                    }]
 					}]			
 				});
