@@ -210,7 +210,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			if(containsTermSubstitution(reportSubstitutionDetails))
 				return PlanStatus.OFF;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK_SUBSTITUTION;
+				return PlanStatus.ON_TRACK_SUBSTITUTIO;
 		}
 		if(termBound == false && useSubstitutableCourses == false)
 		{
@@ -231,7 +231,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			if(containsTermSubstitution(reportSubstitutionDetails))
 				return PlanStatus.ON_TRACK_SEQUENCE;
 			if(containsCourseSubstitution(reportSubstitutionDetails))
-				return PlanStatus.ON_TRACK_SUBSTITUTION;
+				return PlanStatus.ON_TRACK_SUBSTITUTIO;
 		}	
 		return PlanStatus.ON;
 	}	

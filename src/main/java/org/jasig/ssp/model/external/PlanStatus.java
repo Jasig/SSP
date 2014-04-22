@@ -28,7 +28,7 @@ package org.jasig.ssp.model.external;
 public enum PlanStatus {
 	ON("On Plan"),
 	OFF("Off Plan"),
-	ON_TRACK_SUBSTITUTION("On Track Substitution"),
+	ON_TRACK_SUBSTITUTIO("On Track Substitution"),
 	ON_TRACK_SEQUENCE("On Track Sequence");
 	
 	private String displayName;
