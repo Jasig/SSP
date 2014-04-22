@@ -32,6 +32,8 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
 import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
+import org.jasig.ssp.factory.reference.EarlyAlertOutreachTOFactory;
+import org.jasig.ssp.factory.reference.EarlyAlertReferralTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
 import org.jasig.ssp.model.JournalEntry;
@@ -137,6 +139,13 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private transient EarlyAlertResponseTOFactory earlyAlertResponseTOFactory;
+	
+	@Autowired
+	private EarlyAlertReferralTOFactory earlyAlertReferralFactoryTO;
+	
+	@Autowired
+	private EarlyAlertOutreachTOFactory earlyAlertOutreachFactoryTO;
+	
 
 	@Autowired
 	private transient PersonService personService;
@@ -432,7 +441,18 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 				.fillTemplateParameters(earlyAlert);
 
 		// add early alert response to the parameter list
-		templateParameters.put("earlyAlertResponse", earlyAlertResponse);
+		Person creator = null;
+		try {
+			creator = personService.get(earlyAlertResponse.getCreatedBy().getId());
+		} catch (ObjectNotFoundException e) {
+			LOGGER.error("No creator found for early alert response :" + earlyAlertResponse.getCreatedBy().getId(), e);
+		}
+		EarlyAlertResponseMessageTemplateTO earTO = new EarlyAlertResponseMessageTemplateTO(earlyAlertResponse, creator);
+		earTO.setEarlyAlertReferrals(earlyAlertReferralFactoryTO.asTOList(earlyAlertResponse.getEarlyAlertReferralIds()));
+		earTO.setEarlyAlertOutreach(earlyAlertOutreachFactoryTO.asTOList(earlyAlertResponse.getEarlyAlertOutreachIds()));
+
+		
+		templateParameters.put("earlyAlertResponse", earTO);
 		templateParameters.put("workPhone", earlyAlert.getPerson()
 				.getWorkPhone());
 		if ( earlyAlert.getPerson().getCoach() != null &&
