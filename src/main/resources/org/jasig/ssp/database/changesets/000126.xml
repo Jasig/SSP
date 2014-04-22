@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="Update Template Plan Owner, Coach" author="jim.stanley">
+    <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="bcc180b0-3a8b-11e3-aa6e-0800200c9a66"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>
+            <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+                 <param name="messageTemplateId" value="bcc180b0-3a8b-11e3-aa6e-0800200c9a66"/>
+                <param name="columnName" value="body"/>
+                <param name="columnValue"><![CDATA[<html><body>
+<div>
+
+<p text-align="center" style="padding-left:10%">
+<table style="width:80%" ><tbody>
+<tr>
+<td style="text-align:left;width:30%" ></td>
+<td style="text-align:center;width:30%;font-size:large" ><b>$!title</b></td>
+<td style="text-align:right;width:30%;font-size:small" >Last Modified: $!lastModified</td>
+</tr>
+<tr>
+<td style="text-align:left;font-size:small" >#if($!printParams.divisionName)Division: $!printParams.divisionName#end</td>
+<td style="text-align:center;font-size:small" >#if($!printParams.departmentName)Department: $!printParams.departmentName#end</td>
+<td style="text-align:right;font-size:small" >#if($!printParams.programName)Program: $!printParams.programName#end</td>
+</tr>
+</tbody></table>
+<b>
+</p>
+</div>
+<div style="position:relative;left:100px">
+    #foreach($termCourse in $termCourses) 
+        <table cellpadding="0" cellspacing="0" style="background-color:white;width:80%;border-collapse:collapse;">
+            <caption  style="font-size:small;text-align:left">$termCourse.term.name #if($!termCourse.studentNotes) - $!termCourse.studentNotes#end</caption>
+            <thead>
+                <tr >
+                    <th style="text-align:center;border:1px solid black;width:15%">
+                        Course<br/>Number
+                    </th>
+                    <th style="text-align:center;border:1px solid black;width:50%">
+                        Course Title
+                    </th>
+                    <th style="text-align:center;border:1px solid black;width:15%">
+                        Credit <br/> Hours
+                    </th>
+                    <th style="text-align:center;border:1px solid black;width:25%">
+                        Notes <b>(Student)</b> <br/> 
+                    </th>
+                </tr>
+            </thead>
+            #foreach($course in $!termCourse.courses)
+            <tr>
+                <td style="text-align:center;border:1px solid black;width:15%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    $!course.formattedCourse
+                </td>
+                <td style="text-align:left;border:1px solid black;width:50%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    $!course.courseTitle
+                </td>
+                <td style="text-align:center;border:1px solid black;width:15%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    $!course.creditHours
+                </td>
+                <td style="text-align:center;border:1px solid black;width:25%;padding-bottom:5px; padding-top:5px;padding-left:5px">
+                    $!course.studentNotes
+                </td>
+            </tr>
+            <tr>
+            #end
+            <tr>
+            <td colspan="3" style="height:35px; padding-bottom:5px; padding-left:80px;vertical-align:bottom">
+                <b>Total Credit Hours:</b>  $!termCourse.totalCreditHours
+            </td>
+            </tr>
+            <tr>
+            <td colspan="3" style="height:15px">
+            <br/>
+            </td>
+            </tr>
+        </table>
+    #end
+    <table style="width:80%">
+        <tbody>
+        #if($!planStudentNotes)
+        <tr>
+        <td style="text-align:left">
+           Notes:
+        </td>
+        </tr>
+        <tr>
+        <td style="text-align:left;padding-left10px;">
+           $!planStudentNotes
+        </td>
+        </tr>
+        #end
+        <tr>
+        <td style="text-align:center">
+        <b>Total Template Hours: $!totalPlanHours</b>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+    <div>
+    <div>
+    #if(($!contactName != "" && $!contactName.trim() != "") 
+        || ($!contactTitle != ""  && $!contactTitle.trim() != "") 
+        || ($!contactPhone != ""  && $!contactPhone.trim() != "") 
+        || ($!contactEmail != "" && $!contactEmail.trim() != "") )
+    <p style="padding-left:20px">
+    <b>If I have questions or concerns about my plan I will contact:
+    </p>
+    <p style="padding-left:20px">
+    #if($!contactName != "")$!contactName</br>#end
+    #if($!contactTitle != "")$!contactTitle</br>#end
+    #if($!contactPhone != "")$!contactPhone</br>#end
+    #if($!contactEmail != "")$!contactEmail#end
+    </p>`
+    #end    
+    <p style="padding-left:20px">
+    #if($!ownerFullName != "")$!ownerFullName</br>#end
+    #if($!ownerPhone != "")$!ownerPhone</br>#end
+    #if($!ownerEmail != "")$!ownerEmail#end
+    </p>
+    </div>
+    </div>
+</body></html>]]></param>
+            </customChange>
+    </changeSet>
+</databaseChangeLog>
