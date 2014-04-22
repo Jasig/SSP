@@ -43,6 +43,7 @@ Ext.define('Ssp.model.tool.actionplan.Task', {
              {name:'completed',type:'boolean'},
              {name:'completedDate', type:'date', dateFormat:'time'},
              {name:'challengeId',type:'string'},
+             {name:'challengeReferralId',type:'string'},
              {name:'type',type:'string'},
              {name:'personId',type:'string'}]
 });
