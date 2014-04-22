@@ -52,10 +52,10 @@ public class ChallengeReferral
 	private String publicDescription;
 
 	@Column(nullable = false)
-	private Boolean showInSelfHelpGuide;
+	private Boolean showInSelfHelpGuide = true;
 
 	@Column(nullable = false)
-	private Boolean showInStudentIntake;
+	private Boolean showInStudentIntake = true;
 
 	@OneToMany(mappedBy = "challengeReferral")
 	private Set<ChallengeChallengeReferral> challengeChallengeReferrals =

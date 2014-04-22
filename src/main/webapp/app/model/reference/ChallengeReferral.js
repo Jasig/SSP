@@ -20,5 +20,6 @@ Ext.define('Ssp.model.reference.ChallengeReferral', {
     extend: 'Ssp.model.reference.AbstractReference',
     fields: [{name: 'publicDescription', type: 'string'},
              {name:'link',type:'string'},
-             {name: 'showInSelfHelpGuide', type: 'boolean'}]
+             {name: 'showInSelfHelpGuide', type: 'boolean'},
+             {name: 'showInStudentIntake', type: 'boolean'}]
 });

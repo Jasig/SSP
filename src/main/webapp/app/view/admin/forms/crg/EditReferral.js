@@ -49,7 +49,13 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     anchor: '100%',
                     maxLength: 256,
                     name: 'link'
-                },                
+                },  
+                {
+                    xtype: 'checkboxfield',
+                    fieldLabel: 'Show in Student Intake',
+                    anchor: '100%',
+                    name: 'showInStudentIntake'
+                },
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Show in Self Help Guide',
