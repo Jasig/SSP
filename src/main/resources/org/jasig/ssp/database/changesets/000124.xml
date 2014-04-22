@@ -83,7 +83,6 @@
                     <p>Sincerely,</p>
                     #if($!earlyAlert.coach)
                     <p>$!earlyAlert.coach.getFullName()<br />
-                    #if( $earlyAlert.coach.title ) $!earlyAlert.coach.title<br/>#end
                     #if( $earlyAlert.coach.officeLocation )$earlyAlert.coach.officeLocation<br />#end
                     #if( $earlyAlert.coach.workPhone )$earlyAlert.coach.workPhone<br />#end
                      #if( $earlyAlert.coach.primaryEmailAddress )$earlyAlert.coach.primaryEmailAddress
