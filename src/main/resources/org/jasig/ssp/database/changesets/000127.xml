@@ -26,7 +26,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext 
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-
+   
+    <property name="schema" value="${database.schema}" />
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
     
@@ -39,44 +40,34 @@
             <column name="show_in_self_help_guide" value="false" />
             <where>show_in_self_help_guide is NULL</where>
         </update>
-         <addDefaultValue
-            columnDataType="boolean"
-            columnName="show_in_student_intake"
-            defaultValueBoolean="TRUE"
-            schemaName="public"
-            tableName="challenge_referral"/>
         <addDefaultValue
             columnDataType="boolean"
             columnName="show_in_self_help_guide"
             defaultValueBoolean="TRUE"
-            schemaName="public"
+            schemaName="${schema}"
             tableName="challenge_referral"/>
         <addNotNullConstraint
             columnDataType="boolean"
             columnName="show_in_student_intake"
-            schemaName="public"
+            schemaName="${schema}"
             tableName="challenge_referral"/>
          <addNotNullConstraint
             columnDataType="boolean"
             columnName="show_in_self_help_guide"
-            schemaName="public"
+            schemaName="${schema}"
             tableName="challenge_referral"/>
         <rollback>
-             <dropDefaultValue
-            columnName="show_in_student_intake"
-            schemaName="public"
-            tableName="challenge_referral"/>
             <dropDefaultValue
             columnName="show_in_self_help_guide"
-            schemaName="public"
+            schemaName="${schema}"
             tableName="challenge_referral"/>
             <dropNotNullConstraint
             columnName="show_in_student_intake"
-            schemaName="public"
+            schemaName="${schema}"
             tableName="challenge_referral"/>
             <dropNotNullConstraint
             columnName="show_in_self_help_guide"
-            schemaName="public"
+            schemaName="${schema}"
             tableName="challenge_referral"/>
         </rollback>
     </changeSet>
