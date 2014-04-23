@@ -34,6 +34,7 @@ public class ChallengeReferralIT extends AbstractReferenceTest {
     private static final String[] CHALLENGE_REFERRAL_DESCRIPTIONS;
     private static final String[] CHALLENGE_REFERRAL_PUBLIC_DESCRIPTION;
     private static final boolean[] CHALLENGE_REFERRAL_SHOW_IN_SELF_HELP_GUIDE_VALUES;
+    private static final boolean[] CHALLENGE_REFERRAL_SHOW_IN_STUDENT_INTAKE_VALUES;
     private static final String[] CHALLENGE_REFERRAL_LINKS;
 
     private static final JSONArray CHALLENGE_REFERRAL_ROWS;
@@ -311,6 +312,14 @@ public class ChallengeReferralIT extends AbstractReferenceTest {
                 true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true,
                 false, true, true, true, true, true, false, true, false, true, true
         };
+        
+        CHALLENGE_REFERRAL_SHOW_IN_STUDENT_INTAKE_VALUES = new boolean[] {
+                true, true, false, false, true, false, false, true, true, false, true, false, true, true, true,
+                true, true, true, true, true, true, true, false, false, false, false, true, false, true, false,
+                true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true,
+                false, true, true, true, true, true, false, true, false, true, true
+        };
+
 
         CHALLENGE_REFERRAL_LINKS = new String[] {
                 "", "apply.studentsuccessplan.org", "www.al-anondemo.org", "", "www.studentsuccessplan.org", "",
@@ -337,12 +346,7 @@ public class ChallengeReferralIT extends AbstractReferenceTest {
             temp.put("description", CHALLENGE_REFERRAL_DESCRIPTIONS[index]);
             temp.put("publicDescription", CHALLENGE_REFERRAL_PUBLIC_DESCRIPTION[index]);
             temp.put("showInSelfHelpGuide", CHALLENGE_REFERRAL_SHOW_IN_SELF_HELP_GUIDE_VALUES[index]);
-
-            if ( index != 24 && index != 25 && index != 54  ) {
-                temp.put("showInStudentIntake", null);
-            } else {
-                temp.put("showInStudentIntake", true);
-            }
+            temp.put("showInStudentIntake", CHALLENGE_REFERRAL_SHOW_IN_STUDENT_INTAKE_VALUES[index]);
 
             temp.put("link", CHALLENGE_REFERRAL_LINKS[index]);
 

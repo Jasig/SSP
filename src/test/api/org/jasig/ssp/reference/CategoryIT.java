@@ -120,7 +120,7 @@ public class CategoryIT extends AbstractReferenceTest {
         CATEGORY_CHALLENGE_REFERRAL.put("publicDescription", "Career Coaches are available to assist you in planning " +
                 "out how your education will lead to the career you deserve.");
         CATEGORY_CHALLENGE_REFERRAL.put("showInSelfHelpGuide", false);
-        CATEGORY_CHALLENGE_REFERRAL.put("showInStudentIntake", null);
+        CATEGORY_CHALLENGE_REFERRAL.put("showInStudentIntake", false);
         CATEGORY_CHALLENGE_REFERRAL.put("link", "");
 
         CATEGORY_CHALLENGE_CHALLENGE_REFERRALS = new JSONArray();

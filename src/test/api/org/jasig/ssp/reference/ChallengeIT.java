@@ -67,6 +67,7 @@ public class ChallengeIT extends AbstractReferenceTest {
     private static final String[] CHALLENGE_REFERRAL_DESCRIPTIONS;
     private static final String[] CHALLENGE_REFERRAL_PUBLIC_DESCRIPTIONS;
     private static final boolean[] CHALLENGE_REFERRAL_SELF_HELP_GUIDE_VALUES;
+    private static final boolean[] CHALLENGE_REFERRAL_STUDENT_INTAKE_VALUES;
     private static final String[] CHALLENGE_REFERRAL_LINKS;
 
     private static final String[] SELF_HELP_GUIDE_QUESTION_UUIDS;
@@ -342,6 +343,13 @@ public class ChallengeIT extends AbstractReferenceTest {
         };
 
         CHALLENGE_REFERRAL_SELF_HELP_GUIDE_VALUES = new boolean[] {
+                true, true, false, false, true, false, false, true, true, false, true, false, true, true, true,
+                true, true, true, true, true, true, true, false, false, false, false, true, false, true, false,
+                true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true,
+                false, true, true, true, true, true, false, true, false, true, true
+        };
+        
+        CHALLENGE_REFERRAL_STUDENT_INTAKE_VALUES = new boolean[] {
                 true, true, false, false, true, false, false, true, true, false, true, false, true, true, true,
                 true, true, true, true, true, true, true, false, false, false, false, true, false, true, false,
                 true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true,
@@ -1400,12 +1408,7 @@ public class ChallengeIT extends AbstractReferenceTest {
                     tempChallengeReferral.put("description", CHALLENGE_REFERRAL_DESCRIPTIONS[referralUUIDIndex]);
                     tempChallengeReferral.put("publicDescription", CHALLENGE_REFERRAL_PUBLIC_DESCRIPTIONS[referralUUIDIndex]);
                     tempChallengeReferral.put("showInSelfHelpGuide", CHALLENGE_REFERRAL_SELF_HELP_GUIDE_VALUES[referralUUIDIndex]);
-
-                    if ( referralUUIDIndex != 24 && referralUUIDIndex != 25 && referralUUIDIndex != 54  ) {
-                        tempChallengeReferral.put("showInStudentIntake", null);
-                    } else {
-                        tempChallengeReferral.put("showInStudentIntake", true);
-                    }
+                    tempChallengeReferral.put("showInStudentIntake", CHALLENGE_REFERRAL_STUDENT_INTAKE_VALUES[referralUUIDIndex]);
 
                     tempChallengeReferral.put("link", CHALLENGE_REFERRAL_LINKS[referralUUIDIndex]);
 
