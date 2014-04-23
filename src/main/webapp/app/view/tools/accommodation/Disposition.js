@@ -147,12 +147,14 @@ Ext.define('Ssp.view.tools.accommodation.Disposition', {
                     {
                         xtype: 'textareafield',
                         fieldLabel: 'Please list medications',
-                        name: 'medicationList'
+                        name: 'medicationList',
+						maxLength: 50
                     },
                     {
                         xtype: 'textareafield',
                         fieldLabel: 'Functional limitations?, please explain',
-                        name: 'functionalLimitations'
+                        name: 'functionalLimitations',
+						maxLength: 50
                     }]
         });
 
