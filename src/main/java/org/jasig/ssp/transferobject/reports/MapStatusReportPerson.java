@@ -30,6 +30,7 @@ public class MapStatusReportPerson {
 		this.schoolId = schoolId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.programCode = programCode;
 		this.catalogYearCode = catalogYearCode;
 	}
 
