@@ -33,7 +33,10 @@ Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
                     xtype: 'textfield',
                     fieldLabel: 'Challenge Name',
                     anchor: '100%',
-                    name: 'name'
+                    name: 'name',
+                    value: 'default',
+                    allowBlank: false,
+                    required: true
                 },
                 {
                     xtype: 'textareafield',

@@ -179,8 +179,12 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                     },
                     { header: 'Name',
                         dataIndex: 'name',
+                    	editor:{
+							allowBlank: false
+						},
                         field: {
-                            xtype: 'textfield'
+                            xtype: 'textfield',
+							allowBlank: false
                         },
                         flex: 50
                     },

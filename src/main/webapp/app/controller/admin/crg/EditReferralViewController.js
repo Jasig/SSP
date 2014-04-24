@@ -56,6 +56,11 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 			record = this.model;
 			id = record.get('id');
 			jsonData = record.data;
+			var failure = function(){
+		       	   Ext.Msg.alert('SSP Error', 'There was an error while trying to save.');
+		       	   me.getView().setLoading(false);
+		    	};
+		    	
 			successFunc = function(response, view) {
 				var responseTextObject = response['responseText'];
 				var rto = Ext.JSON.decode(responseTextObject);
@@ -85,7 +90,8 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 					url: url+"/"+id,
 					method: 'PUT',
 					jsonData: jsonData,
-					successFunc: successFunc 
+					successFunc: successFunc,
+					failureFunc: failure
 				});
 				
 			}else{
@@ -94,7 +100,8 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 					url: url,
 					method: 'POST',
 					jsonData: jsonData,
-					successFunc: successFunc 
+					successFunc: successFunc,
+					failureFunc: failure 
 				});		
 			}
 		}
