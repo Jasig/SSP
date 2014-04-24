@@ -175,9 +175,12 @@ public class ConfigController
 	}
 
 	private ConfigTO filterSensitiveValues(ConfigTO configTO) {
+		if(configTO == null)
+			return configTO;
 		if ( !(securityService.hasAuthority(Permission.REFERENCE_WRITE)) ) {
 			requestTrustService.obfuscateSensitiveConfig(configTO);
 		}
+		
 		if(configTO.getIsSecret())
 			configTO.setValue("**********");
 		return configTO;
