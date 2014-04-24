@@ -34,9 +34,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
                     xtype: 'textfield',
                     fieldLabel: 'Name',
                     anchor: '100%',
-                    name: 'name',
-                    allowBlank: false,
-                    required: true
+                    name: 'name'
                 },{
                     xtype: 'textareafield',
                     fieldLabel: 'Description',

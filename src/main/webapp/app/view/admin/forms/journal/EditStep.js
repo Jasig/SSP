@@ -30,8 +30,6 @@ Ext.define('Ssp.view.admin.forms.journal.EditStep',{
                     xtype: 'textfield',
                     fieldLabel: 'Step Name',
                     anchor: '100%',
-                    allowBlank: false,
-                    required: true,
                     name: 'name'
                 },
                 {
