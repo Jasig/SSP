@@ -110,7 +110,7 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * uses AbstractAuditable transfer objects).
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, updatable = false)
+	@JoinColumn(nullable = false, updatable = true)
 	private AuditPerson modifiedBy;
 
 	/**
