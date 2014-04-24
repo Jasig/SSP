@@ -179,7 +179,7 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		}
 		
 		// Handle call not found result
-		if (response.status==404 || response.status==405 || response.status==400)
+		if (response.status==404 || response.status==405)
 		{
 			Ext.Msg.alert('SSP Error', msg);
 		}
