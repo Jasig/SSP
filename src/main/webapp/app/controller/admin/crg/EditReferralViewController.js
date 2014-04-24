@@ -48,18 +48,19 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 	onSaveClick: function(button) {
 		var me = this;
 		var record, id, jsonData, url;
-		me.getView().setLoading(true);
+		
 		if(me.getView().getForm().isValid())
 		{
+			me.getView().setLoading(true);
 			url = this.store.getProxy().url;
 			me.getView().getForm().updateRecord();
 			record = this.model;
 			id = record.get('id');
 			jsonData = record.data;
-			var failure = function(){
-		       	   Ext.Msg.alert('SSP Error', 'There was an error while trying to save.');
-		       	   me.getView().setLoading(false);
-		    	};
+			var failure = function(response, view){
+				 me.apiProperties.handleError(response);
+				 me.getView().setLoading(false);
+		    };
 		    	
 			successFunc = function(response, view) {
 				var responseTextObject = response['responseText'];
