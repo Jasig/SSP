@@ -465,7 +465,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			//If term or program code are defined as null as part of the substitution then it's considered term or program unbounded
 			//In otherwords, if term is null it applies to all terms, if program is null is applies to all programs
 			if((mapPlanStatusReportCourse.getFormattedCourse().trim().equalsIgnoreCase(substitutableCourse.getSourceFormattedCourse().trim()) &&
-				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE) || mapPlanStatusReportCourse.getCourseTitle().trim().equalsIgnoreCase(substitutableCourse.getSourceCourseCode())) &&
+				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE) || mapPlanStatusReportCourse.getCourseTitle().trim().equalsIgnoreCase(substitutableCourse.getSourceCourseTitle())) &&
 				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS) || mapPlanStatusReportCourse.getCreditHours().equals(substitutableCourse.getSourceCreditHours())) &&
 				(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE) || mapPlanStatusReportCourse.getCourseCode().trim().equals(substitutableCourse.getSourceCourseCode()))) 
 			   && (substitutableCourse.getTermCode() == null || (mapPlanStatusReportCourse.getTermCode() != null && mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim())))
