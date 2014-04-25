@@ -533,7 +533,7 @@
 		<band height="42">
 			<printWhenExpression><![CDATA[!$F{earlyAlerts}.isEmpty()]]></printWhenExpression>
 			<staticText>
-				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="2" width="572" height="15" backcolor="#F7DFC5">
+				<reportElement uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0" positionType="Float" mode="Opaque" x="0" y="2" width="572" height="15" backcolor="#C5CCF7">
 					<printWhenExpression><![CDATA[!$F{earlyAlerts}.isEmpty();]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">

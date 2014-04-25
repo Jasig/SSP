@@ -26,9 +26,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="22"/>
-	<property name="ireport.y" value="33"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/codynet/workspace/ssd/SSP-Open-Source-Project/src/main/resources/reports/"]]></defaultValueExpression>
 	</parameter>
@@ -47,63 +47,63 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="118" splitType="Stretch">
+		<band height="133" splitType="Stretch">
 			<textField>
-				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" stretchType="RelativeToTallestObject" x="101" y="36" width="454" height="19"/>
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" stretchType="RelativeToTallestObject" x="101" y="50" width="454" height="19"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{createdBy.firstName} + " " + $F{createdBy.lastName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="2910e244-9689-4022-b894-845b897feb21" mode="Opaque" x="0" y="2" width="555" height="15" backcolor="#C2C7F8"/>
+				<reportElement uuid="2910e244-9689-4022-b894-845b897feb21" mode="Opaque" x="0" y="11" width="555" height="15" backcolor="#909AFE"/>
 				<textElement/>
 				<text><![CDATA[Early Alert]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="082b7371-c4bc-44ed-9d0d-ed4da09078b6" x="0" y="36" width="100" height="20"/>
+				<reportElement uuid="082b7371-c4bc-44ed-9d0d-ed4da09078b6" x="0" y="50" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Instructor Name:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f4d0005e-b505-4842-acba-d85c412f629f" x="0" y="56" width="100" height="20"/>
+				<reportElement uuid="f4d0005e-b505-4842-acba-d85c412f629f" x="0" y="70" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Course Name:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="f35887c5-0929-4ec4-b302-6e510b28c7f8" x="101" y="56" width="454" height="20">
+				<reportElement uuid="f35887c5-0929-4ec4-b302-6e510b28c7f8" x="101" y="70" width="454" height="20">
 					<printWhenExpression><![CDATA[$F{courseName} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3f71091c-8771-43a6-a708-46fb3955c647" x="0" y="76" width="100" height="20"/>
+				<reportElement uuid="3f71091c-8771-43a6-a708-46fb3955c647" x="0" y="90" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Course Title:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="afa58d0a-6061-4a76-810e-dc32f415eba6" x="101" y="76" width="454" height="20">
+				<reportElement uuid="afa58d0a-6061-4a76-810e-dc32f415eba6" x="101" y="90" width="454" height="20">
 					<printWhenExpression><![CDATA[$F{courseTitle} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{courseTitle}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="9f94900c-c7e2-4db1-9331-8f39e45cd368" x="0" y="17" width="100" height="20"/>
+				<reportElement uuid="9f94900c-c7e2-4db1-9331-8f39e45cd368" x="0" y="31" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Date Created: ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="cba5748c-d955-4ba9-8ed9-a1e9bbb298c2" x="101" y="17" width="375" height="20"/>
+				<reportElement uuid="cba5748c-d955-4ba9-8ed9-a1e9bbb298c2" x="101" y="31" width="375" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{createdDate} == null ? "" : new SimpleDateFormat("MM/dd/yyyy HH:mm:ss z").format($F{createdDate})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="a7432ae1-ff9e-474c-9eae-17a0a07d0182" stretchType="RelativeToBandHeight" x="0" y="96" width="100" height="20"/>
+				<reportElement uuid="a7432ae1-ff9e-474c-9eae-17a0a07d0182" stretchType="RelativeToBandHeight" x="0" y="110" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[Reason:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement uuid="f8a10acb-ebf6-47bf-ae69-2563d155e8a9" stretchType="RelativeToBandHeight" x="101" y="96" width="454" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="f8a10acb-ebf6-47bf-ae69-2563d155e8a9" stretchType="RelativeToBandHeight" x="101" y="110" width="454" height="20" isPrintWhenDetailOverflows="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{earlyAlertReasonTOs})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
@@ -152,7 +152,7 @@
 				<text><![CDATA[Faculty Comment:]]></text>
 			</staticText>
 		</band>
-		<band height="24">
+		<band height="27">
 			<staticText>
 				<reportElement uuid="97815147-4c82-4f31-a7d6-87bfde1e35ea" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="100" height="20"/>
 				<textElement/>

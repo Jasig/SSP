@@ -20,7 +20,7 @@
 
 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tasks_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="51dbb813-035f-483a-9532-ecd7ac9cfc86">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="groupName" class="java.lang.String"/>
@@ -29,16 +29,16 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="34" splitType="Stretch">
+		<band height="46" splitType="Stretch">
 			<textField>
-				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" mode="Opaque" x="0" y="1" width="555" height="16" backcolor="#DCC7C7"/>
+				<reportElement uuid="0555938f-0ca6-44ad-93ea-2818cdcc7270" mode="Opaque" x="0" y="10" width="555" height="16" backcolor="#DCC7C7"/>
 				<textElement verticalAlignment="Middle">
 					<font isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Challenge: " + $F{groupName}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement uuid="463f5dd1-6b8b-4aef-96a3-28f44388b49d" stretchType="RelativeToTallestObject" x="19" y="17" width="536" height="17"/>
+				<reportElement uuid="463f5dd1-6b8b-4aef-96a3-28f44388b49d" stretchType="RelativeToTallestObject" x="19" y="26" width="536" height="17"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{taskList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/tasksHistory_subreport.jasper"]]></subreportExpression>
 			</subreport>
