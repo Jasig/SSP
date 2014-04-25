@@ -20,15 +20,7 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -57,6 +49,7 @@ import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
 import org.jasig.ssp.transferobject.reports.PersonReportTO;
 import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
+import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -235,72 +228,106 @@ public class PersonHistoryReportController extends ReportBaseController {
 		return new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.US);
 	}
 
+    private static int sortDateDescending( Date date1, Date date2 ) {
+        if ( date1.compareTo(date2) < 0 ) {
+            return 1;
+        } else if ( date1.compareTo(date2) > 0 ) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
 	public static List<StudentHistoryTO> sort(
 			final Set<EarlyAlertTO> earlyAlerts,
 			final Map<String, List<TaskTO>> taskMap,
 			final List<JournalEntryTO> journalEntries) {
 
-		final Map<String, StudentHistoryTO> studentHistoryMap = Maps
-				.newHashMap();
+        //TreeMap assures modified date order is preserved (sorted by modified date descending)
+        final TreeMap<Date, StudentHistoryTO> studentHistoryMap = new TreeMap( new Comparator<Date>() {
+            public int compare(Date o1, Date o2) {
+                return sortDateDescending(o1, o2);
+            }
+        });
 
-		// first, iterate over each EarlyAlertTO, looking for matching dates int
-		// eh PersonHistoryTO
-		final Iterator<EarlyAlertTO> alertIter = earlyAlerts.iterator();
-		while (alertIter.hasNext()) {
+        //Sort early alerts by modified date descending
+        final List<EarlyAlertTO> earlyAlertsSorted = new ArrayList(earlyAlerts);
+        Collections.sort(earlyAlertsSorted, new Comparator<EarlyAlertTO>() {
+            @Override
+            public int compare (final EarlyAlertTO o1, final EarlyAlertTO o2) {
+                return sortDateDescending(o1.getModifiedDate(), o2.getModifiedDate());
+            }
+        });
+
+        //Sort journal entries by modified date descending
+        final List journalEntriesSorted = journalEntries;
+        Collections.sort(journalEntriesSorted, new Comparator<JournalEntryTO>() {
+            @Override
+            public int compare (final JournalEntryTO o1, final JournalEntryTO o2) {
+                return sortDateDescending(o1.getModifiedDate(), o2.getModifiedDate());
+            }
+        });
+
+
+        //First, iterate over each EarlyAlertTO, looking for matching dates in the PersonHistoryTO
+		final Iterator<EarlyAlertTO> alertIter = earlyAlertsSorted.iterator();
+		while ( alertIter.hasNext() ) {
 			final EarlyAlertTO thisEarlyAlertTO = alertIter.next();
-			final String snewDate = getDateFormatter().format(thisEarlyAlertTO
-					.getCreatedDate());
-			if (studentHistoryMap.containsKey(snewDate)) {
-				final StudentHistoryTO studentHistoryTO = studentHistoryMap
-						.get(snewDate);
+            final Date snewDate = DateTimeUtils.midnightOn(thisEarlyAlertTO.getModifiedDate());
+
+			if ( studentHistoryMap.containsKey(snewDate) ) {
+				final StudentHistoryTO studentHistoryTO = studentHistoryMap.get(snewDate);
 				studentHistoryTO.addEarlyAlertTO(thisEarlyAlertTO);
 
 			} else {
-				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
-						snewDate);
+				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(getDateFormatter().format(snewDate));
 				thisStudentHistoryTO.addEarlyAlertTO(thisEarlyAlertTO);
 				studentHistoryMap.put(snewDate, thisStudentHistoryTO);
 			}
 		}
 
-		final Iterator<JournalEntryTO> journalEntryIter = journalEntries
-				.iterator();
-		while (journalEntryIter.hasNext()) {
+        //Second, iterate over each JournalEntryTO, looking for matching dates in the PersonHistoryTO
+		final Iterator<JournalEntryTO> journalEntryIter = journalEntriesSorted.iterator();
+		while ( journalEntryIter.hasNext() ) {
 			final JournalEntryTO thisJournalEntryTO = journalEntryIter.next();
-			final String snewDate = getDateFormatter().format(
-					thisJournalEntryTO
-							.getCreatedDate());
-			if (studentHistoryMap.containsKey(snewDate)) {
-				final StudentHistoryTO studentHistoryTO = studentHistoryMap
-						.get(snewDate);
+            final Date snewDate = DateTimeUtils.midnightOn(thisJournalEntryTO.getModifiedDate());
+
+			if ( studentHistoryMap.containsKey(snewDate) ) {
+				final StudentHistoryTO studentHistoryTO = studentHistoryMap.get(snewDate);
 				studentHistoryTO.addJournalEntryTO(thisJournalEntryTO);
 			} else {
-				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
-						snewDate);
+				final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(getDateFormatter().format(snewDate));
 				thisStudentHistoryTO.addJournalEntryTO(thisJournalEntryTO);
 				studentHistoryMap.put(snewDate, thisStudentHistoryTO);
 			}
 		}
 
-		// Per the API, the tasks are already broken down into a map, sorted by
-		// group.
-		// we want to maintain this grouping, but sort these guys based date
-		for (final Map.Entry<String, List<TaskTO>> entry : taskMap.entrySet()) {
+        // Per the API, the tasks are already broken down into a map, sorted by group.
+        //    We want to maintain this grouping, but sort these based date
+        //Third, iterate over each TaskTO in each group, looking for matching dates in the PersonHistoryTO
+		for ( final Map.Entry<String, List<TaskTO>> entry : taskMap.entrySet() ) {
 			final String groupName = entry.getKey();
-			final List<TaskTO> tasks = entry.getValue();
+			final List<TaskTO> tasksSorted = entry.getValue();
 
-			final Iterator<TaskTO> taskIter = tasks.iterator();
-			while (taskIter.hasNext()) {
+            //Sort tasks by modified date descending
+            Collections.sort(tasksSorted, new Comparator<TaskTO>() {
+                @Override
+                public int compare (final TaskTO o1, final TaskTO o2) {
+                    return sortDateDescending(o1.getModifiedDate(), o2.getModifiedDate());
+                }
+            });
+
+			final Iterator<TaskTO> taskIter = tasksSorted.iterator();
+			while ( taskIter.hasNext() ) {
 				final TaskTO thisTask = taskIter.next();
-				final String snewDate = getDateFormatter().format(thisTask
-						.getCreatedDate());
-				if (studentHistoryMap.containsKey(snewDate)) {
-					final StudentHistoryTO studentHistoryTO = studentHistoryMap
-							.get(snewDate);
+                final Date snewDate = DateTimeUtils.midnightOn(thisTask.getModifiedDate());
+
+				if ( studentHistoryMap.containsKey(snewDate) ) {
+					final StudentHistoryTO studentHistoryTO = studentHistoryMap.get(snewDate);
 					studentHistoryTO.addTask(groupName, thisTask);
 				} else {
-					final StudentHistoryTO thisStudentHistoryTO = new StudentHistoryTO(
-							snewDate);
+					final StudentHistoryTO thisStudentHistoryTO =
+                            new StudentHistoryTO(getDateFormatter().format(snewDate));
 					thisStudentHistoryTO.addTask(groupName, thisTask);
 					studentHistoryMap.put(snewDate, thisStudentHistoryTO);
 				}
@@ -312,11 +339,9 @@ public class PersonHistoryReportController extends ReportBaseController {
 				.values();
 
 		final List<StudentHistoryTO> retVal = new ArrayList<StudentHistoryTO>();
-		final Iterator<StudentHistoryTO> studentHistoryTOIter = studentHistoryTOs
-				.iterator();
-		while (studentHistoryTOIter.hasNext()) {
-			final StudentHistoryTO currentStudentHistoryTO = studentHistoryTOIter
-					.next();
+		final Iterator<StudentHistoryTO> studentHistoryTOIter = studentHistoryTOs.iterator();
+		while ( studentHistoryTOIter.hasNext() ) {
+			final StudentHistoryTO currentStudentHistoryTO = studentHistoryTOIter.next();
 			currentStudentHistoryTO.createTaskList();
 			retVal.add(currentStudentHistoryTO);
 		}

@@ -39,7 +39,7 @@
 			<staticText>
 				<reportElement uuid="d1bceb54-0d86-4c55-922b-5e9794498d09" x="0" y="1" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[Date]]></text>
+				<text><![CDATA[Created Date:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="98e77ac6-4b39-42e3-b2bc-fd5ab395c125" x="100" y="1" width="375" height="20"/>
