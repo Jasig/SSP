@@ -395,6 +395,9 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         var me = this;
         me.getView().setLoading(true);
         var data = [];
+        var isValid = true;
+        var badTasks = "";
+        var seperator = "";
         me.store.each(function(item, index, count){
         
             item.set('type', 'SSP');
@@ -402,10 +405,21 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             item.set('confidentialityLevel', {
                 id: item.data.confidentialityLevel.id
             });
+            if(!item.get('confidentialityLevel') || !item.get('dueDate')){
+            	isValid = false;
+            	badTasks += seperator + item.get('name');
+            	seperator = " : ";
+        	}
             
             data.push(item.getData());
+            
         });
-        
+
+		if(!isValid){
+			me.getView().setLoading(false);
+			Ext.Msg.alert('SSP Error', 'There are errors in your task definitions: Confidentiality Level must be selected and a due date set. Tasks missing necessary data: ' + badTasks);
+			return;
+		}
         successFunc = function(response, view){
         
             me.getView().setLoading(false);
