@@ -78,7 +78,6 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     fieldLabel: 'Plan Hrs',
                     itemId: 'currentTotalPlanCrHrs',
                     name: 'currentTotalPlanCrHrs',
-                    id: 'currentTotalPlanCrHrs',
 				    fieldStyle: 'text-align: left'
                 
                 },                        {
@@ -88,7 +87,6 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     fieldLabel: 'Dev Hrs',
                     itemId: 'currentPlanTotalDevCrHrs',
                     name: 'currentPlanTotalDevCrHrs',
-					id:'currentPlanTotalDevCrHrs',
 				    fieldStyle: 'text-align: left'
                 
                 },	{

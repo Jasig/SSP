@@ -27,6 +27,7 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 			 {name:'maxCreditHours', type: 'float'},
 			 {name:'creditHours', type: 'float'},
              {name:'termCode', type: 'string'},
+             {name:'termName', type: 'string'},
              {name:'isDev', type: 'boolean'},
 			 {name:'orderInTerm', type: 'int'},
 			 {name:'studentNotes', type: 'string'},

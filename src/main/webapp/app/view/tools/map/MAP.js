@@ -22,22 +22,26 @@ Ext.define('Ssp.view.tools.map.MAP', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MAPController',
-    width: '100%',
-    height: '100%',   
-    layout: {
-                type: 'fit'
-            },
-    initComponent: function() { 
-        Ext.apply(this,
-		{items: [
-		{
-		xtype: 'maptool'
-		}
-		]});
+	width : '100%',
+	height : '100%',
+	layout : {
+		type : 'hbox',
+		align : 'stretch'
+	},    
+        	initComponent : function() {
+        		Ext.apply(this, {
+        			items : [ {
+        				xtype : 'coursesview',
+        				width : 300
+        			}, {
+        				xtype : 'mapview',
+        				flex : 1
+        			}
 
-        return this.callParent(arguments);
+        			]
+        		});
+
+        		return this.callParent(arguments);
     }
-
-	
         
 });

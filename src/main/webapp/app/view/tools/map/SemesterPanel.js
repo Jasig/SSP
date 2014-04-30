@@ -29,7 +29,14 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 		colorsStore: 'colorsStore', 
 		colorsUnpagedStore: 'colorsUnpagedStore', 
 		colorsAllStore: 'colorsAllStore', 
+    	termsStore:'termsStore',
 		colorsAllUnpagedStore: 'colorsAllUnpagedStore'    	
+	},
+	destroy: function () {
+		console.log('destroy semester panel');
+	},
+	onDestroy: function () {
+		console.log('onDestroy semester panel');
 	},
 	store: null,
     controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
@@ -45,6 +52,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
  	hideHeaders: true, 	
     initComponent: function(){
         var me = this;
+       // me.tools[0].hidden = !(me.editPastTerms === 'true' || !me.termsStore.isPastTerm(termCode));
         Ext.apply(me, {
 			viewConfig: {
 				copy: false,
@@ -60,7 +68,11 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 		}, 
 		invalidRecord: function(record) { 
             return record.get('isValidInTerm') === false || record.get('hasCorequisites')  === false || record.get('hasPrerequisites')  === false; 
-        },		
+        },	
+        title: me.store.termName,
+        scroll: true,
+        itemId: me.store.termCode,
+		enableDragAndDrop: !(me.editPastTerms === 'true' || !me.termsStore.isPastTerm(me.store.termCode)),
 		columns: [
 					{
 					    xtype: 'gridcolumn',

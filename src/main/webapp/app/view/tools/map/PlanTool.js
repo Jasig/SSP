@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.PlanTool', {
-    extend: 'Ext.form.Panel',
+    extend: 'Ext.form.FieldSet',
     alias: 'widget.plantool',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {

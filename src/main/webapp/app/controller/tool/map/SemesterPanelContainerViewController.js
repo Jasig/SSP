@@ -34,6 +34,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         colorStore: 'colorsAllUnpagedStore',
     },
     semesterPanels : new Array(),
+    yearFieldSets : new Array(),
 	control: {
 	    	view: {
 				afterlayout: {
@@ -61,7 +62,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		
-	    me.resetForm();
 		me.appEventsController.assignEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onCreateNewMapPlan', callBackFunc: me.onCreateNewMapPlan, scope: me});
@@ -275,6 +275,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.clearSemesterStores();
 		Ext.Array.forEach(terms, function(term) {
 			me.semesterStores[term.get('code')] = new Ssp.store.SemesterCourses();
+			me.semesterStores[term.get('code')].termName = term.get('name');
+			me.semesterStores[term.get('code')].termCode = term.get('code');
+			me.semesterStores[term.get('code')].editPastTerms = me.editPastTerms;
 		});
 	},
 	
@@ -323,7 +326,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			return;
 		}		
 		Ext.suspendLayouts();
-		view.removeAll(true);
+		view.removeAll(false);
 		
 		var i=0;
 		var termsets = [];
@@ -336,21 +339,30 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			};
 		});
 		var yearViews = new Array();
+		var yearView;
 		Ext.Array.forEach(termsets, function(termSet) {
 			if (termSet) {
-			var yearSemesterPanels = new Array();
-			var yearView = new Ext.form.FieldSet({
-				xtype : 'fieldset',
-				border: 0,
-				title : '',
-				padding : '2 2 2 2',
-				margin : '0 0 0 0',
-				layout : 'hbox',
-				autoScroll : true,
-				minHeight: 204,
-				itemId : 'year' + termSet[0].get("reportYear"),
-				flex : 1
-			});
+				if(!me.yearFieldSets[termSet[0].get("reportYear")])
+				{
+					yearView = new Ssp.view.tools.map.PersistentFieldSet({
+						xtype : 'fieldset',
+						border: 0,
+						title : '',
+						padding : '2 2 2 2',
+						margin : '0 0 0 0',
+						layout : 'hbox',
+						autoScroll : true,
+						minHeight: 204,
+						itemId : 'year' + termSet[0].get("reportYear"),
+						flex : 1
+					});
+					me.yearFieldSets[termSet[0].get("reportYear")] = yearView;
+				}
+				else
+				{
+					me.yearFieldSets[termSet[0].get("reportYear")].removeAll(false);
+					yearView = me.yearFieldSets[termSet[0].get("reportYear")];
+				}
 			if(Ext.isIE){  //without this check/alteration, scrollbars appear in IE10 per SSP-1308
 				yearView.minHeight = 214;
 			}
@@ -378,26 +390,20 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore,editPastTerms){
 		var me = this;
-		
-		if(me.editPastTerms === 'true' || !me.termsStore.isPastTerm(termCode)){
-			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
-				title:semesterName,
-				itemId:termCode,
-				store:semesterStore,
-				scroll: true
-			});		 	
-		}else{
-			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
-				title:semesterName,
-				itemId:termCode,
-				store:semesterStore,
-				enableDragAndDrop: false,
-				scroll: true
-			});			 	
-		 	semesterPanel.tools[0].hidden = false;
-		 	semesterPanel.editPastTerms = editPastTerms;
+		if(me.semesterPanels[termCode])
+		{
+			me.semesterPanels[termCode].reconfigure(semesterStore);
+			return me.semesterPanels[termCode];
+			
 		}
-		return semesterPanel;
+		else
+		{
+			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
+				store:semesterStore,
+			});	
+			me.semesterPanels[termCode] = semesterPanel;
+			return semesterPanel;
+		}
 	},
 	
 	afterServiceHandler: function(serviceResponses) {
@@ -466,7 +472,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     	
     	if (mainView.items.length > 0)
 		{
-			mainView.removeAll();
+			mainView.removeAll(false);
 		}
 		
 		arrViewItems = [{xtype:'search',flex: 2},
@@ -909,7 +915,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onCreateNewMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveAsMapPlan', callBackFunc: me.onSaveAsMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveMapPlan', callBackFunc: me.onSaveMapPlan, scope: me});
 		
@@ -919,7 +925,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		  
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me})
         
 		return me.callParent( arguments );

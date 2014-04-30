@@ -16,32 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.map.MAPTool', {
-	extend : 'Ext.container.Container',
-	alias : 'widget.maptool',
-	mixins : [ 'Deft.mixin.Injectable', 'Deft.mixin.Controllable' ],
-	// controller:
-	// 'Ssp.controller.tool.actionplan.ActionPlanToolViewController',
-	width : '100%',
-	height : '100%',
-	layout : {
-		type : 'hbox',
-		align : 'stretch'
+Ext.define('Ssp.view.tools.map.PersistentFieldSet', {
+    extend: 'Ext.form.FieldSet',
+    alias: 'widget.persistentfieldset',
+	destroy: function () {
+		//Do nothing since we want this component to live beyong autodestroy
 	},
-	initComponent : function() {
-		Ext.apply(this, {
-			items : [ {
-				xtype : 'coursesview',
-				width : 300
-			}, {
-				xtype : 'mapview',
-				flex : 1
-			}
-
-			]
-		});
-
-		return this.callParent(arguments);
+	onDestroy: function () {
+		//Do nothing since we want this component to live beyong autodestroy
 	}
-
+    
 });

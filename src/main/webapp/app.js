@@ -134,10 +134,10 @@ Ext.require([
 	
 	//MAP Views
     'Ssp.view.tools.map.MAP',
-	'Ssp.view.tools.map.MAPTool',
 	'Ssp.view.tools.map.CoursesView',
 	'Ssp.view.tools.map.SemesterGridTranscript',
     'Ssp.view.tools.map.SemesterPanel',
+    'Ssp.view.tools.map.PersistentFieldSet',
     'Ssp.view.tools.map.SemesterPanelContainer',
     'Ssp.view.tools.map.StudentTranscriptViewer',
     'Ssp.view.tools.map.MapStatusReport',
@@ -157,7 +157,6 @@ Ext.require([
     'Ssp.view.tools.map.EmailPlan',
     'Ssp.view.tools.map.PrintPlan',
     'Ssp.view.tools.map.CourseDetails',
-    'Ssp.view.tools.map.CoursesGrid',
 	'Ssp.view.tools.map.CoursesGridPanel',
 	
 	//PERSON NOTES TOOL

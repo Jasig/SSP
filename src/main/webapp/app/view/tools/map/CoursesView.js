@@ -286,7 +286,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                 
                 },
                 {
-                    xtype : 'coursesgridpanel'
+                    xtype : 'coursesgrid'
                 }
             
                 ]

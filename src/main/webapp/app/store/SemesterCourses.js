@@ -34,7 +34,7 @@ Ext.define('Ssp.store.SemesterCourses', {
 		Ext.apply(this);
 		return this.callParent(arguments);
 	},
-	
+	termName: '',
 	listeners:{
 		datachanged: function(){
 			var me = this;

@@ -449,11 +449,6 @@
                     "path": "/app/view/tools/map/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.map.MAPTool",
-                    "name": "MAPTool.js",
-                    "path": "/app/view/tools/map/"
-                },
-                {
                     "clsName": "Ssp.view.tools.map.StudentTranscriptViewer",
                     "name": "StudentTranscriptViewer.js",
                     "path": "/app/view/tools/map/"
@@ -473,6 +468,11 @@
                     "name": "SemesterPanel.js",
                     "path": "/app/view/tools/map/"
                 },
+                {
+                    "clsName": "Ssp.view.tools.map.PersistentFieldSet",
+                    "name": "PersistentFieldSet.js",
+                    "path": "/app/view/tools/map/"
+                },                 
 				{
                     "clsName": "Ssp.view.tools.map.SemesterPanelContainer",
                     "name": "SemesterPanelContainer.js",
@@ -551,11 +551,6 @@
 				 {
                     "clsName": "Ssp.view.tools.map.CourseDetails",
                     "name": "CourseDetails.js",
-                    "path": "/app/view/tools/map/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.map.CoursesGrid",
-                    "name": "CoursesGrid.js",
                     "path": "/app/view/tools/map/"
                 },
                  {

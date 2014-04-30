@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.SemesterPanelContainer', {
-	extend : 'Ext.form.Panel',
+    extend: 'Ext.container.Container',
 	alias : 'widget.semesterpanelcontainer',
 	mixins : [ 'Deft.mixin.Injectable', 'Deft.mixin.Controllable' ],
 	controller:'Ssp.controller.tool.map.SemesterPanelContainerViewController',

@@ -42,13 +42,8 @@ Ext.define('Ssp.view.tools.map.MAPView', {
             items: [{
     			xtype: 'semesterpanelcontainer',
     			flex:1
-            },	{
-    			xtype: 'faview',
-				itemId: 'faPopUp',
-    			flex:1,
-				hidden:true,
-				hideable:false
-            }],
+            }
+            ],
             dockedItems: [{
                 dock: 'top',
                 xtype: 'toolbar',

@@ -65,7 +65,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
 		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
-		me.getView().view.addListener('drop', me.onDrop, me);		
+		me.getView().view.addListener('drop', me.onDrop, me);	
 		return me.callParent(arguments);
     },
 

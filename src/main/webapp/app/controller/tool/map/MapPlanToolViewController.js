@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     },
     resetForm: function() {
         var me = this;
-        me.getView().getForm().reset();
+       me.getView().getForm().reset();
     },
 
     updatePlanStatus: function(){
@@ -91,6 +91,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         }
         else
         {
+            me.onCurrentMapPlanChange();
     		me.getView().setLoading(false);
         }
 	},
