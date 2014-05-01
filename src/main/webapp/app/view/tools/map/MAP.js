@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.MAP', {
-   extend: 'Ext.panel.Panel',
+   extend: 'Ext.container.Container',
     alias : 'widget.map',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
