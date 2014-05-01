@@ -59,7 +59,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	
 	renderTaskStatus: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
-        strHtml += '<p>' + ((record.get('completedDate') != null) ? 'Complete' : 'InComplete' ) + '</p>';
+        strHtml += '<p>' + ((record.get('completedDate') != null) ? 'Complete' : 'Incomplete' ) + '</p>';
 		strHtml += '</div>';
 	    return strHtml;
 	},
