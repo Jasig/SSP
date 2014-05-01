@@ -153,7 +153,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                         {
                             xtype: 'textfield',
                             anchor: '100%',
-                            fieldLabel: 'CC This email to additional recipients(comma seperated)',
+                            fieldLabel: 'CC This email to additional recipients(comma separated)',
                             labelAlign: 'top',
 							itemId: 'ccAPToAdditional',
 							padding: '30 0 0 0'

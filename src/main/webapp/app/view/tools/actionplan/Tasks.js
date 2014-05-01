@@ -233,7 +233,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 							{
                                 xtype: 'checkbox',
                                 boxLabel: 'Incomplete Tasks',
-                                itemId: 'filterTasksByInCompleteCheck'
+                                itemId: 'filterTasksByIncompleteCheck'
                             },
 							{
                                 xtype: 'tbspacer',
