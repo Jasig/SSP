@@ -459,11 +459,6 @@
                     "path": "/app/view/tools/map/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.map.SemesterGridTranscript",
-                    "name": "SemesterGridTranscript.js",
-                    "path": "/app/view/tools/map/"
-                },
-                {
                     "clsName": "Ssp.view.tools.map.SemesterPanel",
                     "name": "SemesterPanel.js",
                     "path": "/app/view/tools/map/"

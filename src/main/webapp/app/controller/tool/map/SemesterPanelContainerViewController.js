@@ -326,7 +326,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			return;
 		}		
 		Ext.suspendLayouts();
-		view.removeAll(false);
+		view.removeAll();
 		
 		var i=0;
 		var termsets = [];
