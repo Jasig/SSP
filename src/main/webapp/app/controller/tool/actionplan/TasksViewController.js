@@ -55,8 +55,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
             change: 'onFilterTasksBySelfChange'
         },
         
-        'filterTasksByInCompleteCheck': {
-            change: 'onFilterTasksByInCompleteCheck'
+        'filterTasksByIncompleteCheck': {
+            change: 'onFilterTasksByIncompleteCheck'
         },
         
         selectAllTaskButton: {
@@ -244,10 +244,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         this.filterTasks();
     },
     
-    onFilterTasksByInCompleteCheck: function(comp, newComp, oldComp, eOpts){
+    onFilterTasksByIncompleteCheck: function(comp, newComp, oldComp, eOpts){
     
         if (newComp == true) {
-            this.filteredTaskStatus = "InComplete";
+            this.filteredTaskStatus = "Incomplete";
             
         }
         else {
@@ -269,7 +269,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         });
         
         switch (me.filteredTaskStatus) {
-            case 'InComplete':
+            case 'Incomplete':
                 filterStatusFunc = function(item){
                     return (item.get('completed') == false);
                 };
