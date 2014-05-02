@@ -182,7 +182,7 @@ background: url('/ssp/images/search-icon.png') !important;
 }
 
 .studentHistoryIcon {
-background: url('/ssp/images/student-history-report-icon.png') !important;
+background: url('/ssp/images/student-history-report-icon.png') no-repeat !important;
 }
 
 .setNonParticipatingStatusIcon {

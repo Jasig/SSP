@@ -41,19 +41,16 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onFAButtonClick'
            }
         },
-		'planFAFieldSet': '#planFAFieldSet',
-		'planTranscriptFieldSet': '#planTranscriptFieldSet',
-		'mapStatusFieldSet': '#mapStatusFieldSet',
 		'onPlan':'#onPlan',
         'onPlanStatusDetails':'#onPlanStatusDetails',
-		//'onPlanFieldSet':'#onPlanFieldSet',
         'planNotesButton':{
          selector: '#planNotesButton',
            listeners: {
             click: 'onplanNotesButtonClick'
            }
         },
-        
+        'showStudentTranscript' : '#showStudentTranscript',
+        'showStudentTranscript' : '#showMapStatus',
         'loadSavedPlanButton':{
            selector: '#loadSavedPlanButton',
             listeners: {
@@ -80,10 +77,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            listeners: {
             click: 'onmovePlanButtonClick'
            }
-        },
-
-		'movePlanLabel':{
-           selector: '#movePlanLabel'
         },
 
 		'showStudentTranscript':{
@@ -113,10 +106,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            }
         },
 
-		'notesLabel':{
-           selector: '#notesLabel'
-        },
-
 		'name':{
            selector: '#name'
         },
@@ -133,17 +122,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
             click: 'onemailPlanButtonClick'
            }
         },
-        'emailLabel':{
-           selector: '#emailLabel'
-        },
         'printPlanButton':{
            selector: '#printPlanButton',
            listeners: {
             click: 'onprintPlanButtonClick'
            }
-        },
-		'printLabel':{
-           selector: '#printLabel'
         },
 
 		'planOverviewButton':{
@@ -167,7 +150,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
-		
 		me.onUpdateSaveOption();
 
 		// Special handling for this one b/c ApplicationEventsController only
@@ -733,37 +715,24 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getSaveTemplateAsButton().show();
 			me.getPrintPlanButton().hide();
 			me.getPlanFAButton().hide();
-			me.getPrintLabel().hide();
+			me.getShowMapStatus().hide();
+			me.getShowStudentTranscript().hide();
 			me.getEmailPlanButton().hide();
-			me.getEmailLabel().hide();
 			me.getName().setFieldLabel("Template Title");
-			me.getNotesLabel().setText("Template Notes");
 			me.getPlanNotesButton().setTooltip("Template Notes");
-			me.getPlanFAFieldSet().hide();
-			me.getPlanTranscriptFieldSet().hide();
-			me.getMapStatusFieldSet().hide();
-			me.getMovePlanLabel().setText("Move Template");
 			me.getMovePlanButton().setTooltip("Move Template");
-		//	me.getOnPlanFieldSet().hide();
 		}else{
 			me.getSavePlanButton().show();
 			me.getSaveTemplateAsButton().show();
 			me.getSaveTemplateButton().hide();
 			me.getPrintPlanButton().show();
-			me.getPlanFAFieldSet().show();
 			me.getPlanFAButton().show();
-			me.getPlanTranscriptFieldSet().show();
-			me.getMapStatusFieldSet().show();
-			me.getPrintLabel().show();
+			me.getShowMapStatus().show();
+			me.getShowStudentTranscript().show();			
 			me.getEmailPlanButton().show();
-			me.getEmailLabel().show();
 			me.getName().setFieldLabel("Plan Title");
-			me.getNotesLabel().setText("Plan Notes");
 			me.getPlanNotesButton().setTooltip("Plan Notes");
-			
-			me.getMovePlanLabel().setText("Move Plan");
 			me.getMovePlanButton().setTooltip("Move Plan");
-		//	me.getOnPlanFieldSet().show();
 		}
 	},
 	
