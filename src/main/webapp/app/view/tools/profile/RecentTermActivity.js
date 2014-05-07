@@ -45,7 +45,9 @@ Ext.define('Ssp.view.tools.profile.RecentTermActivity', {
            {
                 dataIndex: 'gradePointAverage',
                 text: 'GPA',
-                flex: 1
+                flex: 1,
+                xtype: 'numbercolumn', 
+                format:'0.00'
             }, {
                 dataIndex: 'creditHoursAttempted',
                 text: 'Load',

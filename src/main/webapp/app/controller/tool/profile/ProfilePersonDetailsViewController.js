@@ -321,7 +321,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>');
         	me.getFinancialAidGpaField().setFieldLabel('');
         	if(financialAid.financialAidGpa != null)
-				me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + financialAid.financialAidGpa);
+				me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + Ext.util.Format.number(me.handleNull(financialAid.financialAidGpa), '0.00'));
 			else
 				me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>');
 

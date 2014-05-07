@@ -175,7 +175,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 				me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
 			else
 				me.getOriginalLoanAmountField().setValue('');
-        	me.getFinancialAidGpaField().setValue(me.handleNull(financialAid.financialAidGpa));
+        	me.getFinancialAidGpaField().setValue(Ext.util.Format.number(me.handleNull(financialAid.financialAidGpa), '0.00'));
 			me.getGpa20AHrsNeededField().setValue(me.handleNull(financialAid.gpa20AHrsNeeded));
 	        me.getGpa20BHrsNeededField().setValue(me.handleNull(financialAid.gpa20BHrsNeeded));
 			me.getNeededFor67PtcCompletionField().setValue(me.handleNull(financialAid.neededFor67PtcCompletion));
