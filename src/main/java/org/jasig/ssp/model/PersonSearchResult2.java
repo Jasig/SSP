@@ -54,7 +54,11 @@ public class PersonSearchResult2 {
 
 	private Date studentIntakeCompleteDate;
 
-	private int numberOfEarlyAlerts;
+	private int numberOfEarlyAlerts = 0;
+	
+	private int activeAlerts = 0;
+	
+	private int closedAlerts = 0;
 	
 	private int numberEarlyAlertResponsesRequired;
 	
@@ -95,6 +99,28 @@ public class PersonSearchResult2 {
 
 	public void setNumberOfEarlyAlerts(final Number numberOfEarlyAlerts) {
 		this.numberOfEarlyAlerts = numberOfEarlyAlerts.intValue();
+	}
+
+	public int getClosedAlerts() {
+		return closedAlerts;
+	}
+
+	public void setClosedAlerts(Integer closedAlerts) {
+		if(closedAlerts != null){
+			this.closedAlerts = closedAlerts;
+			this.numberOfEarlyAlerts = closedAlerts + activeAlerts;
+		}
+	}
+
+	public int getActiveAlerts() {
+		return activeAlerts;
+	}
+
+	public void setActiveAlerts(Integer activeAlerts) {
+		if(activeAlerts != null){
+			this.activeAlerts = activeAlerts;
+			this.numberOfEarlyAlerts = closedAlerts + activeAlerts;
+		}
 	}
 
 	public boolean isStudentIntakeComplete() {

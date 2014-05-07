@@ -21,7 +21,8 @@ Ext.define('Ssp.service.SearchService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'studentsSearchStore'
+    	storeOld: 'studentsSearchStore',
+    	store: 'directoryPersonSearchStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -95,7 +96,9 @@ Ext.define('Ssp.service.SearchService', {
 		}, callbacks);
     },
     search2: function( 
-    		 studentId,
+    		 schoolId,
+    		 firstName,
+    		 lastName,
     		 programStatus,
     		 specialServiceGroup,
     		 coachId,
@@ -115,7 +118,9 @@ Ext.define('Ssp.service.SearchService', {
     		callbacks ){
     	var me = this;
 		me.searchWithParams({
-   		 studentId: studentId,
+	     schoolId: schoolId,
+	     firstName: firstName,
+	     lastName: lastName,
 		 programStatus: programStatus,
 		 specialServiceGroup: specialServiceGroup,
 		 coachId: coachId,

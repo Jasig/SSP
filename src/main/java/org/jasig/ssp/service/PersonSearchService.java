@@ -71,6 +71,8 @@ public interface PersonSearchService {
 			throws ObjectNotFoundException, ValidationException;
 
 	PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from);
+	
+	PagingWrapper<PersonSearchResult2> searchPersonDirectory(PersonSearchRequest from);
 
 	/**
 	 * Gets the case load for the specified {@link CoachPersonLiteTO} (advisor)

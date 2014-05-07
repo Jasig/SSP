@@ -91,7 +91,9 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			model.setSpecialServiceGroup(specialServiceGroup);
 		}
 		model.setSapStatusCode(to.getSapStatusCode());
-		model.setStudentId(to.getStudentId());
+		model.setSchoolId(to.getSchoolId());
+		model.setFirstName(to.getFirstName());
+		model.setLastName(to.getLastName());
 		model.setPlanStatus(to.getPlanStatus());
 		model.setMyCaseload(to.getMyCaseload());
 		model.setMyPlans(to.getMyPlans());
@@ -123,13 +125,16 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 
 
 	@Override
-	public PersonSearchRequest from(String studentId, String programStatus, String specialServiceGroup,
+	public PersonSearchRequest from(String schoolId, String firstName, String lastName,
+			String programStatus, String specialServiceGroup,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,Date birthDate) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
-		to.setStudentId(studentId);
+		to.setSchoolId(schoolId);
+		to.setFirstName(firstName);
+		to.setLastName(lastName);
 		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
 		to.setSpecialServiceGroup(specialServiceGroup == null ? null : UUID.fromString(specialServiceGroup));
 		to.setCoachId(coachId == null ? null : UUID.fromString(coachId));

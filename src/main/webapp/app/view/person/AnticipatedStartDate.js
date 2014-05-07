@@ -48,6 +48,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 			{
 		        xtype: 'combobox',
 		        name: 'anticipatedStartTerm',
+		        itemId: 'anticipatedStartTerm',
 		        fieldLabel: 'Anticipated Start Term',
 		        emptyText: 'Select One',
 		        store: this.termsStore.getCurrentAndFutureTermsStore(true),
@@ -63,6 +64,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 			},{
 		        xtype: 'combobox',
 		        name: 'anticipatedStartYear',
+		        itemId: 'anticipatedStartYear',
 		        fieldLabel: 'Anticipated Start Year',
 		        emptyText: 'Select One',
 		        store: this.termsStore.getCurrentAndFutureYearStore(true),
@@ -78,6 +80,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 			{
 				xtype: 'combobox',
 		        name: 'abilityToBenefit',
+		        itemId: 'abilityToBenefit',
 		        fieldLabel: 'Ability to Benefit',
 		        //emptyText: 'Select One',
 		        store: abilityToBenefit,

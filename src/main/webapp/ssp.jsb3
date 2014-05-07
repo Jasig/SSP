@@ -808,6 +808,11 @@
                     "name": "StudentsSearch.js",
                     "path": "/app/store/"
                 },
+                 {
+                    "clsName": "Ssp.store.DirectoryPersonSearch",
+                    "name": "DirectoryPersonSearch.js",
+                    "path": "/app/store/"
+                },
                 {
                     "clsName": "Ssp.service.SearchService",
                     "name": "SearchService.js",
@@ -907,6 +912,11 @@
                 {
                     "clsName": "Ssp.controller.person.CaseloadAssignmentViewController",
                     "name": "CaseloadAssignmentViewController.js",
+                    "path": "/app/controller/person/"
+                },
+                {
+                    "clsName": "Ssp.controller.person.InstantCaseloadAssignmentViewController",
+                    "name": "InstantCaseloadAssignmentViewController.js",
                     "path": "/app/controller/person/"
                 },
                 {
@@ -1569,6 +1579,16 @@
                 {
                     "clsName": "Ssp.view.person.CaseloadAssignment",
                     "name": "CaseloadAssignment.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.InstantCaseloadAssignment",
+                    "name": "InstantCaseloadAssignment.js",
+                    "path": "/app/view/person/"
+                },
+                {
+                    "clsName": "Ssp.view.person.InstantStudent",
+                    "name": "InstantStudent.js",
                     "path": "/app/view/person/"
                 },
                 {

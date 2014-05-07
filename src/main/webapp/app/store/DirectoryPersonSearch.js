@@ -16,31 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.person.AnticipatedStartDateViewController', {
-    extend: 'Deft.mvc.ViewController',
+Ext.define('Ssp.store.DirectoryPersonSearch', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.SearchPerson',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        person: 'currentPerson'
+        apiProperties: 'apiProperties'
     },
-    control: {
-    	anticipatedStartTermField: '#anticipatedStartTerm',
-    	anticipatedStartYearField: '#anticipatedStartYear',
-    	abilityToBenefitField: '#abilityToBenefit',
-    
+    config: {
+        baseUrlName: 'directoryPersonSearch'
     },
-    
-	init: function() {
-		this.getView().loadRecord( this.person );
-		if(this.getView().instantCaseloadAssignment == true){
-			this.hideForInstantCaseload();
-		}
-		return this.callParent(arguments);
-    },
-    
-    hideForInstantCaseload: function(){
-    	var me = this;
-    	me.getAnticipatedStartTermField().hide();
-        me.getAnticipatedStartYearField().hide();
-        me.getAbilityToBenefitField().hide();
-    },
-});
+	constructor: function(){
+		var me=this;
+		Ext.apply(me, {
+							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl(me.getBaseUrlName())),
+							autoLoad: false,
+							autoSync: false
+						});
+		return me.callParent(arguments);
+}});

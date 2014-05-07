@@ -56,11 +56,25 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
             }
     	}, 
     	
+    	usernameField: {
+    		selector: '#username',
+    		listeners: {
+                change: 'onStudentNameChange'
+            }
+    	}, 
+    	
     	studentIdField: {
     		selector: '#studentId',
     		listeners: {
                 validityChange: 'onStudentIdValidityChange'
             }
+    	},
+    	
+    	view: {
+			afterlayout: {
+				fn: 'onAfterLayout',
+				single: true
+			}
     	},
     	
     	homePhoneField: '#homePhone',
@@ -71,7 +85,57 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     },  
 	init: function() {
 		var me=this;
-    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
+		if(!me.getView().instantCaseloadAssignment){
+	    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
+			var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
+	    	// alias the studentId field and provide validation
+			var studentIdField = me.getStudentIdField();
+			Ext.apply(studentIdField, {
+		                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
+		                  minLengthText: me.sspConfig.get('studentIdMinValidationErrorText'),
+		                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+		                  maxLengthText: me.sspConfig.get('studentIdMaxValidationErrorText'),
+		                  vtype: 'studentIdValidator',
+		                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+	                     });		
+			
+			// when editing a student, 
+			if (me.person.get('id') != "")
+			{
+				// set the retrieve from SSI button visbility
+				me.getRetrieveFromExternalButton().setVisible( false );
+			
+				// disable fields if the external configuration mode is enabled
+				me.getFirstNameField().setDisabled(disabled);
+				me.getMiddleNameField().setDisabled(disabled);
+				me.getLastNameField().setDisabled(disabled);
+				studentIdField.setDisabled(disabled);
+				me.getHomePhoneField().setDisabled(disabled);
+				me.getWorkPhoneField().setDisabled(disabled);
+				me.getPrimaryEmailAddressField().setDisabled(disabled);
+				me.getSecondaryEmailAddressField().setDisabled(disabled);
+			}
+			
+			
+			me.getView().getForm().reset();
+			me.getView().loadRecord( me.person );
+			// use config to determine if the retrieveFromExternalButton should be visible
+			if (me.person.get('id') == "")
+			{
+				me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );			
+				// enable the retrieveFromExternalButton if the studentId field is valid
+				me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );		
+			}else{
+				me.getRetrieveFromExternalButton().setVisible(false);
+			}
+		}
+		
+		return me.callParent(arguments);
+    },
+    
+    setForInstantCaseloadAssignment: function(schoolId) {
+		var me=this;
+    	var disabled = true;		
 		var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
     	// alias the studentId field and provide validation
 		var studentIdField = me.getStudentIdField();
@@ -83,12 +147,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 	                  vtype: 'studentIdValidator',
 	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
                      });		
-		
-		// when editing a student, 
-		if (me.person.get('id') != "")
-		{
-			// set the retrieve from SSI button visbility
-			me.getRetrieveFromExternalButton().setVisible( false );
+				
 		
 			// disable fields if the external configuration mode is enabled
 			me.getFirstNameField().setDisabled(disabled);
@@ -99,22 +158,28 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getWorkPhoneField().setDisabled(disabled);
 			me.getPrimaryEmailAddressField().setDisabled(disabled);
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
-		}
+			me.getUsernameField().setDisabled(disabled);
+			
+			me.getRetrieveFromExternalButton().setVisible( false );
+			me.getHomePhoneField().setVisible( false );
+			me.getWorkPhoneField().setVisible( false );
+			me.getPrimaryEmailAddressField().setVisible( false );
+			me.getSecondaryEmailAddressField().setVisible( false );
+			me.getUsernameField().setVisible( false );
+		
 		
 		
 		me.getView().getForm().reset();
-		me.getView().loadRecord( me.person );
-		// use config to determine if the retrieveFromExternalButton should be visible
-		if (me.person.get('id') == "")
-		{
-			me.getRetrieveFromExternalButton().setVisible( displayRetrieveFromExternalButton );			
-			// enable the retrieveFromExternalButton if the studentId field is valid
-			me.setRetrieveFromExternalButtonDisabled( !studentIdField.isValid() );		
-		}else{
-			me.getRetrieveFromExternalButton().setVisible(false);
-		}
-		
-		return me.callParent(arguments);
+		var studentIdField = me.getStudentIdField();
+		studentIdField.value = schoolId;
+		me.onRetrieveFromExternalClick();
+    },
+    
+    onAfterLayout: function(){
+		var me = this;
+    	if(me.getView().instantCaseloadAssignment == true){
+    		this.setForInstantCaseloadAssignment(me.getView().schoolIdValue);
+    	}
     },
 	
 	handleNull: function(value, defaultValue){
@@ -128,7 +193,10 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     onStudentNameChange: function( comp, newValue, oldValue, eOpts){
     	var me=this;
     	me.person.set(comp.name,newValue);
-    	me.appEventsController.getApplication().fireEvent('studentNameChange');
+    	if(me.getView().instantCaseloadAssignment)
+    		me.appEventsController.getApplication().fireEvent('instantStudentNameChange');
+    	else
+    		me.appEventsController.getApplication().fireEvent('studentNameChange');
     },
     
     onStudentIdValidityChange: function(comp, isValid, eOpts){
@@ -172,7 +240,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 				model.populateFromExternalData( r );
 				me.person.data = model.data;
 				me.getView().loadRecord( me.person );
-				me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+				if(!me.getView().instantCaseloadAssignment)
+					me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
 			}
 			//If we find an internal record, reload the screen in 'Edit' mode.
 			else
@@ -195,8 +264,9 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     	var person = new Ssp.model.Person();
 		me.getView().setLoading( false );
     	me.person.data = person.data;
-    	me.person.populateFromGenericObject(response);   	
-    	me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});				
+    	me.person.populateFromGenericObject(response);
+    	if(!me.getView().instantCaseloadAssignment)
+    		me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});				
     },    
     getBySchoolIdFailure: function( response, scope ){
     	var me=scope;

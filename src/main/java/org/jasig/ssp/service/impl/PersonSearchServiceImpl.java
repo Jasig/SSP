@@ -31,6 +31,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.CaseloadDao;
+import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.PersonSearchDao;
 import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
@@ -69,6 +70,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Autowired
 	private transient PersonSearchDao dao;
+	
+	@Autowired
+	private transient DirectoryPersonSearchDao directoryPersonDao;
    
 	@Autowired
 	private transient PersonProgramStatusService personProgramStatus;
@@ -312,6 +316,14 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	public void reassignStudents(CaseloadReassignmentRequestTO obj) throws ObjectNotFoundException {
 		Person coach = personService.get(obj.getCoachId());
 		daoCaseload.reassignStudents(obj,coach);
+	}
+
+
+	@Override
+	public PagingWrapper<PersonSearchResult2> searchPersonDirectory(
+			PersonSearchRequest form) {
+		List<PersonSearchResult2> results = directoryPersonDao.search(form);
+		return new PagingWrapper<PersonSearchResult2>(results.size(), results);
 	}
 
 }

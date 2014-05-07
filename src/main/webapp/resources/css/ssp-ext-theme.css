@@ -212,6 +212,10 @@ background:#FEBB40 !important;
 background:#ffff00 !important; 
 }
 
+.directory-person-is-external-person-only > td { 
+   font-style: italic !important; 
+}
+
 .ssp-form {
     background-color:#dfe8f6;
 }

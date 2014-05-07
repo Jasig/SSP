@@ -120,6 +120,7 @@ public class PersonSearchController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResultTO>(true,
 				results.getResults(), factory.asTOList(results.getRows()));
 	}
+	
 
 	@DynamicPermissionChecking
 	@ResponseBody
@@ -146,7 +147,40 @@ public class PersonSearchController extends AbstractBaseController {
 	 {
 		assertSearchApiAuthorization(request);
 
-		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,programStatus,specialServiceGroup, coachId,declaredMajor,
+		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,null, null,programStatus,specialServiceGroup, coachId,declaredMajor,
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,earlyAlertResponseLate,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans,birthDate));
+		return new PagedResponse<PersonSearchResult2TO>(true,
+				models.getResults(), factory2.asTOList(models.getRows()));	
+	}
+	
+	@DynamicPermissionChecking
+	@ResponseBody
+	@RequestMapping(value="/directoryperson/search", method = RequestMethod.GET)
+	PagedResponse<PersonSearchResult2TO>  personDirectorySearch(	
+	 final @RequestParam(required = false) String schoolId,
+	 final @RequestParam(required = false) String firstName,
+	 final @RequestParam(required = false) String lastName,
+	 final @RequestParam(required = false) String programStatus,
+	 final @RequestParam(required = false) String coachId,
+	 final @RequestParam(required = false) String declaredMajor,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMin,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+	 final @RequestParam(required = false) Boolean currentlyRegistered,
+	 final @RequestParam(required = false) String earlyAlertResponseLate,
+	 final @RequestParam(required = false) String sapStatusCode,
+	 final @RequestParam(required = false) String specialServiceGroup,
+	 final @RequestParam(required = false)String mapStatus,
+	 final @RequestParam(required = false)String planStatus,
+	 final @RequestParam(required = false) Boolean myCaseload,
+	 final @RequestParam(required = false) Boolean myPlans,
+	 final @RequestParam(required = false) Date birthDate,
+	 final HttpServletRequest request) throws ObjectNotFoundException
+	 {
+		assertSearchApiAuthorization(request);
+
+		final PagingWrapper<PersonSearchResult2> models = service.searchPersonDirectory(personSearchRequestFactory.from(schoolId,firstName, lastName, programStatus,specialServiceGroup, coachId,declaredMajor,
 				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,earlyAlertResponseLate,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans,birthDate));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	

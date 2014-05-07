@@ -37,7 +37,8 @@ Ext.define('Ssp.controller.SearchViewController', {
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
-        searchStore: 'studentsSearchStore',
+        searchStoreOld: 'studentsSearchStore',
+        searchStore: 'directoryPersonSearchStore',
 		termsStore: 'termsStore',
         sspConfig: 'sspConfig',
         textStore:'sspTextStore',
@@ -128,7 +129,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me=this;    	
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
-	   	me.personLite.set('id','');
+	   //	me.personLite.set('id','');
+		
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH = 0;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD = 1;
 		if(me.termsStore.getTotalCount() == 0){
@@ -161,8 +163,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.person.data = person.data;
 			if (records.length > 0)
 			{
-				me.updatePerson(records);
-				me.appEventsController.getApplication().fireEvent('loadPerson');	
+				if(records[0].get("id")){
+					if(me.personLite.get('id') != records[0].get("id")){
+						me.updatePerson(records);
+						me.appEventsController.getApplication().fireEvent('loadPerson');
+					}
+				}else{
+					me.instantCaseloadAssignment(records[0]);
+				}
 			}
 		}
 	},
@@ -189,11 +197,25 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.assignEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
+		me.appEventsController.assignEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
 	   	me.initSearchGrid();
 
 	   	// load program statuses
 		me.getProgramStatuses();	
 		me.configurationOptionsUnpagedStore.load();
+		me.harmonizePersonLite();
+	},
+	
+	harmonizePersonLite:function()
+	{
+		var me = this;
+		if(me.personLite.get('id')){
+			var foundIndex = me.getView().getStore().find("id", me.personLite.get('id'));
+				if ( foundIndex >= 0)
+			{
+				me.getView().getSelectionModel().select(foundIndex);
+			}
+		}
 	},
 	
 	onUpdateEarlyAlertCounts: function(params){
@@ -221,6 +243,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
+		me.appEventsController.removeEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
+		if(me.instantCaseload != null && !me.instantCaseload.isDestroyed)
+			me.instantCaseload.close();
 		return me.callParent( arguments );
     },
     
@@ -411,6 +436,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 				{
 					cls = 'caseload-early-alert-response-required-indicator'
 				}				
+			}
+			
+			if (row.get('id') == "")
+			{
+				cls = "directory-person-is-external-person-only";
 			}
 
 			return cls;
@@ -673,9 +703,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	setSearchCriteria: function(){
 		var me=this;
-		//var outsideCaseload = !me.getSearchCaseloadCheck().getValue();
-		//var searchTerm = me.getSearchText().value;
-		// store search term
 		me.searchCriteria.set('searchTerm', searchTerm);
 		me.searchCriteria.set('outsideCaseload', outsideCaseload);
 	},
@@ -792,10 +819,30 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=scope;
     	me.getView().setLoading( false );
 		me.getSearchGridPager().onLoad();
+		me.harmonizePersonLite();
     },
 
     getCaseloadFailure: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
+    },
+    
+    instantCaseloadAssignment: function(record){
+    	var me=this;
+		if(me.instantCaseload == null || me.instantCaseload.isDestroyed)
+       		me.instantCaseload = Ext.create('Ssp.view.person.InstantCaseloadAssignment',{hidden:true, schoolIdValue:record.get("schoolId"), coachIdValue:record.get("coachId")});
+		me.instantCaseload.show();
+    },
+    
+    onUpdateSearchStoreRecord:function(params){
+    	var me = this;
+    	var record = me.searchStore.findRecord("schoolId", params.person.get("schoolId"));
+    	record.set("id", params.person.get("id"));
+    	record.set("firstName", params.person.get("firstName"));
+    	record.set("middleName", params.person.get("middleName"));
+    	record.set("lastName", params.person.get("lastName"));
+    	record.set("currentProgramStatusName", "Active");
+    	me.updatePerson([record]);
+		me.appEventsController.getApplication().fireEvent('loadPerson');
     }
 });

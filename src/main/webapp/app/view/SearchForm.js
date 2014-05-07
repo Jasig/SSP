@@ -45,9 +45,10 @@ Ext.define('Ssp.view.SearchForm',{
     scroll: 'vertical',
 	listeners: {
 	      afterlayout: function() {
-	        Ext.ComponentQuery.query('[name=studentId]')[0].focus();
+	        Ext.ComponentQuery.query('[name=schoolId]')[0].focus();
 	      }
 	},
+    
 	initComponent: function() {
     	var me=this;
     	me.configStore.load();
@@ -92,10 +93,10 @@ Ext.define('Ssp.view.SearchForm',{
             items: [
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Student Name/ID',
-                    emptyText: 'Enter Student Name/ID',
+                    fieldLabel: 'School ID',
+                    emptyText: 'Enter School ID (Exact)',
                     width: 100,
-                    name: 'studentId',
+                    name: 'schoolId',
 					enableKeyEvents:true,
 					listeners: {
 					      afterrender: function(field) {
@@ -111,6 +112,56 @@ Ext.define('Ssp.view.SearchForm',{
 			    	  	}
 					}
                 },
+                {	layout: 'column',
+                    border: false,
+                    items: [
+                            {
+                         	   xtype: 'label',
+                         	   text: 'Name',
+                         	   columnWidth: .10
+                            },             
+                            {
+                                xtype: 'textfield',
+                                fieldLabel: 'First',
+                                emptyText: 'Enter All or Part of First Name',
+                                columnWidth: .45,
+                                name: 'firstName',
+            					enableKeyEvents:true,
+            					listeners: {
+            					      afterrender: function(field) {
+            					        field.focus(false, 0);
+            					      },
+            						  specialkey:{
+            							scope: me,
+            							fn: function(field, el) {
+            								if(el.getKey() == Ext.EventObject.ENTER){
+            									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+            								}
+            							}	
+            			    	  	}
+            					}
+                            },
+                            {
+                                xtype: 'textfield',
+                                fieldLabel: 'Last',
+                                emptyText: 'Enter All or Part of Last Name ',
+                                columnWidth: .45,
+                                name: 'lastName',
+            					enableKeyEvents:true,
+            					listeners: {
+            					      afterrender: function(field) {
+            					        field.focus(false, 0);
+            					      },
+            						  specialkey:{
+            							scope: me,
+            							fn: function(field, el) {
+            								if(el.getKey() == Ext.EventObject.ENTER){
+            									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+            								}
+            							}	
+            			    	  	}
+            					}
+                            }]},
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Program Status',

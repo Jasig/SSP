@@ -51,8 +51,8 @@ public class PersonSearchRequest {
 	
 	public static final String EARLY_ALERT_RESPONSE_ALL_OPEN_ALERTS = "ALL_OPEN_ALERTS";
 	
-	// id of the student
-	private String studentId;
+	// id of the person
+	private String schoolId;
 
 	private ProgramStatus programStatus;
 	
@@ -85,19 +85,23 @@ public class PersonSearchRequest {
 	private Boolean myPlans;
 
 	private Date birthDate;
+	
+	private String firstName;
+	
+	private String lastName;
 
 	public PersonSearchRequest() {
 		super();
 	}
 
 
-	public String getStudentId() {
-		return studentId;
+	public String getSchoolId() {
+		return schoolId;
 	}
 
 
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
+	public void setSchoolId(String studentId) {
+		this.schoolId = studentId;
 	}
 
 
@@ -258,6 +262,26 @@ public class PersonSearchRequest {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 

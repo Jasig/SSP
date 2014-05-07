@@ -96,6 +96,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		return me.callParent(arguments);
     },
     
+    
     destroy: function(){
     	this.appEventsController.removeEvent({eventName: 'studentTypeChange', callBackFunc: this.onStudentTypeChange, scope: this});    	
     	
@@ -138,7 +139,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		//Assumes studentTypesStore is loaded in higher controller
     	studentType = me.studentTypesStore.getById(newValue); 
 		
-    	if (studentType != null)
+    	if (studentType != null &&  !me.getView().instantCaseloadAssignment)
     	{
     		requireAppointment = studentType.get('requireInitialAppointment');
 			appendToLabelValue = "";

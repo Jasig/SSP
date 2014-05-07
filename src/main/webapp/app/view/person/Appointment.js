@@ -71,8 +71,9 @@ Ext.define('Ssp.view.person.Appointment', {
                     altFormats: 'm/d/Y|m-d-Y',
                     invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
                     name: 'appointmentDate',
-                    allowBlank: false,
+                    allowBlank: me.instantCaseloadAssignment == true ? true:false,
                     showToday: false,
+                    hidden: me.instantCaseloadAssignment == true ? true:false
                 }, {
                     xtype: 'fieldset',
                     title: '',
@@ -80,6 +81,7 @@ Ext.define('Ssp.view.person.Appointment', {
                         align: 'stretch',
                         type: 'hbox'
                     },
+                    hidden: me.instantCaseloadAssignment == true ? true:false,
                     border: 0,
                     padding: '0 0 0 0',
                     items: [{
@@ -90,7 +92,7 @@ Ext.define('Ssp.view.person.Appointment', {
                         labelSeparator: "",
                         increment: 30,
                         typeAhead: false,
-                        allowBlank: false,
+                        allowBlank: me.instantCaseloadAssignment == true ? true:false,
                         width: 110,
                         margin: '0 0 0 0',
                         padding: '0 0 0 0',
@@ -105,7 +107,7 @@ Ext.define('Ssp.view.person.Appointment', {
                         itemId: 'endTimeField',
                         fieldLabel: '- End Times',
                         typeAhead: false,
-                        allowBlank: false,
+                        allowBlank: me.instantCaseloadAssignment == true ? true:false,
                         increment: 30,
                         width: 110,
                         margin: '0 0 0 0',

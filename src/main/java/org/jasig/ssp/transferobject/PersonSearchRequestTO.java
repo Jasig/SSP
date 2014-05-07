@@ -29,7 +29,11 @@ import org.jasig.ssp.model.PersonSearchRequest;
  */
 public class PersonSearchRequestTO  implements	TransferObject<PersonSearchRequest> {
 
-	private String studentId;
+	private String schoolId;
+	
+	private String firstName;
+	
+	private String lastName;
 
 	private UUID programStatus;
 	
@@ -64,12 +68,28 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private Date birthDate;
 	
 	
-	public String getStudentId() {
-		return studentId;
+	public String getSchoolId() {
+		return schoolId;
 	}
 
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
+	public void setSchoolId(String schoolId) {
+		this.schoolId = schoolId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public UUID getProgramStatus() {

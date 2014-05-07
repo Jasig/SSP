@@ -35,7 +35,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
-        searchStore: 'studentsSearchStore'
+        searchStoreOld: 'studentsSearchStore',
+        searchStore: 'directoryPersonSearchStore'
 
     },
     control: {
@@ -74,7 +75,11 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
-	   	me.personLite.set('id','');
+	   	//me.personLite.set('id','');
+		
+		if(me.personLite.get('id'))
+			me.getView().collapse();
+		
 		return me.callParent(arguments);
     },
 
@@ -99,7 +104,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	search: function(){
 		var me=this;		
 		me.searchService.search2( 
-				Ext.String.trim(me.getView().query('textfield[name=studentId]')[0].value),
+				me.textFieldValueFromName('schoolId'),
+				me.textFieldValueFromName('firstName'),
+				me.textFieldValueFromName('lastName'),
 				me.getView().query('combobox[name=programStatus]')[0].value,
 				me.getView().query('combobox[name=specialServiceGroup]')[0].value,
 				me.getView().query('combobox[name=coachId]')[0].value,				
@@ -123,6 +130,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		});	
 		
 	}, 
+	
+	textFieldValueFromName: function(name){
+		var me =  this;
+		var value = me.getView().query('textfield[name=' + name + ']')[0].value;
+		return Ext.String.trim(value ? value: "");
+	},
+	
 	clear: function() {
 		var me=this;
 		me.getView().getForm().reset();

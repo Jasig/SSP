@@ -45,69 +45,88 @@ Ext.define('Ssp.controller.person.CoachViewController', {
                 change: 'onCoachComboChange',
                 select: 'onCoachComboSelect'
             }
-        }
-    
+        },
+    	view: {
+    		afterlayout: {
+    			fn: 'onAfterLayout',
+    			single: true
+    		}
+    	}
     },
     
     init: function(){
         var me = this;
         me.missingCoach = null;
-        
-        me.coachesStore.load(function(records, operation, success){
-            if (!success) {
-                Ext.Msg.alert('Error', 'Unable to load Coaches. Please see your system administrator for assistance.');
-            }
-            else {
-                // Make best effort at trying to find the
-                // associated coach and inject it into the view. Currently
-                // associated coach might not be in the store already, e.g. if he/she
-                // were "demoted" in the directory system. So, we query to get all
-                // coaches.
-                var currentCoachId = me.person.getCoachId();
-                
-                //Don't look up or put in combo if ID is not valid
-                if (currentCoachId) {
-                    if (!(me.coachesStore.getById(currentCoachId))) {
-                        me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
-                    }
-                    else {
-                        me.getCoachCombo().setValue(me.person.getCoachId());
-                    }
-                }
-            }
-        });
-        
-        var getExtDataCoachValue = 'true';
-		var getExtUnsetDataCoachValue = 'true';
-		
-        
-        me.configurationOptionsUnpagedStore.each(function(rec){
-        
-            var s = rec.get('value');
-            if (rec.get('name') == 'coachSetFromExternalData') {
-				
-                if (s.toUpperCase().indexOf("TRUE") == -1) 
-                    getExtDataCoachValue = 'false'
-                
-            }
-            if (rec.get('name') == 'coachUnsetFromExternalData') {
-				
-                if (s.toUpperCase().indexOf("TRUE") == -1) 
-                    getExtUnsetDataCoachValue = 'false'
-            }
-           
+         return this.callParent(arguments);
+    },
+    
+    onAfterLayout: function(){
+		var me = this;
+    	 me.coachesStore.load(function(records, operation, success){
+             if (!success) {
+                 Ext.Msg.alert('Error', 'Unable to load Coaches. Please see your system administrator for assistance.');
+             }
+             else {
+                 // Make best effort at trying to find the
+                 // associated coach and inject it into the view. Currently
+                 // associated coach might not be in the store already, e.g. if he/she
+                 // were "demoted" in the directory system. So, we query to get all
+                 // coaches.
+                 var currentCoachId = me.getView().instantCaseloadAssignment ? me.getView().coachIdValue : me.person.getCoachId();
+                 
+                 //Don't look up or put in combo if ID is not valid
+                 if (currentCoachId) {
+                     if (!(me.coachesStore.getById(currentCoachId))) {
+                         me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
+                     }
+                     else {
+                         me.getCoachCombo().setValue(currentCoachId);
+                     }
+                 }
+             }
+         });
+         
+         var getExtDataCoachValue = 'true';
+ 		var getExtUnsetDataCoachValue = 'true';
+ 		
+         
+         me.configurationOptionsUnpagedStore.each(function(rec){
+         
+             var s = rec.get('value');
+             if (rec.get('name') == 'coachSetFromExternalData') {
+ 				
+                 if (s.toUpperCase().indexOf("TRUE") == -1) 
+                     getExtDataCoachValue = 'false'
+                 
+             }
+             if (rec.get('name') == 'coachUnsetFromExternalData') {
+ 				
+                 if (s.toUpperCase().indexOf("TRUE") == -1) 
+                     getExtUnsetDataCoachValue = 'false'
+             }
             
-        });
-      
-		
-		
-        if (getExtDataCoachValue == 'false' && getExtUnsetDataCoachValue == 'false') {
-            me.getCoachCombo().setFieldLabel(me.sspConfig.get('coachFieldLabel') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
-        }
-		
-        me.initForm();
-        
-        return this.callParent(arguments);
+             
+         });
+       
+ 		
+ 		
+         if (getExtDataCoachValue == 'false' && getExtUnsetDataCoachValue == 'false') {
+             me.getCoachCombo().setFieldLabel(me.sspConfig.get('coachFieldLabel') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+         }
+         
+         if(me.getView().instantCaseloadAssignment){
+         	me.hideForInstantCaseload();
+         }
+ 		
+         me.initForm();
+    },
+    
+    hideForInstantCaseload: function(){
+		var me = this;
+    	me.getDepartmentField().hide();
+        me.getPhoneField().hide();
+        me.getEmailAddressField().hide();
+        me.getOfficeField().hide();
     },
     
     initForm: function(){

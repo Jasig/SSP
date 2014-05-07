@@ -29,10 +29,12 @@ import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 public interface PersonSearchRequestTOFactory extends
 		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
 
-	PersonSearchRequest from(String studentId, String programStatus,String specialServiceGroup,
+	PersonSearchRequest from(String studentId, String firstName, String lastName,
+			String programStatus,String specialServiceGroup,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
+			String sapStatusCode, String mapStatus, String planStatus, 
+			Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
 
 }
