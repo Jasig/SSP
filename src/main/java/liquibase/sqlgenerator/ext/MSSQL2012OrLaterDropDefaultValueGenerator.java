@@ -27,6 +27,8 @@ import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.DropDefaultValueGenerator;
 import liquibase.statement.core.DropDefaultValueStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Workaround for Liquibase issue when trying to drop constraints against SQLServer versions later than 2008 (2012 in
@@ -43,20 +45,39 @@ public class MSSQL2012OrLaterDropDefaultValueGenerator extends DropDefaultValueG
      */
     public static final String KILL_SWITCH = "ssp.enable.mssql.2012.drop.default.liquibase.ext";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MSSQL2012OrLaterDropDefaultValueGenerator.class);
+
     @Override
     /**
      * Makes sure we're given a chance to completely hide the default DropDefaultValueGenerator implementation.
      */
     public int getPriority() {
-        return super.getPriority()+1;
+        final int priority = super.getPriority()+1;
+        LOGGER.debug("Returning priority [{}]", priority);
+        return priority;
     }
 
     @Override
     public boolean supports(DropDefaultValueStatement statement, Database database) {
+        final Object[] argsDescriptor = argsDescriptor(statement, database);
+
         if ( !(isEnabled()) ) {
+            LOGGER.debug("Reporting no support for dropping [{}] on [{}] for [{}] because this component is disabled", argsDescriptor);
             return false;
         }
-        return super.supports(statement, database) && isMssql2012OrLater(database);
+        final boolean superSupports = super.supports(statement, database);
+        if ( !(superSupports) ) {
+            LOGGER.debug("Reporting no support for dropping [{}] on [{}] for [{}] because the default DropDefaultValueGenerator does not support it",
+                    argsDescriptor);
+            return false;
+        }
+        final boolean thisSupports = isMssql2012OrLater(database);
+        if ( !(thisSupports) ) {
+            LOGGER.debug("Reporting no support for dropping [{}] on [{}] for [{}] because this does not appear to be a SQLServer 2012 or later database",
+                    argsDescriptor);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -67,6 +88,8 @@ public class MSSQL2012OrLaterDropDefaultValueGenerator extends DropDefaultValueG
         String query = "DECLARE @default sysname\n";
         query += "SELECT @default = object_name(default_object_id) FROM sys.columns WHERE object_id=object_id('" + statement.getSchemaName() + "." + statement.getTableName() + "') AND name='" + statement.getColumnName() + "'\n";
         query += "EXEC ('ALTER TABLE " + database.escapeTableName(statement.getSchemaName(), statement.getTableName()) + " DROP CONSTRAINT ' + @default)";
+
+        LOGGER.debug("Generated SQL [" + query + "] for dropping [{}] on [{}] for [{}]", argsDescriptor(statement,database));
 
         return new Sql[] {
                 new UnparsedSql(query)
@@ -103,5 +126,16 @@ public class MSSQL2012OrLaterDropDefaultValueGenerator extends DropDefaultValueG
         String killSwitch = System.getProperty(KILL_SWITCH);
         killSwitch = killSwitch == null ? null : killSwitch.toLowerCase();
         return killSwitch == null || Boolean.parseBoolean(killSwitch);
+    }
+
+    private Object[] argsDescriptor(DropDefaultValueStatement statement, Database database) {
+        try {
+            return new Object[] { statement.getColumnName(), statement.getTableName(),
+                    database.getDatabaseProductName() + " : " + database.getDatabaseProductVersion() };
+        } catch ( RuntimeException e ) {
+            throw e;
+        } catch ( DatabaseException e ) {
+            throw new UnexpectedLiquibaseException(e);
+        }
     }
 }
