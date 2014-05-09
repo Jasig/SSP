@@ -38,7 +38,7 @@ public class PersonEducationLevelTO
 	@NotNull
 	private UUID personId;
 
-	private Integer graduatedYear, highestGradeCompleted, lastYearAttended;
+	private String graduatedYear, highestGradeCompleted, lastYearAttended;
 	private String description, schoolName;
 
 	public PersonEducationLevelTO() {
@@ -99,27 +99,27 @@ public class PersonEducationLevelTO
 		this.personId = personId;
 	}
 
-	public Integer getGraduatedYear() {
+	public String getGraduatedYear() {
 		return graduatedYear;
 	}
 
-	public void setGraduatedYear(final Integer graduatedYear) {
+	public void setGraduatedYear(final String graduatedYear) {
 		this.graduatedYear = graduatedYear;
 	}
 
-	public Integer getHighestGradeCompleted() {
+	public String getHighestGradeCompleted() {
 		return highestGradeCompleted;
 	}
 
-	public void setHighestGradeCompleted(final Integer highestGradeCompleted) {
+	public void setHighestGradeCompleted(final String highestGradeCompleted) {
 		this.highestGradeCompleted = highestGradeCompleted;
 	}
 
-	public Integer getLastYearAttended() {
+	public String getLastYearAttended() {
 		return lastYearAttended;
 	}
 
-	public void setLastYearAttended(final Integer lastYearAttended) {
+	public void setLastYearAttended(final String lastYearAttended) {
 		this.lastYearAttended = lastYearAttended;
 	}
 

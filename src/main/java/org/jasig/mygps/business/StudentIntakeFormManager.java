@@ -828,9 +828,8 @@ public class StudentIntakeFormManager { // NOPMD
 						.getFormQuestionById(
 								SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID)
 						.setValue(
-								SspStringUtils
-										.stringFromYear(studentEducationLevel
-												.getLastYearAttended()));
+								studentEducationLevel
+												.getLastYearAttended());
 
 				educationLevelFormSection
 						.getFormQuestionById(
@@ -844,10 +843,7 @@ public class StudentIntakeFormManager { // NOPMD
 
 				educationLevelFormSection.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID)
-						.setValue(
-								SspStringUtils
-										.stringFromYear(studentEducationLevel
-												.getGraduatedYear()));
+						.setValue(studentEducationLevel.getGraduatedYear());
 
 			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.HIGH_SCHOOL_GRADUATION_ID)) {
@@ -855,10 +851,7 @@ public class StudentIntakeFormManager { // NOPMD
 				educationLevelFormSection
 						.getFormQuestionById(
 								SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID)
-						.setValue(
-								SspStringUtils
-										.stringFromYear(studentEducationLevel
-												.getGraduatedYear()));
+						.setValue(studentEducationLevel.getGraduatedYear());
 
 				educationLevelFormSection.getFormQuestionById(
 						SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLATTENDED_ID)
@@ -870,10 +863,8 @@ public class StudentIntakeFormManager { // NOPMD
 				educationLevelFormSection
 						.getFormQuestionById(
 								SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID)
-						.setValue(
-								SspStringUtils
-										.stringFromYear(studentEducationLevel
-												.getLastYearAttended()));
+						.setValue(studentEducationLevel
+												.getLastYearAttended());
 
 			} else if (studentEducationLevel.getEducationLevel().getId()
 					.equals(EducationLevel.OTHER_ID)) {
@@ -1461,8 +1452,7 @@ public class StudentIntakeFormManager { // NOPMD
 						.getValue();
 
 				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
-					studentEducationLevel.setLastYearAttended(Integer
-							.parseInt(educationLevelQuestionValue));
+					studentEducationLevel.setLastYearAttended(educationLevelQuestionValue);
 				}
 
 				educationLevelQuestionValue = educationLevelSection
@@ -1471,8 +1461,7 @@ public class StudentIntakeFormManager { // NOPMD
 						.getValue();
 
 				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue) && !"null".equals(educationLevelQuestionValue)) {
-					studentEducationLevel.setHighestGradeCompleted(Integer
-							.parseInt(educationLevelQuestionValue));
+					studentEducationLevel.setHighestGradeCompleted(educationLevelQuestionValue);
 				}
 
 			} else if (formOption.getId().equals(EducationLevel.GED_ID)) {
@@ -1483,8 +1472,7 @@ public class StudentIntakeFormManager { // NOPMD
 						.getValue();
 
 				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
-					studentEducationLevel.setGraduatedYear(Integer
-							.parseInt(educationLevelQuestionValue));
+					studentEducationLevel.setGraduatedYear(educationLevelQuestionValue);
 				}
 
 			} else if (formOption.getId().equals(
@@ -1496,8 +1484,7 @@ public class StudentIntakeFormManager { // NOPMD
 						.getValue();
 
 				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
-					studentEducationLevel.setGraduatedYear(Integer
-							.parseInt(educationLevelQuestionValue));
+					studentEducationLevel.setGraduatedYear(educationLevelQuestionValue);
 				}
 
 				studentEducationLevel
@@ -1515,8 +1502,7 @@ public class StudentIntakeFormManager { // NOPMD
 						.getValue();
 
 				if (educationLevelQuestionValue != null && !"".equals(educationLevelQuestionValue)) {
-					studentEducationLevel.setLastYearAttended(Integer
-							.parseInt(educationLevelQuestionValue));
+					studentEducationLevel.setLastYearAttended(educationLevelQuestionValue);
 				}
 
 			} else if (formOption.getId().equals(EducationLevel.OTHER_ID)) {
@@ -2581,7 +2567,7 @@ public class StudentIntakeFormManager { // NOPMD
 		noDiplomaLastYearAttendedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_NODIPLOMALASTYEARATTENDED_ID);
 		noDiplomaLastYearAttendedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.last-year-attended"));
-		noDiplomaLastYearAttendedQuestion.setMaximumLength("4");
+		noDiplomaLastYearAttendedQuestion.setMaximumLength("20");
 		noDiplomaLastYearAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> noDiplomaLastYearAttendedQuestion shown when
@@ -2603,7 +2589,7 @@ public class StudentIntakeFormManager { // NOPMD
 				.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.highest-grade"));
 		noDiplomaHighestGradeCompletedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		noDiplomaHighestGradeCompletedQuestion.setRequired(true);
-		noDiplomaHighestGradeCompletedQuestion.setMaximumLength("3");
+		noDiplomaHighestGradeCompletedQuestion.setMaximumLength("10");
 		// DEPENDENCY -> noDiplomaHighestGradeCompletedQuestion shown when
 		// educationLevelCompletedQuestion value is
 		// 5d967ba0-e086-4426-85d5-29bc86da9295
@@ -2676,7 +2662,7 @@ public class StudentIntakeFormManager { // NOPMD
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_SOMECOLLEGECREDITSLASTYEARATTENDED_ID);
 		someCollegeCreditsLastYearAttendedQuestion
 				.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.last-year-attended"));
-		someCollegeCreditsLastYearAttendedQuestion.setMaximumLength("4");
+		someCollegeCreditsLastYearAttendedQuestion.setMaximumLength("20");
 		someCollegeCreditsLastYearAttendedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		someCollegeCreditsLastYearAttendedQuestion.setRequired(true);
 		// DEPENDENCY -> someCollegeCreditsLastYearAttendedQuestion shown when
