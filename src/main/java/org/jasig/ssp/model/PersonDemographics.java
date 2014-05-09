@@ -135,8 +135,8 @@ public class PersonDemographics // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Size(max = 50)
 	private String wage;
 
-	@Column(length = 3)
-	@Size(max = 3)
+	@Column(length = 20)
+	@Size(max = 20)
 	private String totalHoursWorkedPerWeek;
 
 	public BigDecimal getBalanceOwed() {

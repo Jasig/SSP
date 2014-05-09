@@ -50,12 +50,18 @@ public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Column(length = 255)
 	@Size(max = 255)
 	private String description;
+	
+	@Column(length = 20)
+	@Size(max = 20)
+	private String lastYearAttended;
 
-	private Integer lastYearAttended;
+	@Column(length = 10)
+	@Size(max = 10)
+	private String highestGradeCompleted;
 
-	private Integer highestGradeCompleted;
-
-	private Integer graduatedYear;
+	@Column(length = 20)
+	@Size(max = 20)
+	private String graduatedYear;
 
 	@Column(length = 128)
 	@Size(max = 128)
@@ -91,27 +97,27 @@ public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 		this.description = description;
 	}
 
-	public Integer getLastYearAttended() {
+	public String getLastYearAttended() {
 		return lastYearAttended;
 	}
 
-	public void setLastYearAttended(final Integer lastYearAttended) {
+	public void setLastYearAttended(final String lastYearAttended) {
 		this.lastYearAttended = lastYearAttended;
 	}
 
-	public Integer getHighestGradeCompleted() {
+	public String getHighestGradeCompleted() {
 		return highestGradeCompleted;
 	}
 
-	public void setHighestGradeCompleted(final Integer highestGradeCompleted) {
+	public void setHighestGradeCompleted(final String highestGradeCompleted) {
 		this.highestGradeCompleted = highestGradeCompleted;
 	}
 
-	public Integer getGraduatedYear() {
+	public String getGraduatedYear() {
 		return graduatedYear;
 	}
 
-	public void setGraduatedYear(final Integer graduatedYear) {
+	public void setGraduatedYear(final String graduatedYear) {
 		this.graduatedYear = graduatedYear;
 	}
 
