@@ -2606,7 +2606,7 @@ public class StudentIntakeFormManager { // NOPMD
 		gedYearOfGedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_GEDYEAROFGED_ID);
 		gedYearOfGedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.year-of-ged"));
-		gedYearOfGedQuestion.setMaximumLength("4");
+		gedYearOfGedQuestion.setMaximumLength("20");
 		gedYearOfGedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		gedYearOfGedQuestion.setRequired(true);
 		// DEPENDENCY -> gedYearOfGedQuestion shown when
@@ -2625,7 +2625,7 @@ public class StudentIntakeFormManager { // NOPMD
 		highSchoolYearGraduatedQuestion
 				.setId(SECTION_EDUCATIONLEVEL_QUESTION_HIGHSCHOOLYEARGRADUATED_ID);
 		highSchoolYearGraduatedQuestion.setLabel(getLabelNullSafe(blurbStore,"intake.tab4.label.year-graduated"));
-		highSchoolYearGraduatedQuestion.setMaximumLength("4");
+		highSchoolYearGraduatedQuestion.setMaximumLength("20");
 		highSchoolYearGraduatedQuestion.setType(FORM_TYPE_TEXTINPUT);
 		highSchoolYearGraduatedQuestion.setRequired(true);
 		// DEPENDENCY -> highSchoolYearGraduatedQuestion shown when
