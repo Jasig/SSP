@@ -304,7 +304,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    },{
 				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.total-hours-worked'),
 				        itemId: 'totalHoursWorkedPerWeek',
-				        name: 'totalHoursWorkedPerWeek'
+				        name: 'totalHoursWorkedPerWeek',
+				        maxLength: 10
 				    }]
 				    }]
 				});
