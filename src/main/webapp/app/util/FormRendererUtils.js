@@ -356,6 +356,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     		name: map.parentId + this.additionalFieldsKeySeparator + map.name, 
     		fieldLabel: map.label, 
     		labelWidth: map.labelWidth,
+    		maxLength: map.maxLength,
     		anchor: '100%',
     		vtype: 'mappedFieldValidator',
     		vtypeText: valErrorText,
