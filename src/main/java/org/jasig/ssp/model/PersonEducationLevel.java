@@ -63,8 +63,8 @@ public class PersonEducationLevel // NOPMD by jon.adams on 5/24/12 1:34 PM
 	@Size(max = 20)
 	private String graduatedYear;
 
-	@Column(length = 128)
-	@Size(max = 128)
+	@Column(length = 255)
+	@Size(max = 255)
 	private String schoolName;
 
 	/**
