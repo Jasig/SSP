@@ -212,4 +212,27 @@
                 <column name="school_id" />
             </createIndex>
         </changeSet>
+        
+    <changeSet dbms="mssql" id="drop REFRESH_MV_DIRECTORY_PERSON for perm msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+                DROP PROCEDURE ${schema}.REFRESH_MV_DIRECTORY_PERSON;
+        ]]></sql>
+    </changeSet>
+     <changeSet dbms="mssql" id="update to truncate REFRESH_MV_DIRECTORY_PERSON msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+            
+                CREATE PROCEDURE ${schema}.REFRESH_MV_DIRECTORY_PERSON 
+                    with execute as owner
+                    AS 
+                   TRUNCATE TABLE ${schema}.mv_directory_person;
+                   INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where id is not null;
+                   select last_name from ${schema}.mv_directory_person where 1=2;
+                RETURN
+        ]]></sql>
+    </changeSet>
+    <changeSet dbms="mssql" id="update perm REFRESH_MV_DIRECTORY_PERSON msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+                GRANT EXEC on ${schema}.REFRESH_MV_DIRECTORY_PERSON to ${database.app.username};
+        ]]></sql>
+    </changeSet>
 </databaseChangeLog>
