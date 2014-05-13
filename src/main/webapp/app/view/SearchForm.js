@@ -91,6 +91,37 @@ Ext.define('Ssp.view.SearchForm',{
         			}  
                     ], 
             items: [
+			{  layout:'column',
+			   border: false,
+			   items:[
+				{
+			       xtype: 'checkboxfield',
+			       fieldLabel: 'My Plans',
+			       name: 'myPlans',
+				   columnWidth: .5,
+			       listeners: {
+			           change: function() {
+			           	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
+			           }
+			       }
+			   },
+				{
+			        xtype: 'checkboxfield',
+			        fieldLabel: 'My Caseload',
+			        name: 'myCaseload',
+				    enableKeyEvents:true,
+				    labelWidth:100,
+			        listeners: {
+			            change: function() {
+			             	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
+			              }
+			        },
+				   labelAlign: 'right',
+				   columnWidth: .5
+			   }
+			]
+
+			},
                 {
                     xtype: 'textfield',
                     fieldLabel: 'School ID',
@@ -112,19 +143,16 @@ Ext.define('Ssp.view.SearchForm',{
 			    	  	}
 					}
                 },
+
                 {	layout: 'column',
                     border: false,
                     items: [
-                            {
-                         	   xtype: 'label',
-                         	   text: 'Name',
-                         	   columnWidth: .10
-                            },             
+             
                             {
                                 xtype: 'textfield',
                                 fieldLabel: 'First',
                                 emptyText: 'Enter All or Part of First Name',
-                                columnWidth: .45,
+                                columnWidth: .5,
                                 name: 'firstName',
             					enableKeyEvents:true,
             					listeners: {
@@ -145,8 +173,10 @@ Ext.define('Ssp.view.SearchForm',{
                                 xtype: 'textfield',
                                 fieldLabel: 'Last',
                                 emptyText: 'Enter All or Part of Last Name ',
-                                columnWidth: .45,
+                                columnWidth: .5,
+								labelWidth:50,
                                 name: 'lastName',
+								labelAlign: 'right',
             					enableKeyEvents:true,
             					listeners: {
             					      afterrender: function(field) {
@@ -323,53 +353,27 @@ Ext.define('Ssp.view.SearchForm',{
    		   		    valueField: 'code',
 		   		    displayField: 'displayValue'               
                 },
-                {	layout: 'column',
-                    border: false,
-                    items: [
-                             {
-                                 xtype: 'checkboxfield',
-                                 fieldLabel: 'My Caseload',
-                                 name: 'myCaseload',
-                			     enableKeyEvents:true,
-                                 listeners: {
-                                     change: function() {
-                                      	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
-                                       }
-                                 },
-                         	   labelAlign: 'left',
-                         	   columnWidth: .45
-                            },
-                            {
-        				       xtype: 'datefield',
-        				       format: 'm/d/Y',
-       				    	   altFormats: 'm/d/Y|m-d-Y',
-                         	   allowBlank: true,
-                         	   showToday:false, 
-                         	   validateOnChange: false,
-                         	   labelAlign: 'left',
-                         	   columnWidth: .55,
-                         	   labelSeparator: '',
-                         	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
-                         	   name: 'birthDate',
- 							   itemId: 'birthDate',
- 							  onExpand: function() {
- 								    var value = this.getValue();
- 								    var today = new Date();
- 								    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
- 								}
-                            }              
-                 ]},
+               	{
+			       xtype: 'datefield',
+			       format: 'm/d/Y',
+		    	   altFormats: 'm/d/Y|m-d-Y',
+             	   allowBlank: true,
+             	   showToday:false, 
+             	   validateOnChange: false,
+             	   labelAlign: 'left',
+				   labelWidth: 130,
+             	   labelSeparator: '',
+             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
+             	   name: 'birthDate',
+				   itemId: 'birthDate',
+				  onExpand: function() {
+					    var value = this.getValue();
+					    var today = new Date();
+					    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
+					}
+                }
 
-                {
-                    xtype: 'checkboxfield',
-                    fieldLabel: 'My Plans',
-                    name: 'myPlans',
-                    listeners: {
-                        change: function() {
-                        	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
-                        }
-                    }
-                }             
+                          
             ]
               
         });
