@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="create table scheduled_application_task_status" author="jim.stanley">
+        <createTable tableName="scheduled_application_task_status">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="task_name" type="${nvarchar.type}(50)" >
+                <constraints nullable="false" />
+            </column>           
+            <column name="status" type="${nvarchar.type}(10)" >
+                <constraints nullable="true" />
+            </column>
+            <column name="start_date" type="datetime" >
+                <constraints nullable="true" />
+            </column>
+            <column name="completed_date" type="datetime" >
+                <constraints nullable="true" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="sch_app_task_created_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="sch_app_task_modified_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>  
+        <sql>grant all on scheduled_application_task_status to ${database.app.username}</sql>
+   </changeSet>
+   
+   <changeSet id="add directory person refresh task trigger config" author="jim.stanley">
+        <insert tableName="config">
+            <column name="id" value="fd2b276b-eb6d-4d87-bcb5-a9d7f7000eb8" />
+            <column name="name" value="task_directory_person_refresh_trigger" />
+            <column name="description"
+                    value="Frequency with which the material view directory person is refreshed. The refresh task will is run automatically after the person sync task. 
+                    So it is not normally required to run this task there the default value is set to 'default'. 
+                    If it is desired to refresh the person directory table in between person sync use a standard cron exp to initiate the refresh. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'run january 1st at midnight 3000'" />
+            <column name="value">disabled</column>
+            <column name="default_value">disabled</column>
+            <column name="created_date" valueDate="2014-05-08T12:00:00" />
+            <column name="modified_date" valueDate="2014-05-08T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="207" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='fd2b276b-eb6d-4d87-bcb5-a9d7f7000eb8'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    
+
+    
+    <changeSet dbms="postgresql" id="add trigger test on directory person refresh"  author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+    DROP TRIGGER IF EXISTS change_directory_person_person on person;
+    DROP TRIGGER IF EXISTS change_directory_person_early_alert ON early_alert;
+    DROP TRIGGER IF EXISTS change_directory_person_early_alert_response ON early_alert_response;
+    
+    create or replace FUNCTION ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() RETURNS BIGINT as $$
+        select count(*) from scheduled_application_task_status where task_name='directory-person-refresh' and status = 'RUNNING'
+    $$ LANGUAGE SQL STRICT;
+    
+    CREATE TRIGGER change_directory_person_person
+         AFTER UPDATE OR INSERT ON ${schema}.person
+         FOR EACH ROW
+         WHEN(${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0)
+         EXECUTE PROCEDURE ${schema}.update_directory_person_from_view_where_school_id();
+     
+     CREATE TRIGGER change_directory_person_early_alert
+         AFTER UPDATE OR INSERT ON ${schema}.early_alert
+         FOR EACH ROW
+         WHEN(${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0)
+     EXECUTE PROCEDURE ${schema}.update_directory_person_from_view_where_person_id();
+     
+     CREATE TRIGGER change_directory_person_early_alert_response
+         AFTER UPDATE OR INSERT ON ${schema}.early_alert_response
+         FOR EACH ROW
+         WHEN(${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0)
+     EXECUTE PROCEDURE ${schema}.update_directory_person_from_view_where_person_id();
+      ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="drop triggers directory_person msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+                drop TRIGGER tr_insert_directory_person_person;
+                drop TRIGGER tr_insert_directory_person_early_alert;
+                drop TRIGGER tr_insert_directory_person_early_alert_response;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="create directory_person_refresh_run msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+                CREATE FUNCTION ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() RETURNS BIGINT
+                    AS BEGIN
+                     DECLARE @count BIGINT    
+                    set @count = (select count(*) from scheduled_application_task_status where task_name='directory-person-refresh' and status = 'RUNNING')
+                RETURN @count
+                END;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="update tr_insert_directory_person_early_alert_response msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+                CREATE TRIGGER ${schema}.tr_insert_directory_person_early_alert_response on ${schema}.early_alert_response FOR INSERT,UPDATE AS
+                  declare @person_ids uniqueidentifier
+                  set @person_ids = (SELECT person_id from inserted as ins, early_alert as ea where ea.id = ins.early_alert_id);
+                  IF @@ROWCOUNT > 0 AND ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
+                     EXEC ${schema}.update_directory_person_from_view_where_person_id @person_ids;
+        ]]></sql>
+    </changeSet>
+
+    
+     <changeSet dbms="mssql" id="update tr_insert_directory_person_person msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+             CREATE TRIGGER dbo.tr_insert_directory_person_person on dbo.person FOR INSERT, UPDATE AS
+                    declare @school_ids VARCHAR(50)
+                    set @school_ids = (SELECT school_id FROM inserted where 1=1);
+                    IF @@ROWCOUNT > 0 AND ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
+                    EXEC dbo.update_directory_person_from_view_where_school_id @school_ids;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="update tr_insert_directory_person_early_alert msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+            
+                CREATE TRIGGER ${schema}.tr_insert_directory_person_early_alert on ${schema}.early_alert FOR INSERT, UPDATE AS
+                    declare @person_ids uniqueidentifier
+                    set @person_ids = (SELECT person_id FROM inserted where 1=1);
+                    IF @@ROWCOUNT > 0 AND ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
+                    EXEC ${schema}.update_directory_person_from_view_where_person_id @person_ids;
+                
+        ]]></sql>
+    </changeSet>
+    <changeSet dbms="mssql" id="drop REFRESH_MV_DIRECTORY_PERSON msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+                DROP PROCEDURE ${schema}.REFRESH_MV_DIRECTORY_PERSON;
+        ]]></sql>
+    </changeSet>
+     <changeSet dbms="mssql" id="update REFRESH_MV_DIRECTORY_PERSON msql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+            
+                CREATE PROCEDURE ${schema}.REFRESH_MV_DIRECTORY_PERSON 
+                    with execute as owner
+                    AS 
+                   delete from ${schema}.mv_directory_person where 1=1;
+                   INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where id is not null;
+                   select last_name from ${schema}.mv_directory_person where 1=2;
+                RETURN;
+                grant EXEC on ${schema}.REFRESH_MV_DIRECTORY_PERSON to ${database.app.username};
+                grant ALTER on ${schema}.REFRESH_MV_DIRECTORY_PERSON to ${database.app.username};
+                
+        ]]></sql>
+    </changeSet>
+     <changeSet dbms="postgresql" id="add select REFRESH_MV_DIRECTORY_PERSON postgresql" author="jim.stanley">
+        <sql splitStatements="false"><![CDATA[
+             drop function ${schema}.REFRESH_MV_DIRECTORY_PERSON();
+             create or replace function ${schema}.REFRESH_MV_DIRECTORY_PERSON() RETURNS setof VARCHAR(50) AS $$
+                TRUNCATE ${schema}.mv_directory_person;
+                INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where id is not null;
+                SELECT last_name from ${schema}.mv_directory_person where 1=2
+            $$ LANGUAGE SQL STRICT;
+        ]]></sql>
+    </changeSet>
+    
+        <changeSet id="add constraints materialized directory_person view" author="jim.stanley">
+            <createIndex tableName="mv_directory_person" 
+                indexName="idx_school_id_mv_directory_person">
+                <column name="school_id" />
+            </createIndex>
+        </changeSet>
+</databaseChangeLog>
