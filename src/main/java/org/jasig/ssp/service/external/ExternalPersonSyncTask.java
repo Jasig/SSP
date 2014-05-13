@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.service.external;
 
-import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 
 public interface ExternalPersonSyncTask extends BatchedTask<Pair<Long,Long>> {

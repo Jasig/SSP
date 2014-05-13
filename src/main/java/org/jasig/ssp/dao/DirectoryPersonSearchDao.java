@@ -20,46 +20,41 @@ package org.jasig.ssp.dao;
 
 import java.io.FileWriter;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
-import org.hibernate.type.StringType;
-import org.jasig.ssp.model.DirectoryPerson;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.cfg.Settings;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.collect.Lists;
-
 /**
  * PersonSearch DAO
  */
+@NamedQueries({ @NamedQuery(name = "refreshMVDirectoryPerson_SP", query = "{ ? = call REFRESH_MV_DIRECTORY_PERSON() }" )})
 @Repository
 public class DirectoryPersonSearchDao  {
 
@@ -86,6 +81,38 @@ public class DirectoryPersonSearchDao  {
 
 	FileWriter fileWriter;
 
+	public void refreshDirectoryPerson(){
+		
+		if(isPostgresSession()){
+			try{
+				Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON();");
+				query.list();
+			}catch(Exception exp){
+				Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
+				query.list();
+			}
+		}else{
+			Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
+			query.list();
+		}
+	}
+	
+	private Boolean isPostgresSession(){
+		try{
+			Properties properties = System.getProperties();
+			String dialect = properties.getProperty("db_dialect");
+			if(StringUtils.isBlank(dialect)){
+				SessionFactoryImpl sfi = (SessionFactoryImpl) sessionFactory; 
+				Properties props = sfi.getProperties();
+				dialect = props.get("hibernate.dialect").toString();
+			}
+			return dialect.toUpperCase().contains("POSTGRES") ? true:false;
+		}catch(Exception exp){
+			
+		}
+
+		return true;
+	}
 	/**
 	 * Search people by the specified terms.
 	 * 
@@ -108,7 +135,7 @@ public class DirectoryPersonSearchDao  {
 	 * @return List of people that match the specified filters
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
+	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
 	{
 		Term currentTerm;
 		FilterTracker filterTracker = new FilterTracker();
@@ -134,12 +161,16 @@ public class DirectoryPersonSearchDao  {
 		
 		buildWhere(personSearchRequest, filterTracker, stringBuilder);
 		
-		Query query = sessionFactory.getCurrentSession().createQuery(stringBuilder.toString());
+		Map<String,Object> params = getBindParams(personSearchRequest, currentTerm);
 		
-		addBindParams(personSearchRequest,query,currentTerm);
-		query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+		Pair<Long,Query> querySet =  personSearchRequest
+				.getSortAndPage()
+				.applySortingAndPagingToPagedQuery(sessionFactory.getCurrentSession(), stringBuilder, false, null, true, params);
+		
+		
+		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
-		return query.list();
+		 return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
 	}
 
 	private StringBuilder buildSelect(){
@@ -151,7 +182,7 @@ public class DirectoryPersonSearchDao  {
 				
 			;*/
 		stringBuilder.append(" select distinct " +
-				 "dp.id as person_schoolId," +
+				 "dp.schoolId as person_schoolId," +
 				 "dp.firstName as person_firstName, " +
 				 "dp.middleName as person_middleName, " +
 				 "dp.lastName as person_lastName, " +
@@ -437,6 +468,113 @@ public class DirectoryPersonSearchDao  {
 		}		
 		
 		//query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
+	}
+	
+	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, Term currentTerm) 
+	{
+		HashMap<String,Object> params= new HashMap<String,Object>();
+		if(hasSchoolId(personSearchRequest)) {
+			params.put("schoolId",personSearchRequest.getSchoolId().trim().toUpperCase());
+		}
+		
+		if(hasFirstName(personSearchRequest)) {
+			params.put("firstName",personSearchRequest.getFirstName().trim().toUpperCase() + "%");
+		}
+		
+		if(hasLastName(personSearchRequest)) {
+			params.put("lastName",personSearchRequest.getLastName().trim().toUpperCase() + "%");
+		}
+
+		if(hasPlanStatus(personSearchRequest))
+		{
+			params.put("planObjectStatus", 
+					PersonSearchRequest.PLAN_STATUS_ACTIVE.equals(personSearchRequest.getPlanStatus()) 
+					? ObjectStatus.ACTIVE.ordinal() : ObjectStatus.INACTIVE.ordinal());
+		}
+		if(hasMapStatus(personSearchRequest))
+		{ 
+			PlanStatus param = null;
+			if(PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.ON;
+			}
+			if(PersonSearchRequest.MAP_STATUS_OFF_PLAN.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.OFF;
+			}
+			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.ON_TRACK_SEQUENCE;
+			}
+			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTIO.equals(personSearchRequest.getMapStatus()))
+			{
+				param = PlanStatus.ON_TRACK_SUBSTITUTIO;
+			}			
+			params.put("mapStatus",param.name());
+		}
+		
+		if(hasGpaCriteria(personSearchRequest))
+		{
+			if(personSearchRequest.getGpaEarnedMin() != null)
+			{
+				params.put("gpaEarnedMin", personSearchRequest.getGpaEarnedMin());
+			}
+			if(personSearchRequest.getGpaEarnedMax() != null)
+			{
+				params.put("gpaEarnedMax", personSearchRequest.getGpaEarnedMax());
+			}			
+		}
+		
+		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
+		{
+			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
+			params.put("coachId", coach.getId());
+		}
+		
+		if(hasDeclaredMajor(personSearchRequest))
+		{
+			params.put("declaredMajor", personSearchRequest.getDeclaredMajor());
+		}
+		
+		if(hasHoursEarnedCriteria(personSearchRequest))
+		{
+			if(personSearchRequest.getHoursEarnedMin() != null)
+			{
+				params.put("hoursEarnedMin", personSearchRequest.getHoursEarnedMin());
+			}
+			if(personSearchRequest.getHoursEarnedMax() != null )
+			{
+				params.put("hoursEarnedMax", personSearchRequest.getHoursEarnedMax());
+			}	
+		}
+		
+		if(hasProgramStatus(personSearchRequest))
+		{
+			params.put("programStatusName", personSearchRequest.getProgramStatus().getName());
+		}
+		
+		if(hasSpecialServiceGroup(personSearchRequest))
+		{
+			params.put("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
+		}
+		
+		if(hasFinancialAidStatus(personSearchRequest))
+		{
+			params.put("sapStatusCode", personSearchRequest.getSapStatusCode());
+		}
+		
+		if(hasMyPlans(personSearchRequest))
+		{
+			params.put("owner", securityService.currentlyAuthenticatedUser().getPerson());
+		}
+		
+		if(hasBirthDate(personSearchRequest))
+		{
+			params.put("birthDate", personSearchRequest.getBirthDate());
+		}		
+		
+		//query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
+		return params;
 	}
 
 

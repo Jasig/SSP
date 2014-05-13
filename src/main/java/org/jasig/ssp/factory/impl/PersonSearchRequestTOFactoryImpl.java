@@ -33,6 +33,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +100,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setMyPlans(to.getMyPlans());
 		model.setBirthDate(to.getBirthDate());
 		model.setEarlyAlertResponseLate(to.getEarlyAlertResponseLate());
+		model.setSortAndPage(to.getSortAndPage());
 		return model;
 	}
 
@@ -130,7 +132,40 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,Date birthDate) throws ObjectNotFoundException {
+			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
+			Date birthDate,SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+		PersonSearchRequestTO to = new PersonSearchRequestTO();
+		to.setSchoolId(schoolId);
+		to.setFirstName(firstName);
+		to.setLastName(lastName);
+		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
+		to.setSpecialServiceGroup(specialServiceGroup == null ? null : UUID.fromString(specialServiceGroup));
+		to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
+		to.setDeclaredMajor(declaredMajor);
+		to.setHoursEarnedMin(hoursEarnedMin);
+		to.setHoursEarnedMax(hoursEarnedMax);
+		to.setGpaEarnedMin(gpaEarnedMin);
+		to.setGpaEarnedMax(gpaEarnedMax);
+		to.setCurrentlyRegistered(currentlyRegistered);
+		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
+		to.setSapStatusCode(sapStatusCode);
+		to.setMapStatus(mapStatus);
+		to.setPlanStatus(planStatus);
+		to.setMyCaseload(myCaseload);
+		to.setMyPlans(myPlans);
+		to.setBirthDate(birthDate);
+		to.setSortAndPage(sortAndPage);
+		return from(to);
+	}
+	
+	@Override
+	public PersonSearchRequest from(String schoolId, String firstName, String lastName,
+			String programStatus, String specialServiceGroup,
+			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
+			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
+			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
+			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
+			Date birthDate) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);

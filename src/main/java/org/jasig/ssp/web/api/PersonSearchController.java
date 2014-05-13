@@ -42,6 +42,7 @@ import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -176,15 +177,41 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Date birthDate,
+	 final @RequestParam(required = false) Integer start,
+	 final @RequestParam(required = false) Integer limit,
+	 final @RequestParam(required = false) String sort,
+	 final @RequestParam(required = false) String sortDirection,
 	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
-
-		final PagingWrapper<PersonSearchResult2> models = service.searchPersonDirectory(personSearchRequestFactory.from(schoolId,firstName, lastName, programStatus,specialServiceGroup, coachId,declaredMajor,
-				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,earlyAlertResponseLate,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans,birthDate));
+		String sortConfigured = sort == null ? "lastName":sort;
+		if(sortConfigured.equals("coach")){
+			sortConfigured = "coachLastName";
+		}else if(sortConfigured.equals("currentProgramStatusName")){
+			sortConfigured = "programStatusName";
+		}else if(sortConfigured.equals("numberOfEarlyAlerts")){
+			sortConfigured = "activeAlertsCount";
+		}
+		SortingAndPaging sortAndPage = SortingAndPaging
+		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
+				sortDirection, null);
+		if(sortConfigured.equals("coach")){
+			sortAndPage.prependSortField("coachFirstName", SortDirection.getSortDirection(sortDirection));
+		}
+		final PagingWrapper<PersonSearchResult2> models = service.searchPersonDirectory(personSearchRequestFactory.from(schoolId,
+				firstName, lastName, 
+				programStatus,specialServiceGroup, 
+				coachId,declaredMajor,
+				hoursEarnedMin,hoursEarnedMax,
+				gpaEarnedMin,gpaEarnedMax,
+				currentlyRegistered,earlyAlertResponseLate,
+				sapStatusCode,
+				mapStatus,planStatus,
+				myCaseload,myPlans,birthDate, sortAndPage));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
+	
 
 	private void assertSearchApiAuthorization(HttpServletRequest request)
 			throws AccessDeniedException {

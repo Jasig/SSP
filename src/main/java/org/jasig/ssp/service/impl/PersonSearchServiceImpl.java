@@ -322,8 +322,12 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	@Override
 	public PagingWrapper<PersonSearchResult2> searchPersonDirectory(
 			PersonSearchRequest form) {
-		List<PersonSearchResult2> results = directoryPersonDao.search(form);
-		return new PagingWrapper<PersonSearchResult2>(results.size(), results);
+		return directoryPersonDao.search(form);
+	}
+	
+	@Override
+	public void refreshDirectoryPerson(){
+		directoryPersonDao.refreshDirectoryPerson();
 	}
 
 }

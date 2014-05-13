@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * PersonSearchResult transfer object
@@ -66,6 +67,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private Boolean myPlans;
 	
 	private Date birthDate;
+	
+	private SortingAndPaging sortAndPage;
 	
 	
 	public String getSchoolId() {
@@ -223,6 +226,16 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+	
+
+	public SortingAndPaging getSortAndPage() {
+		return sortAndPage;
+	}
+
+
+	public void setSortAndPage(SortingAndPaging sortAndPage) {
+		this.sortAndPage = sortAndPage;
 	}
 
 }

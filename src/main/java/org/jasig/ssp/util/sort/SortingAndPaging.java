@@ -20,9 +20,12 @@ package org.jasig.ssp.util.sort;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -268,6 +271,19 @@ public final class SortingAndPaging { // NOPMD
 			criteria.add(Restrictions.eq("objectStatus", status));
 		}
 	}
+	
+	public StringBuilder addStatusFilterToQuery(final StringBuilder query, String objectName, Boolean initialRestriction) {
+		if (isFilteredByStatus()) {
+			if(initialRestriction == null){
+				query.append(" where ");
+			}else{
+				query.append(" and ");
+			}
+			query.append(objectName);
+			query.append(".objectStatus = :objectStatus");
+		}
+		return query;
+	}
 
 	/**
 	 * Add the current paging filter to the specified criteria.
@@ -280,6 +296,35 @@ public final class SortingAndPaging { // NOPMD
 			criteria.setFirstResult(firstResult);
 			criteria.setMaxResults(maxResults);
 		}
+	}
+	
+	/**
+	 * Add the current paging filter to the specified criteria.
+	 * 
+	 * @param criteria
+	 *            Paging filter will be added to this criteria
+	 */
+	public void addPagingToQuery(final Query query) {
+		if (isPaged()) {
+			query.setFirstResult(firstResult);
+			query.setMaxResults(maxResults);
+		}
+	}
+	
+	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Session session, final StringBuilder hql,
+			final boolean filterByStatus,String objectToAddStatusFilter, Boolean whereStarted, Map<String,Object> bindParams) {
+
+		if (filterByStatus && StringUtils.isNotBlank(objectToAddStatusFilter)) {
+			addStatusFilterToQuery(hql, objectToAddStatusFilter, whereStarted);
+		}
+		
+		addSortingToQuery(hql);
+		
+		Query query = session.createQuery(hql.toString());
+		query.setProperties(bindParams);
+		final Long totalRows = new Integer(query.list().size()).longValue();
+		addPagingToQuery(query);
+		return new Pair<Long,Query>(totalRows,query);
 	}
 
 	public Long applySortingAndPagingToPagedQuery(final Criteria query,
@@ -325,6 +370,29 @@ public final class SortingAndPaging { // NOPMD
 					defaultSortDirection);
 		}
 	}
+	
+	/**
+	 * Add the current sorting filter to the specified criteria.
+	 * 
+	 * @param criteria
+	 *            Paging filter will be added to this criteria
+	 */
+	public StringBuilder addSortingToQuery(final StringBuilder query) {
+		if (isSorted()) {
+			query.append(" Order By ");
+			String seperator = "";
+			for (final Pair<String, SortDirection> entry : sortFields) {
+				query.append(seperator);
+				addSortToQuery(query, entry.getFirst(), entry.getSecond());
+				seperator = ", ";
+			}
+		} else if (isDefaultSorted()) {
+			// sort by the default property
+			addSortToQuery(query, defaultSortProperty,
+					defaultSortDirection);
+		}
+		return query;
+	}
 
 	/**
 	 * Add all the current filters to the specified criteria
@@ -344,6 +412,17 @@ public final class SortingAndPaging { // NOPMD
 			criteria.addOrder(Order.asc(sort));
 		} else {
 			criteria.addOrder(Order.desc(sort));
+		}
+	}
+	
+	private void addSortToQuery(final StringBuilder query,
+			final String sort, final SortDirection sortDirection) {
+		if (sortDirection.equals(SortDirection.ASC)) {
+			query.append(sort);
+			query.append(" asc ");
+		} else {
+			query.append(sort);
+			query.append(" desc ");
 		}
 	}
 

@@ -24,13 +24,20 @@ package org.jasig.ssp.service;
  */
 public interface ScheduledTaskWrapperService {
 
+	/* Not scheduled through config fires every 2.5 minutes after completion*/
 	public void sendMessages();
 
+	/* Not scheduled through config fires every 5 minutes after completion*/
 	public void syncCoaches();
+	
+	/* Not scheduled through config. runs at 1 am every day*/
+	public void sendTaskReminders();
 
 	public void syncExternalPersons();
+	
+	public void refreshDirectoryPerson();
 
-	public void sendTaskReminders();
+
 
 	public void calcMapStatusReports();
 	

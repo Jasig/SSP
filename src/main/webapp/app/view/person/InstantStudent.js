@@ -75,6 +75,7 @@ Ext.define('Ssp.view.person.InstantStudent', {
                         {
                     xtype: 'personappointment',
                     instantCaseloadAssignment:me.instantCaseloadAssignment,
+                    studentTypeNameValue:me.studentTypeNameValue,
                     hidden: false,
                 },
                 {

@@ -37,6 +37,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.RefreshDirectoryPersonTask;
+import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.ScheduledTaskWrapperService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.SendQueuedMessagesTask;
@@ -85,6 +87,7 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SEND_MESSAGES_TASK_NAME = "send-messages";
 	public static final String SYNC_COACHES_TASK_NAME = "sync-coaches";
 	public static final String SYNC_EXTERNAL_PERSONS_TASK_NAME = "sync-external-persons";
+	public static final String REFRESH_DIRECTORY_PERSON_TASK_NAME = "directory-person-refresh";
 	public static final String CALC_MAP_STATUS_REPORTS_TASK_NAME = "calc-map-status-reports";
 	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
@@ -93,6 +96,7 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
 	private static final String FIFTEEN_MINUTES_IN_MILLIS = 15 * 60 * 1000 + "";
+	private static final String NEVER = "0 0 0 31 12 *";
 
 	// Not a fan of the underscores but matches convention for existing
 	// ConfigService records, and will probably be convenient for our IDs here
@@ -100,6 +104,10 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EXTERNAL_PERSON_SYNC_TASK_ID = "task_external_person_sync";
 	private static final String EXTERNAL_PERSON_SYNC_TASK_TRIGGER_CONFIG_NAME = "task_external_person_sync_trigger";
 	private static final String EXTERNAL_PERSON_SYNC_TASK_DEFAULT_TRIGGER = EVERY_DAY_1_AM;
+	
+	private static final String DIRECTORY_PERSON_REFRESH_TASK_ID = "task_directory_person_refresh";
+	private static final String DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME = "task_directory_person_refresh_trigger";
+	private static final String DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER = NEVER;
 
 	private static final String SCHEDULER_CONFIG_POLL_TASK_ID = "task_scheduler_config_poll";
 	private static final String SCHEDULER_CONFIG_POLL_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_config_poll_trigger";
@@ -112,12 +120,16 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EARLY_ALERT_TASK_ID = "task_early_alert_scheduled_tasks";
 	private static final String EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_early_alert_trigger";
 	private static final String EARLY_ALERT_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
+	private static final String DISABLED_TRIGGER_CONFIG_VALUE = "DISABLED";
 
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
 	@Autowired
 	private transient ExternalPersonSyncTask externalPersonSyncTask;
+	
+	@Autowired
+	private transient RefreshDirectoryPersonTask directoryPersonRefreshTask;
 	
 	@Autowired
 	private transient MapStatusReportCalcTask mapStatusReportCalcTask;
@@ -127,6 +139,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient PersonService personService;
+	
+	@Autowired
+	private transient ScheduledApplicationTaskStatusService taskStatusService;
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -173,10 +188,21 @@ public class ScheduledTaskWrapperServiceImpl
 					@Override
 					public void run() {
 						syncExternalPersons();
+						refreshDirectoryPerson();
 					}
 				},
 				EXTERNAL_PERSON_SYNC_TASK_DEFAULT_TRIGGER,
 				EXTERNAL_PERSON_SYNC_TASK_TRIGGER_CONFIG_NAME));
+		
+		this.tasks.put(DIRECTORY_PERSON_REFRESH_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_TASK_ID,
+				new Runnable() {
+					@Override
+					public void run() {
+						refreshDirectoryPerson();
+					}
+				},
+				DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
+				DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
 
 		this.tasks.put(MAP_STATUS_REPORT_CALC_TASK_ID, new Task(MAP_STATUS_REPORT_CALC_TASK_ID,
 				new Runnable() {
@@ -348,6 +374,8 @@ public class ScheduledTaskWrapperServiceImpl
 			LOGGER.info("Attempting task [{}] cancellation", task.id);
 			task.execution.cancel(task.mayInterrupt);
 		}
+		
+		
 		task.executingTrigger = null;
 		task.executingTriggerExpression = null;
 	}
@@ -377,13 +405,15 @@ public class ScheduledTaskWrapperServiceImpl
 		if ( configValue == null ) {
 			return null;
 		}
-		return new Pair(configValue, parseTriggerConfig(configValue));
+		if(configValue.toUpperCase().equals(DISABLED_TRIGGER_CONFIG_VALUE))
+		   return  new Pair<String,Trigger>(configValue, new DisabledTrigger());
+		
+		return new Pair<String,Trigger>(configValue, parseTriggerConfig(configValue));
 	}
 
 	protected Trigger parseTriggerConfig(String configValue)
 	throws BadTriggerConfigException {
 
-		Pair<String,Trigger> trigger = null;
 		BadTriggerConfigException badPeriodicTiggerException = null;
 		BadTriggerConfigException badCronTiggerException = null;
 		try {
@@ -668,19 +698,21 @@ public class ScheduledTaskWrapperServiceImpl
 				}
 				final String currentThreadName = Thread.currentThread().getName();
 				final String currentMdcEntry = MDC.get(TASK_NAME_MDC_KEY);
+				taskStatusService.beginTask(taskName);
 				try {
 					final String newThreadName = currentThreadName == null ? taskName : currentThreadName + ":" + taskName;
 					Thread.currentThread().setName(newThreadName);
 					final String newMdcEntry = currentMdcEntry == null ? taskName : currentMdcEntry + ":" + taskName;
 					MDC.put(TASK_NAME_MDC_KEY, newMdcEntry);
 					work.run();
-				} finally {
+				}finally {
 					if ( currentMdcEntry == null ) {
 						MDC.remove(TASK_NAME_MDC_KEY);
 					} else {
 						MDC.put(TASK_NAME_MDC_KEY, currentMdcEntry);
 					}
 					Thread.currentThread().setName(currentThreadName);
+					taskStatusService.completeTask(taskName);
 				}
 			}
 		};
@@ -757,8 +789,8 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
-	protected void execBatchedTaskWithName(final String syncExternalPersonsTaskName, final BatchedTask batchedTask) {
-		withTaskName(syncExternalPersonsTaskName, new Runnable() {
+	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
+		withTaskName(taskName, new Runnable() {
 			@Override
 			public void run() {
 				batchedTask.exec(newTaskBatchExecutor(batchedTask.getBatchExecReturnType()));
@@ -791,20 +823,6 @@ public class ScheduledTaskWrapperServiceImpl
 			}
 		});
 	}
-
-	/**
-	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
-	 * config polling job.
-	 */
-	@Override
-	public void syncExternalPersons() {
-		execBatchedTaskWithName(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask);
-	}
-
-	@Override
-	public void calcMapStatusReports() {
-		execBatchedTaskWithName(CALC_MAP_STATUS_REPORTS_TASK_NAME, mapStatusReportCalcTask);
-	}
 	
 	@Override
 	@Scheduled(cron = "0 0 1 * * *")
@@ -816,6 +834,25 @@ public class ScheduledTaskWrapperServiceImpl
 				taskService.sendAllTaskReminderNotifications();
 			}
 		});
+	}
+
+	/**
+	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
+	 * config polling job.
+	 */
+	@Override
+	public void syncExternalPersons() {
+		execBatchedTaskWithName(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask);
+	}
+	
+	@Override 
+	public void refreshDirectoryPerson(){
+		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_TASK_NAME, directoryPersonRefreshTask);
+	}
+
+	@Override
+	public void calcMapStatusReports() {
+		execBatchedTaskWithName(CALC_MAP_STATUS_REPORTS_TASK_NAME, mapStatusReportCalcTask);
 	}
 	
 	@Override
@@ -831,6 +868,7 @@ public class ScheduledTaskWrapperServiceImpl
 	protected static class Task {
 
 		public String id;
+		
 
 		public String triggerExpressionConfigName;
 		public String configuredTriggerExpression;

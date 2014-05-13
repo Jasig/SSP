@@ -23,13 +23,18 @@ Ext.define('Ssp.store.DirectoryPersonSearch', {
     inject: {
         apiProperties: 'apiProperties'
     },
+    remoteSort: true,
     config: {
         baseUrlName: 'directoryPersonSearch'
     },
+
 	constructor: function(){
 		var me=this;
+		var p = me.apiProperties.getProxy(me.apiProperties.getItemUrl(me.getBaseUrlName()));
+		 p.directionParam = 'sortDirection';
+        p.simpleSortMode = true;
 		Ext.apply(me, {
-							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl(me.getBaseUrlName())),
+							proxy: p,
 							autoLoad: false,
 							autoSync: false
 						});

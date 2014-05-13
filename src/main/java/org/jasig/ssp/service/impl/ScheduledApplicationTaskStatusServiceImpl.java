@@ -1,0 +1,104 @@
+package org.jasig.ssp.service.impl;
+
+import java.util.Date;
+
+import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.dao.ScheduledApplicationTaskStatusDao;
+import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
+import org.jasig.ssp.model.ScheduledTaskStatus;
+import org.jasig.ssp.service.AbstractAuditableCrudService;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
+import org.jasig.ssp.web.api.validation.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ScheduledApplicationTaskStatusServiceImpl extends
+		AbstractAuditableCrudService<ScheduledApplicationTaskStatus> implements ScheduledApplicationTaskStatusService {
+	
+	@Autowired
+	private transient ScheduledApplicationTaskStatusDao dao;
+	
+	@Override
+	protected AuditableCrudDao<ScheduledApplicationTaskStatus> getDao() {
+		return dao;
+	}
+
+	@Override
+	public ScheduledApplicationTaskStatus save(
+			ScheduledApplicationTaskStatus obj) throws ObjectNotFoundException,
+			ValidationException {
+		return dao.save(obj);
+	}
+
+	@Override
+	public ScheduledApplicationTaskStatus beginTask(String taskName) {
+		ScheduledApplicationTaskStatus taskStatus = dao.getByTaskName(taskName);
+		if(taskStatus == null){
+			taskStatus = new ScheduledApplicationTaskStatus();
+		}
+
+		taskStatus.setCompletedDate(null);
+		taskStatus.setStartDate(new Date());
+		taskStatus.setStatus(ScheduledTaskStatus.RUNNING);
+		taskStatus.setTaskName(taskName);
+		return dao.save(taskStatus);
+	}
+
+	@Override
+	public ScheduledApplicationTaskStatus completeTask(String taskName) {
+		ScheduledApplicationTaskStatus taskStatus = dao.getByTaskName(taskName);
+		if(taskStatus == null){
+			return null;
+		}
+		taskStatus.setCompletedDate(new Date());
+		taskStatus.setStatus(ScheduledTaskStatus.COMPLETED);
+		return dao.save(taskStatus);
+	}
+	
+	@Override
+	public ScheduledApplicationTaskStatus interruptTask(String taskName) {
+		ScheduledApplicationTaskStatus taskStatus = dao.getByTaskName(taskName);
+		if(taskStatus == null){
+			return null;
+		}
+		taskStatus.setCompletedDate(new Date());
+		taskStatus.setStatus(ScheduledTaskStatus.INTERRUPTED);
+		return  dao.save(taskStatus);
+	}
+
+	@Override
+	public ScheduledApplicationTaskStatus failTask(String taskName) {
+		ScheduledApplicationTaskStatus taskStatus = dao.getByTaskName(taskName);
+		if(taskStatus == null){
+			return null;
+		}
+		taskStatus.setCompletedDate(new Date());
+		taskStatus.setStatus(ScheduledTaskStatus.FAILED);
+		return dao.save(taskStatus);
+		
+	}
+	
+	@Override
+	public ScheduledApplicationTaskStatus getByName(String taskName){
+		return dao.getByTaskName(taskName);
+	}
+	
+	@Override
+	public ScheduledApplicationTaskStatus resetTask(String taskName) {
+		ScheduledApplicationTaskStatus taskStatus = dao.getByTaskName(taskName);
+		if(taskStatus == null){
+			taskStatus = new ScheduledApplicationTaskStatus();
+		}
+
+		taskStatus.setCompletedDate(null);
+		taskStatus.setStartDate(null);
+		taskStatus.setStatus(null);
+		taskStatus.setTaskName(taskName);
+		return dao.save(taskStatus);
+	}
+	
+	
+
+}

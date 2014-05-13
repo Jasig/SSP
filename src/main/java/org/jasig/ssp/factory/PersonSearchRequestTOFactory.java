@@ -25,6 +25,7 @@ import java.util.UUID;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 public interface PersonSearchRequestTOFactory extends
 		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
@@ -35,6 +36,13 @@ public interface PersonSearchRequestTOFactory extends
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, 
-			Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
+			Boolean myCaseload, Boolean myPlans, Date birthDate, SortingAndPaging sAndP) throws ObjectNotFoundException;
 
+	PersonSearchRequest from(String studentId, String firstName, String lastName,
+			String programStatus,String specialServiceGroup,
+			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
+			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
+			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
+			String sapStatusCode, String mapStatus, String planStatus, 
+			Boolean myCaseload, Boolean myPlans, Date birthDate) throws ObjectNotFoundException;
 }

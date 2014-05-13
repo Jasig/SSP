@@ -49,7 +49,6 @@ public class TaskMessageEnqueueServiceImpl extends
 	@Override
 	public TaskMessageEnqueue save(TaskMessageEnqueue obj)
 			throws ObjectNotFoundException, ValidationException {
-		// TODO Auto-generated method stub
 		return dao.save(obj);
 	}
 
@@ -60,7 +59,6 @@ public class TaskMessageEnqueueServiceImpl extends
 
 	@Override
 	public List<TaskMessageEnqueue> getAllForTask(Task task) {
-		// TODO Auto-generated method stub
 		return dao.getAllForTask(task);
 	}
 

@@ -45,7 +45,8 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
 				deferredRender: false,
 				instantCaseloadAssignment:true,
 				schoolIdValue: me.schoolIdValue,
-				coachIdValue:me.coachIdValue
+				coachIdValue:me.coachIdValue,
+				studentTypeNameValue:me.studentTypeNameValue
 			}],
             dockedItems: [{
                 xtype: 'toolbar',

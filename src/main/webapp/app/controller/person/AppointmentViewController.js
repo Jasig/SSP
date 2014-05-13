@@ -79,6 +79,17 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 			 }
 		
+			 if(me.studentTypesStore.getTotalCount( ) == 0){
+				 me.studentTypesStore.load({callback:me.afterStudentTypeLoaded,scope:me,single:true})
+			 }else{
+				 me.afterStudentTypeLoaded();
+			 }
+				 
+		return me.callParent(arguments);
+    },
+    
+    afterStudentTypeLoaded: function(){
+	    var me = this;
 		me.studentTypesStore.clearFilter(true);	 
 		
 		if ( me.person.data.studentType ) {
@@ -88,13 +99,18 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		}
 				
 		me.getView().getForm().reset();
-		me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
+		if(me.getView().instantCaseloadAssignment){
+			var record = me.studentTypesStore.findRecord("name",me.getView().studentTypeNameValue);
+			if(record)
+				me.getStudentTypeCombo().setValue( record.get("id") );
+		}else
+			me.getStudentTypeCombo().setValue( me.person.getStudentTypeId() );
 		me.getView().loadRecord( me.appointment );
-
+	
 		me.assignAppointmentRequiredFields();
 		
-		return me.callParent(arguments);
-    },
+	
+	},
     
     
     destroy: function(){

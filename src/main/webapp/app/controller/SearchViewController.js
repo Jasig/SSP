@@ -830,7 +830,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     instantCaseloadAssignment: function(record){
     	var me=this;
 		if(me.instantCaseload == null || me.instantCaseload.isDestroyed)
-       		me.instantCaseload = Ext.create('Ssp.view.person.InstantCaseloadAssignment',{hidden:true, schoolIdValue:record.get("schoolId"), coachIdValue:record.get("coachId")});
+       		me.instantCaseload = Ext.create('Ssp.view.person.InstantCaseloadAssignment',{hidden:true, 
+       			schoolIdValue:record.get("schoolId"), 
+       			coachIdValue:record.get("coachId"),
+       			studentTypeNameValue:record.get("studentTypeName")});
 		me.instantCaseload.show();
     },
     

@@ -27,6 +27,7 @@ import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
@@ -61,6 +62,9 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 	@Autowired
 	private ExternalPersonService externalPersonService;
+	
+	@Autowired
+	private PersonSearchService directoryPersonService;
 
 	@Autowired
 	private PersonService personService;

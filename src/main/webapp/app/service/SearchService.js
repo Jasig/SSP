@@ -37,6 +37,7 @@ Ext.define('Ssp.service.SearchService', {
 		var me=this;
 
 		me.store.removeAll();
+		me.store.currentPage = 1;
 
 		// Set params in the url for Search Store
 		// because the params need to be applied prior to load and not in a params
@@ -55,10 +56,6 @@ Ext.define('Ssp.service.SearchService', {
 					birthDate = "birthDate=" + params[key] + "&";
 				}
 			}
-		}
-		
-		if ( !("sort" in activeParams) ) {
-			activeParams["sort"] = "lastName";
 		}
 		
 		var encodedUrl = Ext.urlEncode(activeParams);
@@ -85,7 +82,6 @@ Ext.define('Ssp.service.SearchService', {
 			},
 			scope: me
 		});
-		me.store.sort('sortableName','ASC');
 	},
 
     search: function( searchTerm, outsideCaseload, callbacks ){
@@ -117,6 +113,7 @@ Ext.define('Ssp.service.SearchService', {
     		 birthDate,
     		callbacks ){
     	var me = this;
+    	
 		me.searchWithParams({
 	     schoolId: schoolId,
 	     firstName: firstName,
