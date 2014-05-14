@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
 		var me = this;
 		var record, id, jsonData, url,parentId;
 		url = this.store.getProxy().url;
-		this.getView().getForm().updateRecord();
+		me.getView().getForm().updateRecord();
 		record = this.model;
 		id = record.get('id');
 		jsonData = record.data;
@@ -56,6 +56,11 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
 			var r = Ext.decode(response.responseText);
 			parentId = r.id;
 	 		url = me.questionStore.getProxy().url;
+	 		if(me.questionStore && me.questionStore.data.items.length == 0){
+	 			Ext.Msg.alert('SSP Warning', 'Self-Help Guide has been saved. It is recommended to associate a question with guide.'); 
+	 			me.displayMain();
+	 			return;
+	 		}
 	 		for(var i=0; i<me.questionStore.data.items.length;i++)
 	 		{
 	 			jsonData = me.questionStore.data.items[i].data;
