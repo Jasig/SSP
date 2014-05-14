@@ -198,7 +198,6 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             
         });
         
-        
         if (record.dirty) {
             record.commit();
             
@@ -207,10 +206,6 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             Ext.get(h).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR, Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
             
         }
-		
-        record.data.dueDate = me.formUtils.toJSONStringifiableAPDate(record.data.dueDate);
-		
-		
     },
     
    onDrop:function(node, data, overModel, dropPosition, options)

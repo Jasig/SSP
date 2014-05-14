@@ -109,6 +109,9 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
                         name: 'dueDate',
                         itemId: 'actionPlanDueDate',
                         allowBlank: false,
+						format: 'm/d/Y',
+						minValue: Ext.Date.format(new Date(), 'm/d/Y'),
+						minText: 'Cannot have a due date before today!',
                         showToday: false, // else 'today' would be browser-local 'today'
                         listeners: {
                             render: function(field){

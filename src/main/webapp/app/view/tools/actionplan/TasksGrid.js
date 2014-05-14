@@ -97,16 +97,17 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     xtype: 'textfield',
                     fieldStyle: "margin-bottom:12px;"
                 }
-            }, {
+            },{
                 xtype: 'datecolumn',
                 header: 'Due Date',
                 dataIndex: 'dueDate',
                 width: 85,
                 name: 'dueDate',
+				format:'m/d/Y',
                 itemId: 'actionPlanDueDate',
                 renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
                 	var dt = record.get('dueDate');
-					
+
 					if (Ext.isObject(dt) && dt.apStr) {
 						return dt.apStr;
 					} else {
@@ -118,12 +119,14 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
 						}
 					}
                 },
-                
                 editor: {
                     xtype: 'datefield',
                     allowBlank: false,
                     altFormats: 'm/d/Y|m-d-Y',
+					format:'m/d/Y',
                     showToday: false,
+					minValue: Ext.Date.format(new Date(), 'm/d/Y'),
+					minText: 'Cannot have a due date before today!',
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -133,7 +136,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                         }
                     }
                 }
-            
+
             }, {
                 header: 'Confidentiality',
                 dataIndex: 'confidentialityLevel',
