@@ -41,6 +41,11 @@ Ext.define('Ssp.controller.admin.crg.DisplayChallengesAdminViewController', {
     },
     init: function(){
         var me = this;
+		// TODO THIS REMOVE SORTS, BEHAVIOR TO SUPPORT inappropriate sort by 'active' client property
+		// pass the columns for editing
+		me.store.sorters.clear();
+		//TODO  currentPage for store is reset to 1 since sorting is client side.
+		me.store.currentPage=1;
         me.formUtils.reconfigureGridPanel(me.getView(), me.store);
         var ptb = me.getView().down('pagingtoolbar');
         var asidx = me.adminSelectedIndex.get('value');

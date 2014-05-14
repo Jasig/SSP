@@ -138,7 +138,13 @@ Ext.define('Ssp.controller.AdminViewController', {
 			// the component to use the store
 			if (store != null)
 			{
+				// TODO THIS REMOVE SORTS, BEHAVIOR TO SUPPORT inappropriate sort by 'active' client property
 				// pass the columns for editing
+				if(store.sorters){
+					store.sorters.clear();
+				}
+				//TODO  currentPage for store is reset to 1 since sorting is client side.
+				store.currentPage=1;
 				if (columns != null)
 				{
 					// comp.reconfigure(store, columns); // ,columns
@@ -149,7 +155,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 			}
 
-			if ( options.interfaceOptions.storeDependencies ) {
+			if ( options.interfaceOptions && options.interfaceOptions.storeDependencies ) {
 
 				var responseDispatcherConfig = {
 					remainingOpNames: [],
