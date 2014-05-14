@@ -30,6 +30,8 @@ Ext.define('Ssp.view.admin.forms.journal.EditStep',{
                     xtype: 'textfield',
                     fieldLabel: 'Step Name',
                     anchor: '100%',
+                    allowBlank: false,
+                    required: true,
                     name: 'name'
                 },
                 {
@@ -56,6 +58,7 @@ Ext.define('Ssp.view.admin.forms.journal.EditStep',{
 		       		                   text: 'Save',
 		       		                   xtype: 'button',
 		       		                   action: 'save',
+		       		                   formBind: true,
 		       		                   itemId: 'saveButton'
 		       		               }, '-', {
 		       		                   text: 'Cancel',

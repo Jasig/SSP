@@ -47,53 +47,59 @@ Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
     
 	onSaveClick: function(button) {
 		var me = this;
-		var record, id, jsonData, url;
-		me.getView().setLoading(true);
-		url = this.store.getProxy().url;
-		this.getView().getForm().updateRecord();
-		record = this.model;
-		id = record.get('id');
-		jsonData = record.data;
-		successFunc = function(response, view) {
-			var responseTextObject = response['responseText'];
-					var rto = Ext.JSON.decode(responseTextObject);
-					var rowid = rto['id'];
-					me.store.load({
-						params: {
-							limit: 500
-						},
-						callback: function(records) {
-							var rowidx = -1;
-							Ext.Array.each(records, function(item,index) {
-								if (item.get('id') === rowid) {
-									rowidx = index;
-									return false;
-								}
-							});
-							me.adminSelectedIndex.set('value',rowidx);
-							me.displayMain();
-						}
-					});
-				};
-		
-		if (id.length > 0)
+		if(me.getView().getForm().isValid())
 		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+"/"+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});
+			var record, id, jsonData, url;
+			me.getView().setLoading(true);
+			url = this.store.getProxy().url;
+			this.getView().getForm().updateRecord();
+			record = this.model;
+			id = record.get('id');
+			jsonData = record.data;
+			successFunc = function(response, view) {
+				var responseTextObject = response['responseText'];
+						var rto = Ext.JSON.decode(responseTextObject);
+						var rowid = rto['id'];
+						me.store.load({
+							params: {
+								limit: 500
+							},
+							callback: function(records) {
+								var rowidx = -1;
+								Ext.Array.each(records, function(item,index) {
+									if (item.get('id') === rowid) {
+										rowidx = index;
+										return false;
+									}
+								});
+								me.adminSelectedIndex.set('value',rowidx);
+								me.displayMain();
+							}
+						});
+					};
 			
-		}else{
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});		
+			if (id.length > 0)
+			{
+				// editing
+				this.apiProperties.makeRequest({
+					url: url+"/"+id,
+					method: 'PUT',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});
+				
+			}else{
+				// adding
+				this.apiProperties.makeRequest({
+					url: url,
+					method: 'POST',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});		
+			}
+		}
+		else {
+			Ext.Msg.alert('SSP Error', 'There are errors highlighted in red'); 
 		}
 	},
 	

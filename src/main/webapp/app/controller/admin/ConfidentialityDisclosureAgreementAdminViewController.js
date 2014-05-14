@@ -55,19 +55,24 @@ Ext.define('Ssp.controller.admin.ConfidentialityDisclosureAgreementAdminViewCont
 	save: function(button){
 		var record, id, jsonData;
 		var me=this;
-		var view = me.getView();
-		view.getForm().updateRecord();
-		record = view.getRecord();
-		id = record.get('id');
-		jsonData = record.data;
-		
-		view.setLoading(true);
-
-		me.service.save( jsonData, {
-			success: me.saveSuccess,
-			failure: me.saveFailure,
-			scope: me
-		});
+		if(me.getView().getForm().isValid())
+		{
+			var view = me.getView();
+			view.getForm().updateRecord();
+			record = view.getRecord();
+			id = record.get('id');
+			jsonData = record.data;
+			
+			view.setLoading(true);
+	
+			me.service.save( jsonData, {
+				success: me.saveSuccess,
+				failure: me.saveFailure,
+				scope: me
+			});
+		} else {
+			Ext.Msg.alert('SSP Error', 'There are errors highlighted in red'); 
+		}
 	},
 	
 	saveSuccess: function( r, scope ){

@@ -47,35 +47,40 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeCategoryViewController', {
     
 	onSaveClick: function(button) {
 		var me = this;
-		var record, id, jsonData, url, successFunc;
-		url = this.store.getProxy().url;
-		this.getView().getForm().updateRecord();
-		record = this.model;
-		id = record.get('id');
-		jsonData = record.data;
-		successFunc = function(response, view) {
-			me.displayMain();
-		};
-		
-		if (id.length > 0)
+		if(me.getView().getForm().isValid())
 		{
-			// editing
-			this.apiProperties.makeRequest({
-				url: url+"/"+id,
-				method: 'PUT',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});
+			var record, id, jsonData, url, successFunc;
+			url = this.store.getProxy().url;
+			this.getView().getForm().updateRecord();
+			record = this.model;
+			id = record.get('id');
+			jsonData = record.data;
+			successFunc = function(response, view) {
+				me.displayMain();
+			};
 			
-		}else{
-			
-			// adding
-			this.apiProperties.makeRequest({
-				url: url,
-				method: 'POST',
-				jsonData: jsonData,
-				successFunc: successFunc 
-			});		
+			if (id.length > 0)
+			{
+				// editing
+				this.apiProperties.makeRequest({
+					url: url+"/"+id,
+					method: 'PUT',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});
+				
+			}else{
+				
+				// adding
+				this.apiProperties.makeRequest({
+					url: url,
+					method: 'POST',
+					jsonData: jsonData,
+					successFunc: successFunc 
+				});		
+			} 
+		}else {
+			Ext.Msg.alert('SSP Error', 'There are errors highlighted in red'); 
 		}
 	},
 	

@@ -49,6 +49,7 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 					        xtype: 'textfield',
 					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 					        name: 'name',
+					        allowBlank: false,
 					        anchor: '95%'
 					    },{
 					        fieldLabel: 'Description',
@@ -60,6 +61,7 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 		    		          xtype: 'htmleditor',
 		    		          fieldLabel: 'Disclosure Agreement',
 		    		          enableColors: false,
+		    		          allowBlank: false,
 		    		          disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 		    		          enableAlignments: false,
 		    		          anchor: '95% 80%',
@@ -74,6 +76,7 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
      		                   xtype: 'button',
      		                   hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
      		                   action: 'save',
+     		                   formBind: true,
      		                   itemId: 'saveButton'
      		               },{
 		        	    	xtype: 'label',

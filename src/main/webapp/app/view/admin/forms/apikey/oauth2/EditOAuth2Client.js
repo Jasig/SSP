@@ -234,6 +234,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     text: 'Save',
                     xtype: 'button',
                     action: 'save',
+                    formBind: true,
                     hidden: !me.authenticatedPerson.hasAccess('API_KEY_SAVE_BUTTON'),
                     itemId: 'saveButton'
                 }, '-', {

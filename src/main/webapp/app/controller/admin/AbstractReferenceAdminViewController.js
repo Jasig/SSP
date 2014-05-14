@@ -87,52 +87,58 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		var record = e.record;
 		var id = record.get('id');
 		var jsonData = record.data;
-		var store = editor.grid.getStore();
-		var persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
-		
-		Ext.each(editor.editor.items.items, function(item) {
-			if(item.store != undefined && item.store != null) {
-				item.store.clearFilter(true);
-			}	
+		var me = this;
+		if(typeof(me.getView().getForm) !== 'function' || me.getView().getForm().isValid())
+		{
+			var store = editor.grid.getStore();
+			var persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
 			
-		});
-
-		Ext.Ajax.request({
-			url: editor.grid.getStore().getProxy().url+"/"+id,
-			method: persistMethod,
-			headers: { 'Content-Type': 'application/json' },
-			jsonData: jsonData,
-			success: function(response, view) {
-				if(persistMethod == "PUT") {
-					var r = Ext.decode(response.responseText);
-					record.persisted = true;
-					
-					if (record.dirty) {
-						record.commit();
-						editor.grid.getSelectionModel().select(record);
-						var h = editor.grid.getView().getSelectedNodes()[0];
-						Ext.get(h).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
-							Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
+			Ext.each(editor.editor.items.items, function(item) {
+				if(item.store != undefined && item.store != null) {
+					item.store.clearFilter(true);
+				}	
+				
+			});
+	
+			Ext.Ajax.request({
+				url: editor.grid.getStore().getProxy().url+"/"+id,
+				method: persistMethod,
+				headers: { 'Content-Type': 'application/json' },
+				jsonData: jsonData,
+				success: function(response, view) {
+					if(persistMethod == "PUT") {
+						var r = Ext.decode(response.responseText);
+						record.persisted = true;
 						
+						if (record.dirty) {
+							record.commit();
+							editor.grid.getSelectionModel().select(record);
+							var h = editor.grid.getView().getSelectedNodes()[0];
+							Ext.get(h).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
+								Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
+							
+						}
+					} else {
+						var r = Ext.decode(response.responseText);
+						record.populateFromGenericObject(r);
+						store.totalCount = store.totalCount+1;
+						
+						if (record.dirty) {
+							record.commit();
+							editor.grid.getSelectionModel().select(0);
+							
+							var h1 = editor.grid.getView().getSelectedNodes()[0];
+							Ext.get(h1).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
+								Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
+							
+						}
 					}
-				} else {
-					var r = Ext.decode(response.responseText);
-					record.populateFromGenericObject(r);
-					store.totalCount = store.totalCount+1;
-					
-					if (record.dirty) {
-						record.commit();
-						editor.grid.getSelectionModel().select(0);
-						
-						var h1 = editor.grid.getView().getSelectedNodes()[0];
-						Ext.get(h1).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
-							Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
-						
-					}
-				}
-			},
-			failure: this.apiProperties.handleError
-		}, this);
+				},
+				failure: this.apiProperties.handleError
+			}, this);
+		}else{
+			Ext.Msg.alert('SSP Error', 'There are errors highlighted in red'); 
+		}
 	},
 	
 	addRecord: function(button){
@@ -156,7 +162,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
    				item.set('sortOrder',store.getTotalCount()+1);
 			} else {
 				if (col.required==true) {       			
-	       			item.set(col.dataIndex,'default');
+	       			item.set(col.dataIndex,'');
 	       		}
    			}
        	});

@@ -84,7 +84,8 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		       		                   text: 'Save',
 		       		                   xtype: 'button',
 		       		                   action: 'save',
-		       		                   itemId: 'saveButton'
+		       		                   itemId: 'saveButton',
+		       		                   formBind: true
 		       		               }, '-', {
 		       		                   text: 'Cancel',
 		       		                   xtype: 'button',

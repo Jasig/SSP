@@ -34,7 +34,10 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
                     xtype: 'textfield',
                     fieldLabel: 'Name',
                     anchor: '100%',
-                    name: 'name'
+                    name: 'name',
+					maxLength: 80,
+                    allowBlank: false,
+                    required: true
                 },{
                     xtype: 'textareafield',
                     fieldLabel: 'Description',
@@ -66,7 +69,8 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			       		                   text: 'Save',
 			       		                   xtype: 'button',
 			       		                   action: 'save',
-			       		                   itemId: 'saveButton'
+			       		                   itemId: 'saveButton',
+										   formBind: true
 			       		               }, '-', {
 			       		                   text: 'Cancel',
 			       		                   xtype: 'button',

@@ -113,14 +113,19 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 	},
 	onSaveClick: function(button) {
 		var me = this; 
-		me.getView().getForm().updateRecord();
-		
-		me.getView().setLoading( true );
-		me.campusService.saveCampus( me.model.data, {
-			success: me.saveSuccess,
-			failure: me.saveFailure,
-			scope: me
-		} );
+		if(me.getView().getForm().isValid())
+		{
+			me.getView().getForm().updateRecord();
+			
+			me.getView().setLoading( true );
+			me.campusService.saveCampus( me.model.data, {
+				success: me.saveSuccess,
+				failure: me.saveFailure,
+				scope: me
+			} );
+		}else {
+			Ext.Msg.alert('SSP Error', 'There are errors highlighted in red'); 
+		}
 	},
 	
 	onCancelClick: function(button){

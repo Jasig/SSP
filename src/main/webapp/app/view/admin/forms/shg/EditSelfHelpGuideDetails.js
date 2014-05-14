@@ -38,7 +38,8 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                     xtype: 'textfield',
                     fieldLabel: 'Self Help Guide Name',
                     anchor: '100%',
-                    name: 'name'
+                    name: 'name',
+                    allowBlank:false
                 },
                 {
                     xtype: 'textareafield',
@@ -55,12 +56,14 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                     xtype: 'textareafield',
                     fieldLabel: 'Introduction',
                     anchor: '100%',
+                    allowBlank:false,
                     name: 'introductoryText'
                 },
                 {
                     xtype: 'textareafield',
                     fieldLabel: 'Summary',
                     anchor: '100%',
+                    allowBlank:false,
                     name: 'summaryText'
                 },
                 {
@@ -73,6 +76,7 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                     xtype: 'textareafield',
                     fieldLabel: 'Early Alert Summary',
                     anchor: '100%',
+                    allowBlank:false,
                     name: 'summaryTextEarlyAlert'
                 },
                 {
@@ -95,7 +99,8 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
  		                   xtype: 'button',
  		                   action: 'save',
  		                   hidden: !me.authenticatedPerson.hasAccess('SELF_HELP_GUIDE_SAVE_BUTTON'),
- 		                   itemId: 'saveButton'
+ 		                   itemId: 'saveButton',
+ 		                   formBind: true
  		               }, '-', {
  		                   text: 'Cancel',
  		                   xtype: 'button',
