@@ -37,7 +37,9 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 	        var me = this;
 	        Ext.apply(me, {
 	            			store: this.store,
-							
+	            			viewConfig: {
+	            				loadMask: false
+	            			},
 	                        columns: [{
 	                            text: 'code',
 	                            dataIndex: 'code',

@@ -48,9 +48,10 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     },
 	init: function() {
 		var me=this;
-		
+		me.getView().setLoading(false);
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		me.store.load();
+		me.store.appEventsController = me.appEventsController;
 		me.electiveStore.load();
 		me.store.addListener('load', this.sortAfterLoad, me.store,{single:true});
 	   	me.appEventsController.getApplication().addListener("onRequisiteLoad", me.showCourseDetails, me);
@@ -60,6 +61,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 	sortAfterLoad: function(){
 		var me = this;
 		me.sort('formattedCourse','ASC');
+		me.appEventsController.getApplication().fireEvent("onAfterCourseLoad");
 	},
     
     control:{

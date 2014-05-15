@@ -87,13 +87,23 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
+		view.setLoading(true);
+        me.appEventsController.getApplication().addListener("onBeforeCourseLoad", me.onBeforeCourseLoad, me);
+        me.appEventsController.getApplication().addListener("onAfterCourseLoad", me.onAfterCourseLoad, me);
+        
 		me.programs.load();
 		me.terms.load();
 		me.tags.load();		
 		return this.callParent(arguments);
     },
-    
-    
+    onBeforeCourseLoad: function(){
+        var me=this;
+        me.getView().setLoading(true);
+    },    
+    onAfterCourseLoad: function(){
+        var me=this;
+        me.getView().setLoading(false);
+    },    
     onProgramSelect: function(){
         var me=this;
         me.handleSelect(me);
@@ -182,6 +192,8 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 
 	destroy:function(){
 	    var me=this;
+        me.appEventsController.getApplication().removeListener("onBeforeCourseLoad", me.onBeforeCourseLoad, me);
+        me.appEventsController.getApplication().removeListener("onAfterCourseLoad", me.onAfterCourseLoad, me);
 	    return me.callParent( arguments );
 	}
 	

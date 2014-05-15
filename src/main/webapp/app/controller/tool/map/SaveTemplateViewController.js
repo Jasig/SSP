@@ -26,6 +26,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
+    	mapEventUtils: 'mapEventUtils',
         divisionsStore: 'divisionsStore',
         catalogYearsStore: 'catalogYearsStore',
 		contactPersonStore: 'contactPersonStore'
@@ -164,15 +165,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 				me.currentMapPlan.set('id', '');
 				me.currentMapPlan.setIsTemplate(true);
 			}
-	    	me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
-	    	if(me.getView().saveAs)
-	    	{
-	    		me.appEventsController.getApplication().fireEvent('onSaveAsTemplatePlan');
-	    	}
-	    	else
-	    	{
-	    		me.appEventsController.getApplication().fireEvent('onSaveTemplatePlan');
-	    	}
+	    	me.mapEventUtils.saveTemplate(me.getView().saveAs);
     	}else if(btnId == 'no'){
     		return;
     	}

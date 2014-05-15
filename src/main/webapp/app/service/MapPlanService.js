@@ -123,7 +123,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		});    	
     },
     
-    getPlan: function( planId, personId, callbacks ){
+    getPlan: function( planId, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl(personId);
 	    var success = function( response, view ){
@@ -133,13 +133,12 @@ Ext.define('Ssp.service.MapPlanService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
-	    
 		me.apiProperties.makeRequest({
 			url: url+'/'+planId, 
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
-			scope: me
+			scope: callbacks.scope
 		});    	
     },
     
@@ -153,7 +152,6 @@ Ext.define('Ssp.service.MapPlanService', {
 	    	me.apiProperties.handleError( response );	    	
 	    	callbacks.failure( response, callbacks.scope );
 	    };
-	    
 		me.apiProperties.makeRequest({
 			url: url+'/'+planId, 
 			method: 'GET',
@@ -203,7 +201,7 @@ Ext.define('Ssp.service.MapPlanService', {
 	},
 
     
-    save: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
+    save: function(semesterStores, callbacks, currentMapPlan, saveAs ){
 		var me=this;
 		var url = me.getBaseUrl(me.personLite.get('id'));
 	    var success = function( response ){
@@ -242,7 +240,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		}	
     },
     
-    saveTemplate: function(semesterStores, callbacks, currentMapPlan, view, saveAs ){
+    saveTemplate: function(semesterStores, callbacks, currentMapPlan, saveAs ){
 		var me=this;
 		var url = me.getTemplateBaseUrl();
 	    var success = function( response ){

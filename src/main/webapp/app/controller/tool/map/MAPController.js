@@ -47,17 +47,10 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
-        
-		if(personId != ""){
-	    	me.getView().setLoading( true );
-	    	if(me.termsStore.getCount() <= 0){
-				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
-				me.termsStore.load();
-			}else{
-				me.termStoreLoaded();
-			}
-			
-	    }
+		if(personId != "")
+		{
+			me.loadTranscript();
+		}
 		return this.callParent(arguments);
     },
 	
@@ -75,7 +68,7 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 		}
 	},
 	// added here to support semester panels.
-	termStoreLoaded: function(){
+	loadTranscript: function(){
 		var me = this;
 		var personId = me.personLite.get('id');
 		if(personId != ""){

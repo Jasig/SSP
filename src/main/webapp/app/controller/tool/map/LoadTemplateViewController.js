@@ -29,6 +29,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     	mapPlanService:'mapPlanService',
 		programsStore: 'programsFacetedStore',
         departmentsStore: 'departmentsStore',
+    	mapEventUtils: 'mapEventUtils',
         divisionsStore: 'divisionsStore'
     },
     
@@ -154,39 +155,13 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		record = me.getView().query('gridpanel')[0].getView().getSelectionModel().getSelection()[0];
         if (record) 
         {	
-        	 me.mapPlanService.getTemplate(record.get('id'), callbacks);
+        	 me.mapEventUtils.loadTemplate(record.get('id'));
+     	     me.getView().hide();
         }else{
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
      	   me.getView().setLoading(false);
         }    	
     },
-	
-	onLoadCompleteSuccess: function(serviceResponses){
-        var me = this;
-		if(!serviceResponses || !serviceResponses.responseText || serviceResponses.responseText.trim().length == 0) {
-
-       	} else {
-       		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
-       		me.scope.currentMapPlan.set('isTemplate',true);
-			me.scope.appEventsController.getApplication().fireEvent('onLoadTemplatePlan');
-			me.scope.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
-	    	me.scope.getView().setLoading(false);
-			me.scope.getView().hide();
-		}
-	},
-
-	initNewPlan: function( btnId ){
-		var me=this;
-		if (btnId=="yes")
-		{
-			me.appEventsController.getApplication().fireEvent('onCreateNewTemplatePlan');
-		}
-		else
-		{
-			me.appEventsController.getApplication().fireEvent('onShowMain');
-		}
-		me.getView().hide();
-	},
 	onLoadCompleteFailure: function(serviceResponses){
 		var me = this;
 		view.setLoading(false);

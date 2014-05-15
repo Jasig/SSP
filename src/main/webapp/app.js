@@ -315,6 +315,7 @@ Ext.require([
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
+	'Ssp.util.tools.map.MapEventUtils',
     'Ssp.util.ResponseDispatcher',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
@@ -697,6 +698,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 				    },
+				    mapEventUtils:{
+				        fn: function(){
+				            return new Ssp.util.tools.map.MapEventUtils({});
+				    	},
+				        singleton: true
+				    },				    
 				    treeRendererUtils:{
 				        fn: function(){
 				            return new Ssp.util.TreeRendererUtils({});

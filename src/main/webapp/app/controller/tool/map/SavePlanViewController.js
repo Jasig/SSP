@@ -25,6 +25,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	currentMapPlan: 'currentMapPlan',
         programsStore: 'programsFacetedStore',
 		authenticatedPerson: 'authenticatedPerson',
+    	mapEventUtils: 'mapEventUtils',
 		contactPersonStore: 'contactPersonStore'
     },
     
@@ -120,14 +121,9 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			me.setField('checkbox[name=isFinancialAid]', 'isFinancialAid');
 			me.setField('checkbox[name=isImportant]', 'isImportant');
 			me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
-			me.appEventsController.getApplication().fireEvent("onUpdateCurrentMapPlanPlanToolView");
+			me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 			me.currentMapPlan.setIsTemplate(false);
-			if (me.getView().saveAs) {
-				me.appEventsController.getApplication().fireEvent('onSaveAsMapPlan');
-			}
-			else {
-				me.appEventsController.getApplication().fireEvent('onSaveMapPlan');
-			}
+			me.mapEventUtils.save(me.getView().saveAs);
 			me.onCancelClick();
 		}
 		else{

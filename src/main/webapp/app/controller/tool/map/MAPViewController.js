@@ -25,6 +25,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		columnRendererUtils : 'columnRendererUtils',
     	currentMapPlan: 'currentMapPlan',
 		formUtils: 'formRendererUtils',
+		mapEventUtils: 'mapEventUtils',		
+    	planStore: 'planStore',
+        personLite: 'personLite',
 		semesterStores: 'currentSemesterStores'
     },
     control: {
@@ -152,33 +155,29 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var view = me.getView();
 		me.onUpdateSaveOption();
 
+		
+		me.appEventsController.assignEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onInitEvent, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onAfterPlanSave', callBackFunc: me.onAfterEvent, scope: me});
+		
 		// Special handling for this one b/c ApplicationEventsController only
 		// allows one handler per event. We happen to know it's OK to have
 		// multiple handlers in this particular case.
 		me.appEventsController.getApplication().addListener('toolsNav', me.onToolsNav, me);
 
 		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
-
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
-
 		me.appEventsController.assignEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
-
 		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
-
 		me.appEventsController.assignEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
-
 		me.appEventsController.assignEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
-
 		me.appEventsController.assignEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
-		
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
-		
 		me.appEventsController.assignEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
 		me.appEventsController.assignEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
-		
 		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 	
 		return this.callParent(arguments);
     },    
@@ -252,6 +251,14 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},
+	onInitEvent: function(){
+		var me = this;
+		me.getView().setLoading(true);
+	},
+	onAfterEvent: function(){
+		var me = this;
+		me.getView().setLoading(false);
+	},	
 	onPersonButtonAdd: function(searchViewController){
 		var me = this;
 
@@ -553,7 +560,45 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     
     loadPlanDialog: function(button){
         var me=this; 
-		me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true});
+        
+        me.planStore.removeAll();
+		personId = me.personLite.get('id');
+	    
+		var successFunc = function(response,view){
+			
+	    	var r, records;
+	    	var data=[];
+	    	r = Ext.decode(response.responseText);
+	    	
+	    	// hide the loader
+	    	me.getView().setLoading( false );
+	    	if (r != null)
+	    	{
+	    		Ext.Object.each(r,function(key,value){
+		    		var plans = value;
+		    		Ext.Array.each(plans,function(plan,index){
+		    			if(plan.name){
+							data.push(plan);
+						}
+		    		},this);
+		    	},this);		    		
+
+	    		me.planStore.loadData(data);
+	    		me.planStore.sort();
+	    	}
+		};
+		
+		me.personMapPlanUrl = me.apiProperties.getItemUrl('personMapPlan');
+		me.personMapPlanUrl = me.personMapPlanUrl.replace('{id}',personId);
+
+
+		me.apiProperties.makeRequest({
+			url: me.apiProperties.createUrl(me.personMapPlanUrl+'/summary'),
+			method: 'GET',
+			successFunc: successFunc 
+		});
+		
+    	me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,store:me.planStore});
 		me.allPlansPopUp.show();
     },
     
@@ -681,7 +726,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			else
 				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedNewMap, me);
 		}else{
-			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+			me.mapEventUtils.createNewMapPlan();
 		}
     },
     
@@ -690,7 +735,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(buttonId == "on" || buttonId == "yes"){
 			me.onSavePlanRequest({loaderDialogEventName:'onCreateNewMapPlan'});
 		}else{
-			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+			me.mapEventUtils.createNewMapPlan();
 		}
 	},
 	
@@ -699,7 +744,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(buttonId == "on" || buttonId == "yes"){
 			me.onSaveTemplateRequest({loaderDialogEventName:'onCreateNewMapPlan'});
 		}else{
-			me.appEventsController.getApplication().fireEvent('onCreateNewMapPlan');
+			me.mapEventUtils.createNewMapPlan();
 		}
 	},
 
@@ -734,29 +779,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanNotesButton().setTooltip("Plan Notes");
 			me.getMovePlanButton().setTooltip("Move Plan");
 		}
+		me.getView().setLoading(false);
 	},
 	
 	destroy:function(){
 	    var me=this;
 
+		me.appEventsController.removeEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onInitEvent, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
 	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
-		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
-		me.appEventsController.removeEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});
+		me.appEventsController.removeEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
 		me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
-		me.appEventsController.removeEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});
-
+		me.appEventsController.removeEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
-		
-		me.appEventsController.removeEvent({eventName: 'laodTemplateDialog', callBackFunc: me.laodTemplateDialog, scope: me});
+		me.appEventsController.removeEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
 		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
-		
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
-		
 		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
 			me.faPopUp.close();

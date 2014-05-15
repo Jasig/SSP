@@ -42,10 +42,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	 *   scope - the scope to run the function under
 	 */
 	assignEvent: function( args ){
-		if ( !this.getApplication().hasListener(args.eventName) )
-		{
 			this.getApplication().addListener(args.eventName, args.callBackFunc, args.scope);
-		}
 	},
 
 	/**

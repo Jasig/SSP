@@ -62,7 +62,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	},	
 	init: function() {
 		var me=this;
-		me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
+		me.appEventsController.getApplication().addListener("onAfterPlanLoad", me.updatePastTermButton, me);
 		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.getView().view.addListener('drop', me.onDrop, me);	
@@ -353,7 +353,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	destroy: function(){
 		var me=this;
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
-		me.appEventsController.getApplication().removeListener("onUpdateCurrentMapPlanPlanToolView", me.updatePastTermButton, me);
+		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.updatePastTermButton, me);
 		if(me.allTemplatesPopUp != null && !me.allTemplatesPopUp.isDestroyed)
 		    me.allTemplatesPopUp.close();
 		 return me.callParent( arguments );

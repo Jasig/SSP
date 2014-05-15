@@ -41,7 +41,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         // want to accidentally lock the panel forever should we never get
         // the event we expect
         me.resetForm();
-        me.appEventsController.getApplication().addListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+        me.appEventsController.getApplication().addListener("onAfterPlanLoad", me.onUpdateCurrentMapPlan, me);
         me.appEventsController.getApplication().addListener("onUpdatePlanStatus", me.updatePlanStatus, me);
 
         return me.callParent(arguments);
@@ -79,12 +79,10 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
     afterUpdatePlanStatus: function() {
         var me = this;
         me.onCurrentMapPlanChange();
-        me.getView().setLoading(false);
     },
     
 	onUpdateCurrentMapPlan: function(){
 		var me = this;
-		me.getView().setLoading(true);
 		me.getView().loadRecord(me.currentMapPlan);
         if ( me.guardPlanStatusLookup() ) {
             me.updatePlanStatus();
@@ -92,7 +90,6 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         else
         {
             me.onCurrentMapPlanChange();
-    		me.getView().setLoading(false);
         }
 	},
 
@@ -101,16 +98,15 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
         // Can't tell the difference between two different "new" plans without
         // listening for "onCreateNewMapPlan". But can't hook into that b/c
         // SemesterPanelContainerViewController translates that event into
-        // "onUpdateCurrentMapPlanPlanToolView", which this component listens
+        // "onAfterPlanLoad", which this component listens
         // for. So we might not receive "onCreateNewMapPlan" until after
-        // "onUpdateCurrentMapPlanPlanToolView". So this guard ends up being
+        // "onAfterPlanLoad". So this guard ends up being
         // a bit imprecise. But we assume it's probably not necessary to reload
         // the plan status if all you're doing is replacing an unsaved plan with
         // another unsaved plan.
         return me.currentMapPlanId === undefined || // first time load
             me.currentMapPlanId !== me.currentMapPlan.getId(); // obviously changing plans
     },
-
 	
 	onPlanStatusSuccess:function(response){
 		var me = this;
@@ -144,7 +140,6 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	
 	onCurrentMapPlanChange: function(){
 		var me = this;
-		me.appEventsController.getApplication().fireEvent("onCurrentMapPlanChangeUpdateMapView");
 		 if(me.currentMapPlan.get('isTemplate') == true)
 		{
 			me.getOnPlanField().hide();
@@ -158,7 +153,7 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 	
 	destroy: function(){
 		var me = this;
-		me.appEventsController.getApplication().removeListener("onUpdateCurrentMapPlanPlanToolView", me.onUpdateCurrentMapPlan, me);
+		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.onUpdateCurrentMapPlan, me);
         me.appEventsController.getApplication().removeListener("onUpdatePlanStatus", me.updatePlanStatus, me);
 
 	}
