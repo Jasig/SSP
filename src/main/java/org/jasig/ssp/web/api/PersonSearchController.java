@@ -184,19 +184,19 @@ public class PersonSearchController extends AbstractBaseController {
 	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
-		String sortConfigured = sort == null ? "lastName":sort;
-		if(sortConfigured.equals("coach")){
-			sortConfigured = "coachLastName";
+		String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
+		if(sortConfigured.equals("dp.coach")){
+			sortConfigured = "dp.coachLastName";
 		}else if(sortConfigured.equals("currentProgramStatusName")){
-			sortConfigured = "programStatusName";
+			sortConfigured = "dp.programStatusName";
 		}else if(sortConfigured.equals("numberOfEarlyAlerts")){
-			sortConfigured = "activeAlertsCount";
+			sortConfigured = "dp.activeAlertsCount";
 		}
 		SortingAndPaging sortAndPage = SortingAndPaging
 		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
 				sortDirection, null);
-		if(sortConfigured.equals("coach")){
-			sortAndPage.prependSortField("coachFirstName", SortDirection.getSortDirection(sortDirection));
+		if(sortConfigured.equals("dp.coachLastName")){
+			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
 		}
 		final PagingWrapper<PersonSearchResult2> models = service.searchPersonDirectory(personSearchRequestFactory.from(schoolId,
 				firstName, lastName, 

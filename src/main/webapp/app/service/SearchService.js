@@ -38,6 +38,7 @@ Ext.define('Ssp.service.SearchService', {
 
 		me.store.removeAll();
 		me.store.currentPage = 1;
+		me.store.pageSize = 100;
 
 		// Set params in the url for Search Store
 		// because the params need to be applied prior to load and not in a params
