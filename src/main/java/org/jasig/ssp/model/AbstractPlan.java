@@ -87,12 +87,12 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	@Size(max = 2000)
 	private String academicGoals;
 	
-	@Column(length = 500)
-	@Size(max = 500)
+	@Column(length = 2000)
+	@Size(max = 2000)
 	private String academicLink;
 	
-	@Column(length = 500)
-	@Size(max = 500)
+	@Column(length = 2000)
+	@Size(max = 2000)
 	private String careerLink;
 
 	@Column(length = 50)
