@@ -363,112 +363,6 @@ public class DirectoryPersonSearchDao  {
 		return personSearchRequest.getSpecialServiceGroup() != null;
 	}
 
-
-	private void addBindParams(PersonSearchRequest personSearchRequest,
-			Query query, Term currentTerm) 
-	{
-		if(hasSchoolId(personSearchRequest)) {
-			query.setString("schoolId",personSearchRequest.getSchoolId().trim().toUpperCase());
-		}
-		
-		if(hasFirstName(personSearchRequest)) {
-			query.setString("firstName",personSearchRequest.getFirstName().trim().toUpperCase() + "%");
-		}
-		
-		if(hasLastName(personSearchRequest)) {
-			query.setString("lastName",personSearchRequest.getLastName().trim().toUpperCase() + "%");
-		}
-
-		if(hasPlanStatus(personSearchRequest))
-		{
-			query.setInteger("planObjectStatus", 
-					PersonSearchRequest.PLAN_STATUS_ACTIVE.equals(personSearchRequest.getPlanStatus()) 
-					? ObjectStatus.ACTIVE.ordinal() : ObjectStatus.INACTIVE.ordinal());
-		}
-		if(hasMapStatus(personSearchRequest))
-		{ 
-			PlanStatus param = null;
-			if(PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()))
-			{
-				param = PlanStatus.ON;
-			}
-			if(PersonSearchRequest.MAP_STATUS_OFF_PLAN.equals(personSearchRequest.getMapStatus()))
-			{
-				param = PlanStatus.OFF;
-			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getMapStatus()))
-			{
-				param = PlanStatus.ON_TRACK_SEQUENCE;
-			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTIO.equals(personSearchRequest.getMapStatus()))
-			{
-				param = PlanStatus.ON_TRACK_SUBSTITUTIO;
-			}			
-			query.setString("mapStatus",param.name());
-		}
-		
-		if(hasGpaCriteria(personSearchRequest))
-		{
-			if(personSearchRequest.getGpaEarnedMin() != null)
-			{
-				query.setBigDecimal("gpaEarnedMin", personSearchRequest.getGpaEarnedMin());
-			}
-			if(personSearchRequest.getGpaEarnedMax() != null)
-			{
-				query.setBigDecimal("gpaEarnedMax", personSearchRequest.getGpaEarnedMax());
-			}			
-		}
-		
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
-		{
-			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
-			query.setParameter("coachId", coach.getId());
-		}
-		
-		if(hasDeclaredMajor(personSearchRequest))
-		{
-			query.setString("declaredMajor", personSearchRequest.getDeclaredMajor());
-		}
-		
-		if(hasHoursEarnedCriteria(personSearchRequest))
-		{
-			if(personSearchRequest.getHoursEarnedMin() != null)
-			{
-				query.setBigDecimal("hoursEarnedMin", personSearchRequest.getHoursEarnedMin());
-			}
-			if(personSearchRequest.getHoursEarnedMax() != null )
-			{
-				query.setBigDecimal("hoursEarnedMax", personSearchRequest.getHoursEarnedMax());
-			}	
-		}
-		
-		if(hasProgramStatus(personSearchRequest))
-		{
-			query.setString("programStatusName", personSearchRequest.getProgramStatus().getName());
-		}
-		
-		if(hasSpecialServiceGroup(personSearchRequest))
-		{
-			query.setEntity("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
-		}
-		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
-			query.setString("sapStatusCode", personSearchRequest.getSapStatusCode());
-		}
-		
-		if(hasMyPlans(personSearchRequest))
-		{
-			query.setEntity("owner", securityService.currentlyAuthenticatedUser().getPerson());
-		}
-		
-		if(hasBirthDate(personSearchRequest))
-		{
-			query.setDate("birthDate", personSearchRequest.getBirthDate());
-		}		
-		
-		//query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
-	}
 	
 	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, Term currentTerm) 
 	{
@@ -510,7 +404,7 @@ public class DirectoryPersonSearchDao  {
 			{
 				param = PlanStatus.ON_TRACK_SUBSTITUTIO;
 			}			
-			params.put("mapStatus",param.name());
+			params.put("mapStatus",param);
 		}
 		
 		if(hasGpaCriteria(personSearchRequest))
