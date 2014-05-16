@@ -383,7 +383,7 @@ public class DirectoryPersonSearchDao  {
 		{
 			params.put("planObjectStatus", 
 					PersonSearchRequest.PLAN_STATUS_ACTIVE.equals(personSearchRequest.getPlanStatus()) 
-					? ObjectStatus.ACTIVE.ordinal() : ObjectStatus.INACTIVE.ordinal());
+					? ObjectStatus.ACTIVE : ObjectStatus.INACTIVE);
 		}
 		if(hasMapStatus(personSearchRequest))
 		{ 
