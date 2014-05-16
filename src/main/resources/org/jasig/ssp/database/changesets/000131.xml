@@ -36,4 +36,9 @@
 		<modifyDataType tableName="person_education_level" columnName="graduated_year" newDataType="${nvarchar.type}(20)"/>   	
     </changeSet>
 
+    <changeSet id="harmonize some fields between plan - template" author="tony.arland">
+		<modifyDataType tableName="map_plan" columnName="career_link" newDataType="${nvarchar.type}(2000)"/>
+		<modifyDataType tableName="map_plan" columnName="academic_link" newDataType="${nvarchar.type}(2000)"/>   	
+		<modifyDataType tableName="map_plan" columnName="program_code" newDataType="${nvarchar.type}(50)"/>   	
+    </changeSet>
 </databaseChangeLog>
