@@ -187,9 +187,9 @@ public class IntakeControllerIntegrationTest {
 		personEducationLevel.setEducationLevel(new EducationLevel(
 				EDUCATION_LEVEL_ID));
 		personEducationLevel.setPerson(person);
-		personEducationLevel.setGraduatedYear(2008);
-		personEducationLevel.setHighestGradeCompleted(4);
-		personEducationLevel.setLastYearAttended(2011);
+		personEducationLevel.setGraduatedYear("2008");
+		personEducationLevel.setHighestGradeCompleted("4");
+		personEducationLevel.setLastYearAttended("2011");
 		personEducationLevel.setDescription("description");
 		personEducationLevel.setSchoolName("School name");
 		personEducationLevels.add(new PersonEducationLevelTO(
