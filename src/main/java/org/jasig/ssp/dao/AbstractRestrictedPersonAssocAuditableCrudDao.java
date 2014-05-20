@@ -32,6 +32,7 @@ import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -114,11 +115,12 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 					"Requester can not be null.");
 		}
 
-		final Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.in("id", ids));
-
-		addConfidentialityLevelsRestriction(requester, criteria);
-
-		return criteria.list();
+		BatchProcessor<UUID, T> processor =  new BatchProcessor<UUID,T>(ids, sAndP);
+ 		do{
+ 			final Criteria criteria = createCriteria();
+ 			addConfidentialityLevelsRestriction(requester, criteria);
+ 			processor.process(criteria, "id");
+ 		}while(processor.moreToProcess());
+		return processor.getResults();
 	}
 }

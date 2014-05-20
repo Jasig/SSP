@@ -48,6 +48,7 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -128,7 +129,7 @@ public class EarlyAlertResponseDao extends
 
 		final Criteria query = createCriteria();
 		final EarlyAlertResponseCounts counts = new EarlyAlertResponseCounts();
-		
+
 		query.createAlias("earlyAlert", "earlyAlert");
 		query.add(Restrictions.in("earlyAlert.id", earlyAlertIds));
 		query.setProjection(Projections.rowCount());
@@ -387,30 +388,32 @@ public class EarlyAlertResponseDao extends
 		
 		List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
 		
-		final Criteria collectionCriteria = createCriteria();
-		
 		if(ids.size() == 0)
 			return new ArrayList<EarlyAlertStudentReportTO>();
 		
-		collectionCriteria.add(Restrictions.in("id", ids));
+		BatchProcessor<UUID, EarlyAlertStudentReportTO> processor =  new BatchProcessor<UUID,EarlyAlertStudentReportTO>(ids);
 		
-		collectionCriteria.createAlias("earlyAlert", "earlyAlert");
-		collectionCriteria.createAlias("earlyAlert.person", "person");
-		collectionCriteria.createAlias("person.coach","coach");
+		do{
+			final Criteria collectionCriteria = createCriteria();
+			collectionCriteria.createAlias("earlyAlert", "earlyAlert");
+			collectionCriteria.createAlias("earlyAlert.person", "person");
+			collectionCriteria.createAlias("person.coach","coach");
+			
+			ProjectionList projections = Projections.projectionList().
+					add(Projections.distinct(Projections.groupProperty("earlyAlert.id").as("early_alert_response_earlyAlertId")));
+			
+			addBasicStudentProperties(projections, collectionCriteria);
+			collectionCriteria.addOrder(Order.asc("person.lastName"));
+			collectionCriteria.addOrder(Order.asc("person.firstName"));
+			collectionCriteria.addOrder(Order.asc("person.middleName"));
+			collectionCriteria.setProjection(projections)
+					.setResultTransformer(
+							new NamespacedAliasToBeanResultTransformer(
+									EarlyAlertStudentReportTO.class, "early_alert_response_"));
+			processor.process(collectionCriteria, "id");
+		}while(processor.moreToProcess());
 		
-		ProjectionList projections = Projections.projectionList().
-				add(Projections.distinct(Projections.groupProperty("earlyAlert.id").as("early_alert_response_earlyAlertId")));
-		
-		addBasicStudentProperties(projections, collectionCriteria);
-		collectionCriteria.addOrder(Order.asc("person.lastName"));
-		collectionCriteria.addOrder(Order.asc("person.firstName"));
-		collectionCriteria.addOrder(Order.asc("person.middleName"));
-		collectionCriteria.setProjection(projections)
-				.setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								EarlyAlertStudentReportTO.class, "early_alert_response_"));
-		
-		return collectionCriteria.list();
+		return processor.getResults();
 	}
 	
 private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
@@ -477,63 +480,60 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(EntityCountByCoachSearchForm form) {
 
-		final Criteria query = createCriteria();
+		
 		List<Person> coaches = form.getCoaches();
 		List<AuditPerson> auditCoaches = new ArrayList<AuditPerson>();
 		for (Person person : coaches) {
 			auditCoaches.add(new AuditPerson(person.getId()));
 		}
+		BatchProcessor<AuditPerson, EntityStudentCountByCoachTO> processor = new BatchProcessor<AuditPerson, EntityStudentCountByCoachTO>(auditCoaches, form.getSAndP());
 		
-		if (form.getCreateDateFrom() != null) {
-			query.add(Restrictions.ge("createdDate",
-					form.getCreateDateFrom()));
-		}
-
-		if (form.getCreateDateTo() != null) {
-			query.add(Restrictions.le("createdDate",
-					form.getCreateDateTo()));
-		}
+		do{
+			final Criteria query = createCriteria();
+			if (form.getCreateDateFrom() != null) {
+				query.add(Restrictions.ge("createdDate",
+						form.getCreateDateFrom()));
+			}
+	
+			if (form.getCreateDateTo() != null) {
+				query.add(Restrictions.le("createdDate",
+						form.getCreateDateTo()));
+			}
+			
+			query.createAlias("earlyAlert", "earlyAlert");
+			Criteria personCriteria = query.createAlias("earlyAlert.person", "person");		
+			if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
+				personCriteria.add(Restrictions
+						.in("person.studentType.id",form.getStudentTypeIds()));
+			}
+			
+			if (form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty()) {
+				query.createAlias("person.serviceReasons", "serviceReasons");
+				query.createAlias("serviceReasons.serviceReason", "serviceReason");
+				query.add(Restrictions
+						.in("serviceReason.id",form.getServiceReasonIds()));
+			}
+			
+			
+			if (form.getSpecialServiceGroupIds() != null && !form.getSpecialServiceGroupIds().isEmpty()) {
+				query.createAlias("person.specialServiceGroups", "specialServiceGroups");
+				query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
+				query.add(Restrictions
+						.in("specialServiceGroup.id", form.getSpecialServiceGroupIds()));
+			}
+			
+			query.setProjection(Projections.projectionList().
+	        		add(Projections.countDistinct("earlyAlert.person").as("earlyalertresponse_studentCount")).
+	        		add(Projections.countDistinct("id").as("earlyalertresponse_entityCount")).
+	        		add(Projections.groupProperty("earlyAlert.createdBy").as("earlyalertresponse_coach")));
+			
+			query.setResultTransformer(
+							new NamespacedAliasToBeanResultTransformer(
+									EntityStudentCountByCoachTO.class, "earlyalertresponse_"));
+		    processor.process(query, "earlyAlert.createdBy");
+		}while(processor.moreToProcess());
 		
-		query.createAlias("earlyAlert", "earlyAlert");
-		Criteria personCriteria = query.createAlias("earlyAlert.person", "person");
-		personCriteria.add(Restrictions.in("earlyAlert.createdBy", auditCoaches));
-		
-		if (form.getStudentTypeIds() != null && !form.getStudentTypeIds().isEmpty()) {
-			personCriteria.add(Restrictions
-					.in("person.studentType.id",form.getStudentTypeIds()));
-		}
-		
-		if (form.getServiceReasonIds() != null && !form.getServiceReasonIds().isEmpty()) {
-			query.createAlias("person.serviceReasons", "serviceReasons");
-			query.createAlias("serviceReasons.serviceReason", "serviceReason");
-			query.add(Restrictions
-					.in("serviceReason.id",form.getServiceReasonIds()));
-		}
-		
-		
-		if (form.getSpecialServiceGroupIds() != null && !form.getSpecialServiceGroupIds().isEmpty()) {
-			query.createAlias("person.specialServiceGroups", "specialServiceGroups");
-			query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
-			query.add(Restrictions
-					.in("specialServiceGroup.id", form.getSpecialServiceGroupIds()));
-		}
-		// item count
-		Long totalRows = 0L;
-		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
-			totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.createdBy"))
-					.uniqueResult();
-		}
-		
-		query.setProjection(Projections.projectionList().
-        		add(Projections.countDistinct("earlyAlert.person").as("earlyalertresponse_studentCount")).
-        		add(Projections.countDistinct("id").as("earlyalertresponse_entityCount")).
-        		add(Projections.groupProperty("earlyAlert.createdBy").as("earlyalertresponse_coach")));
-		
-		query.setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								EntityStudentCountByCoachTO.class, "earlyalertresponse_"));
-		
-		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
+		return processor.getPagedResults();
 	}
 	
 	

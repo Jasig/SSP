@@ -18,7 +18,11 @@
  */
 package org.jasig.ssp.util.sort;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +34,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.util.collections.Pair;
 
 import com.google.common.collect.Lists;
@@ -393,6 +398,41 @@ public final class SortingAndPaging { // NOPMD
 		}
 		return query;
 	}
+	
+	public List<Object> sortAndPageList(List<Object> list) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+		final List<Object> sortedList = sortList(list);
+		return pageList(sortedList);
+	}
+	
+	private List<Object> pageList(final List<Object> list){
+		if(isPaged()){
+			List<Object> uniques;
+			Integer start = getFirstResult();
+	    	Integer max =getMaxResults();
+	    	if(start >= list.size())
+	    	{
+	    		uniques = new ArrayList<Object>();
+	    	}else{
+	    		max = start + max > list.size() || max < 0 ? list.size():start + max;
+	    		uniques = list.subList(start, max);
+	    	}
+	    	return uniques;
+		}
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Object> sortList(List<Object> results) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+		if(results == null || results.isEmpty())
+			return results;
+		
+		if(isSorted()){
+			Collections.sort(results, new GenericComparator<Object>(results.get(0).getClass(), getSortFields()));
+		}else if(isDefaultSorted()){
+			Collections.sort(results, new GenericComparator<Object>(results.get(0).getClass(), Arrays.asList(new Pair<String, SortDirection>(getDefaultSortProperty(), SortDirection.ASC))));
+		}
+		return results;
+	}
 
 	/**
 	 * Add all the current filters to the specified criteria
@@ -424,6 +464,74 @@ public final class SortingAndPaging { // NOPMD
 			query.append(sort);
 			query.append(" desc ");
 		}
+	}
+	
+
+	
+	public static class GenericComparator<T> implements Comparator<T> {
+		
+		private List<Pair<Field,SortDirection>> sorters = new ArrayList<Pair<Field,SortDirection>>();
+		
+		 public GenericComparator(Class listObjClass, List<Pair<String, SortDirection>> sorters) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+			 setSorters(Class.forName(listObjClass.getName()), sorters);
+		 }
+		 
+		 private void setSorters(Class cls, List<Pair<String, SortDirection>> sorters)
+		 {
+			 for(Pair<String, SortDirection> sorter:sorters){
+				 Field field = getField( cls,  sorter.getFirst());
+				 if(field != null)
+					 this.sorters.add(new Pair<Field, SortDirection>(field, sorter.getSecond()));
+			 }
+		 }
+		 
+		private Field getField(Class cls, String propertyName){
+			 Field field = null;
+			 while(field == null && cls != null){
+				 try{
+					 field = cls.getDeclaredField(propertyName);
+				 }catch(Exception exp){
+					 
+				 }
+				 if(field == null){
+					 cls = cls.getSuperclass();
+				 }else{
+					 field.setAccessible(true);
+					 return field;
+				 }
+			 }
+			 return null;
+		 }
+
+		@Override
+		public int compare(T o1, T o2) {
+			int compared = 0;
+			for(Pair<Field, SortDirection> sorter:sorters){
+				Comparable<Object> prop1 = getComparableProperty(o1, sorter.getFirst());
+				Comparable<Object> prop2 = getComparableProperty(o2,  sorter.getFirst());
+			
+				if(sorter.getSecond().equals(SortDirection.ASC)){
+					compared = prop1.compareTo(prop2);
+				} else {
+					compared = prop2.compareTo(prop1);
+				}
+				if(compared != 0)
+					return compared;
+			}
+			return compared;
+		}
+		
+		private Comparable<Object> getComparableProperty(T obj, Field field){
+			try {
+				 return (Comparable)field.get(obj);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		
 	}
 
 	/**

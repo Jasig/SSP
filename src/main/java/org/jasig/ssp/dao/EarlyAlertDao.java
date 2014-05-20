@@ -38,17 +38,20 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -142,24 +145,29 @@ public class EarlyAlertDao extends
 
 		// only run the query to fill the return Map if values were given
 		if (!personIds.isEmpty()) {
-			// setup query
-			final ProjectionList projections = Projections.projectionList();
-			projections.add(Projections.groupProperty("person.id").as(
-					"personId"));
-			projections.add(Projections.count("id"));
 
-			Criteria query = createCriteria();
-			query.setProjection(projections);
-			query.add(Restrictions.in("person.id", personIds));
-			query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+			BatchProcessor<UUID,Object[]> processor = new BatchProcessor<UUID,Object[]>(personIds);
+			do{
+				Criteria query = createCriteria();
+				
+				final ProjectionList projections = Projections.projectionList();
+				projections.add(Projections.groupProperty("person.id").as(
+						"personId"));
+				projections.add(Projections.count("id"));
+				query.setProjection(projections);
+				
+				query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 
-			if ( criteriaCallback != null ) {
-				query = criteriaCallback.criteria(query);
-			}
+				if ( criteriaCallback != null ) {
+					query = criteriaCallback.criteria(query);
+				}
+				
+				processor.process(query, "person.id");
+			}while(processor.moreToProcess());
 
 			// run query
 			@SuppressWarnings("unchecked")
-			final List<Object[]> results = query.list();
+			final List<Object[]> results = processor.getResults();
 
 			// put query results into return value
 			for (final Object[] result : results) {
@@ -258,13 +266,7 @@ public class EarlyAlertDao extends
 			query.add(Restrictions.le("createdDate",
 					criteriaTO.getEndDate()));
 		}
-		
-		// item count
-		Long totalRows = 0L;
-		if ((sAndP != null) && sAndP.isPaged()) {
-				totalRows = (Long) query.setProjection(Projections.rowCount())
-							.uniqueResult();
-		}
+
 		
 		query.setProjection(null);
 		
@@ -272,28 +274,25 @@ public class EarlyAlertDao extends
 
 		if(ids.size() <= 0)
 			return null;
-		List<List<UUID>> batches = prepareBatches(ids);
-		List<EarlyAlertStudentReportTO> set = new ArrayList<EarlyAlertStudentReportTO>();
-		for(List<UUID> batch:batches){
-		final Criteria collectionQuery = createCriteria(sAndP);
-		
-			collectionQuery.add(Restrictions.in("id", batch));		
-			
+		BatchProcessor<UUID,EarlyAlertStudentReportTO> processor = new BatchProcessor<UUID,EarlyAlertStudentReportTO>(ids, sAndP);
+		do{
+			final Criteria criteria = createCriteria();
 			ProjectionList projections = Projections.projectionList()
-				.add(Projections.countDistinct("id").as("earlyalert_total"))
-				.add(Projections.countDistinct("closedBy").as("earlyalert_closed"));
+					.add(Projections.countDistinct("id").as("earlyalert_total"))
+					.add(Projections.countDistinct("closedBy").as("earlyalert_closed"));
+				
+				addBasicStudentProperties(projections, criteria); 
+				
+				projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
+				criteria.setProjection(projections);
+				criteria.setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(
+								EarlyAlertStudentReportTO.class, "earlyalert_"));
 			
-			addBasicStudentProperties(projections, collectionQuery); 
-			
-			projections.add(Projections.groupProperty("id").as("earlyalert_earlyAlertId"));
-			collectionQuery.setProjection(projections);
-			collectionQuery.setResultTransformer(
-					new NamespacedAliasToBeanResultTransformer(
-							EarlyAlertStudentReportTO.class, "earlyalert_"));
-				set.addAll(collectionQuery.list());
-		}
+			processor.process(criteria, "id");
+		}while(processor.moreToProcess());
 		
-		return new PagingWrapper<EarlyAlertStudentReportTO>(totalRows, set);
+		return processor.getPagedResults();
 	}
 	
 	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
@@ -359,20 +358,24 @@ public class EarlyAlertDao extends
 
 	public Long getCountOfAlertsForSchoolIds(
 			Collection<String> schoolIds, Campus campus) {
+		BatchProcessor<String,Long> processor = new BatchProcessor<String,Long>(schoolIds);
+		do{
+			final Criteria query = createCriteria();
+			
+			query.createAlias("person",
+					"person");
+			
+			
+			if(campus != null){
+				query.add(Restrictions
+						.eq("campus", campus));
+			}
+			query.setProjection(Projections.countDistinct("person"));
+			
+			processor.countDistinct(query, "person.schoolId");
+		}while(processor.moreToProcess());
 		
-		final Criteria query = createCriteria();
-		
-		query.createAlias("person",
-				"person")
-				.add(Restrictions
-						.in("person.schoolId",schoolIds));
-		
-		if(campus != null){
-			query.add(Restrictions
-					.eq("campus", campus));
-		}
-		
-		return (Long)query.setProjection(Projections.countDistinct("person")).list().get(0);
+		return processor.getCount();
 	}
 
 	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
@@ -455,33 +458,28 @@ public class EarlyAlertDao extends
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form) {
 
-		final Criteria query = createCriteria();
+		
 		List<Person> coaches = form.getCoaches();
 		List<AuditPerson> auditCoaches = new ArrayList<AuditPerson>();
 		for (Person person : coaches) {
 			auditCoaches.add(new AuditPerson(person.getId()));
 		}
+		BatchProcessor<AuditPerson, EntityStudentCountByCoachTO> processor = new BatchProcessor<AuditPerson, EntityStudentCountByCoachTO>(auditCoaches, form.getSAndP());
+		do{
+			final Criteria query = createCriteria();
+			setBasicCriteria( query,  form);
+			query.setProjection(Projections.projectionList().
+	        		add(Projections.countDistinct("person").as("earlyalert_studentCount")).
+	        		add(Projections.countDistinct("id").as("earlyalert_entityCount")).
+	        		add(Projections.groupProperty("createdBy").as("earlyalert_coach")));
+			
+			query.setResultTransformer(
+							new NamespacedAliasToBeanResultTransformer(
+									EntityStudentCountByCoachTO.class, "earlyalert_"));
+			processor.process(query, "createdBy");
+		}while(processor.moreToProcess());
 		
- 
-		setBasicCriteria( query,  form);
-		query.add(Restrictions.in("createdBy", auditCoaches));
-		// item count
-		Long totalRows = 0L;
-		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
-			totalRows = (Long) query.setProjection(Projections.countDistinct("createdBy"))
-					.uniqueResult();
-		}
-		
-		query.setProjection(Projections.projectionList().
-        		add(Projections.countDistinct("person").as("earlyalert_studentCount")).
-        		add(Projections.countDistinct("id").as("earlyalert_entityCount")).
-        		add(Projections.groupProperty("createdBy").as("earlyalert_coach")));
-		
-		query.setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								EntityStudentCountByCoachTO.class, "earlyalert_"));
-		
-		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows,  (List<EntityStudentCountByCoachTO>)query.list());
+		return processor.getPagedResults();
 	}
 	
 	private Criteria setBasicCriteria(Criteria query, EntityCountByCoachSearchForm form){
@@ -557,33 +555,26 @@ public class EarlyAlertDao extends
 	
 	public Map<UUID, Number> getResponsesDueCountEarlyAlerts(
 			@NotNull final Collection<UUID> personIds, Date lastResponseDate) {
-		List<List<UUID>> batches = prepareBatches(personIds);
-		List<Object[]> results = new ArrayList<Object[]>();
-		Map<UUID,Number> responsesDuePerPerson = new HashMap<UUID,Number>();
-		for(List<UUID> batch:batches){
-			results.addAll(getResponsesBatchDueCountEarlyAlerts(batch, lastResponseDate));
-		}
 		
-
-		// put query results into return value
-		for (final Object[] result : results) {
-			responsesDuePerPerson.put((UUID) result[0], (Number) result[1]);
+		Map<UUID,Number> responsesDuePerPerson = new HashMap<UUID,Number>();
+		if(personIds.size() > 0){
+			BatchProcessor<UUID,Object[]> processor = new BatchProcessor<UUID,Object[]>(personIds);
+			String sql = "select distinct ea.person.id, count(ea) " +  responseQuery() 
+					+ " and ea.person.id in :personIds group by ea.person.id";
+			do{
+				final Query query = createHqlQuery(sql);
+				query.setParameter("objectStatus", ObjectStatus.ACTIVE);
+				query.setParameter("lastResponseDate", lastResponseDate);
+				processor.process(query, "personIds");
+			}while(processor.moreToProcess());
+			
+			for (final Object[] result : processor.getResults()) {
+				responsesDuePerPerson.put((UUID) result[0], (Number) result[1]);
+			}
 		}
-
 		return responsesDuePerPerson;
 	}
 	
-	public List<Object[]> getResponsesBatchDueCountEarlyAlerts(List<UUID> students, Date lastResponseDate){
-		if(students.size() == 0)
-			return new ArrayList<Object[]>();
-		String sql = "select distinct ea.person.id, count(ea) " +  responseQuery() 
-				+ " and ea.person.id in :personIds group by ea.person.id";
-		final Query query = createHqlQuery(sql);
-		query.setParameter("objectStatus", ObjectStatus.ACTIVE);
-		query.setParameter("lastResponseDate", lastResponseDate);
-		query.setParameterList("personIds", students);
-		return (List<Object[]>)query.list();
-	}
 	
 	private  String  responseQuery(){
 		return "from EarlyAlert as ea where ((ea.closedDate is null and ea.objectStatus = :objectStatus "

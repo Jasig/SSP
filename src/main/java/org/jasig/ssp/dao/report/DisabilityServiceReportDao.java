@@ -34,6 +34,7 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -48,23 +49,29 @@ public class DisabilityServiceReportDao extends PersonDao {
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		List<UUID> ids = getStudentUUIDs(form);
 		
-		Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.in("id", ids));
-		// clear the row count projection
-		criteria.setProjection(null);
+		BatchProcessor<UUID,DisabilityServicesReportTO> processor = new BatchProcessor<UUID,DisabilityServicesReportTO>(ids, sAndP);
+		do{
+			Criteria criteria = createCriteria();
+			
+			// clear the row count projection
+			criteria.setProjection(null);
+	
+					
+			// don't bring back any non-students, there will likely be a better way
+			// to do this later
+			
+			final ProjectionList projections = Projections.projectionList();
+			
+			criteria.setProjection(projections);
+			addBasicStudentProperties(projections, criteria);
+			
+			criteria.setResultTransformer(new AliasToBeanResultTransformer(
+					DisabilityServicesReportTO.class));
+			
+			processor.process(criteria, "id");
+		}while(processor.moreToProcess());
 
-				
-		// don't bring back any non-students, there will likely be a better way
-		// to do this later
-		
-		final ProjectionList projections = Projections.projectionList();
-		
-		criteria.setProjection(projections);
-		addBasicStudentProperties(projections, criteria);
-		criteria.setResultTransformer(new AliasToBeanResultTransformer(
-				DisabilityServicesReportTO.class));
-
-		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), criteria.list());
+		return processor.getPagedResults();
 
 	}
 	

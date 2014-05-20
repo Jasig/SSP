@@ -23,10 +23,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -37,12 +38,13 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.MultipleCountProjection;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.hibernate.OrderAsString;
@@ -385,51 +387,14 @@ public class CaseloadDao extends AbstractDao<Person> {
 	}
 
 	public int reassignStudents(CaseloadReassignmentRequestTO obj, Person coach) {
-		List<List<String>> batches = prepareBatches(obj);
-		int updatedEntities = 0;
-		String reassignStudentBaseQuery = "update Person p set p.coach = :coach where p.schoolId in (%)";
-		for (List<String> batch : batches) 
-		{
-			StringBuilder inClause = new StringBuilder();
-			for (String studentId : batch) 
-			{
-				inClause.append("'");
-				inClause.append(studentId);
-				inClause.append("'");
-				inClause.append(",");
-			}
-			inClause.deleteCharAt(inClause.lastIndexOf(","));
-			String query = StringUtils.replace(reassignStudentBaseQuery, "%", inClause.toString());
-			updatedEntities += createHqlQuery( query )
-					.setEntity( "coach", coach )
-					.executeUpdate();
-		}
-		return updatedEntities;
-	}
-
-	private List<List<String>> prepareBatches(CaseloadReassignmentRequestTO obj) 
-	{
-		String[] studentIds = obj.getStudentIds();
-		List<String> currentBatch = new ArrayList<String>(); 
-		List<List<String>> batches = new ArrayList<List<String>>();
-		int batchCounter = 0;
-		for (String studentId : studentIds) 
-		{
-			if(batchCounter == getBatchsize())
-			{
-				currentBatch.add(studentId);
-				batches.add(currentBatch);
-				currentBatch = new ArrayList<String>();
-				batchCounter = 0;
-			}
-			else
-			{
-				currentBatch.add(studentId);
-				batchCounter++;
-			}
-		}
-		batches.add(currentBatch);
-		return batches;
+		String sql = "update Person p set p.coach = :coach where p.schoolId in :studentId";
+		BatchProcessor<String, Object> update = new BatchProcessor<String, Object>(Lists.newArrayList(obj.getStudentIds()));
+		do{
+			Query query = createHqlQuery( sql ).setEntity( "coach", coach );
+			update.updateProcess(query, "studentId");
+		}while(update.moreToProcess());
+		
+		return update.getCount().intValue();
 	}
 
 }

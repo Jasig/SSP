@@ -23,10 +23,16 @@ import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.mygps.business.EarlyAlertManager;
 import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -71,10 +77,13 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable>
 			throw new IllegalArgumentException(
 					"List of ids can not be null or empty.");
 		}
+		BatchProcessor<UUID, T> processor =  new BatchProcessor<UUID,T>(ids, sAndP);
+		do{
+			final Criteria criteria = createCriteria();
+			processor.process(criteria, "id");
+		}while(processor.moreToProcess());
 
-		final Criteria criteria = createCriteria();
-		criteria.add(Restrictions.in("id", ids));
-		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
+		return processor.getPagedResults();
 	}
 
 	@SuppressWarnings(UNCHECKED)

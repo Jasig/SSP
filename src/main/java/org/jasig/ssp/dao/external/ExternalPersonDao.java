@@ -29,6 +29,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
@@ -100,11 +101,13 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 	public PagingWrapper<ExternalPerson> getBySchoolIds(
 			@NotNull final Collection<String> schoolIds,
 			final SortingAndPaging sAndP) {
-
-		final Criteria query = createCriteria()
-				.add(Restrictions.in("schoolId", schoolIds));
-
-		return processCriteriaWithSortingAndPaging(query, sAndP, false);
+		BatchProcessor<String, ExternalPerson> processor =  new BatchProcessor<String,ExternalPerson>(schoolIds, sAndP);
+		
+		do{
+			processor.process(createCriteria(), "schoolId");
+		}while(processor.moreToProcess());
+				
+		return processor.getPagedResults();
 	}
 	
 	@SuppressWarnings("unchecked")

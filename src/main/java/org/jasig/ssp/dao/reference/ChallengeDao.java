@@ -33,8 +33,10 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -250,26 +252,29 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		}
 		List<UUID> uuids = query.list();
 		int size = uuids.size();
+		
 		if(size > 0){
 			if(sp.getMaxResults() != null && sp.getMaxResults()  > 0)
 				uuids = uuids.subList(sp.getFirstResult(), 
 						sp.getFirstResult() + sp.getMaxResults() > size ? size : sp.getFirstResult() + (sp.getMaxResults() == null ? size:sp.getMaxResults()));
 			
-			Criteria criteria = createCriteria();
-			criteria.setFetchMode( "challengeChallengeReferrals", FetchMode.JOIN );
-			criteria.setFetchMode( "selfHelpGuideQuestions", FetchMode.JOIN );
-			for(Pair<String,SortDirection> sf:sp.getSortFields()){
-				if(sf.getSecond().equals(SortDirection.ASC))
-					criteria.addOrder(Order.asc(sf.getFirst().toString()));
-				else
-					criteria.addOrder(Order.desc(sf.getFirst().toString()));
-			}
+			BatchProcessor<UUID, Challenge> processor =  new BatchProcessor<UUID,Challenge>(uuids, sAndP);
+			do{
+				Criteria criteria = createCriteria();
+				criteria.setFetchMode( "challengeChallengeReferrals", FetchMode.JOIN );
+				criteria.setFetchMode( "selfHelpGuideQuestions", FetchMode.JOIN );
+				for(Pair<String,SortDirection> sf:sp.getSortFields()){
+					if(sf.getSecond().equals(SortDirection.ASC))
+						criteria.addOrder(Order.asc(sf.getFirst().toString()));
+					else
+						criteria.addOrder(Order.desc(sf.getFirst().toString()));
+				}
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+				processor.process(criteria, "id");
+			}while(processor.moreToProcess());
 			
-			criteria.add(Restrictions.in("id", uuids));
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			List<Challenge> challenges = criteria.list();
-			return new PagingWrapper<Challenge>(size, challenges);
+			return processor.getPagedResults();
 		}
-		return new PagingWrapper(0,new ArrayList<UUID>());
+		return new PagingWrapper<Challenge>(0,new ArrayList<Challenge>());
 	}
 }

@@ -33,6 +33,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.DateTimeUtils;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -185,30 +186,28 @@ public class TaskDao
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form) {
 
-		final Criteria query = createCriteria();
+		
  
-		setCriteria( query,  form);
+		
 		List<AuditPerson> auditCoaches = new ArrayList<AuditPerson>();
 		for (Person person : form.getCoaches()) {
 			auditCoaches.add(new AuditPerson(person.getId()));
-		}		
-		query.add(Restrictions.in("createdBy", auditCoaches));
-		// item count
-		Long totalRows = 0L;
-		if ((form.getSAndP() != null) && form.getSAndP().isPaged()) {
-				totalRows = (Long) query.setProjection(Projections.rowCount())
-							.uniqueResult();
 		}
+		BatchProcessor<AuditPerson,EntityStudentCountByCoachTO> processor = new BatchProcessor<AuditPerson,EntityStudentCountByCoachTO>(auditCoaches, form.getSAndP());
+		do{
+			final Criteria query = createCriteria();
+			setCriteria( query,  form);
+			
+			query.setProjection(Projections.projectionList().
+	        		add(Projections.countDistinct("person").as("task_studentCount")).
+	        		add(Projections.countDistinct("id").as("task_entityCount")).
+	        		add(Projections.groupProperty("createdBy").as("task_coach"))).setResultTransformer(
+							new NamespacedAliasToBeanResultTransformer(
+									EntityStudentCountByCoachTO.class, "task_"));
+			processor.process(query,"createdBy");
+		}while(processor.moreToProcess());
 		
-		
-		query.setProjection(Projections.projectionList().
-        		add(Projections.countDistinct("person").as("task_studentCount")).
-        		add(Projections.countDistinct("id").as("task_entityCount")).
-        		add(Projections.groupProperty("createdBy").as("task_coach"))).setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								EntityStudentCountByCoachTO.class, "task_"));
-		
-		return new PagingWrapper<EntityStudentCountByCoachTO>(totalRows, (List<EntityStudentCountByCoachTO>)query.list());
+		return processor.getPagedResults();
 	}
 	
 	

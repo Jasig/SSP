@@ -28,7 +28,6 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -48,6 +47,7 @@ import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -128,10 +128,15 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			throw new ValidationException(
 					"Missing or empty list of Person identifiers.");
 		}
-
-		final Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.in("id", personIds));
-		return criteria.list();
+		BatchProcessor<UUID, Person> processor =  new BatchProcessor<UUID,Person>(personIds, sAndP);
+		do{
+			
+			final Criteria criteria = createCriteria();
+			processor.process(criteria, "id");
+			
+		}while(processor.moreToProcess());
+		
+		return processor.getResults();
 	}
 	
 	public void removeFromSession(Person person)
@@ -274,42 +279,34 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			normalizedCoachUsernames.add(StringUtils.lowerCase(coachUsername));
 		}
 		
-		Criteria criteria = createCriteria()
-				.add(Restrictions.in("username", normalizedCoachUsernames));
+		BatchProcessor<String, CoachPersonLiteTO> processor = new BatchProcessor(normalizedCoachUsernames, sAndP);
+		do{
+			// ignore department name and office location for now... would
+			// require join we know we don't actually need for existing call sites
+			Criteria criteria = createCriteria(sAndP);
+			if(homeDepartment != null && homeDepartment.length() > 0){
+				criteria.createAlias("staffDetails", "personStaffDetails")
+					.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
+			}else{
+				criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
+			}
+			
+			criteria.setProjection(Projections.projectionList()
+							.add(Projections.property("id").as("person_id"))
+							.add(Projections.property("firstName").as("person_firstName"))
+							.add(Projections.property("lastName").as("person_lastName"))
+							.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
+							.add(Projections.property("workPhone").as("person_workPhone"))
+							.add(Projections.property("photoUrl").as("person_photoUrl"))
+							.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
+							.add(Projections.property("personStaffDetails.officeLocation").as("person_officeLocation")))
+					.setResultTransformer(
+							new NamespacedAliasToBeanResultTransformer(
+									CoachPersonLiteTO.class, "person_"));
+				processor.process(criteria, "username");
+		}while(processor.moreToProcess());
 		
-		if(homeDepartment != null && homeDepartment.length() > 0){
-			criteria.createAlias("staffDetails", "personStaffDetails")
-				.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
-		}
-
-		final long totalRows = (Long) criteria.setProjection(
-				Projections.rowCount()).uniqueResult();
-
-		// ignore department name and office location for now... would
-		// require join we know we don't actually need for existing call sites
-		criteria = createCriteria(sAndP);
-		if(homeDepartment != null && homeDepartment.length() > 0){
-			criteria.createAlias("staffDetails", "personStaffDetails")
-				.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
-		}else{
-			criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
-		}
-		
-		criteria.add(Restrictions.in("username", normalizedCoachUsernames))
-				.setProjection(Projections.projectionList()
-						.add(Projections.property("id").as("person_id"))
-						.add(Projections.property("firstName").as("person_firstName"))
-						.add(Projections.property("lastName").as("person_lastName"))
-						.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
-						.add(Projections.property("workPhone").as("person_workPhone"))
-						.add(Projections.property("photoUrl").as("person_photoUrl"))
-						.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
-						.add(Projections.property("personStaffDetails.officeLocation").as("person_officeLocation")))
-				.setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								CoachPersonLiteTO.class, "person_"));
-
-		return new PagingWrapper<CoachPersonLiteTO>(totalRows, criteria.list());
+		return processor.getPagedResults();
 	}
 
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
@@ -544,20 +541,23 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if(ids.size() == 0)
 			return null;
 		
-		final Criteria criteria = createCriteria(sAndP);
-
-		criteria.add(Restrictions.in("id", ids));
+		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids);
+		do{
+			final Criteria criteria = createCriteria();
+					
+			final ProjectionList projections = Projections.projectionList();
 			
-		final ProjectionList projections = Projections.projectionList();
+			criteria.setProjection(projections);
 		
-		criteria.setProjection(projections);
-	
-		addBasicStudentProperties(projections, criteria, sAndP.getStatus());
-		
-		criteria.setResultTransformer(new AliasToBeanResultTransformer(
-				BaseStudentReportTO.class));
+			addBasicStudentProperties(projections, criteria, sAndP.getStatus());
+			
+			criteria.setResultTransformer(new AliasToBeanResultTransformer(
+					BaseStudentReportTO.class));
+			processor.process(criteria, "id");
+			
+		}while(processor.moreToProcess());
 
-		return new PagingWrapper<BaseStudentReportTO>(ids.size(), criteria.list());
+		return new PagingWrapper<BaseStudentReportTO>(ids.size(), processor.getResults());
 
 	}
 	
@@ -568,73 +568,76 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		List<UUID> ids = getStudentUUIDs(form);
 		if(ids.size() == 0)
 			return null;
-		
-		final Criteria criteria = createCriteria(sAndP);
-		criteria.add(Restrictions.in("id", ids));
-		// don't bring back any non-students, there will likely be a better way
-		// to do this later
-		
-		final ProjectionList projections = Projections.projectionList();
-		
-		criteria.setProjection(projections);
-				
-		addBasicStudentProperties(projections, criteria, sAndP.getStatus());
-		
-		Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
-		demographics.createAlias("demographics.ethnicity", "ethnicity", JoinType.LEFT_OUTER_JOIN);
-		demographics.createAlias("demographics.race", "race", JoinType.LEFT_OUTER_JOIN);
-		demographics.createAlias("demographics.veteranStatus", "veteranStatus", JoinType.LEFT_OUTER_JOIN);
-		
-		criteria.createAlias("disabilityAgencies", "disabilityAgencies", JoinType.LEFT_OUTER_JOIN);
-		
-		criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency", JoinType.LEFT_OUTER_JOIN);
-		
-		criteria.createAlias("disabilityTypes", "personDisabilityTypes", JoinType.LEFT_OUTER_JOIN);
-		
-		criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("disability", "personDisability");
-		
-		
-		criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus", JoinType.LEFT_OUTER_JOIN);
-		
-		criteria.createAlias("educationGoal", "educationGoal", JoinType.LEFT_OUTER_JOIN);
-		
-		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
-		if ( dialect instanceof SQLServerDialect) {
+		BatchProcessor<UUID, DisabilityServicesReportTO> processor =  new BatchProcessor<UUID,DisabilityServicesReportTO>(ids, sAndP);
+		do{
+			final Criteria criteria = createCriteria();
+			
+			// don't bring back any non-students, there will likely be a better way
+			// to do this later
+			
+			final ProjectionList projections = Projections.projectionList();
+			
+			criteria.setProjection(projections);
+					
+			addBasicStudentProperties(projections, criteria, sAndP.getStatus());
+			
+			Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
+			demographics.createAlias("demographics.ethnicity", "ethnicity", JoinType.LEFT_OUTER_JOIN);
+			demographics.createAlias("demographics.race", "race", JoinType.LEFT_OUTER_JOIN);
+			demographics.createAlias("demographics.veteranStatus", "veteranStatus", JoinType.LEFT_OUTER_JOIN);
+			
+			criteria.createAlias("disabilityAgencies", "disabilityAgencies", JoinType.LEFT_OUTER_JOIN);
+			
+			criteria.createAlias("disabilityAgencies.disabilityAgency", "disabilityAgency", JoinType.LEFT_OUTER_JOIN);
+			
+			criteria.createAlias("disabilityTypes", "personDisabilityTypes", JoinType.LEFT_OUTER_JOIN);
+			
+			criteria.createAlias("personDisabilityTypes.disabilityType", "disabilityType", JoinType.LEFT_OUTER_JOIN);
+			criteria.createAlias("disability", "personDisability");
+			
+			
+			criteria.createAlias("personDisability.disabilityStatus", "disabilityStatus", JoinType.LEFT_OUTER_JOIN);
+			
+			criteria.createAlias("educationGoal", "educationGoal", JoinType.LEFT_OUTER_JOIN);
+			
+			Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+			if ( dialect instanceof SQLServerDialect) {
+	
+				projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
+				projections.add(Projections.groupProperty("race.name").as("race"));
+				projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
+				projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
+				projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
+				projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
+				projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
+				projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
+				projections.add(Projections.groupProperty("personDisability.createdDate").as("odsRegistrationDate"));
+				projections.add(Projections.groupProperty("personDisability.noDocumentation").as("noDocumentation"));
+				projections.add(Projections.groupProperty("personDisability.inadequateDocumentation").as("inadequateDocumentation"));
+				projections.add(Projections.groupProperty("personDisability.noDisability").as("noDisability"));
+				projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
+			} else {
+				projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
+				projections.add(Projections.groupProperty("race.name").as("race"));
+				projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
+				projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
+				projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
+				projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
+				projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
+				projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
+				projections.add(Projections.groupProperty("personDisability.createdDate").as("odsRegistrationDate"));
+				projections.add(Projections.groupProperty("personDisability.noDocumentation").as("noDocumentation"));
+				projections.add(Projections.groupProperty("personDisability.inadequateDocumentation").as("inadequateDocumentation"));
+				projections.add(Projections.groupProperty("personDisability.noDisability").as("noDisability"));
+				projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
+			}
+			
+			criteria.setResultTransformer(new AliasToBeanResultTransformer(
+					DisabilityServicesReportTO.class));
+			processor.process(criteria, "id");
+		}while(processor.moreToProcess());
 
-			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
-			projections.add(Projections.groupProperty("race.name").as("race"));
-			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
-			projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
-			projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
-			projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
-			projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
-			projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
-			projections.add(Projections.groupProperty("personDisability.createdDate").as("odsRegistrationDate"));
-			projections.add(Projections.groupProperty("personDisability.noDocumentation").as("noDocumentation"));
-			projections.add(Projections.groupProperty("personDisability.inadequateDocumentation").as("inadequateDocumentation"));
-			projections.add(Projections.groupProperty("personDisability.noDisability").as("noDisability"));
-			projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
-		} else {
-			projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
-			projections.add(Projections.groupProperty("race.name").as("race"));
-			projections.add(Projections.groupProperty("veteranStatus.name").as("veteranStatus"));
-			projections.add(Projections.groupProperty("disabilityType.name").as("disabilityType"));
-			projections.add(Projections.groupProperty("disabilityAgency.name").as("disabilityAgencyName"));
-			projections.add(Projections.groupProperty("disabilityAgency.createdDate").as("disabilityAgencyCreatedDate"));
-			projections.add(Projections.groupProperty("educationGoal.plannedMajor").as("major"));
-			projections.add(Projections.groupProperty("disabilityStatus.name").as("odsStatus"));
-			projections.add(Projections.groupProperty("personDisability.createdDate").as("odsRegistrationDate"));
-			projections.add(Projections.groupProperty("personDisability.noDocumentation").as("noDocumentation"));
-			projections.add(Projections.groupProperty("personDisability.inadequateDocumentation").as("inadequateDocumentation"));
-			projections.add(Projections.groupProperty("personDisability.noDisability").as("noDisability"));
-			projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
-		}
-		
-		criteria.setResultTransformer(new AliasToBeanResultTransformer(
-				DisabilityServicesReportTO.class));
-
-		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), criteria.list());
+		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), processor.getResults());
 
 	}
 	

@@ -179,7 +179,7 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		// building
 		final PagingWrapper<EarlyAlertStudentReportTO> reports = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
 				searchForm, 
-				SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
+				SearchParameters.getReportPersonSortingAndPagingAll(status, ""));
 		
 		List<EarlyAlertStudentReportTO> compressedReports = processReports(reports, earlyAlertResponseService);
 			

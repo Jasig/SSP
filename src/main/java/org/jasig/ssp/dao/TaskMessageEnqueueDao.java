@@ -27,6 +27,7 @@ import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TaskMessageEnqueue;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,14 @@ public class TaskMessageEnqueueDao extends AbstractAuditableCrudDao<TaskMessageE
 	
 	@SuppressWarnings("unchecked")
 	public List<TaskMessageEnqueue> getAllForIds(List<UUID> ids) {
-		final Criteria criteria = createCriteria();
-		criteria.add(Restrictions.in("id", ids));
+		BatchProcessor<UUID, TaskMessageEnqueue> processor =  new BatchProcessor<UUID, TaskMessageEnqueue>(ids);
+		
+		do{
+			final Criteria criteria = createCriteria();
+			processor.process(criteria, "id");
+		}while(processor.moreToProcess());
 
-		return (List<TaskMessageEnqueue>)criteria.list();
+		return processor.getResults();
 	}
 
 
