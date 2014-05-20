@@ -680,8 +680,8 @@
                 },
                 {
                     "clsName": "Ssp.util.tools.map.MapEventUtils",
-                    "name": "MapEventUtil.js",
-                    "path": "/app/util/"
+                    "name": "MapEventUtils.js",
+                    "path": "/app/util/tools/map/"
                 },                
                 {
                     "clsName": "Ssp.util.ColumnRendererUtils",
