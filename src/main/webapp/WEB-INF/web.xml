@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 
     Licensed to Jasig under one or more contributor license
@@ -19,121 +19,239 @@
     under the License.
 
 -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5">
-	<display-name>SSP Application</display-name>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>SSP Application</display-name>
 
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/spring/app-config.xml
-			/WEB-INF/spring/security-config.xml
-		</param-value>
-	</context-param>
-	<context-param>
-		<param-name>contextInitializerClasses</param-name>
-		<param-value>org.jasig.ssp.config.BeanProfileApplicationContextInitializer</param-value>
-	</context-param>
-	<listener>
-		<listener-class>org.jasig.ssp.config.logging.ExternalConfigLoader</listener-class>
-	</listener>
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/spring/app-config.xml
+            /WEB-INF/spring/security-config.xml
+        </param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextInitializerClasses</param-name>
+        <param-value>org.jasig.ssp.config.BeanProfileApplicationContextInitializer</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.jasig.ssp.config.logging.ExternalConfigLoader</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
-	<filter>
-		<filter-name>MDCInsertingServletFilter</filter-name>
-		<filter-class>
-			ch.qos.logback.classic.helpers.MDCInsertingServletFilter
-		</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>MDCInsertingServletFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter>
-		<filter-name>openSessionInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-	</filter>
-	<filter>
-		<filter-name>requestCleanupServletFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter>
-		<filter-name>requestAndResponseAccessFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
+    <filter>
+        <filter-name>MDCInsertingServletFilter</filter-name>
+        <filter-class>
+            ch.qos.logback.classic.helpers.MDCInsertingServletFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>MDCInsertingServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>etagFilter</filter-name>
+       <filter-class>org.springframework.web.filter.ShallowEtagHeaderFilter</filter-class>
+    </filter>
+    
+     <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/MyGPS/scripts/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/MyGPS/templates/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/MyGPS/styles/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/MyGPS/images/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/resources/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/images/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/css/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/js/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/app/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/app.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/app-all.js</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+            <filter-name>etagFilter</filter-name>
+            <servlet-name>ssp</servlet-name> 
+            <url-pattern>/app-test.js</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>requestCleanupServletFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter>
+        <filter-name>requestAndResponseAccessFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
     <filter>
         <filter-name>keepSessionAliveFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
-	<filter-mapping>
-		<filter-name>openSessionInViewFilter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>requestCleanupServletFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>requestAndResponseAccessFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+    
+    
+    <filter-mapping>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>requestCleanupServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>requestAndResponseAccessFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>keepSessionAliveFilter</filter-name>
         <url-pattern>/api/*</url-pattern>
     </filter-mapping>
-	<servlet>
-		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>
-				/WEB-INF/spring/mvc-config.xml
-			</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+    
+    <servlet>
+        <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+                /WEB-INF/spring/mvc-config.xml
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-	<servlet>
-		<servlet-name>ViewRendererServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>	
+    <servlet>
+        <servlet-name>ViewRendererServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+<servlet>
+<servlet-name>MyGPS</servlet-name>
+<servlet-class>org.apache.pluto.container.driver.PortletServlet</servlet-class>
+<init-param>
+<param-name>portlet-name</param-name>
+<param-value>MyGPS</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet>
+<servlet-name>SSP</servlet-name>
+<servlet-class>org.apache.pluto.container.driver.PortletServlet</servlet-class>
+<init-param>
+<param-name>portlet-name</param-name>
+<param-value>SSP</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet>
+<servlet-name>SSP Reports</servlet-name>
+<servlet-class>org.apache.pluto.container.driver.PortletServlet</servlet-class>
+<init-param>
+<param-name>portlet-name</param-name>
+<param-value>SSP Reports</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet>
+<servlet-name>EarlyAlert</servlet-name>
+<servlet-class>org.apache.pluto.container.driver.PortletServlet</servlet-class>
+<init-param>
+<param-name>portlet-name</param-name>
+<param-value>EarlyAlert</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>  
 
-	<servlet-mapping>
-		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>ViewRendererServlet</servlet-name>
-		<url-pattern>/WEB-INF/servlet/view</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewRendererServlet</servlet-name>
+        <url-pattern>/WEB-INF/servlet/view</url-pattern>
+    </servlet-mapping>
+<servlet-mapping>
+<servlet-name>MyGPS</servlet-name>
+<url-pattern>/PlutoInvoker/MyGPS</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>SSP</servlet-name>
+<url-pattern>/PlutoInvoker/SSP</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>SSP Reports</servlet-name>
+<url-pattern>/PlutoInvoker/SSP Reports</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+<servlet-name>EarlyAlert</servlet-name>
+<url-pattern>/PlutoInvoker/EarlyAlert</url-pattern>
+</servlet-mapping>
 
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-	<error-page>
-		<error-code>400</error-code>
-		<location>/400.jsp</location>
-	</error-page>
-	<error-page>
-		<error-code>404</error-code>
-		<location>/404.jsp</location>
-	</error-page>
-	<error-page>
-		<error-code>500</error-code>
-		<location>/500.jsp</location>
-	</error-page>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/400.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500.jsp</location>
+    </error-page>
 </web-app>
