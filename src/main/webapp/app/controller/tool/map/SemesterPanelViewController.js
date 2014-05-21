@@ -354,8 +354,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me=this;
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.updatePastTermButton, me);
-		if(me.allTemplatesPopUp != null && !me.allTemplatesPopUp.isDestroyed)
-		    me.allTemplatesPopUp.close();
 		 return me.callParent( arguments );
 	}
 });
