@@ -37,11 +37,15 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
+import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.impl.ScheduledTaskWrapperServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
@@ -54,7 +58,6 @@ import org.springframework.stereotype.Repository;
 /**
  * PersonSearch DAO
  */
-@NamedQueries({ @NamedQuery(name = "refreshMVDirectoryPerson_SP", query = "{ ? = call REFRESH_MV_DIRECTORY_PERSON() }" )})
 @Repository
 public class DirectoryPersonSearchDao  {
 
@@ -70,6 +73,9 @@ public class DirectoryPersonSearchDao  {
 	
 	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient ScheduledApplicationTaskStatusService scheduledApplicationTaskService;
 	
 	@Autowired
 	protected transient SessionFactory sessionFactory;
@@ -672,7 +678,12 @@ public class DirectoryPersonSearchDao  {
 
 	private void buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
 	{
-		stringBuilder.append(" from DirectoryPerson dp ");
+		ScheduledApplicationTaskStatus status = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_TASK_NAME);
+		if(status.getStatus().equals(ScheduledTaskStatus.RUNNING)){
+			stringBuilder.append(" from ViewDirectoryPerson dp ");
+		}else{
+			stringBuilder.append(" from MaterializedDirectoryPerson dp ");
+		}
 		
 		if(personRequired(personSearchRequest)){
 			stringBuilder.append(", Person p");

@@ -32,6 +32,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,11 +48,9 @@ import org.jasig.ssp.model.external.ExternalData;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.StudentType;
 
-
-@Entity
-@Immutable
-@Table(name = "mv_directory_person")
-public class DirectoryPerson extends AbstractExternalData implements ExternalData, Serializable { // NOPMD
+@SuppressWarnings("serial")
+@MappedSuperclass
+public abstract class DirectoryPerson extends AbstractExternalData implements ExternalData, Serializable { // NOPMD
 
 
 	/**
