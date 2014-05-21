@@ -187,9 +187,9 @@ public class PersonSearchController extends AbstractBaseController {
 		String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
 		if(sortConfigured.equals("dp.coach")){
 			sortConfigured = "dp.coachLastName";
-		}else if(sortConfigured.equals("currentProgramStatusName")){
+		}else if(sortConfigured.equals("dp.currentProgramStatusName")){
 			sortConfigured = "dp.programStatusName";
-		}else if(sortConfigured.equals("numberOfEarlyAlerts")){
+		}else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
 			sortConfigured = "dp.activeAlertsCount";
 		}
 		SortingAndPaging sortAndPage = SortingAndPaging
