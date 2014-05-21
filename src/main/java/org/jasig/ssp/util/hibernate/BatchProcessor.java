@@ -61,36 +61,51 @@ public class BatchProcessor<I, O> {
 	
 	public void process(Query query, String propertyName){
 		if(batches.hasNext()){
-			query.setParameterList(propertyName, batches.next());
-			results.addAll(query.list());
+			List<I> batch = batches.next();
+			if(batch != null && !batch.isEmpty()){
+				query.setParameterList(propertyName, batch);
+				results.addAll(query.list());
+			}
 		}
 	}
 	
 	public void updateProcess(Query query, String propertyName){
 		if(batches.hasNext()){
-			query.setParameterList(propertyName, batches.next());
-			count += query.executeUpdate();
+			List<I> batch = batches.next();
+			if(batch != null && !batch.isEmpty()){
+				query.setParameterList(propertyName, batch);
+				count += query.executeUpdate();
+			}
 		}
 	}
 	
 	public void countDistinct(Query query, String propertyName){
 		if(batches.hasNext()){
-			query.setParameterList(propertyName, batches.next());
-			count += (Long)(query.uniqueResult());
+			List<I> batch = batches.next();
+			if(batch != null && !batch.isEmpty()){
+				query.setParameterList(propertyName, batch);
+				count += (Long)(query.uniqueResult());
+			}
 		}
 	}
 	
 	public void countDistinct(Criteria query, String propertyName){
 		if(batches.hasNext()){
-			query.add(Restrictions.in(propertyName, batches.next()));
-			count += (Long)(query.uniqueResult());
+			List<I> batch = batches.next();
+			if(batch != null && !batch.isEmpty()){
+				query.add(Restrictions.in(propertyName, batch));
+				count += (Long)(query.uniqueResult());
+			}
 		}
 	}
 	
 	public void process(Criteria criteria, String propertyName){
 		if(batches.hasNext()){
-			criteria.add(Restrictions.in(propertyName, batches.next()));
-			results.addAll(criteria.list());
+			List<I> batch = batches.next();
+			if(batch != null && !batch.isEmpty()){
+				criteria.add(Restrictions.in(propertyName, batch));
+				results.addAll(criteria.list());
+			}
 		}
 	}
 	
@@ -143,7 +158,8 @@ public class BatchProcessor<I, O> {
 				batchCounter++;
 			}
 		}
-		batches.add(currentBatch);
+		if(currentBatch.size() > 0)
+			batches.add(currentBatch);
 		return batches.iterator();
 	}
 	
