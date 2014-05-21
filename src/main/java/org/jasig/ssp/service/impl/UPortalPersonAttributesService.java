@@ -18,37 +18,34 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.portlet.PortletRequest;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
-import org.jasig.portlet.utils.rest.SimpleCrossContextRestApiInvoker;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UPortalSecurityException;
 import org.jasig.ssp.security.uportal.RequestAndResponseAccessFilter;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.http.PatchedSimpleCrossContextRestApiInvoker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.ServletContextAware;
-
-import com.google.common.collect.Maps;
 import org.springframework.web.context.request.async.WebAsyncUtils;
+
+import javax.portlet.PortletRequest;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UPortalPersonAttributesService
 		implements PersonAttributesService, ServletContextAware {
@@ -116,7 +113,7 @@ public class UPortalPersonAttributesService
 		final Map<String, String[]> params = new HashMap<String, String[]>();
 		params.put(PARAM_USERNAME, new String[] { username });
 
-		final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
+		final CrossContextRestApiInvoker rest = new PatchedSimpleCrossContextRestApiInvoker();
 
 		final Object origWebAsyncManager = req.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
 		req.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
@@ -215,7 +212,7 @@ public class UPortalPersonAttributesService
 		// Add serchTerms[] to the params
 		params.put(PARAM_SEARCH_TERMS, searchTerms.toArray(new String[0]));
 
-		final CrossContextRestApiInvoker rest = new SimpleCrossContextRestApiInvoker();
+		final CrossContextRestApiInvoker rest = new PatchedSimpleCrossContextRestApiInvoker();
 
 		final Object origWebAsyncManager = req.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
 		req.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
@@ -337,4 +334,5 @@ public class UPortalPersonAttributesService
 	public void setServletContext(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	}
+
 }
