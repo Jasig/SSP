@@ -63,15 +63,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		
+		
+		me.appEventsController.getApplication().addListener('onBeforePlanLoad', me.onBeforePlanLoad, me);
+		me.appEventsController.getApplication().addListener('onAfterPlanLoad', me.updateAllPlanHours, me);
+		me.appEventsController.getApplication().addListener('onPlanLoad', me.onPlanLoad, me);
+		
 		me.appEventsController.assignEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me});
 		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onBeforePlanLoad, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.updateAllPlanHours, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onPlanLoad', callBackFunc: me.onPlanLoad, scope: me});
 
 
 		return me.callParent(arguments);
@@ -155,14 +157,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
        	} else {
 			me.currentMapPlan.clearMapPlan();
 			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
-			if(isTemplate){
-				me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
-			}
 			me.withMapPlanRenderingDependencies({
 				fn: function() {
 					me.onCreateMapPlan();
 					me.currentMapPlan.setIsTemplate(!!(isTemplate));
-					me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 				},
 				scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
 			});
@@ -185,7 +183,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var me = this;
 		me.mapEventUtils.loadCurrentMap();
 	},
-	
+
 	fireInitialiseMap: function(){
 		var me = this;
 		var id = me.personLite.get('id');
@@ -261,7 +259,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
 		me.currentMapPlan.set('name','New Plan');
 		me.onCreateMapPlan();
-		me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 	},
 	clearPlanState: function(){
 		var me = this;
@@ -277,6 +274,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		me.fillSemesterStores(terms);
 		var view  = me.getView().getComponent("semestersets");
+		Ext.suspendLayouts();
+		view.removeAll(true);
 		if(view == null){
 			return;
 		}		
@@ -294,8 +293,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var yearView;
 		Ext.Array.forEach(termsets, function(termSet) {
 			if (termSet) {
-				if(!me.yearFieldSets[termSet[0].get("reportYear")])
-				{
+
 					yearView = new Ssp.view.tools.map.PersistentFieldSet({
 						xtype : 'fieldset',
 						border: 0,
@@ -308,13 +306,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 						itemId : 'year' + termSet[0].get("reportYear"),
 						flex : 1
 					});
-					me.yearFieldSets[termSet[0].get("reportYear")] = yearView;
 				}
-				else
-				{
-					me.yearFieldSets[termSet[0].get("reportYear")].removeAll(false);
-					yearView = me.yearFieldSets[termSet[0].get("reportYear")];
-				}
+		
 			if(Ext.isIE){  //without this check/alteration, scrollbars appear in IE10 per SSP-1308
 				yearView.minHeight = 214;
 			}
@@ -329,7 +322,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 			yearView.add(semesterPanels);		
 			yearViews.push(yearView);
-			}
+			
 		});
 		me.currentMapPlan.repopulatePlanStores(me.semesterStores);
 		view.add(yearViews);	
@@ -377,6 +370,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.set('personId',  me.personLite.get('id'));
 		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
 		me.currentMapPlan.set('name','New Plan');		
+		me.currentMapPlan.dirty = false;
 	},
 	onPlanLoad: function() {
 		var me = this;
@@ -610,9 +604,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var mapResponse = serviceResponses.successes.validatePlan;
 		
 		me.clonedMap.loadFromServer(Ext.decode(mapResponse.responseText));
-		if(me.currentMapPlan.get("isTemplate")){
-			me.clonedMap.set("planCourses", me.clonedMap.get('templateCourses'));
-		}
 	    if(me.clonedMap.get("isValid"))
 	    	me.onValidateAccept('ok');
 		else{
@@ -650,7 +641,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 						me.currentMapPlan.loadPlan(me.clonedMap, true);
 						me.onCreateMapPlan();
 						me.currentMapPlan.dirty = true;
-						me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 					},
 					scope: me
 			});

@@ -51,9 +51,24 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 		{
 			me.loadTranscript();
 		}
+		me.appEventsController.getApplication().addListener('onBeforePlanLoad', me.onInitEvent, me);
+		me.appEventsController.getApplication().addListener('onBeforePlanSave', me.onInitEvent, me);
+		me.appEventsController.getApplication().addListener('onRemoveMask', me.onAfterEvent, me);		
+		me.appEventsController.getApplication().addListener('onAfterPlanSave', me.onAfterEvent, me);		
 		return this.callParent(arguments);
     },
-	
+	onInitEvent: function(){
+		var me = this;
+		me.getView().setLoading(true);
+	},
+	onAfterEvent: function(){
+		var me = this;
+		me.getView().setLoading(false);
+	},		
+	removeMask: function() {
+		var me = this;
+		me.getView().setLoading(false);
+	},
 	planDataHasChanged:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
@@ -125,6 +140,9 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 	
 	destroy:function(){
 	    var me=this;
+		me.appEventsController.removeEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onInitEvent, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
 	    me.currentMapPlan.clearMapPlan();
 	    return me.callParent( arguments );
 	}

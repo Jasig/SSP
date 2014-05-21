@@ -40,7 +40,7 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	
 	private MapTemplateVisibility visibility;
 	
-	private List<TemplateCourseTO> templateCourses = new ArrayList<TemplateCourseTO>(); 
+	private List<TemplateCourseTO> planCourses = new ArrayList<TemplateCourseTO>(); 
 	
 	
 	public TemplateTO(Template model) {
@@ -63,9 +63,9 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		this.setVisibility(model.getVisibility());
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
-		List<TemplateCourse> templateCourses = model.getTemplateCourses();
+		List<TemplateCourse> templateCourses = model.getPlanCourses();
 		for (TemplateCourse templateCourse : templateCourses) {
-			this.getTemplateCourses().add(new TemplateCourseTO(templateCourse));
+			this.getPlanCourses().add(new TemplateCourseTO(templateCourse));
 		}
 		List<TermNote> termNotes = model.getTermNotes();
 		for (TermNote termNote : termNotes) {
@@ -99,13 +99,13 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	}
 
 
-	public List<TemplateCourseTO> getTemplateCourses() {
-		return templateCourses;
+	public List<TemplateCourseTO> getPlanCourses() {
+		return planCourses;
 	}
 
 
-	public void setTemplateCourses(List<TemplateCourseTO> templateCourses) {
-		this.templateCourses = templateCourses;
+	public void setPlanCourses(List<TemplateCourseTO> planCourses) {
+		this.planCourses = planCourses;
 	}
 
 	public Collection<TemplateTO> asTOList(Collection<Template> rows) {
@@ -119,7 +119,7 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	@Override
 	@JsonIgnore
 	public List<TemplateCourseTO> getCourses() {
-		return templateCourses;
+		return planCourses;
 	}
 
 	public MapTemplateVisibility getVisibility() {

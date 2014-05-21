@@ -25,43 +25,5 @@ Ext.define('Ssp.model.tool.map.MapStatus', {
             {name:'planRatioFraction',type:'string'},
             {name:'totalPlanCourses',type:'string'},
             {name:'planRatioDemerits',type:'string'}
-	],
-	
-	clearMapPlan:function(){
-		var me = this;
-		me.clearPlanCourses();
-		me.clearTermNotes();
-		me.set('ownerId','');
-		me.set('personId','');
-		me.set('name','');
-		me.set('id','');
-		me.set('createdBy','');
-		me.set('modifiedBy','');
-		me.set('contactTitle','');
-		me.set('contactPhone','');
-		me.set('contactEmail','');
-		me.set('contactName','');
-		me.set('contactNotes','');
-		me.set('studentNotes','');
-		//me.set('basedOnTemplateId','');
-		me.set('isFinancialAid',false);
-		me.set('isImportant',false);
-		me.set('isF1Visa',false);
-		me.set('academicGoals','');
-		me.set('careerLink','');
-		me.set('academicLink','');
-		me.set('departmentCode','');
-		me.set('divisionCode','');
-		me.set('catalogYearCode','');
-		me.set('isPrivate',false);
-		me.set('visibility','AUTHENTICATED');
-		me.set('programCode','');
-		me.set('createdDate',null);
-		me.set('modifiedDate',null);
-		me.set('isValid',true);
-		me.set('isTemplate',false);
-		me.dirty = false;
-	}
-			
-
+	]
 });

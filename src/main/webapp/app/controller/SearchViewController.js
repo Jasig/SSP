@@ -130,6 +130,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   //	me.personLite.set('id','');
+
+
 		
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH = 0;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD = 1;
@@ -190,6 +192,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	onViewReady: function(comp, eobj){
 		var me=this;
+		// 'do' events are added to avoid potential multiple listener issues
+		me.appEventsController.assignEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doDeletePerson', callBackFunc: me.onDeletePerson, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'doPersonNav', callBackFunc: me.setProgramStatus, scope: me});	
+
+		
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
@@ -235,6 +246,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     destroy: function() {
     	var me=this;
+		me.appEventsController.removeEvent({eventName: 'doDeletePerson', callBackFunc: me.onDeletePerson, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
+		me.appEventsController.removeEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
         me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
@@ -515,10 +531,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 
 	onDeletePerson: function(){
-	    var records = this.getView().getSelectionModel().getSelection();
+		var me=this;
+	    var records = me.getView().getSelectionModel().getSelection();
 		if (records.length>0)
 		{
-			this.deleteConfirmation();
+			me.deleteConfirmation();
 		}else{
 			Ext.Msg.alert('Error','Please select a student to delete.');
 		}
@@ -818,7 +835,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     getCaseloadSuccess: function( r, scope){
     	var me=scope;
     	me.getView().setLoading( false );
-		me.getSearchGridPager().onLoad();
+    	if(me.getSearchGridPager)
+    	{
+    		me.getSearchGridPager().onLoad();
+    	}
 		me.harmonizePersonLite();
     },
 

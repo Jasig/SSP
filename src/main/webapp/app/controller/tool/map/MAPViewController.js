@@ -30,6 +30,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         personLite: 'personLite',
 		semesterStores: 'currentSemesterStores'
     },
+
     control: {
 		view: {
 			afterlayout: {
@@ -156,21 +157,18 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.onUpdateSaveOption();
 
 		
-		me.appEventsController.assignEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onInitEvent, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onAfterPlanSave', callBackFunc: me.onAfterEvent, scope: me});
+
 		
 		// Special handling for this one b/c ApplicationEventsController only
 		// allows one handler per event. We happen to know it's OK to have
 		// multiple handlers in this particular case.
 		me.appEventsController.getApplication().addListener('toolsNav', me.onToolsNav, me);
-
+		me.appEventsController.getApplication().addListener('onAfterPlanLoad', me.onCurrentMapPlanChange, me);
 		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
 		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
+		me.appEventsController.assignEvent({eventName: 'personButtonDelete', callBackFunc: me.onPersonButtonDelete, scope: me});
 		me.appEventsController.assignEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
 		me.appEventsController.assignEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
@@ -202,10 +200,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav'});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav'});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -231,12 +229,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						// only b/c that code is much older (but still might turn out to need
 						// to be handled similarly)
 						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
+							me.saveTemplatePopUp.destroy();personNav
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav'});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav'});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -251,14 +249,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},
-	onInitEvent: function(){
-		var me = this;
-		me.getView().setLoading(true);
-	},
-	onAfterEvent: function(){
-		var me = this;
-		me.getView().setLoading(false);
-	},	
 	onPersonButtonAdd: function(searchViewController){
 		var me = this;
 
@@ -274,10 +264,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAddPerson'});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAddPerson'});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -305,10 +295,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonButtonEdit'});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonButtonEdit'});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -335,10 +325,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonToolbarEdit'});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonToolbarEdit'});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -366,10 +356,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doDeletePerson' });
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doDeletePerson' });
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -397,10 +387,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doRetrieveCaseload' });
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doRetrieveCaseload' });
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -428,10 +418,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange', status:button.action});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange',status: button.action });
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -597,7 +587,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			method: 'GET',
 			successFunc: successFunc 
 		});
-		
+		if(me.allPlansPopUp)
+		{
+			me.allPlansPopUp.destroy();
+		}
     	me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,store:me.planStore});
 		me.allPlansPopUp.show();
     },
@@ -614,7 +607,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	templateDataChangedLoadingPlans:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
-			me.onSaveTemplateRequest({loaderDialogEventName:'laodPlanDialog'});
+			me.onSaveTemplateRequest({loaderDialogEventName:'loadPlanDialog'});
 		}	else{
 				me.loadPlanDialog();
 		}
@@ -655,8 +648,15 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     
     loadTemplateDialog:function(){
     	var me=this;
-        if(me.allTemplatesPopUp == null || me.allTemplatesPopUp.isDestroyed)
-			me.allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates',{hidden:true});
+        if(me.allTemplatesPopUp == null || me.allTemplatesPopUp.isDestroyed) 
+        {
+        	me.allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates',{hidden:true});
+        }
+        else
+        {
+        	me.allTemplatesPopUp.destroy();
+        	me.allTemplatesPopUp = Ext.create('Ssp.view.tools.map.LoadTemplates',{hidden:true});
+        }
 		me.allTemplatesPopUp.show();
     },
     
@@ -726,6 +726,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			else
 				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedNewMap, me);
 		}else{
+			me.appEventsController.getApplication().fireEvent("onBeforePlanLoad");
 			me.mapEventUtils.createNewMapPlan();
 		}
     },
@@ -735,6 +736,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(buttonId == "on" || buttonId == "yes"){
 			me.onSavePlanRequest({loaderDialogEventName:'onCreateNewMapPlan'});
 		}else{
+			me.appEventsController.getApplication().fireEvent("onBeforePlanLoad");
 			me.mapEventUtils.createNewMapPlan();
 		}
 	},
@@ -744,6 +746,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(buttonId == "on" || buttonId == "yes"){
 			me.onSaveTemplateRequest({loaderDialogEventName:'onCreateNewMapPlan'});
 		}else{
+			me.appEventsController.getApplication().fireEvent("onBeforePlanLoad");
 			me.mapEventUtils.createNewMapPlan();
 		}
 	},

@@ -131,11 +131,13 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 			me.getOnPlanField().setValue("No Status");
 			me.getOnPlanStatusDetails().setTooltip("Currently, there is no status given for this student.");
 		}
+
 	},
 	
 	onPlanStatusFailure:function(){
 		var me = this;
 		me.getOnPlanField().setValue("No Plan");
+
 	},
 	
 	onCurrentMapPlanChange: function(){
@@ -148,6 +150,8 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 			me.getOnPlanField().show();
 			me.getOnPlanStatusDetails().show();
 		}
+		me.appEventsController.getApplication().fireEvent("onRemoveMask");
+
 	},
 
 	

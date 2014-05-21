@@ -57,11 +57,16 @@ Ext.define('Ssp.controller.ToolsViewController', {
             scope: me
         });
         
+        me.appEventsController.assignEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
+       
         if (me.personLite.get('id') != "") {
             me.loadPerson();
         }
     },
-    
+    doToolsNav: function(){
+    	var me=this;
+    	me.loadTool(toolsRecord.get('toolType'));
+    },
     destroy: function(){
         var me = this;
         

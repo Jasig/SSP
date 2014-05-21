@@ -200,7 +200,7 @@ public class TemplateControllerIntegrationTest {
 		course.setOrderInTerm(new Integer(1));
 		course.setIsDev(true);
 		course.setCreditHours(new BigDecimal(3.0));
-		obj.getTemplateCourses().add(course);
+		obj.getCourses().add(course);
 		return obj;
 	}
 

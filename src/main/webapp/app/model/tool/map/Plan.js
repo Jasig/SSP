@@ -89,14 +89,6 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		}else{
 			me.set('planCourses',[]);
 		}
-		var currentTemplateCourses =  me.get('templateCourses');
-		if(Array.isArray(currentTemplateCourses)){
-			while(	currentTemplateCourses.length > 0){
-				currentTemplateCourses.pop(); 
-			}
-		}else{
-			me.set('templateCourses',[]);
-		}
 	},	
 	
     setIsTemplate: function(value){
@@ -270,15 +262,14 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.isValid = me.get('isValid');
 		simpleData.programCode = me.get('programCode');
 		simpleData.catalogYearCode = me.get('catalogYearCode');
+		simpleData.planCourses = me.get('planCourses');
 		
 		if(me.get('isTemplate')){
-			simpleData.templateCourses = me.get('planCourses');
 			simpleData.departmentCode = me.get('departmentCode');
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
 		}else{
-			simpleData.planCourses = me.get('planCourses');
 			simpleData.personId = me.get('personId');
 		}
 		return simpleData;
@@ -299,9 +290,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.loadFromServer(data);
 		if(retainTemplateStatus){
 			me.get('isTemplate', isTemplate);
-			if(isTemplate){
-				me.set("planCourses", me.get('templateCourses'));
-		}}
+		}
 	},
 	
 	getBoolean:function(fieldName){
@@ -492,8 +481,6 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	getPlanCourseFromCourseCode: function(courseCode, termCode){
 		var me = this;
 		var planCourses = me.get('planCourses');
-		if(!planCourses)
-			planCourses = me.get('templateCourses');
 		if(planCourses)
 		{
 			for(var i = 0; i < planCourses.length; i++){
@@ -515,8 +502,6 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	repopulatePlanStores:function(semesterStores, markDirty){
 		var me = this;
 		var planCourses = me.get('planCourses');
-		if(!planCourses)
-			planCourses = me.get('templateCourses');
 		var courses = {};
 		if(planCourses && planCourses.length > 0){
 			Ext.Array.forEach(planCourses, function(planCourse) {

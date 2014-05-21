@@ -28,7 +28,6 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	mapEventUtils: 'mapEventUtils',
 		contactPersonStore: 'contactPersonStore'
     },
-    
 	control: {
 		view: {
 			show: 'onShow'
@@ -98,7 +97,13 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		if(me.getView().viewToClose){
 			me.getView().viewToClose.close();
 		}else if(me.getView().loaderDialogEventName){
-			me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName);
+			if(me.getView().loaderDialogEventName === 'doPersonNav')
+			{
+				
+			}else
+			{
+				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
+			}
 		}
     },
     

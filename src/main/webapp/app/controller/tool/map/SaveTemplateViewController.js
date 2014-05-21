@@ -94,7 +94,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		if(me.getView().viewToClose){
 			me.getView().viewToClose.close();
 		}else if(me.getView().loaderDialogEventName){
-			me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName);
+			me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
 		}
     },
     

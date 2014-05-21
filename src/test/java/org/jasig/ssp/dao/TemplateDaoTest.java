@@ -163,7 +163,7 @@ public class TemplateDaoTest {
 				course.setTemplate(template);
 				course.setCreditHours(new BigDecimal(3.0));
 				course.setTermCode(term.getCode());
-				template.getTemplateCourses().add(course);
+				template.getPlanCourses().add(course);
 			}
 		}
 		templateService.save(template);
@@ -200,7 +200,7 @@ public class TemplateDaoTest {
 		course.setTemplate(template);
 		course.setCreditHours(new BigDecimal(4.0));
 		
-		template.getTemplateCourses().add(course);
+		template.getPlanCourses().add(course);
 		
 		dao.save(template);
 		
@@ -208,8 +208,8 @@ public class TemplateDaoTest {
 		session.flush();
 		
 		Template loadedTemplate = dao.load(template.getId()).clone();
-		assertEquals(loadedTemplate.getTemplateCourses().size(), 1);
-		TemplateCourse templateCourse = loadedTemplate.getTemplateCourses().get(0);
+		assertEquals(loadedTemplate.getPlanCourses().size(), 1);
+		TemplateCourse templateCourse = loadedTemplate.getPlanCourses().get(0);
 		assertEquals(templateCourse.getCourseCode(),"MAT");
 		assertEquals(templateCourse.getCourseTitle(),"TEST");
 		assertEquals(templateCourse.getFormattedCourse(),"TEST");
@@ -242,7 +242,7 @@ public class TemplateDaoTest {
 		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setTemplate(template);
 		course.setCreditHours(new BigDecimal(4.0));
-		template.getTemplateCourses().add(course);
+		template.getPlanCourses().add(course);
 		
 		dao.save(template);
 		
@@ -250,8 +250,8 @@ public class TemplateDaoTest {
 		session.flush();
 		
 		Template loadedTemplate = dao.load(template.getId()).clone();
-		assertEquals(loadedTemplate.getTemplateCourses().size(), 1);
-		TemplateCourse templateCourse = loadedTemplate.getTemplateCourses().get(0);
+		assertEquals(loadedTemplate.getPlanCourses().size(), 1);
+		TemplateCourse templateCourse = loadedTemplate.getPlanCourses().get(0);
 		assertEquals(templateCourse.getCourseCode(),"MAT");
 		assertEquals(templateCourse.getCourseTitle(),"TEST");
 		assertEquals(templateCourse.getFormattedCourse(),"TEST");
@@ -290,7 +290,7 @@ public class TemplateDaoTest {
 		course.setCreatedBy(new AuditPerson(person.getId()));
 		course.setTemplate(template);
 		course.setCreditHours(new BigDecimal(3.0));
-		template.getTemplateCourses().add(course);
+		template.getPlanCourses().add(course);
 		
 		dao.save(template);
 		
@@ -307,7 +307,7 @@ public class TemplateDaoTest {
 		
 		Template loadedClone = dao.load(clone.getId());
 		
-		assertEquals(1, loadedClone.getTemplateCourses().size());
+		assertEquals(1, loadedClone.getPlanCourses().size());
 		
 		
 		

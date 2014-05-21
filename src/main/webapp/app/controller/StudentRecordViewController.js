@@ -53,6 +53,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     init: function() {
     	var me=this;
 		me.confidentialityLevelsStore.load();
+		me.appEventsController.assignEvent({eventName: 'doPersonToolbarEdit', callBackFunc: me.studentRecordEdit, scope: me});
+
         me.appEventsController.assignEvent({
             eventName: 'updateStudentRecord',
             callBackFunc: me.updateStudentRecord,
@@ -143,6 +145,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
              callBackFunc: me.updateStudentRecord,
              scope: me
          });
+    	 
+ 		me.appEventsController.removeEvent({eventName: 'doPersonToolbarEdit', callBackFunc: me.studentRecordEdit, scope: me});
+
     	 return me.callParent(arguments);
     }
 });

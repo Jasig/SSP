@@ -65,7 +65,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
         				    	         cls: 'helpIconSmall',
         				    	         tooltip: 'Student is currently on plan.'
         				    	     },{
-                            		fieldLabel: 'PlanStatus',
+                            		fieldLabel: 'Plan Status',
         		                    itemId: 'onPlan',
         		                    name: 'onPlan',
         							fieldStyle:"text-align:left"

@@ -74,7 +74,6 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
        		if(me.isTemplate)
        		{
        			me.scope.currentMapPlan.setIsTemplate(true);
-       			me.scope.currentMapPlan.set("planCourses", me.scope.currentMapPlan.get('templateCourses'));
        		}
        		else
        		{
@@ -107,12 +106,8 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 	},
 	createNewMapPlan: function () {
 		var me = this;
-		me.appEventsController.getApplication().fireEvent("onBeforePlanLoad");
-		me.currentMapPlan.clearMapPlan();
-		me.currentMapPlan.set('personId',  me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
-		me.currentMapPlan.set('name','New Plan');
 		me.appEventsController.getApplication().fireEvent("onPlanLoad");
+		Ext.Msg.alert('The plan is ready for edit');
 	},
  
 	saveTemplate: function(saveAs) {
@@ -221,7 +216,6 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
        		if(isTemplate)
        		{
        			me.currentMapPlan.setIsTemplate(true);
-       			me.currentMapPlan.set("planCourses", me.currentMapPlan.get('templateCourses'));
        		}
 			me.appEventsController.getApplication().fireEvent("onPlanLoad");
 		}

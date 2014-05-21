@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     },
 	init: function() {
 		var me=this;
-		me.getView().setLoading(false);
+		me.getView().setLoading(false,false);
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		me.store.load();
 		me.store.appEventsController = me.appEventsController;

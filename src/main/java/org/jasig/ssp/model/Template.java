@@ -63,7 +63,7 @@ public class Template extends AbstractPlan implements Cloneable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@OrderBy("orderInTerm")	
-	private List<TemplateCourse> templateCourses = new ArrayList<TemplateCourse>(0);	
+	private List<TemplateCourse> planCourses = new ArrayList<TemplateCourse>(0);	
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
@@ -101,12 +101,12 @@ public class Template extends AbstractPlan implements Cloneable{
 		this.visibility = visibility;
 	}
 
-	public List<TemplateCourse> getTemplateCourses() {
-		return templateCourses;
+	public List<TemplateCourse> getPlanCourses() {
+		return planCourses;
 	}
 
-	public void setTemplateCourses(List<TemplateCourse> planCourses) {
-		this.templateCourses = planCourses;
+	public void setPlanCourses(List<TemplateCourse> planCourses) {
+		this.planCourses = planCourses;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -129,11 +129,11 @@ public class Template extends AbstractPlan implements Cloneable{
 		clone.setDepartmentCode(this.getDepartmentCode());
 		clone.setDivisionCode(this.getDivisionCode());
 		clone.setProgramCode(this.getProgramCode());
-		List<TemplateCourse> planCourses = this.getTemplateCourses();
+		List<TemplateCourse> planCourses = this.getPlanCourses();
 		for (TemplateCourse planCourse : planCourses) {
 			TemplateCourse planCourseClone = planCourse.clone();
 			planCourseClone.setTemplate(clone);
-			clone.getTemplateCourses().add(planCourseClone);
+			clone.getPlanCourses().add(planCourseClone);
 		}
 		List<TermNote> termNotes = this.getTermNotes();
 		for (TermNote termNote : termNotes) {
@@ -155,7 +155,7 @@ public class Template extends AbstractPlan implements Cloneable{
 
 	@Override
 	public List<? extends AbstractPlanCourse<?>> getCourses() {
-		return getTemplateCourses();
+		return getPlanCourses();
 	}
 
 	@Override

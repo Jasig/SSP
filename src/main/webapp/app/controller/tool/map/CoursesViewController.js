@@ -87,7 +87,7 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
 	init: function() {
 		var me=this;
 		var view = me.getView();
-		view.setLoading(true);
+		//view.setLoading(true);
         me.appEventsController.getApplication().addListener("onBeforeCourseLoad", me.onBeforeCourseLoad, me);
         me.appEventsController.getApplication().addListener("onAfterCourseLoad", me.onAfterCourseLoad, me);
         
@@ -98,11 +98,11 @@ Ext.define('Ssp.controller.tool.map.CoursesViewController', {
     },
     onBeforeCourseLoad: function(){
         var me=this;
-        me.getView().setLoading(true);
+       // me.getView().setLoading(true);
     },    
     onAfterCourseLoad: function(){
         var me=this;
-        me.getView().setLoading(false);
+       // me.getView().setLoading(false);
     },    
     onProgramSelect: function(){
         var me=this;

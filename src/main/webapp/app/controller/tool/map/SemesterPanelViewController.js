@@ -299,7 +299,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			}
 			me.restoreCourse();
     	}else{
-			me.currentMapPlan.dirty = true;
+			me.currentMapPlan.dirty = false;
 		}
     },
     
