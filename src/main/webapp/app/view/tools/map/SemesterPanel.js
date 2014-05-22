@@ -34,6 +34,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 	},
 	destroy: function () {
 		//Overwritten so that object does not get destroyed when removed from the view
+		var me=this;
+		me.store.removeAll();
 	},
 	onDestroy: function () {
 	},
@@ -294,7 +296,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 	getStore: function() {
 		var me=this;
 		return me.store;
-	},
+	}
       
     
 });

@@ -51,6 +51,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     xtype: 'button',
                     itemId: 'planOverviewButton',
                     align: 'center',
+                    hideMode: 'offsets',
                     padding: '0 0 0 0'
             },
            {
@@ -60,6 +61,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'mapNotesIcon',
                     xtype: 'button',
                     itemId: 'planNotesButton',
+                    hideMode: 'offsets',
                     align: 'center',
                     padding: '0 0 0 0'
                 },
@@ -72,6 +74,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 		                    itemId: 'movePlanButton',
 			                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
 		                    align: 'center',
+                    		hideMode: 'offsets',
 		                    padding: '0 0 0 0'							
 		           }, 
            {
@@ -83,6 +86,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     itemId: 'emailPlanButton',
                     hidden:	!me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
                     align: 'center',
+                    hideMode: 'offsets',
                     padding: '0 0 0 0'
                 },
                 {
@@ -92,6 +96,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     cls: 'mapPrintIcon',
                     xtype: 'button',
                     itemId: 'printPlanButton',
+                    hideMode: 'offsets',
 	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
                     align: 'center',
                     padding: '0 0 0 0'
@@ -104,6 +109,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                    xtype: 'button',
 	                    itemId: 'planFAButton',
 	                    align: 'center',
+                  	    hideMode: 'offsets',
 	                    hidden:  me.currentMapPlan.get("isTemplate") == true,
 	                    padding: '0 0 0 0'
 	                },
@@ -115,6 +121,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                    xtype: 'button',
 			                    itemId: 'showStudentTranscript',
 			                    align: 'center',
+                  	   		    hideMode: 'offsets',
 			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
 			                    padding: '0 0 0 0'
 			          },
@@ -126,6 +133,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                    xtype: 'button',
 			                    itemId: 'showMapStatus',
 			                    align: 'center',
+                  			    hideMode: 'offsets',
 			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
 			                    padding: '0 0 0 0'
 			                    

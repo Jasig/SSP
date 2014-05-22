@@ -289,6 +289,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				termsets[term.get("reportYear")][0] = term;
 			};
 		});
+		Ext.Array.forEach(me.yearFieldSets, function(fieldSet) {
+			fieldSet.removeAll(false);
+		});
 		var yearViews = new Array();
 		var yearView;
 		Ext.Array.forEach(termsets, function(termSet) {
@@ -306,8 +309,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 						itemId : 'year' + termSet[0].get("reportYear"),
 						flex : 1
 					});
+					me.yearFieldSets[termSet[0].get("reportYear")] = yearView;
 				}
-		
+				else
+				{
+					me.yearFieldSets[termSet[0].get("reportYear")].removeAll(false);
+					yearView = me.yearFieldSets[termSet[0].get("reportYear")];
+				}
 			if(Ext.isIE){  //without this check/alteration, scrollbars appear in IE10 per SSP-1308
 				yearView.minHeight = 214;
 			}
