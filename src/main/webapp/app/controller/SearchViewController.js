@@ -101,13 +101,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     		}
     	},
     	
-    	deletePersonButton: {
-    		selector: '#deletePersonButton',
-    		listeners: {
-    			click: 'onDeletePersonClick'
-    		}
-    	},
-    	
 		'setTransitionStatusButton': {
 			click: 'onSetProgramStatusClick'
 		},
@@ -194,7 +187,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me=this;
 		// 'do' events are added to avoid potential multiple listener issues
 		me.appEventsController.assignEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doDeletePerson', callBackFunc: me.onDeletePerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
@@ -246,7 +238,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     destroy: function() {
     	var me=this;
-		me.appEventsController.removeEvent({eventName: 'doDeletePerson', callBackFunc: me.onDeletePerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
@@ -502,15 +493,6 @@ Ext.define('Ssp.controller.SearchViewController', {
         }
 	},
 
-	onDeletePersonClick: function( button ){
-    	var me=this;
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonDelete',me);  
-        if(skipCallBack)
-        {
-        	me.onDeletePerson();
-        }
-	},	
-	
 	onAddPerson: function(){
 		var me=this;
 		var model = new Ssp.model.Person();
@@ -528,63 +510,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}else{
 			Ext.Msg.alert('Error','Please select a student to edit.');
 		}
-	},
-
-	onDeletePerson: function(){
-		var me=this;
-	    var records = me.getView().getSelectionModel().getSelection();
-		if (records.length>0)
-		{
-			me.deleteConfirmation();
-		}else{
-			Ext.Msg.alert('Error','Please select a student to delete.');
-		}
-	},	
-	
-    deleteConfirmation: function() {
-    	var message = 'You are about to delete the student: "'+ this.person.getFullName() + '". Would you like to continue?';
-    	var model = this.person;
-        if (model.get('id') != "") 
-        {  
-           Ext.Msg.confirm({
-   		     title:'Delete Student?',
-   		     msg: message,
-   		     buttons: Ext.Msg.YESNO,
-   		     fn: this.deletePerson,
-   		     scope: this
-   		   });
-        }else{
-     	   Ext.Msg.alert('SSP Error', 'Unable to delete student.'); 
-        }
-     },	
-	
-	deletePerson: function( btnId  ){
-     	var me=this;
-     	var id = me.personLite.get('id');
-     	if (btnId=="yes")
-     	{
-     	   me.getView().setLoading( true );
-           me.personService.destroy( id,
-        		   {
-        	   success: me.deletePersonSuccess,
-        	   failure: me.deletePersonFailure,
-        	   scope: me
-           });	
-     	}	
-	},
-	
-	deletePersonSuccess: function( r, scope ){
-		var me=scope;
-		var store = me.searchStore;
-		var id = me.personLite.get('id');
-		me.getView().setLoading( false );
-	    store.remove( store.getById( id ) );
-		me.loadStudentToolsView();
-	},
-	
-	deletePersonFailure: function( r, scope ){
-		var me=scope;
-		me.getView().setLoading( false );
 	},
 
     refreshPagingToolBar: function(){

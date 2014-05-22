@@ -168,7 +168,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
 		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'personButtonDelete', callBackFunc: me.onPersonButtonDelete, scope: me});
 		me.appEventsController.assignEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
 		me.appEventsController.assignEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
@@ -341,37 +340,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},	
-	onPersonButtonDelete: function(searchViewController){
-		var me = this;
 
-		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
-				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doDeletePerson' });
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doDeletePerson' });
-						me.savePlanPopUp.show();
-					}
-				} else if(btn === 'no') {
-				    me.currentMapPlan.dirty = false;
-				    me.semesterStores = {};
-				    searchViewController.onDeletePerson();
-				}
-			});	
-			return false;
-		}
-		return true;
-	},	
 	onRetrieveCaseload: function(searchViewController){
 		var me = this;
 
@@ -796,7 +765,6 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
-		me.appEventsController.removeEvent({eventName: 'personButtonDeleted', callBackFunc: me.onPersonButtonDelete, scope: me});
 		me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personStatusChange', callBackFunc: me.onPersonStatusChange, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});

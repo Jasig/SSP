@@ -145,15 +145,6 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     itemId: 'editPersonButton'
                 }, {
-                    tooltip: 'Delete Student',
-                    text: '',
-                    width: 25,
-                    height: 25,
-                    hidden: !me.authenticatedPerson.hasAccess('DELETE_STUDENT_BUTTON'),
-                    cls: 'deletePersonIcon',
-                    xtype: 'button',
-                    itemId: 'deletePersonButton'
-                }, {
                     xtype: 'tbspacer',
                     flex: 1
                 }, {
