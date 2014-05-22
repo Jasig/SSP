@@ -31,7 +31,6 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     fieldLabel: 'Referral Name',
                     anchor: '100%',
                     name: 'name',
-                    value: 'default',
                     allowBlank: false,
                     required: true
                 },
