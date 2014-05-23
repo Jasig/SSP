@@ -193,7 +193,7 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 
 		    		me.planStore.loadData(data);
 		    		me.planStore.sort();
-		    		me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,store:me.planStore});
+		    		me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,store:me.planStore,fromMapLoad:true});
 		    		me.allPlansPopUp.show();
 		    	}
 			};
