@@ -267,7 +267,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
 		
 		var invalidReasons = planCourse.invalidReasons;
-    	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
+//    	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
+        if(true){
+    		
     		var message = " \n Are you sure you want to add the course? " 
 						+ planCourse.formattedCourse
 						+ " generates the following concerns: " 
@@ -294,12 +296,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
         	var index = me.getView().getStore().find('code', me.droppedRecord.get("code"));
 			if(index >= 0){
         		me.getView().getStore().removeAt(index);
+        		//It would be nice if ExtJs has an option to 'remove silently'.  Removing this from the store triggers the
+        		// 'isDirty' check done during global navigation.  Since we don't want the cancellation of the drop
+        		// to trip dirty (see SSP-2032), we clear out the 'removed' array.
+				me.getView().getStore().removed = [];
 				me.currentMapPlan.dirty = me.planWasDirty;
 				me.getView().getStore().sort("orderInTerm", "ASC");
 			}
 			me.restoreCourse();
     	}else{
-			me.currentMapPlan.dirty = false;
+			me.currentMapPlan.dirty = true;
 		}
     },
     
