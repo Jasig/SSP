@@ -23,7 +23,7 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
     inject: {
         apiProperties: 'apiProperties'
     },
-
+    remoteSort: true,
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, { 
@@ -35,9 +35,17 @@ Ext.define('Ssp.store.reference.AbstractReferences', {
 								page : 0,
 								start : 0,
 								limit : me.apiProperties.getPagingSize()
-							}						
+							},
+							listeners:{
+								beforeload: me.beforeSort
+							}					
 						}
 		);
+		
 		return me.callParent(arguments);
+	},
+	
+	beforeSort: function( store, operation, eOpts ){
+		store.currentPage = 1;
 	}
 });

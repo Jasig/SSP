@@ -83,6 +83,8 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		var proxyObj = {
 			type: 'rest',
 			url: this.createUrl(url),
+			simpleSortMode: true,
+			directionParam:'sortDirection',
 			actionMethods: {
 				create: "POST", 
 				read: "GET", 
