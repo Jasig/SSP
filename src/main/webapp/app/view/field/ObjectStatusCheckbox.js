@@ -16,6 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.SelfHelpGuide', {
-    extend: 'Ssp.model.reference.AbstractReference'
+Ext.define('Ssp.view.field.ObjectStatusCheckbox', {
+	extend: 'Ext.form.field.Checkbox',
+	getValue: function () {
+	        return this.checked ?  "ACTIVE": "INACTIVE";
+	 },
+	alias : 'widget.oscheckbox',
+    uncheckedValue: "INACTIVE",
+	inputValue: "ACTIVE"
 });

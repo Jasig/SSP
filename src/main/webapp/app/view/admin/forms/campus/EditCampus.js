@@ -58,9 +58,9 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			        width: 300
 				},
 				{
-                    xtype: 'checkbox',
+                    xtype: 'oscheckbox',
                     fieldLabel: 'Active',
-                    name: 'active'
+                    name: 'objectStatus'
                 }],
 	            
 	            dockedItems: [{

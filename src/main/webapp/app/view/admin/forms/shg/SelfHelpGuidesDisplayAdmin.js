@@ -52,8 +52,8 @@ Ext.define('Ssp.view.admin.forms.shg.SelfHelpGuidesDisplayAdmin', {
         		                  flex: 1 
         		             },
     		                { header: 'Published',  
-      		                  dataIndex: 'active',
-      		                  renderer: me.columnRendererUtils.renderFriendlyBoolean,
+      		                  dataIndex: 'objectStatus',
+      		                  renderer: me.columnRendererUtils.renderObjectStatus,
       		                  flex: 1 
       		                }
     		           ],

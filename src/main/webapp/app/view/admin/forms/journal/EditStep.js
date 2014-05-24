@@ -46,9 +46,9 @@ Ext.define('Ssp.view.admin.forms.journal.EditStep',{
                     name: 'usedForTransition'
                 },
 				{
-                    xtype: 'checkbox',
+                    xtype: 'oscheckbox',
                     fieldLabel: 'Active',
-                    name: 'active'
+                    name: 'objectStatus'
                 }
 				],
             

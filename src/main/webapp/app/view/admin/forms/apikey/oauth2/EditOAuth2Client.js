@@ -213,11 +213,11 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     vertical: true
                 },
                 {
-                    xtype: 'checkboxfield',
+                    xtype: 'oscheckbox',
                     fieldLabel: 'Active',
                     checked: true,
                     anchor: '40%',
-                    name: 'active',
+                    name: 'objectStatus',
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {

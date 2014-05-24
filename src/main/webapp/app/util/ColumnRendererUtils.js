@@ -213,7 +213,8 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;
 	},
 	
-	renderActive: function(val, metadata, record) {
+	
+	renderObjectStatus: function(val, metadata, record) {
 		var active;
 		if(record === null)
 		{
@@ -221,7 +222,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		}
 		else
 		{
-			active = record.get('active') ? "Yes" : "No";
+			active = record.get('objectStatus') == 'ACTIVE' ? "Yes" : "No";
 		}
 		var strHtml = '<div style="white-space:normal !important;">';
 		strHtml += '<p>' + active + '</p>'

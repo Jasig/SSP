@@ -48,7 +48,6 @@ Ext.define('Ssp.controller.admin.journal.DisplayDetailsAdminViewController', {
         var asidx = me.adminSelectedIndex.get('value');
         var pageidx = parseInt(asidx / me.apiProperties.getPagingSize());
         var startidx = pageidx * me.apiProperties.getPagingSize();
-        // TODO THIS REMOVE SORTS, BEHAVIOR TO SUPPORT inappropriate sort by 'active' client property
 		// pass the columns for editing
 		me.store.sorters.clear();
 		//TODO  currentPage for store is reset to 1 since sorting is client side.

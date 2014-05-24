@@ -102,18 +102,6 @@ public class Elective
 	public void setSortOrder(Integer order) {
 		this.sortOrder = order;
 	}
-	
-	public Boolean getActive() {
-		return this.getObjectStatus().equals(ObjectStatus.ACTIVE);
-	}
-	
-	public void setActive(Boolean active) {
-		if(active) {
-			this.setObjectStatus(ObjectStatus.ACTIVE);
-		} else {
-			this.setObjectStatus(ObjectStatus.INACTIVE);
-		}		
-	}
 		
 	public Color getColor() {
 		return color;

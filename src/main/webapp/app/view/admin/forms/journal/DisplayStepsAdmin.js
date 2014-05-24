@@ -50,11 +50,11 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
 						  {
 		                        header: 'Active',
 		                        required: true,
-		                        dataIndex: 'active',
-		                        renderer: me.columnRendererUtils.renderActive,
+		                        dataIndex: 'objectStatus',
+		                        renderer: me.columnRendererUtils.renderObjectStatus,
 		                        flex: .20,
 		                        field: {
-		                            xtype: 'checkbox'
+		                            xtype: 'oscheckbox'
 		                        }
 		                    }, 
     		                { header: 'Name',  

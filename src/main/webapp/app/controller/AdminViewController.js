@@ -138,7 +138,6 @@ Ext.define('Ssp.controller.AdminViewController', {
 			// the component to use the store
 			if (store != null)
 			{
-				// TODO THIS REMOVE SORTS, BEHAVIOR TO SUPPORT inappropriate sort by 'active' client property
 				// pass the columns for editing
 				if(store.sorters){
 					store.sorters.clear();

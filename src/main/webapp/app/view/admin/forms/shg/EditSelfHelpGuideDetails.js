@@ -80,10 +80,10 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                     name: 'summaryTextEarlyAlert'
                 },
                 {
-                    xtype: 'checkboxfield',
+                    xtype: 'oscheckbox',
                     fieldLabel: 'Published',
                     anchor: '100%',
-                    name: 'active'
+                    name: 'objectStatus'
                 },
                 {
                     xtype: 'checkboxfield',

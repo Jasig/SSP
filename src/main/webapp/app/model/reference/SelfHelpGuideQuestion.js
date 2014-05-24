@@ -17,6 +17,5 @@
  * under the License.
  */
 Ext.define('Ssp.model.reference.SelfHelpGuideQuestion', {
-    extend: 'Ssp.model.reference.AbstractReference',
-    fields: []
+    extend: 'Ssp.model.reference.AbstractReference'
 });

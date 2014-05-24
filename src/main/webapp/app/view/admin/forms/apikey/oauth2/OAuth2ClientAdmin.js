@@ -52,8 +52,8 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin', {
                         flex: 1
                     },
                     { header: 'Active',
-                        dataIndex: 'active',
-                        renderer: me.columnRendererUtils.renderFriendlyBoolean,
+                        dataIndex: 'objectStatus',
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: 1
                     }
                 ],

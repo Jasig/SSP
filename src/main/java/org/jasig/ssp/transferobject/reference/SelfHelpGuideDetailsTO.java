@@ -45,9 +45,7 @@ public class SelfHelpGuideDetailsTO extends SelfHelpGuideTO implements TransferO
 	private String summaryTextThreshold;
 
 	private boolean authenticationRequired;
-	
-	private boolean active;
-	
+		
 	private List<SelfHelpGuideQuestionTO> questions;
 
 	public SelfHelpGuideDetailsTO() {
@@ -75,8 +73,6 @@ public class SelfHelpGuideDetailsTO extends SelfHelpGuideTO implements TransferO
 		
 		authenticationRequired = model.isAuthenticationRequired();
 		
-		active = ObjectStatus.ACTIVE.equals(model.getObjectStatus());
-
 		questions = Lists.newArrayList();
 		
 		for (SelfHelpGuideQuestion question : model.getSelfHelpGuideQuestions()) {
@@ -140,13 +136,5 @@ public class SelfHelpGuideDetailsTO extends SelfHelpGuideTO implements TransferO
 
 	public void setSummaryText(String summaryText) {
 		this.summaryText = summaryText;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
 	}
 }

@@ -88,17 +88,6 @@ public class Tag
 		this.code = code;
 	}
 	
-	public Boolean getActive() {
-			return this.getObjectStatus().equals(ObjectStatus.ACTIVE);
-	}
-	
-	public void setActive(Boolean active) {
-		if(active) {
-		this.setObjectStatus(ObjectStatus.ACTIVE);
-		} else {
-		this.setObjectStatus(ObjectStatus.INACTIVE);
-		}	
-	}
 
 	@Override
 	protected int hashPrime() {

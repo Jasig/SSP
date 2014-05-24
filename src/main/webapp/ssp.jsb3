@@ -333,6 +333,12 @@
                     "name": "ConfidentialityDisclosureAgreements.js",
                     "path": "/app/store/reference/"
                 },
+                
+                {
+                    "clsName": "Ssp.view.field.ObjectStatusCheckbox",
+                    "name": "ObjectStatusCheckbox.js",
+                    "path": "/app/view/field/"
+                },
                 {
                     "clsName": "Ssp.view.tools.accommodation.General",
                     "name": "General.js",

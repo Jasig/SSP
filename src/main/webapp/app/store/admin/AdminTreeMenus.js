@@ -55,12 +55,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
 						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: .10,
                         field: {
-                            xtype: 'checkbox'
+                            xtype: 'oscheckbox'
                         }
                     },{
                         header: 'Name',
@@ -188,12 +188,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
 					    header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
                         defaultValue: true,
                         flex: .2,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         field: {
-                            xtype: 'checkbox',
+                            xtype: 'oscheckbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
 					},{					
@@ -329,12 +329,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
 					    header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
                         defaultValue: true,
                         flex: .2,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         field: {
-                            xtype: 'checkbox',
+                            xtype: 'oscheckbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
 					},{					
@@ -501,12 +501,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
 						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: .10,
                         field: {
-                            xtype: 'checkbox'
+                            xtype: 'oscheckbox'
                         }
                     },
 					{
@@ -618,12 +618,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
 						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: .10,
                         field: {
-                            xtype: 'checkbox'
+                            xtype: 'oscheckbox'
                         }
                     },{
                         header: 'Name',
@@ -754,12 +754,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
                         defaultValue: true,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: .20,
                         field: {
-                            xtype: 'checkbox'
+                            xtype: 'oscheckbox'
                         }
                     }, {
                         header: 'Name',
@@ -868,12 +868,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	                columns: [{
 					    header: 'Active',
 	                    required: true,
-	                    dataIndex: 'active',
+	                    dataIndex: 'objectStatus',
 	                    defaultValue: true,
 	                    flex: .2,
-	                    renderer: me.columnRendererUtils.renderActive,
+	                    renderer: me.columnRendererUtils.renderObjectStatus,
 	                    field: {
-	                        xtype: 'checkbox',
+	                        xtype: 'oscheckbox',
 	                        fieldStyle: "margin-bottom:12px;"
 	                    }
 					},{					
@@ -922,12 +922,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	                columns: [{
 					    header: 'Active',
 	                    required: true,
-	                    dataIndex: 'active',
+	                    dataIndex: 'objectStatus',
 	                    defaultValue: true,
 	                    flex: .2,
-	                    renderer: me.columnRendererUtils.renderActive,
+	                    renderer: me.columnRendererUtils.renderObjectStatus,
 	                    field: {
-	                        xtype: 'checkbox',
+	                        xtype: 'oscheckbox',
 	                        fieldStyle: "margin-bottom:12px;"
 	                    }
 					},{					
@@ -974,8 +974,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     title: 'Electives',
                     store: 'electivesAll',
                     sort: {
-                    	field: 'sortOrder',
-                    	direction: 'ASC' //or 'DESC'
+                    	field: 'sortOrder'
                     },
                     viewConfig: {
                         markDirty: false
@@ -1009,12 +1008,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     }, {
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
                         defaultValue: true,
                         flex: .2,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         field: {
-                            xtype: 'checkbox',
+                            xtype: 'oscheckbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
                     }, {
@@ -1082,12 +1081,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
                         defaultValue: true,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: .20,
                         field: {
-                            xtype: 'checkbox',
+                            xtype: 'oscheckbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
                     }, {
@@ -1150,12 +1149,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'active',
+                        dataIndex: 'objectStatus',
                         defaultValue: true,
-                        renderer: me.columnRendererUtils.renderActive,
+                        renderer: me.columnRendererUtils.renderObjectStatus,
                         flex: .20,
                         field: {
-                            xtype: 'checkbox'
+                            xtype: 'oscheckbox'
                         }
                     }, {
                         header: 'Tag Name',

@@ -65,7 +65,6 @@ public class SelfHelpGuideDetailsTOFactoryImpl extends
 		guide.setSummaryText(tObject.getSummaryText());
 		guide.setSummaryTextEarlyAlert(tObject.getSummaryTextEarlyAlert());
 		guide.setSummaryTextThreshold(tObject.getSummaryTextThreshold());
-		guide.setObjectStatus(tObject.isActive() ? ObjectStatus.ACTIVE : ObjectStatus.INACTIVE);
 		guide.setAuthenticationRequired(tObject.isAuthenticationRequired());
 		return guide;
 	}

@@ -902,7 +902,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var me = this;
 		var activeOnlyFilter = Ext.create('Ext.util.Filter', {
 			filterFn: function(storeItem) {
-				return storeItem.data.active;
+				return storeItem.data.objectStatus == 'ACTIVE' ? true:false;
 			}
 		});
 		return store.filter(activeOnlyFilter);

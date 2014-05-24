@@ -40,7 +40,7 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
 		var me=this;
 		me.confidentialityLevelsStore.clearFilter(true);
 		
-		me.confidentialityLevelsStore.filter('active', true);
+		me.confidentialityLevelsStore.filter('objectStatus', 'ACTIVE');
 
 		var model = new  Ext.create('Ssp.model.EmailStudentRequest');
 		model.set('studentId',me.person.get('id'));

@@ -60,12 +60,12 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
 						  {
 	                        header: 'Active',
 	                        required: true,
-	                        dataIndex: 'active',
+	                        dataIndex: 'objectStatus',
 							defaultValue: true,
-	                        renderer: me.columnRendererUtils.renderActive,
+	                        renderer: me.columnRendererUtils.renderObjectStatus,
 	                        flex: .10,
 	                        field: {
-	                            xtype: 'checkbox'
+	                            xtype: 'oscheckbox'
 	                        }
 	                    },
 						  
