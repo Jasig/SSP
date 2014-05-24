@@ -62,6 +62,12 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 			id = record.get('id');
 			
 			jsonData = record.data;
+			
+			var failure = function(response, view){
+				 me.apiProperties.handleError(response);
+				 me.getView().setLoading(false);
+		    };
+		    
 			successFunc = function(response, view) {
 				
 				var responseTextObject = response['responseText'];
@@ -101,7 +107,8 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 					url: url+"/"+id,
 					method: 'PUT',
 					jsonData: jsonData,
-					successFunc: successFunc 
+					successFunc: successFunc,
+					failureFunc: failure 
 				});
 				
 			}else{
@@ -110,7 +117,8 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 					url: url,
 					method: 'POST',
 					jsonData: jsonData,
-					successFunc: successFunc 
+					successFunc: successFunc,
+					failureFunc: failure 
 				});
 			}
 		} else {
