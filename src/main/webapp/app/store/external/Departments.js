@@ -28,7 +28,7 @@ Ext.define('Ssp.store.external.Departments', {
 		var me = this;
 		
 		me.callParent(arguments);
-		this.addListener('load', this.sortAfterLoad, me);
+		this.addListener('load', this.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('department'),
     		autoLoad: true});
     	return; 
