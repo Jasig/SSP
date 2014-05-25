@@ -1392,7 +1392,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivesUnpagedStore',
-							     extraParams: {limit: "-1"}
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1401,7 +1401,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllStore',		
-							     extraParams: {status: "ALL"}
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL"}
 							 });
 					    },
 					    singleton: true
@@ -1410,7 +1410,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllUnpagedStore',		
-							     extraParams: {status: "ALL", limit: "-1"}
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL", limit: "-1"}
 							 });
 					    },
 					    singleton: true
