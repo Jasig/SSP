@@ -221,6 +221,9 @@ public class DirectoryPersonSearchDao  {
 		// programStatus
 		buildProgramStatus(personSearchRequest, filterTracker, stringBuilder);	
 		
+		// personTableType
+		buildPersonTableType(personSearchRequest, filterTracker,  stringBuilder);
+		
 		// specialServiceGroup
 		buildSpecialServiceGroup( personSearchRequest, filterTracker, stringBuilder);
 		
@@ -337,6 +340,19 @@ public class DirectoryPersonSearchDao  {
 			PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getSapStatusCode() != null;
 	}
+	
+	private void buildPersonTableType(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder){
+		if(this.hasPersonTableType(personSearchRequest)){
+			if(personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)){
+				appendAndOrWhere(stringBuilder,filterTracker);
+				stringBuilder.append(" dp.personId IS NOT NULL ");
+			}else if(personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)){
+				appendAndOrWhere(stringBuilder,filterTracker);
+				stringBuilder.append(" dp.personId IS NULL ");
+			}
+		}
+	}
 
 
 	private void buildProgramStatus(PersonSearchRequest personSearchRequest,
@@ -353,6 +369,10 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getProgramStatus() != null;
+	}
+	
+	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest){
+		return StringUtils.isNotBlank(personSearchRequest.getPersonTableType());
 	}
 	
 	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest,
@@ -406,7 +426,7 @@ public class DirectoryPersonSearchDao  {
 			{
 				param = PlanStatus.ON_TRACK_SEQUENCE;
 			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTIO.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getMapStatus()))
 			{
 				param = PlanStatus.ON_TRACK_SUBSTITUTIO;
 			}			
@@ -473,7 +493,6 @@ public class DirectoryPersonSearchDao  {
 			params.put("birthDate", personSearchRequest.getBirthDate());
 		}		
 		
-		//query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
 		return params;
 	}
 

@@ -422,6 +422,7 @@ Ext.require([
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.PlanStatus',
     'Ssp.store.MAPStatus',
+    'Ssp.store.PersonTableTypes',
     'Ssp.store.MapStatusReports',
     'Ssp.store.MapStatusReportCourseDetails',
     'Ssp.store.MapStatusReportSubstitutionDetails',
@@ -1382,7 +1383,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivesStore',
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC" }
+							     extraParams: {sort: "sortOrder", sortDirection:'ASC' }
 							 });
 					    },
 					    singleton: true
@@ -1391,7 +1392,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivesUnpagedStore',
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC", limit: "-1"}
+							     extraParams: {limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1400,7 +1401,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllStore',		
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL"}
+							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true
@@ -1409,7 +1410,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllUnpagedStore',		
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL", limit: "-1"}
+							     extraParams: {status: "ALL", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1419,7 +1420,7 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplatesSummary', {
 							     storeId: 'planTemplatesSummaryStore',		
-							     extraParams: {sort: "name", sortDirection: "ASC", status: "ALL", limit: "-1"}
+							     extraParams: {sort: "name", status: "ALL", limit: "-1"}
 							});
 						},
 						singleton: true
@@ -1741,6 +1742,7 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 			        planStatusStore: 'Ssp.store.PlanStatus',
+			        personTableTypesStore: 'Ssp.store.PersonTableTypes',
 			        financialAidSAPStatus: 'Ssp.store.FinancialAidSAPStatus',
 			        mapStatusStore: 'Ssp.store.MAPStatus',
 			        earlyAlertResponseLateStore: 'Ssp.store.EarlyAlertResponseLate',

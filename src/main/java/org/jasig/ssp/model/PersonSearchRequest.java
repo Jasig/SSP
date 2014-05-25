@@ -42,7 +42,7 @@ public class PersonSearchRequest {
 	
 	public static final String MAP_STATUS_OFF_PLAN = "OFF_PLAN";
 
-	public static final String MAP_STATUS_ON_TRACK_SUBSTITUTIO = "ON_TRACK_SUBSTITUTION";
+	public static final String MAP_STATUS_ON_TRACK_SUBSTITUTION = "ON_TRACK_SUBSTITUTION";
 	
 	public static final String MAP_STATUS_ON_TRACK_SEQUENCE = "ON_TRACK_SEQUENCE";
 	
@@ -51,6 +51,12 @@ public class PersonSearchRequest {
 	public static final String EARLY_ALERT_RESPONSE_RESPONSE_OVERDUE = "RESPONSE_OVERDUE";
 	
 	public static final String EARLY_ALERT_RESPONSE_ALL_OPEN_ALERTS = "ALL_OPEN_ALERTS";
+	
+	public static final String PERSON_TABLE_TYPE_ANYWHERE = "ANYWHERE";
+	
+	public static final String PERSON_TABLE_TYPE_SSP_ONLY = "SSP_ONLY";
+	
+	public static final String PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY = "EXTERNAL_DATA_ONLY";
 	
 	// id of the person
 	private String schoolId;
@@ -90,6 +96,8 @@ public class PersonSearchRequest {
 	private String firstName;
 	
 	private String lastName;
+	
+	private String personTableType;
 	
 	private SortingAndPaging sortAndPage;
 
@@ -285,6 +293,16 @@ public class PersonSearchRequest {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+
+	public String getPersonTableType() {
+		return personTableType;
+	}
+
+
+	public void setPersonTableType(String personTableType) {
+		this.personTableType = personTableType;
 	}
 
 

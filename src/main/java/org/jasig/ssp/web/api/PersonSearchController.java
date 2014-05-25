@@ -177,6 +177,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Date birthDate,
+	 final @RequestParam(required = false)String personTableType,
 	 final @RequestParam(required = false) Integer start,
 	 final @RequestParam(required = false) Integer limit,
 	 final @RequestParam(required = false) String sort,
@@ -207,7 +208,7 @@ public class PersonSearchController extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				mapStatus,planStatus,
-				myCaseload,myPlans,birthDate, sortAndPage));
+				myCaseload,myPlans,birthDate, personTableType, sortAndPage));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}

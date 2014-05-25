@@ -68,6 +68,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private Date birthDate;
 	
+	private String personTableType;
+	
 	private SortingAndPaging sortAndPage;
 	
 	
@@ -228,6 +230,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.birthDate = birthDate;
 	}
 	
+
+	public String getPersonTableType() {
+		return personTableType;
+	}
+
+	public void setPersonTableType(String personTableType) {
+		this.personTableType = personTableType;
+	}
 
 	public SortingAndPaging getSortAndPage() {
 		return sortAndPage;

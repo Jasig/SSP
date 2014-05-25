@@ -100,6 +100,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setMyPlans(to.getMyPlans());
 		model.setBirthDate(to.getBirthDate());
 		model.setEarlyAlertResponseLate(to.getEarlyAlertResponseLate());
+		model.setPersonTableType(to.getPersonTableType());
 		model.setSortAndPage(to.getSortAndPage());
 		return model;
 	}
@@ -133,7 +134,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
-			Date birthDate,SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+			Date birthDate, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);
@@ -154,6 +155,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
 		to.setBirthDate(birthDate);
+		to.setPersonTableType(personTableType);
 		to.setSortAndPage(sortAndPage);
 		return from(to);
 	}

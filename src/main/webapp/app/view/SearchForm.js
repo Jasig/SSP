@@ -30,6 +30,7 @@ Ext.define('Ssp.view.SearchForm',{
         planStatusStore: 'planStatusStore',
         sapStatusesStore: 'sapStatusesActiveUnpagedStore',
         mapStatusStore: 'mapStatusStore',
+        personTableTypesStore: 'personTableTypesStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
         earlyAlertResponseLateStore: 'earlyAlertResponseLateStore',
         programsStore: 'programsStore',
@@ -201,7 +202,17 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    displayField: 'name',
                     width: 100,
                     name: 'programStatus'
-                },    
+                }, 
+                {
+		   		    xtype: 'combobox',
+                    fieldLabel: 'Student Exists In',
+		   		    store: me.personTableTypesStore,
+   		   		    valueField: 'code',
+   		   		    emptyText: 'Anywhere',
+		   		    displayField: 'displayValue',
+                    width: 100,
+                    name: 'personTableType'
+                },  
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Special Service Group',
@@ -211,7 +222,7 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    displayField: 'name',
                     width: 100,
                     name: 'specialServiceGroup'
-                },  
+                }, 
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Assigned Coach',
