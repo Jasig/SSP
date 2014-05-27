@@ -877,7 +877,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     	var me = this;
     	var activeOrSelectedFilter = Ext.create('Ext.util.Filter', {
 			filterFn: function(storeItem) {
-				var storeItemActive = storeItem.data.active;
+				var storeItemActive = storeItem.data.objectStatus == 'ACTIVE' ? true:false;
 				var storeItemId = storeItem.data.id;				
 				return me.filterAssociativeItem(storeItemActive, storeItemId, idToMatch );
 			}
