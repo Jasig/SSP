@@ -82,7 +82,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		}
 		else
 		{
-			helpButton.hidden = !me.getView().pastTerm;
+			helpButton.hidden = me.getView().editable;
 		}
 	},
 	setTermNoteButton: function(){
@@ -127,7 +127,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		var grid = me.getView();
 		var record = grid.getSelectionModel().getSelection()[0];
-		if(!grid.enableDragAndDrop && !me.currentMapPlan.get('isTemplate'))
+		if(!grid.editable && !me.currentMapPlan.get('isTemplate'))
 		{
 		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
 		    return;
