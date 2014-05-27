@@ -97,10 +97,11 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		if(me.getView().viewToClose){
 			me.getView().viewToClose.close();
 		}else if(me.getView().loaderDialogEventName){
-			if(me.getView().loaderDialogEventName === 'doPersonNav')
+			if(me.getView().loaderDialogEventName === 'doToolsNav')
 			{
-				
-			}else
+				me.getView().navController.loadTool(me.getView().secondaryNavInfo);
+			}
+			else
 			{
 				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
 			}
@@ -128,7 +129,8 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
 			me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 			me.currentMapPlan.setIsTemplate(false);
-			me.mapEventUtils.save(me.getView().saveAs);
+			console.log(me.getView().secondaryNavInfo);
+			me.mapEventUtils.save(me.getView().saveAs,me.getView().secondaryNavInfo,me.getView().navController);
 			me.onCancelClick();
 		}
 		else{

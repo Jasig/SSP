@@ -87,17 +87,22 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			});
 		}
 	},
-
     onCancelClick: function(){
     	me = this;
     	me.getView().close();
 		if(me.getView().viewToClose){
 			me.getView().viewToClose.close();
 		}else if(me.getView().loaderDialogEventName){
-			me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
+			if(me.getView().loaderDialogEventName === 'doToolsNav')
+			{
+				me.getView().navController.loadTool(me.getView().secondaryNavInfo);
+			}
+			else
+			{
+				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
+			}
 		}
-    },
-    
+    },    
     onSaveClick:function(){
     	me = this;
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();

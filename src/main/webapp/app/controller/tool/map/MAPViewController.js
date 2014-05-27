@@ -199,10 +199,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav'});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav',secondaryNavInfo:toolsRecord.get('toolType'), navController : toolsViewController});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav'});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav',secondaryNavInfo:toolsRecord.get('toolType'), navController : toolsViewController});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
@@ -228,12 +228,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						// only b/c that code is much older (but still might turn out to need
 						// to be handled similarly)
 						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();personNav
+							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav'});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav', secondaryNavInfo:'onPersonNav',navController : searchViewController});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav'});
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav',navController : searchViewController});
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
