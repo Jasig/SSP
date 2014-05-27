@@ -53,7 +53,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
  	hideHeaders: true, 	
     initComponent: function(){
         var me = this;
-       // me.tools[0].hidden = !(me.editPastTerms === 'true' || !me.termsStore.isPastTerm(termCode));
         Ext.apply(me, {
 			viewConfig: {
 				copy: false,
@@ -63,8 +62,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					dropGroup: 'coursesDDGroup',
 					dragGroup: 'coursesDDGroup',
 					pluginId: 'semesterviewdragdrop',
-					enableDrag: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate'),
-					enableDrop: me.enableDragAndDrop || me.currentMapPlan.get('isTemplate')
+					enableDrag: me.editable || me.currentMapPlan.get('isTemplate'),
+					enableDrop: me.editable || me.currentMapPlan.get('isTemplate')
 		    }
 		}, 
 		invalidRecord: function(record) { 
@@ -73,7 +72,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
         title: me.store.termName,
         scroll: true,
         itemId: me.store.termCode,
-		enableDragAndDrop: !(me.editPastTerms === 'true' || !me.termsStore.isPastTerm(me.store.termCode)),
 		columns: [
 					{
 					    xtype: 'gridcolumn',
