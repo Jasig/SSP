@@ -349,7 +349,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		else
 		{
 			var editable = me.editPastTerms === 'true' || !me.termsStore.isPastTerm(termCode);
-			if(me.editPastTerms)
 			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
 				store:semesterStore,
 				editable: editable
