@@ -66,6 +66,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.getView().view.addListener('drop', me.onDrop, me);	
+		var helpButton = me.getView().tools[0];
+		if(me.currentMapPlan.get('isTemplate'))
+		{
+			helpButton.hidden = true;
+		}
+		else
+		{
+			helpButton.hidden = !me.getView().editable;
+		}
 		return me.callParent(arguments);
     },
 
@@ -82,7 +91,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		}
 		else
 		{
-			helpButton.hidden = me.getView().editable;
+			helpButton.hidden = !me.getView().editable;
 		}
 	},
 	setTermNoteButton: function(){
@@ -152,7 +161,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		var courseRecord = record;
 		
-    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().enableDragAndDrop});
+    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().editable});
     		me.coursePlanDetails.parentGrid = me.getView();
     		
     		

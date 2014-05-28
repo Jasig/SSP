@@ -240,7 +240,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 height: 20,
                 cls: 'helpIconSmall',
                 text:'',
-                hidden: !me.pastTerm,
+                hidden: me.editable || me.currentMapPlan.get('isTemplate'),
                 tooltip: 'This term is in the past and cannot be edited.'
                 
             },{
