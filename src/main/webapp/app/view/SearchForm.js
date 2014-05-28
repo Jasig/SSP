@@ -226,7 +226,7 @@ Ext.define('Ssp.view.SearchForm',{
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Assigned Coach',
-                    emptyText: 'Select Advisor',
+                    emptyText: 'Select Coach',
                     width: 100,
                     name: 'coachId',
 		   		    store: this.coachesStore,
