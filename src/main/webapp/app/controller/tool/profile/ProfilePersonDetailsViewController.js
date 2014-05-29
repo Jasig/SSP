@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         transcriptService: 'transcriptService',
 		personProgramStatusService: 'personProgramStatusService',
 		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
-        sspConfig: 'sspConfig',
+        configStore: 'configStore',
         formUtils: 'formRendererUtils',
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
@@ -208,7 +208,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         nameField.setFieldLabel('');
         nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
         studentIdField.setFieldLabel('');
-        studentIdField.setValue('<span style="color:#15428B">' + me.sspConfig.get('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
+        studentIdField.setValue('<span style="color:#15428B">' + me.configStore.getConfigByName('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
         primaryEmailAddressLabel.setFieldLabel('');
 		primaryEmailAddressLabel.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' );
 		primaryEmailAddressField.setFieldLabel('');

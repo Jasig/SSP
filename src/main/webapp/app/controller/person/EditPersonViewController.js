@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
         personLite: 'personLite',
         personService: 'personService',
      	formUtils: 'formRendererUtils',
-        sspConfig: 'sspConfig'
+        configStore: 'configStore'
     },
     control: {
     	retrieveFromExternalButton: {
@@ -86,17 +86,17 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 	init: function() {
 		var me=this;
 		if(!me.getView().instantCaseloadAssignment){
-	    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');		
-			var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
+	    	var disabled = me.configStore.getConfigByName('syncStudentPersonalDataWithExternalData');		
+			var displayRetrieveFromExternalButton = me.configStore.getConfigByName('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
 	    	// alias the studentId field and provide validation
 			var studentIdField = me.getStudentIdField();
 			Ext.apply(studentIdField, {
-		                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
-		                  minLengthText: me.sspConfig.get('studentIdMinValidationErrorText'),
-		                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
-		                  maxLengthText: me.sspConfig.get('studentIdMaxValidationErrorText'),
+		                  minLength: me.configStore.getConfigByName('studentIdMinValidationLength'),
+		                  minLengthText: me.configStore.getConfigByName('studentIdMinValidationErrorText'),
+		                  maxLength: me.configStore.getConfigByName('studentIdMaxValidationLength'),
+		                  maxLengthText: me.configStore.getConfigByName('studentIdMaxValidationErrorText'),
 		                  vtype: 'studentIdValidator',
-		                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+		                  vtypeText: me.configStore.getConfigByName('studentIdValidationErrorText')
 	                     });		
 			
 			// when editing a student, 
@@ -136,16 +136,16 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     setForInstantCaseloadAssignment: function(schoolId) {
 		var me=this;
     	var disabled = true;		
-		var displayRetrieveFromExternalButton = me.sspConfig.get('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
+		var displayRetrieveFromExternalButton = me.configStore.getConfigByName('allowExternalRetrievalOfStudentDataFromCaseloadAssignment');
     	// alias the studentId field and provide validation
 		var studentIdField = me.getStudentIdField();
 		Ext.apply(studentIdField, {
-	                  minLength: me.sspConfig.get('studentIdMinValidationLength'),
-	                  minLengthText: me.sspConfig.get('studentIdMinValidationErrorText'),
-	                  maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
-	                  maxLengthText: me.sspConfig.get('studentIdMaxValidationErrorText'),
+	                  minLength: me.configStore.getConfigByName('studentIdMinValidationLength'),
+	                  minLengthText: me.configStore.getConfigByName('studentIdMinValidationErrorText'),
+	                  maxLength: me.configStore.getConfigByName('studentIdMaxValidationLength'),
+	                  maxLengthText: me.configStore.getConfigByName('studentIdMaxValidationErrorText'),
 	                  vtype: 'studentIdValidator',
-	                  vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+	                  vtypeText: me.configStore.getConfigByName('studentIdValidationErrorText')
                      });		
 				
 		

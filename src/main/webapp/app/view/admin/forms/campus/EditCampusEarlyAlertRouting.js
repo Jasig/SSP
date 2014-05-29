@@ -25,7 +25,6 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
     inject: {
     	earlyAlertReasonsStore: 'earlyAlertReasonsAllUnpagedStore',
     	coachesStore: 'coachesStore',
-    	sspConfig: 'sspConfig',
     	personService: 'personService'
     },
 	title: 'Edit Routing Group',

@@ -22,7 +22,6 @@ Ext.define('Ssp.controller.tool.studentintake.EducationGoalsViewController', {
     inject: {
     	formUtils: 'formRendererUtils',
     	model: 'currentStudentIntake',
-    	sspConfig: 'sspConfig',
 		termsStore: 'termsStore'
     },
     control: {

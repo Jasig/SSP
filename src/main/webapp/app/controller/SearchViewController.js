@@ -40,7 +40,7 @@ Ext.define('Ssp.controller.SearchViewController', {
         searchStoreOld: 'studentsSearchStore',
         searchStore: 'directoryPersonSearchStore',
 		termsStore: 'termsStore',
-        sspConfig: 'sspConfig',
+        configStore: 'configStore',
         textStore:'sspTextStore',
 		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
         
@@ -383,7 +383,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var grid = me.getView();
 		var store;
 		var sortableColumns = true;
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		if ( me.getIsCaseload() )
 		{
 			store = me.caseloadStore;

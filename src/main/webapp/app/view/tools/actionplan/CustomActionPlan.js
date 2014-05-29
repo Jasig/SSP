@@ -24,7 +24,6 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController',
-        sspConfig: 'sspConfig',
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
     height: 375,

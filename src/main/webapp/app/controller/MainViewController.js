@@ -24,7 +24,9 @@ Ext.define('Ssp.controller.MainViewController', {
         formUtils: 'formRendererUtils',
 		personService: 'personService',
 		authenticatedPerson: 'authenticatedPerson',
-		contactPersonStore: 'contactPersonStore'
+		contactPersonStore: 'contactPersonStore',
+        configStore: 'configStore'
+
     },
     config: {
     	personButtonsVisible: true
@@ -41,6 +43,7 @@ Ext.define('Ssp.controller.MainViewController', {
 	
 	init: function() {
 		var me=this;
+		me.configStore.load();
 		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
 		me.displayStudentRecordView();
 		

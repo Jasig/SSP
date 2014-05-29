@@ -1157,6 +1157,16 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
+					configStore: 
+					{
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ConfigurationOptionsUnpaged', {
+							     storeId: 'configurationOptionsUnpagedStore',		
+							     extraParams: {limit: "-1"}
+							 });
+				    	},
+				    	singleton: true
+				    },				    
 				    colorsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Colors', {

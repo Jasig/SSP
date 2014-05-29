@@ -23,7 +23,6 @@ Ext.define('Ssp.view.tools.map.FAView', {
     controller: 'Ssp.controller.tool.map.FAViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
     },
     height: 600,
     width: 380,

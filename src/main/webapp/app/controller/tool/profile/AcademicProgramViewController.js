@@ -24,7 +24,6 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
         appEventsController: 'appEventsController',
         personLite: 'personLite',
         personService: 'personService',
-        sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils',
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan',

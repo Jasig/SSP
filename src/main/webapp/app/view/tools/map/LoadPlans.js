@@ -22,8 +22,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.LoadPlanViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig'
+        columnRendererUtils: 'columnRendererUtils'
     },
     height: 500,
     width: 700,

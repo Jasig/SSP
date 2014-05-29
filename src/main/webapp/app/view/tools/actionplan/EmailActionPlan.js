@@ -25,7 +25,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController',
-		sspConfig: 'sspConfig',
+        configStore: 'configStore',
 		textStore: 'sspTextStore',
 		person: 'currentPerson'
     },
@@ -133,7 +133,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                             xtype: 'checkboxfield',
                             anchor: '100%',
                             fieldLabel: '',
-                            boxLabel: 'Send To ' + me.sspConfig.get('coachFieldLabel') ,
+                            boxLabel: 'Send To ' + me.configStore.getConfigByName('coachFieldLabel') ,
 							disabled: !me.person.getCoachPrimaryEmailAddress(),
 							itemId: 'emailAPToCoach'
                         }

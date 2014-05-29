@@ -22,8 +22,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-		authenticatedPerson: 'authenticatedPerson',
-        sspConfig: 'sspConfig'
+		authenticatedPerson: 'authenticatedPerson'
     },
     controller: 'Ssp.controller.tool.profile.AcademicProgramViewController',
     width: '100%',

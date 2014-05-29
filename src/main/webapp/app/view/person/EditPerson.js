@@ -23,7 +23,7 @@ Ext.define('Ssp.view.person.EditPerson', {
     controller: 'Ssp.controller.person.EditPersonViewController',
     inject: {
         textStore: 'sspTextStore',
-        sspConfig: 'sspConfig'
+        configStore: 'configStore'
     },
 	padding: '0 0 0 0',
 	margin: '0 0 0 0',
@@ -58,7 +58,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 					},
 					items: [{
 						name: 'schoolId',
-						fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.sspConfig.get('studentIdAlias'),
+						fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.configStore.getConfigByName('studentIdAlias'),
 						minLength: 7,
 						maxLength: 7,
 						itemId: 'studentId',

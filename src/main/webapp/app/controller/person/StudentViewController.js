@@ -24,8 +24,7 @@ Ext.define('Ssp.controller.person.StudentViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
-     	formUtils: 'formRendererUtils',
-        sspConfig: 'sspConfig'
+     	formUtils: 'formRendererUtils'
     },
     control: {
 		studentIntakeRequestDateInCaseloadField: '#studentIntakeRequestDateInCaseload',

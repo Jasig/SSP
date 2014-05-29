@@ -24,7 +24,7 @@ Ext.define('Ssp.view.person.Coach', {
     controller: 'Ssp.controller.person.CoachViewController',
     inject: {
     	coachesStore: 'coachesStore',
-    	sspConfig: 'sspConfig'
+        configStore: 'configStore'
     },
 	width: '100%',
 	padding: '0 0 0 0',
@@ -54,7 +54,7 @@ Ext.define('Ssp.view.person.Coach', {
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  me.sspConfig.get('coachFieldLabel'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  me.configStore.getConfigByName('coachFieldLabel'),
 				        emptyText: 'Select One',
 				        store: me.coachesStore,
 				        valueField: 'id',

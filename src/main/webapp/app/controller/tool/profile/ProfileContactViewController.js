@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
-        sspConfig: 'sspConfig',
+        configStore: 'configStore',
 		authenticatedPerson: 'authenticatedPerson',
 		formUtils: 'formRendererUtils'
     },
@@ -50,7 +50,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 	init: function() {
 		var me=this;
 		
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		var id =  me.personLite.get('id');
 		me.getView().getForm().reset();
 
@@ -77,7 +77,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileContactViewController', {
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
 		
 		var id= me.personLite.get('id');
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		var fullName;
 		var alternateAddressInUse = "No";
 		var primaryEmailWithLink = "";

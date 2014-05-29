@@ -21,7 +21,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
-    	sspConfig: 'sspConfig'
+        configStore: 'configStore'
     }, 
     control: {
     	firstNameField: '#firstName',
@@ -41,7 +41,7 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
     },
 	init: function() {
 		var me=this;
-    	var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
+    	var disabled = me.configStore.getConfigByName('syncStudentPersonalDataWithExternalData');
 		// disable externally loaded fields
     	me.getFirstNameField().setDisabled(disabled);
 		me.getMiddleNameField().setDisabled(disabled);
@@ -61,12 +61,12 @@ Ext.define('Ssp.controller.tool.studentintake.PersonalViewController', {
 		// set the field label and supply an asterisk for required
 		//studentIdField.setFieldLabel(studentIdField.getFieldLabel() + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		Ext.apply(studentIdField, {
-            minLength: me.sspConfig.get('studentIdMinValidationLength'),
+            minLength: me.configStore.getConfigByName('studentIdMinValidationLength'),
             minLengthText: '',
-            maxLength: me.sspConfig.get('studentIdMaxValidationLength'),
+            maxLength: me.configStore.getConfigByName('studentIdMaxValidationLength'),
         	maxLengthText: '',
         	vtype: 'studentIdValidator',
-        	vtypeText: me.sspConfig.get('studentIdValidationErrorText')
+        	vtypeText: me.configStore.getConfigByName('studentIdValidationErrorText')
          });
 
 		return me.callParent(arguments);

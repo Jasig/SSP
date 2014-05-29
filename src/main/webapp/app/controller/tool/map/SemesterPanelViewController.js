@@ -275,8 +275,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var panel = me.getView();
 		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
 		
-		var invalidReasons = planCourse.invalidReasons;
-    	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
+		//var invalidReasons = planCourse.invalidReasons;
+		var invalidReasons = 'boo';
+    	if(true){
     		var message = " \n Are you sure you want to add the course? " 
 						+ planCourse.formattedCourse
 						+ " generates the following concerns: " 

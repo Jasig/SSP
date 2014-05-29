@@ -21,8 +21,7 @@ Ext.define('Ssp.service.PersonService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	person: 'currentPerson',
-    	sspConfig: 'sspConfig'
+    	person: 'currentPerson'
     },
     config: {
     	personUrl: null

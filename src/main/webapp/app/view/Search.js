@@ -25,8 +25,7 @@ Ext.define('Ssp.view.Search', {
         authenticatedPerson: 'authenticatedPerson',
         apiProperties: 'apiProperties',
         columnRendererUtils: 'columnRendererUtils',
-        programStatusesStore: 'programStatusesStore',
-        sspConfig: 'sspConfig'
+        programStatusesStore: 'programStatusesStore'
     },
     initComponent: function(){
         var me = this;

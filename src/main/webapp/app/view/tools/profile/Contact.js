@@ -23,7 +23,6 @@ Ext.define('Ssp.view.tools.profile.Contact', {
     controller: 'Ssp.controller.tool.profile.ProfileContactViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig',
         textStore:'sspTextStore'
     },
     width: '100%',

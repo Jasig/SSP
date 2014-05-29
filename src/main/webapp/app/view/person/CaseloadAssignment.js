@@ -22,8 +22,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.CaseloadAssignmentViewController',
     inject: {
-        model: 'currentPerson',
-        sspConfig: 'sspConfig'
+        model: 'currentPerson'
     },
     width: '100%',
     height: '100%',

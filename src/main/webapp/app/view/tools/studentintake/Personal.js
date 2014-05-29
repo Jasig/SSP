@@ -27,7 +27,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
     	columnRendererUtils: 'columnRendererUtils',
         statesStore: 'statesStore',
         textStore:'sspTextStore',
-    	sspConfig: 'sspConfig'
+        configStore: 'configStore'
     },
 	width: '100%',
     height: '100%',
@@ -90,7 +90,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        maxLength: 50,
 				        allowBlank:false
 				    },{
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.sspConfig.get('studentIdAlias'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.configStore.getConfigByName('studentIdAlias'),
 				        name: 'schoolId',
 				        minLength: 0,
 				        maxLength: 7,

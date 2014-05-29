@@ -23,7 +23,6 @@ Ext.define('Ssp.view.tools.profile.Details', {
     controller: 'Ssp.controller.tool.profile.ProfilePersonDetailsViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        sspConfig: 'sspConfig',
         textStore:'sspTextStore'
     },
     width: '100%',

@@ -24,11 +24,10 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         apiProperties: 'apiProperties',
         coachesStore: 'coachesStore',
         person: 'currentPerson',
-        sspConfig: 'sspConfig',
+        configStore: 'configStore',
         studentTypesStore: 'studentTypesAllUnpagedStore',
         formRendererUtils: 'formRendererUtils',
-        personService: 'personService',
-        configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
+        personService: 'personService'
     },
     config: {
         inited: false
@@ -90,7 +89,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
  		var getExtUnsetDataCoachValue = 'true';
  		
          
-         me.configurationOptionsUnpagedStore.each(function(rec){
+         me.configStore.each(function(rec){
          
              var s = rec.get('value');
              if (rec.get('name') == 'coachSetFromExternalData') {
@@ -111,7 +110,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
  		
  		
          if (getExtDataCoachValue == 'false' && getExtUnsetDataCoachValue == 'false') {
-             me.getCoachCombo().setFieldLabel(me.sspConfig.get('coachFieldLabel') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+             me.getCoachCombo().setFieldLabel(me.configStore.getConfigByName('coachFieldLabel') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
          }
          
          if(me.getView().instantCaseloadAssignment){

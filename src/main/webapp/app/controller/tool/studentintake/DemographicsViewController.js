@@ -22,7 +22,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     inject: {
     	citizenshipsStore: 'citizenshipsStore',
     	model: 'currentStudentIntake',
-    	sspConfig: 'sspConfig'
+        configStore: 'configStore'
     },
     config: {
     	displayEmploymentShift: 1
@@ -69,7 +69,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 	init: function() {
 		var me=this;
 		//added below 5 lines to take care of disabling entry if syncStudentPersonalDataWithExternalData is true
-		var disabled = me.sspConfig.get('syncStudentPersonalDataWithExternalData');
+		var disabled = me.configStore.getConfigByName('syncStudentPersonalDataWithExternalData');
 		var studentIntakeDemographicsForm = Ext.getCmp('StudentIntakeDemographics');
 		studentIntakeDemographicsForm.getForm().findField("gender").setDisabled(disabled);
 		studentIntakeDemographicsForm.getForm().findField("maritalStatusId").setDisabled(disabled);
@@ -99,7 +99,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 			me.getEmployedCheckOff().setValue( !employed );
 		}
 		
-		me.displayStudentIntakeDemographicsEmploymentShift = me.sspConfig.get('displayStudentIntakeDemographicsEmploymentShift');
+		me.displayStudentIntakeDemographicsEmploymentShift = me.configStore.getConfigByName('displayStudentIntakeDemographicsEmploymentShift');
 		
         me.showHideChildcareArrangement( childcareNeeded.getValue() );
         me.showHideEmploymentFields( isEmployed.getValue() );

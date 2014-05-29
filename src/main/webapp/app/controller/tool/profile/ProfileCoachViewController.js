@@ -27,7 +27,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
         personService: 'personService',
         studentActivityService: 'studentActivityService',
         studentActivitiesStore: 'studentActivitiesStore',
-        sspConfig: 'sspConfig'
+        configStore: 'configStore'
     },
     
     control: {
@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 	init: function() {
 		var me=this;
 		
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		var id =  me.personLite.get('id');
 		me.getView().getForm().reset();
 		
@@ -79,7 +79,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		var coachPhotoUrlField = me.getCoachPhotoUrlField();
 		
 		var id= me.personLite.get('id');
-		var studentIdAlias = me.sspConfig.get('studentIdAlias');
+		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		
 		// load the person data
 		me.person.populateFromGenericObject(r);		

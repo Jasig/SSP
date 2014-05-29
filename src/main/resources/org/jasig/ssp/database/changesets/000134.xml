@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+   
+	<changeSet id="Move configuration.js values into config table" author="tony.arland">
+		<insert tableName="config">
+			<column name="id" value="af98f8f0-1b91-4db4-8800-71365cbfe67e" />
+			<column name="name" value="syncStudentPersonalDataWithExternalData" />
+			<column name="description"
+				value="Set this option to true to lock editing on fields that relate to the external_data
+		       source. This will restrict you from editing any data that relates to external after
+		       you have first added a record to the system. All editing will be disabled for personal
+		       data, including changing a studentId/schoolId after the record has been added to the
+		       system.  " />
+			<column name="value">false</column>
+			<column name="default_value">false</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		
+		<insert tableName="config">
+			<column name="id" value="698fac25-78dc-421d-97f7-9db226bd7301" />
+			<column name="name" value="allowExternalRetrievalOfStudentDataFromCaseloadAssignment" />
+			<column name="description" value="Set this option to true to display the retrieveFromExternalDataButton on the Caseload
+    	       Assignment Screen when adding a new record. This will allow you to populate a student's record
+    	       from the external_data source while adding a new record to the system." />
+			<column name="value">true</column>
+			<column name="default_value">true</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		
+		<insert tableName="config">
+			<column name="id" value="a1f6c0cd-11a4-4570-803f-56b8ed67f537" />
+			<column name="name" value="studentIdAlias" />
+			<column name="description" value="Set this option to the label you would like to see for the studentId values in the system.
+    	       For instance: Use this to label your studentId for your institution's naming convention." />
+			<column name="value">Student ID</column>
+			<column name="default_value">Student ID</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		
+		<insert tableName="config">
+			<column name="id" value="a99b5215-a6d3-4c89-9d46-f3195599946d" />
+			<column name="name" value="studentIdMinValidationLength" />
+			<column name="description" value="Minimum data length for a studentId/schoolId in the application." />
+			<column name="value">3</column>
+			<column name="default_value">3</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>	
+		
+		<insert tableName="config">
+			<column name="id" value="d271b495-6f7a-4488-a5b1-e9d806715d1a" />
+			<column name="name" value="studentIdMinValidationErrorText" />
+			<column name="description" value="Error message for a studentId/schoolId that exceeds the specified minimum validation length." />
+			<column name="value">The entered value is not long enough.</column>
+			<column name="default_value">The entered value is not long enough.</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>	
+			
+		<insert tableName="config">
+			<column name="id" value="1cb05802-a48f-4bd5-962f-33351e10bd4d" />
+			<column name="name" value="studentIdMaxValidationLength" />
+			<column name="description" value="Maximum data length for a studentId/schoolId in the application." />
+			<column name="value">20</column>
+			<column name="default_value">20</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>	
+			
+		<insert tableName="config">
+			<column name="id" value="58d21d35-344a-48f5-954e-30d004223cf1" />
+			<column name="name" value="studentIdMaxValidationErrorText" />
+			<column name="description" value="Error message for a studentId/schoolId that exceeds the specified maximum validation length." />
+			<column name="value">The entered value is too long.</column>
+			<column name="default_value">The entered value is too long.</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>		
+			
+		<insert tableName="config">
+			<column name="id" value="57b36c34-9663-46f0-8568-df85015df96b" />
+			<column name="name" value="studentIdAllowableCharacters" />
+			<column name="description" value="Values to validate for the allowable characters in a studentId/schoolId. This value will
+    	      be converted and applied as a regular expression, so all regular expressions values should be
+    	      available to this value.
+    	      
+    	      For example: 
+    	      
+    	      Only digits use '0-9'.  
+    	      Only alphabetical characters use: 'a-zA-Z'.
+    	      Alphabetical characters and digits use: 'a-zA-Z0-9'" />
+			<column name="value">a-zA-Z0-9</column>
+			<column name="default_value">a-zA-Z0-9</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>	
+		
+		<insert tableName="config">
+			<column name="id" value="502a558d-b4b0-49de-89a2-98e8fae853e1" />
+			<column name="name" value="studentIdValidationErrorText" />
+			<column name="description" value="Error message for a studentId/schoolId validation error." />
+			<column name="value">Not a valid Student Id</column>
+			<column name="default_value">Not a valid Student Id</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>	
+		
+		
+		
+		<insert tableName="config">
+			<column name="id" value="be1bdb18-94f8-4a60-b75b-6f413af26577" />
+			<column name="name" value="displayStudentIntakeDemographicsEmploymentShift" />
+			<column name="description" value="Set to true to display the Employment Shift option on the Student Intake Tool." />
+			<column name="value">true</column>
+			<column name="default_value">true</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>	
+		
+		<insert tableName="config">
+			<column name="id" value="3753a1f0-fb12-49c3-ac63-1140ddc3f1f6" />
+			<column name="name" value="coachFieldLabel" />
+			<column name="description" value="Label to use for the Coach field displays across the application." />
+			<column name="value">Coach</column>
+			<column name="default_value">Coach</column>
+			<column name="created_date" valueDate="2014-05-28T12:00:00" />
+			<column name="modified_date" valueDate="2014-05-28T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>										
+		<rollback>
+			<delete tableName="config">
+				<where>id='3753a1f0-fb12-49c3-ac63-1140ddc3f1f6'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='be1bdb18-94f8-4a60-b75b-6f413af26577'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='502a558d-b4b0-49de-89a2-98e8fae853e1'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='57b36c34-9663-46f0-8568-df85015df96b'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='58d21d35-344a-48f5-954e-30d004223cf1'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='1cb05802-a48f-4bd5-962f-33351e10bd4d'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='d271b495-6f7a-4488-a5b1-e9d806715d1a'</where>
+			</delete>
+			<delete tableName="config">
+				<where>id='a99b5215-a6d3-4c89-9d46-f3195599946d'</where>
+			</delete>	
+			<delete tableName="config">
+				<where>id='a1f6c0cd-11a4-4570-803f-56b8ed67f537'</where>
+			</delete>	
+			<delete tableName="config">
+				<where>id='698fac25-78dc-421d-97f7-9db226bd7301'</where>
+			</delete>											
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

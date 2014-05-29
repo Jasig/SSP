@@ -21,8 +21,7 @@ Ext.define('Ssp.controller.tool.studentintake.EducationPlansViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	formUtils: 'formRendererUtils',
-    	model: 'currentStudentIntake',
-    	sspConfig: 'sspConfig'
+    	model: 'currentStudentIntake'
     },
     control: {
     	parentsDegreeField: '#collegeDegreeForParents',

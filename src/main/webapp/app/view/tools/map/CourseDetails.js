@@ -23,7 +23,6 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
     //controller: 'Ssp.controller.tool.map.CoursesGridController',
     inject: {
         columnRendererUtils: 'columnRendererUtils'
-        //sspConfig: 'sspConfig'
     },
     height: 400,
     width: 650,

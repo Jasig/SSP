@@ -25,7 +25,6 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         transcriptService: 'transcriptService',
-        sspConfig: 'sspConfig',
 		formUtils: 'formRendererUtils'
     },
     control: {
