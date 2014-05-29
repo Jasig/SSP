@@ -334,6 +334,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		});
 		me.currentMapPlan.repopulatePlanStores(me.semesterStores);
 		view.add(yearViews);	
+		me.currentMapPlan.dirty = false;
 		Ext.resumeLayouts(true);	
 		me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
     },

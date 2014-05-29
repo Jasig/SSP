@@ -106,6 +106,7 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 	},
 	createNewMapPlan: function () {
 		var me = this;
+		me.currentMapPlan.dirty = false;
 		me.appEventsController.getApplication().fireEvent("onPlanLoad");
 		Ext.Msg.alert('The plan is ready for edit');
 	},
