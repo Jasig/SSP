@@ -190,7 +190,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'doPersonNav', callBackFunc: me.setProgramStatus, scope: me});	
 
 		
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});

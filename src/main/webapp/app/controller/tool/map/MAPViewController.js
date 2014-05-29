@@ -230,9 +230,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
+						searchViewController.updatePerson(records);
 						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav', secondaryNavInfo:'onPersonNav',navController : searchViewController});
 						me.saveTemplatePopUp.show();
 					} else {
+						searchViewController.updatePerson(records);
 						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav',navController : searchViewController});
 						me.savePlanPopUp.show();
 					}

@@ -94,8 +94,12 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			me.getView().viewToClose.close();
 		}else if(me.getView().loaderDialogEventName){
 			if(me.getView().loaderDialogEventName === 'doToolsNav')
+			{	
+				me.getView().navController.loadTool(me.getView().secondaryNavInfo);				
+			} else
+			if(me.getView().loaderDialogEventName === 'doPersonNav')
 			{
-				me.getView().navController.loadTool(me.getView().secondaryNavInfo);
+		        me.appEventsController.getApplication().fireEvent('loadPerson');  
 			}
 			else
 			{
