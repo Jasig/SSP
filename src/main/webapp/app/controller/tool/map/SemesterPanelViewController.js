@@ -283,6 +283,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 						+ invalidReasons;
     		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.handleInvalidCourse, me);
     	}else{
+			me.currentMapPlan.dirty = true;
 			me.setOrderInTerm();
 		}
     },
