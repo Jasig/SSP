@@ -250,6 +250,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
             };
 		me.setOrderInTerm();
 		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
+		me.planWasDirty = me.currentMapPlan.dirty;
 		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
             success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
@@ -263,7 +264,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		 me.getView().setLoading(false);
 		var mapResponse = serviceResponses.successes.validatedPlan;
 		var planAsJsonObject = Ext.decode(mapResponse.responseText);
-		me.planWasDirty = me.currentMapPlan.dirty;
 		me.currentMapPlan.loadFromServer(planAsJsonObject);
 		// If the plan came back as valid, then we know a course was added and
 		// thus must be dirty, thus the 2nd arg. If not the user is given the
