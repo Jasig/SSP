@@ -159,6 +159,6 @@ Ext.define('Ssp.controller.tool.map.MapPlanToolViewController', {
 		var me = this;
 		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.onUpdateCurrentMapPlan, me);
         me.appEventsController.getApplication().removeListener("onUpdatePlanStatus", me.updatePlanStatus, me);
-
+	    return me.callParent( arguments );
 	}
 });

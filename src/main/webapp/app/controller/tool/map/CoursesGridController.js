@@ -120,6 +120,8 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.appEventsController.getApplication().removeListener("onRequisiteLoad", me.showCourseDetails, me);
 		if(me.courseDetailsPopUp != null && !me.courseDetailsPopUp.isDestroyed)
 			me.courseDetailsPopUp.close();
+	    return me.callParent( arguments );
+
     }
     
     
