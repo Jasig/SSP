@@ -22,8 +22,10 @@ Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	store: 'journalStepsAllStore',
+    	unpagedStore: 'journalStepsAllUnpagedStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentJournalStep',
+    	storeUtils: 'storeUtils',
 		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
@@ -43,44 +45,13 @@ Ext.define('Ssp.controller.admin.journal.DisplayStepsAdminViewController', {
 	init: function() {
 		var me=this;
 		
-		// TODO THIS REMOVE SORTS, BEHAVIOR TO SUPPORT inappropriate sort by 'active' client property
-		// pass the columns for editing
-		me.store.sorters.clear();
-		//TODO  currentPage for store is reset to 1 since sorting is client side.
-		me.store.currentPage=1;
-		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
-		var ptb = me.getView().down('pagingtoolbar');
-        var asidx = me.adminSelectedIndex.get('value');
-        var pageidx = parseInt(asidx / me.apiProperties.getPagingSize());
-        var startidx = pageidx * me.apiProperties.getPagingSize();
-        
-        me.store.load({
-            params: {
-                start: startidx,
-                page: (pageidx + 1)
-            },
-            callback: function(){
-                if (asidx >= 0) {
-                    var rowidx = (asidx - startidx);
-                    
-                    me.getView().getSelectionModel().select(rowidx);
-                    
-                    var sn = me.getView().getView().getSelectedNodes()[0];
-                    
-                    Ext.get(sn).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
-                        Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
-                    me.adminSelectedIndex.set('value', -1);
-                   
-                    if (ptb) {
-                       
-                        ptb.child('#inputItem').setValue((pageidx + 1));
-                        
-                    }
-					me.getView().getStore().currentPage = (pageidx + 1); 
-					
-                }
-            }
-        });
+		 var params = {store:me.store, 
+					unpagedStore:me.unpagedStore, 
+					propertyName:"name", 
+					grid:me.getView(),
+					model:me.model,
+					selectedIndex: me.adminSelectedIndex};
+		me.storeUtils.onStoreUpdate(params);
 		
 		return me.callParent(arguments);
     },    

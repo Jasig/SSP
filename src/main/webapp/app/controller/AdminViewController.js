@@ -22,7 +22,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     inject: {
     	campusesStore: 'campusesStore',
     	campusServicesStore: 'campusServicesStore',
-    	challengeCategoriesStore: 'challengeCategoriesStore',
+    	challengeCategoriesAllStore: 'challengeCategoriesAllStore',
         challengesStore: 'challengesStore',
     	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsAllStore: 'childCareArrangementsAllStore',
@@ -71,7 +71,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	specialServiceGroupsAllStore: 'specialServiceGroupsAllStore',
         statesStore: 'statesStore',
         studentStatusesAllStore: 'studentStatusesAllStore',
-        studentTypesStore: 'studentTypesAllUnpagedStore',
+        studentTypesStore: 'studentTypesAllStore',
 		tagsStore: 'tagsStore',
 		textStore: 'textStore',
     	veteranStatusesAllStore: 'veteranStatusesAllStore'

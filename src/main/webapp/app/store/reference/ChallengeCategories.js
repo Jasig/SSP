@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.ChallengeCategories', {
     model: 'Ssp.model.reference.ChallengeCategory',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('category')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('category'),
+		extraParams: this.extraParams});
     }
 });

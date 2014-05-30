@@ -321,6 +321,7 @@ Ext.require([
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
+	'Ssp.util.StoreUtils',
 	'Ssp.util.Constants',
 	'Ssp.util.Util',
 	'Ssp.store.Coaches',
@@ -370,13 +371,9 @@ Ext.require([
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
-    'Ssp.store.reference.JournalSourcesUnpaged',
-	'Ssp.store.reference.JournalSourcesAll',
     'Ssp.store.reference.JournalStepDetails',
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
-    'Ssp.store.reference.JournalTracksUnpaged',
-	'Ssp.store.reference.JournalTracksAll',
     'Ssp.store.reference.Lassis',
     'Ssp.store.reference.MaritalStatuses',
     'Ssp.store.reference.MilitaryAffiliations',
@@ -715,6 +712,12 @@ Ext.onReady(function(){
 					util:{
 						fn: function(){
 							return new Ssp.util.Util({});
+						},
+						singleton: true
+					},
+					storeUtils:{
+						fn: function(){
+							return new Ssp.util.StoreUtils({});
 						},
 						singleton: true
 					},
@@ -1113,11 +1116,27 @@ Ext.onReady(function(){
 				    	singleton: true
 				    },
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
+					challengeCategoriesAllStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ChallengeCategories', {
+							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 					challengeReferralsAllStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.ChallengeReferrals', {
 							     extraParams: {status: "ALL"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    challengeReferralsAllUnpagedStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.reference.ChallengeReferrals', {
+							     extraParams: {status: "ALL", limit:"-1"}
 							 });
 				    	},
 				    	singleton: true
@@ -1402,7 +1421,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivesUnpagedStore',
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC", limit: "-1"}
+							     extraParams: {limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1411,7 +1430,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllStore',		
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL"}
+							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true
@@ -1420,7 +1439,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllUnpagedStore',		
-							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL", limit: "-1"}
+							     extraParams: {status: "ALL", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1519,14 +1538,43 @@ Ext.onReady(function(){
 			    	journalEntriesUnpagedStore: 'Ssp.store.JournalEntriesUnpaged',
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
 			    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
-			    	journalSourcesUnpagedStore: 'Ssp.store.reference.JournalSourcesUnpaged',
-					journalSourcesAllStore: 'Ssp.store.reference.JournalSourcesAll',
-					journalSourcesAllUnpagedStore: 'Ssp.store.reference.JournalSourcesAllUnpaged',
+			    	journalSourcesAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalSources', {
+							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},	
+					journalSourcesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalSources', {
+							     extraParams: {status: "ALL", limit:"-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					journalSourcesUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalSources', {
+							     extraParams: {limit:"-1"}
+							 });
+					    },
+					    singleton: true
+					},
 			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
 					journalStepsAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.JournalSteps', {
 							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},	
+					journalStepsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalSteps', {
+							     extraParams: {status: "ALL", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1540,10 +1588,39 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},	
+					journalDetailsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalStepDetails', {
+							     extraParams: {status: "ALL", limit:"-1"}
+							 });
+					    },
+					    singleton: true
+					},	
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
-			        journalTracksUnpagedStore: 'Ssp.store.reference.JournalTracksUnpaged',
-					journalTracksAllStore: 'Ssp.store.reference.JournalTracksAll',
-					journalTracksAllUnpagedStore: 'Ssp.store.reference.JournalTracksAllUnpaged',
+			        journalTracksUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalTracks', {
+							     extraParams: {limit:"-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					journalTracksAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalTracks', {
+							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},
+					journalTracksAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.JournalTracks', {
+							     extraParams: {status: "ALL", limit:"-1"}
+							 });
+					    },
+					    singleton: true
+					},
 			        lassisStore: 'Ssp.store.reference.Lassis',
 			        maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 					maritalStatusesAllStore: {
@@ -1722,6 +1799,14 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.StudentTypes', {
 							     extraParams: {status: "ALL", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},
+					studentTypesAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.StudentTypes', {
+							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true

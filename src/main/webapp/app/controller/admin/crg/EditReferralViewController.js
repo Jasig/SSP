@@ -84,7 +84,7 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 				});
 			};
 			
-			if (id.length > 0)
+			if (id && id.length > 0)
 			{
 				// editing
 				this.apiProperties.makeRequest({

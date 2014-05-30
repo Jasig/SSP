@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentChallenge',
-    	store: 'challengesStore',
+    	store: 'challengesAllStore',
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
 		adminSelectedIndex: 'adminSelectedIndex'
     },

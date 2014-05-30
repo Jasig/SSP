@@ -685,6 +685,11 @@
                     "path": "/app/util/"
                 },
                 {
+                    "clsName": "Ssp.util.StoreUtils",
+                    "name": "StoreUtils.js",
+                    "path": "/app/util/"
+                },
+                {
                     "clsName": "Ssp.util.tools.map.MapEventUtils",
                     "name": "MapEventUtils.js",
                     "path": "/app/util/tools/map/"
@@ -2308,21 +2313,6 @@
                     "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.store.reference.JournalTracksAll",
-                    "name": "JournalTracksAll.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.JournalTracksUnpaged",
-                    "name": "JournalTracksUnpaged.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.JournalTracksAllUnpaged",
-                    "name": "JournalTracksAllUnpaged.js",
-                    "path": "/app/store/reference/"
-                },
-                {
                     "clsName": "Ssp.store.People",
                     "name": "People.js",
                     "path": "/app/store/"
@@ -2700,21 +2690,6 @@
                 {
                     "clsName": "Ssp.store.reference.JournalSources",
                     "name": "JournalSources.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.JournalSourcesAll",
-                    "name": "JournalSourcesAll.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.JournalSourcesUnpaged",
-                    "name": "JournalSourcesUnpaged.js",
-                    "path": "/app/store/reference/"
-                },
-                {
-                    "clsName": "Ssp.store.reference.JournalSourcesAllUnpaged",
-                    "name": "JournalSourcesAllUnpaged.js",
                     "path": "/app/store/reference/"
                 },
                 {

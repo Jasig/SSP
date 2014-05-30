@@ -26,7 +26,8 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
     inject: {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
-		columnRendererUtils: 'columnRendererUtils'
+		columnRendererUtils: 'columnRendererUtils',
+		store: 'challengeReferralsAllStore'
     },
 	height: '100%',
 	width: '100%',
@@ -45,6 +46,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
     		      autoScroll: true,
     		      selType: 'rowmodel',
 				  cls: 'configgrid',
+				  store: me.store,
     		      columns: [
 					  {
 	                        header: 'Active',
@@ -75,7 +77,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
      		       			xtype: 'pagingtoolbar',
      		       		    dock: 'bottom',
      		       		    displayInfo: true,
-     		       		    pageSize: me.apiProperties.getPagingSize()
+							pageSize: me.apiProperties.getPagingSize(),
      		       		},
      		              {
      		               xtype: 'toolbar',

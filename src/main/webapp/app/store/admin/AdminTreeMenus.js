@@ -450,7 +450,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Categories',
                     title: 'Categories',
-                    store: 'challengeCategories',
+                    store: 'challengeCategoriesAll',
 					interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false                  
