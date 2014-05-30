@@ -228,52 +228,34 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 		if (sp == null) {
 			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
 		}
-
 		if (!sp.isSorted()) {
 			sp.appendSortField("objectStatus", SortDirection.ASC);
 			sp.appendSortField("name", SortDirection.ASC);
 		}
-		
+				
 		StringBuilder statement = new StringBuilder("select id from Challenge");
-		if(!sp.getStatus().equals(ObjectStatus.ALL)){
+		if(sp.getStatus()  != null && !sp.getStatus().equals(ObjectStatus.ALL)){
 			statement.append(" where objectStatus=:objectStatus");
-		}
-		statement.append(" order by ");
-		String suffix = "";
-		for(Pair<String,SortDirection> sf:sp.getSortFields()){
-			statement.append(suffix);
-			statement.append(sf.getFirst().toString() + " " + sf.getSecond().toString());
-			suffix = ", ";
 		}
 		
 		Query query = createHqlQuery(statement.toString());
-		if(!sp.getStatus().equals(ObjectStatus.ALL)){
+		if(sp.getStatus()  != null && !sp.getStatus().equals(ObjectStatus.ALL)){
 			query.setParameter("objectStatus", sp.getStatus());
 		}
 		List<UUID> uuids = query.list();
 		int size = uuids.size();
 		
 		if(size > 0){
-			if(sp.getMaxResults() != null && sp.getMaxResults()  > 0)
-				uuids = uuids.subList(sp.getFirstResult(), 
-						sp.getFirstResult() + sp.getMaxResults() > size ? size : sp.getFirstResult() + (sp.getMaxResults() == null ? size:sp.getMaxResults()));
-			
-			BatchProcessor<UUID, Challenge> processor =  new BatchProcessor<UUID,Challenge>(uuids, sAndP);
+			BatchProcessor<UUID, Challenge> processor =  new BatchProcessor<UUID,Challenge>(uuids, sp);
 			do{
 				Criteria criteria = createCriteria();
 				criteria.setFetchMode( "challengeChallengeReferrals", FetchMode.JOIN );
 				criteria.setFetchMode( "selfHelpGuideQuestions", FetchMode.JOIN );
-				for(Pair<String,SortDirection> sf:sp.getSortFields()){
-					if(sf.getSecond().equals(SortDirection.ASC))
-						criteria.addOrder(Order.asc(sf.getFirst().toString()));
-					else
-						criteria.addOrder(Order.desc(sf.getFirst().toString()));
-				}
 				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 				processor.process(criteria, "id");
 			}while(processor.moreToProcess());
 			
-			return processor.getPagedResults();
+			return processor.getSortedAndPagedResults();
 		}
 		return new PagingWrapper<Challenge>(0,new ArrayList<Challenge>());
 	}
