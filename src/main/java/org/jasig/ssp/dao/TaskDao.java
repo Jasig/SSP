@@ -207,7 +207,7 @@ public class TaskDao
 			processor.process(query,"createdBy");
 		}while(processor.moreToProcess());
 		
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 	
 	

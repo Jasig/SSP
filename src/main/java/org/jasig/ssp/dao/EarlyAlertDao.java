@@ -167,7 +167,7 @@ public class EarlyAlertDao extends
 
 			// run query
 			@SuppressWarnings("unchecked")
-			final List<Object[]> results = processor.getResults();
+			final List<Object[]> results = processor.getSortedAndPagedResultsAsList();
 
 			// put query results into return value
 			for (final Object[] result : results) {
@@ -292,7 +292,7 @@ public class EarlyAlertDao extends
 			processor.process(criteria, "id");
 		}while(processor.moreToProcess());
 		
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 	
 	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
@@ -479,7 +479,7 @@ public class EarlyAlertDao extends
 			processor.process(query, "createdBy");
 		}while(processor.moreToProcess());
 		
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 	
 	private Criteria setBasicCriteria(Criteria query, EntityCountByCoachSearchForm form){
@@ -568,7 +568,7 @@ public class EarlyAlertDao extends
 				processor.process(query, "personIds");
 			}while(processor.moreToProcess());
 			
-			for (final Object[] result : processor.getResults()) {
+			for (final Object[] result : processor.getSortedAndPagedResultsAsList()) {
 				responsesDuePerPerson.put((UUID) result[0], (Number) result[1]);
 			}
 		}

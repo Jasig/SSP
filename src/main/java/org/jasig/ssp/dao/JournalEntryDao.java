@@ -132,7 +132,7 @@ public class JournalEntryDao
 			processor.process(query, "createdBy");
 		}while(processor.moreToProcess());
 		
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 	
 	private Criteria setCriteria(Criteria query, EntityCountByCoachSearchForm form){

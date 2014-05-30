@@ -107,7 +107,7 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 			processor.process(createCriteria(), "schoolId");
 		}while(processor.moreToProcess());
 				
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -136,7 +136,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			
 		}while(processor.moreToProcess());
 		
-		return processor.getResults();
+		return processor.getSortedAndPagedResultsAsList();
 	}
 	
 	public void removeFromSession(Person person)
@@ -306,7 +306,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				processor.process(criteria, "username");
 		}while(processor.moreToProcess());
 		
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
@@ -557,7 +557,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			
 		}while(processor.moreToProcess());
 
-		return new PagingWrapper<BaseStudentReportTO>(ids.size(), processor.getResults());
+		return new PagingWrapper<BaseStudentReportTO>(ids.size(), processor.getSortedAndPagedResultsAsList());
 
 	}
 	
@@ -637,7 +637,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			processor.process(criteria, "id");
 		}while(processor.moreToProcess());
 
-		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), processor.getResults());
+		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), processor.getSortedAndPagedResultsAsList());
 
 	}
 	

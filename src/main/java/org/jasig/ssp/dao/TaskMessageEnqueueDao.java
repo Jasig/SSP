@@ -68,7 +68,7 @@ public class TaskMessageEnqueueDao extends AbstractAuditableCrudDao<TaskMessageE
 			processor.process(criteria, "id");
 		}while(processor.moreToProcess());
 
-		return processor.getResults();
+		return processor.getSortedAndPagedResultsAsList();
 	}
 
 

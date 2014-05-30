@@ -71,7 +71,7 @@ public class DisabilityServiceReportDao extends PersonDao {
 			processor.process(criteria, "id");
 		}while(processor.moreToProcess());
 
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 
 	}
 	

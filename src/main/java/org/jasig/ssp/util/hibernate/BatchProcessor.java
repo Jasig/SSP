@@ -113,7 +113,7 @@ public class BatchProcessor<I, O> {
 		return batches.hasNext();
 	}
 	
-	public List<O> getResults() {
+	public List<O> getSortedAndPagedResultsAsList() {
 		
 		if(sortAndPage != null){
 			try{
@@ -125,7 +125,17 @@ public class BatchProcessor<I, O> {
 		return results;
 	}
 	
-	public PagingWrapper<O> getPagedResults(){
+	public List<O> getUnsortedUnpagedResultsAsList() {
+		return results;
+	}
+	
+	public PagingWrapper<O> getUnSortedAndUnPagedResults(Integer count){
+		if(count == null)
+		  count = results.size();
+		return new PagingWrapper<O>(count, results);
+	}
+	
+	public PagingWrapper<O> getSortedAndPagedResults(){
 		Integer count = results.size();
 		if(sortAndPage != null){
 			try{

@@ -413,7 +413,7 @@ public class EarlyAlertResponseDao extends
 			processor.process(collectionCriteria, "id");
 		}while(processor.moreToProcess());
 		
-		return processor.getResults();
+		return processor.getSortedAndPagedResultsAsList();
 	}
 	
 private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
@@ -533,7 +533,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		    processor.process(query, "earlyAlert.createdBy");
 		}while(processor.moreToProcess());
 		
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 	
 	

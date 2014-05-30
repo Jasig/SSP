@@ -121,6 +121,6 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
  			addConfidentialityLevelsRestriction(requester, criteria);
  			processor.process(criteria, "id");
  		}while(processor.moreToProcess());
-		return processor.getResults();
+		return processor.getSortedAndPagedResultsAsList();
 	}
 }

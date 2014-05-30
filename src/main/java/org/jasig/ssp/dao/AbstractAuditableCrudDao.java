@@ -83,7 +83,7 @@ public abstract class AbstractAuditableCrudDao<T extends Auditable>
 			processor.process(criteria, "id");
 		}while(processor.moreToProcess());
 
-		return processor.getPagedResults();
+		return processor.getSortedAndPagedResults();
 	}
 
 	@SuppressWarnings(UNCHECKED)
