@@ -213,7 +213,7 @@
         <ul class="field-suggestions"></ul>
         <p><a href="javascript:void(0);" class="suggestions-add-edit"><img src="<c:url value="/rs/famfamfam/silk/1.3/add.png" />" alt="<spring:message code="add.edit"/>" /> <spring:message code="add.edit"/></a></p>
       </div>
-      <div class="ea-required">&nbsp;</div>
+      <div class="ea-required">*</div>
       <div class="ea-label">
         <span><spring:message code="faculty.suggestions"/>:</span>
       </div>

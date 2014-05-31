@@ -192,6 +192,12 @@ var ssp = ssp || {};
             } else {
                 $(selectors.reason).removeClass('invalid');
             }
+            if(!$(selectors.suggestionsId) || $(selectors.suggestionsId).length <= 0) {
+                rslt = false;
+            	$(selectors.suggestionsAddEdit).addClass('invalid');
+            } else {
+                $(selectors.suggestionsAddEdit).removeClass('invalid');
+            }
             var emailCc = $(selectors.emailCc).val().trim();
             // True regex email validation is a pipe-dream. Just a sanity
             // check here.
