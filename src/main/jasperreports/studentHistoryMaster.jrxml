@@ -341,7 +341,7 @@
 			<staticText>
 				<reportElement uuid="456bc62d-fd32-4401-bbaa-1e0667aa8477" x="273" y="20" width="140" height="20"/>
 				<textElement/>
-				<text><![CDATA[MAP Projected Graduation: ]]></text>
+				<text><![CDATA[MAP Ends: ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="1d19891d-93c4-4319-8650-1a60221394e6" x="100" y="20" width="160" height="20" isPrintWhenDetailOverflows="true">
