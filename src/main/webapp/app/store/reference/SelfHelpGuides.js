@@ -16,17 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.SelfHelpGuides', {
-    extend: 'Ext.data.Store',
+Ext.define('Ssp.store.reference.SelfHelpGuides', {
+    extend: 'Ssp.store.reference.AbstractReferences',
     model: 'Ssp.model.tool.shg.SelfHelpGuides',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
     },    
 	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('selfHelpGuides') ),
-						  autoLoad: false });
-		return this.callParent(arguments);
+		this.callParent(arguments);
+		Ext.apply(this.getProxy(), {
+    		url: this.getProxy().url + this.apiProperties.getItemUrl('selfHelpGuides'),
+    		extraParams: this.extraParams});
 	},
 	
 	groupField: 'group'

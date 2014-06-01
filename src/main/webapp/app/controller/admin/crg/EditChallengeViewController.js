@@ -67,36 +67,8 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 				 me.apiProperties.handleError(response);
 				 me.getView().setLoading(false);
 		    };
-		    
-			successFunc = function(response, view) {
-				
-				var responseTextObject = response['responseText'];
-				var rto = Ext.JSON.decode(responseTextObject);
-			
-				var rowid = rto['id'];
-				me.store.load({
-					params: {
-						limit: 500
-					},
-					callback: function(records) {
-						
-						var rowidx = -1;
-						
-						Ext.Array.each(records, function(item,index) {
-							if (item.get('id') === rowid) {
-								rowidx = index;
-								return false;
-							}
-						});
-						
-						me.adminSelectedIndex.set('value',rowidx);
-						me.displayMain();
-					}
-				});
-				
-				
-			};
 			successEditFunc = function(response, view) {
+				me.adminSelectedIndex.set('value', 1);
 				me.displayMain();
 			};
 			
@@ -107,7 +79,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 					url: url+"/"+id,
 					method: 'PUT',
 					jsonData: jsonData,
-					successFunc: successFunc,
+					successFunc: successEditFunc,
 					failureFunc: failure 
 				});
 				
@@ -117,7 +89,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 					url: url,
 					method: 'POST',
 					jsonData: jsonData,
-					successFunc: successFunc,
+					successFunc: successEditFunc,
 					failureFunc: failure 
 				});
 			}
@@ -127,6 +99,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 	},
 	
 	onCancelClick: function(button){
+		me.adminSelectedIndex.set('value', -11);
 		this.displayMain();
 	},
 	

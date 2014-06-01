@@ -2813,7 +2813,7 @@
                     "path": "/app/model/tool/shg/"
                 },
                 {
-                    "clsName": "Ssp.store.SelfHelpGuideQuestions",
+                    "clsName": "Ssp.store.reference.SelfHelpGuideQuestions",
                     "name": "SelfHelpGuideQuestions.js",
                     "path": "/app/store/"
                 },
@@ -2823,7 +2823,7 @@
                     "path": "/app/model/tool/shg/"
                 },
                 {
-                    "clsName": "Ssp.store.SelfHelpGuides",
+                    "clsName": "Ssp.store.reference.SelfHelpGuides",
                     "name": "SelfHelpGuides.js",
                     "path": "/app/store/"
                 },

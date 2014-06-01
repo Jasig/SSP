@@ -63,25 +63,8 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 		    };
 		    	
 			successFunc = function(response, view) {
-				var responseTextObject = response['responseText'];
-				var rto = Ext.JSON.decode(responseTextObject);
-				var rowid = rto['id'];
-				me.store.load({
-					params: {
-						limit: 500
-					},
-					callback: function(records) {
-						var rowidx = -1;
-						Ext.Array.each(records, function(item,index) {
-							if (item.get('id') === rowid) {
-								rowidx = index;
-								return false;
-							}
-						});
-						me.adminSelectedIndex.set('value',rowidx);
-						me.displayMain();
-					}
-				});
+				me.adminSelectedIndex.set('value', 1);
+				me.displayMain();
 			};
 			
 			if (id && id.length > 0)
@@ -113,6 +96,7 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 	},
 	
 	onCancelClick: function(button){
+		me.adminSelectedIndex.set('value', -1);
 		this.displayMain();
 	},
 	

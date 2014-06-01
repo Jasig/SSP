@@ -21,6 +21,7 @@ Ext.define('Ssp.store.reference.MessageTemplates', {
     model: 'Ssp.model.MessageTemplates',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('messageTemplate')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('messageTemplate'),
+    		extraParams: this.extraParams});
     }
 });

@@ -33,13 +33,18 @@ Ext.define('Ssp.util.StoreUtils',{
 	
 	onStoreUpdate: function(ps){
 		this.bindStore(ps);
-		if(ps.model.get(ps.propertyName) && ps.model.dirty){
+		if(ps.model.get(ps.propertyName) && (ps.model.dirty || ps.selectedIndex.get('value') == 1)){
 			var sortDirection = false;
 			var sort = false;
 			if(ps.store.sorters && ps.store.sorters.items.length > 0){
 				sortDirection = ps.store.sorters.items[0].direction;
 				sort = ps.store.sorters.items[0].property;
 			}
+			if(!ps.unpagedStore.getProxy().extraParams)
+			  ps.unpagedStore.getProxy().extraParams = {};
+			
+			ps.unpagedExtraParams = JSON.parse(JSON.stringify(ps.unpagedStore.getProxy().extraParams));
+			
 			ps.unpagedStore.getProxy().setExtraParam("status", "ALL");
 			ps.unpagedStore.getProxy().setExtraParam("limit", "-1");
 			if(sortDirection){
@@ -67,7 +72,9 @@ Ext.define('Ssp.util.StoreUtils',{
 	onUnpagedStoreLoaded: function(records, operation, success, params){
 		var index = this.getModelIndex(params.propertyName, params.model, params.unpagedStore);
 		var page = parseInt(index/params.store.pageSize);
+		params.unpagedStore.getProxy().extraParams = params.unpagedExtraParams;
 		params.store.currentPage = page + 1;
+		
 		params.store.load({callback:function(records, operation, success){
 			this.onStoreLoaded(records, operation, success, params)}, scope:this, single:true});
 	},
@@ -81,7 +88,7 @@ Ext.define('Ssp.util.StoreUtils',{
         
         Ext.get(sn).highlight(Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_COLOR,
             Ssp.util.Constants.SSP_EDITED_ROW_HIGHLIGHT_OPTIONS);
-        params.selectedIndex.set('value', -1);
+        params.selectedIndex.set('value', false);
 	},
 	
 	bindStore:function(params){

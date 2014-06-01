@@ -111,6 +111,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 		var me = this;
 		me.getView().getForm().loadRecord( this.model );
 	},
+	
 	onSaveClick: function(button) {
 		var me = this; 
 		if(me.getView().getForm().isValid())
@@ -131,28 +132,17 @@ Ext.define('Ssp.controller.admin.campus.EditCampusViewController', {
 	onCancelClick: function(button){
 		var me = this;
 		me.maybeClearMissingEaCoordinator();
+		me.adminSelectedIndex.set('value', -1);
 		this.displayMain();
 	},
 
     saveSuccess: function( r, scope ){
 		var me=scope;
 		me.maybeClearMissingEaCoordinator();
-		
-				var rowid = r['id'];
-				me.store.load({
-					params: {
-						limit: 500
-					},
-					callback: function(records) {
-						
-						var rowidx = me.store.find('id',rowid);
-						
-						me.adminSelectedIndex.set('value',rowidx);
-						
-						me.displayMain();
-					}
-				});
+		me.adminSelectedIndex.set('value', 1);
 		me.getView().setLoading( false );
+		me.displayMain();
+		
 		
     },
     

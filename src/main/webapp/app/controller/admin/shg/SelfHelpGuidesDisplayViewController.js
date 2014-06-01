@@ -21,10 +21,13 @@ Ext.define('Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'selfHelpGuidesStore',
+    	store: 'selfHelpGuidesAllStore',
+    	unpagedStore: 'selfHelpGuidesAllUnpagedStore',
+    	adminSelectedIndex: 'adminSelectedIndex',
     	selfHelpGuideQuestionsStore: 'selfHelpGuideQuestionsStore',
     	formUtils: 'formRendererUtils',
-    	model: 'currentSelfHelpGuide'
+    	model: 'currentSelfHelpGuide',
+    	storeUtils: 'storeUtils'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -42,8 +45,13 @@ Ext.define('Ssp.controller.admin.shg.SelfHelpGuidesDisplayViewController', {
 	init: function() {
 		var me=this;
 		
-		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
-		me.store.load();
+		var params = {store:me.store, 
+				unpagedStore:me.unpagedStore, 
+				propertyName:"name", 
+				grid:me.getView(),
+				model:me.model,
+				selectedIndex: me.adminSelectedIndex};
+		me.storeUtils.onStoreUpdate(params);
 		
 		return me.callParent(arguments);
     }, 

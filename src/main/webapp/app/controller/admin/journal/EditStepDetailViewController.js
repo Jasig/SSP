@@ -57,26 +57,13 @@ Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
 			id = record.get('id');
 			jsonData = record.data;
 			successFunc = function(response, view) {
-				var responseTextObject = response['responseText'];
-						var rto = Ext.JSON.decode(responseTextObject);
-						var rowid = rto['id'];
-						me.store.load({
-							params: {
-								limit: 500
-							},
-							callback: function(records) {
-								var rowidx = -1;
-								Ext.Array.each(records, function(item,index) {
-									if (item.get('id') === rowid) {
-										rowidx = index;
-										return false;
-									}
-								});
-								me.adminSelectedIndex.set('value',rowidx);
-								me.displayMain();
-							}
-						});
-					};
+				me.adminSelectedIndex.set('value', 1);
+				me.displayMain();
+			};
+			failureFunc = function(response, view) {
+				 me.apiProperties.handleError(response);
+				 me.getView().setLoading(false);
+			};
 			
 			if (id.length > 0)
 			{
@@ -85,7 +72,8 @@ Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
 					url: url+"/"+id,
 					method: 'PUT',
 					jsonData: jsonData,
-					successFunc: successFunc 
+					successFunc: successFunc,
+					failureFunc: failureFunc
 				});
 				
 			}else{
@@ -94,7 +82,8 @@ Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
 					url: url,
 					method: 'POST',
 					jsonData: jsonData,
-					successFunc: successFunc 
+					successFunc: successFunc,
+					failureFunc: failureFunc
 				});		
 			}
 		}
@@ -104,6 +93,7 @@ Ext.define('Ssp.controller.admin.journal.EditStepDetailViewController', {
 	},
 	
 	onCancelClick: function(button){
+		me.adminSelectedIndex.set('value', -1);
 		this.displayMain();
 	},
 	

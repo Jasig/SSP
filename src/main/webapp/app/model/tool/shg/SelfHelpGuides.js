@@ -17,12 +17,8 @@
  * under the License.
  */
 Ext.define('Ssp.model.tool.shg.SelfHelpGuides', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'id',type:'string'},
-             {name:'name',type:'string'},
-             {name:'description',type:'string'},
-             {name:'active',type:'boolean'},
-             {name:'authenticationRequired',type:'boolean'},             
+    extend: 'Ssp.model.reference.AbstractReference',
+    fields: [{name:'authenticationRequired',type:'boolean'},             
              {name:'threshold',type:'integer'},
              {name:'introductoryText',type:'string'},
              {name:'summaryText',type:'string'},

@@ -17,10 +17,8 @@
  * under the License.
  */
 Ext.define('Ssp.model.tool.shg.SelfHelpGuideQuestions', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'id',type:'string'},
-             {name:'name',type:'string'},
-             {name:'questionNumber',type:'integer'},
+    extend: 'Ssp.model.reference.AbstractReference',
+    fields: [{name:'questionNumber',type:'integer'},
              {name:'critical',type:'boolean'},
              {name:'mandatory',type:'boolean'},             
              {name:'selfHelpGuideId',type:'string'},

@@ -20,13 +20,10 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
     extend: 'Deft.mvc.ViewController',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        messageTemplatesStore: 'messageTemplatesStore'
-    },
-    inject: {
         apiProperties: 'apiProperties',
         formUtils: 'formRendererUtils',
         model: 'currentMessageTemplate',
-        store: 'messageTemplatesStore',
+        store: 'messageTemplatesAllStore',
 		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
@@ -73,26 +70,8 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
                 },
                 jsonData: jsonData,
                 success: function(response, view){
-                    var responseTextObject = response['responseText'];
-					var rto = Ext.JSON.decode(responseTextObject);
-					var rowid = rto['id'];
-					me.store.load({
-						params: {
-							limit: 500
-						},
-						callback: function(records) {
-							var rowidx = -1;
-							Ext.Array.each(records, function(item,index) {
-								if (item.get('id') === rowid) {
-									rowidx = index;
-									return false;
-								}
-							});
-							me.adminSelectedIndex.set('value',rowidx);
+							me.adminSelectedIndex.set('value',1);
 							me.displayMain();
-						}
-					});
-                    
                 },
                 failure: this.apiProperties.handleError
             }, this);
@@ -101,6 +80,7 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
     
     
     onCancelClick: function(button){
+    	me.adminSelectedIndex.set('value', 11);
         this.displayMain();
     },
     

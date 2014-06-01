@@ -331,8 +331,6 @@ Ext.require([
     'Ssp.store.Goals',
 	'Ssp.store.Strengths',
 	'Ssp.store.AddTasks',
-    'Ssp.store.SelfHelpGuides',
-    'Ssp.store.SelfHelpGuideQuestions',
     'Ssp.store.JournalEntries',
     'Ssp.store.JournalEntriesUnpaged',
     'Ssp.store.JournalEntryDetails',
@@ -395,6 +393,8 @@ Ext.require([
     'Ssp.store.reference.ProgramStatusChangeReasons',
     'Ssp.store.reference.ReferralSources',
     'Ssp.store.reference.ServiceReasons',
+    'Ssp.store.reference.SelfHelpGuides',
+    'Ssp.store.reference.SelfHelpGuideQuestions',
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.external.Terms',
@@ -1689,7 +1689,7 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',	
+					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',			    	
@@ -1730,8 +1730,24 @@ Ext.onReady(function(){
 				    studentsSearchStore: 'Ssp.store.StudentsSearch',
 				    directoryPersonSearchStore: 'Ssp.store.DirectoryPersonSearch',
 					searchChallengeReferralStore: 'Ssp.store.SearchChallengeReferral',
-				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
-				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
+				    selfHelpGuidesStore: 'Ssp.store.reference.SelfHelpGuides',
+				    selfHelpGuidesAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SelfHelpGuides', {
+					    		extraParams: {status: "ALL", limit: "-1"}
+					    	});
+					    },
+					    singleton: true
+					},
+					selfHelpGuidesAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SelfHelpGuides', {
+					    		extraParams: {status: "ALL"}
+					    	});
+					    },
+					    singleton: true
+					},
+				    selfHelpGuideQuestionsStore: 'Ssp.store.reference.SelfHelpGuideQuestions',
 				    serviceReasonsStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.ServiceReasons', {

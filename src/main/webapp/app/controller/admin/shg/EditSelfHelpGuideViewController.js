@@ -23,8 +23,9 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
     	model: 'currentSelfHelpGuide',
-    	store: 'selfHelpGuidesStore',
-    	questionStore: 'selfHelpGuideQuestionsStore'
+    	store: 'selfHelpGuidesAllStore',
+    	questionStore: 'selfHelpGuideQuestionsStore',
+    	adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -58,6 +59,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
 	 		url = me.questionStore.getProxy().url;
 	 		if(me.questionStore && me.questionStore.data.items.length == 0){
 	 			Ext.Msg.alert('SSP Warning', 'Self-Help Guide has been saved. It is recommended to associate a question with guide.'); 
+	 			me.adminSelectedIndex.set('value', 1);
 	 			me.displayMain();
 	 			return;
 	 		}
@@ -89,6 +91,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
 			
 		};
 		successFunc = function(response, view) {
+			me.adminSelectedIndex.set('value', 1);
 			me.displayMain();
 		};		
 		if (id.length > 0)
@@ -113,6 +116,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideViewController', {
 		
 	
 	onCancelClick: function(button){
+		this.adminSelectedIndex.set('value', -1);
 		this.displayMain();
 	},
 	

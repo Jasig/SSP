@@ -82,7 +82,7 @@ public class SelfHelpGuidesAdminController extends AbstractAuditableReferenceCon
 			final @RequestParam(required = false) String sortDirection) 
 			 {
 		
-		return super.getAll(ObjectStatus.ALL, null, null, null, null);
+		return super.getAll(status == null ? ObjectStatus.ALL : status, start, limit, sort, sortDirection);
 	}
 
 	@Override
