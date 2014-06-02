@@ -80,8 +80,10 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	@Size(max = 2500)
 	private String description;
 	
-	@Column(nullable = true, length = 10)
+	@Column(nullable = false, length = 10)
 	@Size(max = 10)
+	@NotNull
+	@NotEmpty
 	private String grade;
 	
 	@Column(nullable = true)
