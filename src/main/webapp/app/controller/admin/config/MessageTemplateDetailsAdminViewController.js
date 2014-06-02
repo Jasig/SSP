@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.admin.config.MessageTemplateDetailsAdminViewControlle
         apiProperties: 'apiProperties',
         formUtils: 'formRendererUtils',
         model: 'currentMessageTemplate',
-        store: 'messageTemplatesAllStore',
+        store: 'messageTemplatesStore',
 		adminSelectedIndex: 'adminSelectedIndex'
     },
     config: {
