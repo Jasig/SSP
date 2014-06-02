@@ -83,10 +83,7 @@ Ext.define('Ssp.model.AbstractBase', {
      * fields have the same sort of translation as active/objectStatus do, 
      * add those exceptions here. 
      */
-    getServerSideFieldName: function( fieldName ) {
-    	if(fieldName == 'active') {
-    		return 'objectStatus';
-    	}     	
+    getServerSideFieldName: function( fieldName ) {   	
     	return fieldName;
     }
 });
