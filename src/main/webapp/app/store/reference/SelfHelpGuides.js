@@ -28,7 +28,5 @@ Ext.define('Ssp.store.reference.SelfHelpGuides', {
 		Ext.apply(this.getProxy(), {
     		url: this.getProxy().url + this.apiProperties.getItemUrl('selfHelpGuides'),
     		extraParams: this.extraParams});
-	},
-	
-	groupField: 'group'
+	}
 });
