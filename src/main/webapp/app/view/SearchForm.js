@@ -43,6 +43,8 @@ Ext.define('Ssp.view.SearchForm',{
         type: 'vbox',
         align: 'stretch'
     },    
+    width: '100%',
+    height: '100%',
     scroll: 'vertical',
 	listeners: {
 	      afterlayout: function() {
@@ -56,10 +58,16 @@ Ext.define('Ssp.view.SearchForm',{
     	me.mapStatusStore.configStore = me.configStore;
         Ext.applyIf(me, {
             width: '50%',
+            manageOverflow: 2,
             header: {
             	toolFirst: true,
             	buttonAlign: 'left'
             },
+			fieldDefaults: {
+			            anchor: '100%'
+			        },
+			
+		    bodyPadding: 10,
 			defaults:{
 			    	 enableKeyEvents:true,
 			    	 listeners:{
