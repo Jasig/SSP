@@ -138,7 +138,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}else{
 			me.onTextStoreLoad();
 		}
-		
+		if(me.configStore.getTotalCount() == 0){
+			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
+			me.configStore.load();
+		}	
 		return me.callParent(arguments);
     },
     
@@ -384,6 +387,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var store;
 		var sortableColumns = true;
 		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
+		var coachIdAlias = me.configStore.getConfigByName('coachFieldLabel');
+
 		if ( me.getIsCaseload() )
 		{
 			store = me.caseloadStore;
@@ -398,7 +403,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? .4:.2},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: .5},
-	              { sortable: sortableColumns, header: 'Coach', dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
+	              { sortable: sortableColumns, header: coachIdAlias, dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
 	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? .5:.2},
 				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: me.getIsExpanded() ? .5:1},
 	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .2},   	              

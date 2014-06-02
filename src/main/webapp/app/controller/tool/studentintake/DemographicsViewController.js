@@ -99,7 +99,6 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
 			me.getEmployedCheckOff().setValue( !employed );
 		}
 		
-		me.displayStudentIntakeDemographicsEmploymentShift = me.configStore.getConfigByName('displayStudentIntakeDemographicsEmploymentShift');
 		
         me.showHideChildcareArrangement( childcareNeeded.getValue() );
         me.showHideEmploymentFields( isEmployed.getValue() );
@@ -134,12 +133,7 @@ Ext.define('Ssp.controller.tool.studentintake.DemographicsViewController', {
     	if(value.employed=="true")
     	{
     		placeOfEmployment.show();
-    		if (this.displayStudentIntakeDemographicsEmploymentShift)
-    		{
-    		    shift.show();
-    		}else{
-    			shift.hide();
-    		}
+    		shift.show();
     		wage.show();
     		totalHoursWorkedPerWeek.show();
     	}else{

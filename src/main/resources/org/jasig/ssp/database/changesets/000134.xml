@@ -235,4 +235,9 @@
 			</delete>											
 		</rollback>
 	</changeSet>
+	<changeSet id="remove displayStudentIntakeDemographicsEmploymentShift" author="tony.arland">
+			<delete tableName="config">
+				<where>id='be1bdb18-94f8-4a60-b75b-6f413af26577'</where>
+			</delete>	
+	</changeSet>
 </databaseChangeLog>
