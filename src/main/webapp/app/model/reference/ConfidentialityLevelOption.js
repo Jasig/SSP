@@ -17,15 +17,14 @@
  * under the License.
  */
 Ext.define('Ssp.model.reference.ConfidentialityLevelOption', {
-    extend: 'Ssp.model.reference.AbstractReference',
+    extend: 'Ext.data.Model',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	apiProperties: 'apiProperties'
     },
     
     fields: [{name:'id',type:'int'},
-    		 {name:'name',type:'string'},
-    		 {name:'active',type:'boolean',defaultValue:true}] ,
+    		 {name:'name',type:'string'}] ,
 
 	constructor: function(){
 		Ext.apply(this.getProxy(), 
