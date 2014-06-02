@@ -53,7 +53,6 @@ Ext.define('Ssp.store.reference.ConfigurationOptionsUnpaged', {
 		                    return validStudentId.test(val);
 		                }
 		            });
-		            console.log(store);
 					
 				},
 				scope: this,

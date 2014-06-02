@@ -376,6 +376,7 @@ Ext.define('Ssp.view.SearchForm',{
              	   labelSeparator: '',
              	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
              	   name: 'birthDate',
+             	   id:'birthDate',
 				   itemId: 'birthDate',
 				  onExpand: function() {
 					    var value = this.getValue();

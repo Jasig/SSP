@@ -147,6 +147,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     onTextStoreLoad:function(){
     	var me = this;
+    	var birthDateField = Ext.getCmp('birthDate');
+    	birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)' );
     	me.onCollapseStudentRecord();
     },
     

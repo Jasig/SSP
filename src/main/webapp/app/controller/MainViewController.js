@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.MainViewController', {
 		personService: 'personService',
 		authenticatedPerson: 'authenticatedPerson',
 		contactPersonStore: 'contactPersonStore',
-        configStore: 'configStore'
+        configStore: 'configStore',
+
 
     },
     config: {
