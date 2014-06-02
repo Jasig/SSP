@@ -24,6 +24,7 @@ Ext.define('Ssp.store.Caseload', {
     inject: {
         apiProperties: 'apiProperties'
     },
+	remoteSort: false,
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
