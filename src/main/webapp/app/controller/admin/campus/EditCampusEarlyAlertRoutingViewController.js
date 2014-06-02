@@ -48,8 +48,8 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		var me=this;		
 		me.getView().getForm().reset();
 		me.missingEaRoutingPerson = null;
-		me.coachesStore = me.getView().coachesStore;
 
+		 me.coachesStore.clearFilter(true);
 		if ( me.model.get('id') ) {
 			me.filterEarlyAlertReasonsForEdit();
 

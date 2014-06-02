@@ -55,8 +55,9 @@ Ext.define('Ssp.controller.person.CoachViewController', {
     
     init: function(){
         var me = this;
+        me.coachesStore.clearFilter(true);
         me.missingCoach = null;
-         return this.callParent(arguments);
+        return this.callParent(arguments);
     },
     
     onAfterLayout: function(){

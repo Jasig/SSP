@@ -23,6 +23,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentViewController', {
     	coachesStore: 'coachesStore'
     },
 	init: function() {
+		this.coachesStore.clearFilter(true);
 		this.coachesStore.load();	
 		return this.callParent(arguments);
     }

@@ -35,6 +35,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         programStatusService: 'programStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
+        coachesStore: 'coachesStore',
         searchStoreOld: 'studentsSearchStore',
         searchStore: 'directoryPersonSearchStore'
 
@@ -76,7 +77,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   	//me.personLite.set('id','');
-		
+		me.coachesStore.clearFilter(true);
 		if(me.personLite.get('id'))
 			me.getView().collapse();
 		
