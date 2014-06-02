@@ -2815,7 +2815,7 @@
                 {
                     "clsName": "Ssp.store.reference.SelfHelpGuideQuestions",
                     "name": "SelfHelpGuideQuestions.js",
-                    "path": "/app/store/"
+                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.model.tool.shg.SelfHelpGuides",
@@ -2825,7 +2825,7 @@
                 {
                     "clsName": "Ssp.store.reference.SelfHelpGuides",
                     "name": "SelfHelpGuides.js",
-                    "path": "/app/store/"
+                    "path": "/app/store/reference/"
                 },
                 {
                     "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuide",
