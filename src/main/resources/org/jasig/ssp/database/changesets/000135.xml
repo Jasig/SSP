@@ -31,6 +31,6 @@
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
    
 	<changeSet id="Move configuration.js values into config table" author="tony.arland">
-		<addNotNullConstraint tableName="external_student_transcript_course" columnName="grade" />
+		<addNotNullConstraint tableName="external_student_transcript_course" columnName="grade" columnDataType="${nvarchar.type}(10)"/>
 	</changeSet>
 </databaseChangeLog>
