@@ -51,6 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
@@ -405,25 +406,37 @@ public class MessageServiceImpl implements MessageService {
 			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
  
-			// WILL FIND FIRST VALID EMAIL 
-			InternetAddress[] froms = getEmailAddresses( personService.get(Person.SYSTEM_ADMINISTRATOR_ID), "from:",message.getId());
-			
-			
-			if(froms.length > 0){
-				mimeMessageHelper.setFrom(froms[0]);
-				message.setSentFromAddress(froms[0].toString());
-			}
-			// We just happen to know that getEmailAddressWithName() uses the
-			// primary address. This could probably be handled better. W/o
-			// the blank string check, though, javax.mail will blow up
-			// w/ a AddressException
-			if(message.getSender().hasEmailAddresses()){
-				InternetAddress[] replyTos = getEmailAddresses(message.getSender(), "repyTO:",message.getId());
-				if(replyTos.length > 0){
-					mimeMessageHelper.setReplyTo(replyTos[0]);
-					message.setSentReplyToAddress(replyTos[0].toString());
+			InternetAddress from;
+			//We used the configured outbound email address for 3 scenarios
+			// 1) System Admin is the sender
+			// 2) Sender is null
+			// 3) Sender does not have an email address
+			if( (message.getSender()!= null && message.getSender().getId().equals(Person.SYSTEM_ADMINISTRATOR_ID)) || message.getSender() == null || message.getSender().getEmailAddresses().isEmpty()  )
+				{
+				try {
+					 from = new InternetAddress(configService.getByName("outbound_email_address").getValue());
+					 mimeMessageHelper.setFrom(from);
+					 message.setSentFromAddress(from.toString());
+					 mimeMessageHelper.setReplyTo(from);
+					 message.setSentReplyToAddress(from.toString());
+				} catch(AddressException e)
+				{
+					LOGGER.error("The config outbound_email_address has been configured with an invalid email address!!");
+					throw e;
+				}
+			} else
+			{
+				// WILL FIND FIRST VALID EMAIL 
+				InternetAddress[] froms = getEmailAddresses( message.getSender(), "from:",message.getId());
+				if(froms.length > 0){
+					mimeMessageHelper.setFrom(froms[0]);
+					message.setSentFromAddress(froms[0].toString());
+					mimeMessageHelper.setReplyTo(froms[0]);
+					message.setSentReplyToAddress(froms[0].toString());
 				}
 			}
+
+			
 			InternetAddress[] tos = null;
 			if ( message.getRecipient() != null && message.getRecipient().hasEmailAddresses()) { // NOPMD by jon.adams			{
 				tos = getEmailAddresses(message.getRecipient(), "to:",message.getId());
