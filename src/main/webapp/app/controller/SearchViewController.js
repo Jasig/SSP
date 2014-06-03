@@ -276,7 +276,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 				{
 					me.caseloadFilterCriteria.set('programStatusId', Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID );
 				}
-				me.getCaseload();
+				me.getCaseload(true);
 				me.displayCaseloadBar();
 			}else{
 				me.search();
@@ -751,16 +751,26 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=scope;
     },     
     
-	getCaseload: function(){
+	getCaseload: function(defaultToActive){
     	var me=this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
 		me.getView().setLoading( true );
-		me.caseloadService.getCaseload( me.caseloadFilterCriteria.get( 'programStatusId' ),
-    		me.caseloadStore,
-    		{success:me.getCaseloadSuccess, 
-			 failure:me.getCaseloadFailure, 
-			 scope: me});		
+		if(me.getCaseloadStatusCombo().getValue() || defaultToActive )
+		{
+			me.caseloadService.getCaseload( me.caseloadFilterCriteria.get( 'programStatusId' ),
+					me.caseloadStore,
+					{success:me.getCaseloadSuccess, 
+				failure:me.getCaseloadFailure, 
+				scope: me});		
+		} else
+		{
+			me.caseloadService.getCaseload(null,
+					me.caseloadStore,
+					{success:me.getCaseloadSuccess, 
+				failure:me.getCaseloadFailure, 
+				scope: me});
+		}
 	},
     
     getCaseloadSuccess: function( r, scope){

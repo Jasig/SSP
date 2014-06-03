@@ -191,19 +191,11 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
 		
-		ProgramStatus programStatusOrDefault;
 
-		// programStatus : <programStatusId>, default to Active
-		if (programStatus == null) {
-			programStatusOrDefault = programStatusService
-					.get(ProgramStatus.ACTIVE_ID);
-		} else {
-			programStatusOrDefault = programStatus;
-		}
 		
 		PersonSearchRequest from = new PersonSearchRequest();
 		from.setCoach(coach);
-		from.setProgramStatus(programStatusOrDefault);
+		from.setProgramStatus(programStatus);
 
 		
 		return search2(from);
