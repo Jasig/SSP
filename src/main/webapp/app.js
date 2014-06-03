@@ -33,6 +33,7 @@ Ext.require([
     'Ssp.view.Main',
     'Ssp.view.Search',
     'Ssp.view.SearchForm',
+    'Ssp.view.SearchTab',
     'Ssp.view.StudentRecord',
     'Ssp.view.EmailStudentForm',
     'Ssp.view.EmailStudentView',

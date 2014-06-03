@@ -30,19 +30,13 @@ Ext.define('Ssp.view.Search', {
     initComponent: function(){
         var me = this;
         Ext.applyIf(me, {
-            submitEmptyText: false,
-            title: 'Students',
-            collapsible: true,
-            collapseDirection: 'left',
-            width: '100%',
-            height: '100%',
+            border: 0,
             columns: [{
                 text: 'Name',
                 dataIndex: 'lastName',
                 renderer: me.columnRendererUtils.renderSearchStudentName,
                 flex: 50
             }],
-            
             dockedItems: [{
                 xtype: 'pagingtoolbar',
                 itemId: 'searchGridPager',
@@ -61,22 +55,10 @@ Ext.define('Ssp.view.Search', {
                 dock: 'top',
                 itemId: 'searchBar',
                 hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
-                items: [
-  	           {
+                items: [{
   	              	xtype: 'searchForm', 
   	              	hidden: true,
                     flex: 1
-  	           },                       
-                {
-                    tooltip: 'Display Caseload Filters',
-                    text: '',
-                    width: 25,
-                    height: 25,
-                    hidden: false,
-                    cls: 'displayCaseloadIcon',
-                    xtype: 'button',
-                    itemId: 'displayCaseloadBarButton',
-					hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS')
                 }]
             }, {
                 xtype: 'toolbar',
@@ -111,17 +93,7 @@ Ext.define('Ssp.view.Search', {
                 }, {
                     xtype: 'tbspacer',
                     flex: 1
-                }, {
-                    tooltip: 'Display Search Filters',
-                    text: '',
-                    width: 25,
-                    height: 25,
-                    hidden: false,
-                    cls: 'displaySearchIcon',
-                    xtype: 'button',
-                    itemId: 'displaySearchBarButton'
                 }]
-            
             }, {
                 xtype: 'toolbar',
                 dock: 'top',

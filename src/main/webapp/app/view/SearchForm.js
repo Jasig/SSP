@@ -384,9 +384,8 @@ Ext.define('Ssp.view.SearchForm',{
              	   labelSeparator: '',
              	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
              	   name: 'birthDate',
-             	   id:'birthDate',
 				   itemId: 'birthDate',
-				  onExpand: function() {
+				   onExpand: function() {
 					    var value = this.getValue();
 					    var today = new Date();
 					    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));

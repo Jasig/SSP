@@ -97,7 +97,7 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 		
 		arrViewItems = [
-		                {xtype:'search',flex: 2},		                
+		                {xtype:'searchtab',flex: 2},
 					    {xtype: 'studentrecord', flex: 4}];
 		
 		mainView.add( arrViewItems );

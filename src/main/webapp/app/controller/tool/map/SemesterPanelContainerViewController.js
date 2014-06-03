@@ -369,7 +369,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			mainView.removeAll(false);
 		}
 		
-		arrViewItems = [{xtype:'search',flex: 2},
+		arrViewItems = [{xtype:'searchtab',flex: 2},
 					    {xtype: 'studentrecord', flex: 4}];
 		
 		mainView.add( arrViewItems );	

@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     control: {
     	view: {
-    		selectionchange: 'onSelectionChange',
+    		itemclick: 'onSelectionChange',
 			viewready: 'onViewReady'
     	},    	
  
@@ -64,28 +64,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     	},    	
     	
     	searchGridPager: '#searchGridPager',
-//    	searchText: {
-//    		selector: '#searchText',
-//		    listeners:{   
-//		        keypress: 'onSearchKeyPress'  
-//		    } 
-//    	},
-    	
-//    	searchCaseloadCheck: '#searchCaseloadCheck',
     	searchBar: '#searchBar',
     	caseloadBar: '#caseloadBar',
-
-//    	'searchButton': {
-//    		click: 'onSearchClick'
-//    	},
-    	
-    	'displaySearchBarButton': {
-    		click: 'onDisplaySearchBarClick'
-    	},
-    	
-    	'displayCaseloadBarButton': {
-    		click: 'onDisplayCaseloadBarClick'
-    	},
 
     	addPersonButton: {
     		selector: '#addPersonButton',
@@ -119,12 +99,11 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     
 	init: function() {
-		var me=this;    	
+		var me=this;
+        var tabSelection = me.getView().tabContext;
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   //	me.personLite.set('id','');
-
-
 		
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH = 0;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD = 1;
@@ -141,51 +120,62 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if(me.configStore.getTotalCount() == 0){
 			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
-		}	
+		}
+
+        if ( tabSelection === 'myCaseload' ) {
+            me.displayCaseloadBar();
+        } else {
+            me.displaySearchBar();
+        }
+
 		return me.callParent(arguments);
     },
     
     onTextStoreLoad:function(){
     	var me = this;
-    	var birthDateField = Ext.getCmp('birthDate');
-    	birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)' );
+    	var birthDateField = Ext.ComponentQuery.query('searchForm')[1].query('datefield[itemId=birthDate]')[0];
+
+    	if ( birthDateField ) {
+    	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)' );
+    	}
+
     	me.onCollapseStudentRecord();
     },
     
-	onSelectionChange: function(selModel,records,eOpts){ 
+	onSelectionChange: function( view, record, item, index, eventObj ) {
 		var me=this;
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('personNav', records, me);  
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personNav', record, me);
 
-		if(skipCallBack)
-		{
+		if( skipCallBack ) {
 			var person = new Ssp.model.Person();
 			// clear the person record
 			me.person.data = person.data;
-			if (records.length > 0)
-			{
-				if(records[0].get("id")){
-					if(me.personLite.get('id') != records[0].get("id")){
-						me.updatePerson(records);
+
+			if ( record ) {
+				if( record.get("id") ) {
+					if( me.personLite.get('id') != record.get("id") ) {
+						me.updatePerson(record);
 						me.appEventsController.getApplication().fireEvent('loadPerson');
 					}
-				}else{
-					me.instantCaseloadAssignment(records[0]);
+				} else {
+					me.instantCaseloadAssignment(record);
 				}
 			}
 		}
 	},
-    updatePerson: function(records){
-    var me=this;
-		if (records[0].data.id != null)
-		{
-			me.personLite.set('id', records[0].data.id);
-		}else{
-			me.personLite.set('id', records[0].data.personId);
+
+    updatePerson: function( record ) {
+        var me=this;
+
+		if ( record.data.id != null ) {
+			me.personLite.set('id', record.data.id);
+		} else {
+			me.personLite.set('id', record.data.personId);
 		}
-		me.personLite.set('firstName', records[0].data.firstName);
-		me.personLite.set('middleName', records[0].data.middleName);
-		me.personLite.set('lastName', records[0].data.lastName);
-		me.personLite.set('displayFullName', records[0].data.firstName + ' ' + records[0].data.lastName);
+		me.personLite.set('firstName', record.data.firstName);
+		me.personLite.set('middleName', record.data.middleName);
+		me.personLite.set('lastName', record.data.lastName);
+		me.personLite.set('displayFullName', record.data.firstName + ' ' + record.data.lastName);
 	},
 	
 	onViewReady: function(comp, eobj){
@@ -355,23 +345,16 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	
 	onToolsNav: function() {
-		var searchView = Ext.ComponentQuery.query('search')[0];
+		var searchView = Ext.ComponentQuery.query('searchtab')[0];
 		searchView.collapse();
 	},
-	onDisplaySearchBarClick: function( button ){
-		this.displaySearchBar();
-	},
-	
-	onDisplayCaseloadBarClick: function( button ){
-		this.displayCaseloadBar();
-	},
-	
+
 	displaySearchBar: function(){
 		var me=this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH);
 		me.getCaseloadBar().hide();
 		me.getSearchBar().show();
-		Ext.ComponentQuery.query('searchForm')[0].show();
+		Ext.ComponentQuery.query('searchForm')[1].show(); //tabbed layout has 2 of these, second is search
 		me.setGridView();
 	},
 

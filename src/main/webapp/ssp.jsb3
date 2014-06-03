@@ -2996,6 +2996,11 @@
                     "clsName": "Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin",
                     "name": "OAuth2ClientAdmin.js",
                     "path": "/app/view/admin/forms/apikey/oauth2/"
+                },
+                {
+                  "clsName": "Ssp.view.SearchTab",
+                  "name": "SearchTab.js",
+                  "path": "/app/view/"
                 }
 			]
         },
