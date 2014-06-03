@@ -201,6 +201,41 @@ Ext.define('Ssp.view.SearchForm',{
             			    	  	}
             					}
                             }]},
+							{	layout: 'column',
+						                    border: false,
+						                    items: [
+							{
+					   		    xtype: 'combobox',
+			                    fieldLabel: 'Student Exists In',
+					   		    store: me.personTableTypesStore,
+			   		   		    valueField: 'code',
+			   		   		    emptyText: 'Anywhere',
+					   		    displayField: 'displayValue',
+								 columnWidth: .5,
+			                    name: 'personTableType'
+			                },	{
+							       xtype: 'datefield',
+							       format: 'm/d/Y',
+						    	   altFormats: 'm/d/Y|m-d-Y',
+				             	   allowBlank: true,
+				             	   showToday:false, 
+				             	   validateOnChange: false,
+				 					columnWidth: .5,
+				             	   labelAlign: 'right',
+								   labelWidth: 130,
+				             	   labelSeparator: '',
+				             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
+				             	   name: 'birthDate',
+								   itemId: 'birthDate',
+								  onExpand: function() {
+									    var value = this.getValue();
+									    var today = new Date();
+									    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
+									}}]},
+				{	layout: 'column',
+			                    border: false,
+			                    items: [
+								
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Program Status',
@@ -208,19 +243,24 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    store: me.programStatusesStore,
    		   		    valueField: 'id',
 		   		    displayField: 'name',
-                    width: 100,
+                   columnWidth: .5,
                     name: 'programStatus'
                 }, 
-                {
+				{
 		   		    xtype: 'combobox',
-                    fieldLabel: 'Student Exists In',
-		   		    store: me.personTableTypesStore,
-   		   		    valueField: 'code',
-   		   		    emptyText: 'Anywhere',
-		   		    displayField: 'displayValue',
-                    width: 100,
-                    name: 'personTableType'
-                },  
+                    fieldLabel: 'Registered',
+		   		    emptyText: 'Any',
+					columnWidth: .5,
+                    name: 'currentlyRegistered',
+					labelAlign: 'right',
+					labelWidth:100,
+                    store: me.currentlyRegisteredStore,
+   		   		    valueField: 'booleanValue',
+		   		    displayField: 'displayValue'                 
+                }]},
+				{	layout: 'column',
+			                    border: false,
+			                    items: [
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Special Service Group',
@@ -228,32 +268,54 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    store: me.specialServiceGroupsAllUnpagedStore,
    		   		    valueField: 'id',
 		   		    displayField: 'name',
-                    width: 100,
+                    columnWidth: .5,
                     name: 'specialServiceGroup'
                 }, 
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Assigned Coach',
-                    emptyText: 'Select Coach',
-                    width: 100,
-                    name: 'coachId',
-		   		    store: this.coachesStore,
-   		   		    valueField: 'id',
-		   		    displayField: 'fullName',
-   		   		    mode: 'local',
-				    editable: false                    
-                },{
+               {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Declared Major',
                     emptyText: 'Select Major',
-                    width: 100,
+                     columnWidth: .5,
+					labelWidth:100,
+					labelAlign:'right',
                     name: 'declaredMajor',
 		   		    store: this.programsStore,
    		   		    valueField: 'code',
 		   		    displayField: 'name',
    		   		    mode: 'local',
 				    editable: false                     
-                },
+                }]},
+				 {
+			   		    xtype: 'combobox',
+	                    fieldLabel: 'Assigned Coach',
+	                    emptyText: 'Select Coach',
+	                    width: 100,
+	                    name: 'coachId',
+			   		    store: this.coachesStore,
+	   		   		    valueField: 'id',
+			   		    displayField: 'fullName',
+	   		   		    mode: 'local',
+					    editable: false                    
+	                },	{
+				   		    xtype: 'combobox',
+		                    fieldLabel: 'Early Alert Response Status',
+				   		    emptyText: 'Any',
+							width: 100,
+		                    name: 'earlyAlertResponseLate',
+		                    store: me.earlyAlertResponseLateStore,
+		   		   		    valueField: 'code',
+				   		    displayField: 'displayValue' 
+		                }, 
+		                {
+				   		    xtype: 'combobox',
+		                    fieldLabel: 'Fin Aid SAP Status',
+		                     width: 100,
+		                    emptyText: 'Any',
+		                    name: 'financialAidSapStatusCode',
+		                    store: me.sapStatusesStore,
+		   		   		    valueField: 'code',
+				   		    displayField: 'name'
+		                },
                 {   layout: 'column',
                 	border: false,
                 	items: [
@@ -324,38 +386,13 @@ Ext.define('Ssp.view.SearchForm',{
 							   enableKeyEvents:true
                            }              
                 ]},
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Currently Registered',
-		   		    emptyText: 'Any',
-                    name: 'currentlyRegistered',
-                    store: me.currentlyRegisteredStore,
-   		   		    valueField: 'booleanValue',
-		   		    displayField: 'displayValue'                 
-                }, 
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Early Alert Response Status',
-		   		    emptyText: 'Any',
-                    name: 'earlyAlertResponseLate',
-                    store: me.earlyAlertResponseLateStore,
-   		   		    valueField: 'code',
-		   		    displayField: 'displayValue' 
-                }, 
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Fin Aid SAP Status',
-                    width: 100,
-                    emptyText: 'Any',
-                    name: 'financialAidSapStatusCode',
-                    store: me.sapStatusesStore,
-   		   		    valueField: 'code',
-		   		    displayField: 'name'
-                },     
+    				{	layout: 'column',
+				                    border: false,
+				                    items: [
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'MAP Status',
-                    width: 100,
+                    columnWidth: .5,
                     emptyText: 'Any',
                     name: 'mapStatus',
                     store: me.mapStatusStore,
@@ -365,34 +402,15 @@ Ext.define('Ssp.view.SearchForm',{
                 {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Plan Status',
-                    width: 100,
+                    columnWidth: .5,
                     emptyText: 'Any',
                     name: 'planStatus',
+						labelAlign: 'right',
+						labelWidth:100,
                     store: me.planStatusStore,
    		   		    valueField: 'code',
 		   		    displayField: 'displayValue'               
-                },
-               	{
-			       xtype: 'datefield',
-			       format: 'm/d/Y',
-		    	   altFormats: 'm/d/Y|m-d-Y',
-             	   allowBlank: true,
-             	   showToday:false, 
-             	   validateOnChange: false,
-             	   labelAlign: 'left',
-				   labelWidth: 130,
-             	   labelSeparator: '',
-             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
-             	   name: 'birthDate',
-				   itemId: 'birthDate',
-				   onExpand: function() {
-					    var value = this.getValue();
-					    var today = new Date();
-					    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
-					}
-                }
-
-                          
+                }]}      
             ]
               
         });
