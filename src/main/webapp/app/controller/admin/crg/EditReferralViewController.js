@@ -96,7 +96,7 @@ Ext.define('Ssp.controller.admin.crg.EditReferralViewController', {
 	},
 	
 	onCancelClick: function(button){
-		me.adminSelectedIndex.set('value', -1);
+		this.adminSelectedIndex.set('value', -1);
 		this.displayMain();
 	},
 	

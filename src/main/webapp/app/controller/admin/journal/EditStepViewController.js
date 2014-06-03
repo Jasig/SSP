@@ -92,7 +92,7 @@ Ext.define('Ssp.controller.admin.journal.EditStepViewController', {
 	},
 	
 	onCancelClick: function(button){
-		me.adminSelectedIndex.set('value', -1);
+		this.adminSelectedIndex.set('value', -1);
 		this.displayMain();
 	},
 	

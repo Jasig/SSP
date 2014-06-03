@@ -99,7 +99,7 @@ Ext.define('Ssp.controller.admin.crg.EditChallengeViewController', {
 	},
 	
 	onCancelClick: function(button){
-		me.adminSelectedIndex.set('value', -11);
+		this.adminSelectedIndex.set('value', -11);
 		this.displayMain();
 	},
 	
