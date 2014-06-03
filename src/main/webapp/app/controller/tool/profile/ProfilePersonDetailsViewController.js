@@ -33,6 +33,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
         personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
+        configStore: 'configStore',
         textStore:'sspTextStore'
     },
     
@@ -145,9 +146,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     resetForm: function(){
         var me = this;
         me.getView().getForm().reset();
-        
         // Set defined configured label for the studentId field
-        var studentIdAlias = me.sspConfig.get('studentIdAlias');
+        var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
         me.getStudentIdField().setFieldLabel(studentIdAlias);
         me.setFinancialLabels();
     },
