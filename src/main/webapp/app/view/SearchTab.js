@@ -17,7 +17,7 @@
  * under the License.
  */
 Ext.define('Ssp.view.SearchTab', {
-    extend: 'Ext.container.Container',
+    extend: 'Ext.panel.Panel',
     alias: 'widget.searchtab',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
