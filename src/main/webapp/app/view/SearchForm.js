@@ -222,7 +222,7 @@ Ext.define('Ssp.view.SearchForm',{
 				             	   validateOnChange: false,
 				 					columnWidth: .5,
 				             	   labelAlign: 'right',
-								   labelWidth: 130,
+								   labelWidth: 110,
 				             	   labelSeparator: '',
 				             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
 				             	   name: 'birthDate',
@@ -257,34 +257,30 @@ Ext.define('Ssp.view.SearchForm',{
                     store: me.currentlyRegisteredStore,
    		   		    valueField: 'booleanValue',
 		   		    displayField: 'displayValue'                 
-                }]},
-				{	layout: 'column',
-			                    border: false,
-			                    items: [
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Special Service Group',
-                    emptyText: 'Select Special Service Group',
-		   		    store: me.specialServiceGroupsAllUnpagedStore,
-   		   		    valueField: 'id',
-		   		    displayField: 'name',
-                    columnWidth: .5,
-                    name: 'specialServiceGroup'
-                }, 
-               {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Declared Major',
-                    emptyText: 'Select Major',
-                     columnWidth: .5,
-					labelWidth:100,
-					labelAlign:'right',
-                    name: 'declaredMajor',
-		   		    store: this.programsStore,
-   		   		    valueField: 'code',
-		   		    displayField: 'name',
-   		   		    mode: 'local',
-				    editable: false                     
-                }]},
+                }]},	{
+			   		    xtype: 'combobox',
+	                    fieldLabel: 'Special Service Group',
+	                    emptyText: 'Select Special Service Group',
+			   		    store: me.specialServiceGroupsAllUnpagedStore,
+	   		   		    valueField: 'id',
+			   		    displayField: 'name',
+			            width:100,
+	                    name: 'specialServiceGroup'
+	                }, 
+	               {
+			   		    xtype: 'combobox',
+	                    fieldLabel: 'Declared Major',
+	                    emptyText: 'Select Major',
+	                    width:100,
+	                    name: 'declaredMajor',
+			   		    store: this.programsStore,
+	   		   		    valueField: 'code',
+			   		    displayField: 'name',
+	   		   		    mode: 'local',
+					    editable: false                     
+	                },
+				
+               
 				 {
 			   		    xtype: 'combobox',
 	                    fieldLabel: 'Assigned Coach',
@@ -296,11 +292,13 @@ Ext.define('Ssp.view.SearchForm',{
 			   		    displayField: 'fullName',
 	   		   		    mode: 'local',
 					    editable: false                    
-	                },	{
+	                },	{	layout: 'column',
+					                    border: false,
+					                    items: [	{
 				   		    xtype: 'combobox',
-		                    fieldLabel: 'Early Alert Response Status',
+		                    fieldLabel: 'Early Alert Status',
 				   		    emptyText: 'Any',
-							width: 100,
+							 columnWidth: .5,
 		                    name: 'earlyAlertResponseLate',
 		                    store: me.earlyAlertResponseLateStore,
 		   		   		    valueField: 'code',
@@ -308,14 +306,16 @@ Ext.define('Ssp.view.SearchForm',{
 		                }, 
 		                {
 				   		    xtype: 'combobox',
-		                    fieldLabel: 'Fin Aid SAP Status',
-		                     width: 100,
+		                    fieldLabel: 'FA SAP Status',
+		                     columnWidth: .5,
+							labelWidth:100,
+							labelAlign:'right',
 		                    emptyText: 'Any',
 		                    name: 'financialAidSapStatusCode',
 		                    store: me.sapStatusesStore,
 		   		   		    valueField: 'code',
 				   		    displayField: 'name'
-		                },
+		                } ]},
                 {   layout: 'column',
                 	border: false,
                 	items: [
