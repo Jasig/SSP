@@ -186,13 +186,13 @@ public class EarlyAlertRoutingController
 					"You submitted a earlyAlertRouting with an id to the create method. Did you mean to save?");
 		}
 
-		if ( obj.getPerson() == null || obj.getPerson().getId() == null ) {
-			// also verified at lower layers, but this results in a *much*
-			// nicer error msg as compared to a Hibernate/JPA validation,
-			// which will basically be rendered as-is to the client
-			// at this writing (~v1.2.0)
-			throw new ValidationException("Must specify a Person when creating an Early Alert Routing.");
-		}
+//		if ( obj.getPerson() == null || obj.getPerson().getId() == null ) {
+//			// also verified at lower layers, but this results in a *much*
+//			// nicer error msg as compared to a Hibernate/JPA validation,
+//			// which will basically be rendered as-is to the client
+//			// at this writing (~v1.2.0)
+//			throw new ValidationException("Must specify a Person when creating an Early Alert Routing.");
+//		}
 
 		if (obj.getCampusId() == null) {
 			obj.setCampusId(campusId);

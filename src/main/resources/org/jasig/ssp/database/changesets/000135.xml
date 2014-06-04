@@ -36,4 +36,7 @@
 	<changeSet id="drop not null constraint from shg.summary_text_ea" author="tony.arland">
 		<dropNotNullConstraint tableName="self_help_guide" columnName="summary_text_early_alert"  columnDataType="text"/>
 	</changeSet>
+	<changeSet id="drop not null constraint from ear.person_id" author="tony.arland">
+		<dropNotNullConstraint tableName="early_alert_routing" columnName="person_id"  columnDataType="text"/>
+	</changeSet>	
 </databaseChangeLog>

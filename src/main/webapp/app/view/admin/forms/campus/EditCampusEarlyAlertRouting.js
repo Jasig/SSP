@@ -73,7 +73,6 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		            typeAhead: true,
 		            fieldLabel: 'Person',
 		            queryMode: 'local',
-		            allowBlank: false,
 		            width: 300
 		        }],
             

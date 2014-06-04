@@ -50,8 +50,7 @@ public class EarlyAlertRouting extends AbstractAuditable implements
 	private EarlyAlertReason earlyAlertReason;
 
 	@ManyToOne
-	@JoinColumn(name = "person_id", nullable = false)
-	@NotNull
+	@JoinColumn(name = "person_id", nullable = true)
 	private Person person;
 
 	/**
