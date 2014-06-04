@@ -29,6 +29,7 @@
 
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <property name="schema" value="${database.schema}" />
    
 	<changeSet id="Move configuration.js values into config table" author="tony.arland">
 		<addNotNullConstraint tableName="external_student_transcript_course" columnName="grade" columnDataType="${nvarchar.type}(10)"/>
@@ -42,7 +43,7 @@
 		
 	<changeSet id="drop not null constraint from ear.person_id" author="tony.arland" dbms="mssql">
 		<dropForeignKeyConstraint baseTableName="early_alert_routing"  constraintName="early_alert_routing_person_id"/>
-		<dropNotNullConstraint tableName="early_alert_routing" columnName="person_id"  columnDataType="text"/>
-		<addForeignKeyConstraint constraintName="early_alert_routing_person_id" referencedTableName="person" baseColumnNames="person_id" baseTableName="early_alert_routing" referencedColumnNames="id"/>
+		<dropNotNullConstraint tableName="early_alert_routing" columnName="person_id"  columnDataType="uuid"/>
+		<addForeignKeyConstraint baseTableSchemaName="${schema}" constraintName="early_alert_routing_person_id" referencedTableName="person" baseColumnNames="person_id" baseTableName="early_alert_routing"  referencedColumnNames="id"/>
 	</changeSet>	
 </databaseChangeLog>
