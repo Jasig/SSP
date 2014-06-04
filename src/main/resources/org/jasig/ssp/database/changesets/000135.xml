@@ -36,7 +36,13 @@
 	<changeSet id="drop not null constraint from shg.summary_text_ea" author="tony.arland">
 		<dropNotNullConstraint tableName="self_help_guide" columnName="summary_text_early_alert"  columnDataType="text"/>
 	</changeSet>
-	<changeSet id="drop not null constraint from ear.person_id" author="tony.arland">
+	<changeSet id="drop not null constraint from ear.person_id" author="tony.arland" dbms="postgresql">
 		<dropNotNullConstraint tableName="early_alert_routing" columnName="person_id"  columnDataType="text"/>
+	</changeSet>
+		
+	<changeSet id="drop not null constraint from ear.person_id" author="tony.arland" dbms="mssql">
+		<dropForeignKeyConstraint baseTableName="early_alert_routing"  constraintName="early_alert_routing_person_id"/>
+		<dropNotNullConstraint tableName="early_alert_routing" columnName="person_id"  columnDataType="text"/>
+		<addForeignKeyConstraint constraintName="early_alert_routing_person_id" referencedTableName="person" baseColumnNames="person_id" baseTableName="early_alert_routing" referencedColumnNames="id"/>
 	</changeSet>	
 </databaseChangeLog>
