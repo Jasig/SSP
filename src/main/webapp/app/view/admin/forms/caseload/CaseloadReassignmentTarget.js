@@ -86,7 +86,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
     	    		        		   		        valueField: 'id',
     	    		        		   		        displayField: 'fullName',
     	    		        		   		        mode: 'local',
-    	    		        		   		        typeAhead: true,
+    	    		        				        editable: false,
     	    		        		   		        queryMode: 'local',
     	    		        		   		        allowBlank: true
     	    		        		                       }]  
