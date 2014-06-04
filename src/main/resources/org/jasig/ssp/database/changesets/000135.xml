@@ -33,4 +33,7 @@
 	<changeSet id="Move configuration.js values into config table" author="tony.arland">
 		<addNotNullConstraint tableName="external_student_transcript_course" columnName="grade" columnDataType="${nvarchar.type}(10)"/>
 	</changeSet>
+	<changeSet id="drop not null constraint from shg.summary_text_ea" author="tony.arland">
+		<dropNotNullConstraint tableName="self_help_guide" columnName="summary_text_early_alert"  columnDataType="text"/>
+	</changeSet>
 </databaseChangeLog>

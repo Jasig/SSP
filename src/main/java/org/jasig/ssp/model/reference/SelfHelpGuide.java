@@ -57,7 +57,7 @@ public class SelfHelpGuide
 	@Column(name = "summaryText", nullable = false)
 	private String summaryText;
 
-	@Column(name = "summaryTextEarlyAlert", nullable = false)
+	@Column(name = "summaryTextEarlyAlert", nullable = true)
 	private String summaryTextEarlyAlert;
 
 	@Column(name = "summaryTextThreshold")

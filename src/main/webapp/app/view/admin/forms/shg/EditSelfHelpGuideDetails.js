@@ -76,7 +76,6 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                     xtype: 'textareafield',
                     fieldLabel: 'Early Alert Summary',
                     anchor: '100%',
-                    allowBlank:false,
                     name: 'summaryTextEarlyAlert'
                 },
                 {
