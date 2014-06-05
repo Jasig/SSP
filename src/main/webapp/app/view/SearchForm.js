@@ -212,7 +212,8 @@ Ext.define('Ssp.view.SearchForm',{
 			   		   		    emptyText: 'Anywhere',
 					   		    displayField: 'displayValue',
 								 columnWidth: .5,
-			                    name: 'personTableType'
+			                    name: 'personTableType',
+			                    editable: false
 			                },	{
 							       xtype: 'datefield',
 							       format: 'm/d/Y',
@@ -243,8 +244,9 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    store: me.programStatusesStore,
    		   		    valueField: 'id',
 		   		    displayField: 'name',
-                   columnWidth: .5,
-                    name: 'programStatus'
+                    columnWidth: .5,
+                    name: 'programStatus',
+                    editable: false
                 }, 
 				{
 		   		    xtype: 'combobox',
@@ -256,7 +258,8 @@ Ext.define('Ssp.view.SearchForm',{
 					labelWidth:100,
                     store: me.currentlyRegisteredStore,
    		   		    valueField: 'booleanValue',
-		   		    displayField: 'displayValue'                 
+		   		    displayField: 'displayValue',
+		   		    editable: false
                 }]},	{
 			   		    xtype: 'combobox',
 	                    fieldLabel: 'Special Service Group',
@@ -265,7 +268,8 @@ Ext.define('Ssp.view.SearchForm',{
 	   		   		    valueField: 'id',
 			   		    displayField: 'name',
 			            width:100,
-	                    name: 'specialServiceGroup'
+	                    name: 'specialServiceGroup',
+	                    editable: false
 	                }, 
 	               {
 			   		    xtype: 'combobox',
@@ -302,7 +306,8 @@ Ext.define('Ssp.view.SearchForm',{
 		                    name: 'earlyAlertResponseLate',
 		                    store: me.earlyAlertResponseLateStore,
 		   		   		    valueField: 'code',
-				   		    displayField: 'displayValue' 
+				   		    displayField: 'displayValue',
+				   		    editable: false
 		                }, 
 		                {
 				   		    xtype: 'combobox',
@@ -314,7 +319,8 @@ Ext.define('Ssp.view.SearchForm',{
 		                    name: 'financialAidSapStatusCode',
 		                    store: me.sapStatusesStore,
 		   		   		    valueField: 'code',
-				   		    displayField: 'name'
+				   		    displayField: 'name',
+				   		    editable: false
 		                } ]},
                 {   layout: 'column',
                 	border: false,
@@ -397,7 +403,8 @@ Ext.define('Ssp.view.SearchForm',{
                     name: 'mapStatus',
                     store: me.mapStatusStore,
    		   		    valueField: 'code',
-		   		    displayField: 'displayValue'                   
+		   		    displayField: 'displayValue',
+		   		    editable: false
                 },      
                 {
 		   		    xtype: 'combobox',
@@ -405,11 +412,12 @@ Ext.define('Ssp.view.SearchForm',{
                     columnWidth: .5,
                     emptyText: 'Any',
                     name: 'planStatus',
-						labelAlign: 'right',
-						labelWidth:100,
+					labelAlign: 'right',
+					labelWidth:100,
                     store: me.planStatusStore,
    		   		    valueField: 'code',
-		   		    displayField: 'displayValue'               
+		   		    displayField: 'displayValue',
+		   		 editable: false
                 }]}      
             ]
               
