@@ -79,7 +79,6 @@ Ext.define('Ssp.controller.admin.crg.DisplayReferralsAdminViewController', {
 	},
 	
 	destroy:function(){
-		this.model.data = {};
 		return this.callParent(arguments);
 	}
 });
