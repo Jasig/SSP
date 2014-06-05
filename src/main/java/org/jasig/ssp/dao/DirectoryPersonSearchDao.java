@@ -26,12 +26,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-import org.hibernate.cfg.Settings;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -67,6 +62,8 @@ public class DirectoryPersonSearchDao  {
 
 	@Autowired
 	private transient ConfigService configService;
+	
+	private static final String ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW = "activate_materialized_directory_person_view";
 	
 	@Autowired
 	private transient TermService termService;
@@ -694,11 +691,12 @@ public class DirectoryPersonSearchDao  {
 				|| hasMyPlans(personSearchRequest) || hasMapStatus(personSearchRequest);
 	}
 
-
 	private void buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
 	{
 		ScheduledApplicationTaskStatus status = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_TASK_NAME);
-		if(status.getStatus().equals(ScheduledTaskStatus.RUNNING)){
+		
+		boolean mv_activated = Boolean.parseBoolean(configService.getByNameEmpty(ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW).trim());
+		if(!mv_activated || status == null || status.getStatus() == null || status.getStatus().equals(ScheduledTaskStatus.RUNNING)){
 			stringBuilder.append(" from ViewDirectoryPerson dp ");
 		}else{
 			stringBuilder.append(" from MaterializedDirectoryPerson dp ");
@@ -719,7 +717,6 @@ public class DirectoryPersonSearchDao  {
 			stringBuilder.append(", org.jasig.ssp.model.MapStatusReport msr ");
 		}
 	}
-
 
 	private boolean hasGpaCriteria(PersonSearchRequest personSearchRequest) 
 	{
