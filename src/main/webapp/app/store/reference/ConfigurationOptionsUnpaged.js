@@ -50,7 +50,6 @@ Ext.define('Ssp.store.reference.ConfigurationOptionsUnpaged', {
 		    		Ext.apply(Ext.form.field.VTypes, {
 		                //  vtype validation function
 		                studentIdValidator: function(val, field) {
-		                	console.out(validStudentId);
 		                    return validStudentId.test(val);
 		                }
 		            });
