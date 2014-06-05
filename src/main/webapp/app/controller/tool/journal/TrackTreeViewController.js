@@ -174,6 +174,8 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
     uniqueAssociations: function(assocs, keyBuilder) {
         var me = this;
         var unique = [];
+		var recordsToDelete = [];
+		var deleteCount = 0;
         var index = {}; // field names: assoc keys from keyBuilder callback
                         // field values: association objectStatus and "pos"
                         //               which is an index into the "unique"
@@ -182,9 +184,11 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             var key = keyBuilder.apply(me, [ assoc ]);
             var indexRecord = index[key];
             if ( indexRecord && indexRecord.objectStatus !== 'ACTIVE' && assoc.objectStatus === 'ACTIVE' ) {
-                // replace inactive record with active record
-                unique[indexRecord.pos] = assoc;
-                indexRecord.objectStatus = 'ACTIVE';
+            	recordsToDelete[deleteCount++]=indexRecord;
+            	index[key] = {
+                        objectStatus: assoc.objectStatus,
+                        pos: (unique.push(assoc) - 1)
+                    }
             } else if ( !(indexRecord) ) {
                 index[key] = {
                     objectStatus: assoc.objectStatus,
@@ -194,6 +198,9 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
                 // true duplicate, do nothing
             }
         });
+		for(i = deleteCount-1;i >= 0; i--){
+			unique.splice(recordsToDelete[i].pos,1);
+		}
         return unique;
     },
 
@@ -264,9 +271,15 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             treeRequest.set('responseFilter', me.transformJournalStepJournalDetailAssociations);
             treeRequest.set('callbackFunc', me.afterJournalDetailsLoaded);
             treeRequest.set('callbackScope', me);
-            treeRequest.set('removeParentWhenNoChildrenExist', true);
-            
+            treeRequest.set('removeParentWhenNoChildrenExist', true);            
             treeRequest.set('node', node);
+            treeRequest.set('sortFunction', function(rec1, rec2){
+            	if(rec1.objectStatus != rec2.objectStatus)
+            		return rec1.objectStatus == 'ACTIVE' ? -1:1;
+			   if(rec1.associatedToStep != rec2.associatedToStep)
+		            		return rec1.associatedToStep ? -1:1;
+            	return rec1.sortOrder - rec2.sortOrder;
+            });
             me.treeUtils.getItems(treeRequest);
         }
     },
@@ -277,7 +290,13 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         var transformed = [];
         Ext.Array.each(unique, function(assoc, index) {
             if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalStepJournalDetailAssociation(assoc) ) {
-                transformed.push(me.journalDetailNodeItemFromStepAssociation(assoc));
+				var journalDetail = me.journalDetailNodeItemFromStepAssociation(assoc);
+				if(assoc.objectStatus !== "ACTIVE"){
+					journalDetail.associatedToStep = false;
+					journalDetail.extraObsoleteText = " Detail no longer associated to step.";
+				}else
+					journalDetail.associatedToStep = true;
+                transformed.push(journalDetail);
             }
         });
         return transformed;

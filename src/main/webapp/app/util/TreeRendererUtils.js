@@ -114,6 +114,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
      * @expanded - whether or not a branch should load expanded   
      */
     createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName, sortFunction){
+	    var me = this;
     	var nodeIdentifier = "";
     	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
@@ -128,7 +129,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 
     	Ext.each(records, function(name, index) {
     		var nodeData = {
-        	        text: records[index].name,
+        	        text: records[index].name + me.setObsoleteText(records[index]),
         	        id: records[index].id + nodeIdentifier,
         	        qtip: ((includeToolTip === true)? records[index][toolTipFieldName] : ""),
         	        leaf: isLeaf || false,
@@ -145,6 +146,16 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		
     	return nodes;
     },   
+
+   setObsoleteText: function(record){
+       var txt = "";
+       if(record.objectStatus !== 'ACTIVE')
+	      txt = " (Obsolete)";
+		if(record.extraObsoleteText && record.extraObsoleteText.length > 0)
+		  txt += record.extraObsoleteText;
+		return txt;
+	}, 
+   
  
     /*
      * Retrieves items to populate the tree store.

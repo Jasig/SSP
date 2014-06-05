@@ -22,8 +22,12 @@ Ext.define('Ssp.controller.admin.journal.AssociateStepDetailsAdminViewController
         associatedItemType: 'journalStepDetail',
         parentItemType: 'journalStep',
         parentIdAttribute: 'journalStepId',
-        associatedItemIdAttribute: 'journalStepDetailId'
-    },
+        associatedItemIdAttribute: 'journalStepDetailId',
+        nodeSortFunction: function(rec1, rec2){
+        	if(rec1.objectStatus != rec2.objectStatus)
+        		return rec1.objectStatus == 'ACTIVE' ? -1:1;
+        	return rec1.sortOrder - rec2.sortOrder;
+        }},
 	constructor: function(){
 		var me=this;
 		me.callParent(arguments);
