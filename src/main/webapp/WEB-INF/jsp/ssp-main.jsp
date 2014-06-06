@@ -22,6 +22,10 @@
 
 <c:set var="n"><portlet:namespace/></c:set>
 
+<c:set var="version" scope="request" value="${model.cachebust}"/>
+
+ 
+    
 <!-- ExtJS Styles -->
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/resources/css/ext-all.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/CheckHeader.css" />">
@@ -30,12 +34,12 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/grid/css/RangeMenu.css" />">
 
 <!-- SSP Theme -->
-<link href="<c:url value="/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
-<link href="<c:url value="/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
+<link href="<c:url value="${version}/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
+<link href="<c:url value="${version}/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
 
 <!-- ExtJS Lib -->
 <c:choose>
-	<c:when test="${useMinified}">
+	<c:when test="${model.useMinified}">
 		<script type="text/javascript" src="<c:url value="/js/libs/ext-4.1/ext-all.js" />"></script>
 	</c:when>
 	<c:otherwise>
@@ -74,11 +78,11 @@
 
 <!-- SSP Application -->
 <c:choose>
-	<c:when test="${useMinified}">
-		<script type="text/javascript" src="<c:url value="/app-all.js" />"></script>
+	<c:when test="${model.useMinified}">
+		<script type="text/javascript" src="<c:url value="${version}/app-all.js" />"></script>
 	</c:when>
 	<c:otherwise>
-		<script type="text/javascript" src="<c:url value="/app.js" />"></script>
+		<script type="text/javascript" src="<c:url value="${version}/app.js" />"></script>
 	</c:otherwise>
 </c:choose>
 <div class="sspOuter">

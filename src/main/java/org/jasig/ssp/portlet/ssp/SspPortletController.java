@@ -18,6 +18,11 @@
  */
 package org.jasig.ssp.portlet.ssp;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jasig.ssp.service.ServerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,9 +37,21 @@ public final class SspPortletController {
 	@Value("#{configProperties.ssp_main_use_minifed_js}")
 	private boolean sspMainUseMinifiedJs = false;
 	
+	@Autowired
+	private ServerService serverService;
+	
 	@RenderMapping
 	public ModelAndView show(){
-		return new ModelAndView("ssp-main", "useMinified", sspMainUseMinifiedJs);
+		Map<String,Object> model = new HashMap<String,Object>();
+		model.put("useMinified", sspMainUseMinifiedJs);
+		
+		try{
+			String build = "/versioned/" + serverService.getVersionProfile().get("buildDate").toString();
+			model.put("cachebust", build);
+		}catch(Exception exp){
+			
+		}
+		return new ModelAndView("ssp-main", "model", model);
 	}
 
 }

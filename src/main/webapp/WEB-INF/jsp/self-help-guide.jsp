@@ -18,18 +18,23 @@
     under the License.
 
 --%>
+<jsp:directive.include file="/WEB-INF/jsp/include.jsp"/>
+
+<c:set var="version" scope="request"  value="${model.cachebust}"/>
+
 <script type="text/javascript">
 function openWindow()
 {
-	window.open('/ssp/MyGPS/index.html', '_self');
-	window.focus();
+    var url = '/ssp/MyGPS' + '${version}/' + 'index.html';
+    window.open(url, '_self');
+    window.focus();
 
 }
 
 </script>
 <script type="text/javascript">
 
-openWindow();
 
+openWindow();
 
 </script>

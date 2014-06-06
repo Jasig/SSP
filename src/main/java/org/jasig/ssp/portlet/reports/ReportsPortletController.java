@@ -18,16 +18,33 @@
  */
 package org.jasig.ssp.portlet.reports;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jasig.ssp.service.ServerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 @Controller
 @RequestMapping("VIEW")
 public class ReportsPortletController {
 
+	@Autowired
+	private ServerService serverService;
+	
 	@RenderMapping
-	public String show() {
-		return "reports";
+	public ModelAndView show(){
+		Map<String,Object> model = new HashMap<String,Object>();		
+		try{
+			String build = "/versioned/" + serverService.getVersionProfile().get("buildDate").toString();
+			model.put("cachebust", build);
+		}catch(Exception exp){
+			
+		}
+		return new ModelAndView("reports", "model", model);
 	}
 }
+

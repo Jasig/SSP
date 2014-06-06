@@ -19,7 +19,7 @@
 
 --%>
 <jsp:directive.include file="/WEB-INF/jsp/include.jsp"/>
-
+<c:set var="version" scope="request"  value="${model.cachebust}"/>
 <portlet:renderURL var="cancelUrl" />
 <portlet:renderURL var="doneUrl" escapeXml="false"> 
     <portlet:param name="confirm" value="true"/>
@@ -43,10 +43,10 @@
 <!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/fluid/1.4.0/js/fluid-all-1.4.0.min.js"/>" type="text/javascript"></script>
-<script src="<c:url value="/js/reports.js" />" type="text/javascript"></script>
+<script src="<c:url value="${version}/js/reports.js" />" type="text/javascript"></script>
 <script src="<c:url value="/js/libs/jquery.print.js" />" type="text/javascript"></script>
 
-<link href="<c:url value="/resources/css/report.css" />" rel="stylesheet" type="text/css">
+<link href="<c:url value="${version}/resources/css/report.css" />" rel="stylesheet" type="text/css">
 
 <!-- Portlet -->
 <div id="${n}reportSelector" class="fl-widget portlet report" role="section">
