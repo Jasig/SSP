@@ -2137,6 +2137,17 @@
                     "name": "SemesterCourses.js",
                     "path": "/app/store/"
                 },
+                
+                 {
+                    "clsName": "Ssp.store.RegistrationStatusByTerm",
+                    "name": "RegistrationStatusByTerm.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.MapStatusReportTermDetails",
+                    "name": "MapStatusReportTermDetails.js",
+                    "path": "/app/store/"
+                },
                 {
                     "clsName": "Ssp.store.Plan",
                     "name": "Plan.js",
