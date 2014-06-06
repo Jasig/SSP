@@ -137,10 +137,6 @@
 		<createIndex tableName="person_disability_type" indexName="idx_pdt_person_Id" >
 			<column name="person_id"></column>
 		</createIndex>	
-																																						
-		<createIndex tableName="person_edu_plan_completed_items" indexName="idx_pepci_epi" >
-			<column name="edu_plan_id"></column>
-		</createIndex>	
 			
 		<createIndex tableName="person_education_level" indexName="idx_pel_person_Id" >
 			<column name="person_id"></column>
