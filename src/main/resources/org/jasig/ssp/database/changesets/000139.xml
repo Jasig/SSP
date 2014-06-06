@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <property name="schema" value="${database.schema}" />
+   
+		
+	<changeSet id="add indicies to many FKs" author="tony.arland">
+	
+		<createIndex tableName="appointment" indexName="idx_appointment_person_id" >
+			<column name="person_id"></column>
+		</createIndex>
+		
+		<createIndex tableName="early_alert" indexName="idx_early_alert_person_id" >
+			<column name="person_id"></column>
+		</createIndex>	
+
+		<createIndex tableName="early_alert_early_alert_reason" indexName="idx_early_alert_early_alert_id" >
+			<column name="early_alert_id"></column>
+		</createIndex>		
+
+		<createIndex tableName="early_alert_early_alert_suggestion" indexName="idx_eaeas_early_alert_id" >
+			<column name="early_alert_id"></column>
+		</createIndex>	
+
+		<createIndex tableName="early_alert_response" indexName="idx_ear_early_alert_id" >
+			<column name="early_alert_id"></column>
+		</createIndex>		
+
+		<createIndex tableName="early_alert_response_early_alert_outreach" indexName="idx_eareao" >
+			<column name="early_alert_response_id"></column>
+		</createIndex>	
+
+		<createIndex tableName="early_alert_response_early_alert_referral" indexName="idx_earear" >
+			<column name="early_alert_response_id"></column>
+		</createIndex>	
+
+		<createIndex tableName="early_alert_routing" indexName="idx_ear_person_id" >
+			<column name="person_id"></column>
+		</createIndex>	
+
+		<createIndex tableName="goal" indexName="idx_goal_person_id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="journal_entry" indexName="idx_journal_entry_person_id" >
+			<column name="person_id"></column>
+		</createIndex>			
+			
+		<createIndex tableName="journal_entry_detail" indexName="idx_jed_journal_entry_id" >
+			<column name="journal_entry_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="journal_step_journal_step_detail" indexName="idx_jsjsd_journal_step_id" >
+			<column name="journal_step_id"></column>
+		</createIndex>			
+			
+		<createIndex tableName="map_plan" indexName="idx_map_plan_person_id" >
+			<column name="person_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="map_plan_course" indexName="idx_mpc_plan_id" >
+			<column name="plan_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="map_status_report" indexName="idx_msr_person_id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="map_status_report_course_details" indexName="idx_msrc_report_id" >
+			<column name="report_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="map_status_report_term_details" indexName="idx_msrtd_report_id" >
+			<column name="report_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="map_template_course" indexName="idx_mtc_template_id" >
+			<column name="template_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="map_term_note" indexName="idx_mtn_template_id" >
+			<column name="template_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="map_term_note" indexName="idx_mtn_plan_id" >
+			<column name="plan_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="person_challenge" indexName="idx_pc_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="person_completed_item" indexName="idx_pci_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_confidentiality_disclosure_agreement" indexName="idx_pcda_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_disability_accommodation" indexName="idx_pda_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_disability_agency" indexName="idx_pdagen_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_disability_type" indexName="idx_pdt_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>	
+																																						
+		<createIndex tableName="person_edu_plan_completed_items" indexName="idx_pepci_epi" >
+			<column name="edu_plan_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="person_education_level" indexName="idx_pel_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_program_status" indexName="idx_pps_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="person_funding_source" indexName="idx_pfs_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_special_service_group" indexName="idx_pssg_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_referral_source" indexName="idx_prs_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="person_service_reason" indexName="idx_psr_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="person_tool" indexName="idx_ptool_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="student_document" indexName="idx_stu_doc_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="task" indexName="idx_task_person_Id" >
+			<column name="person_id"></column>
+		</createIndex>		
+									
+	</changeSet>	
+	
+	<changeSet id="add indicies to many FKs (reference tables)" author="tony.arland">
+		<createIndex tableName="challenge_category" indexName="idx_cc_challenge_Id" >
+			<column name="challenge_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="challenge_challenge_referral" indexName="idx_ccr_person_Id" >
+			<column name="challenge_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="journal_track_journal_step" indexName="idx_jtjs_jt_Id" >
+			<column name="journal_track_id"></column>
+		</createIndex>		
+			
+		<createIndex tableName="journal_step_journal_step_detail" indexName="idx_jsjsd_js_Id" >
+			<column name="journal_step_id"></column>
+		</createIndex>		
+			
+			
+		<createIndex tableName="self_help_guide_question" indexName="idx_shgq_shg_Id" >
+			<column name="self_help_guide_id"></column>
+		</createIndex>	
+			
+		<createIndex tableName="self_help_guide_question_response" indexName="idx_shgqr_shgq_Id" >
+			<column name="self_help_guide_question_id"></column>
+		</createIndex>		
+		
+		<createIndex tableName="self_help_guide_response" indexName="idx_shgr_shg_Id" >
+			<column name="self_help_guide_id"></column>
+		</createIndex>	
+							
+	</changeSet>
+	
+	<changeSet id="add indicies to many FKs continued" author="tony.arland">
+		<createIndex tableName="task_message_enqueue" indexName="idx_tme_task_id" >
+			<column name="task_id"></column>
+		</createIndex>
+		<createIndex tableName="challenge_category" indexName="idx_cc_category_id" >
+			<column name="category_id"></column>
+		</createIndex>
+		
+		<createIndex tableName="challenge_challenge_referral" indexName="idx_ccr_cr_id" >
+			<column name="challenge_referral_id"></column>
+		</createIndex>
+	</changeSet>	
+	
+</databaseChangeLog>
