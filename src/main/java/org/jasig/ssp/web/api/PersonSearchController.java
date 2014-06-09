@@ -19,6 +19,7 @@
 package org.jasig.ssp.web.api;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -40,6 +41,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -48,6 +50,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -121,8 +124,7 @@ public class PersonSearchController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResultTO>(true,
 				results.getResults(), factory.asTOList(results.getRows()));
 	}
-	
-
+		
 	@DynamicPermissionChecking
 	@ResponseBody
 	@RequestMapping(value="/students/search", method = RequestMethod.GET)
@@ -142,14 +144,14 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false)String mapStatus,
 	 final @RequestParam(required = false)String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
-	 final @RequestParam(required = false) Boolean myPlans,
-	 final @RequestParam(required = false) Date birthDate,
-	 final HttpServletRequest request) throws ObjectNotFoundException
+	 final @RequestParam(required = false)  Boolean myPlans,
+	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
+	 final HttpServletRequest request) throws ObjectNotFoundException, ParseException
 	 {
 		assertSearchApiAuthorization(request);
-
+		
 		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,null, null,programStatus,specialServiceGroup, coachId,declaredMajor,
-				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,earlyAlertResponseLate,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans,birthDate));
+				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,earlyAlertResponseLate,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans, birthDate));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
@@ -176,7 +178,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false)String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
-	 final @RequestParam(required = false) Date birthDate,
+	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
 	 final @RequestParam(required = false)String personTableType,
 	 final @RequestParam(required = false) Integer start,
 	 final @RequestParam(required = false) Integer limit,

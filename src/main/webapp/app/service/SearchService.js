@@ -46,22 +46,15 @@ Ext.define('Ssp.service.SearchService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous page
 		var activeParams = {};
-	    var birthDate = "";
 		for (key in params) {
-			if(key != "birthDate" ){
-		    	if(params[key] && params[key] != null){
-					activeParams[key] = params[key] 
-				}
-			}else{
-				if(params[key] && params[key] != null){
-					birthDate = "birthDate=" + params[key] + "&";
-				}
+		    if(params[key] && params[key] != null){
+				activeParams[key] = params[key] 
 			}
 		}
 		
 		var encodedUrl = Ext.urlEncode(activeParams);
 
-		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?'+ birthDate +encodedUrl});
+		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
 
 		me.store.load({
 			params: {
