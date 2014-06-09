@@ -542,17 +542,16 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         }},
                         {
                             header: 'Data Permission',
-                            dataIndex: 'dataPermission',
+                            dataIndex: 'permission',
                             required: true,                        
                             field: {
                                 xtype: 'combo',
                                 store: me.confidentialityLevelOptionsStore,
                                 displayField: 'name',
+                                valueField:'name',
                                 typeAhead: true,
-                                mode:'local',
-                                queryMode:'local',
                                 forceSelection: false,
-                                associativeField: 'dataPermission'
+                                associativeField: 'permission'
                             },
                             flex: .3
                         }]
