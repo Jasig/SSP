@@ -37,9 +37,7 @@ Ext.define('Ssp.store.reference.ConfigurationOptionsUnpaged', {
 		    		var maxStudentIdLen = me.getConfigByName('studentIdMaxValidationLength');
 		    		var allowableCharacters = me.getConfigByName('studentIdAllowableCharacters');
 		    		// Example RegEx - /(^[1-9]{7,9})/
-		    		var regExString = '^([' + allowableCharacters + ']';
-		    		regExString = regExString + '{' + minStudentIdLen + ',';
-		    		regExString = regExString + maxStudentIdLen + '})';
+		    		var regExString = '^[' + allowableCharacters + ']+$';
 		    		var validStudentId = new RegExp( regExString );
 		            var studentIdValErrorText = 'You should only use the following character list for input: ' + allowableCharacters;
 		            me.getConfigModelName('studentIdValidationErrorText').set('value',studentIdValErrorText);
