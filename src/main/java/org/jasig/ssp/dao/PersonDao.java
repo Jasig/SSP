@@ -101,12 +101,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 
 		Criteria criteria = createCriteria();
-		final long totalRows = (Long) criteria.setProjection(
-				Projections.rowCount()).uniqueResult();
 
 		criteria = createCriteria(sAndP);
 
-		return new PagingWrapper<Person>(totalRows, criteria.list());
+		List results = criteria.list();
+		
+		return new PagingWrapper<Person>(results.size(), results);
 	}
 
 	public Person fromUsername(@NotNull final String username) {
