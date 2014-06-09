@@ -24,7 +24,7 @@ Ext.define('Ssp.model.reference.ConfidentialityLevel', {
     },
     
     fields: [{name:'acronym',type:'string',defaultValue:'DEFAULT'},
-             {name:'dataPermission',type:'string'}
+             {name:'permission',type:'string'}
              ] ,
 
 	constructor: function(){

@@ -17,17 +17,29 @@
  * under the License.
  */
 Ext.define('Ssp.store.reference.ConfidentialityLevelOptions', {
-    extend: 'Ssp.store.reference.AbstractReferences',
+    extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.ConfidentialityLevelOption',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'
     },
     constructor: function(){
-    	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('confidentialityLevel')+'/options',
-    		extraParams: this.extraParams
-    	});
-    	this.load();
+    	
+    	var me = this;
+    	
+    	Ext.apply(me, { 
+		    proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('confidentialityLevel')+'/options'), 
+			autoLoad: true,
+			autoSync: true,
+		    pageSize: -1,
+		    params : {
+				page : 0,
+				start : 0,
+				limit : -1
+			},
+			extraParams: this.extraParams
+		}
+    	);
+    	return me.callParent(arguments);
     }
 });

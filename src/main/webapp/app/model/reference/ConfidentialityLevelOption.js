@@ -19,19 +19,13 @@
 Ext.define('Ssp.model.reference.ConfidentialityLevelOption', {
     extend: 'Ext.data.Model',
     mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },
-    
-    fields: [{name:'id',type:'int'},
+    // objectStatus is added to support default associativeFilter found in RenderUtils
+    // as an enum there is no objectStatus in server code
+    fields: [{name:'objectStatus',type:'string', defaultValue: 'ACTIVE'},
+			 {name:'id',type:'int'},
     		 {name:'name',type:'string'}] ,
 
 	constructor: function(){
-		Ext.apply(this.getProxy(), 
-				{ 
-			url: this.apiProperties.createUrl( this.apiProperties.getItemUrl('confidentialityLevelOption') )
-			    }
-		);
 		return this.callParent(arguments);
 	}
 });

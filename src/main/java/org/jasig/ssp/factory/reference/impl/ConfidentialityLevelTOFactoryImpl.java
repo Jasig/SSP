@@ -54,7 +54,7 @@ public class ConfidentialityLevelTOFactoryImpl
 		final ConfidentialityLevel model = super.from(tObject);
 
 		model.setAcronym(tObject.getAcronym());
-		model.setPermission(DataPermissions.valueOf(tObject.getDataPermission()));
+		model.setPermission(DataPermissions.valueOf(tObject.getPermission()));
 
 		return model;
 	}

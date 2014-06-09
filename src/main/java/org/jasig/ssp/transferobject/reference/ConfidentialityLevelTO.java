@@ -38,7 +38,7 @@ public class ConfidentialityLevelTO extends
 	@NotEmpty
 	private String acronym;
 	
-	private String dataPermission;
+	private String permission;
 
 	public ConfidentialityLevelTO() {
 		super();
@@ -67,7 +67,7 @@ public class ConfidentialityLevelTO extends
 	public final void from(final ConfidentialityLevel model) {
 		super.from(model);
 		acronym = model.getAcronym();
-		dataPermission = model.getPermission().name();
+		permission = model.getPermission().name();
 	}
 
 	public String getAcronym() {
@@ -78,12 +78,12 @@ public class ConfidentialityLevelTO extends
 		this.acronym = acronym;
 	}
 
-	public String getDataPermission() {
-		return dataPermission;
+	public String getPermission() {
+		return permission;
 	}
 
-	public void setDataPermission(String dataPermission) {
-		this.dataPermission = dataPermission;
+	public void setPermission(String permission) {
+		this.permission = permission;
 	}
 
 }
