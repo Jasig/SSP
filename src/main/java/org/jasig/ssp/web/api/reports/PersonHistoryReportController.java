@@ -34,6 +34,7 @@ import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.*;
@@ -44,6 +45,7 @@ import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
@@ -119,6 +121,8 @@ public class PersonHistoryReportController extends ReportBaseController {
     private transient PlanService planService;
 	@Autowired
 	protected transient SecurityService securityService;
+	@Autowired
+	protected transient TermService termService;
 
 	@RequestMapping(value = "/{personId}/history/print", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
@@ -188,8 +192,16 @@ public class PersonHistoryReportController extends ReportBaseController {
             if ( plan.getPersonId().equals(personId) ) {
                 plan = planService.validate(plan);
             }
+            Term latestTerm = null;
             if(plan.getPlanCourses() != null && !plan.getPlanCourses().isEmpty())
-            	planGraduateTerm = plan.getPlanCourses().get(0).getTermCode();
+            	for (PlanCourseTO planCourseTO : plan.getPlanCourses()) {
+            		Term term = termService.getByCode(planCourseTO.getTermCode());
+            		if(latestTerm == null || latestTerm.getEndDate().before(term.getEndDate()))
+            		{
+            			latestTerm = term;
+            		}
+				}
+            	planGraduateTerm = latestTerm.getCode();
         }
         final PlanTO planTO = plan;
         final String planProjectedGraduationTerm = planGraduateTerm;
