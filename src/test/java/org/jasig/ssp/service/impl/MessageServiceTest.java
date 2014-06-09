@@ -26,8 +26,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.UnsupportedEncodingException;
+
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
+
 import org.jasig.ssp.config.MockMailService;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.Message;
@@ -97,7 +100,7 @@ public class MessageServiceTest {
 
 	@Test
 	public void sendsMessageWithInvalidCc() throws ObjectNotFoundException,
-			SendFailedException {
+			SendFailedException, UnsupportedEncodingException {
 
 		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();
 		assertFalse("Faux mail server should be running but was not.",
@@ -121,7 +124,7 @@ public class MessageServiceTest {
 
 	@Test
 	public void sendsMessageWithInvalidBcc() throws ObjectNotFoundException,
-			SendFailedException, ValidationException {
+			SendFailedException, ValidationException, UnsupportedEncodingException {
 
 		// setup
 		final SimpleSmtpServer smtpServer = mockMailService.getSmtpServer();

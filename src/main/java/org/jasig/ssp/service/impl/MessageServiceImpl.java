@@ -322,7 +322,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	private Pair<PagingWrapper<Message>, Collection<Throwable>>
-	sendQueuedMessageBatch(SortingAndPaging sap) {
+	sendQueuedMessageBatch(SortingAndPaging sap) throws UnsupportedEncodingException {
 		LinkedList<Throwable> errors = Lists.newLinkedList();
 		LOGGER.info("Looking for queued message batch at start row {}, batch size {}",
 				sap.getFirstResult(), sap.getMaxResults());
@@ -378,7 +378,7 @@ public class MessageServiceImpl implements MessageService {
 		}
 		return emailValidator.isValid(email);
 	}
-	
+	 
 	/**
 	 * Validate e-mail address via {@link EmailValidator}.
 	 * 
@@ -396,7 +396,7 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	@Transactional(readOnly = false)
 	public boolean sendMessage(@NotNull final Message message)
-			throws ObjectNotFoundException, SendFailedException {
+			throws ObjectNotFoundException, SendFailedException, UnsupportedEncodingException {
 
 		LOGGER.info("BEGIN : sendMessage()");
 		LOGGER.info(addMessageIdToError(message) + "Sending message: {}" , message.toString());
@@ -407,14 +407,17 @@ public class MessageServiceImpl implements MessageService {
 					mimeMessage);
  
 			InternetAddress from;
-			//We used the configured outbound email address for 3 scenarios
-			// 1) System Admin is the sender
-			// 2) Sender is null
-			// 3) Sender does not have an email address
+			String appName = configService.getByName("app_title").getValue();
+			
+			//We used the configured outbound email address for every outgoing message
+			//If a message was initiated by an end user, their name will be attached to the 'from' while
+			//the configured outbound address will be the actual address used for example "Amy Aministrator (SSP) <myconfiguredaddress@foobar.com>"
+			
+			
 			if( (message.getSender()!= null && message.getSender().getId().equals(Person.SYSTEM_ADMINISTRATOR_ID)) || message.getSender() == null || message.getSender().getEmailAddresses().isEmpty()  )
 				{
 				try {
-					 from = new InternetAddress(configService.getByName("outbound_email_address").getValue());
+					 from = new InternetAddress(configService.getByName("outbound_email_address").getValue(),appName+" Administrator");
 					 mimeMessageHelper.setFrom(from);
 					 message.setSentFromAddress(from.toString());
 					 mimeMessageHelper.setReplyTo(from);
@@ -429,8 +432,9 @@ public class MessageServiceImpl implements MessageService {
 				// WILL FIND FIRST VALID EMAIL 
 				InternetAddress[] froms = getEmailAddresses( message.getSender(), "from:",message.getId());
 				if(froms.length > 0){
-					mimeMessageHelper.setFrom(froms[0]);
-					message.setSentFromAddress(froms[0].toString());
+					from = new InternetAddress(configService.getByName("outbound_email_address").getValue(),message.getSender().getFullName() + " ("+appName+")");
+				     mimeMessageHelper.setFrom(from);
+					message.setSentFromAddress(from.toString());
 					mimeMessageHelper.setReplyTo(froms[0]);
 					message.setSentReplyToAddress(froms[0].toString());
 				}

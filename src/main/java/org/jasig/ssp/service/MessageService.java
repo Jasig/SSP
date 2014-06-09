@@ -30,6 +30,7 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 /**
@@ -117,8 +118,9 @@ public interface MessageService {
 	 * @throws ObjectNotFoundException
 	 *             If current user or the administrator info could not be
 	 *             loaded.
+	 * @throws UnsupportedEncodingException 
 	 */
 	boolean sendMessage(Message message) throws SendFailedException,
-			ObjectNotFoundException;
+			ObjectNotFoundException, UnsupportedEncodingException;
 
 }
