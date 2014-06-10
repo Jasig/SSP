@@ -167,7 +167,11 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 		var me = this;
 		var record, jsonData, url, selectedPersonId;
 		url = me.url;	
-		if ( me.getView().getForm().isValid() )
+        var groupName = me.getView().getForm().findField('groupName').getValue();
+        var groupEmail = me.getView().getForm().findField('groupEmail').getValue();
+        var personCombo = me.getView().getForm().findField('personCombo').getValue();
+
+		if ( (groupName && groupEmail) || personCombo )
 		{
 			me.getView().getForm().updateRecord();
 			record = me.model;			
@@ -188,7 +192,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 				scope: me
 			});			
 		}else{
-			Ext.Msg.alert('SSP Error', 'Please correct the errors before saving this item.');
+			Ext.Msg.alert('SSP Error', 'Please enter a Group name and email OR choose a Person.');
 		}
 	},
 

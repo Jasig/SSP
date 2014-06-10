@@ -47,14 +47,14 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 			        displayField: 'name',
 			        typeAhead: true,
 			        queryMode: 'local',
-			        allowBlank: false,
+			        allowBlank: true,
 			        width: 500
 				},{
                     xtype: 'textfield',
                     fieldLabel: 'Group Name',
                     width: 500,
                     name: 'groupName',
-                    allowBlank: false
+                    allowBlank: true
                 },{
                     xtype: 'textfield',
                     fieldLabel: 'Group Email',
@@ -62,11 +62,12 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
                     width: 500,
                     vtype:'email',
 			        maxLength: 100,
-			        allowBlank: false
+			        allowBlank: true
                 },{
 		            xtype: 'combobox',
 		            store: me.coachesStore,
 		            itemId: 'personCombo',
+                    name: 'personCombo',
 		            displayField: 'fullName',
 		            emptyText: 'Select One',
 		            valueField:'id',
@@ -83,7 +84,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
 		       		                   xtype: 'button',
 		       		                   action: 'save',
 		       		                   itemId: 'saveButton',
-		       		                   formBind: true
+		       		                   formBind: false
 		       		               }, '-', {
 		       		                   text: 'Cancel',
 		       		                   xtype: 'button',
