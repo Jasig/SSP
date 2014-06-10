@@ -28,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -114,10 +115,24 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
-		final Criteria query = sessionFactory.getCurrentSession()
+		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+		Session currentSession = sessionFactory.getCurrentSession();
+		final Criteria query = currentSession
 				.createCriteria(Person.class);
-		query.add(Restrictions.eq("username", StringUtils.lowerCase(username))).setFlushMode(
-				FlushMode.COMMIT);
+		//Sqlserver does a case insensitive string compare so we don't do the string
+		//normalization for sqlserver so that it hits index on person table idx_person_username
+		if ( dialect instanceof SQLServerDialect) {
+			query.add(Restrictions.eq("username", username)).setFlushMode(
+					FlushMode.COMMIT);
+			return (Person) query.uniqueResult();			
+			
+		}
+		else
+		{
+			//Postgres has an index on lower(username): idx_func_username_person
+			query.add(Restrictions.eq("username", StringUtils.lowerCase(username))).setFlushMode(
+					FlushMode.COMMIT);
+		}
 		return (Person) query.uniqueResult();
 	}
 
