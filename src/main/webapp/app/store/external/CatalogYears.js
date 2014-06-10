@@ -28,9 +28,9 @@ Ext.define('Ssp.store.external.CatalogYears', {
 		var me = this;
 		
 		me.callParent(arguments);
-		this.addListener('load', this.sortAfterLoad, me);
+		this.addListener('load', this.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('catalogYear'),
-    		autoLoad: true});
+    		autoLoad: false});
     	return; 
     },
 	sortAfterLoad: function(){

@@ -217,5 +217,13 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	setField: function(query, fieldName){
 		var me=this;
 		me.currentMapPlan.set(fieldName, me.getView().query(query)[0].getValue());
+	},
+	destroy:function(){
+	    var me=this;
+	    me.programsStore.removeListener("load", me.onShow, me, {single:true});
+		me.departmentsStore.removeListener("load", me.onShow,me, {single:true});
+		me.divisionsStore.removeListener("load", me.onShow, me, {single:true});
+		me.catalogYearsStore.removeListener("load", me.onShow, me, {single:true});
+	    return me.callParent( arguments );
 	}
 });
