@@ -243,14 +243,6 @@ public class EarlyAlertRoutingController
 					"EarlyAlertRouting data is required.");
 		}
 
-		if ( obj.getPerson() == null || obj.getPerson().getId() == null ) {
-			// also verified at lower layers, but this results in a *much*
-			// nicer error msg as compared to a Hibernate/JPA validation,
-			// which will basically be rendered as-is to the client
-			// at this writing (~v1.2.0)
-			throw new ValidationException("Every Early Alert Routing must be associated with a Person.");
-		}
-
 		if (obj.getCampusId() == null) {
 			obj.setCampusId(campusId);
 		}
