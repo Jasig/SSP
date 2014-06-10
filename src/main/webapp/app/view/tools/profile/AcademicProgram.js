@@ -120,7 +120,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                         itemId: 'mapName',
                         labelWidth: 35
                     }, {
-                        fieldLabel: 'Advisor',
+                        fieldLabel: 'Owner',
                         name: 'advisor',
                         itemId: 'advisor',
                         labelWidth: 42

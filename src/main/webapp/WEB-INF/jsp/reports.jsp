@@ -2333,7 +2333,7 @@
 </div><!-- end number courses in plan report -->
 
 <div class="hideable-form number-plans-by-advisor-report" style="display:none">
-	<h1>Number Of Plans By Advisor</h1>
+	<h1>Number Of Plans By Owner</h1>
 	<form action="/ssp/api/1/report/map/numberplansbyadvisor" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		

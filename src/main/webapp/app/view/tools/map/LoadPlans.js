@@ -128,7 +128,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                                 renderer: me.columnRendererUtils.renderDateBackgroundColorActive
                                 
                             }, {
-                                text: 'Advisor',
+                                text: 'Owner',
                                 sortable: true,
 								width: 160,
                                 dataIndex: 'ownerName',

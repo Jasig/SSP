@@ -92,7 +92,7 @@
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Number of Plans By Advisor]]></text>
+				<text><![CDATA[Number of Plans By Owners]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -103,7 +103,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[COACH]]></text>
+				<text><![CDATA[OWNER]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="5db1d0a3-5499-486c-9e0a-1756dd520e32" x="108" y="2" width="100" height="16"/>

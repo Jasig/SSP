@@ -335,7 +335,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
              renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
              
          }, {
-             text: 'Advisor',
+             text: 'Owner',
              width: 120,
              sortable: true,
              dataIndex: 'ownerName'
