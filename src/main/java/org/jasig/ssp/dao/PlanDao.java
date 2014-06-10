@@ -174,13 +174,13 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 				"from Plan p, PlanCourse pc, Person person, ExternalCourse ec,"+ planStatusSelect);
 		
 		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
-		if(form.getPlanStatus() != null && !calculateMapPlanStatus)
+		if(!calculateMapPlanStatus)
 		{
 			selectPlanCourses.append(" and ps.schoolId = person.schoolId ");
 		}
 		if(form.getPlanStatus() != null && calculateMapPlanStatus)
 		{
-			selectPlanCourses.append(" and msr.plan in elements(person.plans) ");
+			selectPlanCourses.append(" and msr.plan in elements(person.plans) and msr.person.id = person.id");
 			
 		}
 		selectPlanCourses.append(" group by pc.courseCode, pc.formattedCourse, pc.courseTitle, pc.termCode");
