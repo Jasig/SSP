@@ -214,12 +214,12 @@ Ext.define('Ssp.service.MapPlanService', {
 	    };
 		
 	    me.updateCurrentMap(semesterStores);
-	    
+		me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
+
 		// save
 		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == true)
 		{	ownerId
 			me.currentMapPlan.set('id','');
-			me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
 
 			me.apiProperties.makeRequest({
     			url: url,
@@ -245,6 +245,8 @@ Ext.define('Ssp.service.MapPlanService', {
     saveTemplate: function(semesterStores, callbacks, currentMapPlan, saveAs ){
 		var me=this;
 		var url = me.getTemplateBaseUrl();
+		me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
+
 	    var success = function( response ){
 	    	callbacks.success( response, callbacks.scope );
 	    };

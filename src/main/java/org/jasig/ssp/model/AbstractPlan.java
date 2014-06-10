@@ -46,7 +46,7 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	@Immutable
 	@NotNull
 	@ManyToOne()
-	@JoinColumn(name = "owner_id", updatable = false, nullable = false)
+	@JoinColumn(name = "owner_id", updatable = true, nullable = false)
 	private Person owner;
 	
 	@Column(length = 200)
