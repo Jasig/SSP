@@ -505,7 +505,7 @@ public class DirectoryPersonSearchDao  {
 		if(hasPlanStatus(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" plan.objectStatus = :planObjectStatus ");
+			stringBuilder.append(" plan.objectStatus = :planObjectStatus and plan.person.id = dp.personId ");
 		}
 	}
 
@@ -517,14 +517,14 @@ public class DirectoryPersonSearchDao  {
 		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esps.status = :mapStatus ");
+			stringBuilder.append(" esps.status = :mapStatus and esps.schoolId = dp.id ");
 		}
 		
 		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" msr.plan in elements(p.plans) ");
-			stringBuilder.append(" and msr.planStatus = :mapStatus ");
+			stringBuilder.append(" and msr.planStatus = :mapStatus and msr.person.id = dp.personId ");
 			
 		}
 	}
@@ -714,7 +714,7 @@ public class DirectoryPersonSearchDao  {
 		}
 		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
 		{
-			stringBuilder.append(", org.jasig.ssp.model.MapStatusReport msr ");
+			stringBuilder.append(", MapStatusReport msr ");
 		}
 	}
 
