@@ -221,4 +221,9 @@
 		</createIndex>
 	</changeSet>	
 	
+	<changeSet id="add indicies to many FKs 3" author="tony.arland">
+		<createIndex tableName="map_status_report_substitution_details" indexName="idx_msrsbd_report_id" >
+			<column name="report_id"></column>
+		</createIndex>	
+	</changeSet>	
 </databaseChangeLog>
