@@ -378,29 +378,10 @@ public class TemplateController  extends AbstractBaseController {
 		}
 
 		assertTemplateWritePublicApiAuthorization(obj);
-		Person oldOwner = getService().getOwnerForPlan(id);
-		
-		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
-		
-		//If the currently logged in user is not the owner of this plan
-		//we need to create a clone then save it.
-		if(currentUser.getPerson().getId().equals(oldOwner.getId()))
-		{
-			final Template model = getFactory().from(obj);
-			Template savedTemplate = getService().save(model);
-			if (null != model) {
-				return validatePlan(new TemplateTO(savedTemplate));
-			}
-		}
-		else
-		{
-			obj.setId(null);
-			Template model = getFactory().from(obj);
-			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
-
-			if (null != clonedTemplate) {
-				return validatePlan(new TemplateTO(clonedTemplate));
-			}
+		final Template model = getFactory().from(obj);
+		Template savedTemplate = getService().save(model);
+		if (null != model) {
+			return validatePlan(new TemplateTO(savedTemplate));
 		}
 		return null;
 	}
