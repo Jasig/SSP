@@ -134,6 +134,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
             callBackFunc: this.onEmailAPToUsers,
             scope: this
         });
+        return this.callParent(arguments);
     },
     
     onEmailActionPlan: function(button){
