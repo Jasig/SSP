@@ -392,7 +392,7 @@ public final class SortingAndPaging { // NOPMD
 				seperator = ", ";
 			}
 		} else if (isDefaultSorted()) {
-			// sort by the default property
+			query.append(" Order By ");
 			addSortToQuery(query, defaultSortProperty,
 					defaultSortDirection);
 		}

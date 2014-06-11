@@ -27,16 +27,24 @@ Ext.define('Ssp.store.DirectoryPersonSearch', {
     config: {
         baseUrlName: 'directoryPersonSearch'
     },
-
 	constructor: function(){
 		var me=this;
 		var p = me.apiProperties.getProxy(me.apiProperties.getItemUrl(me.getBaseUrlName()));
-		p.directionParam = 'sortDirection';
-        p.simpleSortMode = true;
 		Ext.apply(me, {
 							proxy: p,
 							autoLoad: false,
-							autoSync: false
+							autoSync: false,
+							 pageSize: 100,
+							 params : {
+								 page : 0,
+									start : 0,
+									limit : 100
+							}
 						});
 		return me.callParent(arguments);
-}});
+},
+	onBeforeSort: function() {
+		this.callParent(arguments);
+		this.currentPage = 1;
+	}
+});

@@ -42,8 +42,25 @@ Ext.define('Ssp.service.CaseloadService', {
     getCaseload: function( programStatusId, store, callbacks ){
     	var me=this;
 	    
-		// clear the store
 		store.removeAll();
+		store.currentPage = 1;
+		var activeParams = {};
+		
+		if(store.extraParams){
+			for (key in store.extraParams) {
+				if(store.extraParams[key] && store.extraParams[key] != null){
+					activeParams[key] = store.extraParams[key];
+				}
+			}
+		}
+		
+		if(store.params){
+			for (key in store.params) {
+				if(store.params[key] && store.params[key] != null){
+					activeParams[key] = store.params[key];
+				}
+			}
+		}
 
 		// Set the Url for the Caseload Store
 		// including param definitions because the params need
@@ -55,13 +72,14 @@ Ext.define('Ssp.service.CaseloadService', {
 		var url;
 		if(programStatusId)
 		{
-			url = me.getBaseUrl()+'?programStatusId='+programStatusId+'&status=ACTIVE';
+			activeParams['programStatusId'] = programStatusId;
 		}
-		else
-		{
-			url = me.getBaseUrl()+'?status=ACTIVE';
-		}
-		Ext.apply(store.getProxy(),{url: url});
+		
+		activeParams['status'] = 'ACTIVE';
+		
+		var encodedUrl = Ext.urlEncode(activeParams);
+		
+		Ext.apply(store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
 
 	    store.load({
 		    callback: function(records, operation, success) {

@@ -21,7 +21,6 @@ Ext.define('Ssp.service.SearchService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	storeOld: 'studentsSearchStore',
     	store: 'directoryPersonSearchStore'
     },
     initComponent: function() {
@@ -38,7 +37,6 @@ Ext.define('Ssp.service.SearchService', {
 
 		me.store.removeAll();
 		me.store.currentPage = 1;
-		me.store.pageSize = 100;
 
 		// Set params in the url for Search Store
 		// because the params need to be applied prior to load and not in a params
@@ -46,11 +44,29 @@ Ext.define('Ssp.service.SearchService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous page
 		var activeParams = {};
-		for (key in params) {
-		    if(params[key] && params[key] != null){
-				activeParams[key] = params[key] 
+		
+		if(me.store.extraParams){
+			for (key in me.store.extraParams) {
+				if(me.store.extraParams[key] && me.store.extraParams[key] != null){
+					activeParams[key] = me.store.extraParams[key];
+				}
 			}
 		}
+		
+		if(me.store.params){
+			for (key in me.store.params) {
+				if(me.store.params[key] && me.store.params[key] != null){
+					activeParams[key] = me.store.params[key];
+				}
+			}
+		}
+		
+		for (key in params) {
+		    if(params[key] && params[key] != null){
+				activeParams[key] = params[key];
+			}
+		}
+
 		
 		var encodedUrl = Ext.urlEncode(activeParams);
 

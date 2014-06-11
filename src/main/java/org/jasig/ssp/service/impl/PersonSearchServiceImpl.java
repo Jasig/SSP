@@ -189,16 +189,12 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	public PagingWrapper<PersonSearchResult2> caseLoadFor(
 			final ProgramStatus programStatus, @NotNull final Person coach,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-
 		
-
-		
-		PersonSearchRequest from = new PersonSearchRequest();
-		from.setCoach(coach);
-		from.setProgramStatus(programStatus);
-
-		
-		return search2(from);
+		PersonSearchRequest form = new PersonSearchRequest();
+		form.setCoach(coach);
+		form.setProgramStatus(programStatus);
+		form.setSortAndPage(sAndP);
+		return searchPersonDirectory(form);
 	}
 
 	@Override

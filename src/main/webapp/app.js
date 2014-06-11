@@ -1095,7 +1095,15 @@ Ext.onReady(function(){
 				    },
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
-					caseloadStore: 'Ssp.store.Caseload',
+					caseloadStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.Caseload', {
+							     storeId: 'caseloadStoreMain',		
+							     extraParams: {limit: "30"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
 					contactPersonStore: 'Ssp.store.ContactPerson',
@@ -1728,8 +1736,24 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 				    searchStore: 'Ssp.store.Search',
-				    studentsSearchStore: 'Ssp.store.StudentsSearch',
-				    directoryPersonSearchStore: 'Ssp.store.DirectoryPersonSearch',
+				    studentsSearchStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.StudentsSearch', {
+							     storeId: 'studenSearchStoreMain',		
+							     extraParams: {limit: "50"}
+							 });
+				    	},
+				    	singleton: true
+				    },
+				    directoryPersonSearchStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.DirectoryPersonSearch', {
+							     storeId: 'directoryPersonSearchStore',		
+							     extraParams: {limit: "50"}
+							 });
+				    	},
+				    	singleton: true
+				    },
 					searchChallengeReferralStore: 'Ssp.store.SearchChallengeReferral',
 				    selfHelpGuidesStore: 'Ssp.store.reference.SelfHelpGuides',
 				    selfHelpGuidesAllUnpagedStore: {
