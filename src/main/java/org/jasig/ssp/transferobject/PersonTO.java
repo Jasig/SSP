@@ -344,15 +344,19 @@ public class PersonTO // NOPMD
 	}
 	
 	private void setActionPlanCountsAndDate(Set<Task> tasks){
-		for(Task task:tasks){		
-			if(task.getCompletedDate() == null)
-				actionPlanTaskOpenCount++;
-			else{
-				actionPlanTaskClosedCount++;
-				if(lastActionPlanCompletedDate == null)
-					lastActionPlanCompletedDate = task.getCompletedDate();
-				else if(lastActionPlanCompletedDate.before(task.getCompletedDate()))
-					lastActionPlanCompletedDate = task.getCompletedDate();
+		for(Task task:tasks){	
+			if(ObjectStatus.ACTIVE.equals(task.getObjectStatus()))
+			{
+				if(task.getCompletedDate() == null)
+					actionPlanTaskOpenCount++;
+				else
+				{
+					actionPlanTaskClosedCount++;
+					if(lastActionPlanCompletedDate == null)
+						lastActionPlanCompletedDate = task.getCompletedDate();
+					else if(lastActionPlanCompletedDate.before(task.getCompletedDate()))
+						lastActionPlanCompletedDate = task.getCompletedDate();
+				}
 			}
 		}
 	}
