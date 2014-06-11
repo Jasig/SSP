@@ -38,14 +38,15 @@ Ext.define('Ssp.store.MAPStatus', {
                       { displayValue:'On Track Sequence', code: 'ON_TRACK_SEQUENCE', booleanValue: true },
                       { displayValue:'On Track Substitution', code: 'ON_TRACK_SUBSTITUTIO', booleanValue: false }                      
         ];
+
+        if(substitutableCourses.trim().toLowerCase() === 'false')
+        {
+        	values.splice(3, 1);
+        }    
         if(termBound.trim().toLowerCase() === 'true')
         {
         	values.splice(2, 1);
         }
-        if(substitutableCourses.trim().toLowerCase() === 'false')
-        {
-        	values.splice(3, 1);
-        }        
         // set the model
         me.loadData( values );
         return me;    	
