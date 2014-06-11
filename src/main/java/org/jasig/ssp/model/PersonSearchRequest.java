@@ -42,7 +42,7 @@ public class PersonSearchRequest {
 	
 	public static final String MAP_STATUS_OFF_PLAN = "OFF_PLAN";
 
-	public static final String MAP_STATUS_ON_TRACK_SUBSTITUTION = "ON_TRACK_SUBSTITUTION";
+	public static final String MAP_STATUS_ON_TRACK_SUBSTITUTION = "ON_TRACK_SUBSTITUTIO";
 	
 	public static final String MAP_STATUS_ON_TRACK_SEQUENCE = "ON_TRACK_SEQUENCE";
 	
