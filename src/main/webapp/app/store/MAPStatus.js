@@ -40,11 +40,11 @@ Ext.define('Ssp.store.MAPStatus', {
         ];
         if(termBound.trim().toLowerCase() === 'true')
         {
-        	values.splice(3, 1);
+        	values.splice(2, 1);
         }
         if(substitutableCourses.trim().toLowerCase() === 'false')
         {
-        	values.splice(2, 1);
+        	values.splice(3, 1);
         }        
         // set the model
         me.loadData( values );
