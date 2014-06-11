@@ -349,14 +349,20 @@ Ext.define('Ssp.controller.SearchViewController', {
 		searchView.collapse();
 	},
 
-	displaySearchBar: function(){
-		var me=this;
+	displaySearchBar: function() {
+	    var me = this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH);
 		me.getCaseloadBar().hide();
 		me.getSearchBar().show();
-		Ext.ComponentQuery.query('searchForm')[1].show(); //tabbed layout has 2 of these, second is search
-		me.setGridView();
-	},
+
+		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
+		    Ext.ComponentQuery.query('searchForm')[1].show(); //user has two, second is search
+        } else {
+            Ext.ComponentQuery.query('searchForm')[0].show(); //user only has one (no caseload)
+        }
+
+        me.setGridView();
+    },
 
 	displayCaseloadBar: function(){
 		var me=this;
