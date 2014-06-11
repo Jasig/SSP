@@ -25,10 +25,12 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStep;
+import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -39,6 +41,8 @@ public class JournalStepDao extends
 		AbstractReferenceAuditableCrudDao<JournalStep>
 		implements AuditableCrudDao<JournalStep> {
 
+	private Logger logger = Logger.getLogger(JournalStepDao.class);
+	
 	public JournalStepDao() {
 		super(JournalStep.class);
 	}
@@ -54,6 +58,7 @@ public class JournalStepDao extends
 
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
+	
 
 	public void softDeleteReferencingAssociations(UUID id) throws ObjectNotFoundException {
 		JournalStep obj = get(id);

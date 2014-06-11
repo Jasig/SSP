@@ -132,6 +132,13 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             treeRequest.set('callbackFunc', this.afterJournalStepsLoaded);
             treeRequest.set('callbackScope', this);
             treeRequest.set('nodeToAppendTo', this.getLoadingRootNode());
+            treeRequest.set('sortFunction', function(rec1, rec2){
+            	if(rec1.objectStatus != rec2.objectStatus)
+            		return rec1.objectStatus == 'ACTIVE' ? -1:1;
+			   if(rec1.associatedToTrack != rec2.associatedToTrack)
+		            		return rec1.associatedToTrack ? -1:1;
+            	return rec1.sortOrder - rec2.sortOrder;
+            });
             this.treeUtils.getItems(treeRequest);
         } else {
             this.loaded();
@@ -145,12 +152,21 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         var unique = me.uniqueJournalTrackJournalStepAssociations(assocs);
         var transformed = [];
         Ext.Array.each(unique, function(assoc, index) {
-            if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalTrackJournalStepAssociation(assoc) ) {
-                transformed.push(me.journalStepNodeItemFromTrackAssociation(assoc));
+        	if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalTrackJournalStepAssociation(assoc) ) {
+        		var journalStep = me.journalStepNodeItemFromTrackAssociation(assoc);
+        		journalStep.extraObsoleteText = '';
+        		if(assoc.objectStatus !== "ACTIVE"){
+        			journalStep.associatedToTrack = false;
+        			journalStep.extraObsoleteText += " (Inactive)";
+        		}else
+        			journalStep.associatedToTrack = true;
+                transformed.push(journalStep);
             }
         });
         return transformed;
     },
+    
+    
 
     uniqueJournalTrackJournalStepAssociations: function (assocs) {
         var me = this;
@@ -291,9 +307,10 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         Ext.Array.each(unique, function(assoc, index) {
             if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalStepJournalDetailAssociation(assoc) ) {
 				var journalDetail = me.journalDetailNodeItemFromStepAssociation(assoc);
+				journalDetail.extraObsoleteText = '';
 				if(assoc.objectStatus !== "ACTIVE"){
 					journalDetail.associatedToStep = false;
-					journalDetail.extraObsoleteText = " Detail no longer associated to step.";
+					journalDetail.extraObsoleteText += " (Inactive)";
 				}else
 					journalDetail.associatedToStep = true;
                 transformed.push(journalDetail);
@@ -379,7 +396,6 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
                         }
 
                     });
-
                 }
                 
             });

@@ -19,9 +19,7 @@
 package org.jasig.ssp.service.reference.impl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.jasig.ssp.dao.reference.JournalStepDao;
@@ -37,6 +35,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.JournalStepService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -159,6 +158,14 @@ public class JournalStepServiceImpl extends
 
 		return journalStepJournalStepDetail;
 	}
+	
+	@Override
+	public JournalStep save(JournalStep obj) throws ObjectNotFoundException, ValidationException{
+		if(!obj.getObjectStatus().equals(ObjectStatus.ACTIVE) && !obj.getObjectStatus().equals(ObjectStatus.ALL))
+			dao.softDeleteReferencingAssociations(obj.getId());
+		return super.save(obj);
+	}
+	
 	 
 	@Override
 	public void delete(UUID id) throws ObjectNotFoundException {

@@ -149,10 +149,13 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 
    setObsoleteText: function(record){
        var txt = "";
-       if(record.objectStatus !== 'ACTIVE')
-	      txt = " (Obsolete)";
-		if(record.extraObsoleteText && record.extraObsoleteText.length > 0)
-		  txt += record.extraObsoleteText;
+		if(typeof record.extraObsoleteText !== "undefined"){
+		  if(record.objectStatus !== 'ACTIVE' && record.extraObsoleteText.length == 0){
+			  txt = ' (Inactive)';
+		  }else{
+		     txt += record.extraObsoleteText;
+		  }
+		}
 		return txt;
 	}, 
    

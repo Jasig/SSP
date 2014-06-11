@@ -31,6 +31,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -45,10 +46,11 @@ public class JournalStepDetailDao extends
 	@Autowired
 	private JournalStepDao journalStepDao;
 	
+	private Logger logger = Logger.getLogger(JournalStepDetailDao.class);
+	
 	public JournalStepDetailDao() {
 		super(JournalStepDetail.class);
 	}
-
 	
 	public void softDeleteReferencingAssociations(UUID id) throws ObjectNotFoundException {
 		JournalStepDetail obj = get(id);
