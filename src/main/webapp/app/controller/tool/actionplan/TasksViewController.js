@@ -125,7 +125,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
             callBackFunc: this.deleteConfirmation,
             scope: this
         });
-        
+		if(this.editTaskFormPopUp != null && !this.editTaskFormPopUp.isDestroyed)
+			this.editTaskFormPopUp.close();
         return this.callParent(arguments);
     },
     
@@ -136,10 +137,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
     
     onEditTask: function(){
-        
-		 this.editTaskFormPopUp = Ext.create('Ssp.view.tools.actionplan.EditTaskForm', {
-               
-            });
+		 this.editTaskFormPopUp = Ext.create('Ssp.view.tools.actionplan.EditTaskForm', {});
         this.editTaskFormPopUp.show();
     },
     
