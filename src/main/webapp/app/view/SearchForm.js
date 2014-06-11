@@ -322,6 +322,34 @@ Ext.define('Ssp.view.SearchForm',{
 				   		    displayField: 'name',
 				   		    editable: false
 		                } ]},
+		                ,
+	    				{	layout: 'column',
+					                    border: false,
+					                    items: [
+	                {
+			   		    xtype: 'combobox',
+	                    fieldLabel: 'MAP Status',
+	                    columnWidth: .5,
+	                    emptyText: 'Any',
+	                    name: 'mapStatus',
+	                    store: me.mapStatusStore,
+	   		   		    valueField: 'code',
+			   		    displayField: 'displayValue',
+			   		    editable: false
+	                },      
+	                {
+			   		    xtype: 'combobox',
+	                    fieldLabel: 'Plan Status',
+	                    columnWidth: .5,
+	                    emptyText: 'Any',
+	                    name: 'planStatus',
+						labelAlign: 'right',
+						labelWidth:100,
+	                    store: me.planStatusStore,
+	   		   		    valueField: 'code',
+			   		    displayField: 'displayValue',
+			   		 editable: false
+	                }]},        
                 {   layout: 'column',
                 	border: false,
                 	items: [
@@ -391,34 +419,7 @@ Ext.define('Ssp.view.SearchForm',{
 							   itemId: 'gpaMax',
 							   enableKeyEvents:true
                            }              
-                ]},
-    				{	layout: 'column',
-				                    border: false,
-				                    items: [
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'MAP Status',
-                    columnWidth: .5,
-                    emptyText: 'Any',
-                    name: 'mapStatus',
-                    store: me.mapStatusStore,
-   		   		    valueField: 'code',
-		   		    displayField: 'displayValue',
-		   		    editable: false
-                },      
-                {
-		   		    xtype: 'combobox',
-                    fieldLabel: 'Plan Status',
-                    columnWidth: .5,
-                    emptyText: 'Any',
-                    name: 'planStatus',
-					labelAlign: 'right',
-					labelWidth:100,
-                    store: me.planStatusStore,
-   		   		    valueField: 'code',
-		   		    displayField: 'displayValue',
-		   		 editable: false
-                }]}      
+                ]}      
             ]
               
         });
