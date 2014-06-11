@@ -421,8 +421,11 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				matchedTranscriptCourse = findTranscriptCourseMatchSubstitutableCourse(mapPlanStatusReportCourse,transcript,criteriaSet,allSubstitutableCourses,planAndPersonInfo);
 				if(matchedTranscriptCourse != null)
 				{
-					//If we find a substitution match, create an substitution entry
-					reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
+					//If we find a transcript match, it must have a passing grade before we log it
+					if(gradesSet.contains(matchedTranscriptCourse.getGrade().trim()))
+					{
+						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
+					}
 				}
 
 			}
