@@ -170,9 +170,16 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
         var groupName = me.getView().getForm().findField('groupName').getValue();
         var groupEmail = me.getView().getForm().findField('groupEmail').getValue();
         var personCombo = me.getView().getForm().findField('personCombo').getValue();
+        var earlyAlertReasonId = me.getView().getForm().findField('earlyAlertReasonId').getValue();
 
-		if ( (groupName && groupEmail) || personCombo )
+		if (earlyAlertReasonId && ((groupName && groupEmail) || personCombo) )
 		{
+			if (! me.getView().getForm().isValid() )
+			{
+				Ext.Msg.alert('SSP Error', 'Please enter a valid email address.');
+				return;
+			}
+
 			me.getView().getForm().updateRecord();
 			record = me.model;			
 			jsonData = record.data;
@@ -192,7 +199,7 @@ Ext.define('Ssp.controller.admin.campus.EditCampusEarlyAlertRoutingViewControlle
 				scope: me
 			});			
 		}else{
-			Ext.Msg.alert('SSP Error', 'Please enter a Group name and email OR choose a Person.');
+			Ext.Msg.alert('SSP Error', 'Please enter a Reason and either a Group name and email OR choose a Person.');
 		}
 	},
 
