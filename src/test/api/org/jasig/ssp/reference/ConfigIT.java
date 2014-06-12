@@ -174,14 +174,14 @@ public class ConfigIT extends AbstractReferenceTest {
                     .contentType("application/json")
                     .statusCode(200)
                     .log().ifError()
-                    .body("results", equalTo(44))
+                    .body("results", equalTo(57))
                     .and()
                     .body("success", equalTo("true"))
                     .and()
-                    .body("rows", hasSize(44))
+                    .body("rows", hasSize(57))
                     .and();
 
-        spec = expectListResponseObjectAtIndex(spec, 0, CONFIG_ROWS);
+        spec = expectListResponseObjectAtIndex(spec, 2, CONFIG_ROWS, 0);
 
         // One of the other tests soft-deletes a config record. So we either
         // need a status=ALL or GTE assertion on the spec above, else

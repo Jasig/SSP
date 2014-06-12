@@ -69,12 +69,8 @@ public class ExpectationUtils {
     }
 
     /**
-     * Appends {@code body} {@link JSONPath} assertions to the given
-     * {@link ResponseSpecification} for verifying every top-level field in a
-     * list response element at a particular index. That index applies both to
-     * the actual object in the list response and the given {@link JSONArray}
-     * fixture representing the caller's expectations about the underlying
-     * system's state.
+     * Same as {@link #expectListResponseObjectAtIndex(com.jayway.restassured.specification.ResponseSpecification, int, org.json.simple.JSONArray, int)}
+     * but assumes the same index can be used on the response and the expectation fixture.
      *
      * @param spec
      * @param index
@@ -83,7 +79,26 @@ public class ExpectationUtils {
      * @see #expectResponseObjectAtIndex(com.jayway.restassured.specification.ResponseSpecification, int, org.json.simple.JSONArray, String)
      */
     public static ResponseSpecification expectListResponseObjectAtIndex(ResponseSpecification spec, int index, JSONArray fixture) {
-        return expectResponseObjectAtIndex(spec, index, fixture, "rows[" + index + "].");
+        return expectListResponseObjectAtIndex(spec, index, fixture, index);
+    }
+
+    /**
+     * Appends {@code body} {@link JSONPath} assertions to the given
+     * {@link ResponseSpecification} for verifying every top-level field in a
+     * list response element at a particular index. That index applies both to
+     * the actual object in the list response and the given {@link JSONArray}
+     * fixture representing the caller's expectations about the underlying
+     * system's state.
+     *
+     * @param spec
+     * @param responseIndex
+     * @param fixture
+     * @param fixtureIndex
+     * @return
+     * @see #expectResponseObjectAtIndex(com.jayway.restassured.specification.ResponseSpecification, int, org.json.simple.JSONArray, String)
+     */
+    public static ResponseSpecification expectListResponseObjectAtIndex(ResponseSpecification spec, int responseIndex, JSONArray fixture, int fixtureIndex) {
+        return expectResponseObjectAtIndex(spec, fixture, fixtureIndex, "rows[" + responseIndex + "].");
     }
 
     /**
@@ -95,13 +110,13 @@ public class ExpectationUtils {
      * in terms of the top-level field.)
      *
      * @param spec
-     * @param index
      * @param fixture
+     * @param fixtureIndex
      * @return
      * @see #expectResponseObjectAtIndex(com.jayway.restassured.specification.ResponseSpecification, int, org.json.simple.JSONArray, String)
      */
-    public static ResponseSpecification expectResponseObjectAtIndex(ResponseSpecification spec, int index, JSONArray fixture) {
-        return expectResponseObjectAtIndex(spec, index, fixture, null);
+    public static ResponseSpecification expectResponseObjectAtIndex(ResponseSpecification spec, JSONArray fixture, int fixtureIndex) {
+        return expectResponseObjectAtIndex(spec, fixture, fixtureIndex, null);
     }
 
     /**
@@ -115,13 +130,14 @@ public class ExpectationUtils {
      * {@link JSONObject} at a particular index of a list response.</p>
      *
      * @param spec
-     * @param jsonPathPrefix
-     * @param index
      * @param fixture
+     * @param fixtureIndex
+     * @param jsonPathPrefix
+     *
      * @return
      */
-    public static ResponseSpecification expectResponseObjectAtIndex(ResponseSpecification spec, int index, JSONArray fixture, String jsonPathPrefix) {
-        final JSONObject expectedRecord = expectedObjectAtIndex(index, fixture);
+    public static ResponseSpecification expectResponseObjectAtIndex(ResponseSpecification spec, JSONArray fixture, int fixtureIndex, String jsonPathPrefix) {
+        final JSONObject expectedRecord = expectedObjectAtIndex(fixtureIndex, fixture);
         for ( Object entry : expectedRecord.entrySet() ) {
             Map.Entry<Object,Object> mapEntry = (Map.Entry<Object,Object>)entry;
             spec = expectValueAtJsonPath(spec,
