@@ -36,4 +36,11 @@
 		<property name="prefix" value="/WEB-INF/jsp/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
+
+	<bean id="defaultExceptionHandlerTemplate"
+				class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver"
+				lazy-init="false">
+		<property name="defaultErrorView" value="ea-error"/>
+	</bean>
+
 </beans>

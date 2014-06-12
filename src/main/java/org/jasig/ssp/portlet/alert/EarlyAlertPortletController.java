@@ -137,18 +137,15 @@ public final class EarlyAlertPortletController {
 		// with the method param of that name, effectively copying the student's
 		// school ID into the faculty user's record.
 		if(!StringUtils.isNotBlank(schoolId) &&  !StringUtils.isNotBlank(studentUserName)){
-			throw new RuntimeException("Missing student identifier."
-					+ req.getRemoteUser());
+			throw new RuntimeException("Missing student identifier.");
 		}
 		
 		if(!StringUtils.isNotBlank(formattedCourse) &&  !StringUtils.isNotBlank(sectionCode)){
-			throw new RuntimeException("Missing or regquired course information."
-					+ req.getRemoteUser());
+			throw new RuntimeException("Missing course identifier/s.");
 		}
 		Person user = (Person)model.get("user");
 		if ( user == null ) {
-			throw new RuntimeException("Missing or deactivated account for remote user "
-					+ req.getRemoteUser());
+			throw new RuntimeException("Missing or deactivated account for current user.");
 		}
 		FacultyCourse course = null;
 		Person student = null;
@@ -167,7 +164,7 @@ public final class EarlyAlertPortletController {
 
 
 			if ( course == null ) {
-				throw new IllegalStateException(buildErrorMesssage("Course not found for current instructor:", user.getSchoolId(), null, formattedCourse, termCode, sectionCode));
+				throw new IllegalStateException(buildErrorMesssage("Course not found or current user is not listed as the instructor of record:", user.getSchoolId(), null, formattedCourse, termCode, sectionCode));
 			}
 
 			/*
@@ -199,13 +196,13 @@ public final class EarlyAlertPortletController {
                         sectionCode));
 			}
 
-		} catch (ObjectNotFoundException e) {
-			throw new RuntimeException(buildErrorMesssage("Unrecognized Entity: ", 
+		} catch (Exception e) {
+			throw new RuntimeException(buildErrorMesssage("System error looking up course or enrollment for: ",
 					user.getSchoolId(), 
 					schoolId, 
 					formattedCourse, 
 					termCode,
-                    sectionCode), e);
+					sectionCode), e);
 		}
 		/*
 		 *  SANITY CHECK (is this even necessary?  wanted?)
@@ -213,9 +210,9 @@ public final class EarlyAlertPortletController {
 		 *      course
 		 */
 		if (!course.getFacultySchoolId().equals(user.getSchoolId())) {
-			throw new IllegalStateException(buildErrorMesssage("Logged in user must be faculty of record on the specified course: ", 
-					user.getSchoolId(), 
-					null, 
+			throw new IllegalStateException(buildErrorMesssage("Current user is not listed as the instructor of record on the specified course: ",
+					user.getSchoolId(),
+					student.getSchoolId(),
 					formattedCourse, 
 					termCode,
                     sectionCode));
@@ -290,15 +287,15 @@ public final class EarlyAlertPortletController {
 	private String buildErrorMesssage(String prefix, String facultySchoolId, String studentSchoolId, String formattedCourse, String termCode, String sectionCode){
 		StringBuilder errorMsg = new StringBuilder(prefix);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(facultySchoolId))
-			errorMsg.append(" Faculty School ID:").append(facultySchoolId);
+			errorMsg.append(" Faculty School ID: ").append(facultySchoolId);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(studentSchoolId))
-			errorMsg.append(" Student School ID:").append(studentSchoolId);
+			errorMsg.append(" Student School ID: ").append(studentSchoolId);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
-			errorMsg.append(" Formatted Course:").append(formattedCourse);
+			errorMsg.append(" Formatted Course: ").append(formattedCourse);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			errorMsg.append(" Term Code:").append(termCode);
+			errorMsg.append(" Term Code: ").append(termCode);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(sectionCode))
-			errorMsg.append(" Section Code:").append(sectionCode);
+			errorMsg.append(" Section Code: ").append(sectionCode);
 		return errorMsg.toString();
 	}
 }
