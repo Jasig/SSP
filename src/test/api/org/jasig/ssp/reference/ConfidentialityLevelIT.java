@@ -70,7 +70,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_ARC.put("name", "Academic Resource Center");
         CONFIDENTIALITY_LEVEL_ARC.put("description", "");
         CONFIDENTIALITY_LEVEL_ARC.put("acronym", "ARC");
-        CONFIDENTIALITY_LEVEL_ARC.put("dataPermission", "DATA_ACADEMIC_RESOURCE_CENTER");
+        CONFIDENTIALITY_LEVEL_ARC.put("permission", "DATA_ACADEMIC_RESOURCE_CENTER");
 
         CONFIDENTIALITY_LEVEL_CNSL = new JSONObject();
         CONFIDENTIALITY_LEVEL_CNSL.put("id", "b2d07935-5056-a51a-80db-caa0dadd3f2e");
@@ -82,7 +82,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_CNSL.put("name", "Counselor");
         CONFIDENTIALITY_LEVEL_CNSL.put("description", "");
         CONFIDENTIALITY_LEVEL_CNSL.put("acronym", "CNSL");
-        CONFIDENTIALITY_LEVEL_CNSL.put("dataPermission", "DATA_COUNSELING_SERVICES");
+        CONFIDENTIALITY_LEVEL_CNSL.put("permission", "DATA_COUNSELING_SERVICES");
 
         CONFIDENTIALITY_LEVEL_DIS = new JSONObject();
         CONFIDENTIALITY_LEVEL_DIS.put("id", "b2d07915-5056-a51a-80ce-334eca0e0a10");
@@ -94,7 +94,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_DIS.put("name", "Disability");
         CONFIDENTIALITY_LEVEL_DIS.put("description", "");
         CONFIDENTIALITY_LEVEL_DIS.put("acronym", "DIS");
-        CONFIDENTIALITY_LEVEL_DIS.put("dataPermission", "DATA_DISABILITY");
+        CONFIDENTIALITY_LEVEL_DIS.put("permission", "DATA_DISABILITY");
 
         CONFIDENTIALITY_LEVEL_DSW = new JSONObject();
         CONFIDENTIALITY_LEVEL_DSW.put("id", "b2d07964-5157-a51a-800a-a95d3bb3c4e3");
@@ -106,7 +106,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_DSW.put("name", "Displaced Workers");
         CONFIDENTIALITY_LEVEL_DSW.put("description", "");
         CONFIDENTIALITY_LEVEL_DSW.put("acronym", "DSW");
-        CONFIDENTIALITY_LEVEL_DSW.put("dataPermission", "DATA_DISPLACED_WORKERS");
+        CONFIDENTIALITY_LEVEL_DSW.put("permission", "DATA_DISPLACED_WORKERS");
 
         CONFIDENTIALITY_LEVEL_EAL = new JSONObject();
         CONFIDENTIALITY_LEVEL_EAL.put("id", "b2d07964-5157-a51a-800a-a95d3bb3c4f4");
@@ -118,7 +118,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_EAL.put("name", "Early Alert ");
         CONFIDENTIALITY_LEVEL_EAL.put("description", "");
         CONFIDENTIALITY_LEVEL_EAL.put("acronym", "EAL");
-        CONFIDENTIALITY_LEVEL_EAL.put("dataPermission", "DATA_EARLY_ALERT");
+        CONFIDENTIALITY_LEVEL_EAL.put("permission", "DATA_EARLY_ALERT");
 
         CONFIDENTIALITY_LEVEL_ESL = new JSONObject();
         CONFIDENTIALITY_LEVEL_ESL.put("id", "b2d07964-5056-a51a-800a-a95d3bb3c4d1");
@@ -130,7 +130,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_ESL.put("name", "English as a Second Language");
         CONFIDENTIALITY_LEVEL_ESL.put("description", "");
         CONFIDENTIALITY_LEVEL_ESL.put("acronym", "ESL");
-        CONFIDENTIALITY_LEVEL_ESL.put("dataPermission", "DATA_ENGLISH_SECOND_LANGUAGE");
+        CONFIDENTIALITY_LEVEL_ESL.put("permission", "DATA_ENGLISH_SECOND_LANGUAGE");
 
         CONFIDENTIALITY_LEVEL_EVRY = new JSONObject();
         CONFIDENTIALITY_LEVEL_EVRY.put("id", "b3d077a7-4055-0510-7967-4a09f93a0357");
@@ -142,7 +142,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_EVRY.put("name", "Everyone");
         CONFIDENTIALITY_LEVEL_EVRY.put("description", "Not Confidential. Records may be viewed by all users.");
         CONFIDENTIALITY_LEVEL_EVRY.put("acronym", "EVERYONE");
-        CONFIDENTIALITY_LEVEL_EVRY.put("dataPermission", "DATA_EVERYONE");
+        CONFIDENTIALITY_LEVEL_EVRY.put("permission", "DATA_EVERYONE");
 
         CONFIDENTIALITY_LEVEL_FFC = new JSONObject();
         CONFIDENTIALITY_LEVEL_FFC.put("id", "b2d07964-5157-a51a-800a-a95d3bb3c505");
@@ -154,7 +154,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_FFC.put("name", "Fast Forward");
         CONFIDENTIALITY_LEVEL_FFC.put("description", "");
         CONFIDENTIALITY_LEVEL_FFC.put("acronym", "FFC");
-        CONFIDENTIALITY_LEVEL_FFC.put("dataPermission", "DATA_FAST_FORWARD");
+        CONFIDENTIALITY_LEVEL_FFC.put("permission", "DATA_FAST_FORWARD");
 
         CONFIDENTIALITY_LEVEL_MGR = new JSONObject();
         CONFIDENTIALITY_LEVEL_MGR.put("id", "b2d07906-5056-a51a-80fd-9d19f636e501");
@@ -166,7 +166,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_MGR.put("name", "Manager");
         CONFIDENTIALITY_LEVEL_MGR.put("description", "");
         CONFIDENTIALITY_LEVEL_MGR.put("acronym", "MGR");
-        CONFIDENTIALITY_LEVEL_MGR.put("dataPermission", "DATA_MANAGER");
+        CONFIDENTIALITY_LEVEL_MGR.put("permission", "DATA_MANAGER");
 
         CONFIDENTIALITY_LEVEL_STAFF = new JSONObject();
         CONFIDENTIALITY_LEVEL_STAFF.put("id", "b2d078b8-5056-a51a-8057-4a09f93a0347");
@@ -178,7 +178,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_STAFF.put("name", "Staff");
         CONFIDENTIALITY_LEVEL_STAFF.put("description", "");
         CONFIDENTIALITY_LEVEL_STAFF.put("acronym", "STAFF");
-        CONFIDENTIALITY_LEVEL_STAFF.put("dataPermission", "DATA_STAFF");
+        CONFIDENTIALITY_LEVEL_STAFF.put("permission", "DATA_STAFF");
 
         CONFIDENTIALITY_LEVEL_SuCo = new JSONObject();
         CONFIDENTIALITY_LEVEL_SuCo.put("id", "b2d07944-5056-a51a-8047-654512d4d083");
@@ -190,7 +190,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_SuCo.put("name", "Success Coach");
         CONFIDENTIALITY_LEVEL_SuCo.put("description", "");
         CONFIDENTIALITY_LEVEL_SuCo.put("acronym", "SuCo");
-        CONFIDENTIALITY_LEVEL_SuCo.put("dataPermission", "DATA_INDIVIDUALIZED_LEARNING_PLAN");
+        CONFIDENTIALITY_LEVEL_SuCo.put("permission", "DATA_INDIVIDUALIZED_LEARNING_PLAN");
 
         CONFIDENTIALITY_LEVEL_TST = new JSONObject();
         CONFIDENTIALITY_LEVEL_TST.put("id", "2eb131de-1e27-11e2-a5bc-406c8f22c3ce");
@@ -202,7 +202,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         CONFIDENTIALITY_LEVEL_TST.put("name", "Test");
         CONFIDENTIALITY_LEVEL_TST.put("description", null);
         CONFIDENTIALITY_LEVEL_TST.put("acronym", "TST");
-        CONFIDENTIALITY_LEVEL_TST.put("dataPermission", "DATA_TEST");
+        CONFIDENTIALITY_LEVEL_TST.put("permission", "DATA_TEST");
 
 
         CONFIDENTIALITY_LEVEL_ROWS = new JSONArray();
@@ -257,7 +257,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
     public void testPermissionProtectedMethodsConfidentialityLevelReference() {
         final JSONObject testPostPutNegative = (JSONObject) CONFIDENTIALITY_LEVEL_ARC.clone();
         testPostPutNegative.put("name", "testPostUnAuth");
-        testPostPutNegative.put("dataPermission", CONFIDENTIALITY_LEVEL_OPTIONS[00]);
+        testPostPutNegative.put("permission", CONFIDENTIALITY_LEVEL_OPTIONS[00]);
 
         referenceAuthenticationControlledMethodNegativeTest(CONFIDENTIALITY_LEVEL_PATH, testPostPutNegative);
 
@@ -364,7 +364,7 @@ public class ConfidentialityLevelIT extends AbstractReferenceTest {
         // to avoid disrupting a subsequent list operation on all unbound
         // data perms, which will typically assert on the first element in the
         // resulting list.
-        testPostPutPositive.put("dataPermission", CONFIDENTIALITY_LEVEL_OPTIONS[20]);
+        testPostPutPositive.put("permission", CONFIDENTIALITY_LEVEL_OPTIONS[20]);
 
         referencePositiveSupportedMethodTest(CONFIDENTIALITY_LEVEL_PATH, CONFIDENTIALITY_LEVEL_DSW.get("id").toString(),
                 testPostPutPositive);
