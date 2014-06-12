@@ -20,8 +20,10 @@ package org.jasig.ssp.transferobject.reports;
 
 import java.util.*;
 
+import com.google.common.collect.Sets;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.transferobject.JournalEntryDetailTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.TaskTO;
 
@@ -43,7 +45,19 @@ public class StudentHistoryTO {
 	}
 
 	public void addJournalEntryTO(JournalEntryTO journalEntryTO){
-		journalEntries.add(journalEntryTO);
+        if ( ObjectStatus.ACTIVE.equals(journalEntryTO.getObjectStatus()) ) {
+            HashSet<JournalEntryDetailTO> nonDeletedJournalEntryDetails = Sets.newHashSet();
+
+            for ( JournalEntryDetailTO singleJournalEntryDetail : journalEntryTO.getJournalEntryDetails() ) {
+                if ( ObjectStatus.ACTIVE.equals(singleJournalEntryDetail.getObjectStatus()) ) {
+                    nonDeletedJournalEntryDetails.add(singleJournalEntryDetail);
+                }
+            }
+
+            journalEntryTO.setJournalEntryDetails(nonDeletedJournalEntryDetails);
+
+            journalEntries.add(journalEntryTO);
+        }
 	}
 
 	public void addTask(String group, TaskTO task){		
