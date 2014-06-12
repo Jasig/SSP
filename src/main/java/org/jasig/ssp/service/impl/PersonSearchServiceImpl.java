@@ -53,7 +53,10 @@ import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.PersonSearchController;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +71,9 @@ import com.google.common.collect.Sets;
 @Transactional
 public class PersonSearchServiceImpl implements PersonSearchService {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonSearchServiceImpl.class);
+	
 	@Autowired
 	private transient PersonSearchDao dao;
 	
@@ -181,7 +187,18 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		}else
 			filteredResults = results;
 
-		return new PagingWrapper<PersonSearchResult2>(filteredResults.size(), filteredResults);
+		int size = filteredResults.size();
+		List<PersonSearchResult2> sortedAndPaged = new ArrayList<PersonSearchResult2>();
+		try {
+			sortedAndPaged = (List<PersonSearchResult2>)(List<?>)form.getSortAndPage().sortAndPageList((List<Object>)(List<?>)filteredResults);
+		} catch (NoSuchFieldException e) {
+			LOGGER.error("Field not Found", e);
+		} catch (SecurityException e) {
+			LOGGER.error("Field not allowed", e);
+		} catch (ClassNotFoundException e) {
+			LOGGER.error("Class not Found", e);
+		}
+		return new PagingWrapper<PersonSearchResult2>(size, sortedAndPaged);
 	}
 	
 

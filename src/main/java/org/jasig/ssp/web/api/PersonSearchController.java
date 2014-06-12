@@ -29,6 +29,7 @@ import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.factory.PersonSearchResultTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -146,12 +147,48 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false)  Boolean myPlans,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
-	 final HttpServletRequest request) throws ObjectNotFoundException, ParseException
+	 final @RequestParam(required = false) ObjectStatus status,
+	 final @RequestParam(required = false) Integer start,
+	 final @RequestParam(required = false) Integer limit,
+	 final @RequestParam(required = false) String sort,
+	 final @RequestParam(required = false) String sortDirection,
+	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
+		PersonSearchRequest form = personSearchRequestFactory.from(studentId,
+				null, 
+				null,
+				programStatus,
+				specialServiceGroup, 
+				coachId,
+				declaredMajor,
+				hoursEarnedMin,
+				hoursEarnedMax,
+				gpaEarnedMin,
+				gpaEarnedMax,
+				currentlyRegistered,
+				earlyAlertResponseLate,
+				sapStatusCode,
+				mapStatus,
+				planStatus,
+				myCaseload,
+				myPlans, birthDate);
 		
-		final PagingWrapper<PersonSearchResult2> models = service.search2(personSearchRequestFactory.from(studentId,null, null,programStatus,specialServiceGroup, coachId,declaredMajor,
-				hoursEarnedMin,hoursEarnedMax,gpaEarnedMin,gpaEarnedMax,currentlyRegistered,earlyAlertResponseLate,sapStatusCode,mapStatus,planStatus,myCaseload,myPlans, birthDate));
+		
+		String sortConfigured = sort == null ? "lastName":sort;
+		if(sortConfigured.equals("coach")){
+			sortConfigured = "coachFirstName";
+		}
+		SortingAndPaging sortAndPage = SortingAndPaging
+		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
+				sortDirection, null);
+		if(sortConfigured.equals("coachFirstName")){
+			sortAndPage.prependSortField("coachLastName", SortDirection.valueOf(sortDirection));
+		}
+		
+		form.setSortAndPage(sortAndPage);
+		final PagingWrapper<PersonSearchResult2> models = service.search2(form);
+		
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
