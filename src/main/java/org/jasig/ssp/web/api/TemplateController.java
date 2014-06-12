@@ -232,13 +232,12 @@ public class TemplateController  extends AbstractBaseController {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
-
 		assertTemplateWritePublicApiAuthorization(obj);
 
+
+
 		Template model = getFactory().from(obj);
-
 		model = getService().save(model);
-
 		if (null != model) {
 			final Template createdModel = getFactory().from(obj);
 			if (null != createdModel) {
@@ -378,10 +377,32 @@ public class TemplateController  extends AbstractBaseController {
 		}
 
 		assertTemplateWritePublicApiAuthorization(obj);
-		final Template model = getFactory().from(obj);
-		Template savedTemplate = getService().save(model);
-		if (null != model) {
-			return validatePlan(new TemplateTO(savedTemplate));
+
+		final Template oldTemplate = getService().get(id);
+		final Person oldOwner = oldTemplate.getOwner();
+		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
+		
+//		Three scenarios for template save
+//		1) User is template admin (has the ROLE_MAP_PUBLIC_TEMPLATE_WRITE perm): save in place
+//		2) User is not a template admin but saves a template in which he is already the owner: save in place
+//		3) User is not a template admin but saves a template in which he is NOT the owner: copy on save
+		if(currentUser.getPerson().getId().equals(oldOwner.getId()) || securityService.hasAuthority("ROLE_MAP_PUBLIC_TEMPLATE_WRITE") )
+		{
+			final Template model = getFactory().from(obj);
+			Template savedTemplate = getService().save(model);
+			if (null != model) {
+				return validatePlan(new TemplateTO(savedTemplate));
+			}
+		}
+		else
+		{
+			obj.setId(null);
+			Template model = getFactory().from(obj);
+			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
+
+			if (null != clonedTemplate) {
+				return validatePlan(new TemplateTO(clonedTemplate));
+			}
 		}
 		return null;
 	}
