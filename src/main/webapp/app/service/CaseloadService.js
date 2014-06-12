@@ -42,8 +42,25 @@ Ext.define('Ssp.service.CaseloadService', {
     getCaseload: function( programStatusId, store, callbacks ){
     	var me=this;
 	    
-		// clear the store
 		store.removeAll();
+		store.currentPage = 1;
+		var activeParams = {};
+		
+		if(store.extraParams){
+			for (key in store.extraParams) {
+				if(store.extraParams[key] && store.extraParams[key] != null){
+					activeParams[key] = store.extraParams[key];
+				}
+			}
+		}
+		
+		if(store.params){
+			for (key in store.params) {
+				if(store.params[key] && store.params[key] != null){
+					activeParams[key] = store.params[key];
+				}
+			}
+		}
 
 		// Set the Url for the Caseload Store
 		// including param definitions because the params need
@@ -52,7 +69,17 @@ Ext.define('Ssp.service.CaseloadService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous
 		// page
-		Ext.apply(store.getProxy(),{url: me.getBaseUrl()+'?programStatusId='+programStatusId+'&status=ACTIVE'});
+		var url;
+		if(programStatusId)
+		{
+			activeParams['programStatusId'] = programStatusId;
+		}
+		
+		activeParams['status'] = 'ACTIVE';
+		
+		var encodedUrl = Ext.urlEncode(activeParams);
+		
+		Ext.apply(store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
 
 	    store.load({
 		    callback: function(records, operation, success) {

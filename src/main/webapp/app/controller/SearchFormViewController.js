@@ -115,7 +115,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=planStatus]')[0].value,
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
 				me.getView().query('checkbox[name=myPlans]')[0].value,
-				me.getView().query('datefield[name=birthDate]')[0].value,
+				me.dateFieldValueFromName("birthDate"),
 				{
 				success: me.searchSuccess,
 				failure: me.searchFailure,
@@ -123,6 +123,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		});	
 		
 	}, 
+	
+	dateFieldValueFromName: function(name){
+		var me =  this;
+		var value = me.getView().query('datefield[name=' + name + ']')[0].value;
+		if(value > 0)
+			return me.formUtils.toJSONStringifiableDate(value).formattedStr;
+		return null;
+	},
 	clear: function() {
 		var me=this;
 		me.getView().getForm().reset();

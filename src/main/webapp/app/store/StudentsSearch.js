@@ -26,12 +26,25 @@ Ext.define('Ssp.store.StudentsSearch', {
     config: {
         baseUrlName: 'studentSearch'
     },
+	remoteSort: true,
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
 							proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl(me.getBaseUrlName())),
 							autoLoad: false,
-							autoSync: false
+							autoSync: false,
+							pageSize: 40,
+						    params : {
+								page : 0,
+								start : 0,
+								limit : 40
+							}
 						});
 		return me.callParent(arguments);
-}});
+	},
+	onBeforeSort: function() {
+		this.callParent(arguments);
+		this.currentPage = 1;
+	}
+	
+});

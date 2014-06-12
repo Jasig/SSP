@@ -18,11 +18,18 @@
  */
 package org.jasig.ssp.util.sort;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -268,6 +275,19 @@ public final class SortingAndPaging { // NOPMD
 			criteria.add(Restrictions.eq("objectStatus", status));
 		}
 	}
+	
+	public StringBuilder addStatusFilterToQuery(final StringBuilder query, String objectName, Boolean initialRestriction) {
+		if (isFilteredByStatus()) {
+			if(initialRestriction == null){
+				query.append(" where ");
+			}else{
+				query.append(" and ");
+			}
+			query.append(objectName);
+			query.append(".objectStatus = :objectStatus");
+		}
+		return query;
+	}
 
 	/**
 	 * Add the current paging filter to the specified criteria.
@@ -280,6 +300,35 @@ public final class SortingAndPaging { // NOPMD
 			criteria.setFirstResult(firstResult);
 			criteria.setMaxResults(maxResults);
 		}
+	}
+	
+	/**
+	 * Add the current paging filter to the specified criteria.
+	 * 
+	 * @param criteria
+	 *            Paging filter will be added to this criteria
+	 */
+	public void addPagingToQuery(final Query query) {
+		if (isPaged()) {
+			query.setFirstResult(firstResult);
+			query.setMaxResults(maxResults);
+		}
+	}
+	
+	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Session session, final StringBuilder hql,
+			final boolean filterByStatus,String objectToAddStatusFilter, Boolean whereStarted, Map<String,Object> bindParams) {
+
+		if (filterByStatus && StringUtils.isNotBlank(objectToAddStatusFilter)) {
+			addStatusFilterToQuery(hql, objectToAddStatusFilter, whereStarted);
+		}
+		
+		addSortingToQuery(hql);
+		
+		Query query = session.createQuery(hql.toString());
+		query.setProperties(bindParams);
+		final Long totalRows = new Integer(query.list().size()).longValue();
+		addPagingToQuery(query);
+		return new Pair<Long,Query>(totalRows,query);
 	}
 
 	public Long applySortingAndPagingToPagedQuery(final Criteria query,
@@ -325,6 +374,64 @@ public final class SortingAndPaging { // NOPMD
 					defaultSortDirection);
 		}
 	}
+	
+	/**
+	 * Add the current sorting filter to the specified criteria.
+	 * 
+	 * @param criteria
+	 *            Paging filter will be added to this criteria
+	 */
+	public StringBuilder addSortingToQuery(final StringBuilder query) {
+		if (isSorted()) {
+			query.append(" Order By ");
+			String seperator = "";
+			for (final Pair<String, SortDirection> entry : sortFields) {
+				query.append(seperator);
+				addSortToQuery(query, entry.getFirst(), entry.getSecond());
+				seperator = ", ";
+			}
+		} else if (isDefaultSorted()) {
+			query.append(" Order By ");
+			addSortToQuery(query, defaultSortProperty,
+					defaultSortDirection);
+		}
+		return query;
+	}
+	
+	public List<Object> sortAndPageList(List<Object> list) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+		final List<Object> sortedList = sortList(list);
+		return pageList(sortedList);
+	}
+	
+	private List<Object> pageList(final List<Object> list){
+		if(isPaged()){
+			List<Object> uniques;
+			Integer start = getFirstResult();
+	    	Integer max =getMaxResults();
+	    	if(start >= list.size())
+	    	{
+	    		uniques = new ArrayList<Object>();
+	    	}else{
+	    		max = start + max > list.size() || max < 0 ? list.size():start + max;
+	    		uniques = list.subList(start, max);
+	    	}
+	    	return uniques;
+		}
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Object> sortList(List<Object> results) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+		if(results == null || results.isEmpty())
+			return results;
+		
+		if(isSorted()){
+			Collections.sort(results, new GenericComparator<Object>(results.get(0).getClass(), getSortFields()));
+		}else if(isDefaultSorted()){
+			Collections.sort(results, new GenericComparator<Object>(results.get(0).getClass(), Arrays.asList(new Pair<String, SortDirection>(getDefaultSortProperty(), SortDirection.ASC))));
+		}
+		return results;
+	}
 
 	/**
 	 * Add all the current filters to the specified criteria
@@ -345,6 +452,85 @@ public final class SortingAndPaging { // NOPMD
 		} else {
 			criteria.addOrder(Order.desc(sort));
 		}
+	}
+	
+	private void addSortToQuery(final StringBuilder query,
+			final String sort, final SortDirection sortDirection) {
+		if (sortDirection.equals(SortDirection.ASC)) {
+			query.append(sort);
+			query.append(" asc ");
+		} else {
+			query.append(sort);
+			query.append(" desc ");
+		}
+	}
+	
+
+	
+	public static class GenericComparator<T> implements Comparator<T> {
+		
+		private List<Pair<Field,SortDirection>> sorters = new ArrayList<Pair<Field,SortDirection>>();
+		
+		 public GenericComparator(Class listObjClass, List<Pair<String, SortDirection>> sorters) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+			 setSorters(Class.forName(listObjClass.getName()), sorters);
+		 }
+		 
+		 private void setSorters(Class cls, List<Pair<String, SortDirection>> sorters)
+		 {
+			 for(Pair<String, SortDirection> sorter:sorters){
+				 Field field = getField( cls,  sorter.getFirst());
+				 if(field != null)
+					 this.sorters.add(new Pair<Field, SortDirection>(field, sorter.getSecond()));
+			 }
+		 }
+		 
+		private Field getField(Class cls, String propertyName){
+			 Field field = null;
+			 while(field == null && cls != null){
+				 try{
+					 field = cls.getDeclaredField(propertyName);
+				 }catch(Exception exp){
+					 
+				 }
+				 if(field == null){
+					 cls = cls.getSuperclass();
+				 }else{
+					 field.setAccessible(true);
+					 return field;
+				 }
+			 }
+			 return null;
+		 }
+
+		@Override
+		public int compare(T o1, T o2) {
+			int compared = 0;
+			for(Pair<Field, SortDirection> sorter:sorters){
+				Comparable<Object> prop1 = getComparableProperty(o1, sorter.getFirst());
+				Comparable<Object> prop2 = getComparableProperty(o2,  sorter.getFirst());
+			
+				if(sorter.getSecond().equals(SortDirection.ASC)){
+					compared = prop1.compareTo(prop2);
+				} else {
+					compared = prop2.compareTo(prop1);
+				}
+				if(compared != 0)
+					return compared;
+			}
+			return compared;
+		}
+		
+		private Comparable<Object> getComparableProperty(T obj, Field field){
+			try {
+				 return (Comparable)field.get(obj);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		
 	}
 
 	/**

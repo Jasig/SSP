@@ -52,7 +52,10 @@ import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.PersonController;
 import org.jasig.ssp.web.api.validation.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,6 +90,10 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	
 	@Autowired
 	private transient PersonService personService;
+	
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(PersonSearchServiceImpl.class);
+
 
 	@Override
 	public PagingWrapper<PersonSearchResult> searchBy(
@@ -114,6 +121,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest form) {
 		
@@ -177,7 +185,14 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		}else
 			filteredResults = results;
 
-		return new PagingWrapper<PersonSearchResult2>(filteredResults.size(), filteredResults);
+		int size = filteredResults.size();
+		List<PersonSearchResult2> sortedAndPaged = new ArrayList<PersonSearchResult2>();
+		try{
+			sortedAndPaged = (List<PersonSearchResult2>)(List<?>)form.getSortAndPage().sortAndPageList((List<Object>)(List<?>)filteredResults);
+		}catch(Exception exp){
+			LOGGER.error("Unable to cast Person Search", exp);
+		}
+		return new PagingWrapper<PersonSearchResult2>(size, sortedAndPaged);
 	}
 	
 
@@ -197,12 +212,12 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			programStatusOrDefault = programStatus;
 		}
 		
-		PersonSearchRequest from = new PersonSearchRequest();
-		from.setCoach(coach);
-		from.setProgramStatus(programStatusOrDefault);
-
+		PersonSearchRequest form = new PersonSearchRequest();
+		form.setCoach(coach);
+		form.setProgramStatus(programStatusOrDefault);
+		form.setSortAndPage(sAndP);
 		
-		return search2(from);
+		return search2(form);
 	}
 
 	@Override

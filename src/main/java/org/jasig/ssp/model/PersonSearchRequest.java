@@ -24,6 +24,7 @@ import java.util.Date;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.PersonSearchController;
 
 /**
@@ -85,6 +86,8 @@ public class PersonSearchRequest {
 	private Boolean myPlans;
 
 	private Date birthDate;
+	
+	private SortingAndPaging sortAndPage;
 
 	public PersonSearchRequest() {
 		super();
@@ -258,6 +261,16 @@ public class PersonSearchRequest {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+
+
+	public SortingAndPaging getSortAndPage() {
+		return sortAndPage;
+	}
+
+
+	public void setSortAndPage(SortingAndPaging sortAndPage) {
+		this.sortAndPage = sortAndPage;
 	}
 
 

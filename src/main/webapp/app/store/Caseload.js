@@ -18,25 +18,30 @@
  */
 Ext.define('Ssp.store.Caseload', {
     // extend: 'Ext.data.Store',
-    extend: 'Ssp.store.reference.AbstractReferences',
+    extend: 'Ext.data.Store',
     model: 'Ssp.model.SearchPerson',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'
     },
+	remoteSort: true,
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCaseload')),
 						autoLoad: false,
 						autoSync: false,
-					    pageSize: me.apiProperties.getPagingSize(),
+					    pageSize: 40,
 					    params : {
 							page : 0,
 							start : 0,
-							limit : me.apiProperties.getPagingSize()
+							limit : 40
 						}
 					});
 		return me.callParent(arguments);
+	},
+	onBeforeSort: function() {
+			this.callParent(arguments);
+			this.currentPage = 1;
 	}
 });

@@ -36,6 +36,7 @@ Ext.define('Ssp.service.SearchService', {
 		var me=this;
 
 		me.store.removeAll();
+		me.store.currentPage = 1;
 
 		// Set params in the url for Search Store
 		// because the params need to be applied prior to load and not in a params
@@ -43,26 +44,31 @@ Ext.define('Ssp.service.SearchService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous page
 		var activeParams = {};
-	    var birthDate = "";
-		for (key in params) {
-			if(key != "birthDate" ){
-		    	if(params[key] && params[key] != null){
-					activeParams[key] = params[key] 
-				}
-			}else{
-				if(params[key] && params[key] != null){
-					birthDate = "birthDate=" + params[key] + "&";
+		
+		if(me.store.extraParams){
+			for (key in me.store.extraParams) {
+				if(me.store.extraParams[key] && me.store.extraParams[key] != null){
+					activeParams[key] = me.store.extraParams[key];
 				}
 			}
 		}
 		
-		if ( !("sort" in activeParams) ) {
-			activeParams["sort"] = "lastName";
+		if(me.store.params){
+			for (key in me.store.params) {
+				if(me.store.params[key] && me.store.params[key] != null){
+					activeParams[key] = me.store.params[key];
+				}
+			}
 		}
-		
+	    var birthDate = "";
+		for (key in params) {
+		    if(params[key] && params[key] != null){
+				activeParams[key] = params[key] 
+			}
+		}
 		var encodedUrl = Ext.urlEncode(activeParams);
 
-		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?'+ birthDate +encodedUrl});
+		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
 
 		me.store.load({
 			params: {
