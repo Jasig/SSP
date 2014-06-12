@@ -162,9 +162,13 @@ public final class EarlyAlertPortletController {
 					sectionCode,  
 					formattedCourse));
 
-
 			if ( course == null ) {
-				throw new IllegalStateException(buildErrorMesssage("Course not found or current user is not listed as the instructor of record:", user.getSchoolId(), null, formattedCourse, termCode, sectionCode));
+				throw new IllegalStateException(buildErrorMesssage("Course not found or current user is not listed as the instructor of record:",
+						user.getSchoolId(),
+						null,
+						formattedCourse,
+						termCode,
+						sectionCode));
 			}
 
 			/*
@@ -172,34 +176,43 @@ public final class EarlyAlertPortletController {
 			 * UUID) at this point in the Early Alert process.  Previous APIs 
 			 * user the former where following APIs use the later.
 			 */
-			if(StringUtils.isNotBlank(schoolId))
+			if(StringUtils.isNotBlank(schoolId)) {
 				student = personService.getBySchoolId(schoolId, true);  // TODO:  Handle error better??
-			else
+				if ( student == null ) {
+					throw new IllegalStateException("Student not found by school ID: " + schoolId);
+				}
+			} else {
 				student = personService.getByUsername(studentUserName, true);
-
-			if ( student == null ) {
-				throw new IllegalStateException("Student not found: " + schoolId);
+				if ( student == null ) {
+					throw new IllegalStateException("Student not found by username: " + studentUserName);
+				}
 			}
-			
+
+			// Should never happen, but if it is blank, getEnrollment() will effectively give you a random enrollment,
+			// which is bad news. Of course.
+			if ( StringUtils.isBlank(student.getSchoolId()) ) {
+				throw new IllegalStateException("Selected student has no school ID");
+			}
+
 			enrollment = facultyCourseService.getEnrollment(new SearchStudentCourseTO(user.getSchoolId(),
 					termCode,
 					sectionCode,
-					formattedCourse,  
-					schoolId));
+					formattedCourse,
+					student.getSchoolId()));
 
 			if ( enrollment == null ) {
 				throw new IllegalStateException(buildErrorMesssage("Enrollment not found for: ", 
-						user.getSchoolId(), 
-						schoolId, 
+						user.getSchoolId(),
+						student.getSchoolId(),
 						formattedCourse, 
 						termCode,
-                        sectionCode));
+						sectionCode));
 			}
 
 		} catch (Exception e) {
 			throw new RuntimeException(buildErrorMesssage("System error looking up course or enrollment for: ",
-					user.getSchoolId(), 
-					schoolId, 
+					user.getSchoolId(),
+					student.getSchoolId(),
 					formattedCourse, 
 					termCode,
 					sectionCode), e);
