@@ -36,7 +36,7 @@ Ext.define('Ssp.store.MAPStatus', {
         var values = [{ displayValue:'On Plan', code: 'ON_PLAN', booleanValue: true },
                       { displayValue:'Off Plan', code: 'OFF_PLAN', booleanValue: false },
                       { displayValue:'On Track Sequence', code: 'ON_TRACK_SEQUENCE', booleanValue: true },
-                      { displayValue:'On Track Substitution', code: 'ON_TRACK_SUBSTITUTIO', booleanValue: false }                      
+                      { displayValue:'On Track Substitution', code: 'ON_TRACK_SUBSTITUTION', booleanValue: false }                      
         ];
         if(termBound.trim().toLowerCase() === 'true')
         {
