@@ -703,7 +703,7 @@
             <column name="modified_date" valueDate="2014-06-08T12:00:00" />
             <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
             <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
-            <column name="object_status" value="1" />
+            <column name="object_status" value="2" />
             <column name="sort_order" value="10000" />
         </insert>
         <rollback>
