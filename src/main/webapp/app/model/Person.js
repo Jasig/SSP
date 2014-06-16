@@ -258,7 +258,10 @@ Ext.define('Ssp.model.Person', {
 		{
 			jsonData.referralSources=null;
 		}
-
+		if( jsonData.objectStatus == "" )
+		{
+			jsonData.objectStatus=null;
+		}
 		return jsonData;
     },
     

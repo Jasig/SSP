@@ -61,6 +61,10 @@ Ext.define('Ssp.model.tool.accommodation.PersonDisability', {
  		{
  			jsonData.referredBy = null;
  		}
+ 		if ( jsonData.objectStatus == "")
+ 		{
+ 			jsonData.objectStatus = null;
+ 		} 		
  		return jsonData;
      }
 });

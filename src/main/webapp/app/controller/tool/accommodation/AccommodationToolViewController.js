@@ -444,7 +444,7 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 		me.getView().setLoading( false );
 		
 		if( r.success ) {
-			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
+			Ext.Msg.alert('Your changes have been saved.'); 
 			if ( newSaveFlag ) {
 				me.onCancelClick(); //rebuild view for new save to show date
 			}				
