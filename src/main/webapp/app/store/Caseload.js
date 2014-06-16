@@ -18,7 +18,7 @@
  */
 Ext.define('Ssp.store.Caseload', {
     // extend: 'Ext.data.Store',
-    extend: 'Ssp.store.reference.AbstractReferences',
+    extend: 'Ext.data.Store',
     model: 'Ssp.model.SearchPerson',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
@@ -31,11 +31,11 @@ Ext.define('Ssp.store.Caseload', {
 						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCaseload')),
 						autoLoad: false,
 						autoSync: false,
-					    pageSize: 30,
+					    pageSize: 100,
 					    params : {
 							page : 0,
 							start : 0,
-							limit : 30
+							limit : 100
 						}
 					});
 		return me.callParent(arguments);

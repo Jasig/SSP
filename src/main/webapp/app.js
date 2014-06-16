@@ -1099,7 +1099,11 @@ Ext.onReady(function(){
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.Caseload', {
 							     storeId: 'caseloadStoreMain',		
-							     extraParams: {limit: "30"}
+							     params : {
+										page : 0,
+										start : 0,
+										limit : 100
+									}	
 							 });
 				    	},
 				    	singleton: true

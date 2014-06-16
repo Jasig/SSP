@@ -38,18 +38,42 @@ Ext.define('Ssp.service.CaseloadService', {
 		baseUrl = baseUrl.replace('{id}',id);
     	return baseUrl;
     },    
+    getProgramAndStatusAgnosticCaseload: function( store, callbacks ){
+    	var me=this;
+	    
+		// clear the store
+		store.removeAll();
 
+		Ext.apply(store.getProxy(),{url: me.getBaseUrl()});
+
+	    store.load({
+		    callback: function(records, operation, success) {
+		        if (success)
+		        {
+			    	if (callbacks != null)
+			    	{
+			    		callbacks.success( records, callbacks.scope );
+			    	}		        	
+		        }else{
+			    	if (callbacks != null)
+			    	{
+			    		callbacks.failure( records, callbacks.scope );
+			    	}
+		        }
+		    },
+		    scope: me
+		});
+    },
     getCaseload: function( programStatusId, store, callbacks ){
     	var me=this;
 	    
 		store.removeAll();
 		store.currentPage = 1;
 		var activeParams = {};
-		
-		if(store.extraParams){
-			for (key in store.extraParams) {
-				if(store.extraParams[key] && store.extraParams[key] != null){
-					activeParams[key] = store.extraParams[key];
+		if(store.params){
+			for (key in store.params) {
+				if(store.params[key] && store.params[key] != null){
+					activeParams[key] = store.params[key];
 				}
 			}
 		}
@@ -61,7 +85,15 @@ Ext.define('Ssp.service.CaseloadService', {
 				}
 			}
 		}
-
+		
+		if(store.extraParams){
+			for (key in store.extraParams) {
+				if(store.extraParams[key] && store.extraParams[key] != null){
+					activeParams[key] = store.extraParams[key];
+				}
+			}
+		}
+		
 		// Set the Url for the Caseload Store
 		// including param definitions because the params need
 		// to be applied prior to load and not in a params 
