@@ -131,6 +131,7 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 			query.append(" and ec.code = ecp.courseCode ");
 			query.append(" and ecp.programCode = :programCode  ");
 		}
+		query.append(" order by et.startDate ");
 		return query.toString();	
 	}
 
