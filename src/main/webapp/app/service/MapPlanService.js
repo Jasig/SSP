@@ -218,9 +218,8 @@ Ext.define('Ssp.service.MapPlanService', {
 
 		// save
 		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == true)
-		{	ownerId
+		{	
 			me.currentMapPlan.set('id','');
-
 			me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
