@@ -34,16 +34,24 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
     autoScroll: true,
     layout: 'fit',
     margin: '110 0 0 0',
-    fullReferralDescription: function(){
+    truncateDesc: function(){
         var me = this;
         
         return function(value, metaData, record){
             var fullDesc = record.get('description');
+            if(fullDesc && fullDesc.length > 150)
+            {
+            	truncDesc = fullDesc.substring(0, 149) + "...";
+            }
+            else 
+            {
+            	truncDesc = fullDesc;
+            }
             metaData.tdAttr = 'data-qtip="' + fullDesc + '"';
             var tpl = new Ext.Template('<div class="wrappable-cell">{NAME}</div>');
             
             return tpl.apply({
-                NAME: record.get('description')
+                NAME: truncDesc
             });
            
         }
@@ -87,7 +95,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 flex: 1,
                 dataIndex: 'description',
                 rowEditable: false,
-                renderer: me.fullReferralDescription()
+                renderer: me.truncateDesc()
             }, {
                 header: 'Link',
                 flex: .45,
