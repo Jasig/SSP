@@ -106,6 +106,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
+            
             me.personRegistrationStatusByTermStore.load(id);
             var serviceResponses = {
                 failures: {},
@@ -198,6 +199,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
+        
+        me.personRegistrationStatusByTermStore.load(me.person.get('id'));
 		
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
