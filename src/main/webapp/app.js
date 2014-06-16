@@ -1818,6 +1818,14 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},
+				    specialServiceGroupsActiveUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', {
+							     extraParams: {status: "ACTIVE", limit: "-1"}
+							 });
+					    },
+					    singleton: true
+					},					
 				    statesStore: 'Ssp.store.reference.States',
 				    studentDocumentsStore: 'Ssp.store.StudentDocuments',
 				    studentsStore: 'Ssp.store.Students',

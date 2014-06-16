@@ -35,7 +35,7 @@ Ext.define('Ssp.view.SearchForm',{
         earlyAlertResponseLateStore: 'earlyAlertResponseLateStore',
         programsStore: 'programsStore',
         configStore: 'configurationOptionsUnpagedStore',
-        specialServiceGroupsAllUnpagedStore: 'specialServiceGroupsAllUnpagedStore',
+        specialServiceGroupsActiveUnpagedStore: 'specialServiceGroupsActiveUnpagedStore',
         textStore:'sspTextStore'
     },
     collapsible: true,
@@ -264,7 +264,7 @@ Ext.define('Ssp.view.SearchForm',{
 			   		    xtype: 'combobox',
 	                    fieldLabel: 'Special Service Group',
 	                    emptyText: 'Select Special Service Group',
-			   		    store: me.specialServiceGroupsAllUnpagedStore,
+			   		    store: me.specialServiceGroupsActiveUnpagedStore,
 	   		   		    valueField: 'id',
 			   		    displayField: 'name',
 			            width:100,
