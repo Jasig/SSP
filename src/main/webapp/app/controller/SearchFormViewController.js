@@ -74,13 +74,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	init: function() {
 		var me=this;    	
 
-	   	// ensure the selected person is not loaded twice
-		// once on load and once on selection
-	   	//me.personLite.set('id','');
 		me.coachesStore.clearFilter(true);
-		if(me.personLite.get('id'))
-			me.getView().collapse();
-		
+
 		return me.callParent(arguments);
     },
 
