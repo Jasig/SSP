@@ -446,6 +446,9 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@Nullable
 	private Integer earlyAlertResponseCurrentCount;
 	
+	@Nullable
+	private ObjectStatus objectStatus;
+	
 
 	/**
 	 * Initialize a Person.
@@ -992,6 +995,14 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	 */
 	public void setF1Status(String f1Status) {
 		this.f1Status = f1Status;
+	}
+
+	public ObjectStatus getObjectStatus() {
+		return objectStatus;
+	}
+
+	public void setObjectStatus(ObjectStatus objectStatus) {
+		this.objectStatus = objectStatus;
 	}
 
 

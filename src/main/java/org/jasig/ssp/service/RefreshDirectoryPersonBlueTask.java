@@ -16,32 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model;
+package org.jasig.ssp.service;
 
-import java.util.UUID;
+import org.jasig.ssp.service.external.BatchedTask;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Immutable;
-
-@Entity
-@Immutable
-@Table(name = "v_directory_person")
-public class ViewDirectoryPerson extends DirectoryPerson {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1723311730958118497L;
-
-	public ViewDirectoryPerson() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public ViewDirectoryPerson(UUID id) {
-		super(id);
-		// TODO Auto-generated constructor stub
-	}
+public interface RefreshDirectoryPersonBlueTask extends BatchedTask<Void> {
 
 }

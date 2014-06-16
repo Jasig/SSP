@@ -75,6 +75,9 @@ public interface PersonSearchService {
 	PagingWrapper<PersonSearchResult2> searchPersonDirectory(PersonSearchRequest from);
 	
 	void refreshDirectoryPerson();
+	
+	void refreshDirectoryPersonBlue();
+	
 
 	/**
 	 * Gets the case load for the specified {@link CoachPersonLiteTO} (advisor)

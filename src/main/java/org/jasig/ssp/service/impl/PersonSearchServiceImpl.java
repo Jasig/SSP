@@ -334,5 +334,11 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	public void refreshDirectoryPerson(){
 		directoryPersonDao.refreshDirectoryPerson();
 	}
+	
+	@Override
+	public void refreshDirectoryPersonBlue(){
+		directoryPersonDao.refreshDirectoryPersonBlue();
+	}
+
 
 }

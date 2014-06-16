@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api;
 
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.ObjectStatus;
@@ -34,6 +35,7 @@ import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -91,11 +93,10 @@ public class CaseloadController extends AbstractBaseController {
 		if (null != programStatusId) {
 			programStatus = programStatusService.get(programStatusId);
 		}
-
+		
 		final PagingWrapper<PersonSearchResult2> caseload = service.caseLoadFor(
 				programStatus, securityService.currentUser().getPerson(),
-				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
-						sort, sortDirection, "lastName"));
+				 buildSortAndPage( limit,  start,  sort,  sortDirection));
 
 		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
@@ -117,14 +118,34 @@ public class CaseloadController extends AbstractBaseController {
 		if (null != programStatusId) {
 			programStatus = programStatusService.get(programStatusId);
 		}
+		
 
 		final PagingWrapper<PersonSearchResult2> caseload = service.caseLoadFor(
 				programStatus, personService.get(personId),
-				SortingAndPaging.createForSingleSortWithPaging(status, start, limit,
-						sort, sortDirection, "lastName"));
+				 buildSortAndPage( limit,  start,  sort,  sortDirection));
 
 		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
+	}
+	
+	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
+		String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
+		if(sortConfigured.equals("dp.coach")){
+			sortConfigured = "dp.coachLastName";
+		}else if(sortConfigured.equals("dp.currentProgramStatusName")){
+			sortConfigured = "dp.programStatusName";
+		}else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
+			sortConfigured = "dp.activeAlertsCount";
+		}else if(sortConfigured.equals("dp.studentType")){
+			sortConfigured = "dp.studentTypeName";
+		}
+		SortingAndPaging sortAndPage = SortingAndPaging
+		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
+				sortDirection, "dp.lastName");
+		if(sortConfigured.equals("dp.coachLastName")){
+			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
+		}
+		return sortAndPage;
 	}
 	
 	@RequestMapping(value = "/caseload", method = RequestMethod.POST)

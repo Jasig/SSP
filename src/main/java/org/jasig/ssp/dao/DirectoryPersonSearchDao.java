@@ -19,6 +19,7 @@
 package org.jasig.ssp.dao;
 
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,6 +101,22 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 	
+	public void refreshDirectoryPersonBlue(){
+		
+		if(isPostgresSession()){
+			try{
+				Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON_BLUE();");
+				query.list();
+			}catch(Exception exp){
+				Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
+				query.list();
+			}
+		}else{
+			Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
+			query.list();
+		}
+	}
+	
 	private Boolean isPostgresSession(){
 		try{
 			Properties properties = System.getProperties();
@@ -158,7 +175,8 @@ public class DirectoryPersonSearchDao  {
 		}
 		StringBuilder stringBuilder = buildSelect();
 		
-		buildFrom(personSearchRequest,stringBuilder);
+		if(!buildFrom(personSearchRequest,stringBuilder))
+			return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
 		
 		buildJoins(personSearchRequest,stringBuilder);
 		
@@ -206,6 +224,7 @@ public class DirectoryPersonSearchDao  {
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
 		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
 		// + lastName
+		buildPersonObjectStatus(personSearchRequest, filterTracker, stringBuilder);
 		buildSchoolId(personSearchRequest, filterTracker, stringBuilder);
 		buildFirstName(personSearchRequest, filterTracker, stringBuilder);
 		buildLastName(personSearchRequest, filterTracker, stringBuilder);
@@ -251,13 +270,26 @@ public class DirectoryPersonSearchDao  {
 		buildEarlyAlertCriteria(personSearchRequest,filterTracker, stringBuilder);
 		
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
-		
-		//appendAndOrWhere(stringBuilder, filterTracker);
-		//stringBuilder.append(" dp.studentType is not null ");
-		//stringBuilder.append(" and dp.objectStatus = :activeObjectStatus ");
-		//stringBuilder.append(" and dp.programStatus IS NOT NULL");
 	}
-
+	
+	private void buildPersonObjectStatus(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(requiresObjectStatus(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" dp.objectStatus = :personObjectStatus ");
+		}
+	}
+	
+	
+	private Boolean sspPersonOnly(PersonSearchRequest personSearchRequest){
+		return personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
+	}
+	private Boolean requiresObjectStatus(PersonSearchRequest personSearchRequest){
+		if(personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY))
+			return false;
+		return true;
+	}
 
 	private void buildBirthDate(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
@@ -488,7 +520,11 @@ public class DirectoryPersonSearchDao  {
 		if(hasBirthDate(personSearchRequest))
 		{
 			params.put("birthDate", personSearchRequest.getBirthDate());
-		}		
+		}
+		
+		if(requiresObjectStatus(personSearchRequest)){
+			params.put("personObjectStatus", ObjectStatus.ACTIVE);
+		}
 		
 		return params;
 	}
@@ -691,16 +727,17 @@ public class DirectoryPersonSearchDao  {
 				|| hasMyPlans(personSearchRequest) || hasMapStatus(personSearchRequest);
 	}
 
-	private void buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
+	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
 	{
 		ScheduledApplicationTaskStatus status = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_TASK_NAME);
+		ScheduledApplicationTaskStatus status_blue = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME);
 		
-		boolean mv_activated = Boolean.parseBoolean(configService.getByNameEmpty(ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW).trim());
-		if(!mv_activated || status == null || status.getStatus() == null || status.getStatus().equals(ScheduledTaskStatus.RUNNING)){
-			stringBuilder.append(" from ViewDirectoryPerson dp ");
-		}else{
+		if(status != null && status.getStatus() != null && status.getStatus().equals(ScheduledTaskStatus.COMPLETED)){
 			stringBuilder.append(" from MaterializedDirectoryPerson dp ");
-		}
+		}else if(status_blue != null && status_blue.getStatus() != null && status_blue.getStatus().equals(ScheduledTaskStatus.COMPLETED)){
+			stringBuilder.append(" from MaterializedDirectoryPersonBlue dp ");
+		}else
+			return false;
 		
 		if(personRequired(personSearchRequest)){
 			stringBuilder.append(", Person p");
@@ -716,6 +753,7 @@ public class DirectoryPersonSearchDao  {
 		{
 			stringBuilder.append(", MapStatusReport msr ");
 		}
+		return true;
 	}
 
 	private boolean hasGpaCriteria(PersonSearchRequest personSearchRequest) 

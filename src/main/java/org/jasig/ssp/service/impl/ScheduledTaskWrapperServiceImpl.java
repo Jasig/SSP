@@ -37,6 +37,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.RefreshDirectoryPersonBlueTask;
 import org.jasig.ssp.service.RefreshDirectoryPersonTask;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.ScheduledTaskWrapperService;
@@ -50,6 +51,9 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -88,6 +92,7 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SYNC_COACHES_TASK_NAME = "sync-coaches";
 	public static final String SYNC_EXTERNAL_PERSONS_TASK_NAME = "sync-external-persons";
 	public static final String REFRESH_DIRECTORY_PERSON_TASK_NAME = "directory-person-refresh";
+	public static final String REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME = "directory-person-refresh-blue";
 	public static final String CALC_MAP_STATUS_REPORTS_TASK_NAME = "calc-map-status-reports";
 	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
@@ -108,6 +113,9 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String DIRECTORY_PERSON_REFRESH_TASK_ID = "task_directory_person_refresh";
 	private static final String DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME = "task_directory_person_refresh_trigger";
 	private static final String DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER = NEVER;
+	
+	private static final String STARTUP_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME = "task_directory_person_refresh_start_up_trigger";
+	
 
 	private static final String SCHEDULER_CONFIG_POLL_TASK_ID = "task_scheduler_config_poll";
 	private static final String SCHEDULER_CONFIG_POLL_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_config_poll_trigger";
@@ -121,7 +129,8 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_early_alert_trigger";
 	private static final String EARLY_ALERT_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
 	private static final String DISABLED_TRIGGER_CONFIG_VALUE = "DISABLED";
-
+	private static final String RUN_ONCE_TRIGGER_CONFIG_VALUE = "RUN_ONCE_ON_STARTUP";
+	
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
@@ -130,6 +139,9 @@ public class ScheduledTaskWrapperServiceImpl
 	
 	@Autowired
 	private transient RefreshDirectoryPersonTask directoryPersonRefreshTask;
+	
+	@Autowired
+	private transient RefreshDirectoryPersonBlueTask directoryPersonRefreshBlueTask;
 	
 	@Autowired
 	private transient MapStatusReportCalcTask mapStatusReportCalcTask;
@@ -188,6 +200,7 @@ public class ScheduledTaskWrapperServiceImpl
 					@Override
 					public void run() {
 						syncExternalPersons();
+						refreshDirectoryPersonBlue();
 						refreshDirectoryPerson();
 					}
 				},
@@ -198,11 +211,25 @@ public class ScheduledTaskWrapperServiceImpl
 				new Runnable() {
 					@Override
 					public void run() {
+						refreshDirectoryPersonBlue();
 						refreshDirectoryPerson();
 					}
 				},
 				DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
 				DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
+		
+		//Schedule task to be run once on startup
+		this.tasks.put(DIRECTORY_PERSON_REFRESH_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_TASK_ID,
+				new Runnable() {
+					@Override
+					public void run() {
+						refreshDirectoryPersonBlue();
+						refreshDirectoryPerson();
+					}
+				},
+				DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
+				STARTUP_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
+		
 
 		this.tasks.put(MAP_STATUS_REPORT_CALC_TASK_ID, new Task(MAP_STATUS_REPORT_CALC_TASK_ID,
 				new Runnable() {
@@ -407,6 +434,9 @@ public class ScheduledTaskWrapperServiceImpl
 		}
 		if(configValue.toUpperCase().equals(DISABLED_TRIGGER_CONFIG_VALUE))
 		   return  new Pair<String,Trigger>(configValue, new DisabledTrigger());
+		
+		if(configValue.toUpperCase().equals(RUN_ONCE_TRIGGER_CONFIG_VALUE))
+			   return  new Pair<String,Trigger>(configValue, new OnStartUpTrigger());
 		
 		return new Pair<String,Trigger>(configValue, parseTriggerConfig(configValue));
 	}
@@ -845,9 +875,16 @@ public class ScheduledTaskWrapperServiceImpl
 		execBatchedTaskWithName(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask);
 	}
 	
+	
+	
 	@Override 
 	public void refreshDirectoryPerson(){
 		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_TASK_NAME, directoryPersonRefreshTask);
+	}
+	
+	@Override 
+	public void refreshDirectoryPersonBlue(){
+		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME, directoryPersonRefreshBlueTask);
 	}
 
 	@Override
@@ -913,6 +950,33 @@ public class ScheduledTaskWrapperServiceImpl
 		@Override
 		public int hashCode() {
 			return DisabledTrigger.class.getName().hashCode();
+		}
+	}
+	
+	protected static class OnStartUpTrigger implements Trigger {
+		boolean hasRun = false;
+		@Override
+		public Date nextExecutionTime(TriggerContext triggerContext) {
+			if(hasRun)
+				return null;
+			else{
+				hasRun = true;
+			}
+			return new Date();
+		}
+		@Override
+		public boolean equals(Object o) {
+			if ( o == null ) {
+				return false;
+			}
+			if ( o == this ) {
+				return true;
+			}
+			return o.getClass().equals(OnStartUpTrigger.class);
+		}
+		@Override
+		public int hashCode() {
+			return OnStartUpTrigger.class.getName().hashCode();
 		}
 	}
 

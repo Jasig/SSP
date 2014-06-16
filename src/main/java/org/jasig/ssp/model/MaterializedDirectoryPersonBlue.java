@@ -16,30 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service;
+package org.jasig.ssp.model;
 
-/**
- * Exists just to give us a non-transactional location in which to launch
- * a relatively static set of scheduled jobs and clean up after them
- */
-public interface ScheduledTaskWrapperService {
+import java.util.UUID;
 
-	/* Not scheduled through config fires every 2.5 minutes after completion*/
-	public void sendMessages();
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-	/* Not scheduled through config fires every 5 minutes after completion*/
-	public void syncCoaches();
-	
-	/* Not scheduled through config. runs at 1 am every day*/
-	public void sendTaskReminders();
+import org.hibernate.annotations.Immutable;
 
-	public void syncExternalPersons();
-	
-	public void refreshDirectoryPerson();
+@Entity
+@Immutable
+@Table(name = "mv_directory_person_blue")
+public class MaterializedDirectoryPersonBlue extends DirectoryPerson {
 
-	public void refreshDirectoryPersonBlue();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1723311730958118497L;
 
-	public void calcMapStatusReports();
-	
-	public void sendEarlyAlertReminders();
+	public MaterializedDirectoryPersonBlue() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public MaterializedDirectoryPersonBlue(UUID id) {
+		super(id);
+		// TODO Auto-generated constructor stub
+	}
+
 }

@@ -224,20 +224,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
-		String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
-		if(sortConfigured.equals("dp.coach")){
-			sortConfigured = "dp.coachLastName";
-		}else if(sortConfigured.equals("dp.currentProgramStatusName")){
-			sortConfigured = "dp.programStatusName";
-		}else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
-			sortConfigured = "dp.activeAlertsCount";
-		}
-		SortingAndPaging sortAndPage = SortingAndPaging
-		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
-				sortDirection, null);
-		if(sortConfigured.equals("dp.coachLastName")){
-			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
-		}
+		SortingAndPaging sortAndPage = buildSortAndPage( limit,  start,  sort,  sortDirection);
 		final PagingWrapper<PersonSearchResult2> models = service.searchPersonDirectory(personSearchRequestFactory.from(schoolId,
 				firstName, lastName, 
 				programStatus,specialServiceGroup, 
@@ -252,6 +239,25 @@ public class PersonSearchController extends AbstractBaseController {
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
 	
+	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
+		String sortConfigured = sort == null ? "dp.lastName":"dp."+ sort;
+		if(sortConfigured.equals("dp.coach")){
+			sortConfigured = "dp.coachLastName";
+		}else if(sortConfigured.equals("dp.currentProgramStatusName")){
+			sortConfigured = "dp.programStatusName";
+		}else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
+			sortConfigured = "dp.activeAlertsCount";
+		}else if(sortConfigured.equals("dp.studentType")){
+			sortConfigured = "dp.studentTypeName";
+		}
+		SortingAndPaging sortAndPage = SortingAndPaging
+		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
+				sortDirection, null);
+		if(sortConfigured.equals("dp.coachLastName")){
+			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
+		}
+		return sortAndPage;
+	}
 
 	private void assertSearchApiAuthorization(HttpServletRequest request)
 			throws AccessDeniedException {
