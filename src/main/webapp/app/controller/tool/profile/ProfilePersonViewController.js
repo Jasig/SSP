@@ -107,9 +107,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             // display loader
             me.getView().setLoading(true);
 
-    	    me.personRegistrationStatusByTermStore.addListener("load", me.onRegStoreLoaded(), me);
-
+    	    me.personRegistrationStatusByTermStore.addListener("load", me.onRegStoreLoaded, me);
             me.personRegistrationStatusByTermStore.load(id);
+            
             var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -149,7 +149,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     },
     onRegStoreLoaded: function() {
     	var me=this;
-    	console.log('yay');
         var redTerms = '';
         for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
         {
@@ -163,7 +162,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
           regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
         }
         me.getPaymentStatusField().setValue(regStatus);		
-
     },
     
     resetForm: function() {
@@ -220,8 +218,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
         
-	    me.personRegistrationStatusByTermStore.addListener("load", me.onRegStoreLoaded(), me);
-	    me.personRegistrationStatusByTermStore.load(me.person.get('id'));
 	    
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
@@ -404,6 +400,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             callBackFunc: me.onEmailCoach,
             scope: me
         });
+	    me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
 		var view = Ext.ComponentQuery.query("#profileDetails");
     	if(view && view.length > 0)
     		view[0].getController().closePopups();

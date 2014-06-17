@@ -40,6 +40,7 @@ Ext.define('Ssp.store.RegistrationStatusByTerm', {
 	    	var r;
 	    	r = Ext.decode(response.responseText);
 	    		me.loadData(r);
+	    		me.fireEvent('load');
 		};
 		
 		me.personRegistrationStatusByTermUrl = me.apiProperties.getItemUrl('personRegistrationStatusByTerm');
