@@ -98,8 +98,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
+            
+    	    me.personRegistrationStatusByTermStore.addListener("load", me.onRegStoreLoaded(), me);
             me.personRegistrationStatusByTermStore.load(id);
-
             var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -142,7 +143,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		
         return me.callParent(arguments);
     },
-    
+    onRegStoreLoaded: function() {
+    	var me=this;
+        var redTerms = '';
+        console.log('yay2');
+        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
+        {
+        	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
+        }
+        
+        me.getRegisteredTermsField().setValue(redTerms);
+        var regStatus = '';
+        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
+        {
+          regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
+        }
+        me.getPaymentStatusField().setValue(regStatus);		
+
+    },    
     resetForm: function(){
         var me = this;
         me.getView().getForm().reset();
@@ -184,7 +202,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var me = this;
         var personResponse = serviceResponses.successes.person;
         me.person.populateFromGenericObject(personResponse);
-               
+	    me.personRegistrationStatusByTermStore.addListener("load", me.onRegStoreLoaded(), me);
+	    me.personRegistrationStatusByTermStore.load(me.person.get('id'));              
         var nameField = me.getNameField();
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
 		var primaryEmailAddressLabel = me.getPrimaryEmailAddressLabel();
@@ -220,19 +239,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         photoUrlField.setSrc(me.person.getPhotoUrl());
         programStatusField.setFieldLabel('');
         programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
-        var redTerms = '';
-        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
-        {
-        	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
-        }
-        
-        me.getRegisteredTermsField().setValue(redTerms);
-        var regStatus = '';
-        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
-        {
-          regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
-        }
-        me.getPaymentStatusField().setValue(regStatus);
 		
 		anticipatedStartYearTermField.setFieldLabel('');
 		anticipatedStartYearTermField.setValue('<span style="color:#15428B">Anticipated Start Year/Term:  </span>' + me.person.get('anticipatedStartYear') + '/' + me.person.get('anticipatedStartTerm'));
