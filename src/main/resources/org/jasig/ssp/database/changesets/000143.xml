@@ -31,13 +31,13 @@
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
     
-    <changeSet dbms="postgresql" id="add trigger program status spc.serv.grp postgres"  author="jim.stanley">
+    <changeSet dbms="postgresql" id="add trigger program status postgres"  author="jim.stanley">
         <sql splitStatements="false"><![CDATA[
         CREATE TRIGGER change_directory_person_program_status
-             AFTER INSERT ON ${schema}.person_program_status
+             AFTER INSERT OR UPDATE ON ${schema}.person_program_status
              FOR EACH ROW
              WHEN(${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0)
-        EXECUTE PROCEDURE ${schema}.update_directory_person_from_view_where_person_id();
+            EXECUTE PROCEDURE ${schema}.update_directory_person_from_view_where_person_id();
         ]]></sql>
     </changeSet>
     
