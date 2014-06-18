@@ -42,4 +42,6 @@ public interface ScheduledTaskWrapperService {
 	public void calcMapStatusReports();
 	
 	public void sendEarlyAlertReminders();
+	
+	public void resetTaskStatus();
 }

@@ -114,6 +114,7 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME = "task_directory_person_refresh_trigger";
 	private static final String DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER = NEVER;
 	
+	private static final String DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID = "task_directory_person_refresh_on_start_up";
 	private static final String STARTUP_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME = "task_directory_person_refresh_start_up_trigger";
 	
 
@@ -219,10 +220,11 @@ public class ScheduledTaskWrapperServiceImpl
 				DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
 		
 		//Schedule task to be run once on startup
-		this.tasks.put(DIRECTORY_PERSON_REFRESH_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_TASK_ID,
+		this.tasks.put(DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID,
 				new Runnable() {
 					@Override
 					public void run() {
+						resetTaskStatus();
 						refreshDirectoryPersonBlue();
 						refreshDirectoryPerson();
 					}
@@ -880,6 +882,14 @@ public class ScheduledTaskWrapperServiceImpl
 	@Override 
 	public void refreshDirectoryPerson(){
 		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_TASK_NAME, directoryPersonRefreshTask);
+	}
+	
+	//Reset Tasks schedule where used for control if possiblity completion is interrupted by termination
+	@Override 
+	public void resetTaskStatus(){
+		
+		taskStatusService.completeTask(REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME);
+		taskStatusService.completeTask(REFRESH_DIRECTORY_PERSON_TASK_NAME);
 	}
 	
 	@Override 
