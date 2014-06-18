@@ -122,7 +122,6 @@ public final class EarlyAlertPortletController {
 	}
 	
 */
-
 	@RenderMapping(params = "action=enterAlert")
 	public ModelAndView showForm(final PortletRequest req, 
 			@RequestParam(required = false) final String schoolId, 
@@ -137,15 +136,15 @@ public final class EarlyAlertPortletController {
 		// with the method param of that name, effectively copying the student's
 		// school ID into the faculty user's record.
 		if(!StringUtils.isNotBlank(schoolId) &&  !StringUtils.isNotBlank(studentUserName)){
-			throw new RuntimeException("Missing student identifier.");
+			throw new EarlyAlertPortletControllerRuntimeException("Missing student identifier.");
 		}
 		
 		if(!StringUtils.isNotBlank(formattedCourse) &&  !StringUtils.isNotBlank(sectionCode)){
-			throw new RuntimeException("Missing course identifier/s.");
+			throw new EarlyAlertPortletControllerRuntimeException("Missing course identifier/s.");
 		}
 		Person user = (Person)model.get("user");
 		if ( user == null ) {
-			throw new RuntimeException("Missing or deactivated account for current user.");
+			throw new EarlyAlertPortletControllerRuntimeException("Missing or deactivated account for current user.");
 		}
 		FacultyCourse course = null;
 		Person student = null;
@@ -163,9 +162,10 @@ public final class EarlyAlertPortletController {
 					formattedCourse));
 
 			if ( course == null ) {
-				throw new IllegalStateException(buildErrorMesssage("Course not found or current user is not listed as the instructor of record:",
+				throw new EarlyAlertPortletControllerRuntimeException(buildErrorMesssage("Course not found or current user is not listed as the instructor of record:",
 						user.getSchoolId(),
-						null,
+						schoolId,
+						studentUserName,
 						formattedCourse,
 						termCode,
 						sectionCode));
@@ -177,21 +177,30 @@ public final class EarlyAlertPortletController {
 			 * user the former where following APIs use the later.
 			 */
 			if(StringUtils.isNotBlank(schoolId)) {
-				student = personService.getBySchoolId(schoolId, true);  // TODO:  Handle error better??
-				if ( student == null ) {
-					throw new IllegalStateException("Student not found by school ID: " + schoolId);
+				try {
+					student = personService.getBySchoolId(schoolId, true);  // TODO:  Handle error better??
+					if ( student == null ) {
+						throw new EarlyAlertPortletControllerRuntimeException("Student not found by school ID: " + schoolId);
+					}
+				} catch (ObjectNotFoundException e) {
+					throw new EarlyAlertPortletControllerRuntimeException("Student not found by school ID: " + schoolId, e);
 				}
 			} else {
-				student = personService.getByUsername(studentUserName, true);
-				if ( student == null ) {
-					throw new IllegalStateException("Student not found by username: " + studentUserName);
+				try {
+					student = personService.getByUsername(studentUserName, true);
+					if ( student == null ) {
+						throw new EarlyAlertPortletControllerRuntimeException("Student not found by username: " + studentUserName);
+					}
+				} catch (ObjectNotFoundException e) {
+					throw new EarlyAlertPortletControllerRuntimeException("Student not found by username: " + studentUserName, e);
 				}
+
 			}
 
 			// Should never happen, but if it is blank, getEnrollment() will effectively give you a random enrollment,
 			// which is bad news. Of course.
 			if ( StringUtils.isBlank(student.getSchoolId()) ) {
-				throw new IllegalStateException("Selected student has no school ID");
+				throw new EarlyAlertPortletControllerRuntimeException("Selected student has no school ID. Username: " + student.getUsername());
 			}
 
 			enrollment = facultyCourseService.getEnrollment(new SearchStudentCourseTO(user.getSchoolId(),
@@ -201,18 +210,21 @@ public final class EarlyAlertPortletController {
 					student.getSchoolId()));
 
 			if ( enrollment == null ) {
-				throw new IllegalStateException(buildErrorMesssage("Enrollment not found for: ", 
+				throw new EarlyAlertPortletControllerRuntimeException(buildErrorMesssage("Enrollment not found for: ",
 						user.getSchoolId(),
 						student.getSchoolId(),
+						student.getUsername(),
 						formattedCourse, 
 						termCode,
 						sectionCode));
 			}
-
+		} catch ( EarlyAlertPortletControllerRuntimeException e ) {
+			throw e;
 		} catch (Exception e) {
 			throw new RuntimeException(buildErrorMesssage("System error looking up course or enrollment for: ",
 					user.getSchoolId(),
-					student.getSchoolId(),
+					student == null ? schoolId : student.getSchoolId(),
+					student == null ? studentUserName : student.getUsername(),
 					formattedCourse, 
 					termCode,
 					sectionCode), e);
@@ -223,9 +235,10 @@ public final class EarlyAlertPortletController {
 		 *      course
 		 */
 		if (!course.getFacultySchoolId().equals(user.getSchoolId())) {
-			throw new IllegalStateException(buildErrorMesssage("Current user is not listed as the instructor of record on the specified course: ",
+			throw new EarlyAlertPortletControllerRuntimeException(buildErrorMesssage("Current user is not listed as the instructor of record on the specified course: ",
 					user.getSchoolId(),
 					student.getSchoolId(),
+					student.getUsername(),
 					formattedCourse, 
 					termCode,
                     sectionCode));
@@ -297,18 +310,46 @@ public final class EarlyAlertPortletController {
 		return person;
 	}
 	
-	private String buildErrorMesssage(String prefix, String facultySchoolId, String studentSchoolId, String formattedCourse, String termCode, String sectionCode){
+	private String buildErrorMesssage(String prefix, String facultySchoolId, String studentSchoolId, String studentUsername, String formattedCourse, String termCode, String sectionCode){
 		StringBuilder errorMsg = new StringBuilder(prefix);
 		if(org.apache.commons.lang.StringUtils.isNotBlank(facultySchoolId))
-			errorMsg.append(" Faculty School ID: ").append(facultySchoolId);
+			errorMsg.append(" [Faculty School ID: ").append(facultySchoolId).append("]");
 		if(org.apache.commons.lang.StringUtils.isNotBlank(studentSchoolId))
-			errorMsg.append(" Student School ID: ").append(studentSchoolId);
+			errorMsg.append(" [Student School ID: ").append(studentSchoolId).append("]");
+		if(org.apache.commons.lang.StringUtils.isNotBlank(studentUsername))
+			errorMsg.append(" [Student Username: ").append(studentUsername).append("]");
 		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
-			errorMsg.append(" Formatted Course: ").append(formattedCourse);
+			errorMsg.append(" [Formatted Course: ").append(formattedCourse).append("]");
 		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			errorMsg.append(" Term Code: ").append(termCode);
+			errorMsg.append(" [Term Code: ").append(termCode).append("]");
 		if(org.apache.commons.lang.StringUtils.isNotBlank(sectionCode))
-			errorMsg.append(" Section Code: ").append(sectionCode);
+			errorMsg.append(" [Section Code: ").append(sectionCode).append("]");
 		return errorMsg.toString();
+	}
+
+	// Hopefully temporary hack to work around historically imprecise error representations in
+	// portlet render/action handlers. Basically just need a way to distinguish between errors
+	// which we've handled but want to represent as such the end users in a rather specific way
+	// and Everything Else, which we want to represent to end users very generically.
+	private static final class EarlyAlertPortletControllerRuntimeException extends RuntimeException {
+
+		public EarlyAlertPortletControllerRuntimeException() {
+			super();
+		}
+
+
+		public EarlyAlertPortletControllerRuntimeException(String message) {
+			super(message);
+		}
+
+
+		public EarlyAlertPortletControllerRuntimeException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+
+		public EarlyAlertPortletControllerRuntimeException(Throwable cause) {
+			super(cause);
+		}
 	}
 }
