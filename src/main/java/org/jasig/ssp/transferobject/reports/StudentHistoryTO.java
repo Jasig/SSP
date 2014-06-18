@@ -20,6 +20,7 @@ package org.jasig.ssp.transferobject.reports;
 
 import java.util.*;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.TaskTO;
@@ -46,14 +47,17 @@ public class StudentHistoryTO {
 	}
 
 	public void addTask(String group, TaskTO task){		
-		ArrayList<TaskTO> taskList = taskMap.get(group);
-		if(null == taskList){
-			taskList = new ArrayList<TaskTO>();
-			taskMap.put(group, taskList);
-		}	
-		if(!taskList.contains(task)){
-			taskList.add(task);	
-		}		
+		if(ObjectStatus.ACTIVE.equals(task.getObjectStatus()))
+		{
+			ArrayList<TaskTO> taskList = taskMap.get(group);
+			if(null == taskList){
+				taskList = new ArrayList<TaskTO>();
+				taskMap.put(group, taskList);
+			}	
+			if(!taskList.contains(task)){
+				taskList.add(task);	
+			}		
+		}
 	}
 
 	public void createTaskList() {

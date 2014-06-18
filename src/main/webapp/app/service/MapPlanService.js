@@ -259,6 +259,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		// save
 		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == false )
 		{	
+			me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
 			me.currentMapPlan.set('id','');
 			me.apiProperties.makeRequest({
     			url: url,
