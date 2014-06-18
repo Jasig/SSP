@@ -887,8 +887,6 @@ public class ScheduledTaskWrapperServiceImpl
 	//Reset Tasks schedule where used for control if possiblity completion is interrupted by termination
 	@Override 
 	public void resetTaskStatus(){
-		
-		taskStatusService.completeTask(REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME);
 		taskStatusService.completeTask(REFRESH_DIRECTORY_PERSON_TASK_NAME);
 	}
 	
