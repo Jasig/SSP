@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
     controller: 'Ssp.controller.tool.map.SaveTemplateViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        programsStore: 'programsFacetedStore',
+        programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
         divisionsStore: 'divisionsStore',

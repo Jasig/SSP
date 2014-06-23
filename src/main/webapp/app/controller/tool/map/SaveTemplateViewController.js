@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
-		programsStore: 'programsFacetedStore',
+		programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
     	mapEventUtils: 'mapEventUtils',

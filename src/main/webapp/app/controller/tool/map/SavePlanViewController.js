@@ -23,7 +23,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
     	currentMapPlan: 'currentMapPlan',
-        programsStore: 'programsFacetedStore',
+        programsStore: 'programsStore',
 		authenticatedPerson: 'authenticatedPerson',
     	mapEventUtils: 'mapEventUtils',
 		contactPersonStore: 'contactPersonStore'
