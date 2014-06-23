@@ -23,7 +23,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 	controller: 'Ssp.controller.tool.map.LoadTemplateViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        programsStore: 'programsFacetedStore',
+        programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore',
         store: 'planTemplatesSummaryStore'

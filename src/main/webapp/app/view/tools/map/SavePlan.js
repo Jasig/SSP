@@ -24,7 +24,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
 		appEventsController: 'appEventsController',
-        programsStore: 'programsFacetedStore',
+        programsStore: 'programsStore',
         catalogYearsStore: 'catalogYearsStore',
 		currentMapPlan: 'currentMapPlan'
     },
