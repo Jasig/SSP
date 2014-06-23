@@ -18,18 +18,25 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
@@ -120,6 +127,7 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 			delete(mapStatusReport);
 		}
 	}
+
 
 
 }

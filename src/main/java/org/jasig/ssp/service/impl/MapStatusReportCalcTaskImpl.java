@@ -32,12 +32,14 @@ import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.MapStatusReportService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -70,6 +72,9 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	
 	@Autowired
 	private transient MapStatusReportService mapStatusReportService;
+	
+	@Autowired 
+	private transient ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
 
 	@Autowired
 	private transient ExternalPersonDao dao;
@@ -124,6 +129,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
 		List<MapStatusReportPerson> allActivePlans = planService.getAllActivePlanIds();
 		LOGGER.info("Starting report calculations for {} plans",allActivePlans.size());
+		
 		
 		final List<Term> allTerms = termService.getAll();
 		//Sort terms by startDate, we do this here so we have no dependency on the default sort order in termService.getAll()
@@ -246,9 +252,9 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	private void evaluatePlan(Set<String> gradesSet, Set<String> criteriaSet,
 			Term cutoffTerm,  List<Term> allTerms,
 			MapStatusReportPerson planIdPersonIdPair, Collection<ExternalSubstitutableCourse> allSubstitutableCourses, boolean termBound, boolean useSubstitutableCourses) 
-	{
-		
-		final MapStatusReport report = mapStatusReportService.evaluatePlan(gradesSet, criteriaSet, cutoffTerm, allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
+	{ 
+		List<ExternalStudentTranscriptCourse> transcript = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(planIdPersonIdPair.getSchoolId());
+		final MapStatusReport report = mapStatusReportService.evaluatePlan(gradesSet, criteriaSet, cutoffTerm, allTerms, planIdPersonIdPair,allSubstitutableCourses,transcript,termBound,useSubstitutableCourses);
 		try {
 			//Any new writes to this task should be included here
 			withTransaction.withNewTransaction(new Callable<MapStatusReport>() {
