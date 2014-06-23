@@ -40,6 +40,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.MapStatusReportService;
@@ -241,30 +242,8 @@ public class MapStatusReportController  extends AbstractBaseController {
 	Boolean calculateStatus(final @PathVariable UUID personId,
 			final HttpServletRequest request) throws ObjectNotFoundException, ValidationException  {
 
-		mapStatusReportService.oldReportForStudent(personId);
-		Collection<ExternalSubstitutableCourse> allSubstitutableCourses = mapStatusReportService.getAllSubstitutableCourses();
-		//Load up our configs
-		Set<String> gradesSet = mapStatusReportService.getPassingGrades();
-		Set<String> additionalCriteriaSet = mapStatusReportService.getAdditionalCriteria();
-		boolean termBound = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_term_bound_strict").trim());
-		boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
-		
-		//Lets figure out our cutoff term
-		Term cutoffTerm = mapStatusReportService.deriveCuttoffTerm();
-		
-		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
-		Plan plan = planService.getCurrentForStudent(personId);
-		
-		//If there is no active plan return false
-		if(plan == null)
-			return false;
-		
-		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(),plan.getCatalogYearCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName());
-		List<Term> allTerms = termService.getAll();
-		
-		MapStatusReport report = mapStatusReportService.evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 
-					allTerms, mapStatusReportPerson, allSubstitutableCourses,termBound,useSubstitutableCourses);
-		mapStatusReportService.save(report);
+		mapStatusReportService.calculateStatusForStudent(personId);
+
 		return true;
 	}
 

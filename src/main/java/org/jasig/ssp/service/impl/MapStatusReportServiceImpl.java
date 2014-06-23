@@ -90,6 +90,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	@Autowired 
 	private transient PlanService planService;
 	
+	
 	@Autowired 
 	private transient ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
 	
@@ -132,11 +133,11 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			List<Term> allTerms,
 			MapStatusReportPerson planAndPersonInfo,
 			Collection<ExternalSubstitutableCourse> allSubstitutableCourses,
+			List<ExternalStudentTranscriptCourse> transcript,
 			boolean termBound, 
 			boolean useSubstitutableCourses) 
 	{
 		LOGGER.info("Loading plan with id {}",planAndPersonInfo.getPlanId());
-		String schoolId = planAndPersonInfo.getSchoolId();
 		
 		
 		List<MapPlanStatusReportCourse> planCourses = planService.getAllPlanCoursesForStatusReport(planAndPersonInfo.getPlanId()); 
@@ -151,9 +152,6 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		
 		//Create an entry whenever there is a term or course substitution
 		List<MapStatusReportSubstitutionDetails> reportSubstitutionDetails = new ArrayList<MapStatusReportSubstitutionDetails>();
-		
-		
-		List<ExternalStudentTranscriptCourse> transcript = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId);
 		
 		//Organize Plan Courses by term.. Preprocessing this data by term helps with term based matching
 		Map<String,List<MapPlanStatusReportCourse>> planCoursesByTerm = organizePlanCoursesByTerm(planCourses);
@@ -750,6 +748,47 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	@Override
 	public void oldReportForStudent(UUID personId) {
 		 dao.oldReportForStudent(personId);
+	}
+
+	@Override
+	public Boolean calculateStatusForStudent(UUID personId) throws ObjectNotFoundException, ValidationException {
+		
+		oldReportForStudent(personId);
+		//Load up our configs
+		Set<String> gradesSet = getPassingGrades();
+		Set<String> additionalCriteriaSet = getAdditionalCriteria();
+		boolean termBound = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_term_bound_strict").trim());
+		boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
+		
+
+		//Lets figure out our cutoff term
+		Term cutoffTerm = deriveCuttoffTerm();
+		
+		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
+		Plan plan = planService.getCurrentForStudent(personId);
+		
+		if(plan == null)
+			return false;
+		
+		List<ExternalStudentTranscriptCourse> transcript = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(plan.getPerson().getSchoolId());
+		
+		//Collection<ExternalSubstitutableCourse> allSubstitutableCourses = mapStatusReportService.getAllSubstitutableCourses();
+		Collection<ExternalSubstitutableCourse> allSubstitutableCourses = getAllPossibleSubstitutableCoursesForStudent(plan,transcript);
+		//If there is no active plan return false
+		
+		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(),plan.getCatalogYearCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName());
+		List<Term> allTerms = termService.getAll();
+		
+		MapStatusReport report = evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 
+					allTerms, mapStatusReportPerson, allSubstitutableCourses,transcript,termBound,useSubstitutableCourses);
+		save(report);
+		
+		return true;
+	}
+
+	private Collection<ExternalSubstitutableCourse> getAllPossibleSubstitutableCoursesForStudent(
+			Plan plan, List<ExternalStudentTranscriptCourse> transcript) {
+		return externalSubstitutableCourseDao.getAllPossibleSubstitutableCoursesForStudent(plan, transcript);
 	}
 
 }
