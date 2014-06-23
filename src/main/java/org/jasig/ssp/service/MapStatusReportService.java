@@ -29,6 +29,7 @@ import org.jasig.ssp.model.MapStatusReportCourseDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
@@ -36,14 +37,21 @@ import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface MapStatusReportService extends PersonAssocAuditableService<MapStatusReport>  {
 
 	void deleteAllOldReports();
 
-	MapStatusReport evaluatePlan(Set<String> gradesSet, Set<String> criteriaSet,
-			Term cutoffTerm, List<Term> allTerms,
-			MapStatusReportPerson planIdPersonIdPair, Collection<ExternalSubstitutableCourse> allSubstitutableCourses, boolean termBound, boolean useSubstitutableCourses);
+	MapStatusReport evaluatePlan(Set<String> gradesSet, 
+			Set<String> criteriaSet,
+			Term cutoffTerm,  
+			List<Term> allTerms,
+			MapStatusReportPerson planAndPersonInfo,
+			Collection<ExternalSubstitutableCourse> allSubstitutableCourses,
+			List<ExternalStudentTranscriptCourse> transcript,
+			boolean termBound, 
+			boolean useSubstitutableCourses);
 
 	Set<String> getAdditionalCriteria();
 
@@ -68,5 +76,7 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 			Person person);
 
 	void oldReportForStudent(UUID personId);
+
+	Boolean calculateStatusForStudent(UUID personId) throws ObjectNotFoundException, ValidationException;
 
 }
