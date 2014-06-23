@@ -53,15 +53,24 @@ Ext.define('Ssp.model.AbstractBase', {
 
              {name: 'objectStatus', type: 'string', defaultValue: 'ACTIVE'}],
     
-	populateFromGenericObject: function( record ){
-			this.synchronizingStatusFields = false;
-			this.statusFieldsInitialized = false;
-			for (fieldName in this.data)
-	    	{
-	    		this.set( fieldName, record == null ? null : record[fieldName]);
-	    	}
-    },
-    getCreatedByPersonName: function(){
+     populateFromGenericObject: function( record ){
+     			this.synchronizingStatusFields = false;
+     			this.statusFieldsInitialized = false;
+     			for (fieldName in this.data)
+     	    	{
+     				
+     				//TODO CHANGE TO 
+     				//this.set( fieldName, record == null ? this.data[fieldName] : record[fieldName]);
+     				// or something similar.  Waiting until time is available for testing.
+     				// data[fieldName] contains the default value for that field
+     				if(fieldName =='objectStatus')
+     					this.set( fieldName, record == null ? 'ACTIVE' : record[fieldName]);
+     				else
+     					this.set( fieldName, record == null ? null : record[fieldName]);
+     	    	}
+     },    
+     
+     getCreatedByPersonName: function(){
     	return this.get('createdBy').firstName + ' ' + this.get('createdBy').lastName;
     },
 
