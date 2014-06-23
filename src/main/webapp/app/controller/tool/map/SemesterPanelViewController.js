@@ -93,8 +93,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		{
 			helpButton.hidden = !me.getView().editable;
 		}
-		me.setTermNoteButton();
-
 	},
 	setTermNoteButton: function(){
 		var me = this;
