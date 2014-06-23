@@ -27,7 +27,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
         personLite: 'personLite',
     	apiProperties: 'apiProperties',
     	mapPlanService:'mapPlanService',
-		programsStore: 'programsFacetedStore',
+		programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore'
     },
