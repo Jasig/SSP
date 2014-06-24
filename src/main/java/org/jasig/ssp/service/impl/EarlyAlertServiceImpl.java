@@ -794,13 +794,28 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			Person coach = earlyAlert.getPerson().getCoach();
 			//Only early alerts response late messages sent to coaches
 			if(coach == null){
+				final Campus campus = earlyAlert.getCampus();
+				if ( campus == null ) {
+					LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA does not have valid campus, so skipping email to coach because no coach can be resolved.", earlyAlert.getId());
+					continue;
+				}
+				final UUID earlyAlertCoordinatorId = campus.getEarlyAlertCoordinatorId();
+				if ( earlyAlertCoordinatorId == null ) {
+					LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA's campus does not have an early alert coordinator, so skipping email to coach because no coach can be resolved.", earlyAlert.getId());
+					continue;
+				}
 				try{
-					// if no earlyAlert.getCampus()  error thrown by design, should never not be a campus.
-					coach = personService.get(earlyAlert.getCampus().getEarlyAlertCoordinatorId());
+					coach = personService.get(earlyAlertCoordinatorId);
+					if ( coach == null ) { // guard against change in behavior where ObjectNotFoundException is not thrown (which we've seen)
+						LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA's campus has an early alert coordinator with a bad ID ({}), so skipping email to coach because no coach can be resolved.", earlyAlert.getId(), earlyAlertCoordinatorId);
+						continue;
+					}
 				}catch(ObjectNotFoundException exp){
-					LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
+					LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA's campus has an early alert coordinator with a bad ID ({}), so skipping email to coach because no coach can be resolved.", new Object[] { earlyAlert.getId(), earlyAlertCoordinatorId, exp });
+					continue;
 				}
 			}
+			// We've definitely got a coach by this point
 			if(easByCoach.containsKey(coach.getId())){
 				List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
 				coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
