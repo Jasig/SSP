@@ -788,7 +788,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if(lastResponseDate == null)
 			return;
 		List<EarlyAlert> eaOutOfCompliance = dao.getResponseDueEarlyAlerts(lastResponseDate);
-		Map<Person, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<Person, List<EarlyAlertMessageTemplateTO>>();
+		Map<UUID, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, List<EarlyAlertMessageTemplateTO>>();
+		Map<UUID, Person> coaches = new HashMap<UUID, Person>();
 		for(EarlyAlert earlyAlert: eaOutOfCompliance){
 			Person coach = earlyAlert.getPerson().getCoach();
 			//Only early alerts response late messages sent to coaches
@@ -800,23 +801,18 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
 				}
 			}
-			if(easByCoach.containsKey(coach)){
-				List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach);
-				Person creator = null;
-				try{
-					 creator = personService.get(earlyAlert.getCreatedBy().getId());
-				}catch(ObjectNotFoundException exp){
-					LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid creator: " + earlyAlert.getCreatedBy(), exp);
-				}
-				coachEarlyAlerts.add(new EarlyAlertMessageTemplateTO(earlyAlert, creator));
+			if(easByCoach.containsKey(coach.getId())){
+				List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
+				coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
 			}else{
-				easByCoach.put(coach, Lists.newArrayList(new EarlyAlertMessageTemplateTO(earlyAlert)));
+				coaches.put(coach.getId(), coach);
+				easByCoach.put(coach.getId(), Lists.newArrayList(createEarlyAlertTemplateTO( earlyAlert)));
 			}
 		}
-		for(Person coach: easByCoach.keySet()){
+		for(UUID coachId: easByCoach.keySet()){
 			Map<String,Object> messageParams = new HashMap<String,Object>();
 			
-			Collections.sort(easByCoach.get(coach), new Comparator<EarlyAlertTO>() {
+			Collections.sort(easByCoach.get(coachId), new Comparator<EarlyAlertTO>() {
 		        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
 		        	Date p1Date = p1.getLastResponseDate();
 		        	if(p1Date == null)
@@ -831,7 +827,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			
 			Integer daysSince1900ResponseExpected =  DateTimeUtils.daysSince1900(lastResponseDate);
 			List<Pair<EarlyAlertMessageTemplateTO,Integer>> earlyAlertTOPairs = new ArrayList<Pair<EarlyAlertMessageTemplateTO,Integer>>();
-			for(EarlyAlertMessageTemplateTO ea:easByCoach.get(coach)){
+			for(EarlyAlertMessageTemplateTO ea:easByCoach.get(coachId)){
 				Integer daysOutOfCompliance;
 				if(ea.getLastResponseDate() != null){
 					daysOutOfCompliance = daysSince1900ResponseExpected - DateTimeUtils.daysSince1900(ea.getLastResponseDate());
@@ -844,18 +840,28 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					earlyAlertTOPairs.add(new Pair<EarlyAlertMessageTemplateTO,Integer>(ea, daysOutOfCompliance));
 			}
 			messageParams.put("earlyAlertTOPairs", earlyAlertTOPairs);
-			messageParams.put("coach", coach);
+			messageParams.put("coach", coaches.get(coachId));
 			messageParams.put("DateTimeUtils", DateTimeUtils.class);
 			messageParams.put("termToRepresentEarlyAlert",
 					configService.getByNameEmpty("term_to_represent_early_alert"));
 			SubjectAndBody subjAndBody = messageTemplateService.createEarlyAlertResponseRequiredToCoachMessage(messageParams);
 			try{
-				messageService.createMessage(coach, null, subjAndBody);
+				messageService.createMessage(coaches.get(coachId), null, subjAndBody);
 			}catch(Exception exp){
-				LOGGER.error("Unable to send reminder emails to coach: " + coach.getFullName() + "\n", exp);
+				LOGGER.error("Unable to send reminder emails to coach: " + coaches.get(coachId).getFullName() + "\n", exp);
 			}
 		}
 		
+	}
+	
+	private EarlyAlertMessageTemplateTO createEarlyAlertTemplateTO(EarlyAlert earlyAlert){
+		Person creator = null;
+		try{
+			 creator = personService.get(earlyAlert.getCreatedBy().getId());
+		}catch(ObjectNotFoundException exp){
+			LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid creator: " + earlyAlert.getCreatedBy(), exp);
+		}
+		return new EarlyAlertMessageTemplateTO(earlyAlert, creator);
 	}
 	
 	public Map<UUID,Number> getResponsesDueCountEarlyAlerts(List<UUID> personIds){
