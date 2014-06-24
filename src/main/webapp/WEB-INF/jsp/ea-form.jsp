@@ -23,11 +23,13 @@
 <portlet:renderURL var="cancelUrl" >
     <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
     <portlet:param name="termCode" value="${course.termCode}"/>
+     <portlet:param name="sectionCode" value="${course.sectionCode}"/>
 </portlet:renderURL>
 <portlet:renderURL var="doneUrl" escapeXml="false">
     <portlet:param name="confirm" value="CONFIRMED_ID"/>
     <portlet:param name="studentName" value="STUDENTNAME"/>
     <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
+    <portlet:param name="sectionCode" value="${course.sectionCode}"/>
     <portlet:param name="termCode" value="${course.termCode}"/>
 </portlet:renderURL>
 
@@ -308,6 +310,7 @@
                 courseName:   '${course.formattedCourse}',
                 courseTitle:  '${course.title}',
                 term:         '${course.termCode}',
+                sectionCode:  '${course.sectionCode}',
                 studentId:    '${studentId}',
                 enrollmentStatusCode: '${enrollment.statusCode}'
             },

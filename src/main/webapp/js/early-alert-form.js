@@ -221,6 +221,7 @@ var ssp = ssp || {};
                 courseName: options.parameters.courseName,
                 courseTitle: options.parameters.courseTitle,
                 courseTermCode: options.parameters.term,
+                courseSectionCode: options.parameters.sectionCode,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
                 earlyAlertReasonIds: [], // Set below...

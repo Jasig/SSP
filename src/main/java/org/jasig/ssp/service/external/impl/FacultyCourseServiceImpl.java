@@ -83,6 +83,13 @@ public class FacultyCourseServiceImpl extends
 	}
 	
 	@Override
+	public List<ExternalFacultyCourseRoster> getFacultyCourseRoster(SearchFacultyCourseTO searchFacultyCourse)
+	throws ObjectNotFoundException{
+		return externalFacultyCourseRosterDao.getFacultyCourseRoster(searchFacultyCourse);
+	}
+
+	
+	@Override
 	public ExternalFacultyCourseRoster getEnrollment(SearchStudentCourseTO searchStudentCourse)
 			throws ObjectNotFoundException {
 		return externalFacultyCourseRosterDao.getEnrollment(searchStudentCourse);
@@ -117,5 +124,5 @@ public class FacultyCourseServiceImpl extends
 			throws ObjectNotFoundException {
 		return dao.getCourseBySearchFacultyCourseTO(searchFacultyCourse);
 	}
-
+	
 }

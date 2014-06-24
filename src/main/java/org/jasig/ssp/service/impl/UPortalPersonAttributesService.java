@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
@@ -103,9 +104,7 @@ public class UPortalPersonAttributesService
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public PersonAttributesResult getAttributes(
-			final HttpServletRequest req,
-			final HttpServletResponse res, final String username)
+	public PersonAttributesResult getAttributes(final String username)
 			throws ObjectNotFoundException {
 
 		LOGGER.debug("Fetching attributes for user '{}'", username);
@@ -114,7 +113,8 @@ public class UPortalPersonAttributesService
 		params.put(PARAM_USERNAME, new String[] { username });
 
 		final CrossContextRestApiInvoker rest = new PatchedSimpleCrossContextRestApiInvoker();
-
+		final HttpServletRequest req = requestForCrossContextGet();
+		final HttpServletResponse res = responseForCrossContextGet();
 		final Object origWebAsyncManager = req.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
 		req.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
 
@@ -156,24 +156,6 @@ public class UPortalPersonAttributesService
 	}
 
 	@Override
-	public PersonAttributesResult getAttributes(final String username)
-			throws ObjectNotFoundException {
-
-		final HttpServletRequest req = requestAndResponseAccessFilter
-				.getHttpServletRequest();
-		final HttpServletResponse res = requestAndResponseAccessFilter
-				.getHttpServletResponse();
-
-		if ((req == null) || (res == null)) {
-			throw new UnsupportedOperationException(
-					"Uportal attributes may only be fetched when a HttpServletRequest and HttpServletResponse are available");
-		} else {
-			return getAttributes(req, res, username);
-		}
-
-	}
-
-	@Override
 	public PersonAttributesResult getAttributes(String username,
 			PortletRequest portletRequest) {
 		@SuppressWarnings("unchecked") Map<String,String> userInfo =
@@ -186,9 +168,7 @@ public class UPortalPersonAttributesService
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String, Object>> searchForUsers(
-			final HttpServletRequest req,
-			final HttpServletResponse res, final Map<String, String> query) {
+	public List<Map<String, Object>> searchForUsers(final Map<String, String> query) {
 
 		LOGGER.debug("Searching for users with query terms '{}'", query);
 
@@ -213,7 +193,8 @@ public class UPortalPersonAttributesService
 		params.put(PARAM_SEARCH_TERMS, searchTerms.toArray(new String[0]));
 
 		final CrossContextRestApiInvoker rest = new PatchedSimpleCrossContextRestApiInvoker();
-
+		final HttpServletRequest req = requestForCrossContextGet();
+		final HttpServletResponse res = responseForCrossContextGet();
 		final Object origWebAsyncManager = req.getAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
 		req.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
 
@@ -259,22 +240,9 @@ public class UPortalPersonAttributesService
 	@Override
 	public Collection<String> getCoaches() {
 
-		HttpServletRequest req = requestAndResponseAccessFilter
-				.getHttpServletRequest();
-		HttpServletResponse res = requestAndResponseAccessFilter
-				.getHttpServletResponse();
-
-		if ((req == null) || (res == null)) {
-			// underlying dispatch mechanism requires that a servlet request
-			// always exist
-			req = new MockHttpServletRequest(servletContext, "GET", "/ssp");
-			res = new MockHttpServletResponse();
-		}
-
 		final List<String> rslt = new ArrayList<String>();
 
-		final List<Map<String, Object>> people = searchForUsers(req, res,
-				getCoachesQuery());
+		final List<Map<String, Object>> people = searchForUsers(getCoachesQuery());
 		for (final Map<String, Object> person : people) {
 			rslt.add((String) person.get(USERNAME_KEY));
 		}
@@ -286,6 +254,22 @@ public class UPortalPersonAttributesService
 	/*
 	 * Private Stuff
 	 */
+
+	private HttpServletRequest requestForCrossContextGet() {
+		HttpServletRequest currReq = requestAndResponseAccessFilter.getHttpServletRequest();
+		if ( currReq == null || StringUtils.isBlank(currReq.getMethod()) || !(currReq.getMethod().equalsIgnoreCase("GET")) ) {
+			return currReq = new MockHttpServletRequest(servletContext, "GET", "/ssp");
+		}
+		return currReq;
+	}
+
+	private HttpServletResponse responseForCrossContextGet() {
+		HttpServletResponse currRes = requestAndResponseAccessFilter.getHttpServletResponse();
+		if ( currRes == null ) {
+			return new MockHttpServletResponse();
+		}
+		return currRes;
+	}
 
 	private PersonAttributesResult convertAttributes(final Map<String,
 			List<String>> attr) {

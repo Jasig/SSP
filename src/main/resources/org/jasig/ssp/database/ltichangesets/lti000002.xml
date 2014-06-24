@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+				   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+	http://www.liquibase.org/xml/ns/dbchangelog-ext
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+	<!-- Drop before create as a workaround for mid-development-stream refactor -->
+	<changeSet id="Drop oauth_nonce table" author="dan.mccallum">
+		<preConditions onFail="MARK_RAN">
+			<tableExists tableName="oauth_nonce" schemaName="${database.schema}" />
+		</preConditions>
+		<dropTable tableName="oauth_nonce" schemaName="${database.schema}" />
+	</changeSet>
+
+	<changeSet id="Create oauth_nonce table" author="dan.mccallum">
+		<createTable tableName="oauth_nonce" schemaName="${database.schema}">
+			<column name="consumer_key" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="nonce_timestamp" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="nonce" type="${nvarchar.type}(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<!-- PK name is important here - app code depends on it -->
+		<addPrimaryKey columnNames="consumer_key,nonce_timestamp,nonce"
+				constraintName="pk_oauth_nonce"
+				schemaName="${database.schema}"
+				tableName="oauth_nonce"/>
+		<sql>grant all on oauth_nonce to ${database.app.username}</sql>
+	</changeSet>
+</databaseChangeLog>

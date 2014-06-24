@@ -44,4 +44,6 @@ public interface ScheduledTaskWrapperService {
 	public void sendEarlyAlertReminders();
 	
 	public void resetTaskStatus();
+
+    public void cullOAuth1Nonces();
 }

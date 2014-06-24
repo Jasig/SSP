@@ -57,14 +57,14 @@ var ssp = ssp || {};
               selectedCourse = that.locate('courseSelect').val();
             var selectedRosterIds = {
                 formattedCourse: '',
-                termCode: ''
+                termCode: '',
+                sectionCode:''
             };
             if ( selectedCourse ) {
-                var courseIdParts = selectedCourse.split(options.course_id_delim, 2);
+                var courseIdParts = selectedCourse.split(options.course_id_delim, 3);
                 selectedRosterIds.formattedCourse = courseIdParts[0];
-                if ( courseIdParts.length > 1 ) {
-                    selectedRosterIds.termCode = courseIdParts[1];
-                }
+                selectedRosterIds.termCode = courseIdParts[1];
+                selectedRosterIds.sectionCode = courseIdParts[2];
             }
             return selectedRosterIds;
         };
@@ -93,7 +93,7 @@ var ssp = ssp || {};
             var selectedRosterIds = getSelectedRosterIds(initialSelectedCourse);
             if ( selectedRosterIds && selectedRosterIds.formattedCourse ) {
                 $.ajax({
-                    url: options.urls.roster.replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode),
+                    url: options.urls.roster.replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode).replace('SECTIONCODE', selectedRosterIds.sectionCode),
                     async: false,
                     dataType: 'json',
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -160,7 +160,7 @@ var ssp = ssp || {};
         var courses = getCourseListData();
         if (courses && courses.length != 0) {
             $(courses).each(function(index, course) {
-                var optionVal = course.formattedCourse + (course.termCode ? options.course_id_delim + course.termCode : '');
+                var optionVal = course.formattedCourse + (course.termCode ? options.course_id_delim + course.termCode : course_id_delim) + (course.sectionCode ? options.course_id_delim + course.sectionCode : '');
                 var option = '<option value="' + optionVal  + '">' + course.formattedCourse + (course.title ? ' - ' + course.title : '') + (course.termCode ? ' - ' + course.termCode : '') + '</option>';
                 courseSelect.append(option);
             });
@@ -199,7 +199,7 @@ var ssp = ssp || {};
             $(container + ' ' + that.options.selectors.rosterTable + ' tbody tr').live('click', function() {
                 var schoolId = $(this).find('.schoolId').text();
                 var selectedRosterIds = getSelectedRosterIds();
-                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode);
+                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode).replace('SECTIONCODE', selectedRosterIds.sectionCode);
                 window.location = alertFormUrl;
             });
         } else {

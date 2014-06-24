@@ -24,6 +24,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.SspUserDetailsService;
 import org.jasig.ssp.service.security.oauth2.OAuth2ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,6 +49,7 @@ public class SspUserOauth2ClientDetailsUserServiceImpl implements UserDetailsSer
 	private SspUserDetailsService sspUserDetailsService;
 
 	@Autowired
+	@Qualifier("oauth2ClientDetailsService")
 	private ClientDetailsService clientDetailsService;
 
 	@Override

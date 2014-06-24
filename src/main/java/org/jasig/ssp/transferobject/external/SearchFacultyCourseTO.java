@@ -69,4 +69,8 @@ public class SearchFacultyCourseTO {
 	public Boolean hasFormattedCourse(){
 		return StringUtils.isNotBlank(formattedCourse);
 	}
+	
+	public Boolean hasCourseIdentification(){
+		return hasFormattedCourse() ||  hasSectionCode();
+	}
 }

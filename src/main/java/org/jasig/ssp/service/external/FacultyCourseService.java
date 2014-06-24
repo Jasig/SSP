@@ -96,6 +96,11 @@ public interface FacultyCourseService extends
 			String formattedCourse,
 			String termCode)
 	throws ObjectNotFoundException;
+	
+	
+	List<ExternalFacultyCourseRoster>
+	getFacultyCourseRoster(SearchFacultyCourseTO searchFacultyCourse)
+	throws ObjectNotFoundException;
 
 
 	/**

@@ -18,9 +18,6 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
@@ -34,10 +31,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth.provider.ConsumerAuthentication;
+import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Transactional(readOnly = true)
 public class SecurityServiceImpl implements SecurityService {
@@ -107,6 +109,7 @@ public class SecurityServiceImpl implements SecurityService {
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 
+
 		if (null == auth) {
 			// not authenticated, return null
 			return null;
@@ -117,38 +120,68 @@ public class SecurityServiceImpl implements SecurityService {
 			final Object principal = auth.getPrincipal();
 
 			if (principal instanceof SspUser) {
+
 				sspUser = (SspUser) principal;
-			} else if (principal instanceof String) {
+            } else if ( principal instanceof ConsumerDetails ) {
+
+                ConsumerDetails consumerDetails = (ConsumerDetails)principal;
+                String consumerKey = consumerDetails.getConsumerKey();
+
+                // The threadlocal business here isn't just for perf...
+                // you'll get into an infinite loop if Hib tries to lookup
+                // a current user in persistence during a flush.
+                if ( currentSspUserFallback.get() == null ||
+                        !(consumerKey.equalsIgnoreCase(currentSspUserFallback.get().getUsername())) ) {
+
+                    // Careful! This will try to create a new Person record
+                    // if it can't find one with the given username. This
+                    // isn't what we want on an OAuth request, but we
+                    // can be reasonably sure that's not going to happen
+                    // because we know this particular request has already
+                    // been authenticated, which means the corresponding
+                    // Person record almost certainly exists.
+
+                    currentSspUserFallback.set((SspUser) sspUserDetailsService.loadUserDetails(
+                            consumerKey, auth.getAuthorities()));
+
+                }
+                sspUser = currentSspUserFallback.get();
+
+			} else if (principal instanceof String ) {
 
 				if (SspUser.ANONYMOUS_PERSON_USERNAME.equalsIgnoreCase(((String)principal))) {
-					sspUser = anonymousUser();
-				} else if ( auth instanceof OAuth2Authentication ) {
-					// Would rather not have this coupling to OAuth2 here, but
-					// the alternative would be to change the behavior in the
-					// else clause below to *always* try to load a SspUser given
-					// the string Principal value. But the "return null"
-					// behavior in that else clause has been there a long time,
-					// so unsure whether we'd be introducing regressions by
-					// changing it.
-					//
-					// The threadlocal business here isn't just for perf...
-					// you'll get into an infinite loop if Hib tries to lookup
-					// a current user in persistence during a flush.
-					if ( currentSspUserFallback.get() == null ||
-							!(((String) principal).equalsIgnoreCase(currentSspUserFallback.get().getUsername())) ) {
+						sspUser = anonymousUser();
 
-						// Careful! This will try to create a new Person record
-						// if it can't find one with the given username. This
-						// isn't what we want on an OAuth request, but we
-						// can be reasonably sure that's not going to happen
-						// because we know this particular request has already
-						// been authenticated, which means the corresponding
-						// Person record almost certainly exists.
-						currentSspUserFallback.set((SspUser)sspUserDetailsService.loadUserDetails(
-								(String)principal, auth.getAuthorities()));
-					}
-					sspUser = currentSspUserFallback.get();
-				} else {
+                } else if ( auth instanceof OAuth2Authentication ) {
+
+                    // Would rather not have this coupling to OAuth2 here, but
+                    // the alternative would be to change the behavior in the
+                    // else clause below to *always* try to load a SspUser given
+                    // the string Principal value. But the "return null"
+                    // behavior in that else clause has been there a long time,
+                    // so unsure whether we'd be introducing regressions by
+                    // changing it.
+                    //
+                    // The threadlocal business here isn't just for perf...
+                    // you'll get into an infinite loop if Hib tries to lookup
+                    // a current user in persistence during a flush.
+                    if ( currentSspUserFallback.get() == null ||
+                            !(((String) principal).equalsIgnoreCase(currentSspUserFallback.get().getUsername())) ) {
+
+                        // Careful! This will try to create a new Person record
+                        // if it can't find one with the given username. This
+                        // isn't what we want on an OAuth request, but we
+                        // can be reasonably sure that's not going to happen
+                        // because we know this particular request has already
+                        // been authenticated, which means the corresponding
+                        // Person record almost certainly exists.
+                        currentSspUserFallback.set((SspUser) sspUserDetailsService.loadUserDetails(
+                                (String) principal, auth.getAuthorities()));
+                    }
+                    sspUser = currentSspUserFallback.get();
+
+                } else {
+
 					LOGGER.error("Just tried to get an sspUser object from a user that is "
 							+ principal);
 					// authenticated, but something is wrong with the principal
@@ -156,13 +189,15 @@ public class SecurityServiceImpl implements SecurityService {
 				}
 
 			} else {
-				// authenticated, but something is wrong with the principal
+
+    			// authenticated, but something is wrong with the principal
 				LOGGER.error("Just tried to get an sspUser object from an object that is really a "
 						+ principal.toString());
 				return null;
 			}
 		} else {
-			// not authenticated, return null
+
+     		// not authenticated, return null
 			return null;
 		}
 
@@ -171,10 +206,7 @@ public class SecurityServiceImpl implements SecurityService {
 				sspUser.setPerson(personService.personFromUsername(sspUser
 						.getUsername()));
 			} catch (ObjectNotFoundException e) {
-				LOGGER.error("SspUser in current security context has no " +
-						"corresponding Person, but could not find that Person" +
-						" in the database. Lookup was by username [" + sspUser
-						.getUsername() + "]");
+
 				return null;
 			}
 		}
@@ -207,15 +239,15 @@ public class SecurityServiceImpl implements SecurityService {
 		final SspUser sspUser = currentUser();
 
 		if (sspUser == null) {
-			LOGGER.trace("User is not authenticated");
+			LOGGER.error("User is not authenticated");
 
 		} else if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(sspUser
 				.getUsername())) {
-			LOGGER.trace("Is anonymous user");
+			LOGGER.error("Is anonymous user");
 			return null;
 
 		} else if (sspUser.getPerson() == null) {
-			LOGGER.trace("User is not in the person table");
+			LOGGER.error("User is not in the person table");
 			return null;
 
 		}
@@ -234,10 +266,10 @@ public class SecurityServiceImpl implements SecurityService {
 
 		if (authenticated) {
 			if ((currentUser == null)) {
-				LOGGER.trace("User is authenticated, but not in the person table");
+				LOGGER.error("User is authenticated, but not in the person table");
 				return false;
 			} else {
-				LOGGER.trace("User is authenticated");
+				LOGGER.error("User is authenticated");
 				return true;
 			}
 		} else {
@@ -263,7 +295,7 @@ public class SecurityServiceImpl implements SecurityService {
 	@Override
 	public String getSessionId() {
 		if ( SecurityContextHolder.getContext()
-				.getAuthentication() instanceof OAuth2Authentication ) {
+				.getAuthentication() instanceof OAuth2Authentication || SecurityContextHolder.getContext().getAuthentication() instanceof ConsumerAuthentication ) {
 			// The session ID lookup below will force creation of a HTTP Session
 			// which is undesirable for an OAuth2 request. Currently we only
 			// support client_credentials authorization grants for OAuth2, for
@@ -275,12 +307,14 @@ public class SecurityServiceImpl implements SecurityService {
 			// OAuth2-ish session ID.
 			return null;
 		}
+
 		return RequestContextHolder.currentRequestAttributes().getSessionId();
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void afterRequest() {
+
 		currentSspUserFallback.remove();
 		SspUser.afterRequest();
 	}

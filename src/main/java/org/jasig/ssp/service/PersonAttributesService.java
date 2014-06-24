@@ -36,18 +36,13 @@ import org.jasig.ssp.security.PersonAttributesResult;
  */
 public interface PersonAttributesService {
 
-	PersonAttributesResult getAttributes(HttpServletRequest req,
-			HttpServletResponse res, String username)
-			throws ObjectNotFoundException;
-
 	PersonAttributesResult getAttributes(String username)
 			throws ObjectNotFoundException;
 
 	PersonAttributesResult getAttributes(String username, PortletRequest portletRequest)
 			throws ObjectNotFoundException;
 	
-	List<Map<String, Object>> searchForUsers(HttpServletRequest req, HttpServletResponse res, 
-			Map<String,String> query);
+	List<Map<String, Object>> searchForUsers(Map<String,String> query);
 
 	/*
 	 * @returns usernames of coaches

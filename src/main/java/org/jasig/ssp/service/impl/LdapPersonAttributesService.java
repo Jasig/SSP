@@ -47,17 +47,6 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 	private transient LdapTemplate ldapTemplate;
 
 	@Override
-	public PersonAttributesResult getAttributes(
-			final HttpServletRequest req,
-			final HttpServletResponse res,
-			final String username)
-			throws ObjectNotFoundException {
-
-		return getAttributes(username);
-
-	}
-
-	@Override
 	public PersonAttributesResult getAttributes(final String username) {
 		return propertiesForDn(username, buildDn(username));
 	}
@@ -151,9 +140,7 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 	}
 
 	@Override
-	public List<Map<String, Object>> searchForUsers(
-			final HttpServletRequest req, final HttpServletResponse res,
-			final Map<String, String> query) {
+	public List<Map<String, Object>> searchForUsers(final Map<String, String> query) {
 		throw new NotImplementedException();
 	}
 }

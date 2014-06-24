@@ -64,27 +64,74 @@ public final class EarlyAlertPortletController {
 	private FacultyCourseService facultyCourseService;
 
 	@RenderMapping
-	public ModelAndView showRoster(final PortletRequest req) {
+	public ModelAndView showRoster(final PortletRequest req,
+			ModelMap model) {
 		
-		Map<String,String> model = new HashMap<String,String>();
 		
-		model.put("initialSelectedCourse", getInitialSelectedCourse(req));
+		try {
+			setInitialSelectedCourse(model, req);
+		} catch (ObjectNotFoundException e) {
+			throw new EarlyAlertPortletControllerRuntimeException("Missing student identifier.");
+		}
 		if(isConfirmed(req))
 			model.put("studentName", org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(req.getParameter("studentName")));
 			
 		return new ModelAndView("ea-roster", model);
 	}
 	
-	private String getInitialSelectedCourse(final PortletRequest req){
+	private void setInitialSelectedCourse(ModelMap model, final PortletRequest req) throws ObjectNotFoundException{
 		String formattedCourse = req.getParameter("formattedCourse");
-		String initialSelectedCourse = "";
+		String sectionCode = req.getParameter("sectionCode");
 		String termCode = req.getParameter("termCode");
-		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
-			initialSelectedCourse = formattedCourse;
-		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			initialSelectedCourse += ":" + termCode;
-		return initialSelectedCourse;
+		Person user = (Person)model.get("user");
+		if ( user == null ) {
+			throw new EarlyAlertPortletControllerRuntimeException("Missing or deactivated account for current user.");
+		}
+		FacultyCourse course = getCourse(model, new SearchFacultyCourseTO( user.getSchoolId(),  
+				termCode, 
+				sectionCode,  
+				formattedCourse));
+		if(course != null)
+			model.put("initialSelectedCourse", getCourseSectionKey(course));
 	}
+
+    private FacultyCourse getCourse(ModelMap model, SearchFacultyCourseTO searchFacultyCourseTO){
+    	if(searchFacultyCourseTO.hasCourseIdentification()){
+    		FacultyCourse course = null;
+    		try{
+    			course =  facultyCourseService.getCourseBySearchFacultyCourseTO(searchFacultyCourseTO);
+    		} catch(ObjectNotFoundException e){
+    			throw new EarlyAlertPortletControllerRuntimeException(buildErrorMesssage("Course not found or user not listed as faculty for course.",
+						searchFacultyCourseTO.getFacultySchoolId(),
+						null,
+						null,
+						searchFacultyCourseTO.getFormattedCourse(),
+						searchFacultyCourseTO.getTermCode(),
+						searchFacultyCourseTO.getSectionCode()));
+    		}
+    		if(course == null) {
+    			throw new EarlyAlertPortletControllerRuntimeException(buildErrorMesssage("Course not found or user not listed as faculty for course.",
+						searchFacultyCourseTO.getFacultySchoolId(),
+						null,
+						null,
+						searchFacultyCourseTO.getFormattedCourse(),
+						searchFacultyCourseTO.getTermCode(),
+						searchFacultyCourseTO.getSectionCode()));
+			}
+    		return course;
+    	}
+    	return null;
+    }
+    
+    private String getCourseSectionKey(SearchFacultyCourseTO course){
+    	return course.getFormattedCourse() + ":" +
+    			course.getTermCode() + ":" + course.getSectionCode();
+    }
+    
+    private String getCourseSectionKey(FacultyCourse course){
+    	return course.getFormattedCourse() + ":" +
+    			course.getTermCode() + ":" + course.getSectionCode();
+    }
 	
 	
 	//TODO this is a total hack added to "clear" confirm. portlet does not have access to render parameters so no way to clear
@@ -106,22 +153,7 @@ public final class EarlyAlertPortletController {
 		req.getPortletSession().setAttribute("confirm", confirm);
 		return true;
 	}
-/*
-	@RenderMapping(params = "confirm=true")
-	public ModelAndView confirm(final PortletRequest req, @RequestParam final String studentName) {
-		String formattedCourse = req.getParameter("formattedCourse");
-		String initialSelectedCourse = "";
-		String termCode = req.getParameter("termCode");
-		if(org.apache.commons.lang.StringUtils.isNotBlank(formattedCourse))
-			initialSelectedCourse = formattedCourse;
-		if(org.apache.commons.lang.StringUtils.isNotBlank(termCode))
-			initialSelectedCourse += ":" + termCode;
-		
-		
-		return new ModelAndView("ea-roster", model);
-	}
-	
-*/
+
 	@RenderMapping(params = "action=enterAlert")
 	public ModelAndView showForm(final PortletRequest req, 
 			@RequestParam(required = false) final String schoolId, 
