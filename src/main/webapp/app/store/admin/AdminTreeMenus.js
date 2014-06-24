@@ -15,7 +15,12 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
- */ 
+ */
+  
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/12/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions Data view to Admin Tool
+ */
 Ext.define('Ssp.store.admin.AdminTreeMenus', {
     extend: 'Ext.data.TreeStore',
     mixins: ['Deft.mixin.Injectable'],
@@ -29,6 +34,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
     },
     autoLoad: false,
     constructor: function(){
+
         var me = this;
         var items = {
             text: 'Administrative Tools',
@@ -55,22 +61,19 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
 						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         flex: .10,
                         field: {
-                            xtype: 'oscheckbox'
+                            xtype: 'checkbox'
                         }
                     },{
                         header: 'Name',
                         dataIndex: 'name',
-						editor:{
-							allowBlank: false
-						},
+                        required: true,
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         },
                         flex: 1
                     }, {
@@ -188,24 +191,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
 					    header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
                         defaultValue: true,
                         flex: .2,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         field: {
-                            xtype: 'oscheckbox',
+                            xtype: 'checkbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
 					},{					
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         },
                         flex: .25
                     }, {
@@ -229,13 +228,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						header: 'Student Type Code',
 						required: true,
 						dataIndex: 'code',
-						editor:{
-							allowBlank: false
+						field: {
+							xtype: 'textfield'
 						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
 						flex: .25						
 					}]
                 }, {
@@ -329,24 +324,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
 					    header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
                         defaultValue: true,
                         flex: .2,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         field: {
-                            xtype: 'oscheckbox',
+                            xtype: 'checkbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
 					},{					
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         },
                         flex: .25
                     }, {
@@ -361,13 +352,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						header: 'Race Code',
 						required: true,
 						dataIndex: 'code',
-						editor:{
-							allowBlank: false
+						field: {
+							xtype: 'textfield'
 						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
 						flex: .25						
 					}]
                 },
@@ -450,7 +437,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 children: [{
                     text: 'Categories',
                     title: 'Categories',
-                    store: 'challengeCategoriesAll',
+                    store: 'challengeCategories',
 					interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false                  
@@ -501,12 +488,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
 						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         flex: .10,
                         field: {
-                            xtype: 'oscheckbox'
+                            xtype: 'checkbox'
                         }
                     },
 					{
@@ -514,12 +501,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'name',
                         required: true,
                         flex: .20,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         }
                     }, {
                         header: 'Description',
@@ -533,25 +516,22 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'acronym',
                         required: true,
                         flex: .10,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         }},
                         {
                             header: 'Data Permission',
-                            dataIndex: 'permission',
+                            dataIndex: 'dataPermission',
                             required: true,                        
                             field: {
                                 xtype: 'combo',
                                 store: me.confidentialityLevelOptionsStore,
                                 displayField: 'name',
-                                valueField:'name',
                                 typeAhead: true,
+                                mode:'local',
+                                queryMode:'local',
                                 forceSelection: false,
-                                associativeField: 'permission'
+                                associativeField: 'dataPermission'
                             },
                             flex: .3
                         }]
@@ -563,8 +543,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     leaf: true
                 }]
             }, {
-                text: 'Early Alert',
-                title: 'Early Alert',
+                text: 'EarlyAlert',
+                title: 'EarlyAlert',
                 form: '',
                 expanded: false,
                 children: [{
@@ -584,8 +564,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
-                    text: 'Outreaches',
-                    title: 'Outreaches',
+                    text: 'EarlyAlerts',
+                    title: 'EarlyAlerts',
                     store: 'earlyAlertOutreachesAll',
 					interfaceOptions: {
                         addButtonVisible: true,
@@ -617,23 +597,19 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
 						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         flex: .10,
                         field: {
-                            xtype: 'oscheckbox'
+                            xtype: 'checkbox'
                         }
                     },{
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         },
                         flex: 50
                     }, {
@@ -649,12 +625,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         dataIndex: 'acronym',
                         flex: 10,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         }
                      }, {
                          header: 'Referral Email',
@@ -687,7 +659,18 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
-                }]
+                }//TAPS 20140039 BEGIN
+				, {
+                    text: 'Interventions',
+                    title: 'Interventions',
+                    store: 'earlyAlertInterventionsAll',
+					interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false                  
+                    }, 
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                }] //TAPS 20140039 END
             }, {
                 text: 'Journal',
                 title: 'Journal',
@@ -753,35 +736,27 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
                         defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
-                            xtype: 'oscheckbox'
+                            xtype: 'checkbox'
                         }
                     }, {
                         header: 'Name',
                         dataIndex: 'name',
                         required: true,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         },
                         flex: .20
                     }, {
                         header: 'Code',
                         dataIndex: 'code',
                         required: true,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         },
                         flex: .20
                     }, {
@@ -818,12 +793,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         required: true,
                         rowEditable: false,
                         flex: .10,
-                        editor:{
-							allowBlank: false
-						},
                         field: {
-                            xtype: 'textfield',
-							allowBlank: false
+                            xtype: 'textfield'
                         }
                     }, {
                         header: 'Value',
@@ -867,25 +838,21 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	                columns: [{
 					    header: 'Active',
 	                    required: true,
-	                    dataIndex: 'objectStatus',
+	                    dataIndex: 'active',
 	                    defaultValue: true,
 	                    flex: .2,
-	                    renderer: me.columnRendererUtils.renderObjectStatus,
+	                    renderer: me.columnRendererUtils.renderActive,
 	                    field: {
-	                        xtype: 'oscheckbox',
+	                        xtype: 'checkbox',
 	                        fieldStyle: "margin-bottom:12px;"
 	                    }
 					},{					
 	                    header: 'Name',
 	                    dataIndex: 'name',
 	                    required: true,
-	                    editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
+	                    field: {
+	                        xtype: 'textfield'
+	                    },
 	                    flex: .25
 	                }, {
 	                    header: 'Description',
@@ -899,13 +866,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						header: 'SAP Code',
 						required: true,
 						dataIndex: 'code',
-						editor:{
-							allowBlank: false
+						field: {
+							xtype: 'textfield'
 						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
 						flex: .25						
 					}]
 	            }, {
@@ -921,25 +884,21 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	                columns: [{
 					    header: 'Active',
 	                    required: true,
-	                    dataIndex: 'objectStatus',
+	                    dataIndex: 'active',
 	                    defaultValue: true,
 	                    flex: .2,
-	                    renderer: me.columnRendererUtils.renderObjectStatus,
+	                    renderer: me.columnRendererUtils.renderActive,
 	                    field: {
-	                        xtype: 'oscheckbox',
+	                        xtype: 'checkbox',
 	                        fieldStyle: "margin-bottom:12px;"
 	                    }
 					},{					
 	                    header: 'Name',
 	                    dataIndex: 'name',
 	                    required: true,
-	                    editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
+	                    field: {
+	                        xtype: 'textfield'
+	                    },
 	                    flex: .25
 	                }, {
 	                    header: 'Description',
@@ -953,13 +912,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 						header: 'File Code',
 						required: true,
 						dataIndex: 'code',
-						editor:{
-							allowBlank: false
+						field: {
+							xtype: 'textfield'
 						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
 						flex: .25						
 					}]
 	            }]
@@ -973,7 +928,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     title: 'Electives',
                     store: 'electivesAll',
                     sort: {
-                    	field: 'sortOrder'
+                    	field: 'sortOrder',
+                    	direction: 'ASC' //or 'DESC'
                     },
                     viewConfig: {
                         markDirty: false
@@ -995,24 +951,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         header: 'Order',
                         dataIndex: 'sortOrder',
                         required: true,
-						editor:{
-							allowBlank: false
-						},
                         field: {
                             xtype: 'textfield',
-							 fieldStyle: "margin-bottom:12px;",
-							allowBlank: false
+                            fieldStyle: "margin-bottom:12px;"
                         },
                         flex: .1
                     }, {
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
                         defaultValue: true,
                         flex: .2,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         field: {
-                            xtype: 'oscheckbox',
+                            xtype: 'checkbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
                     }, {
@@ -1020,28 +972,20 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         dataIndex: 'name',
                         required: true,
                         defaultValue: "",
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
+                        field: {
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;"
+                        },
                         flex: .2
                     }, {
                         header: 'Elective Code',
                         dataIndex: 'code',
                         defaultValue: "",
                         required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
+                        field: {
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;"                            	
+                        },
                         flex: .2
                     }, {
                         header: 'Description',
@@ -1080,39 +1024,31 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
                         defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
-                            xtype: 'oscheckbox',
+                            xtype: 'checkbox',
                             fieldStyle: "margin-bottom:12px;"
                         }
                     }, {
                         header: 'Color Name',
                         dataIndex: 'name',
                         required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
+                        field: {
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;"
+                        },
                         flex: .20
                     }, {
                         header: 'Color Code',
                         dataIndex: 'code',
                         required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
+                        field: {
+                            xtype: 'textfield',
+                            fieldStyle: "margin-bottom:12px;"
+                        },
                         flex: .20
                     }, {
                         header: 'Hex Code',
@@ -1148,36 +1084,28 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     columns: [{
                         header: 'Active',
                         required: true,
-                        dataIndex: 'objectStatus',
+                        dataIndex: 'active',
                         defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
+                        renderer: me.columnRendererUtils.renderActive,
                         flex: .20,
                         field: {
-                            xtype: 'oscheckbox'
+                            xtype: 'checkbox'
                         }
                     }, {
                         header: 'Tag Name',
                         dataIndex: 'name',
                         required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								allowBlank: false
-	                        },
+                        field: {
+                            xtype: 'textfield'
+                        },
                         flex: .20
                     }, {
                         header: 'Tag Code',
                         dataIndex: 'code',
                         required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								allowBlank: false
-	                        },
+                        field: {
+                            xtype: 'textfield'
+                        },
                         flex: .20
                     }, {
                         header: 'Description',

@@ -18,6 +18,10 @@
     under the License.
 
 --%>
+<%--
+	01/29/2014	Jonathan Hart	TAPS 20140023	Added "*" to Comments field for display
+    06/17/2014	Jonathan Hart	TAPS 20140039	Added Faculty Interventions to EA Form
+--%>
 <jsp:directive.include file="/WEB-INF/jsp/include.jsp"/>
 
 <portlet:renderURL var="cancelUrl" >
@@ -50,7 +54,7 @@
   
   <!-- Portlet Titlebar -->
   <div class="fl-widget-titlebar titlebar portlet-titlebar" role="sectionhead">
-  	<h2 class="title" role="heading"><spring:message code="early.alert.details"/></h2>
+  	<h2 class="title" role="heading"><spring:message code="early.alert.details"/> - <i>"Information Regarding Student At-Risk of Course Failure"</i></h2> <!-- TAPS 20140068 -->
   </div>
 
   <!-- Portlet Content -->
@@ -213,10 +217,11 @@
       
        <!-- Referral Reasons -->
       <div class="ea-input">
+        <span style="color:red;font-style:italic;font-size:12px;">"Why is Student At-Risk of Failure?"</span><br/> <!-- TAPS 20140068 -->
         <ul class="field-reasons"></ul>
         <p><a href="javascript:void(0);" class="reasons-add-edit"><img src="<c:url value="/rs/famfamfam/silk/1.3/add.png" />" alt="<spring:message code="add.edit"/>" /> <spring:message code="add.edit"/></a></p>
       </div>
-      <div class="ea-required">&nbsp;</div>
+      <div class="ea-required">*</div>
       <div class="ea-label">
         <span><spring:message code="referral.reasons"/>:</span>
       </div>
@@ -232,12 +237,28 @@
         <span><spring:message code="faculty.suggestions"/>:</span>
       </div>
       <div class="ea-clear"></div>
+      
+      <!-- TAPS 20140039 BEGIN -->
+      <!-- Faculty Interventions -->
+      <div class="ea-input">
+        <span style="color:red;font-style:italic;font-size:12px;">"What Interventions have you taken with this student?"</span>  <!-- TAPS 20140068 -->
+        <ul class="field-interventions"></ul>
+        <p><a href="javascript:void(0);" class="interventions-add-edit"><img src="<c:url value="/rs/famfamfam/silk/1.3/add.png" />" alt="<spring:message code="add.edit"/>" /> <spring:message code="add.edit"/></a></p>
+      </div>
+      <div class="ea-required">*</div>
+      <div class="ea-label">
+        <span><spring:message code="faculty.interventions"/>:</span>
+      </div>
+      <div class="ea-clear"></div>
+      <!-- TAPS 20140039 END -->
 
       <!-- Comments -->
       <div class="ea-input">
+        <span style="color:red;font-style:italic;font-size:12px;">"Please add comments to assist advising in resolving this challenge."</span>  <!-- TAPS 20140068 -->
+        <br/>
         <textarea class="field-comments"></textarea>
       </div>
-      <div class="ea-required">&nbsp;</div>
+      <div class="ea-required">*</div> <!-- TAPS 20140023 -->
       <div class="ea-label">
         <span><spring:message code="comments"/>:</span>
       </div>
@@ -263,6 +284,13 @@
         <ul>
         </ul>
       </div>
+      
+      <!-- TAPS 20140039 BEGIN -->
+      <div class="interventions-dialog" style="display: none;">
+        <ul>
+        </ul>
+      </div>
+      <!-- TAPS 20140039 END -->
       
 
     
@@ -299,6 +327,7 @@
                 campus:       '<c:url value="/api/1/reference/campus?limit=-1" />',
                 reasons:       '<c:url value="/api/1/reference/earlyAlertReason?limit=-1" />',
                 suggestions:  '<c:url value="/api/1/reference/earlyAlertSuggestion?limit=-1" />',
+				interventions:'<c:url value="/api/1/reference/earlyAlertIntervention?limit=-1" />', //TAPS 20140039
                 submit:       '<c:url value="/api/1/person/STUDENTID/earlyAlert" />',
                 configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',
                 enrollmentStatus: '<c:url value="/api/1/reference/enrollmentStatus?limit=-1"/>',

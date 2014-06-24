@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ /*
+ *	06/16/2014 IRSC Jonathan Hart - TAPS 20140039: Added EarlyAlertInterventions Faculty Interventions to ReachOut
+ */
 package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import java.util.ArrayList;
@@ -48,6 +51,7 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.EarlyAlertIntervention; //TAPS 20140039
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.security.SspUser;
@@ -64,6 +68,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
+import org.jasig.ssp.service.reference.EarlyAlertInterventionService;  //TAPS 20140039
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
@@ -120,6 +125,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient EarlyAlertSuggestionService earlyAlertSuggestionService;
+	
+	@Autowired																		//TAPS 20140039
+	private transient EarlyAlertInterventionService earlyAlertInterventionService;	//TAPS 20140039
 
 	@Autowired
 	private transient PersonService personService;
@@ -169,7 +177,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		final UUID assignedAdvisor = getEarlyAlertAdvisor(earlyAlert);
 		if (assignedAdvisor == null) {
 			throw new ValidationException(
-					"Could not determine the Early Alert Advisor for student ID "
+					"Could not determine the EarlyAlert Advisor for student ID "
 							+ student.getId());
 		}
 
@@ -188,10 +196,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			sendMessageToAdvisor(saved, earlyAlert.getEmailCC());
 		} catch (final SendFailedException e) {
 			LOGGER.warn(
-					"Could not send Early Alert message to advisor.",
+					"Could not send EarlyAlert message to advisor.",
 					e);
 			throw new ValidationException(
-					"Early Alert notification e-mail could not be sent to advisor. Early Alert was NOT created.",
+					"EarlyAlert notification e-mail could not be sent to advisor. EarlyAlert was NOT created.",
 					e);
 		}
 
@@ -200,10 +208,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			sendConfirmationMessageToFaculty(saved);
 		} catch (final SendFailedException e) {
 			LOGGER.warn(
-					"Could not send Early Alert confirmation to faculty.",
+					"Could not send EarlyAlert confirmation to faculty.",
 					e);
 			throw new ValidationException(
-					"Early Alert confirmation e-mail could not be sent. Early Alert was NOT created.",
+					"EarlyAlert confirmation e-mail could not be sent. EarlyAlert was NOT created.",
 					e);
 		}
 
@@ -229,7 +237,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		final SspUser sspUser = securityService.currentUser();
 		if ( sspUser == null ) {
-			throw new ValidationException("Early Alert cannot be closed by a null User.");
+			throw new ValidationException("EarlyAlert cannot be closed by a null User.");
 		}
 
 		earlyAlert.setClosedDate(new Date());
@@ -261,7 +269,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		final SspUser sspUser = securityService.currentUser();
 		if ( sspUser == null ) {
-			throw new ValidationException("Early Alert cannot be closed by a null User.");
+			throw new ValidationException("EarlyAlert cannot be closed by a null User.");
 		}
 
 		earlyAlert.setClosedDate(null);
@@ -321,6 +329,20 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}
 
 		current.setEarlyAlertSuggestions(earlyAlertSuggestions);
+		
+		//TAPS 20140039 BEGIN
+		final Set<EarlyAlertIntervention> earlyAlertInterventions = new HashSet<EarlyAlertIntervention>();
+		if (obj.getEarlyAlertInterventions() != null) {
+			for (final EarlyAlertIntervention reason : obj
+					.getEarlyAlertInterventions()) {
+				earlyAlertInterventions.add(earlyAlertInterventionService
+						.load(reason
+								.getId()));
+			}
+		}
+
+		current.setEarlyAlertInterventions(earlyAlertInterventions);
+		//TAPS 20140039 END
 
 		return getDao().save(current);
 	}
@@ -365,7 +387,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 		// getEarlyAlertAdvisor should never return null
 		throw new ValidationException(
-				"Could not determined the Early Alert Coordinator for this student. Ensure that a default coordinator is set globally and for all campuses.");
+				"Could not determined the EarlyAlert Coordinator for this student. Ensure that a default coordinator is set globally and for all campuses.");
 	}
 
 	private void ensureValidAlertedOnPersonStateNoFail(Person person) {
@@ -665,7 +687,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		try{
 			creator = personService.get(earlyAlert.getCreatedBy().getId());
 		}catch(ObjectNotFoundException exp)	{
-			LOGGER.error("Early Alert Creator Not found sending message for early alert:" + earlyAlert.getId(), exp);
+			LOGGER.error("EarlyAlert Creator Not found sending message for EarlyAlert:" + earlyAlert.getId(), exp);
 		}
 		
 		EarlyAlertMessageTemplateTO eaMTO = new EarlyAlertMessageTemplateTO(earlyAlert,creator);
@@ -676,7 +698,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				// if no earlyAlert.getCampus()  error thrown by design, should never not be a campus.
 				eaMTO.setCoach(new CoachPersonLiteMessageTemplateTO(personService.get(earlyAlert.getCampus().getEarlyAlertCoordinatorId())));
 			}catch(ObjectNotFoundException exp){
-				LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
+				LOGGER.error("EarlyAlert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
 			}
 		}
 		
@@ -797,7 +819,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					// if no earlyAlert.getCampus()  error thrown by design, should never not be a campus.
 					coach = personService.get(earlyAlert.getCampus().getEarlyAlertCoordinatorId());
 				}catch(ObjectNotFoundException exp){
-					LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
+					LOGGER.error("EarlyAlert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
 				}
 			}
 			if(easByCoach.containsKey(coach)){
@@ -806,7 +828,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				try{
 					 creator = personService.get(earlyAlert.getCreatedBy().getId());
 				}catch(ObjectNotFoundException exp){
-					LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid creator: " + earlyAlert.getCreatedBy(), exp);
+					LOGGER.error("EarlyAlert with id: " + earlyAlert.getId() + " does not have valid creator: " + earlyAlert.getCreatedBy(), exp);
 				}
 				coachEarlyAlerts.add(new EarlyAlertMessageTemplateTO(earlyAlert, creator));
 			}else{

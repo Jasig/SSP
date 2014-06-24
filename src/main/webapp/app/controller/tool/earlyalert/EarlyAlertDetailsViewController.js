@@ -16,6 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ 
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions functionality to EA Controller
+ */
 Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -29,6 +34,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         selectedReasonsStore: 'earlyAlertDetailsReasonsStore',
         suggestionsStore: 'earlyAlertSuggestionsAllUnpagedStore',
         selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
+		interventionsStore: 'earlyAlertInterventionsAllUnpagedStore', //TAPS 20140039
+        selectedInterventionsStore: 'earlyAlertDetailsInterventionsStore', //TAPS 20140039
         appEventsController: 'appEventsController',
         earlyAlertResponse: 'currentEarlyAlertResponse',
         personLite: 'personLite',
@@ -52,6 +59,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         },
         
         earlyAlertSuggestionsList: '#earlyAlertSuggestionsList',
+		earlyAlertInterventionsList: '#earlyAlertInterventionsList', //TAPS 20140039
         campusField: '#campusField',
         statusField: '#statusField',
         createdByField: '#createdByField',
@@ -142,6 +150,13 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertDetailsViewController', {
         var selectedSuggestions = me.formUtils.getSimpleItemsForDisplay( me.suggestionsStore, me.model.get('earlyAlertSuggestionIds'), 'Suggestions' );
         me.selectedSuggestionsStore.removeAll();
         me.selectedSuggestionsStore.loadData( selectedSuggestions );
+		
+		//TAPS 20140039 BEGIN
+		// Interventions
+        var selectedInterventions = me.formUtils.getSimpleItemsForDisplay( me.interventionsStore, me.model.get('earlyAlertInterventionIds'), 'Interventions' );
+        me.selectedInterventionsStore.removeAll();
+        me.selectedInterventionsStore.loadData( selectedInterventions );
+		//TAPS 20140039 END
 
         if ( me.model.get('closedById') ) {
             if ( me.model.get('closedByName') ) {

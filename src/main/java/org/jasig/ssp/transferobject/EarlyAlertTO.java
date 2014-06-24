@@ -16,6 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ 
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/16/2014 - Jonathan Hart IRSC TAPS 20140039 - Add EarlyAlertIntervention Faculty Intervention code
+ */
 package org.jasig.ssp.transferobject;
 
 import java.io.Serializable;
@@ -31,8 +36,10 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.EarlyAlertIntervention; //TAPS 20140039
 import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertInterventionTO; //TAPS 20140039
 
 import com.google.common.collect.Sets;
 
@@ -75,6 +82,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	private Set<UUID> earlyAlertReasonIds;
 
 	private Set<UUID> earlyAlertSuggestionIds;
+	
+	private Set<UUID> earlyAlertInterventionIds; //TAPS 20140039
 
 	private Boolean sendEmailToStudent = Boolean.FALSE;
 	
@@ -84,7 +93,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
     private Set<EarlyAlertReasonTO> earlyAlertReasonTOs;
     @JsonIgnore
     private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs;
-
+	@JsonIgnore													 	//TAPS 20140039
+    private Set<EarlyAlertInterventionTO> earlyAlertInterventionTOs;//TAPS 20140039
 	/**
 	 * Empty constructor
 	 */
@@ -122,8 +132,10 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		closedById = earlyAlert.getClosedById();
 		earlyAlertReasonIds = Sets.newHashSet();
 		earlyAlertSuggestionIds = Sets.newHashSet();
+		earlyAlertInterventionIds = Sets.newHashSet(); //TAPS 20140039
         earlyAlertReasonTOs = Sets.newHashSet();
         earlyAlertSuggestionTOs = Sets.newHashSet();
+		earlyAlertInterventionTOs = Sets.newHashSet(); //TAPS 20140039
 
         if ( closedById != null ) {
 			Person closedBy = earlyAlert.getClosedBy();
@@ -150,7 +162,14 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 			earlyAlertSuggestionIds.add(earlyAlertSuggestion.getId());
             earlyAlertSuggestionTOs.add(new EarlyAlertSuggestionTO(earlyAlertSuggestion));
 		}
-		
+		//TAPS 20140039 BEGIN
+		Set<EarlyAlertIntervention> earlyAlertInterventionModels = earlyAlert
+				.getEarlyAlertInterventions();
+		for (EarlyAlertIntervention earlyAlertIntervention : earlyAlertInterventionModels) {
+			earlyAlertInterventionIds.add(earlyAlertIntervention.getId());
+            earlyAlertInterventionTOs.add(new EarlyAlertInterventionTO(earlyAlertIntervention));
+		}
+		//TAPS 20140039 END
 		setNoOfResponses(earlyAlert.getResponseCount());
 		
 		lastResponseDate = earlyAlert.getLastResponseDate();
@@ -397,6 +416,16 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	public void setEarlyAlertSuggestionIds(Set<UUID> earlyAlertSuggestionIds) {
 		this.earlyAlertSuggestionIds = earlyAlertSuggestionIds;
 	}
+	
+	//TAPS 20140039 BEGIN
+	public Set<UUID> getEarlyAlertInterventionIds() {
+		return earlyAlertInterventionIds;
+	}
+
+	public void setEarlyAlertInterventionIds(Set<UUID> earlyAlertInterventionIds) {
+		this.earlyAlertInterventionIds = earlyAlertInterventionIds;
+	}
+	//TAPS 20140039 END
 
     @JsonIgnore
     public Set<EarlyAlertReasonTO> getEarlyAlertReasonTOs() {
@@ -417,6 +446,18 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
     public void setEarlyAlertSuggestionTOs(Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs) {
         this.earlyAlertSuggestionTOs = earlyAlertSuggestionTOs;
     }
+	
+	//TAPS 20140039 BEGIN
+	@JsonIgnore
+    public Set<EarlyAlertInterventionTO> getEarlyAlertInterventionTOs() {
+        return earlyAlertInterventionTOs;
+    }
+
+    @JsonIgnore
+    public void setEarlyAlertInterventionTOs(Set<EarlyAlertInterventionTO> earlyAlertInterventionTOs) {
+        this.earlyAlertInterventionTOs = earlyAlertInterventionTOs;
+    }
+	//TAPS 20140039 END
 
 	public Date getLastResponseDate() {
 		return lastResponseDate;

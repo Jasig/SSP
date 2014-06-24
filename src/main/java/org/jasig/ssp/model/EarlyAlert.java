@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions to EA
+ */
 package org.jasig.ssp.model;
 
 import java.util.Date;
@@ -42,6 +46,7 @@ import org.hibernate.annotations.TypeDef;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.EarlyAlertIntervention; //TAPS 20140039
 import org.jasig.ssp.util.uuid.UUIDCustomType;
 
 import com.google.common.collect.Sets;
@@ -130,6 +135,17 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 			inverseJoinColumns = @JoinColumn(name = "early_alert_suggestion_id"))
 	private Set<EarlyAlertSuggestion> earlyAlertSuggestions = Sets
 			.newHashSet();
+			
+	//TAPS 20140039 BEGIN
+	// TODO: eager loading makes more sense, but causes cartesian results. so
+	// hold off optimizing performance until the performance pass of the system.
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "early_alert_early_alert_intervention",
+			joinColumns = @JoinColumn(name = "early_alert_id"),
+			inverseJoinColumns = @JoinColumn(name = "early_alert_intervention_id"))
+	private Set<EarlyAlertIntervention> earlyAlertInterventions = Sets
+			.newHashSet();
+	//TAPS 20140039 END
 
 	/**
 	 * @return the courseName
@@ -327,6 +343,24 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 			final Set<EarlyAlertSuggestion> earlyAlertSuggestionIds) {
 		this.earlyAlertSuggestions = earlyAlertSuggestionIds;
 	}
+	
+	//TAPS 20140039 BEGIN
+	/**
+	 * @return the earlyAlertInterventionIds
+	 */
+	public Set<EarlyAlertIntervention> getEarlyAlertInterventions() {
+		return earlyAlertInterventions;
+	}
+
+	/**
+	 * @param earlyAlertInterventionIds
+	 *            the earlyAlertInterventionIds to set
+	 */
+	public void setEarlyAlertInterventions(
+			final Set<EarlyAlertIntervention> earlyAlertInterventionIds) {
+		this.earlyAlertInterventions = earlyAlertInterventionIds;
+	}
+	//TAPS 20140039 END
 
 	@Override
 	protected int hashPrime() {
@@ -348,8 +382,10 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		result *= hashField("courseTermCode", courseTermCode);
 		result *= hashField("emailCC", emailCC);
 		result *= hashField("campus", campus);
+		result *= hashField("earlyAlertReasonOtherDescription",
+				earlyAlertReasonOtherDescription); //TAPS 20140039
 		result *= hashField("earlyAlertSuggestionOtherDescription",
-				earlyAlertReasonOtherDescription);
+				earlyAlertSuggestionOtherDescription); //TAPS 20140039
 		result *= hashField("comment", comment);
 		result *= hashField("person", person);
 		result *= hashField("closedDate", closedDate);

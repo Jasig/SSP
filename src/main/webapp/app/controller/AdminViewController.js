@@ -16,13 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ 
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/12/2014 - Jonathan Hart IRSC TAPS 20140039 - Add earlyAlertInterventionsAllStore data store to AdminViewController
+ */
 Ext.define('Ssp.controller.AdminViewController', {
 	extend: 'Deft.mvc.ViewController',    
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
     	campusesStore: 'campusesStore',
     	campusServicesStore: 'campusServicesStore',
-    	challengeCategoriesAllStore: 'challengeCategoriesAllStore',
+    	challengeCategoriesStore: 'challengeCategoriesStore',
         challengesStore: 'challengesStore',
     	challengeReferralsStore: 'challengeReferralsStore',
     	childCareArrangementsAllStore: 'childCareArrangementsAllStore',
@@ -42,6 +47,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		earlyAlertReasonsAllStore: 'earlyAlertReasonsAllStore',
 		earlyAlertReferralsAllStore: 'earlyAlertReferralsAllStore',
 		earlyAlertSuggestionsAllStore: 'earlyAlertSuggestionsAllStore',
+		earlyAlertInterventionsAllStore: 'earlyAlertInterventionsAllStore', //TAPS 20140039
     	educationGoalsAllStore: 'educationGoalsAllStore',
     	educationLevelsAllStore: 'educationLevelsAllStore',
     	electiveStore: 'electivesStore',
@@ -71,7 +77,7 @@ Ext.define('Ssp.controller.AdminViewController', {
     	specialServiceGroupsAllStore: 'specialServiceGroupsAllStore',
         statesStore: 'statesStore',
         studentStatusesAllStore: 'studentStatusesAllStore',
-        studentTypesStore: 'studentTypesAllStore',
+        studentTypesStore: 'studentTypesAllUnpagedStore',
 		tagsStore: 'tagsStore',
 		textStore: 'textStore',
     	veteranStatusesAllStore: 'veteranStatusesAllStore'
@@ -139,11 +145,6 @@ Ext.define('Ssp.controller.AdminViewController', {
 			if (store != null)
 			{
 				// pass the columns for editing
-				if(store.sorters){
-					store.sorters.clear();
-				}
-				//TODO  currentPage for store is reset to 1 since sorting is client side.
-				store.currentPage=1;
 				if (columns != null)
 				{
 					// comp.reconfigure(store, columns); // ,columns
@@ -154,7 +155,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 			}
 
-			if ( options.interfaceOptions && options.interfaceOptions.storeDependencies ) {
+			if ( options.interfaceOptions.storeDependencies ) {
 
 				var responseDispatcherConfig = {
 					remainingOpNames: [],

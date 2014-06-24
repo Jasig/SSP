@@ -16,6 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ 
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/12/2014 - Jonathan Hart IRSC TAPS 20140039:
+ *				Added -	Ssp.store.reference.EarlyAlertInterventions
+ *					  -	earlyAlertIntervention url path
+ *					  - earlyAlertDetailsInterventionsStore
+ *					  -	earlyAlertInterventionsStore & earlyAlertInterventionsAllUnpagedStore
+ *				
+ *
+ */
 Ext.Loader.setConfig({
 	enabled: true,
 	paths: {
@@ -25,7 +36,6 @@ Ext.Loader.setConfig({
 });
 
 Ext.require([
-    'Ssp.view.field.ObjectStatusCheckbox',
     'Ssp.view.admin.forms.ColorPicker',
     'Ssp.view.admin.AdminMain',
     'Ssp.view.admin.AdminTreeMenu',
@@ -33,15 +43,12 @@ Ext.require([
     'Ssp.view.Main',
     'Ssp.view.Search',
     'Ssp.view.SearchForm',
-    'Ssp.view.SearchTab',
     'Ssp.view.StudentRecord',
     'Ssp.view.EmailStudentForm',
     'Ssp.view.EmailStudentView',
     'Ssp.view.ProgramStatusChangeReasonWindow',
 	'Ssp.view.person.Student',
-	'Ssp.view.person.InstantStudent',
     'Ssp.view.person.CaseloadAssignment',
-    'Ssp.view.person.InstantCaseloadAssignment',
     'Ssp.view.person.EditPerson',
     'Ssp.view.person.Coach',
     'Ssp.view.person.Appointment',
@@ -138,9 +145,10 @@ Ext.require([
 	
 	//MAP Views
     'Ssp.view.tools.map.MAP',
+	'Ssp.view.tools.map.MAPTool',
 	'Ssp.view.tools.map.CoursesView',
+	'Ssp.view.tools.map.SemesterGridTranscript',
     'Ssp.view.tools.map.SemesterPanel',
-    'Ssp.view.tools.map.PersistentFieldSet',
     'Ssp.view.tools.map.SemesterPanelContainer',
     'Ssp.view.tools.map.StudentTranscriptViewer',
     'Ssp.view.tools.map.MapStatusReport',
@@ -160,6 +168,7 @@ Ext.require([
     'Ssp.view.tools.map.EmailPlan',
     'Ssp.view.tools.map.PrintPlan',
     'Ssp.view.tools.map.CourseDetails',
+    'Ssp.view.tools.map.CoursesGrid',
 	'Ssp.view.tools.map.CoursesGridPanel',
 	
 	//PERSON NOTES TOOL
@@ -317,12 +326,10 @@ Ext.require([
 	'Ssp.model.ApiUrl',
 	'Ssp.mixin.ApiProperties',
 	'Ssp.mixin.controller.ItemSelectorInitializer',
-	'Ssp.util.tools.map.MapEventUtils',
     'Ssp.util.ResponseDispatcher',
 	'Ssp.util.FormRendererUtils',
 	'Ssp.util.ColumnRendererUtils',
 	'Ssp.util.TreeRendererUtils',
-	'Ssp.util.StoreUtils',
 	'Ssp.util.Constants',
 	'Ssp.util.Util',
 	'Ssp.store.Coaches',
@@ -332,6 +339,8 @@ Ext.require([
     'Ssp.store.Goals',
 	'Ssp.store.Strengths',
 	'Ssp.store.AddTasks',
+    'Ssp.store.SelfHelpGuides',
+    'Ssp.store.SelfHelpGuideQuestions',
     'Ssp.store.JournalEntries',
     'Ssp.store.JournalEntriesUnpaged',
     'Ssp.store.JournalEntryDetails',
@@ -361,6 +370,7 @@ Ext.require([
 	'Ssp.store.reference.EarlyAlertReasons',
 	'Ssp.store.reference.EarlyAlertReferrals',
 	'Ssp.store.reference.EarlyAlertSuggestions',
+	'Ssp.store.reference.EarlyAlertInterventions', //TAPS 20140039
 	'Ssp.store.reference.Electives',
     'Ssp.store.reference.EmploymentShifts',
     'Ssp.store.reference.Ethnicities',
@@ -370,9 +380,13 @@ Ext.require([
     'Ssp.store.reference.FundingSources',
     'Ssp.store.reference.Genders',
     'Ssp.store.reference.JournalSources',
+    'Ssp.store.reference.JournalSourcesUnpaged',
+	'Ssp.store.reference.JournalSourcesAll',
     'Ssp.store.reference.JournalStepDetails',
     'Ssp.store.reference.JournalSteps',
     'Ssp.store.reference.JournalTracks',
+    'Ssp.store.reference.JournalTracksUnpaged',
+	'Ssp.store.reference.JournalTracksAll',
     'Ssp.store.reference.Lassis',
     'Ssp.store.reference.MaritalStatuses',
     'Ssp.store.reference.MilitaryAffiliations',
@@ -394,8 +408,6 @@ Ext.require([
     'Ssp.store.reference.ProgramStatusChangeReasons',
     'Ssp.store.reference.ReferralSources',
     'Ssp.store.reference.ServiceReasons',
-    'Ssp.store.reference.SelfHelpGuides',
-    'Ssp.store.reference.SelfHelpGuideQuestions',
     'Ssp.store.reference.SpecialServiceGroups',
     'Ssp.store.reference.States', 
     'Ssp.store.external.Terms',
@@ -420,7 +432,6 @@ Ext.require([
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.PlanStatus',
     'Ssp.store.MAPStatus',
-    'Ssp.store.PersonTableTypes',
     'Ssp.store.MapStatusReports',
     'Ssp.store.MapStatusReportCourseDetails',
     'Ssp.store.MapStatusReportSubstitutionDetails',
@@ -501,6 +512,7 @@ var apiUrls = [
   {name: 'earlyAlertReason', url: 'reference/earlyAlertReason'},
   {name: 'earlyAlertReferral', url: 'reference/earlyAlertReferral'},
   {name: 'earlyAlertSuggestion', url: 'reference/earlyAlertSuggestion'},
+  {name: 'earlyAlertIntervention', url: 'reference/earlyAlertIntervention'}, //TAPS 20140039
   {name: 'educationGoal', url: 'reference/educationGoal'},
   {name: 'educationLevel', url: 'reference/educationLevel'},
   {name: 'elective', url: 'reference/elective'},
@@ -552,7 +564,6 @@ var apiUrls = [
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'studentSearch', url: 'person/students/search'},
-  {name: 'directoryPersonSearch', url: 'person/directoryperson/search'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'templatePlan', url: 'reference/map/template'},
@@ -698,12 +709,6 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 				    },
-				    mapEventUtils:{
-				        fn: function(){
-				            return new Ssp.util.tools.map.MapEventUtils({});
-				    	},
-				        singleton: true
-				    },				    
 				    treeRendererUtils:{
 				        fn: function(){
 				            return new Ssp.util.TreeRendererUtils({});
@@ -713,12 +718,6 @@ Ext.onReady(function(){
 					util:{
 						fn: function(){
 							return new Ssp.util.Util({});
-						},
-						singleton: true
-					},
-					storeUtils:{
-						fn: function(){
-							return new Ssp.util.StoreUtils({});
 						},
 						singleton: true
 					},
@@ -967,7 +966,16 @@ Ext.onReady(function(){
 							 });
 				    	},
 				    	singleton: true
-				    },
+				    },  //TAPS 20140039 earlyAlertDetailsInterventionsStore BEGIN
+					earlyAlertDetailsInterventionsStore: {
+				    	fn: function(){
+				    		return Ext.create('Ext.data.Store', {
+							     model: 'Ssp.model.SimpleItemDisplay',
+							     storeId: 'earlyAlertDetailsInterventionsStore'
+							 });
+				    	},
+				    	singleton: true
+				    }, //TAPS 20140039 earlyAlertDetailsInterventionsStore END
 				    earlyAlertDetailsReasonsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ext.data.Store', {
@@ -1095,19 +1103,7 @@ Ext.onReady(function(){
 				    },
 					campusEarlyAlertRoutingsStore: 'Ssp.store.reference.CampusEarlyAlertRoutings',
 					campusServicesStore: 'Ssp.store.reference.CampusServices',
-					caseloadStore: {
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.Caseload', {
-							     storeId: 'caseloadStoreMain',		
-							     params : {
-										page : 0,
-										start : 0,
-										limit : 100
-									}	
-							 });
-				    	},
-				    	singleton: true
-				    },
+					caseloadStore: 'Ssp.store.Caseload',
 					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
 					contactPersonStore: 'Ssp.store.ContactPerson',
@@ -1129,27 +1125,11 @@ Ext.onReady(function(){
 				    	singleton: true
 				    },
 					challengeCategoriesStore: 'Ssp.store.reference.ChallengeCategories',
-					challengeCategoriesAllStore: {
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.reference.ChallengeCategories', {
-							     extraParams: {status: "ALL"}
-							 });
-				    	},
-				    	singleton: true
-				    },
 					challengeReferralsStore: 'Ssp.store.reference.ChallengeReferrals',
 					challengeReferralsAllStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.ChallengeReferrals', {
 							     extraParams: {status: "ALL"}
-							 });
-				    	},
-				    	singleton: true
-				    },
-				    challengeReferralsAllUnpagedStore: {
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.reference.ChallengeReferrals', {
-							     extraParams: {status: "ALL", limit:"-1"}
 							 });
 				    	},
 				    	singleton: true
@@ -1189,16 +1169,6 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
-					configStore: 
-					{
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.reference.ConfigurationOptionsUnpaged', {
-							     storeId: 'configurationOptionsUnpagedStore',		
-							     extraParams: {limit: "-1"}
-							 });
-				    	},
-				    	singleton: true
-				    },				    
 				    colorsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Colors', {
@@ -1400,7 +1370,26 @@ Ext.onReady(function(){
 							});
 						},
 						singleton: true
+					}, //TAPS 20140039 earlyAlertInterventionsStore/earlyAlertInterventionsAllUnpagedStore BEGIN
+					earlyAlertInterventionsStore: 'Ssp.store.reference.EarlyAlertInterventions',
+					earlyAlertInterventionsAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertInterventions', {
+								storeId: 'earlyAlertInterventionsAllStore',
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
 					},
+					earlyAlertInterventionsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.EarlyAlertInterventions', {
+								storeId: 'earlyAlertInterventionsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					}, //TAPS 20140039 earlyAlertInterventionsStore/earlyAlertInterventionsAllUnpagedStore END
 				    educationGoalsStore: 'Ssp.store.reference.EducationGoals',
 					educationGoalsAllStore: {
 						fn: function(){
@@ -1425,7 +1414,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivesStore',
-							     extraParams: {sort: "sortOrder", sortDirection:'ASC' }
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC" }
 							 });
 					    },
 					    singleton: true
@@ -1434,7 +1423,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivesUnpagedStore',
-							     extraParams: {limit: "-1"}
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1443,7 +1432,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllStore',		
-							     extraParams: {status: "ALL"}
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL"}
 							 });
 					    },
 					    singleton: true
@@ -1452,7 +1441,7 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
 							     storeId: 'electivsAllUnpagedStore',		
-							     extraParams: {status: "ALL", limit: "-1"}
+							     extraParams: {sort: "sortOrder", sortDirection: "ASC", status: "ALL", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1462,7 +1451,7 @@ Ext.onReady(function(){
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplatesSummary', {
 							     storeId: 'planTemplatesSummaryStore',		
-							     extraParams: {sort: "name", status: "ALL", limit: "-1"}
+							     extraParams: {sort: "name", sortDirection: "ASC", status: "ALL", limit: "-1"}
 							});
 						},
 						singleton: true
@@ -1551,43 +1540,14 @@ Ext.onReady(function(){
 			    	journalEntriesUnpagedStore: 'Ssp.store.JournalEntriesUnpaged',
 			    	journalEntryDetailsStore: 'Ssp.store.JournalEntryDetails',
 			    	journalSourcesStore: 'Ssp.store.reference.JournalSources',
-			    	journalSourcesAllStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalSources', {
-							     extraParams: {status: "ALL"}
-							 });
-					    },
-					    singleton: true
-					},	
-					journalSourcesAllUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalSources', {
-							     extraParams: {status: "ALL", limit:"-1"}
-							 });
-					    },
-					    singleton: true
-					},
-					journalSourcesUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalSources', {
-							     extraParams: {limit:"-1"}
-							 });
-					    },
-					    singleton: true
-					},
+			    	journalSourcesUnpagedStore: 'Ssp.store.reference.JournalSourcesUnpaged',
+					journalSourcesAllStore: 'Ssp.store.reference.JournalSourcesAll',
+					journalSourcesAllUnpagedStore: 'Ssp.store.reference.JournalSourcesAllUnpaged',
 			        journalStepsStore: 'Ssp.store.reference.JournalSteps',
 					journalStepsAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.JournalSteps', {
 							     extraParams: {status: "ALL"}
-							 });
-					    },
-					    singleton: true
-					},	
-					journalStepsAllUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalSteps', {
-							     extraParams: {status: "ALL", limit: "-1"}
 							 });
 					    },
 					    singleton: true
@@ -1601,39 +1561,10 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},	
-					journalDetailsAllUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalStepDetails', {
-							     extraParams: {status: "ALL", limit:"-1"}
-							 });
-					    },
-					    singleton: true
-					},	
 			        journalTracksStore: 'Ssp.store.reference.JournalTracks',
-			        journalTracksUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalTracks', {
-							     extraParams: {limit:"-1"}
-							 });
-					    },
-					    singleton: true
-					},
-					journalTracksAllStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalTracks', {
-							     extraParams: {status: "ALL"}
-							 });
-					    },
-					    singleton: true
-					},
-					journalTracksAllUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.JournalTracks', {
-							     extraParams: {status: "ALL", limit:"-1"}
-							 });
-					    },
-					    singleton: true
-					},
+			        journalTracksUnpagedStore: 'Ssp.store.reference.JournalTracksUnpaged',
+					journalTracksAllStore: 'Ssp.store.reference.JournalTracksAll',
+					journalTracksAllUnpagedStore: 'Ssp.store.reference.JournalTracksAllUnpaged',
 			        lassisStore: 'Ssp.store.reference.Lassis',
 			        maritalStatusesStore: 'Ssp.store.reference.MaritalStatuses',
 					maritalStatusesAllStore: {
@@ -1702,7 +1633,7 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
+					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',	
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',			    	
@@ -1740,43 +1671,10 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 				    searchStore: 'Ssp.store.Search',
-				    studentsSearchStore: {
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.StudentsSearch', {
-							     storeId: 'studenSearchStoreMain',		
-							     extraParams: {limit: "50"}
-							 });
-				    	},
-				    	singleton: true
-				    },
-				    directoryPersonSearchStore: {
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.DirectoryPersonSearch', {
-							     storeId: 'directoryPersonSearchStore',		
-							     extraParams: {limit: "50"}
-							 });
-				    	},
-				    	singleton: true
-				    },
+				    studentsSearchStore: 'Ssp.store.StudentsSearch',
 					searchChallengeReferralStore: 'Ssp.store.SearchChallengeReferral',
-				    selfHelpGuidesStore: 'Ssp.store.reference.SelfHelpGuides',
-				    selfHelpGuidesAllUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.SelfHelpGuides', {
-					    		extraParams: {status: "ALL", limit: "-1"}
-					    	});
-					    },
-					    singleton: true
-					},
-					selfHelpGuidesAllStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.SelfHelpGuides', {
-					    		extraParams: {status: "ALL"}
-					    	});
-					    },
-					    singleton: true
-					},
-				    selfHelpGuideQuestionsStore: 'Ssp.store.reference.SelfHelpGuideQuestions',
+				    selfHelpGuidesStore: 'Ssp.store.SelfHelpGuides',
+				    selfHelpGuideQuestionsStore: 'Ssp.store.SelfHelpGuideQuestions',
 				    serviceReasonsStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.ServiceReasons', {
@@ -1822,14 +1720,6 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},
-				    specialServiceGroupsActiveUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.SpecialServiceGroups', {
-							     extraParams: {status: "ACTIVE", limit: "-1"}
-							 });
-					    },
-					    singleton: true
-					},					
 				    statesStore: 'Ssp.store.reference.States',
 				    studentDocumentsStore: 'Ssp.store.StudentDocuments',
 				    studentsStore: 'Ssp.store.Students',
@@ -1852,14 +1742,6 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.StudentTypes', {
 							     extraParams: {status: "ALL", limit: "-1"}
-							 });
-					    },
-					    singleton: true
-					},
-					studentTypesAllStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.StudentTypes', {
-							     extraParams: {status: "ALL"}
 							 });
 					    },
 					    singleton: true
@@ -1890,7 +1772,6 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 			        planStatusStore: 'Ssp.store.PlanStatus',
-			        personTableTypesStore: 'Ssp.store.PersonTableTypes',
 			        financialAidSAPStatus: 'Ssp.store.FinancialAidSAPStatus',
 			        mapStatusStore: 'Ssp.store.MAPStatus',
 			        earlyAlertResponseLateStore: 'Ssp.store.EarlyAlertResponseLate',
@@ -1974,7 +1855,7 @@ Ext.onReady(function(){
 				            		{
 				            			Ext.Msg.confirm({
 				            	   		     title:'Access Denied Error',
-				            	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+				            	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in RiverSupport?",
 				            	   		     buttons: Ext.Msg.YESNO,
 				            	   		     fn: function( btnId ){
 				            	   		    	if (btnId=="yes")
@@ -1993,7 +1874,7 @@ Ext.onReady(function(){
 				            		// Handle call not found result
 				            		if (response.status==404)
 				            		{
-				            			Ext.Msg.alert('SSP Error', '404 Server Error. See logs for additional details');
+				            			Ext.Msg.alert('RiverSupport Error', '404 Server Error. See logs for additional details');
 				            		}
 				                });
 				            }

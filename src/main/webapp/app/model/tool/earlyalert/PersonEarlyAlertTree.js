@@ -16,6 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions fields to Person EA Tree
+ */
 Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'personId', type: 'string'},
@@ -29,6 +34,7 @@ Ext.define('Ssp.model.tool.earlyalert.PersonEarlyAlertTree', {
              {name:'responseRequired',type:'boolean'},
              {name:'earlyAlertSuggestionIds',type:'auto'},
              {name:'earlyAlertSuggestionOtherDescription',type:'string'},
+			 {name:'earlyAlertInterventionIds',type:'auto'}, //TAPS 20140039
              {name:'comment',type:'string'},
              {name:'closedDate',type: 'date', dateFormat: 'time'},
              {name:'closedById',type:'string'},

@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions data stores to EA Details
+ */
 Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
     extend: 'Ext.form.Panel',
     alias: 'widget.earlyalertdetails',
@@ -25,6 +29,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
         model: 'currentEarlyAlert',
         selectedReasonsStore: 'earlyAlertDetailsReasonsStore',
         selectedSuggestionsStore: 'earlyAlertDetailsSuggestionsStore',
+		selectedInterventionsStore: 'earlyAlertDetailsInterventionsStore', //TAPS 20140039
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
         treeStore: 'earlyAlertsTreeStore',
@@ -32,7 +37,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
     },
     width: '100%',
     height: '100%',
-    title: 'Early Alert Details',
+    title: 'EarlyAlert Details',
 
     // By default we assume the component causing this view to load has already
     // loaded the EA of interest into a shared resource (the injected
@@ -111,7 +116,19 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
 						fieldLabel: 'Other Suggestion',
 						name: 'earlyAlertSuggestionOtherDescription',
 						hidden: !me.model.get('earlyAlertSuggestionOtherDescription')
-                    }, {                    
+                    }
+					//TAPS 20140039 BEGIN
+					, {
+                        xtype: 'multiselect',
+                        name: 'earlyAlertInterventionIds',
+                        itemId: 'earlyAlertInterventionsList',
+                        fieldLabel: 'Faculty Interventions',
+                        store: me.selectedInterventionsStore,
+                        displayField: 'name',
+                        anchor: '95%'
+					 }
+					//TAPS 20140039 END
+					, {                    
                         fieldLabel: 'Comment',
                         name: 'comment'
                     }, {
@@ -186,13 +203,13 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
             dockedItems: [{
                 xtype: 'toolbar',
                 items: [{
-                    text: 'Return to Early Alert List',
+                    text: 'Return to EarlyAlert List',
                     xtype: 'button',
                     itemId: 'finishButton'
                 },{
                     xtype: 'tbspacer'
                 },{
-                    text: 'Respond  to selected Early Alert',
+                    text: 'Respond  to selected EarlyAlert',
                     xtype: 'button',
                     itemId: 'detailRespondButton',
                     hidden: !me.authenticatedPerson.hasAccess('RESPOND_EARLY_ALERT_BUTTON')

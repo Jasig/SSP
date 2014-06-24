@@ -17,7 +17,10 @@
  * under the License.
  */
 /* Roster Screen */
-
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions Specific CSS and fixed reasons dialog
+ */
 .early-alert .sent-message, .early-alert .error-message {
     margin-bottom: 16px;
 }
@@ -79,6 +82,20 @@
     clear: both;
 }
 
+/* TAPS 20140039 BEGIN */
+.reasons-dialog {
+    width: 400px;
+}
+
+.reasons-dialog ul li {
+    list-style-type: none;
+}
+
+.reasons-dialog li input[type="text"] {
+    width: 240px;
+}
+/* TAPS 20140039 END */
+
 .suggestions-dialog {
     width: 400px;
 }
@@ -90,6 +107,20 @@
 .suggestions-dialog li input[type="text"] {
     width: 240px;
 }
+
+/* TAPS 20140039 BEGIN */
+.interventions-dialog {
+    width: 400px;
+}
+
+.interventions-dialog ul li {
+    list-style-type: none;
+}
+
+.interventions-dialog li input[type="text"] {
+    width: 240px;
+}
+/* TAPS 20140039 END */
 
 /* the .ea-input has to be present in this selector to work around selector
    precedence conflicts with uP sheets which otherwise prevent application of

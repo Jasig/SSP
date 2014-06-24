@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions Transfer Object and references
+ */
 package org.jasig.ssp.factory.impl;
 
 import java.util.ArrayList;
@@ -29,14 +33,17 @@ import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.EarlyAlertIntervention; //TAPS 20140039
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
+import org.jasig.ssp.service.reference.EarlyAlertInterventionService; //TAPS 20140039
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertInterventionTO; //TAPS 20140039
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +84,11 @@ public class EarlyAlertTOFactoryImpl extends
 
 	@Autowired
 	private transient EarlyAlertSuggestionService earlyAlertSuggestionService;
+	
+	//TAPS 20140039 BEGIN
+	@Autowired
+	private transient EarlyAlertInterventionService earlyAlertInterventionService;
+	//TAPS 20140039 END
 
 	@Override
 	protected EarlyAlertDao getDao() {
@@ -127,6 +139,17 @@ public class EarlyAlertTOFactoryImpl extends
 						earlyAlertSuggestionService.load(id));
 			}
 		}
+		
+		//TAPS 20140039 BEGIN
+		model.setEarlyAlertInterventions(new HashSet<EarlyAlertIntervention>());
+		if (tObject.getEarlyAlertInterventionIds() != null) {
+			for (final UUID id : tObject
+					.getEarlyAlertInterventionIds()) {
+				model.getEarlyAlertInterventions().add(
+						earlyAlertInterventionService.load(id));
+			}
+		}
+		//TAPS 20140039 END
 
 		model.setResponseDates(tObject.getLastResponseDate());
 

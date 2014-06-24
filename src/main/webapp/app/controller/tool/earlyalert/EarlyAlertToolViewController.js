@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ /*
+ * IRSC CUSTOMIZATIONS
+ * 06/17/2014 - Jonathan Hart IRSC TAPS 20140039 - Add Faculty Interventions functionality to EA Tool Controller
+ */
 Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     extend: 'Deft.mvc.ViewController',  
     mixins: [ 'Deft.mixin.Injectable'],
@@ -35,6 +39,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
         personLite: 'personLite',
         referralsStore: 'earlyAlertReferralsAllUnpagedStore',
         suggestionsStore: 'earlyAlertSuggestionsAllUnpagedStore',
+		interventionsStore: 'earlyAlertInterventionsAllUnpagedStore', //TAPS 20140039
         treeStore: 'earlyAlertsTreeStore',
         util: 'util'
         },
@@ -56,6 +61,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
     },
 
     onViewReady: function(comp, obj){
+
         var me=this;
         me.campusesStore.load({
             params:{status: "ALL", limit: "-1"}
@@ -80,6 +86,12 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
         me.suggestionsStore.load({
             params:{status: "ALL", limit: "-1"}
         });
+		
+		//TAPS 20140039 BEGIN
+		me.interventionsStore.load({
+            params:{status: "ALL", limit: "-1"}
+        });
+		//TAPS 20140039 END
         
         me.referralsStore.load({
             params:{status: "ALL", limit: "-1"},
@@ -88,7 +100,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                          me.getEarlyAlerts(); 
                   }
                   else {
-                      Ext.Msg.alert("Ssp Error","Failed to load referrals. See your system administrator for assitance.");
+                      Ext.Msg.alert("RiverSupport Error","Failed to load referrals. See your system administrator for assitance.");
                   }
              }
         });

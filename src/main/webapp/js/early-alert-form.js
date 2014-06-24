@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ /**
+*	01/29/2014	Jonathan Hart	TAPS 20140023	IRSC Added Comments field check to validate function
+*	06/17/2014	Jonathan Hart	TAPS 20140039	Added Faculty Interventions to EA form
+**/
 "use strict";
 var ssp = ssp || {};
 
@@ -44,7 +48,7 @@ var ssp = ssp || {};
             student:                 '.field-student',
             enrollmentStatus:        '.field-enrollment-status',
             netId:                   '.field-net-id',
-            studentSchoolId:               '.field-student-school-id',
+            studentSchoolId:         '.field-student-school-id',
             studentEmail:            '.field-student-email',
             studentType:             '.field-student-type',
             assignedCounselor:       '.field-assigned-counselor',
@@ -63,6 +67,10 @@ var ssp = ssp || {};
             suggestionsOtherHidden:  '.field-suggestions-other-hidden',
             suggestionsAddEdit:      '.suggestions-add-edit',
             suggestionsDialog:       '.suggestions-dialog',
+			interventions:           '.field-interventions', //TAPS 20140039
+            interventionsId:         '.field-interventions-id', //TAPS 20140039
+            interventionsAddEdit:    '.interventions-add-edit', //TAPS 20140039
+            interventionsDialog:     '.interventions-dialog', //TAPS 20140039
             comments:                '.field-comments',
             noticeDialog:            '.notice-dialog',
             buttonSend:              '.button-send'
@@ -163,6 +171,30 @@ var ssp = ssp || {};
             });
             return rslt;
         };
+		
+		//TAPS 20140039 BEGIN
+		/*
+         * Interventions Data Function
+         */
+        var getInterventionsData = function() {
+            var rslt = [];
+            $.ajax({
+                url: options.urls.interventions,
+                async: false,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Display the error
+                    var response = $.parseJSON(jqXHR.responseText);
+                    showError(jqXHR.status + ': ' + errorThrown, response.message);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    rslt = data.rows;
+                },
+                type: 'GET'
+            });
+            return rslt;
+        };
+		//TAPS 20140039 END
 
         /*
          * Error Handling Functions
@@ -205,6 +237,25 @@ var ssp = ssp || {};
             } else {
                 $(selectors.emailCc).removeClass('invalid');
             }
+			
+			// TAPS 20140023 - 01/29/2014 Check to see if user entered comments
+			var commentsFld = $(selectors.comments).val().trim();
+			if ('' == commentsFld || !$(selectors.comments).val()) {
+				rslt = false;
+				$(selectors.comments).addClass('invalid');
+			} else {
+				$(selectors.comments).removeClass('invalid');
+			}
+			
+			//TAPS 20140039 BEGIN Add Validation for Faculty Interventions
+			if(!$(selectors.interventionsId) || $(selectors.interventionsId).length <= 0) {
+                rslt = false;
+            	$(selectors.interventionsAddEdit).addClass('invalid');
+            } else {
+                $(selectors.interventionsAddEdit).removeClass('invalid');
+            }
+			//TAPS 20140039 END
+			
             return rslt;
         }
 
@@ -227,6 +278,7 @@ var ssp = ssp || {};
                 earlyAlertReasonOtherDescription: $(selectors.reasonsOtherHidden).val(),
                 earlyAlertSuggestionIds: [],  // Set below...
                 earlyAlertSuggestionOtherDescription: $(selectors.suggestionsOtherHidden).val(),
+				earlyAlertInterventionIds: [],  //TAPS 20140039
                 comment: $(selectors.comments).val(),
                 sendEmailToStudent: sendNotice
             };
@@ -236,6 +288,11 @@ var ssp = ssp || {};
             $(selectors.suggestionsId).each(function() {
             	postData.earlyAlertSuggestionIds.push( $(this).val() );
             });
+			//TAPS 20140039 BEGIN
+            $(selectors.interventionsId).each(function() {
+            	postData.earlyAlertInterventionIds.push( $(this).val() );
+            });
+			//TAPS 20140039 END
             
             
             
@@ -271,6 +328,7 @@ var ssp = ssp || {};
         var campuses = getCampusData();
         var reasons = getReasonsData();
         var suggestions = getSuggestionsData();
+		var interventions = getInterventionsData(); //TAPS 20140039
         
         // studentName
         var studentName = student.firstName + ' '
@@ -347,7 +405,7 @@ var ssp = ssp || {};
                 'Cancel': function() { $(this).dialog('close'); },
             },
             modal: true,
-            title: 'Edit Faculty Reasons'
+            title: 'Edit Referral Reasons' //TAPS 20140039 Corrected wording to match field
         };
         var reasonsDlg = $(selectors.reasonsDialog).dialog(reasonsDlgOptions);
         $(selectors.reasonsAddEdit).click(function() {
@@ -390,6 +448,38 @@ var ssp = ssp || {};
         $(selectors.suggestionsAddEdit).click(function() {
             suggestionsDlg.dialog('open');
         });
+		
+		//TAPS 20140039 BEGIN
+		// interventions
+        $.each(interventions, function(index, value) {
+        	var html = '<li><input type="checkbox" value="' + value.id + '">' + value.name + '</li>';
+            $(selectors.interventionsDialog).find('ul').append(html);
+        });
+        var interventionsDlgOptions = {
+            autoOpen: false,
+            buttons: {
+                'OK': function() {
+                    $(selectors.interventions).html('');  // Clear
+                    $(this).find('li').each(function() {
+                        var chk = $(this).find('input');
+                        if (chk.attr('checked')) {
+                        	var html = '<input type="hidden" class="field-interventions-id" value="' + chk.val() + '" />';
+                            html += $(this).text();
+                            $(selectors.interventions).append('<li>' + html + '</li>');
+                        }
+                    });
+                    $(this).dialog('close');
+                },
+                'Cancel': function() { $(this).dialog('close'); },
+            },
+            modal: true,
+            title: 'Edit Faculty Interventions'
+        };
+        var interventionsDlg = $(selectors.interventionsDialog).dialog(interventionsDlgOptions);
+        $(selectors.interventionsAddEdit).click(function() {
+            interventionsDlg.dialog('open');
+        });
+		//TAPS 20140039 END
         
         // send button
         var noticeDlgOptions = {
@@ -405,8 +495,9 @@ var ssp = ssp || {};
                 }
             },
             modal: true,
-            title: 'Send Early Alert'
+            title: 'Send EarlyAlert'
         };
+
         var noticeDlg = $(selectors.noticeDialog).dialog(noticeDlgOptions);
         $(selectors.buttonSend).click(function() {
             clearErrors();
@@ -414,7 +505,7 @@ var ssp = ssp || {};
                 noticeDlg.dialog('open');
             } else {
                 showError('Validation Error',
-                    'Could not submit the Early Alert because not enough information was provided or some form fields contained invalid data. Please correct the highlighted fields.');
+                    'Could not submit the EarlyAlert because not enough information was provided or some form fields contained invalid data. Please correct the highlighted fields.');
             }
         });
 
