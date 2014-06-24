@@ -228,6 +228,10 @@ Ext.require([
     'Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin',
     'Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',
     
+    //LTIConsumer ADMIN VIEWS
+    'Ssp.view.admin.forms.apikey.lticonsumer.LTIConsumerAdmin',
+    'Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',
+    
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
     
@@ -263,6 +267,7 @@ Ext.require([
 	'Ssp.model.FilterDiscreteValues',
 	'Ssp.model.MessageTemplates',
 	'Ssp.model.OAuth2Client',
+	'Ssp.model.LTIConsumer',
 	'Ssp.model.Permission',
 	'Ssp.model.PersonRegistrationStatusByTerm',
 	'Ssp.model.tool.studentintake.StudentIntakeForm',
@@ -383,6 +388,7 @@ Ext.require([
     'Ssp.store.reference.RegistrationLoads',
     'Ssp.store.reference.CourseworkHours',
 	'Ssp.store.reference.MessageTemplates',
+    'Ssp.store.LTIConsumers',
     'Ssp.store.OAuth2Clients',
     'Ssp.store.Permissions',
     'Ssp.store.People',
@@ -525,6 +531,7 @@ var apiUrls = [
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'oauth2Client', url: 'oauth2/client'},
+  {name: 'ltiConsumer', url: 'lti/tc'},
   {name: 'permission', url: 'reference/permission'},
   {name: 'person', url: 'person'},
   {name: 'personAppointment', url: 'person/{id}/appointment'},
@@ -1896,6 +1903,8 @@ Ext.onReady(function(){
 			        earlyAlertResponseLateStore: 'Ssp.store.EarlyAlertResponseLate',
 			        currentlyRegisteredStore: 'Ssp.store.CurrentlyRegistered',
 			        oauth2ClientsStore: 'Ssp.store.OAuth2Clients',
+			        ltiConsumersStore: 'Ssp.store.LTIConsumers',
+			        ltiSspUserFieldNamesStore: 'Ssp.store.LtiSspUserFieldNames',
 			        permissionsStore: 'Ssp.store.Permissions',
 
 			        

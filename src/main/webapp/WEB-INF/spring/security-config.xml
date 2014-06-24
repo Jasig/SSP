@@ -23,11 +23,13 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+	xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+	xmlns:oauth1="http://www.springframework.org/schema/security/oauth"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.2.xsd
-		http://www.springframework.org/schema/security/oauth2	http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
+		http://www.springframework.org/schema/security/oauth2	http://www.springframework.org/schema/security/spring-security-oauth2.xsd
+		http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth.xsd">
 
 	<beans:import resource="uportal/security-config-uportal.xml"/>
 	<beans:import resource="local/ssp-sec-local.xml"/>
@@ -43,6 +45,16 @@
 
 	<global-method-security pre-post-annotations="enabled" />
 
+	<!-- TODO Error handling needs to be improved. Right now you end up in one of our custom error handling jsp's which
+	emits JSON. That in and of itself isn't too bad, but it doesn't seem to have access to the actual exception in
+	the expected scope. Should be a better way of handling this in general. Ideally we want to inject a component
+	that gives us total control over any exceptions leaving this filter stack -->
+	<http pattern="/api/*/lti/launch/**" create-session="stateless" entry-point-ref="ltiLaunchErrorHandler">
+		<intercept-url pattern="/api/*/lti/launch/**" access="IS_AUTHENTICATED_FULLY" />
+		<anonymous enabled="false" />
+		<custom-filter ref="ltiProtectedResourceFilter" position="PRE_AUTH_FILTER" />
+	</http>
+
 	<http pattern="/api/*/oauth2/token" create-session="stateless" authentication-manager-ref="oauth2ClientAuthenticationManager">
 		<intercept-url pattern="/api/*/oauth2/token" access="IS_AUTHENTICATED_FULLY" />
 		<anonymous enabled="false" />
@@ -57,9 +69,22 @@
 		<access-denied-handler ref="oauth2AccessDeniedHandler" />
 	</http>
 
+	<beans:bean id="ltiProtectedResourceFilter" class="org.springframework.security.oauth.provider.filter.ProtectedResourceProcessingFilter">
+		<beans:property name="allowedMethods" value="POST" />
+		<beans:property name="allowAllMethods" value="false" />
+		<beans:property name="tokenServices" ref="ltiTokenServices" />
+		<beans:property name="consumerDetailsService" ref="ltiConsumerService" />
+		<beans:property name="ignoreMissingCredentials" value="false" />
+		<beans:property name="nonceServices" ref="oAuth1PersistentNonceService" />
+		<beans:property name="authenticationEntryPoint" ref="ltiLaunchErrorHandler" />
+	</beans:bean>
+
+	<!-- TODO Really just want a No-Op Impl. We don't want Oauth1 token handling of any sort. -->
+	<oauth1:token-services id="ltiTokenServices" />
+
 	<!-- NEED TO ADD SOMETHING BACK FOR FORM LOGIN AND LOGOUT IN STANDALONE MODE -->
 
-	<oauth:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" />
+	<oauth2:resource-server id="resourceServerFilter" resource-id="ssp" token-services-ref="oauth2TokenServices" />
 
 	<beans:bean id="oauth2PasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
 		<beans:constructor-arg type="java.lang.CharSequence" value="#{configProperties.oauth2_client_password_encoding_secret}" />

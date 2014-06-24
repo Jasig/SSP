@@ -443,7 +443,7 @@ public class DirectoryPersonSearchDao  {
 	}
 
 	
-	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, Term currentTerm) 
+	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, Term currentTerm)
 	{
 		HashMap<String,Object> params= new HashMap<String,Object>();
 		if(hasSchoolId(personSearchRequest)) {

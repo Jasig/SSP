@@ -116,6 +116,24 @@
 
 	<dependencies>
 
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth</artifactId>
+            <version>2.0.1.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <!--
+                    Prevents Maven from deploying v4.0.3-RELEASE when we need 3.2.0-RELEASE.
+                    The former results in a stack trace rooted in the following when trying to initialize
+                    bean proxies:
+                    'Caused by: java.lan.ClassNotFoundException: org.springframework.objenesis.ObjenesisException'
+                    -->
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
@@ -317,7 +335,7 @@
 		<dependency>
 			<groupId>org.jasig.ssp.platform</groupId>
 			<artifactId>platform-java-api</artifactId>
-			<version>0.1.0</version>
+			<version>0.1.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 

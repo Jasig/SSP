@@ -561,6 +561,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'oauth2Clients',
                     form: 'oauth2clientadmin',
                     leaf: true
+                },
+                {
+                    text: 'LTI Consumers',
+                    title: 'LTI Consumers',
+                    store: 'ltiConsumers',
+                    form: 'lticonsumeradmin',
+                    leaf: true
                 }]
             }, {
                 text: 'Early Alert',

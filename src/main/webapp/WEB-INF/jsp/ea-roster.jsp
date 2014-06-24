@@ -24,6 +24,7 @@
     <portlet:param name="action" value="enterAlert"/>
     <portlet:param name="schoolId" value="SCHOOLID"/>
     <portlet:param name="formattedCourse" value="FORMATTEDCOURSE"/>
+    <portlet:param name="sectionCode" value="SECTIONCODE"/>
     <portlet:param name="termCode" value="TERMCODE"/>
 </portlet:renderURL>
 
@@ -180,7 +181,7 @@
         	urls: {
         		courseList: '<c:url value="/api/1/person/${user.schoolId}/instruction/course"/>',
         		enterAlert: '${enterAlertUrl}',
-        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster?termCode=TERMCODE"/>',
+        		roster: '<c:url value="/api/1/person/${user.schoolId}/instruction/course/FORMATTEDCOURSE/roster?termCode=TERMCODE&sectionCode=SECTIONCODE"/>',
                 configByName: '<c:url value="/api/1/reference/config?name=CONFIGNAME" />',
                 enrollmentStatus: '<c:url value="/api/1/reference/enrollmentStatus?limit=-1"/>'
         	},

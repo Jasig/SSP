@@ -18,17 +18,6 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
@@ -48,12 +37,10 @@ import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.security.oauth.OAuth1NonceServiceMaintenance;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -80,6 +67,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class ScheduledTaskWrapperServiceImpl
 		implements ScheduledTaskWrapperService, InitializingBean {
@@ -96,6 +94,7 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String CALC_MAP_STATUS_REPORTS_TASK_NAME = "calc-map-status-reports";
 	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
+    public static final String OAUTH1_CULL_NONCE_TABLE_TASK_NAME = "cull-oauth1-nonces";
 
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
@@ -131,12 +130,19 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EARLY_ALERT_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
 	private static final String DISABLED_TRIGGER_CONFIG_VALUE = "DISABLED";
 	private static final String RUN_ONCE_TRIGGER_CONFIG_VALUE = "RUN_ONCE_ON_STARTUP";
+
+    private static final String OAUTH1_CULL_NONCE_TASK_ID = "task_oauth1_nonce_cull";
+    private static final String OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_oauth_nonce_cull_trigger";
+    private static final String OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
 	
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
 	@Autowired
 	private transient ExternalPersonSyncTask externalPersonSyncTask;
+
+	@Autowired
+	private transient OAuth1NonceServiceMaintenance oAuth1NonceServiceMaintenance;
 	
 	@Autowired
 	private transient RefreshDirectoryPersonTask directoryPersonRefreshTask;
@@ -261,6 +267,14 @@ public class ScheduledTaskWrapperServiceImpl
 				},
 				EARLY_ALERT_TASK_DEFAULT_TRIGGER,
 				EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME));
+
+        this.tasks.put(OAUTH1_CULL_NONCE_TASK_ID, new Task(OAUTH1_CULL_NONCE_TASK_ID,
+                new Runnable() {
+                    @Override
+                    public void run () {
+                        cullOAuth1Nonces();
+                    }
+                }, OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER, OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME));
 
 		// Can't interrupt this on cancel b/c it's responsible for rescheduling
 		// itself. A scheduling attempt on an interrupted thread is very
@@ -909,6 +923,16 @@ public class ScheduledTaskWrapperServiceImpl
 			}
 		});
 	}
+
+    @Override
+    public void cullOAuth1Nonces() {
+        execWithTaskContext(OAUTH1_CULL_NONCE_TABLE_TASK_NAME, new Runnable() {
+            @Override
+            public void run() {
+				oAuth1NonceServiceMaintenance.removeExpired();
+            }
+        });
+    }
 
 	protected static class Task {
 

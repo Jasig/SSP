@@ -44,4 +44,17 @@ public class UserNotAuthorizedException extends AuthenticationException {
 		super(msg);
 	}
 
+	/**
+	 * Constructs a <code>UserNotFoundInDatabaseException</code> with the
+	 * specified message.
+	 *
+	 * @param msg
+	 *            the detail message.
+	 * @param cause
+	 *            the originating problem
+	 */
+	public UserNotAuthorizedException(final String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
 }

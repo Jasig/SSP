@@ -114,11 +114,7 @@ public class UserDetailsService implements SspUserDetailsService {
 
 		sspUser.setPerson(person);
 
-		if (person.getEmailAddresses().isEmpty()) {
-			LOGGER.error("User {} has no email address", username);
-			throw new EmailNotFoundException(
-					"User does not have an assigned email address, support has been notified.");
-		} else {
+		if (!(person.getEmailAddresses().isEmpty())) {
 			sspUser.setEmailAddress(person.getEmailAddresses().get(0));
 		}
 

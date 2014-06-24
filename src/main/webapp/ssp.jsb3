@@ -3009,6 +3009,36 @@
                     "path": "/app/view/admin/forms/apikey/oauth2/"
                 },
                 {
+                    "clsName": "Ssp.model.LTIConsumer",
+                    "name": "LTIConsumer.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.store.LTIConsumers",
+                    "name": "LTIConsumers.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.apikey.lticonsumer.EditLTIConsumerAdminViewController",
+                    "name": "EditLTIConsumerAdminViewController.js",
+                    "path": "/app/controller/admin/apikey/lticonsumer/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.apikey.lticonsumer.LTIConsumerAdminViewController",
+                    "name": "LTIConsumerAdminViewController.js",
+                    "path": "/app/controller/admin/apikey/lticonsumer/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer",
+                    "name": "EditLTIConsumer.js",
+                    "path": "/app/view/admin/forms/apikey/lticonsumer/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.apikey.lticonsumer.LTIConsumerAdmin",
+                    "name": "LTIConsumerAdmin.js",
+                    "path": "/app/view/admin/forms/apikey/lticonsumer/"
+                },
+                {
                   "clsName": "Ssp.view.SearchTab",
                   "name": "SearchTab.js",
                   "path": "/app/view/"
