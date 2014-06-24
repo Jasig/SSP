@@ -181,6 +181,10 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	}
 
 	private void sendOffPlanEmailsToCoaches() {
+		boolean sendEmail = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_send_off_plan_coach_email").trim().toLowerCase());
+		if ( !(sendEmail) ) {
+			return;
+		}
 		List<MapStatusReportCoachEmailInfo> coaches = mapStatusReportService.getCoachesWithOffPlanStudent();
 		if(coaches.size() > 0 )
 		{
