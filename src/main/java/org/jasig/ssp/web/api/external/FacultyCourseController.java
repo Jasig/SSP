@@ -32,6 +32,7 @@ import org.jasig.ssp.service.external.FacultyCourseService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.ExternalFacultyCourseRosterTO;
 import org.jasig.ssp.transferobject.external.FacultyCourseTO;
+import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,19 +126,14 @@ public class FacultyCourseController extends
 	PagedResponse<ExternalFacultyCourseRosterTO> getRoster(
 			final @PathVariable String facultySchoolId,
 			final @PathVariable String formattedCourse,
+			final @RequestParam(required = false) String sectionCode,
 			final @RequestParam(required = false) String termCode)
 			throws ObjectNotFoundException, ValidationException {
 		String scrubbedTermCode = StringUtils.trimToNull(termCode);
-		List<ExternalFacultyCourseRoster> list = null;
-		if ( scrubbedTermCode == null ) {
-			list = getService()
-					.getRosterByFacultySchoolIdAndCourse(facultySchoolId,
-							formattedCourse);
-		} else {
-			list = getService()
-					.getRosterByFacultySchoolIdAndCourseAndTermCode(
-							facultySchoolId, formattedCourse, scrubbedTermCode);
-		}
+		List<ExternalFacultyCourseRoster> list = getService().getFacultyCourseRoster(new SearchFacultyCourseTO( facultySchoolId,  
+				termCode, 
+				sectionCode,  
+				formattedCourse));
 		return new PagedResponse<ExternalFacultyCourseRosterTO>(true, Long.valueOf(list
 				.size()), externalFacultyCourseRosterTOFactory.asTOList(list));
 	}

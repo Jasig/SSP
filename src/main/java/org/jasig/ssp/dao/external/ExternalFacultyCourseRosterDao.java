@@ -26,6 +26,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
 import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 import org.springframework.stereotype.Repository;
 
@@ -113,6 +114,38 @@ public class ExternalFacultyCourseRosterDao extends
 		.add(Restrictions.eq("formattedCourse", formattedCourse))
 		.add(Restrictions.eq("termCode", termCode))
 		.addOrder(Order.asc("lastName"))
+		.addOrder(Order.asc("firstName"));
+		
+		return criteria.list();
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ExternalFacultyCourseRoster> getFacultyCourseRoster(
+			SearchFacultyCourseTO searchFacultyCourse) throws ObjectNotFoundException {
+
+		// See comments on getRosterByFacultySchoolIdAndCourse() re params
+		// processing
+
+		if (!searchFacultyCourse.hasFacultySchoolId()) {
+			throw new ObjectNotFoundException("Must specify a faculty id either username or school id.",
+					ExternalFacultyCourseRoster.class.getName());
+		}
+		if (!searchFacultyCourse.hasCourseIdentification() ) {
+			throw new ObjectNotFoundException("Missing course Identifcation, either formattedCourse and termCode or sectionCode required",
+					ExternalFacultyCourseRoster.class.getName());
+		}
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("facultySchoolId", searchFacultyCourse.getFacultySchoolId()));
+		
+		if(searchFacultyCourse.hasFormattedCourse())
+			criteria.add(Restrictions.eq("formattedCourse", searchFacultyCourse.getFormattedCourse()));
+		if(searchFacultyCourse.hasTermCode())
+				criteria.add(Restrictions.eq("termCode", searchFacultyCourse.getTermCode()));
+		if(searchFacultyCourse.hasSectionCode())
+			criteria.add(Restrictions.eq("sectionCode", searchFacultyCourse.getSectionCode()));
+		
+		criteria.addOrder(Order.asc("lastName"))
 		.addOrder(Order.asc("firstName"));
 		
 		return criteria.list();
