@@ -285,7 +285,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 
 	@SuppressWarnings("unchecked")
 	public List<MapStatusReportPerson> getAllActivePlanIds() {
-		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.catalogYearCode,plan.person.firstName,plan.person.lastName) "
+		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.catalogYearCode,plan.person.firstName,plan.person.lastName,plan.person.coach.id,plan.owner.id) "
 									   + "from org.jasig.ssp.model.Plan plan "
 									   + "where plan.objectStatus = :objectStatus and plan.person.objectStatus = :objectStatus";
 		Query query = createHqlQuery(getAllActivePlanIdQuery);
