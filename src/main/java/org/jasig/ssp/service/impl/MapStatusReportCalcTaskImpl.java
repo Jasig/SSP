@@ -22,13 +22,17 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
-import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -44,7 +48,7 @@ import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
-import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
+import org.jasig.ssp.transferobject.reports.MapStatusReportOwnerAndCoachInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
@@ -185,49 +189,136 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		if ( !(sendEmail) ) {
 			return;
 		}
-		List<MapStatusReportCoachEmailInfo> coaches = mapStatusReportService.getCoachesWithOffPlanStudent();
-		if(coaches.size() > 0 )
-		{
-			for (MapStatusReportCoachEmailInfo mapStatusReportCoachEmailInfo : coaches) {
-				
-				StringBuilder sb = new StringBuilder();
-				sb.append("The following students have been determined to be Off Plan after comparing their transcript to their MAP</br>");
-				int linebreak = 0;
-				List<MapStatusReportPerson> offPlanPlansForCoach = mapStatusReportService.getOffPlanPlansForOwner(new Person(mapStatusReportCoachEmailInfo.getPersonId()));
-				for (MapStatusReportPerson mapStatusReportPerson : offPlanPlansForCoach) 
-				{
-					sb.append(mapStatusReportPerson.getFirstName()+" "+mapStatusReportPerson.getLastName());
-					if((linebreak % 3) == 2)
-					{
-						sb.append(",</br>");
-					}else
-					{
-						sb.append(", ");
-					}
-					linebreak++;
-					
-				}
-				if(sb.lastIndexOf(",") > 0)
-				{
-					sb.deleteCharAt(sb.lastIndexOf(","));
-				}
-				SubjectAndBody subjectAndBody = new SubjectAndBody("You have students that are off plan", sb.toString());
-				if(!StringUtils.isEmpty(mapStatusReportCoachEmailInfo.getPrimaryEmail()))
-				{
-					String cc = null;
-					try {
-						if(!StringUtils.isEmpty(mapStatusReportCoachEmailInfo.getCoachEmail()) && !mapStatusReportCoachEmailInfo.getCoachEmail().equalsIgnoreCase(mapStatusReportCoachEmailInfo.getPrimaryEmail()))
-						{
-							cc = mapStatusReportCoachEmailInfo.getCoachEmail();
-						}
-						messageService.createMessage(mapStatusReportCoachEmailInfo.getPrimaryEmail(), cc, subjectAndBody);
-					} catch (ObjectNotFoundException e) {
-						LOGGER.error("There was an error sending a coach email", e);
-					}
+
+		final List<MapStatusReportOwnerAndCoachInfo> distinctOwnerCoachPairs = mapStatusReportService.getOwnersAndCoachesWithOffPlanStudent();
+		if ( distinctOwnerCoachPairs == null || distinctOwnerCoachPairs.isEmpty() ) {
+			return;
+		}
+
+		final Set<UUID> ownerIds = new HashSet<UUID>();
+		final Map<UUID,String> emailAddressByPersonId = new HashMap<UUID,String>();
+		final Map<UUID,Map<PersonToPlanRelationship,List<MapStatusReportPerson>>> statusesByOwnerOrCoach =
+				new HashMap<UUID,Map<PersonToPlanRelationship,List<MapStatusReportPerson>>>();
+
+		for ( MapStatusReportOwnerAndCoachInfo ownerCoachPair : distinctOwnerCoachPairs ) {
+			final UUID ownerId = ownerCoachPair.getOwnerId();
+			final UUID coachId = ownerCoachPair.getCoachId();
+
+			emailAddressByPersonId.put(ownerId, ownerCoachPair.getOwnerPrimaryEmail());
+			emailAddressByPersonId.put(coachId, ownerCoachPair.getCoachPrimaryEmail());
+
+			ownerIds.add(ownerId);
+
+			if ( !(statusesByOwnerOrCoach.containsKey(ownerId)) ) {
+				statusesByOwnerOrCoach.put(ownerId, newPlanStatusContainerForOffPlanEmailsToCoaches());
+			}
+			if ( !(statusesByOwnerOrCoach.containsKey(coachId)) ) {
+				statusesByOwnerOrCoach.put(coachId, newPlanStatusContainerForOffPlanEmailsToCoaches());
+			}
+		}
+
+		for ( UUID ownerId : ownerIds ) {
+			final List<MapStatusReportPerson> offPlanPlansForOwner = mapStatusReportService.getOffPlanPlansForOwner(new Person(ownerId));
+			if ( offPlanPlansForOwner == null || offPlanPlansForOwner.isEmpty() ) {
+				continue;
+			}
+			for (MapStatusReportPerson status : offPlanPlansForOwner) {
+				final UUID planCoachId = status.getCoachId();
+				final boolean sameOwnerAndCoach = ownerId.equals(planCoachId);
+				final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForOwner = statusesByOwnerOrCoach.get(ownerId);
+				if ( sameOwnerAndCoach ) {
+					final List<MapStatusReportPerson> categorizedStatuses = statusesForOwner.get(PersonToPlanRelationship.OWNER_AND_COACH);
+					categorizedStatuses.add(status);
+				} else {
+					final List<MapStatusReportPerson> ownerCategorizedStatuses = statusesForOwner.get(PersonToPlanRelationship.OWNER_ONLY);
+					ownerCategorizedStatuses.add(status);
+
+					final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForCoach = statusesByOwnerOrCoach.get(planCoachId);
+					final List<MapStatusReportPerson> coachCategorizedStatuses = statusesForCoach.get(PersonToPlanRelationship.COACH_ONLY);
+					coachCategorizedStatuses.add(status);
 				}
 			}
 		}
-		
+
+		final MapStatusReportPersonNameComparator sorter = new MapStatusReportPersonNameComparator();
+		for ( Map.Entry<UUID, Map<PersonToPlanRelationship, List<MapStatusReportPerson>>> statusesForOwnerOrCoach : statusesByOwnerOrCoach.entrySet() ) {
+
+			final UUID sendToPersonId = statusesForOwnerOrCoach.getKey();
+			final String sendToEmailAddress = emailAddressByPersonId.get(sendToPersonId);
+			if ( StringUtils.trimToNull(sendToEmailAddress) == null ) {
+				continue;
+			}
+
+			for ( List<MapStatusReportPerson> statuses : statusesForOwnerOrCoach.getValue().values() ) {
+				Collections.sort(statuses, sorter);
+			}
+
+			// TODO Templatize: https://issues.jasig.org/browse/SSP-2572
+			final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesByCategory = statusesForOwnerOrCoach.getValue();
+			final StringBuilder sb = new StringBuilder();
+			sb.append("<html><body>\n")
+				.append("<h2>MAP Plan Status Report</h2>\n")
+				.append("The following students have been determined to be Off Plan after comparing their transcript to their MAP.</br>\n");
+
+			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.OWNER_AND_COACH, "Assigned to You (and You Planned the MAP)", sb);
+			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.COACH_ONLY, "Assigned to You (but Somebody Else Planned the MAP)", sb);
+			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.OWNER_ONLY, "Not Assigned to You (but You Planned the MAP)", sb);
+
+			sb.append("<br/>\n</body></html>");
+
+			SubjectAndBody subjectAndBody = new SubjectAndBody("Student MAP Off Plan Report", sb.toString());
+			try {
+				messageService.createMessage(sendToEmailAddress, null, subjectAndBody);
+			} catch ( ObjectNotFoundException e ) {
+				LOGGER.error("Failed to send MAP status report to owner or coach {} at address {}",
+						new Object[] {sendToPersonId, sendToEmailAddress, e});
+			}
+
+		}
+	}
+
+	private static enum PersonToPlanRelationship {
+		OWNER_ONLY,COACH_ONLY,OWNER_AND_COACH
+	}
+
+	private void appendOffPlanStanza(Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesByCategory,
+									 PersonToPlanRelationship statusCategory, String categoryStanzaHeader,
+									 StringBuilder appendTo) {
+		final List<MapStatusReportPerson> statusesInCategory = statusesByCategory.get(statusCategory);
+		appendTo.append("<h3>").append(categoryStanzaHeader).append("</h3>\n");
+		if ( statusesInCategory.isEmpty() ) {
+			appendTo.append("<em>None</em>\n");
+			appendTo.append("<br/>\n");
+		} else {
+			for ( MapStatusReportPerson status : statusesInCategory ) {
+				appendTo.append(status.getFirstName()).append(" ").append(status.getLastName()).append("<br/>\n");
+			}
+		}
+	}
+
+	private Map<PersonToPlanRelationship,List<MapStatusReportPerson>> newPlanStatusContainerForOffPlanEmailsToCoaches() {
+		final Map<PersonToPlanRelationship,List<MapStatusReportPerson>> plansContainer =
+				new HashMap<PersonToPlanRelationship,List<MapStatusReportPerson>>();
+
+		for ( PersonToPlanRelationship key : PersonToPlanRelationship.values() ) {
+			plansContainer.put(key,Lists.<MapStatusReportPerson>newArrayList());
+		}
+
+		return plansContainer;
+	}
+
+	private static final class MapStatusReportPersonNameComparator implements Comparator<MapStatusReportPerson> {
+		@Override
+		public int compare(MapStatusReportPerson msrp1, MapStatusReportPerson msrp2) {
+			return nameOf(msrp1).compareTo(nameOf(msrp2));
+		}
+
+		private String nameOf(MapStatusReportPerson msrp) {
+			return new StringBuilder()
+					.append(StringUtils.trimToEmpty(msrp.getLastName()))
+					.append(StringUtils.trimToEmpty(msrp.getFirstName()))
+					.toString();
+		}
 	}
 
 	private void sendReportEmail(MapStatusReportSummary summary) 

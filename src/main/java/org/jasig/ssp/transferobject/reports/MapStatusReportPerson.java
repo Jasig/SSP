@@ -22,8 +22,25 @@ import java.util.UUID;
 
 public class MapStatusReportPerson {
 
+	private UUID planId;
+	private UUID personId;
+	private String schoolId;
+	private String programCode;
+	private String firstName;
+	private String lastName;
+	private String catalogYearCode;
+	private UUID coachId;
+	private UUID ownerId;
+	
+	/**
+	 * 
+	 */
+	public MapStatusReportPerson() {
+		super();
+	}
 
-	public MapStatusReportPerson(UUID planId, UUID personId, String schoolId, String programCode,String catalogYearCode, String firstName, String lastName) {
+	public MapStatusReportPerson(UUID planId, UUID personId, String schoolId, String programCode,String catalogYearCode,
+								 String firstName, String lastName, UUID coachId, UUID ownerId) {
 		super();
 		this.planId = planId;
 		this.personId = personId;
@@ -32,21 +49,8 @@ public class MapStatusReportPerson {
 		this.lastName = lastName;
 		this.programCode = programCode;
 		this.catalogYearCode = catalogYearCode;
-	}
-
-	private UUID planId;
-	private UUID personId;
-	private String schoolId;
-	private String programCode;
-	private String firstName;
-	private String lastName;
-	private String catalogYearCode;
-	
-	/**
-	 * 
-	 */
-	public MapStatusReportPerson() {
-		super();
+		this.coachId = coachId;
+		this.ownerId = ownerId;
 	}
 
 	public UUID getPlanId() {
@@ -104,4 +108,21 @@ public class MapStatusReportPerson {
 	public void setCatalogYearCode(String catalogYearCode) {
 		this.catalogYearCode = catalogYearCode;
 	}
+
+	public UUID getCoachId() {
+		return coachId;
+	}
+
+	public void setCoachId(UUID coachId) {
+		this.coachId = coachId;
+	}
+
+	public UUID getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(UUID ownerId) {
+		this.ownerId = ownerId;
+	}
+
 }
