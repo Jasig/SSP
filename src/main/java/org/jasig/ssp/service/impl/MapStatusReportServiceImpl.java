@@ -38,7 +38,6 @@ import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
-import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubstitutionCode;
@@ -56,11 +55,9 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
-import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
+import org.jasig.ssp.transferobject.reports.MapStatusReportOwnerAndCoachInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -716,8 +713,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	}
 
 	@Override
-	public List<MapStatusReportCoachEmailInfo> getCoachesWithOffPlanStudent() {
-		return dao.getCoachesWithOffPlanStudent();
+	public List<MapStatusReportOwnerAndCoachInfo> getOwnersAndCoachesWithOffPlanStudent() {
+		return dao.getOwnersAndCoachesWithOffPlanStudent();
 	}
 
 	@Override
@@ -776,7 +773,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		Collection<ExternalSubstitutableCourse> allSubstitutableCourses = getAllPossibleSubstitutableCoursesForStudent(plan,transcript);
 		//If there is no active plan return false
 		
-		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(),plan.getCatalogYearCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName());
+		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(),plan.getCatalogYearCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName(), plan.getPerson().getCoach().getId(), plan.getOwner().getId());
 		List<Term> allTerms = termService.getAll();
 		
 		MapStatusReport report = evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm, 

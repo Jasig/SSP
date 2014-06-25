@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
@@ -32,11 +31,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.transferobject.reports.MapStatusReportCoachEmailInfo;
+import org.jasig.ssp.transferobject.reports.MapStatusReportOwnerAndCoachInfo;
 import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
 public interface MapStatusReportService extends PersonAssocAuditableService<MapStatusReport>  {
@@ -63,9 +60,9 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 
 	List<MapStatusReportSummaryDetail> getSummaryDetails();
 
-	List<MapStatusReportCoachEmailInfo> getCoachesWithOffPlanStudent();
+	List<MapStatusReportOwnerAndCoachInfo> getOwnersAndCoachesWithOffPlanStudent();
 	
-	List<MapStatusReportPerson> getOffPlanPlansForOwner(Person coach);
+	List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner);
 
 	List<MapStatusReportCourseDetails> getAllCourseDetailsForPerson(
 			Person person);
