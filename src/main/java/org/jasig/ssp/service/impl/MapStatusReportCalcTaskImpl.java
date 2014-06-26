@@ -205,14 +205,17 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			final UUID coachId = ownerCoachPair.getCoachId();
 
 			emailAddressByPersonId.put(ownerId, ownerCoachPair.getOwnerPrimaryEmail());
-			emailAddressByPersonId.put(coachId, ownerCoachPair.getCoachPrimaryEmail());
+
+			if ( coachId != null ) {
+				emailAddressByPersonId.put(coachId, ownerCoachPair.getCoachPrimaryEmail());
+			}
 
 			ownerIds.add(ownerId);
 
 			if ( !(statusesByOwnerOrCoach.containsKey(ownerId)) ) {
 				statusesByOwnerOrCoach.put(ownerId, newPlanStatusContainerForOffPlanEmailsToCoaches());
 			}
-			if ( !(statusesByOwnerOrCoach.containsKey(coachId)) ) {
+			if ( coachId != null && !(statusesByOwnerOrCoach.containsKey(coachId)) ) {
 				statusesByOwnerOrCoach.put(coachId, newPlanStatusContainerForOffPlanEmailsToCoaches());
 			}
 		}
@@ -233,9 +236,11 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 					final List<MapStatusReportPerson> ownerCategorizedStatuses = statusesForOwner.get(PersonToPlanRelationship.OWNER_ONLY);
 					ownerCategorizedStatuses.add(status);
 
-					final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForCoach = statusesByOwnerOrCoach.get(planCoachId);
-					final List<MapStatusReportPerson> coachCategorizedStatuses = statusesForCoach.get(PersonToPlanRelationship.COACH_ONLY);
-					coachCategorizedStatuses.add(status);
+					if ( planCoachId != null ) {
+						final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForCoach = statusesByOwnerOrCoach.get(planCoachId);
+						final List<MapStatusReportPerson> coachCategorizedStatuses = statusesForCoach.get(PersonToPlanRelationship.COACH_ONLY);
+						coachCategorizedStatuses.add(status);
+					}
 				}
 			}
 		}
