@@ -220,7 +220,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		if(mapPlan){
 			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
 			Ext.Array.forEach(mapTerms, function(mapTerm) {
-				if(termsStore.find("code", mapTerm.get("code")) < 0)
+				if(termsStore.findExact("code", mapTerm.get("code")) < 0)
 						termsStore.add(mapTerm);	
 			});
 		}
@@ -665,8 +665,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		var me = this;
 
-		var startTermIndex = me.termsStore.find('code', args.startTermCode);
-		var endTermIndex =  me.termsStore.find('code', args.endTermCode);
+		var startTermIndex = me.termsStore.findExact('code', args.startTermCode);
+		var endTermIndex =  me.termsStore.findExact('code', args.endTermCode);
 		if(startTermIndex < 0 || endTermIndex < 0){
 				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
 				return null;
@@ -686,7 +686,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		replaceTermCodes = false;
 		var numberToRemove = 0;
 		Ext.Array.forEach(terms, function(term) {
-			var termIndex = me.termsStore.find('code', term.get('code'));
+			var termIndex = me.termsStore.findExact('code', term.get('code'));
 			if(termIndex >= 0){
 				if (termIndex == startTermIndex){
 					replaceTermCodes = true;

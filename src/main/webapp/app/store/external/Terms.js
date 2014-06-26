@@ -84,7 +84,7 @@ Ext.define('Ssp.store.external.Terms', {
         var me = this;
         var terms = [];
         Ext.Array.forEach(termCodes, function(termCode){
-            var index = me.find('code', termCode);
+            var index = me.findExact('code', termCode);
             terms.push(me.getAt(index));
         });
         var store = Ext.create('Ext.data.Store', {
@@ -114,7 +114,7 @@ Ext.define('Ssp.store.external.Terms', {
         
         var startReportYear = me.getAt(endIndex).get("reportYear");
         if (maximum !== null && maximum !== undefined) {
-            startIndex = me.find('reportYear', startReportYear + maximum);
+            startIndex = me.findExact('reportYear', startReportYear + maximum);
             if (startIndex == -1) 
                 startIndex = 0;
         }
@@ -122,11 +122,11 @@ Ext.define('Ssp.store.external.Terms', {
         // No specific call to find the last that meets criteria or to pull indexes
         // This will find the first term (chronologically in the same school year as the currentTerm
         if (minimum !== null && minimum !== undefined ) {
-        	var index = me.find('reportYear', startReportYear + minimum);
+        	var index = me.findExact('reportYear', startReportYear + minimum);
         	var gindex = index;
         	var count = 0;
         	while(index != -1){
-        		index = me.find('reportYear', startReportYear + minimum, ++index);
+        		index = me.findExact('reportYear', startReportYear + minimum, ++index);
         		if(index != -1){
         			gindex = index;
         		}
@@ -146,7 +146,7 @@ Ext.define('Ssp.store.external.Terms', {
         var me = this;
         var startIndex = 0
         var currentTermIndex = me.findBy(me.isCurrentTerm);
-        var termIndex = me.find('code', termCode)
+        var termIndex = me.findExact('code', termCode)
         
         if (me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime()) 
             return true;

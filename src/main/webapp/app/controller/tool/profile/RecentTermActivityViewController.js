@@ -62,7 +62,7 @@ Ext.define('Ssp.controller.tool.profile.RecentTermActivityViewController', {
         var termTranscripts = [];
         Ext.Array.each(r, function(rawDatum) {
                 var termTranscript = Ext.create('Ssp.model.TermTranscript', rawDatum);
-				var termIndex = me.termsStore.find("code", termTranscript.get("termCode"));
+				var termIndex = me.termsStore.findExact("code", termTranscript.get("termCode"));
 				if(termIndex >= 0){
 					var term = me.termsStore.getAt(termIndex);
 					termTranscript.set("termStartDate", term.get("startDate"));
