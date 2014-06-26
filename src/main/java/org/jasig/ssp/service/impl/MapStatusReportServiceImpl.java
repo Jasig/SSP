@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.MapStatusReportDao;
 import org.jasig.ssp.dao.PersonAssocAuditableCrudDao;
@@ -769,8 +770,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		
 		List<ExternalStudentTranscriptCourse> transcript = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(plan.getPerson().getSchoolId());
 		
-		//Collection<ExternalSubstitutableCourse> allSubstitutableCourses = mapStatusReportService.getAllSubstitutableCourses();
-		Collection<ExternalSubstitutableCourse> allSubstitutableCourses = getAllPossibleSubstitutableCoursesForStudent(plan,transcript);
+		Collection<ExternalSubstitutableCourse> allSubstitutableCourses =
+				useSubstitutableCourses ? getAllPossibleSubstitutableCoursesForStudent(plan,transcript) : Lists.<ExternalSubstitutableCourse>newArrayList();
 		//If there is no active plan return false
 		
 		MapStatusReportPerson mapStatusReportPerson = new MapStatusReportPerson(plan.getId(), personId, plan.getPerson().getSchoolId(), plan.getProgramCode(),plan.getCatalogYearCode(), plan.getPerson().getFirstName(), plan.getPerson().getLastName(), plan.getPerson().getCoach().getId(), plan.getOwner().getId());
