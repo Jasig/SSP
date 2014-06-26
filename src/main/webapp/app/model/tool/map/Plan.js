@@ -410,11 +410,11 @@ Ext.define('Ssp.model.tool.map.Plan', {
     	if(requiredCourses.length > requiredCourses.length){
     		return validationResponse;
 		}
-    	var requiringCourseTermIndex = termsStore.find("code", requiringCourse.termCode);
+    	var requiringCourseTermIndex = termsStore.findExact("code", requiringCourse.termCode);
     	var startMessageAdded = false;
     	
     	Ext.Array.forEach(requiredCourses, function(requiredCourse) {
-    		 var index = termsStore.find("code", requiredCourse.termCode);
+    		 var index = termsStore.findExact("code", requiredCourse.termCode);
     		 var startMessage = "The following pre/co requisites are on plan but in the wrong term: ";
     		 var isValid = true;
     		 switch(requiredCourse.requisiteCode){

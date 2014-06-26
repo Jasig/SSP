@@ -71,7 +71,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		var startTerm = availableTerms.getAt(0);
 		me.getTermCodeToBumpField().setValue(startTerm.get('code'));
 		
-		var indexStartTerm = me.currentAndFutureTermsStore.find('code', startTerm.get('code'));
+		var indexStartTerm = me.currentAndFutureTermsStore.findExact('code', startTerm.get('code'));
 		me.getTermCodeEndField().setValue(me.currentAndFutureTermsStore.getAt(indexStartTerm + 1).get('code'));
 		
 		var actions = Ext.create('Ext.data.Store', {
@@ -99,10 +99,10 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 			return me.currentAndFutureTermsStore;
 		}
 		if(!me.currentMapPlan.get("isTemplate")){
-			var startIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(0).get("code"));
+			var startIndex = me.currentAndFutureTermsStore.findExact('code',availableTerms.getAt(0).get("code"));
 			if(startIndex < 0)
 				startIndex = 0;
-			var endIndex = me.currentAndFutureTermsStore.find('code',availableTerms.getAt(availableTerms.getCount() - 1).get("code"));
+			var endIndex = me.currentAndFutureTermsStore.findExact('code',availableTerms.getAt(availableTerms.getCount() - 1).get("code"));
 			if(endIndex < 0)
 				endIndex = me.currentAndFutureTermsStore.getCount() - 1;
 			if(endIndex < 0)
@@ -122,7 +122,7 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		me.getView().close();
 		me.bumpParams = {startTermCode:startTermCode, endTermCode:endTermCode, action:action};
 		if(action == 'removeTerm' && me.currentMapPlan.hasCourse(startTermCode)){
-			var startTerm = me.currentAndFutureTermsStore.findRecord('code', startTermCode);
+			var startTerm = me.currentAndFutureTermsStore.findRecord('code', startTermCode, 0, false, false, true);
 			var message = startTerm.get('name') + ' has courses. Are you sure you want to delete it?'
 			Ext.Msg.confirm({
        		     title:'Delete Term With Courses?',
