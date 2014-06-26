@@ -117,16 +117,16 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		
 		//Hard delete all previous reports
 		mapStatusReportService.deleteAllOldReports();
-		
-		
-		final Collection<ExternalSubstitutableCourse> allSubstitutableCourses = mapStatusReportService.getAllSubstitutableCourses();
+
+		final boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
+		final Collection<ExternalSubstitutableCourse> allSubstitutableCourses =
+				useSubstitutableCourses ? mapStatusReportService.getAllSubstitutableCourses() : Lists.<ExternalSubstitutableCourse>newArrayList();
 		
 		//Load up our configs
 		final Set<String> gradesSet = mapStatusReportService.getPassingGrades();
 		final Set<String> additionalCriteriaSet = mapStatusReportService.getAdditionalCriteria();
 		final boolean termBound = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_term_bound_strict").trim());
-		final boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
-		
+
 		//Lets figure out our cutoff term
 		final Term cutoffTerm = mapStatusReportService.deriveCuttoffTerm();
 		
