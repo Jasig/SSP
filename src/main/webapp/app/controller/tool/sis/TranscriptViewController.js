@@ -66,7 +66,7 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
         if ( terms ) {
             Ext.Array.each(terms, function(term) {
                     var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
-					var termIndex = me.termsStore.find("code", courseTranscript.get("termCode"));
+					var termIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
 					if(termIndex >= 0){
 						var term = me.termsStore.getAt(termIndex);
 						courseTranscript.set("termStartDate", term.get("startDate"));
