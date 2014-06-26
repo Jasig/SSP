@@ -238,8 +238,17 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 
 					if ( planCoachId != null ) {
 						final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForCoach = statusesByOwnerOrCoach.get(planCoachId);
-						final List<MapStatusReportPerson> coachCategorizedStatuses = statusesForCoach.get(PersonToPlanRelationship.COACH_ONLY);
-						coachCategorizedStatuses.add(status);
+						// Seen this lookup come up empty in practice. Possibly b/c coach assignments changed since
+						// the original list of owners and coaches was pulled? Not really worth it to try to
+						// read/repair here, e.g. would have to go look up the coach email. So for now we're just
+						// going to skip such coaches.
+						if ( statusesForCoach != null ) {
+							final List<MapStatusReportPerson> coachCategorizedStatuses = statusesForCoach.get(PersonToPlanRelationship.COACH_ONLY);
+							coachCategorizedStatuses.add(status);
+						} else {
+							LOGGER.info("Skipping status notification for coach {} on plan {} because that coach wasn't in the original list of plan owners and coaches",
+									planCoachId, status.getPlanId());
+						}
 					}
 				}
 			}
