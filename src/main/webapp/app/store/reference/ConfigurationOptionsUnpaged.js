@@ -62,8 +62,14 @@ Ext.define('Ssp.store.reference.ConfigurationOptionsUnpaged', {
     {
     	var me=this;
     	var index = me.find('name',name);
-    	if(index >= 0)
-    	 return me.getAt(index).get('value');
+    	if(index >= 0){
+    	 var value =  me.getAt(index).get('value');
+    	 if(value === 'true')
+    		 return true;
+    	 if(value === 'false')
+    		 return false;
+    	 return value;
+    	}
     	return null;
     },
     getConfigModelName:function(name)
