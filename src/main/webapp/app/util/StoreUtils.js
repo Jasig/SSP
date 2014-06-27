@@ -62,11 +62,11 @@ Ext.define('Ssp.util.StoreUtils',{
 	getModelIndex: function(propertyName, model,store){
 		// try id first as it has best chance of uniqueness
 		if(model.get("id")){
-		  	var index = store.find("id", model.get("id"));
+		  	var index = store.findExact("id", model.get("id"));
 			if(index >= 0)
 				return index;
 		}
-		return store.find(propertyName, model.get(propertyName));
+		return store.findExact(propertyName, model.get(propertyName));
 	},
 	
 	onUnpagedStoreLoaded: function(records, operation, success, params){
