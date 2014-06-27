@@ -185,7 +185,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			
 			creditHours.setValue(planCourse.get('creditHours'));
 			
-			var course = me.coursesStore.findRecord('code', planCourse.get('code'));
+			var course = me.coursesStore.findRecord('code', planCourse.get('code'), 0, false, false, true);
 		
 			if(me.getMinHrs() == 0){
 				if(course != null)

@@ -408,7 +408,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
     		validationResponse.valid = false;
     		validationResponse.message = " " + courseRequisites.length + " pre/co requisites are not currently on plan: ";
 			for(var i = 0; i < courseRequisites.length; i++){
-				var course = coursesStore.findRecord('code', courseRequisites[i].requiredCourseCode);
+				var course = coursesStore.findRecord('code', courseRequisites[i].requiredCourseCode, 0, false, false, true);
 				var formattedCourse = courseRequisites[i].requiredCourseCode + "(C)";
 				if(course != null){
 					formattedCourse = course.get("formattedCourse");
