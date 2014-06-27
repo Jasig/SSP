@@ -482,7 +482,7 @@ public class DirectoryPersonSearchDao  {
 		
 		if(hasDeclaredMajor(personSearchRequest))
 		{
-			params.put("declaredMajor", personSearchRequest.getDeclaredMajor());
+			params.put("programCode", personSearchRequest.getDeclaredMajor());
 		}
 		
 		if(hasHoursEarnedCriteria(personSearchRequest))
@@ -553,7 +553,7 @@ public class DirectoryPersonSearchDao  {
 		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esps.status = :mapStatus and esps.schoolId = dp.id ");
+			stringBuilder.append(" esps.status = :mapStatus and esps.schoolId = dp.schoolId ");
 		}
 		
 		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
@@ -609,14 +609,14 @@ public class DirectoryPersonSearchDao  {
 
 		}
 	}
-
-
+	
 	private void buildDeclaredMajor(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
 	{
 		if(hasDeclaredMajor(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" dp.declaredMajor = :declaredMajor");
+			stringBuilder.append(" esap.programCode = :programCode ");
+			stringBuilder.append(" and esap.schoolId = dp.id ");
 		}
 	}
 
@@ -743,6 +743,11 @@ public class DirectoryPersonSearchDao  {
 			stringBuilder.append(", Person p");
 		}
 		
+		if(hasDeclaredMajor(personSearchRequest))
+		{
+			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
+		}
+		
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
 		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
@@ -761,18 +766,15 @@ public class DirectoryPersonSearchDao  {
 		return personSearchRequest.getGpaEarnedMax() != null || personSearchRequest.getGpaEarnedMax() != null;
 	}
 
-
 	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) 
 	{
 		return !StringUtils.isEmpty(personSearchRequest.getDeclaredMajor());
 	}
 
-
 	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) 
 	{
 		return personSearchRequest.getCurrentlyRegistered() != null;
 	}
-
 
 	private void appendAndOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) 
 	{
