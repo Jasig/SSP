@@ -276,8 +276,13 @@ public class DirectoryPersonSearchDao  {
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
 		if(requiresObjectStatus(personSearchRequest))
 		{
-			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" dp.objectStatus = :personObjectStatus ");
+			if(sspPersonOnly(personSearchRequest)){
+				appendAndOrWhere(stringBuilder,filterTracker);
+				stringBuilder.append(" dp.objectStatus = :personObjectStatus ");
+			}else{
+				appendAndOrWhere(stringBuilder,filterTracker);
+				stringBuilder.append(" (dp.objectStatus = :personObjectStatus or dp.objectStatus is NULL) ");
+			}
 		}
 	}
 	
