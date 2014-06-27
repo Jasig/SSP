@@ -291,7 +291,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     handleInvalidCourse: function(buttonId){
 		var me = this;
     	if(buttonId != 'yes'){
-        	var index = me.getView().getStore().find('code', me.droppedRecord.get("code"));
+        	var index = me.getView().getStore().findExact('code', me.droppedRecord.get("code"));
 			if(index >= 0){
         		me.getView().getStore().removeAt(index);
 				me.currentMapPlan.dirty = me.planWasDirty;
