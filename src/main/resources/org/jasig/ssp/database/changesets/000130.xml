@@ -263,6 +263,68 @@ END;
     grant all on ${schema}.v_directory_person to ${database.app.username};
           ]]></sql>
      </changeSet>
+     
+     <!--It is necessary to change directory_person_view because declared_major/external_student_academic_program has a one to many relation
+         with person, final fix is in 000144.xml where declared_major is removed.  Until the final fix, declared major is now 
+         filled with dummy values(residency_county) so that installs where students have been assigned multiple academic 
+         programs liquibase will complete. 
+         In the case where installation of mv_directory_person has been created because there 
+         existed a one to one relation between person and  external_student_academic_program update at the time the 
+         table was created, this fix is not necessary and will be taken care of by 000144.xml  -->
+     <changeSet  id="update for new installs directory_person view" author="jim.stanley">
+        <preConditions onFail="MARK_RAN" onFailMessage="Code mv_directory_person already exists database">
+            <not>
+                <tableExists tableName="mv_directory_person" schemaName="${schema}"/>
+            </not>
+        </preConditions>
+        <dropView viewName="v_directory_person" schemaName="${schema}"/>
+        <sql><![CDATA[
+        create view ${schema}.v_directory_person AS select
+    COALESCE(p.school_id, ep.school_id) as id,
+    p.id as person_id,
+    COALESCE(p.school_id, ep.school_id) as school_id,
+    COALESCE(p.username, ep.username) as username,
+    COALESCE(p.first_name, ep.first_name) as first_name,
+    COALESCE(p.middle_name, ep.middle_name) as middle_name,
+    COALESCE(p.last_name, ep.last_name) as last_name,
+    COALESCE(p.birth_date, ep.birth_date) as birth_date,
+    COALESCE(p.primary_email_address, ep.primary_email_address) as primary_email_address,
+    COALESCE(p.address_line_1, ep.address_line_1) as address_line_1,
+    COALESCE(p.address_line_2, ep.address_line_2) as address_line_2,
+    COALESCE(p.city, ep.city) as city,
+    COALESCE(p.state, ep.state) as state,
+    COALESCE(p.zip_code, ep.zip_code) as zip_code,
+    COALESCE(p.home_phone, ep.home_phone) as home_phone,
+    COALESCE(p.work_phone, ep.work_phone) as work_phone,
+    COALESCE(p.actual_start_term, ep.actual_start_term) as actual_start_term,
+    COALESCE(p.actual_start_year, ep.actual_start_year) as actual_start_year,
+    COALESCE(p.cell_phone, ep.cell_phone) as cell_phone,
+    COALESCE(p.photo_url, ep.photo_url) as photo_url,
+    COALESCE(p.residency_county, ep.residency_county) as residency_county,
+    COALESCE(p.f1_status, ep.f1_status) as f1_status,
+    COALESCE(p.coach_id, ${schema}.GET_PERSON_ID_FROM_SCHOOL_ID(ep.coach_school_id)) as coach_id,
+    ${schema}.GET_PERSON_FIRST_NAME_FROM_ID(COALESCE(p.coach_id, ${schema}.GET_PERSON_ID_FROM_SCHOOL_ID(ep.coach_school_id))) as coach_first_name,
+    ${schema}.GET_PERSON_LAST_NAME_FROM_ID(COALESCE(p.coach_id, ${schema}.GET_PERSON_ID_FROM_SCHOOL_ID(ep.coach_school_id))) as coach_last_name,
+    ${schema}.GET_STUDENT_TYPE_NAME_FROM_ID(COALESCE(p.student_type_id, ${schema}.GET_STUDENT_TYPE_ID_FROM_CODE(ep.student_type_code))) as student_type_name,
+    p.student_intake_complete_date as student_intake_complete_date,
+    ${schema}.GET_PROGRAM_STATUS_NAME_FROM_ID(${schema}.GET_PROGRAM_STATUS_FROM_PERSON_ID(p.id)) as program_status_name,
+    COALESCE(p.residency_county, ep.residency_county) as declared_major,
+    est.credit_hours_earned as credit_hours_earned,
+    esfa.sap_status_code as sap_status_code,
+    est.grade_point_average as grade_point_average,
+    ${schema}.ACTIVE_EARLY_ALERT_FORMULA(p.id) as active_alerts_count,
+    ${schema}.INACTIVE_EARLY_ALERT_FORMULA(p.id) as closed_alerts_count,
+    ${schema}.GET_EARLY_ALERT_RESPONSE_DUE_COUNT(${schema}.GET_EARLY_ALERT_RESPONSE_DATE(),p.id) as early_alert_response_due_count,
+    ${schema}.GET_EARLY_ALERT_RESPONSE_CURRENT_COUNT(${schema}.GET_EARLY_ALERT_RESPONSE_DATE(),p.id) as early_alert_response_current_count,
+    ${schema}.CURRENT_REGISTRATION_STATUS(ep.school_id, ${schema}.CURRENT_TERM_CODE()) as current_registration_status
+    from external_person as ep FULL OUTER JOIN
+    person as p on ep.school_id = p.school_id 
+    LEFT OUTER JOIN ${schema}.external_student_transcript as est on ep.school_id = est.school_id
+    LEFT OUTER JOIN ${schema}.external_student_financial_aid as esfa on ep.school_id = esfa.school_id
+    LEFT OUTER JOIN ${schema}.external_person_planning_status as esps on ep.school_id = esps.school_id;
+    grant all on ${schema}.v_directory_person to ${database.app.username};
+          ]]></sql>
+     </changeSet>
     
      <changeSet dbms="postgresql" id="create mv directory_person view and pop postgresql" author="jim.stanley">
         <sql splitStatements="false"><![CDATA[
