@@ -122,7 +122,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 				if (SspUser.ANONYMOUS_PERSON_USERNAME.equalsIgnoreCase(((String)principal))) {
 					sspUser = anonymousUser();
-				} else if ( auth instanceof OAuth2Authentication ) {
+				} else if ( auth instanceof OAuth2Authentication ) { // TODO going to have to add similar logic for ConsumerAuthentication, I think
 					// Would rather not have this coupling to OAuth2 here, but
 					// the alternative would be to change the behavior in the
 					// else clause below to *always* try to load a SspUser given
