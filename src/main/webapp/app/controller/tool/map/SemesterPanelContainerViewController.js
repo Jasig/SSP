@@ -107,7 +107,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
             if ( callback ) {
                 callback.apply(me, [ serviceResponses ]);
             }
-            me.afterServiceHandler(serviceResponses);
         };
     },
 
