@@ -130,8 +130,28 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			}
 		}
 		
+		me.appEventsController.assignEvent({
+            eventName: 'onRetrieveFromExternal',
+            callBackFunc: me.onRetrieveFromExternalClick,
+            scope: me
+        });
+		
 		return me.callParent(arguments);
     },
+	
+	
+	destroy: function(){
+        var me = this;
+        
+        me.appEventsController.removeEvent({
+            eventName: 'onRetrieveFromExternal',
+            callBackFunc: me.onRetrieveFromExternalClick,
+            scope: me
+        });
+        
+        return me.callParent(arguments);
+    },
+	
     
     setForInstantCaseloadAssignment: function(schoolId) {
 		var me=this;

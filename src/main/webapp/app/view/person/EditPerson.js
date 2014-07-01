@@ -23,9 +23,10 @@ Ext.define('Ssp.view.person.EditPerson', {
     controller: 'Ssp.controller.person.EditPersonViewController',
     inject: {
         textStore: 'sspTextStore',
-        configStore: 'configStore'
+        configStore: 'configStore',
+		appEventsController: 'appEventsController'
     },
-	padding: '0 0 0 0',
+	padding: '0 0 0 10',
 	margin: '0 0 0 0',
 	width: '100%',
 	layout: {
@@ -65,7 +66,22 @@ Ext.define('Ssp.view.person.EditPerson', {
 						allowBlank: false,
 						width: 250,						
 						labelAlign: 'top',
-						padding: '0 5 0 0'
+						padding: '0 5 0 0',
+                        enableKeyEvents: true,
+                        listeners: {
+                            afterrender: function(field){
+                                field.focus(false, 5);
+								
+                            },
+                            specialkey: {
+                                scope: me,
+                                fn: function(field, el){
+                                    if (el.getKey() == Ext.EventObject.ENTER) {
+                                        me.appEventsController.getApplication().fireEvent("onRetrieveFromExternal");
+                                    }
+                                }
+                            }
+                        }
 					},
 					{
 						xtype: 'button',
