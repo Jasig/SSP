@@ -175,6 +175,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		// multiple handlers in this particular case.
 		me.appEventsController.getApplication().addListener('toolsNav', me.onToolsNav, me);
 
+
+		me.appEventsController.assignEvent({eventName: 'onUpdateCurrentMapPlanPlanToolView', callBackFunc:  me.setPlanNotesButtonIcon, scope: me});
+
 		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
 
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
@@ -769,6 +772,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	
 	destroy:function(){
 	    var me=this;
+
+		me.appEventsController.removeEvent({eventName: 'onUpdateCurrentMapPlanPlanToolView', callBackFunc:  me.setPlanNotesButtonIcon, scope: me});
 
 	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
