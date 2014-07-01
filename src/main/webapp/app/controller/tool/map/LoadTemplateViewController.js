@@ -100,7 +100,10 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
          },
          view: {
             show: 'onShow'
-         }
+         },
+		 'allPlansTemplateGridPanel':{
+		 	itemdblclick: 'onItemDblClick'
+		 }
 	},
 
 	init: function() {
@@ -119,7 +122,14 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     loadTemplates: function() {
         var me = this;
         me.getView().setLoading(true);
-        me.store.load(); // callback registered in init()
+        me.store.load(); 
+		me.store.filter([
+		{
+			property: 'objectStatus',
+			value: 'ACTIVE'
+		}
+		]);
+		// callback registered in init()
     },
     
     onStoreLoaded: function(){
@@ -142,6 +152,20 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
         var me = this;
          me.getView().query("form")[0].getForm().reset();
     },
+	
+	onItemDblClick: function(grid, record, item, index, e, eOpts) {
+		var me = this;
+		me.getView().setLoading(true);
+		
+		var callbacks = new Object();
+		callbacks.success = me.onLoadCompleteSuccess;
+		callbacks.failure = me.onLoadCompleteFailure;
+		callbacks.scope = me;
+		
+		me.mapEventUtils.loadTemplate(record.get('id'));
+     	me.getView().hide();
+		
+		},
     
     onOpenClick: function(button) {
     	var me = this;
@@ -153,6 +177,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		callbacks.scope = me;
 		
 		record = me.getView().query('gridpanel')[0].getView().getSelectionModel().getSelection()[0];
+		
         if (record) 
         {	
         	 me.mapEventUtils.loadTemplate(record.get('id'));

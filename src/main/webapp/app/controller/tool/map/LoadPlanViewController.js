@@ -35,7 +35,10 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
 		},	
 		'cancelButton': {
 			click: 'onCloseClick'
-		}
+		},
+		 'allPlansGridPanel':{
+		 	itemdblclick: 'onItemDblClick'
+		 }
 	},
 
 	init: function() {
@@ -68,6 +71,13 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
            Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
         }    	
     },
+	
+	onItemDblClick: function(grid, record, item, index, e, eOpts) {
+		var me = this;
+		me.mapEventUtils.loadPlan(record.get('id'));
+     	me.getView().hide();
+		
+	},
 		    
 	onCloseClick: function(){
 		var me = this;
