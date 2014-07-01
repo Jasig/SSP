@@ -753,6 +753,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanNotesButton().setTooltip("Plan Notes");
 			me.getMovePlanButton().setTooltip("Move Plan");
 		}
+		me.setPlanNotesButtonIcon();
 		me.getView().setLoading(false);
 	},
 	
