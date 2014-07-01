@@ -43,11 +43,17 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
                 dataIndex: 'formattedCourse',
                 text: 'Course',
 				flex: .14
-            },  {
+            }, 
+			{
+                dataIndex: 'sectionNumber',
+                text: 'Section',
+				flex: .10
+            },  
+			{
             
                 dataIndex: 'title',
                 text: 'Course Title',
-				flex: .30
+				flex: .25
             },
 			{
                 dataIndex: 'creditEarned',
@@ -58,7 +64,7 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
             
                 dataIndex: 'facultyName',
                 text: 'Instructor',
-                flex: .25
+                flex: .20
             }, {
             
                 dataIndex: 'statusCode',
