@@ -348,7 +348,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		else
 		{
-			var editable = me.editPastTerms === 'true' || !me.termsStore.isPastTerm(termCode);
+			// TODO the boolean logic needs to be changed once we have a proper getConfigAsBoolean() API
+			// https://issues.jasig.org/browse/SSP-2591
+			var editable = me.editPastTerms === 'true' || me.editPastTerms === true || !me.termsStore.isPastTerm(termCode);
 			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
 				store:semesterStore,
 				editable: editable
