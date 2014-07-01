@@ -107,6 +107,17 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate')
 
                     },
+					{
+				    xtype: 'fieldset',
+				    border: 0,
+				    title: '',
+				    margin: '0 0 0 0',
+				    padding: '5 0 0 5',
+				    layout: 'hbox',
+				    defaults: {
+				        align: 'stretch'
+				    },
+				    items: [
                     {
                         xtype: 'combobox',
                         itemId: 'electiveId',
@@ -121,11 +132,28 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                         forceSelection: true,
                         allowBlank: true,
                         queryMode: 'local',
-                        width: 250,
+                        width: 400,
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
 				        associativeField: 'id'
-                    }
-				    ]
+                    },{
+				        tooltip: 'Reset',
+				        text: '',
+				        width: 23,
+				        height: 25,
+				        name: 'electiveCancel',
+				        cls: 'mapClearSearchIcon',
+				        xtype: 'button',
+				        itemId: 'electiveCancel',
+						listeners: {
+		                    	click:function(){
+		                    		me = this;
+									Ext.ComponentQuery.query('#electiveId')[0].reset();
+		                    	},
+		                    	scope: me
+		               }
+				    }
+				    ]}
+					]
 				    ,
 				    dockedItems: [{
 		                xtype: 'toolbar',
