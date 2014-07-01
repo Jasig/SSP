@@ -56,7 +56,9 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
             } 
         });
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
-		if(me.editPastTerms === 'true')
+		// TODO the boolean logic needs to be changed once we have a proper getConfigAsBoolean() API
+		// https://issues.jasig.org/browse/SSP-2591
+		if(me.editPastTerms === true || me.editPastTerms === 'true')
 		{
 			me.currentAndFutureTermsStore = me.termsStore.getCurrentAndFutureTermsStore(true, 8, -1);
 		}
