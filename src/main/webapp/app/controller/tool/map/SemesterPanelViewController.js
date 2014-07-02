@@ -367,6 +367,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	},
 	destroy: function(){
 		var me=this;
+		me.getIsImportantTermButton().removeListener("move", me.setTermNoteButton, me);
+		me.getView().view.removeListener('drop', me.onDrop, me);
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.updatePastTermButton, me);
 		 return me.callParent( arguments );
