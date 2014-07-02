@@ -75,12 +75,23 @@ Ext.define('Ssp.controller.MainViewController', {
     },
     
     onStudentRecordViewNavClick: function(obj, eObj){ 
-		this.displayStudentRecordView();
-	},
-	
-	onAdminViewNavClick: function(obj, eObj){ 
-		this.displayAdminView();
-	},
+    	var me = this;
+        var skipCallBack = me.appEventsController.getApplication().fireEvent('studentsNav',me);  
+    	if(skipCallBack)
+    	{
+    	      	me.displayStudentRecordView();
+    	}
+   	},
+    	 	
+   	onAdminViewNavClick: function(obj, eObj){ 
+  		var me = this;
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('adminNav',me);  
+        if(skipCallBack)
+        {
+          	me.displayAdminView();
+        }
+   	},
+
     
     displayStudentRecordView: function(){
     	var me=this;

@@ -175,6 +175,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		// multiple handlers in this particular case.
 		me.appEventsController.getApplication().addListener('toolsNav', me.onToolsNav, me);
 
+		me.appEventsController.assignEvent({eventName: 'adminNav', callBackFunc: me.onAdminNav, scope: me});
+		
+		me.appEventsController.assignEvent({eventName: 'studentsNav', callBackFunc: me.onStudentsNav, scope: me});	
 
 		me.appEventsController.assignEvent({eventName: 'onUpdateCurrentMapPlanPlanToolView', callBackFunc:  me.setPlanNotesButtonIcon, scope: me});
 
@@ -396,6 +399,67 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},	
+	onAdminNav: function(mainViewController){
+		var me = this;
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
+						me.savePlanPopUp.show();
+					}
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    mainViewController.displayAdminView();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
+	onStudentsNav: function(mainViewController){
+		var me = this;
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false });
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false });
+						me.savePlanPopUp.show();
+					}
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    mainViewController.displayStudentRecordView();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
+	
 	onRetrieveCaseload: function(searchViewController){
 		var me = this;
 
@@ -792,7 +856,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onCurrentMapPlanChangeUpdateMapView', callBackFunc: me.onCurrentMapPlanChange, scope: me});
-		
+		me.appEventsController.removeEvent({eventName: 'adminNav', callBackFunc: me.onAdminNav, scope: me});
+		me.appEventsController.removeEvent({eventName: 'studentsNav', callBackFunc: me.onStudentsNav, scope: me});			
 		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
 			me.faPopUp.close();
