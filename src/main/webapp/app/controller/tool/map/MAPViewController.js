@@ -822,11 +822,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	destroy:function(){
 	    var me=this;
 
+		
+		me.appEventsController.getApplication().removeListener('toolsNav', me.onToolsNav, me);
+		me.appEventsController.getApplication().removeListener('onAfterPlanLoad', me.onCurrentMapPlanChange, me);
 		me.appEventsController.removeEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onInitEvent, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
-	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
-	    
 	    me.appEventsController.removeEvent({eventName: 'adminNav', callBackFunc: me.onAdminNav, scope: me});	
 	    me.appEventsController.removeEvent({eventName: 'studentsNav', callBackFunc: me.onStudentsNav, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
@@ -841,10 +841,15 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
 		
+
+		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
 			me.faPopUp.close();
 		if(me.notesPopUp != null && !me.notesPopUp.isDestroyed)
+		{
+			me.notesPopUp.query('[name=saveButton]')[0].removeListener('click', me.onPlanNotesSave, me, {single:true});
 	    	me.notesPopUp.close();
+		}
 	    //me.allPlansPopUp.close();
 		if(me.allTemplatesPopUp != null && !me.allTemplatesPopUp.isDestroyed)
 	    	me.allTemplatesPopUp.close();

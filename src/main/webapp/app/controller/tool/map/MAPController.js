@@ -140,9 +140,12 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 	
 	destroy:function(){
 	    var me=this;
-		me.appEventsController.removeEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onInitEvent, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
+	    
+		me.appEventsController.getApplication().removeListener('onBeforePlanLoad', me.onInitEvent, me);
+		me.appEventsController.getApplication().removeListener('onBeforePlanSave', me.onInitEvent, me);
+		me.appEventsController.getApplication().removeListener('onRemoveMask', me.onAfterEvent, me);		
+		me.appEventsController.getApplication().removeListener('onAfterPlanSave', me.onAfterEvent, me);
+		
 	    me.currentMapPlan.clearMapPlan();
 	    return me.callParent( arguments );
 	}
