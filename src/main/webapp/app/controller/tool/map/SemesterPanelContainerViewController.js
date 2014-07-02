@@ -32,7 +32,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		semesterStores : 'currentSemesterStores',
         electiveStore: 'electivesAllUnpagedStore',
         configStore: 'configurationOptionsUnpagedStore',
-        colorStore: 'colorsAllUnpagedStore',
+        colorStore: 'colorsAllUnpagedStore'
     },
     semesterPanels : new Array(),
     yearFieldSets : new Array(),
@@ -113,71 +113,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     // Just to avoid creating needless closures
     noOp: function() {},
 
-    // Makes sure we have all the stuff the SemesterPanels will need before they
-    // render. This breaks encapsulation, but not sure of a better way...
-    // maybe a static method on SemesterPanel or SemesterPanelController?
-    // the latter breaks encapsulation too and its dependencies wouldn't have
-    // loaded when the static is invoked, I don't think. The former might not
-    // be so bad in terms of separation of concerns since we already have
-    // complex rendering functions there. But I think we still have the same
-    // DI timing issue. So we do the dirty deed here...
-    withMapPlanRenderingDependencies: function(work) {
-        var me = this;
-        if(me.electiveStore.getCount() < 1 || me.colorStore.getCount() < 1)
-        {
-	        var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', {
-	            remainingOpNames: ['electives','colors'],
-	            afterLastOp: {
-	                callback: work.fn,
-	                callbackScope: work.scope,
-	            },
-	        });
-	        me.electiveStore.clearFilter(true);
-	        me.electiveStore.load(responseDispatcher.setSuccessCallback('electives', me.noOp, me));
-	        me.colorStore.clearFilter(true);
-	        me.colorStore.load(responseDispatcher.setSuccessCallback('colors', me.noOp, me));
-        }
-        else
-        {
-        	work.fn();
-        }
-    },
-
-    getMapPlanServiceSuccess: function(serviceResponses, isTemplate) {
-        var me = this;
-        var mapResponse = serviceResponses.successes.map;
-		if(!mapResponse || !mapResponse.responseText || Ext.String.trim(mapResponse.responseText).length == 0) {
-			if(me.termsStore.isLoading()) {
-				 me.termsStore.on('load', this.getMapPlanServiceFailure, this, {single: true});
-				return;
-			}
-			//Open Load Saved Plan Screen
-			me.allPlansPopUp = Ext.create('Ssp.view.tools.map.LoadPlans',{hidden:true,onInit:true,fromMapLoad:true});
-       	} else {
-			me.currentMapPlan.clearMapPlan();
-			me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
-			me.withMapPlanRenderingDependencies({
-				fn: function() {
-					me.onCreateMapPlan();
-					me.currentMapPlan.setIsTemplate(!!(isTemplate));
-				},
-				scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
-			});
-		}
-    },
-
-    getMapPlanServiceFailure: function() {
-		var me = this;
-		me.withMapPlanRenderingDependencies({
-			fn: function() {
-				me.onCreateNewMapPlan();
-				me.currentMapPlan.set('personId',me.personLite.get('id'));
-				me.currentMapPlan.set('ownerId',me.personLite.get('id'));
-			},
-			scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
-		});
-    },
- 
 	onAfterLayout: function(){
 		var me = this;
 		me.mapEventUtils.loadCurrentMap();
@@ -648,7 +583,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	onValidateAccept: function(btnId){
 		var me = this;
 		if(btnId == 'ok'){
-			me.withMapPlanRenderingDependencies({
+			me.mapEventUtils.withMapPlanRenderingDependencies({
 					fn: function() {
 						me.currentMapPlan.loadPlan(me.clonedMap, true);
 						me.onCreateMapPlan();

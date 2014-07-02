@@ -30,7 +30,9 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
     	currentMapPlan: 'currentMapPlan',
     	mapPlanService:'mapPlanService',
 		authenticatedPerson: 'authenticatedPerson',
-		semesterStores : 'currentSemesterStores'
+		semesterStores : 'currentSemesterStores',
+        electiveStore: 'electivesAllUnpagedStore',
+        colorStore: 'colorsAllUnpagedStore'
     },
 	initComponent: function() {
 		return this.callParent( arguments );
@@ -90,19 +92,24 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 		var me = this;
 		var id = me.personLite.get('id');
 		me.appEventsController.getApplication().fireEvent("onBeforePlanLoad");
-	    if (id != "") {
-			var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-	    	 me.mapPlanService.getCurrent(id, {
-	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
-	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
-	             scope: me
-	         });
-	    }		
+		me.withMapPlanRenderingDependencies({
+			fn: function() {
+				if (id != "") {
+					var serviceResponses = {
+							failures: {},
+							successes: {},
+							responseCnt: 0,
+							expectedResponseCnt: 1
+					}
+					me.mapPlanService.getCurrent(id, {
+						success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
+						failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
+						scope: me
+					});
+				}		
+			},
+			scope: me // shouldnt be necessary in this particular case, but satisfies ResponseDispatcher expectations
+		});
 	},
 	createNewMapPlan: function () {
 		var me = this;
@@ -221,6 +228,27 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 			me.appEventsController.getApplication().fireEvent("onPlanLoad");
 		}
     },	
+    withMapPlanRenderingDependencies: function(work) {
+        var me = this;
+        if(me.electiveStore.getCount() < 1 || me.colorStore.getCount() < 1)
+        {
+	        var responseDispatcher = Ext.create('Ssp.util.ResponseDispatcher', {
+	            remainingOpNames: ['electives','colors'],
+	            afterLastOp: {
+	                callback: work.fn,
+	                callbackScope: work.scope,
+	            },
+	        });
+	        me.electiveStore.clearFilter(true);
+	        me.electiveStore.load(responseDispatcher.setSuccessCallback('electives', me.noOp, me));
+	        me.colorStore.clearFilter(true);
+	        me.colorStore.load(responseDispatcher.setSuccessCallback('colors', me.noOp, me));
+        }
+        else
+        {
+        	work.fn();
+        }
+    },
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;
         return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
