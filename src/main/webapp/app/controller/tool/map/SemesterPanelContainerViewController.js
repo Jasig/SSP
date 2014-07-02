@@ -718,15 +718,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			me.coursePlanDetails.close();
 		}
         
+		me.appEventsController.getApplication().removeListener('onBeforePlanLoad', me.onBeforePlanLoad, me);
+		me.appEventsController.getApplication().removeListener('onAfterPlanLoad', me.updateAllPlanHours, me);
+		me.appEventsController.getApplication().removeListener('onPlanLoad', me.onPlanLoad, me);
+		
+		
 		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onBeforePlanLoad', callBackFunc: me.onBeforePlanLoad, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.updateAllPlanHours, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onPlanLoad', callBackFunc: me.onPlanLoad, scope: me});
 		
 		return me.callParent( arguments );
     }
