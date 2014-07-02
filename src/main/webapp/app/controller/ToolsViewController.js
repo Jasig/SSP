@@ -86,6 +86,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
             scope: me
         });
         
+        me.appEventsController.removeEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
+
+        
         return me.callParent(arguments);
     },
     
