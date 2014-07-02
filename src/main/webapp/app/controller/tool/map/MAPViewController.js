@@ -165,6 +165,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.getApplication().addListener('toolsNav', me.onToolsNav, me);
 		me.appEventsController.getApplication().addListener('onAfterPlanLoad', me.onCurrentMapPlanChange, me);
 		me.appEventsController.assignEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
+		me.appEventsController.assignEvent({eventName: 'adminNav', callBackFunc: me.onAdminNav, scope: me});
+		me.appEventsController.assignEvent({eventName: 'studentsNav', callBackFunc: me.onStudentsNav, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
 		me.appEventsController.assignEvent({eventName: 'personButtonEdit', callBackFunc: me.onPersonButtonEdit, scope: me});	
@@ -368,6 +370,66 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
 				    searchViewController.getCaseload();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
+	onAdminNav: function(mainViewController){
+		var me = this;
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
+						me.savePlanPopUp.show();
+					}
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    mainViewController.displayAdminView();
+				}
+			});	
+			return false;
+		}
+		return true;
+	},	
+	onStudentsNav: function(mainViewController){
+		var me = this;
+		if(me.currentMapPlan.isDirty(me.semesterStores)) {
+			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+				if(btn === 'yes'){
+					if ( me.currentMapPlan.get('isTemplate') ) {
+						// Cleanup template popups b/c not sure if they can be reused and if
+						// we just replace it with a new instance, the old one might never
+						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+						// only b/c that code is much older (but still might turn out to need
+						// to be handled similarly)
+						if ( me.saveTemplatePopUp ) {
+							me.saveTemplatePopUp.destroy();
+						}
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doStudentsNav' });
+						me.saveTemplatePopUp.show();
+					} else {
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doStudentsNav' });
+						me.savePlanPopUp.show();
+					}
+				} else if(btn === 'no') {
+				    me.currentMapPlan.dirty = false;
+				    me.semesterStores = {};
+				    mainViewController.displayStudentRecordView();
 				}
 			});	
 			return false;
@@ -764,6 +826,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.onCurrentMapPlanChange, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onBeforePlanSave', callBackFunc: me.onInitEvent, scope: me});
 	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
+	    
+	    me.appEventsController.removeEvent({eventName: 'adminNav', callBackFunc: me.onAdminNav, scope: me});	
+	    me.appEventsController.removeEvent({eventName: 'studentsNav', callBackFunc: me.onStudentsNav, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});	
 		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
