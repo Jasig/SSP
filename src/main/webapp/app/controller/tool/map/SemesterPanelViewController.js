@@ -66,6 +66,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
 		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.getView().view.addListener('drop', me.onDrop, me);	
+		me.termNotesPopUp.query('[name=saveButton]')[0].addListener('click', me.onTermNotesSave, me, {single:true});
+
 		var helpButton = me.getView().tools[0];
 		if(me.currentMapPlan.get('isTemplate'))
 		{
@@ -128,7 +130,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	    var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
 	    me.termNotesPopUp.query('form')[0].getForm().loadRecord(termNote);
 	   
-		me.termNotesPopUp.query('[name=saveButton]')[0].addListener('click', me.onTermNotesSave, me, {single:true});
 		
         me.termNotesPopUp.center();
         me.termNotesPopUp.show();
@@ -367,12 +368,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	},
 	destroy: function(){
 		var me=this;
+		
 		me.getIsImportantTermButton().removeListener("move", me.setTermNoteButton, me);
 		me.getView().view.removeListener('drop', me.onDrop, me);
 		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.updatePastTermButton, me);
 		me.termNotesPopUp.query('[name=saveButton]')[0].removeListener('click', me.onTermNotesSave, me, {single:true});
 
-		 return me.callParent( arguments );
+		return me.callParent( arguments );
 	}
 });

@@ -871,6 +871,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.showStudentTranscriptPopup.close();
 		if(me.showMapStatusPopup != null && !me.showMapStatusPopup.isDestroyed)
 			me.showMapStatusPopup.close();
+		
 	    return me.callParent( arguments );
 	}
 	
