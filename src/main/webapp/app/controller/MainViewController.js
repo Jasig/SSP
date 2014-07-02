@@ -46,7 +46,9 @@ Ext.define('Ssp.controller.MainViewController', {
 		me.configStore.load();
 		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
 		me.displayStudentRecordView();
-		
+		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
+	
 		me.personService.get( me.authenticatedPerson.get('id'), {
 				success: me.getContactPersonSuccess,
 				failure: me.getContactPersonFailure,
@@ -58,7 +60,10 @@ Ext.define('Ssp.controller.MainViewController', {
     },
 
     destroy: function() {
-	   	this.appEventsController.removeEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+    	var me = this;
+    	me.appEventsController.removeEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
+		me.appEventsController.removeEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
         return this.callParent( arguments );
     },
 	
@@ -78,11 +83,21 @@ Ext.define('Ssp.controller.MainViewController', {
     },
     
     onStudentRecordViewNavClick: function(obj, eObj){ 
-		this.displayStudentRecordView();
+		var me = this;
+        var skipCallBack = me.appEventsController.getApplication().fireEvent('studentsNav',me);  
+        if(skipCallBack)
+        {
+        	me.displayStudentRecordView();
+        }
 	},
 	
 	onAdminViewNavClick: function(obj, eObj){ 
-		this.displayAdminView();
+		var me = this;
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('adminNav',me);  
+        if(skipCallBack)
+        {
+        	me.displayAdminView();
+        }
 	},
     
     displayStudentRecordView: function(){
