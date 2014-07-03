@@ -120,7 +120,8 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     },
 
     destroy: function() {
-    	//this.appEventsController.removeEvent({eventName: 'dynamicCompChange', callBackFunc: this.onDynamicCompChange, scope: this});
+    	var me = this;
+    	this.appEventsController.removeEvent({eventName: 'dynamicCompChange', callBackFunc: this.onDynamicCompChange, scope: this});
 
         return this.callParent( arguments );
     },     

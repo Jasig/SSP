@@ -70,16 +70,6 @@ Ext.define('Ssp.view.SearchForm',{
 		    bodyPadding: 10,
 			defaults:{
 			    	 enableKeyEvents:true,
-			    	 listeners:{
-			    	    specialkey:{
-							scope: me,
-							fn: function(field, el) {
-									if(el.getKey() == Ext.EventObject.ENTER){
-										this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-									}
-							}	
-			    	  	}
-					}
 			},
             tools: [
                     {
@@ -137,19 +127,12 @@ Ext.define('Ssp.view.SearchForm',{
                     emptyText: 'Enter School ID (Exact)',
                     width: 100,
                     name: 'schoolId',
+                    itemId: 'schoolId',
 					enableKeyEvents:true,
 					listeners: {
 					      afterrender: function(field) {
 					        field.focus(false, 0);
-					      },
-						  specialkey:{
-							scope: me,
-							fn: function(field, el) {
-								if(el.getKey() == Ext.EventObject.ENTER){
-									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-								}
-							}	
-			    	  	}
+					      }
 					}
                 },
 

@@ -68,7 +68,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	 'gpaMax':{
 			specialkey: "specialKeyPressed",
 			blur: 'gpaMaxChanged'
-	 }
+	 },
+	 'schoolId': {
+	        specialkey: "specialKeyPressed",
+	    }
     },
     
 	init: function() {
