@@ -119,7 +119,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     destroy: function(){
 		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
-    	this.appEventsController.removeEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this}); 
+    	this.appEventsController.removeEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});
+		me.studentTypesStore.removeListener("load", me.onStoreLoaded, me, {single:true});
+
     	return this.callParent( arguments );
     },
   
