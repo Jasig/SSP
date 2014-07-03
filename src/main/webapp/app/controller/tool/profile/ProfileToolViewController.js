@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
 	
 	destroy: function() {
         var me=this;
-       // me.appEventsController.removeEvent({eventName: 'viewCoachHistory', callBackFunc: me.onViewCoachHistory, scope: me});
+       me.appEventsController.removeEvent({eventName: 'viewCoachHistory', callBackFunc: me.onViewCoachHistory, scope: me});
         
         return me.callParent( arguments );
     },

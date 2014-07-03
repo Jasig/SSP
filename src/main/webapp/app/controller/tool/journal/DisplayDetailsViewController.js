@@ -38,11 +38,15 @@ Ext.define('Ssp.controller.tool.journal.DisplayDetailsViewController', {
     },
     
     onViewReady: function(){
-    	this.appEventsController.assignEvent({eventName: 'refreshJournalEntryDetails', callBackFunc: this.onRefreshJournalEntryDetails, scope: this});
+    	var me = this;
+    	me.appEventsController.assignEvent({eventName: 'refreshJournalEntryDetails', callBackFunc: this.onRefreshJournalEntryDetails, scope: this});
     },
     
     destroy: function(){
-    	this.appEventsController.removeEvent({eventName: 'refreshJournalEntryDetails', callBackFunc: this.onRefreshJournalEntryDetails, scope: this});    	
+    	var me = this;
+    	me.appEventsController.removeEvent({eventName: 'refreshJournalEntryDetails', callBackFunc: this.onRefreshJournalEntryDetails, scope: this});
+        return me.callParent( arguments );
+
     },
     
     onRefreshJournalEntryDetails: function(){
