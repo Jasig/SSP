@@ -233,7 +233,9 @@ Ext.define('Ssp.controller.SearchViewController', {
     destroy: function() {
     	var me=this;
     	
-    	
+		me.termsStore.removeListener("load", me.onTermsStoreLoad, me);
+		me.textStore.removeListener("load", me.onTextStoreLoad, me, {single: true});
+		
 		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
@@ -251,6 +253,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 		if(me.instantCaseload != null && !me.instantCaseload.isDestroyed)
 			me.instantCaseload.close();
+		
 		return me.callParent( arguments );
     },
     
