@@ -211,40 +211,47 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				    },{
 	            				   fieldLabel: 'Contact Email',
 	            				   name: 'contactEmail',
-		            			   itemId: 'contactEmail'
+		            			   itemId: 'contactEmail',
+								   maxLength: 200
 	            				},{
             				        fieldLabel: 'Contact Phone',
             				        name: 'contactPhone',
-            				        itemId: 'contactPhone'
+            				        itemId: 'contactPhone',
+									maxLength: 200
             				    },
             				   {
             				        fieldLabel: 'Academic Link',
             				        name: 'academicLink',
             				        itemId: 'academicLink',
-            				        allowBlank:true
+            				        allowBlank:true,
+									maxLength: 2000
             				    },{
             				        fieldLabel: 'Career Link',
             				        name: 'careerLink',
             				        itemId: 'careerLink',
-            				        allowBlank:true
+            				        allowBlank:true,
+									maxLength: 2000
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
             				        name: 'contactNotes',
             				        itemId: 'contactNotes',
             				        allowBlank:true,
-            				        xtype: 'textareafield'
+            				        xtype: 'textareafield',
+									maxLength: 2000
             				    },{
             				        fieldLabel: 'Student Notes',
             				    	name: 'studentNotes',
             				    	itemId: 'studentNotes',
             			        	allowBlank:true,
-            			        	xtype: 'textareafield'
+            			        	xtype: 'textareafield',
+									maxLength: 2000
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicGoals',
                 			        itemId: 'academicGoals',
                 			        allowBlank:true,
-                			        xtype: 'textareafield'
+                			        xtype: 'textareafield',
+									maxLength: 2000
                 			    }
             			    ]
                     
