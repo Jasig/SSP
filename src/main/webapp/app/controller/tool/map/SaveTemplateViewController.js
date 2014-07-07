@@ -110,46 +110,54 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     onSaveClick:function(){
     	me = this;
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
+		var form =  me.getView().query('form')[0].getForm();
     	if(!nameField || nameField == '')
     	{
     		Ext.Msg.alert('Error','Please give the template a name.');
     		return;
     	}
     	var visibility = me.getVisibilityField().getValue();
-    	if(visibility != 'PRIVATE'){
-    		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
-    			me.getVisibilityField().setValue('PRIVATE');
-    			Ext.Msg.alert('Error','You do not have permission to save a public template.');
-        		return;
-    		}else{
-    			var programCode = me.getView().query('combobox[name="programCode"]')[0].getValue();
-    			var departmentCode = me.getView().query('combobox[name="departmentCode"]')[0].getValue();
-				var noProgramCode = (programCode == null || programCode.length <= 1);
-				var noDepartmentCode = (departmentCode == null || departmentCode.length <= 1);
-				
-    			if( noProgramCode || noDepartmentCode){
-    				var messageBox = Ext.Msg.confirm({
-            		     title:'Save Template No Program/Department Selected',
-            		     msg: "It is recommended that you save a public Template associated to a specific program and a department. " +
-								 (noProgramCode ? "Program":"") +
-											(noProgramCode && noDepartmentCode ?" and ":"") + 
-											(noDepartmentCode ? "Department":"") +
-											(noProgramCode && noDepartmentCode ? " are ":" is ") +
-            		     		"not currently selected. Please select preferred option.",
-            		     buttons: Ext.Msg.YESNOCANCEL,
-            		     fn: me.completeSave,
-            		     scope: me
-            		   });
-    					messageBox.msgButtons['yes'].setText("Save with No " + (noProgramCode ? "Program":"") +
-									(noProgramCode && noDepartmentCode ?"/":"") + 
-									(noDepartmentCode ? "Department":""));
-    					messageBox.msgButtons['no'].setText("Return To Save Dialog");
-    					messageBox.msgButtons['cancel'].setText("Cancel Save");
-    				return;
-    			}
-    		}
-    	}
-    	me.completeSave('yes');
+		var validateResult = me.formUtils.validateForms( form );
+		if (validateResult.valid) {
+			if (visibility != 'PRIVATE') {
+				if (!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')) {
+					me.getVisibilityField().setValue('PRIVATE');
+					Ext.Msg.alert('Error', 'You do not have permission to save a public template.');
+					return;
+				}
+				else {
+					var programCode = me.getView().query('combobox[name="programCode"]')[0].getValue();
+					var departmentCode = me.getView().query('combobox[name="departmentCode"]')[0].getValue();
+					var noProgramCode = (programCode == null || programCode.length <= 1);
+					var noDepartmentCode = (departmentCode == null || departmentCode.length <= 1);
+					
+					if (noProgramCode || noDepartmentCode) {
+						var messageBox = Ext.Msg.confirm({
+							title: 'Save Template No Program/Department Selected',
+							msg: "It is recommended that you save a public Template associated to a specific program and a department. " +
+							(noProgramCode ? "Program" : "") +
+							(noProgramCode && noDepartmentCode ? " and " : "") +
+							(noDepartmentCode ? "Department" : "") +
+							(noProgramCode && noDepartmentCode ? " are " : " is ") +
+							"not currently selected. Please select preferred option.",
+							buttons: Ext.Msg.YESNOCANCEL,
+							fn: me.completeSave,
+							scope: me
+						});
+						messageBox.msgButtons['yes'].setText("Save with No " + (noProgramCode ? "Program" : "") +
+						(noProgramCode && noDepartmentCode ? "/" : "") +
+						(noDepartmentCode ? "Department" : ""));
+						messageBox.msgButtons['no'].setText("Return To Save Dialog");
+						messageBox.msgButtons['cancel'].setText("Cancel Save");
+						return;
+					}
+				}
+			}
+			me.completeSave('yes');
+		}
+		else {
+			me.formUtils.displayErrors(validateResult.fields);
+		}
     },
     
     completeSave: function(btnId){
