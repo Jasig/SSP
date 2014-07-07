@@ -196,6 +196,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.set('isValid',true);
 		me.set('isTemplate',false);
 		me.dirty = false;
+		me.planStatus = null;
+		me.planStatusDetails = null;
 	},
 			
 	loadFromServer : function(objectData){

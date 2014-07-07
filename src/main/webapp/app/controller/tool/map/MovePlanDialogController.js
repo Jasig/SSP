@@ -49,12 +49,6 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		var me=this;
 		var view = me.getView();
 		
-		me.configStore.clearFilter();
-		me.configStore.load({
-            extraParams: {
-                limit: "-1"
-            } 
-        });
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		// TODO the boolean logic needs to be changed once we have a proper getConfigAsBoolean() API
 		// https://issues.jasig.org/browse/SSP-2591

@@ -237,7 +237,7 @@ public class MapStatusReportController  extends AbstractBaseController {
 	}	
 	
 	@RequestMapping(value = "/calculateStatus",method = RequestMethod.PUT)
-	@DynamicPermissionChecking
+	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	public @ResponseBody
 	Boolean calculateStatus(final @PathVariable UUID personId,
 			final HttpServletRequest request) throws ObjectNotFoundException, ValidationException  {
