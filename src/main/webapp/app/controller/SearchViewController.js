@@ -298,7 +298,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
     onCollapseStudentRecord: function(applyColumns) {
 		var me = this;
-		console.log('Apply Columns:'+ applyColumns);
 		me.preferences.set('SEARCH_VIEW_SIZE', "COLLAPSED");
 		if(applyColumns)
 		{
