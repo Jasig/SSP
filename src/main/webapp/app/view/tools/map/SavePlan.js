@@ -184,47 +184,54 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 	            				    name: 'contactEmail',
 	            				    itemId: 'contactEmail',
 									width: '80%',
-	            				   allowBlank:true
+	            				   	allowBlank:true,
+									maxLength: 200
 	            				 },{
             				        fieldLabel: 'Contact Phone',
             				        name: 'contactPhone',
             				        itemId: 'contactPhone',
 									width: '80%',
-            				        allowBlank:true
+            				        allowBlank:true,
+									maxLength: 200
             				    },
             				   {
             				        fieldLabel: 'Academic',
             				        name: 'academicLink',
             				        allowBlank:true,
 									width: '80%',
-            				        itemId: 'academicLink'
+            				        itemId: 'academicLink',
+									maxLength: 2000
             				    },{
             				        fieldLabel: 'Career Data',
             				        name: 'careerLink',
             				        allowBlank:true,
 									width: '80%',
-            				        itemId: 'careerLink'
+            				        itemId: 'careerLink',
+									maxLength: 2000
             				    },{
             				        fieldLabel: 'Advisor/Coach Notes',
             				        name: 'contactNotes',
             				        allowBlank:true,
             				        itemId: 'contactNotes',
 									width: '80%',
-            				        xtype: 'textareafield'
+            				        xtype: 'textareafield',
+									maxLength: 2000
             				    },{
             				        fieldLabel: 'Student Notes',
             				    	name: 'studentNotes',
             			        	allowBlank:true,
             			        	itemId: 'studentNotes',
             			        	xtype: 'textareafield',
-									width: '80%'
+									width: '80%',
+									maxLength: 2000
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicGoals',
                 			        allowBlank: true,
                 			        itemId: 'academicGoals',
                 			        xtype: 'textareafield',
-									width: '80%'
+									width: '80%',
+									maxLength: 2000
                 			    }
             			    ]
                     
