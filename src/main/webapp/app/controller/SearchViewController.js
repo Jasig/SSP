@@ -139,7 +139,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)' );
     	}
 
-    	me.onCollapseStudentRecord();
+    	me.onCollapseStudentRecord(true);
     },
     
 	onSelectionChange: function( view, record, item, index, eventObj ) {
@@ -296,11 +296,14 @@ Ext.define('Ssp.controller.SearchViewController', {
     	me.appEventsController.getApplication().fireEvent('updateStudentRecord');
     	me.refreshPagingToolBar();    	
     },
-    
-    onCollapseStudentRecord: function() {
+    onCollapseStudentRecord: function(applyColumns) {
 		var me = this;
+		console.log('Apply Columns:'+ applyColumns);
 		me.preferences.set('SEARCH_VIEW_SIZE', "COLLAPSED");
-		me.applyColumns();
+		if(applyColumns)
+		{
+			me.applyColumns();
+		}
         me.showColumn(false,'birthDate');
 		if(me.getIsCaseload()){
 			me.showColumn(false,'coach');
@@ -313,10 +316,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 	
-	onExpandStudentRecord: function() {
+	onExpandStudentRecord: function(applyColumns) {
 		var me = this;
 		me.preferences.set('SEARCH_VIEW_SIZE', "EXPANDED");
-		me.applyColumns();
+		if(applyColumns)
+		{
+			me.applyColumns();
+		}
 	    me.showColumn(true,'birthDate');
 		me.showColumn(true,'studentType')
 		if(me.getIsCaseload()){
@@ -331,9 +337,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 	setGridView: function( view ){
 		var me=this;
 		if(me.getIsExpanded()){
-			me.onExpandStudentRecord();
+			me.onExpandStudentRecord(true);
 		}else{
-			me.onCollapseStudentRecord();
+			me.onCollapseStudentRecord(true);
 		}
 	},
 	
