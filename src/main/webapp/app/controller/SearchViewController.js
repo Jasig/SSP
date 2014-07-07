@@ -299,7 +299,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     onCollapseStudentRecord: function(applyColumns) {
 		var me = this;
 		me.preferences.set('SEARCH_VIEW_SIZE', "COLLAPSED");
-		if(applyColumns)
+		if(applyColumns === true)
 		{
 			me.applyColumns();
 		}
@@ -318,7 +318,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	onExpandStudentRecord: function(applyColumns) {
 		var me = this;
 		me.preferences.set('SEARCH_VIEW_SIZE', "EXPANDED");
-		if(applyColumns)
+		if(applyColumns === true)
 		{
 			me.applyColumns();
 		}
