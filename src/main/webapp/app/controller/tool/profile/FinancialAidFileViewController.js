@@ -106,7 +106,7 @@ Ext.define('Ssp.controller.tool.profile.FinancialAidFileViewController', {
 			for(i = 0; i < financialAidFilesStatuses.length; i++){
 				var fileStatus = Ext.create('Ssp.model.external.FinancialAidFileStatus');
 				var status = financialAidFilesStatuses[i];
-				var file = me.financialAidFilesStore.findRecord('code', status.financialFileCode);
+				var file = me.financialAidFilesStore.findRecord('code', status.financialFileCode, 0, false, false, true);
 				fileStatus.set("code", status.financialFileCode);
 				fileStatus.set("status", status.fileStatus);
 				if(file){

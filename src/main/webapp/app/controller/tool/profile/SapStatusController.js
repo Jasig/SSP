@@ -44,7 +44,7 @@ Ext.define('Ssp.controller.tool.profile.SapStatusController', {
 
 	sapStatusesStoreLoaded: function(){
 		var me=this;
-		var sapStatus = me.sapStatusesStore.findRecord('code',me.getView().code);
+		var sapStatus = me.sapStatusesStore.findRecord('code',me.getView().code, 0, false, false, true);
 		if(sapStatus){
 			me.getCodeField().setValue(sapStatus.get('code'));
 			me.getDescriptionField().setValue(sapStatus.get('description'));
