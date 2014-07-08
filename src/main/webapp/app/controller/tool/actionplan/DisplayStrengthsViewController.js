@@ -148,7 +148,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
 						load: {
 							fn: function(store, records, state, operation, opts){
 								if (e.record.get('confidentialityLevel').id == null || e.record.get('confidentialityLevel').id == '') {
-									var confidentialityLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE').get('id');
+									var confidentialityLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE', 0, false, false, true).get('id');
 									item.setValue(confidentialityLevelId);
 								}
 								else {
@@ -174,7 +174,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
         var jsonData = record.data;
         
         var confLevelId = e.newValues.confidentialityLevel;
-        var confLevelName = me.confidentialityLevelsStore.findRecord('id', confLevelId).get('name');
+        var confLevelName = me.confidentialityLevelsStore.findRecord('id', confLevelId, 0, false, false, true).get('name');
         jsonData.confidentialityLevel = {
             id: confLevelId,
             name: confLevelName
