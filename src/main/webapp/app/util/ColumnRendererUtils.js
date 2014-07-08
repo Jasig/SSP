@@ -273,7 +273,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		confidentialityLevelsStore.clearFilter(true);
 		
 		if(val)
-			var confidentialityLevel = confidentialityLevelsStore.findRecord('id', val.id);
+			var confidentialityLevel = confidentialityLevelsStore.findRecord('id', val.id, 0, false, false, true);
 		else
 			var confidentialityLevel = null;
 		
