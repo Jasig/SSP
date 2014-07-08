@@ -1388,9 +1388,19 @@
                     "path": "/app/controller/tool/sis/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.map.StudentCourseHistoryViewController",
+                    "name": "StudentCourseHistoryViewController.js",
+                    "path": "/app/controller/tool/map/"
+                },
+                {
                     "clsName": "Ssp.view.tools.profile.Transcript",
                     "name": "Transcript.js",
                     "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.map.StudentCourseHistory",
+                    "name": "StudentCourseHistory.js",
+                    "path": "/app/view/tools/map/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.AbstractReferenceAdminViewController",

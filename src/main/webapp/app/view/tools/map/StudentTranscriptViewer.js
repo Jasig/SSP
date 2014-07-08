@@ -29,10 +29,10 @@ Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
     initComponent: function() { 
         Ext.apply(this,
 		{
-			title: 'Student Transcript', 
+			title: 'Student Course History', 
 			items: [
 					{
-					xtype: 'transcript'
+					xtype: 'studentcoursehistory'
 					}
 		]});
 

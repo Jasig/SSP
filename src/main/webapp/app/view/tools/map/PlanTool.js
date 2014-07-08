@@ -114,7 +114,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                    padding: '0 0 0 0'
 	                },
 			        {
-			                    tooltip:  'View of Student\'s Transcript',
+			                    tooltip:  'View of Student\'s Course History',
 			                    height: 30,
 			                    flex:.10,
 			                    cls: 'transcriptIcon',

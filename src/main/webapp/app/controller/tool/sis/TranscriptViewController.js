@@ -18,81 +18,85 @@
  */
 Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
     extend: 'Deft.mvc.ViewController',
-    mixins: [ 'Deft.mixin.Injectable' ],
+    mixins: ['Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	service: 'transcriptService',
+        apiProperties: 'apiProperties',
+        service: 'transcriptService',
         personLite: 'personLite',
         store: 'courseTranscriptsStore',
-		termsStore: 'termsStore'
+        termsStore: 'termsStore'
     },
-	init: function() {
-		var me=this;
-		var personId = me.personLite.get('id');
-
+    init: function(){
+        var me = this;
+        var personId = me.personLite.get('id');
+        
         me.store.removeAll();
-		if(personId != ""){
-	    	me.getView().setLoading( true );
-	    	if(me.termsStore.getTotalCount() <= 0){
-				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
-				me.termsStore.load();
-			}else{
-				me.termStoreLoaded();
-			}
-			
-	    }
-		
-		return this.callParent(arguments);
+        
+        if (personId != "") {
+            me.getView().setLoading(true);
+            if (me.termsStore.getTotalCount() <= 0) {
+                me.termsStore.addListener("load", me.termStoreLoaded, me, {
+                    single: true
+                });
+                me.termsStore.load();
+            }
+            else {
+                me.termStoreLoaded();
+            }
+            
+        }
+		 
+        return this.callParent(arguments);
     },
     
-	termStoreLoaded: function(){
-		var me = this;
-		var personId = me.personLite.get('id');
-		if(personId != ""){
-			me.service.getFull( personId, {
-				success: me.getTranscriptSuccess,
-				failure: me.getTranscriptFailure,
-				scope: me			
-			});
-		}
-	},
-	
-    getTranscriptSuccess: function( r, scope ){
-    	var me=scope;
-
-        var courseTranscripts = [];
-        var transcript = new Ssp.model.Transcript(r);
-        var terms = transcript.get('terms');
-        if ( terms ) {
-            Ext.Array.each(terms, function(term) {
-                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
-					var termIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
-					if(termIndex >= 0){
-						var term = me.termsStore.getAt(termIndex);
-						courseTranscript.set("termStartDate", term.get("startDate"));
-					}
-                    courseTranscripts.push(courseTranscript);
-					
+    termStoreLoaded: function(){
+        var me = this;
+        var personId = me.personLite.get('id');
+        if (personId != "") {
+            me.service.getFull(personId, {
+                success: me.getTranscriptSuccess,
+                failure: me.getTranscriptFailure,
+                scope: me
             });
         }
-
-        if(courseTranscripts.length > 0){
-        	me.store.loadData(courseTranscripts);
-        	me.store.sort([
-        	               {
-        	            	   property : 'termStartDate',
-        	            	   direction: 'DESC'
-        	               },
-        	               {
-        	            	   property : 'formattedCourse',
-        	            	   direction: 'ASC'
-        	               }]);
-    	}
-        me.getView().setLoading( false );
     },
     
-    getTranscriptFailure: function( response, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );  	
+    getTranscriptSuccess: function(r, scope){
+        var me = scope;
+        var courseTranscripts = [];
+        var transcript = new Ssp.model.Transcript(r);
+        
+        var items = transcript.get('terms');
+        if (items) {
+            Ext.Array.each(items, function(item){
+               
+                var courseTranscript = Ext.create('Ssp.model.CourseTranscript', item);
+                var termIndex = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseTranscript.get("termCode"));
+               
+                if (termIndex < 0) {
+                    var tIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
+                    var term = me.termsStore.getAt(tIndex);
+                    courseTranscript.set("termStartDate", term.get("startDate"));
+                    courseTranscripts.push(courseTranscript);
+                }
+            });
+        }
+        
+        if (courseTranscripts.length > 0) {
+            me.store.loadData(courseTranscripts);
+            me.store.sort([{
+                property: 'termStartDate',
+                direction: 'DESC'
+            }, {
+                property: 'formattedCourse',
+                direction: 'ASC'
+            }]);
+        }
+        me.getView().setLoading(false);
+    },
+    
+    getTranscriptFailure: function(response, scope){
+        var me = scope;
+        me.getView().setLoading(false);
     }
 });

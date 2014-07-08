@@ -161,6 +161,7 @@ Ext.require([
     'Ssp.view.tools.map.PrintPlan',
     'Ssp.view.tools.map.CourseDetails',
 	'Ssp.view.tools.map.CoursesGridPanel',
+	'Ssp.view.tools.map.StudentCourseHistory',
 	
 	//PERSON NOTES TOOL
 	'Ssp.view.tools.notes.Notes',
@@ -876,6 +877,14 @@ Ext.onReady(function(){
 				        singleton: true
 			        },
 					courseTranscriptsStore: {
+						fn: function(){
+							return Ext.create('Ext.data.Store',{
+								model: 'Ssp.model.CourseTranscript'
+							});
+						},
+						singleton: true
+					},
+					studentCourseHistoryStore: {
 						fn: function(){
 							return Ext.create('Ext.data.Store',{
 								model: 'Ssp.model.CourseTranscript'
