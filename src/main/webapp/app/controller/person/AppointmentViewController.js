@@ -78,6 +78,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 			 if (getStudentTypeSetFromExternalDataValue == 'false' && getStudentTypeUnSetFromExternalDataValue == 'false') {
 			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 			 }
+
+        me.getStudentTypeCombo().setFieldLabel('Student Type Shimmy Shammy' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 		
 			 if(me.studentTypesStore.getTotalCount( ) == 0){
 				 me.studentTypesStore.load({callback:me.afterStudentTypeLoaded,scope:me,single:true})
@@ -100,7 +102,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 				
 		me.getView().getForm().reset();
 		if(me.getView().instantCaseloadAssignment){
-			var record = me.studentTypesStore.findRecord("name",me.getView().studentTypeNameValue);
+			var record = me.studentTypesStore.findRecord("name",me.getView().studentTypeNameValue, 0, false, false, true);
 			if(record)
 				me.getStudentTypeCombo().setValue( record.get("id") );
 		}else
