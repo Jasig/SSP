@@ -120,7 +120,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     destroy: function(){
 		this.appEventsController.removeEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this});    
     	this.appEventsController.removeEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});
-		me.studentTypesStore.removeListener("load", me.onStoreLoaded, me, {single:true});
+        this.studentTypesStore.removeListener("load", this.onStoreLoaded, this, {single:true});
+        this.studentTypesStore.clearFilter(true);
+
 
     	return this.callParent( arguments );
     },
@@ -695,10 +697,5 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     loadStudentToolsView: function(){
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     },
-    
-    destroy: function() {
-        var me=this;
-        me.studentTypesStore.clearFilter(true);    
-		return me.callParent( arguments );
-    }
+
 });
