@@ -30,8 +30,8 @@ Ext.define('Ssp.store.MAPStatus', {
     },
     load: function() {
         var me=this;
-        var termBound = me.configStore.findRecord('name','map_plan_status_term_bound_strict').get('value');
-        var substitutableCourses = me.configStore.findRecord('name','map_plan_status_use_substitutable_courses').get('value');
+        var termBound = me.configStore.findRecord('name','map_plan_status_term_bound_strict', 0, false, false, true).get('value');
+        var substitutableCourses = me.configStore.findRecord('name','map_plan_status_use_substitutable_courses', 0, false, false, true).get('value');
 
         var values = [{ displayValue:'On Plan', code: 'ON_PLAN', booleanValue: true },
                       { displayValue:'Off Plan', code: 'OFF_PLAN', booleanValue: false },
