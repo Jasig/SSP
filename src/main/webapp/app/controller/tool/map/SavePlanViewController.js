@@ -54,29 +54,29 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
 		me.programsStore.load();
 		
-		if (me.getView().saveAs == false) {
-			if (me.checkEmpty(me.currentMapPlan.get('id')) || me.checkEmpty(me.getView().query('textfield[name="contactName"]')[0].getValue())) {
-				
-					me.contactPersonStore.each(function(rec){
-					var displayFullName = rec.get('displayFullName');
-					var primaryEmailAddress = rec.get('primaryEmailAddress');
-					var workPhone = rec.get('workPhone');
-					
-					me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
-					me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
-					me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
-					me.getView().query('textfield[name="contactTitle"]')[0].setValue('Academic Advisor');
-					
-				});
-			}
-			
-		
-			
-		}
+		me.checkForContactInfo();
 		
 
 		return me.callParent(arguments);
     },
+	
+	checkForContactInfo: function(){
+		var me = this;
+			
+			if (me.checkEmpty(me.getView().query('textfield[name="contactName"]')[0].getValue())) {
+			
+				me.contactPersonStore.each(function(rec){
+				var displayFullName = rec.get('displayFullName');
+				var primaryEmailAddress = rec.get('primaryEmailAddress');
+				var workPhone = rec.get('workPhone');
+				
+				me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
+				me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
+				me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
+				me.getView().query('textfield[name="contactTitle"]')[0].setValue('Academic Advisor');
+			});
+		}
+	},
 	
 	checkEmpty: function(str){
     	return !str || !/[^\s]+/.test(str);
