@@ -200,13 +200,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	onUpdateEarlyAlertCounts: function(params){
 		var me = this;
-		var person = me.caseloadStore.findRecord("id",params.personId);
+		var person = me.caseloadStore.findRecord("id",params.personId, 0, false, false, true);
 		if(person != null){
 			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
 			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
 		}
 		
-		person = me.searchStore.findRecord("id",params.personId);
+		person = me.searchStore.findRecord("id",params.personId, 0, false, false, true);
 		if(person != null){
 			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
 			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
@@ -596,9 +596,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	var programStatusId = "";
 	   	if (personId != "")
 	   	{
-			var person = me.caseloadStore.findRecord("personId", personId);
+			var person = me.caseloadStore.findRecord("personId", personId, 0, false, false, true);
 			if(!person)
-			  	person = me.searchStore.findRecord("id", personId);
+			  	person = me.searchStore.findRecord("id", personId, 0, false, false, true);
 			
 			if(action == 'non-participating'){
 				Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {

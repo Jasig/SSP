@@ -81,7 +81,7 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 		if(personId != ""){
 			var schoolId = me.person.get('schoolId');
 			if(me.transcriptStore.getCount() > 0){
-				if(me.transcriptStore.findRecord('schoolId', schoolId))
+				if(me.transcriptStore.findRecord('schoolId', schoolId, 0, false, false, true))
 					return;
 				me.transcriptStore.removeAll();
 			}
