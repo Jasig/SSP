@@ -79,8 +79,6 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 			 }
 
-        me.getStudentTypeCombo().setFieldLabel('Student Type Shimmy Shammy' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
-		
 			 if(me.studentTypesStore.getTotalCount( ) == 0){
 				 me.studentTypesStore.load({callback:me.afterStudentTypeLoaded,scope:me,single:true})
 			 }else{
