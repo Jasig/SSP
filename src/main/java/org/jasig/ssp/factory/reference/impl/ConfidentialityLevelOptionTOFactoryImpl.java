@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.collect.Sets;
 import org.jasig.ssp.factory.reference.ConfidentialityLevelOptionTOFactory;
 import org.jasig.ssp.security.permissions.DataPermissions;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -70,6 +71,16 @@ public class ConfidentialityLevelOptionTOFactoryImpl
 	public Set<ConfidentialityLevelOptionTO> asTOSet(
 			Collection<DataPermissions> models) {
 		Set<ConfidentialityLevelOptionTO> TOs = new HashSet<ConfidentialityLevelOptionTO>();
+		for (DataPermissions dataPermissions : models) {
+			TOs.add(from(dataPermissions));
+		}
+		return TOs;
+	}
+
+	@Override
+	public Set<ConfidentialityLevelOptionTO> asTOSetOrdered(
+			Collection<DataPermissions> models) {
+		Set<ConfidentialityLevelOptionTO> TOs = Sets.newLinkedHashSet();
 		for (DataPermissions dataPermissions : models) {
 			TOs.add(from(dataPermissions));
 		}
