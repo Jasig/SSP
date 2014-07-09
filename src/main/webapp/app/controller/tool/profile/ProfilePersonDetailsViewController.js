@@ -144,7 +144,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     onRegStoreLoaded: function() {
     	var me=this;
         var redTerms = '';
-        console.log('yay2');
         for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
         {
         	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
