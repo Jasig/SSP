@@ -91,6 +91,18 @@ public interface TOFactory<TObject extends TransferObject<M>, M> {
 	Set<TObject> asTOSet(Collection<M> models);
 
 	/**
+	 * Same as {@link #asTOSet(java.util.Collection)} but preserves
+	 * the iteration order of the inbound {@code Collection}.
+	 *
+	 * @param models
+	 *            Models to copy
+	 * @return Transfer object equivalents of the specified models,
+	 *   preserving original iteration order
+	 * @see #asTOSet(Collection)
+	 */
+	Set<TObject> asTOSetOrdered(Collection<M> models);
+
+	/**
 	 * Copy transfer objects to new model instances.
 	 * 
 	 * @param tObjects
