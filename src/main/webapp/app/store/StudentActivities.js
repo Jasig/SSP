@@ -37,7 +37,7 @@ Ext.define('Ssp.store.StudentActivities', {
 	
 	getCoachLastActivity: function(coachId){
 		var me = this;
-		var indexLatestActivity = me.find('coachId', coachId);
+		var indexLatestActivity = me.findExact('coachId', coachId);
 		if(indexLatestActivity == -1)
 			return null;
 		return me.getAt(indexLatestActivity);
