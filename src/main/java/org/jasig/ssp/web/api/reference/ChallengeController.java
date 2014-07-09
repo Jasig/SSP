@@ -134,7 +134,7 @@ public class ChallengeController
 
 		return new PagedResponse<ChallengeReferralTO>(true,
 				data.getResults(),
-				challengeReferralTOFactory.asTOSet(data.getRows()));
+				challengeReferralTOFactory.asTOSetOrdered(data.getRows()));
 	}
 
 	/**

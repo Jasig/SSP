@@ -114,7 +114,7 @@ public class CategoryController
 								limit, sort, sortDirection, null));
 
 		return new PagedResponse<ChallengeTO>(true, data.getResults(),
-				challengeTOFactory.asTOSet(data.getRows()));
+				challengeTOFactory.asTOSetOrdered(data.getRows()));
 	}
 
 	@RequestMapping(value = "/{id}/challenge", method = RequestMethod.POST)

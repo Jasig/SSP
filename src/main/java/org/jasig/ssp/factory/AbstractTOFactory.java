@@ -79,6 +79,14 @@ public abstract class AbstractTOFactory<M, TObject extends TransferObject<M>> {
 		return tos;
 	}
 
+	public Set<TObject> asTOSetOrdered(final Collection<M> models) {
+		final Set<TObject> tos = Sets.newLinkedHashSet();
+		for (M model : models) {
+			tos.add(from(model));
+		}
+		return tos;
+	}
+
 	public Set<M> asSet(final Collection<TObject> tObjects)
 			throws ObjectNotFoundException {
 		final Set<M> models = Sets.newHashSet();
