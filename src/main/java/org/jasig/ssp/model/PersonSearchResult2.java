@@ -72,6 +72,9 @@ public class PersonSearchResult2 {
 
 	private String currentProgramStatusName;
 
+    private String actualStartTerm;
+
+
 	public UUID getPersonId() {
 		return personId;
 	}
@@ -248,4 +251,11 @@ public class PersonSearchResult2 {
 		return numberEarlyAlertResponsesRequired;
 	}
 
+    public String getActualStartTerm () {
+        return actualStartTerm;
+    }
+
+    public void setActualStartTerm (final String actualStartTerm) {
+        this.actualStartTerm = actualStartTerm;
+    }
 }

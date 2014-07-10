@@ -142,11 +142,12 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
-	 final @RequestParam(required = false)String mapStatus,
-	 final @RequestParam(required = false)String planStatus,
+	 final @RequestParam(required = false) String mapStatus,
+	 final @RequestParam(required = false) String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
-	 final @RequestParam(required = false)  Boolean myPlans,
+	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
+     final @RequestParam(required = false) String actualStartTerm,
 	 final @RequestParam(required = false) ObjectStatus status,
 	 final @RequestParam(required = false) Integer start,
 	 final @RequestParam(required = false) Integer limit,
@@ -172,7 +173,7 @@ public class PersonSearchController extends AbstractBaseController {
 				mapStatus,
 				planStatus,
 				myCaseload,
-				myPlans, birthDate);
+				myPlans, birthDate, actualStartTerm);
 		
 		
 		String sortConfigured = sort == null ? "lastName":sort;
@@ -211,12 +212,13 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
-	 final @RequestParam(required = false)String mapStatus,
-	 final @RequestParam(required = false)String planStatus,
+	 final @RequestParam(required = false) String mapStatus,
+	 final @RequestParam(required = false) String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
-	 final @RequestParam(required = false)String personTableType,
+     final @RequestParam(required = false) String actualStartTerm,
+	 final @RequestParam(required = false) String personTableType,
 	 final @RequestParam(required = false) Integer start,
 	 final @RequestParam(required = false) Integer limit,
 	 final @RequestParam(required = false) String sort,
@@ -234,7 +236,7 @@ public class PersonSearchController extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				mapStatus,planStatus,
-				myCaseload,myPlans,birthDate, personTableType, sortAndPage));
+				myCaseload,myPlans,birthDate, actualStartTerm, personTableType, sortAndPage));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}

@@ -96,6 +96,8 @@ public class PersonSearchRequest {
 	private String firstName;
 	
 	private String lastName;
+
+    private String actualStartTerm;
 	
 	private String personTableType;
 	
@@ -316,4 +318,11 @@ public class PersonSearchRequest {
 	}
 
 
+    public String getActualStartTerm () {
+        return actualStartTerm;
+    }
+
+    public void setActualStartTerm (final String actualStartTerm) {
+        this.actualStartTerm = actualStartTerm;
+    }
 }

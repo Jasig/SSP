@@ -99,6 +99,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setMyCaseload(to.getMyCaseload());
 		model.setMyPlans(to.getMyPlans());
 		model.setBirthDate(to.getBirthDate());
+        model.setActualStartTerm(to.getActualStartTerm());
 		model.setEarlyAlertResponseLate(to.getEarlyAlertResponseLate());
 		model.setPersonTableType(to.getPersonTableType());
 		model.setSortAndPage(to.getSortAndPage());
@@ -134,7 +135,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
-			Date birthDate, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+			Date birthDate, String actualStartTerm, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);
@@ -155,6 +156,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
 		to.setBirthDate(birthDate);
+        to.setActualStartTerm(actualStartTerm);
 		to.setPersonTableType(personTableType);
 		to.setSortAndPage(sortAndPage);
 		return from(to);
@@ -167,7 +169,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
-			Date birthDate) throws ObjectNotFoundException {
+			Date birthDate, String actualStartTerm) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);
@@ -188,6 +190,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
 		to.setBirthDate(birthDate);
+        to.setActualStartTerm(actualStartTerm);
 		return from(to);
 	}
 }

@@ -67,6 +67,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private Boolean myPlans;
 	
 	private Date birthDate;
+
+    private String actualStartTerm;
 	
 	private String personTableType;
 	
@@ -248,4 +250,11 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.sortAndPage = sortAndPage;
 	}
 
+    public String getActualStartTerm () {
+        return actualStartTerm;
+    }
+
+    public void setActualStartTerm (final String actualStartTerm) {
+        this.actualStartTerm = actualStartTerm;
+    }
 }
