@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet dbms="postgresql" id="revise EA response due logic postgres" author="dan.mccallum">
+        <sql ><![CDATA[
+              create or replace function ${schema}.GET_EARLY_ALERT_RESPONSE_DUE_COUNT(date, uuid) RETURNS BIGINT as $$
+                  select distinct count(*) from ${schema}.early_alert as ea
+                  where
+                      ea.person_id = $2 and
+                      ea.closed_date is null and
+                      ea.object_status = 1 and
+                      (
+                        (LAST_EARLY_ALERT_RESPONSE_DATE(ea.id) is null and ea.created_date < $1)
+                        or
+                        (LAST_EARLY_ALERT_RESPONSE_DATE(ea.id) < $1)
+                      )
+              $$ LANGUAGE SQL STRICT;
+              ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="revise EA response due logic mssql" author="dan.mccallum">
+        <sql ><![CDATA[
+              ALTER FUNCTION ${schema}.GET_EARLY_ALERT_RESPONSE_DUE_COUNT(@input1 DATE, @input2 uniqueidentifier) RETURNS BIGINT
+                  AS BEGIN
+                      DECLARE @count BIGINT
+                      SET @count = (select distinct count(*) from ${schema}.early_alert as ea
+                                        where
+                                            ea.person_id = @input2 and
+                                            ea.object_status = 1 and
+                                            (
+                                                (${schema}.LAST_EARLY_ALERT_RESPONSE_DATE(ea.id) is null and ea.created_date < @input1)
+                                                or
+                                                (${schema}.LAST_EARLY_ALERT_RESPONSE_DATE(ea.id) < @input1)
+                                            )
+                                    )
+                      RETURN @count
+                    END;
+              ]]></sql>
+    </changeSet>
+
+
+</databaseChangeLog>
