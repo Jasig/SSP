@@ -214,6 +214,7 @@ public class DirectoryPersonSearchDao  {
 				 "dp.programStatusName as person_currentProgramStatusName, " +
 				 "dp.activeAlertsCount as person_activeAlerts, " +
 				 "dp.closedAlertsCount as person_closedAlerts, " +
+				 "dp.earlyAlertResponseDueCount as person_numberEarlyAlertResponsesRequired," +
 				 "dp.coachFirstName as person_coachFirstName, " +
 				 "dp.coachLastName as person_coachLastName, " +
 				 "dp.coachId as person_coachId, " +
