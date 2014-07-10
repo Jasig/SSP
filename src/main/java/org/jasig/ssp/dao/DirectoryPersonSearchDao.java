@@ -210,11 +210,12 @@ public class DirectoryPersonSearchDao  {
 				 "dp.personId as person_id, " +
 				 "dp.studentIntakeCompleteDate as person_studentIntakeCompleteDate, " +
 				 "dp.birthDate as person_birthDate, " +
+                 "dp.actualStartTerm as person_actualStartTerm, " +
 				 "dp.studentTypeName as person_studentTypeName, " +
 				 "dp.programStatusName as person_currentProgramStatusName, " +
 				 "dp.activeAlertsCount as person_activeAlerts, " +
 				 "dp.closedAlertsCount as person_closedAlerts, " +
-				 "dp.earlyAlertResponseDueCount as person_numberEarlyAlertResponsesRequired," +
+				 "dp.earlyAlertResponseDueCount as person_numberEarlyAlertResponsesRequired, " +
 				 "dp.coachFirstName as person_coachFirstName, " +
 				 "dp.coachLastName as person_coachLastName, " +
 				 "dp.coachId as person_coachId, " +
@@ -267,6 +268,9 @@ public class DirectoryPersonSearchDao  {
 		
 		//birthDate
 		buildBirthDate(personSearchRequest,filterTracker, stringBuilder);
+
+        //actualStartTerm
+        buildActualStartTerm(personSearchRequest, filterTracker, stringBuilder);
 		
 		buildEarlyAlertCriteria(personSearchRequest,filterTracker, stringBuilder);
 		
@@ -313,6 +317,18 @@ public class DirectoryPersonSearchDao  {
 	private boolean hasBirthDate(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getBirthDate() != null;
 	}
+
+    private void buildActualStartTerm(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                      StringBuilder stringBuilder) {
+        if( hasActualStartTerm(personSearchRequest) ) {
+            appendAndOrWhere(stringBuilder, filterTracker);
+            stringBuilder.append(" dp.actualStartTerm = :actualStartTerm ");
+        }
+    }
+
+    private boolean hasActualStartTerm(PersonSearchRequest personSearchRequest) {
+        return (StringUtils.isNotBlank(personSearchRequest.getActualStartTerm()));
+    }
 	
 	private void buildEarlyAlertCriteria(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
@@ -550,6 +566,10 @@ public class DirectoryPersonSearchDao  {
 		if(requiresObjectStatus(personSearchRequest)){
 			params.put("personObjectStatus", ObjectStatus.ACTIVE);
 		}
+
+        if(hasActualStartTerm(personSearchRequest)) {
+            params.put("actualStartTerm", personSearchRequest.getActualStartTerm());
+        }
 		
 		return params;
 	}

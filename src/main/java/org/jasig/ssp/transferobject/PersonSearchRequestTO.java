@@ -69,6 +69,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private Boolean myWatchList;
 	
 	private Date birthDate;
+
+    private String actualStartTerm;
 	
 	private String personTableType;
 	
@@ -258,4 +260,11 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.myWatchList = myWatchList;
 	}
 
+        public String getActualStartTerm () {
+                return actualStartTerm;
+        }
+
+        public void setActualStartTerm (final String actualStartTerm) {
+                this.actualStartTerm = actualStartTerm;
+        }
 }
