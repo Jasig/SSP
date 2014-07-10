@@ -238,7 +238,9 @@ public class PersonSearchResult2 {
 	}
 
 	public void setNumberEarlyAlertResponsesRequired(final Number numberEarlyAlertResponsesRequired) {
-		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired.intValue();
+		if ( numberEarlyAlertResponsesRequired != null ) {
+			this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired.intValue();
+		}
 	}
 
 
@@ -246,7 +248,4 @@ public class PersonSearchResult2 {
 		return numberEarlyAlertResponsesRequired;
 	}
 
-	public void setNumberEarlyAlertResponsesRequired(int numberEarlyAlertResponsesRequired) {
-		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired;
-	}
 }
