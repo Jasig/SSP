@@ -53,8 +53,6 @@ public class PersonSearchResult2 {
 	private Date currentAppointmentStartTime;
 
 	private Date studentIntakeCompleteDate;
-
-	private int numberOfEarlyAlerts = 0;
 	
 	private int activeAlerts = 0;
 	
@@ -93,12 +91,13 @@ public class PersonSearchResult2 {
 				: new Date(currentAppointmentStartTime.getTime());
 	}
 
+	/**
+	 * Alias for {@link #getActiveAlerts()} for legacy reasons.
+	 *
+	 * @return
+	 */
 	public int getNumberOfEarlyAlerts() {
-		return numberOfEarlyAlerts;
-	}
-
-	public void setNumberOfEarlyAlerts(final Number numberOfEarlyAlerts) {
-		this.numberOfEarlyAlerts = numberOfEarlyAlerts.intValue();
+		return activeAlerts;
 	}
 
 	public int getClosedAlerts() {
@@ -108,7 +107,6 @@ public class PersonSearchResult2 {
 	public void setClosedAlerts(Integer closedAlerts) {
 		if(closedAlerts != null){
 			this.closedAlerts = closedAlerts;
-			this.numberOfEarlyAlerts = closedAlerts + activeAlerts;
 		}
 	}
 
@@ -119,7 +117,6 @@ public class PersonSearchResult2 {
 	public void setActiveAlerts(Integer activeAlerts) {
 		if(activeAlerts != null){
 			this.activeAlerts = activeAlerts;
-			this.numberOfEarlyAlerts = closedAlerts + activeAlerts;
 		}
 	}
 
@@ -240,10 +237,6 @@ public class PersonSearchResult2 {
 		this.currentProgramStatusName = currentProgramStatusName;
 	}
 
-	public void setNumberOfEarlyAlerts(int numberOfEarlyAlerts) {
-		this.numberOfEarlyAlerts = numberOfEarlyAlerts;
-	}
-	
 	public void setNumberEarlyAlertResponsesRequired(final Number numberEarlyAlertResponsesRequired) {
 		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired.intValue();
 	}

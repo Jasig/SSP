@@ -150,8 +150,8 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			}
 
 			if (earlyAlertCounts.containsKey(record.getId())) {
-				record.setNumberOfEarlyAlerts(earlyAlertCounts.get(record
-						.getId()));
+				record.setActiveAlerts(earlyAlertCounts.get(record
+						.getId()).intValue());
 			}
 			
 			if (numberEarlyAlertResponsesRequired.containsKey(record.getId())) {
@@ -173,13 +173,13 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			}else if(form.getEarlyAlertResponseLate().equals(PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_CURRENT)){
 				for(PersonSearchResult2 result:results){
 					if((!numberEarlyAlertResponsesRequired.containsKey(result.getPersonId()) 
-							|| numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() <= 0) && result.getNumberOfEarlyAlerts() > 0){
+							|| numberEarlyAlertResponsesRequired.get(result.getPersonId()).intValue() <= 0) && result.getActiveAlerts() > 0){
 						filteredResults.add(result);
 					}
 				}
 			}else {
 				for(PersonSearchResult2 result:results){
-					if(result.getNumberOfEarlyAlerts() > 0){
+					if(result.getActiveAlerts() > 0){
 						filteredResults.add(result);
 					}
 				}
