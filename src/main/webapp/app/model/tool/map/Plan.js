@@ -21,6 +21,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
     fields: [{name:'name',type:'string'},
             {name:'ownerId',type:'string'},
             {name:'ownerName',type:'string'},
+			{name:'ownerEmail',type:'string'},
             {name:'contactTitle',type:'string'},
             {name:'contactPhone',type:'string'},
             {name:'contactEmail',type:'string'},

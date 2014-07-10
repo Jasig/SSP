@@ -35,6 +35,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	private String ownerId;
 	
 	private String ownerName;
+	
+	private String ownerEmail;
 
 	private String contactTitle;
 	
@@ -81,6 +83,7 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setName(model.getName());
 		this.setOwnerId(model.getOwner().getId().toString());
 		this.setOwnerName(model.getOwner().getFirstName()+" "+model.getOwner().getLastName());
+		this.setOwnerEmail(model.getOwner().getPrimaryEmailAddress());
 		this.setAcademicGoals(model.getAcademicGoals());
 		this.setAcademicLink(model.getAcademicLink());
 		this.setCareerLink(model.getCareerLink());
@@ -122,6 +125,14 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+	
+	public String getOwnerEmail() {
+		return ownerEmail;
+	}
+
+	public void setOwnerEmail(String ownerEmail) {
+		this.ownerEmail = ownerEmail;
 	}
 
 	public String getContactTitle() {

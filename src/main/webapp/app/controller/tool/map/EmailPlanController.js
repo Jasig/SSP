@@ -48,7 +48,6 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 	init: function() {
 		var me=this;
 		
-		
 		Ext.apply(Ext.form.field.VTypes, {
 
 		    //  vtype validation function
@@ -74,8 +73,40 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 		
 		emailToField.setValue(me.handleNull(me.person.get('primaryEmailAddress')));
 		
-		emailCCField.setValue(me.handleNull(me.person.getCoachPrimaryEmailAddress()));
+		var emailCCCoach = me.handleNull(me.person.getCoachPrimaryEmailAddress());
 		
+		var emailCCContact = me.handleNull(me.currentMapPlan.get('contactEmail'));
+		
+		var emailCCOwner = me.handleNull(me.currentMapPlan.get('ownerEmail'));
+		
+		var emailCC = '';
+		
+		if (emailCCCoach != "")
+		{
+			emailCC = emailCCCoach;
+		}
+		
+		if (emailCCContact != "")
+		{
+			if(emailCC != '')
+				emailCC = emailCC + "," + emailCCContact;
+			else
+				emailCC = emailCCContact;
+		}
+		
+		if (emailCCOwner != "")
+		{
+			if(emailCC != '')
+				emailCC = emailCC + "," + emailCCOwner;
+			else
+				emailCC = emailCCOwner;
+		}
+		
+		
+		
+		
+			
+		emailCCField.setValue(emailCC);
 		return this.callParent(arguments);
     },
     
