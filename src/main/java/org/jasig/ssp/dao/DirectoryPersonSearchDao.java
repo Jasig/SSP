@@ -326,6 +326,8 @@ public class DirectoryPersonSearchDao  {
 			{
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.earlyAlertResponseCurrentCount > 0 ");
+				appendAndOrWhere(stringBuilder,filterTracker);
+				stringBuilder.append(" dp.earlyAlertResponseDueCount <= 0 ");
 			}
 		}
 	}
