@@ -67,5 +67,13 @@
               ]]></sql>
     </changeSet>
 
+    <changeSet dbms="postgresql" id="fix ea due date extension postgres" author="dan.mccallum">
+        <sql ><![CDATA[
+                create or replace function ${schema}.GET_EARLY_ALERT_REQUIRED_RESPONSE_DAYS() RETURNS INTEGER as $$
+                    select  (value)::integer from ${schema}.config cfg where cfg.name = 'maximum_days_before_early_alert_response'
+               $$ LANGUAGE SQL STRICT;
+              ]]></sql>
+    </changeSet>
+
 
 </databaseChangeLog>
