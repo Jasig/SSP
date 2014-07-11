@@ -122,6 +122,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
 				me.getView().query('checkbox[name=myPlans]')[0].value,
 				me.dateFieldValueFromName('birthDate'),
+				me.getView().query('combobox[name=actualStartTerm]')[0].value,
 				me.getView().query('combobox[name=personTableType]')[0].value,
 				{
 				success: me.searchSuccess,
@@ -176,6 +177,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},  
 	onSearchClick: function(button){
 		var me=this;
+
 		if(!me.getView().getForm().isDirty())
 		{
 	     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
