@@ -122,6 +122,7 @@ Ext.define('Ssp.service.SearchService', {
     		 myPlans,
     		 myWatchList,
     		 birthDate,
+    		 actualStartTerm,
     		 personTableType,
     		callbacks ){
     	var me = this;
@@ -148,6 +149,7 @@ Ext.define('Ssp.service.SearchService', {
 		 myPlans: myPlans,
 		 myWatchList: myWatchList,
 		 birthDate: birthDate,
+		 actualStartTerm: actualStartTerm,
 		 personTableType: personTableType
 		}, callbacks);
     }

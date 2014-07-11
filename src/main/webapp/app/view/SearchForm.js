@@ -36,7 +36,8 @@ Ext.define('Ssp.view.SearchForm',{
         programsStore: 'programsStore',
         configStore: 'configurationOptionsUnpagedStore',
         specialServiceGroupsActiveUnpagedStore: 'specialServiceGroupsActiveUnpagedStore',
-        textStore:'sspTextStore'
+        textStore:'sspTextStore',
+        termsStore: 'termsStore'
     },
     collapsible: true,
 	layout: {
@@ -263,7 +264,19 @@ Ext.define('Ssp.view.SearchForm',{
 			            width:100,
 	                    name: 'specialServiceGroup',
 	                    editable: false
-	                }, 
+	                },
+	                {
+	                    xtype: 'combobox',
+	                    fieldLabel: 'Start Term',
+	                    emptyText: 'Select Start Term',
+	                    store: me.termsStore,
+	                    valueField: 'code',
+	                    displayField: 'name',
+	                    width: 50,
+	                    name: 'actualStartTerm',
+	                    mode: 'local',
+	                    editable: false
+	                },
 	               {
 			   		    xtype: 'combobox',
 	                    fieldLabel: 'Declared Major',
