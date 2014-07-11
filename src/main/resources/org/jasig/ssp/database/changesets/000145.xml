@@ -75,5 +75,26 @@
               ]]></sql>
     </changeSet>
 
+    <changeSet dbms="mssql" id="fix EA response due logic to check closed_date mssql" author="dan.mccallum">
+        <sql ><![CDATA[
+              ALTER FUNCTION ${schema}.GET_EARLY_ALERT_RESPONSE_DUE_COUNT(@input1 DATE, @input2 uniqueidentifier) RETURNS BIGINT
+                  AS BEGIN
+                      DECLARE @count BIGINT
+                      SET @count = (select distinct count(*) from ${schema}.early_alert as ea
+                                        where
+                                            ea.person_id = @input2 and
+                                            ea.closed_date is null and
+                                            ea.object_status = 1 and
+                                            (
+                                                (${schema}.LAST_EARLY_ALERT_RESPONSE_DATE(ea.id) is null and ea.created_date < @input1)
+                                                or
+                                                (${schema}.LAST_EARLY_ALERT_RESPONSE_DATE(ea.id) < @input1)
+                                            )
+                                    )
+                      RETURN @count
+                    END;
+              ]]></sql>
+    </changeSet>
+
 
 </databaseChangeLog>
