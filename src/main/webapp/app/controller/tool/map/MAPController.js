@@ -38,7 +38,8 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
     	personLite: 'personLite',
 		person: 'currentPerson',
 		termsStore:'termsStore',
-		semesterStores : 'currentSemesterStores'
+		semesterStores : 'currentSemesterStores',
+		authenticatedPerson : 'authenticatedPerson'
     },
 	resetForm: function() {
         var me = this;
@@ -47,7 +48,7 @@ Ext.define('Ssp.controller.tool.map.MAPController', {
 	init: function() {
 		var me=this;
 		var personId = me.personLite.get('id');
-		if(personId != "")
+		if(personId != ""  && me.authenticatedPerson.hasAccess("ACCESS_STUDENT_TRANSCRIPTS"))
 		{
 			me.loadTranscript();
 		}

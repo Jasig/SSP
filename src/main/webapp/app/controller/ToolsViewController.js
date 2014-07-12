@@ -93,7 +93,11 @@ Ext.define('Ssp.controller.ToolsViewController', {
     },
     
     onLoadPerson: function(){
-        this.loadPerson();
+    	var tool = this.toolsStore.find('toolType', 'profile');
+    	if(tool == -1)
+    		this.loadFirstTool();
+    	else
+    		this.loadPerson();
     },
     
     onLoadIntake: function(){
@@ -102,6 +106,12 @@ Ext.define('Ssp.controller.ToolsViewController', {
     onTransitionStudent: function(){
         this.selectTool('journal');
         this.loadTool('journal');
+    },
+    
+    loadFirstTool: function(){
+    	var tool = this.toolsStore.getRange()[0];
+        this.getView().getSelectionModel().select(tool);
+        this.loadTool(tool.get('toolType'));
     },
     
     loadPerson: function(){

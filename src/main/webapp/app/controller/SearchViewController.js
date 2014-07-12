@@ -157,7 +157,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 						me.updatePerson(record);
 						me.appEventsController.getApplication().fireEvent('loadPerson');
 					}
-				} else {
+				} else if(me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON')){
 					me.instantCaseloadAssignment(record);
 				}
 			}
