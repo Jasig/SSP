@@ -29,7 +29,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     	planStore: 'planStore',
         personLite: 'personLite',
         configStore: 'configurationOptionsUnpagedStore',
-		semesterStores: 'currentSemesterStores'
+		semesterStores: 'currentSemesterStores',
+		authenticatedPerson: 'authenticatedPerson'
+			
     },
 
     control: {
@@ -801,8 +803,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getSavePlanButton().hide();
 			me.getSaveTemplateAsButton().show();
 			me.getPrintPlanButton().hide();
-			me.getPlanFAButton().hide();
+			
 			me.getShowMapStatus().hide();
+			me.getPlanFAButton().hide();
 			me.getShowStudentTranscript().hide();
 			me.getEmailPlanButton().hide();
 			me.getName().setFieldLabel("Template Title");
@@ -813,9 +816,17 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getSaveTemplateAsButton().show();
 			me.getSaveTemplateButton().hide();
 			me.getPrintPlanButton().show();
-			me.getPlanFAButton().show();
+			
 			me.getShowMapStatus().show();
-			me.getShowStudentTranscript().show();			
+			if(me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_FINANCIAL_AID_BUTTON'))
+				me.getPlanFAButton().show();
+			else
+				me.getPlanFAButton().hide();
+			if(me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_TRANSCRIPT_BUTTON'))
+				me.getShowStudentTranscript().show();
+			else
+				me.getShowStudentTranscript().hide();
+				
 			me.getEmailPlanButton().show();
 			me.getName().setFieldLabel("Plan Title");
 			me.getPlanNotesButton().setTooltip("Plan Notes");

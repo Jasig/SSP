@@ -110,7 +110,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                    itemId: 'planFAButton',
 	                    align: 'center',
                   	    hideMode: 'offsets',
-	                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+                  	    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_FINANCIAL_AID_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
 	                    padding: '0 0 0 0'
 	                },
 			        {
@@ -122,7 +122,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                    itemId: 'showStudentTranscript',
 			                    align: 'center',
                   	   		    hideMode: 'offsets',
-			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+                  	   		    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_TRANSCRIPT_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
 			                    padding: '0 0 0 0'
 			          },
 			           {

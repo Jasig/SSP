@@ -113,7 +113,7 @@ public class PersonController extends AbstractBaseController {
 	 * @return All entities in the database filtered by the supplied status.
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	public @ResponseBody
 	PagedResponse<PersonTO> getAll(
 			final @RequestParam(required = false) ObjectStatus status,
@@ -139,7 +139,7 @@ public class PersonController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/coach", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	public @ResponseBody
 	PagedResponse<CoachPersonLiteTO> getAllCoaches(
 			final @RequestParam(required = false) ObjectStatus status,
@@ -166,7 +166,7 @@ public class PersonController extends AbstractBaseController {
 	}
 	
 	@RequestMapping(value = "/currentCoachesLite", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	public @ResponseBody
 	PagedResponse<PersonLiteTO> getAllCurrentCoaches() {
 		final SortedSet<CoachPersonLiteTO> coaches = service
@@ -187,7 +187,7 @@ public class PersonController extends AbstractBaseController {
 	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	public @ResponseBody
 	PersonTO get(final @PathVariable UUID id) throws ObjectNotFoundException {
 		final Person model = service.get(id);
@@ -199,7 +199,7 @@ public class PersonController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value= "/lite/{id}", method=RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	@ResponseBody
 	PersonLiteTO getLite(final @PathVariable UUID id) throws ObjectNotFoundException {
 		final Person model = service.get(id);
@@ -210,7 +210,7 @@ public class PersonController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/searchlite/{id}", method=RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	@ResponseBody
 	PersonSearchResultTO getSearchLite(final @PathVariable UUID id) throws ObjectNotFoundException {
 		final Person model = service.get(id);
@@ -221,7 +221,7 @@ public class PersonController extends AbstractBaseController {
 	}
 
 	@RequestMapping(value = "/bySchoolId/{id}", method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
 	public @ResponseBody
 	PersonTO bySchoolId(final @PathVariable String id)
 			throws ObjectNotFoundException {
@@ -250,7 +250,7 @@ public class PersonController extends AbstractBaseController {
 	 *             If the specified data contains an id (since it shouldn't).
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
+	@PreAuthorize("hasRole('ROLE_PERSON_WRITE') or hasRole('ROLE_PERSON_FILTERED_WRITE')")
 	public @ResponseBody
 	PersonTO create(final @Valid @RequestBody PersonTO obj)
 			throws  ValidationException, ObjectNotFoundException {
@@ -309,7 +309,7 @@ public class PersonController extends AbstractBaseController {
 	 * @throws SendFailedException 
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	@PreAuthorize(Permission.SECURITY_PERSON_WRITE)
+	@PreAuthorize("hasRole('ROLE_PERSON_WRITE') or hasRole('ROLE_PERSON_FILTERED_WRITE')")
 	public @ResponseBody
 	PersonTO save(final @PathVariable UUID id,
 			final @Valid @RequestBody PersonTO obj)

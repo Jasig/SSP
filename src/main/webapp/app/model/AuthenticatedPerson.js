@@ -53,7 +53,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	 */
     	
     	/* MAIN NAVIGATION */
-    	REQUIRED_PERMISSIONS_STUDENTS_NAVIGATION_BUTTON: ['ROLE_PERSON_READ'],
+    	REQUIRED_ANY_PERMISSIONS_STUDENTS_NAVIGATION_BUTTON: ['ROLE_PERSON_READ','ROLE_PERSON_FILTERED_READ'],
     	REQUIRED_PERMISSIONS_ADMIN_NAVIGATION_BUTTON: ['ROLE_REFERENCE_WRITE'],
     	
     	/* SEARCH */  	
@@ -66,10 +66,11 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	REQUIRED_PERMISSIONS_SET_NO_SHOW_STATUS_BUTTON: ['ROLE_PERSON_PROGRAM_STATUS_WRITE'],
     	
     	/* STUDENTS */  	
-    	REQUIRED_PERMISSIONS_ADD_STUDENT_BUTTON: ['ROLE_PERSON_WRITE'],
-    	REQUIRED_PERMISSIONS_EDIT_STUDENT_BUTTON: ['ROLE_PERSON_WRITE'],
+    	REQUIRED_ANY_PERMISSIONS_ADD_STUDENT_BUTTON: ['ROLE_PERSON_WRITE','PERSON_FILTERED_WRITE'],
+    	REQUIRED_ANY_PERMISSIONS_EDIT_STUDENT_BUTTON: ['ROLE_PERSON_WRITE','PERSON_FILTERED_WRITE'],
     	REQUIRED_PERMISSIONS_DELETE_STUDENT_BUTTON: ['ROLE_PERSON_DELETE'],
-    	REQUIRED_PERMISSIONS_EMAIL_STUDENT_BUTTON: ['ROLE_PERSON_WRITE'],
+    	REQUIRED_ANY_PERMISSIONS_EMAIL_STUDENT_BUTTON: ['ROLE_PERSON_WRITE','PERSON_FILTERED_WRITE'],
+
     	
     	/* ADMIN TOOLS */
     	REQUIRED_PERMISSIONS_ABSTRACT_REFERENCE_ADMIN_ADD_BUTTON: ['ROLE_REFERENCE_WRITE'],
@@ -197,6 +198,8 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
 		REQUIRED_PERMISSIONS_MAP_TOOL:['ROLE_PERSON_MAP_READ'],
 		REQUIRED_PERMISSIONS_MAP_TOOL_SAVE_BUTTON:['ROLE_PERSON_MAP_WRITE'],
 		REQUIRED_PERMISSIONS_MAP_TOOL_PRINT_BUTTON:['ROLE_PERSON_MAP_READ'],
+		REQUIRED_PERMISSIONS_MAP_TOOL_STUDENT_TRANSCRIPT_BUTTON:['ROLE_PERSON_READ'],
+		REQUIRED_PERMISSIONS_MAP_TOOL_STUDENT_FINANCIAL_AID_BUTTON:['ROLE_PERSON_READ'],
 		REQUIRED_PERMISSIONS_MAP_TOOL_EMAIL_BUTTON:['ROLE_PERSON_MAP_READ'],
 		REQUIRED_PERMISSIONS_MAP_TOOL_LOAD_BUTTON:['ROLE_PERSON_MAP_READ'],
 		REQUIRED_PERMISSIONS_MAP_TOOL_DRAG_COURSE:['ROLE_PERSON_MAP_WRITE'],
@@ -211,7 +214,10 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
 		REQUIRED_PERMISSIONS_DOCUMENTS_ADD_BUTTON:['ROLE_PERSON_DOCUMENT_WRITE'],
 		REQUIRED_PERMISSIONS_DOCUMENTS_EDIT_BUTTON:['ROLE_PERSON_DOCUMENT_WRITE'],
 		REQUIRED_PERMISSIONS_DOCUMENTS_DELETE_BUTTON:['ROLE_PERSON_DOCUMENT_DELETE'],
-		REQUIRED_PERMISSIONS_DOCUMENTS_DOWNLOAD_BUTTON:['ROLE_PERSON_DOCUMENT_READ']
+		REQUIRED_PERMISSIONS_DOCUMENTS_DOWNLOAD_BUTTON:['ROLE_PERSON_DOCUMENT_READ'],
+		
+		/* ACCESS TO DATA */
+		REQUIRED_PERMISSIONS_ACCESS_STUDENT_TRANSCRIPTS: ['ROLE_PERSON_READ']
     
     },
     
@@ -250,6 +256,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	var me=this;
     	var col = new Ext.util.MixedCollection();
     	var re = new RegExp(/REQUIRED_PERMISSIONS/);
+    	var reAny = new RegExp(/REQUIRED_ANY_PERMISSIONS/);
     	var objectPermission, hasAccess, requiredPermissions;
     	for (prop in Ssp.model.AuthenticatedPerson)
     	{
@@ -261,7 +268,14 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     			objectPermission.set('name',prop.replace('REQUIRED_PERMISSIONS_',""));
     			objectPermission.set('hasAccess',hasAccess);
     			col.add( objectPermission );
-    		}	
+    		}else if( prop.search(reAny) != -1)	{
+    			requiredPermissions = Ssp.model.AuthenticatedPerson[prop];
+    			hasAccess = me.hasAnyRequiredPermissions(requiredPermissions);
+    			objectPermission = new Ssp.model.ObjectPermission;
+    			objectPermission.set('name',prop.replace('REQUIRED_ANY_PERMISSIONS_',""));
+    			objectPermission.set('hasAccess',hasAccess);
+    			col.add( objectPermission );
+    		}
     	}
     	me.set('objectPermissionsCollection',col);
     },    
@@ -284,6 +298,18 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
    	    },this);
     	
         return ((access.length==arrRequiredPermissions.length)? true : false); 
+    },
+    
+    hasAnyRequiredPermissions: function( arrRequiredPermissions ){
+        var access = new Array();
+    	Ext.Array.each(arrRequiredPermissions,function(permission){
+    		if ( this.hasPermission( permission ) == true )
+   		   {
+   			 access.push( true ); 
+   		   }
+   	    },this);
+    	
+        return access.length > 0 ? true : false; 
     },
     
     /**
