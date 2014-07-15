@@ -71,6 +71,6 @@ public class StrengthController
 
 	@Override
 	public String permissionBaseName() {
-		return "GOAL";//TODO SSP-2154
+		return "STRENGTH";
 	}
 }
