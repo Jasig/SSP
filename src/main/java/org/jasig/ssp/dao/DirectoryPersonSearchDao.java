@@ -270,6 +270,9 @@ public class DirectoryPersonSearchDao  {
 		
 		buildEarlyAlertCriteria(personSearchRequest,filterTracker, stringBuilder);
 		
+		//watchList
+		buildWatchList(personSearchRequest,filterTracker, stringBuilder);
+		
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
 	}
 	
@@ -425,6 +428,16 @@ public class DirectoryPersonSearchDao  {
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getSpecialServiceGroup() != null;
 	}
+	
+	private void buildWatchList(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(hasWatchStudent(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" ws.person = :watcher ");		
+			stringBuilder.append(" and ws.student.id = dp.personId ");			
+		}
+	}
 
 	
 	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, Term currentTerm) 
@@ -482,12 +495,16 @@ public class DirectoryPersonSearchDao  {
 			}			
 		}
 		
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
+		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest) )
 		{
 			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
 			params.put("coachId", coach.getId());
 		}
-		
+		if(hasWatchStudent(personSearchRequest))
+		{
+			Person watcher = personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getWatcher();
+			params.put("watcher", watcher);
+		}		
 		if(hasDeclaredMajor(personSearchRequest))
 		{
 			params.put("programCode", personSearchRequest.getDeclaredMajor());
@@ -766,7 +783,16 @@ public class DirectoryPersonSearchDao  {
 		{
 			stringBuilder.append(", MapStatusReport msr ");
 		}
+		if(hasWatchStudent(personSearchRequest))
+		{
+			stringBuilder.append(", WatchStudent ws ");
+		}		
+		
 		return true;
+	}
+
+	private boolean hasWatchStudent(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getMyWatchList() != null;
 	}
 
 	private boolean hasGpaCriteria(PersonSearchRequest personSearchRequest) 

@@ -25,7 +25,9 @@ Ext.define('Ssp.controller.SearchViewController', {
         authenticatedPerson: 'authenticatedPerson',
         caseloadFilterCriteria: 'caseloadFilterCriteria',
         caseloadStore: 'caseloadStore',
+        watchListStore: 'watchListStore',
         caseloadService: 'caseloadService',
+        watchListService: 'watchListService',
         columnRendererUtils: 'columnRendererUtils',
         formUtils: 'formRendererUtils',
         person: 'currentPerson',
@@ -49,23 +51,24 @@ Ext.define('Ssp.controller.SearchViewController', {
     control: {
     	view: {
     		itemclick: 'onSelectionChange',
-			viewready: 'onViewReady'
+			viewready: 'onViewReady',
+			render:  function() {
+	            alert('render'); //this is work
+	        },
+	        show:function() {
+	            alert('show'); //this is work
+	        }
     	},    	
- 
     	caseloadStatusCombo: {
     		selector: '#caseloadStatusCombo',
     		listeners: {
     			select: 'onCaseloadStatusComboSelect'
     		} 
     	},
-
-    	'retrieveCaseloadButton': {
-    		click: 'onRetrieveCaseloadClick'
-    	},    	
     	
     	searchGridPager: '#searchGridPager',
     	searchBar: '#searchBar',
-    	caseloadBar: '#caseloadBar',
+
 
     	addPersonButton: {
     		selector: '#addPersonButton',
@@ -107,6 +110,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH = 0;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD = 1;
+	   	me.SEARCH_GRID_VIEW_TYPE_IS_WATCHLIST = 2;
+
 		if(me.termsStore.getTotalCount() == 0){
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
@@ -121,13 +126,22 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
 		}
-
-        if ( tabSelection === 'myCaseload' ) {
-            me.displayCaseloadBar();
-        } else {
-            me.displaySearchBar();
-        }
-
+		if(me.configurationOptionsUnpagedStore.getTotalCount() == 0){
+			me.configurationOptionsUnpagedStore.load();
+		}
+	   	// load program statuses
+		me.getProgramStatuses();
+		
+		switch(tabSelection) {
+			case 'myCaseload':
+	            me.displayCaseload();
+				break;
+			case 'watchList':
+	            me.displayWatchList();
+				break;
+			case 'search':
+	            me.displaySearch();
+		}
 		return me.callParent(arguments);
     },
     
@@ -185,6 +199,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});	
 
 		
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
@@ -197,9 +212,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
 	   	me.initSearchGrid();
 
-	   	// load program statuses
-		me.getProgramStatuses();	
-		me.configurationOptionsUnpagedStore.load();
+
 		me.harmonizePersonLite();
 	},
 	
@@ -241,6 +254,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
 		me.appEventsController.removeEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
         me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});	
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
@@ -260,11 +274,16 @@ Ext.define('Ssp.controller.SearchViewController', {
     initSearchGrid: function(){
 	   	var me=this;
 	   	
-	   	if (!me.getIsCaseload() )
+	   	if( me.getIsSearch() )
 		{
-			me.search();
-			me.displaySearchBar();
-		}else{
+			me.displaySearch();
+		} else
+		if( me.getIsWatchList() )
+		{
+			me.getWatchList(true);
+			me.displayWatchList();
+		}	   	
+	   	else{
 			if ( me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') )
 			{
 				me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
@@ -274,10 +293,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 					me.caseloadFilterCriteria.set('programStatusId', Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID );
 				}
 				me.getCaseload(true);
-				me.displayCaseloadBar();
+				me.displayCaseload();
 			}else{
 				me.search();
-				me.displaySearchBar();
+				me.displaySearch();
 			}
 		}
     },
@@ -304,7 +323,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.applyColumns();
 		}
         me.showColumn(false,'birthDate');
-		if(me.getIsCaseload()){
+		if(me.getIsCaseload() || me.getIsWatchList()){
 			me.showColumn(false,'coach');
 			me.showColumn(false,'currentProgramStatusName');
 			me.showColumn(true,'studentType')
@@ -324,7 +343,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	    me.showColumn(true,'birthDate');
 		me.showColumn(true,'studentType')
-		if(me.getIsCaseload()){
+		if(me.getIsCaseload() || me.getIsWatchList()){
 			me.showColumn(false,'coach');
 			me.showColumn(false,'currentProgramStatusName');
 		}else{
@@ -351,24 +370,34 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	getIsCaseload: function(){
 		var me= this;
-		if(me.preferences.get('SEARCH_GRID_VIEW_TYPE') == me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD)
+		if(me.getView().tabContext === 'myCaseload')
 			return true;
 		return false;
 	},
-	
+	getIsSearch: function(){
+		var me= this;
+		if(me.getView().tabContext === 'search')
+			return true;
+		return false;
+	},	
+	getIsWatchList: function(){
+		var me= this;
+		if(me.getView().tabContext === 'watchList')
+			return true;
+		return false;
+	},
 	onToolsNav: function() {
 		var searchView = Ext.ComponentQuery.query('searchtab')[0];
 		searchView.collapse();
 	},
 
-	displaySearchBar: function() {
+	displaySearch: function() {
 	    var me = this;
-		me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH);
-		me.getCaseloadBar().hide();
+		//me.getCaseloadStatusCombo.hide();
 		me.getSearchBar().show();
 
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
-		    Ext.ComponentQuery.query('searchForm')[1].show(); //user has two, second is search
+		    Ext.ComponentQuery.query('searchForm')[2].show(); //user has two, second is search
         } else {
             Ext.ComponentQuery.query('searchForm')[0].show(); //user only has one (no caseload)
         }
@@ -376,14 +405,19 @@ Ext.define('Ssp.controller.SearchViewController', {
         me.setGridView();
     },
 
-	displayCaseloadBar: function(){
+	displayCaseload: function(){
 		var me=this;
-	    me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
-		me.getCaseloadBar().show();
+		//me.getCaseloadStatusCombo.show();
 		me.getSearchBar().hide();
 		me.setGridView();
 	},
-	
+	displayWatchList: function(){
+		var me=this;
+		//me.getCaseloadStatusCombo.show();
+		me.getSearchBar().hide();
+		me.setGridView();
+		
+	},	
 	applyColumns: function(){
 		var me=this;
 		var grid = me.getView();
@@ -395,8 +429,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if ( me.getIsCaseload() )
 		{
 			store = me.caseloadStore;
-			
-		}else{
+		}else
+		if( me.getIsWatchList() )
+		{
+			store = me.watchListStore;
+			store.pageSize = store.data.length;
+		} else
+		{
 			store = me.searchStore;
 			store.pageSize = store.data.length;
 		}
@@ -412,13 +451,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .2},   	              
 	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
 	              ];
-		
-		if(me.getSearchGridPager)
-		{
-			me.getSearchGridPager().bindStore(store);
-		}
-		
-		me.refreshPagingToolBar();
+
 		grid.getView().getRowClass = function(row, index)
 	    {
 			var cls = "";
@@ -461,6 +494,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 	    };  		
 		
 		me.formUtils.reconfigureGridPanel(grid, store, columns);
+		
+		if(me.getSearchGridPager)
+		{
+			me.getSearchGridPager().bindStore(store);
+		}
+		
+		me.refreshPagingToolBar();
 	},
 
 	 showColumn: function( show, dataIndex ) {
@@ -678,7 +718,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	
 	search: function(){
 		var me=this;
-		me.preferences.set('SEARCH_GRID_VIEW_TYPE',0);
 		me.setGridView();
 		if ( me.searchCriteria.get('searchTerm') != "")
 		{
@@ -716,7 +755,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 
         if(skipCallBack)
         {
-        	me.getCaseload();
+        	if(me.getView().tabContext === 'watchList')
+        	{
+        		me.getWatchList();
+        	}
+        	else
+        	{
+        		me.getCaseload();
+        	}
         }
 
 	},
@@ -727,6 +773,19 @@ Ext.define('Ssp.controller.SearchViewController', {
     	{
 			me.caseloadFilterCriteria.set('programStatusId', records[0].get('id') );
      	}
+		
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
+        if(skipCallBack)
+        {
+        	if(me.getView().tabContext === 'watchList')
+        	{
+        		me.getWatchList();
+        	}
+        	else
+        	{
+        		me.getCaseload();
+        	}
+        }
 	},
     
 	getProgramStatuses: function(){
@@ -751,7 +810,26 @@ Ext.define('Ssp.controller.SearchViewController', {
     getProgramStatusesFailure: function( r, scope){
     	var me=scope;
     },     
-    
+	getWatchList: function(defaultToActive){
+    	var me=this;
+		me.setGridView();
+		me.getView().setLoading( true );
+		if(me.getCaseloadStatusCombo().getValue() || defaultToActive )
+		{
+			me.watchListService.getWatchList( me.caseloadFilterCriteria.get( 'programStatusId' ),
+					me.watchListStore,
+					{success:me.getCaseloadSuccess, 
+				failure:me.getCaseloadFailure, 
+				scope: me});		
+		} else
+		{
+			me.watchListService.getWatchList(null,
+					me.watchListStore,
+					{success:me.getCaseloadSuccess, 
+				failure:me.getCaseloadFailure, 
+				scope: me});
+		}
+	},
 	getCaseload: function(defaultToActive){
     	var me=this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
@@ -772,16 +850,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 				failure:me.getCaseloadFailure, 
 				scope: me});
 		}
-	},
-    
+	},  
     getCaseloadSuccess: function( r, scope){
     	var me=scope;
-    	me.getView().setLoading( false );
     	if(me.getSearchGridPager)
     	{
     		me.getSearchGridPager().onLoad();
     	}
 		me.harmonizePersonLite();
+		me.getView().setLoading( false );
     },
 
     getCaseloadFailure: function( r, scope){

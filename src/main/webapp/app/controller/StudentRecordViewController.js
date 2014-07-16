@@ -23,6 +23,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
 		apiProperties: 'apiProperties',
+        person: 'currentPerson',
+        authenticatedPerson: 'authenticatedPerson',
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
         
 	},
@@ -36,6 +38,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 				single: true
 			}
 		},
+		'watchStudentButton': {
+            click: 'onWatchStudentButtonClick'
+        },		
 		'emailStudentButton': {
             click: 'onEmailStudentButtonClick'
         },		
@@ -83,6 +88,79 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
    		me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
    		me.emailStudentPopup.show();
     },	
+    getBaseUrl: function(id){
+		var me=this;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personWatch') );
+		baseUrl = baseUrl.replace('{id}', id);
+		return baseUrl;
+    },    
+    onWatchStudentButtonClick: function(button){
+        var me = this;
+        
+   		var watchStudent = Ext.create('Ssp.model.WatchStudent');
+   		watchStudent.set('studentId',me.person.get('id'));
+   		watchStudent.set('watcherId',me.authenticatedPerson.get('id'));
+
+		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
+	    var successWatch = function( response ){
+	    	if(response.responseText)
+	    	{
+	    		me.person.watchId = Ext.decode(response.responseText).id;
+	    	}
+	    	me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
+	    	me.appEventsController.getApplication().fireEvent('onStudentWatchAction');
+            Ext.Msg.alert('You are now watching this student');
+	    };
+	    var successUnWatch = function( response ){
+	    	if(response.responseText)
+	    	{
+	    		me.person.watchId = null;
+	    	}
+	    	me.getWatchStudentButton().setText('<u>Watch Student</u>');
+	        me.appEventsController.getApplication().fireEvent('onStudentWatchAction');
+            Ext.Msg.alert('You are no longer watching this student');
+	    };
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	 
+	    };
+	    if(me.getWatchStudentButton().getText() === '<u>Watch Student</u>')
+	    {
+			Ext.MessageBox.confirm('Watch Student', 'Are you sure you want to watch this student?', function(btn){
+				if(btn === 'yes'){
+		    		me.apiProperties.makeRequest({
+		    			url: url, 
+		    			method: 'POST',
+		    			jsonData: watchStudent.data,
+		    			successFunc: successWatch,
+		    			failureFunc: failure,
+		    			scope: me
+		    		});	
+				} else if(btn === 'no') {
+				   return;
+				}
+			});	
+
+	    }
+	    else
+	    {
+			Ext.MessageBox.confirm('Un-Watch Student', 'Are you sure you want to stop watching this student?', function(btn){
+				if(btn === 'yes'){
+			   	   	watchStudent.set('id',me.person.watchId);
+		    		me.apiProperties.makeRequest({
+		    			url: url+'/'+watchStudent.get('id'), 
+		    			method: 'DELETE',
+		    			jsonData: watchStudent.data,
+		    			successFunc: successUnWatch,
+		    			failureFunc: failure,
+		    			scope: me
+		    		});	
+				} else if(btn === 'no') {
+				   return;
+				}
+			});
+    	
+	    }
+    },	    
 	onStudentRecordEditButtonClick: function(button){
         var me=this;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personToolbarEdit',me);  
@@ -107,6 +185,38 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     updateStudentRecord: function(args){
 		var me = this;
     	if(args && args.person){
+    		
+            var successFunc = function(response, view){
+            	if(response.responseText === '')
+            	{
+                    me.getWatchStudentButton().setText('<u>Watch Student</u>');
+            	}
+            	else
+            	{
+        	    	if(response.responseText)
+        	    	{
+        	    		me.person.watchId = Ext.decode(response.responseText).id;
+        	    	}
+            		me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
+            	}
+            };  		
+            var failureFunc = function(response, view){
+            	me.getWatchStudentButton().setText('<u>Watch Student</u>');
+            };             
+            studentId = args.person.get('id');
+    		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
+
+    		url = url + '/' + studentId;
+            
+            me.apiProperties.makeRequest({
+                url: url,
+                method: 'GET',
+                successFunc: successFunc,
+    			failureFunc: failureFunc
+            });
+    		
+    		
+			me.showElement(me.getWatchStudentButton());
 			me.showElement(me.getEmailStudentButton());
 			me.showElement(me.getViewCoachingHistoryButton());
 			me.showElement(me.getStudentRecordEditButton());
@@ -119,6 +229,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	        	me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
 			
 		}else{
+			me.hideElement(me.getWatchStudentButton());
 			me.hideElement(me.getViewCoachingHistoryButton());
 			me.hideElement(me.getStudentRecordEditButton());
 			if(me.getView())

@@ -277,10 +277,24 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		//birthDate
 		buildBirthDate(personSearchRequest,filterTracker, stringBuilder);
 		
+		//myWatchList
+		buildWatchList(personSearchRequest,filterTracker, stringBuilder);
+		
 		appendAndOrWhere(stringBuilder, filterTracker);
 		stringBuilder.append(" p.studentType is not null ");
 		stringBuilder.append(" and p.objectStatus = :activeObjectStatus ");
 		stringBuilder.append(" and programStatuses.expirationDate IS NULL");
+	}
+
+
+	private void buildWatchList(PersonSearchRequest personSearchRequest,
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(hasWatchStudent(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" ws.person = :coach ");		
+			stringBuilder.append(" ws.student = p ");			
+		}
 	}
 
 
@@ -419,7 +433,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			}			
 		}
 		
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
+		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest) || hasWatchStudent(personSearchRequest))
 		{
 			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
 			query.setEntity("coach", coach);
@@ -692,6 +706,20 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			stringBuilder.append(", ExternalStudentFinancialAid esfa ");
 		}
+		
+		if(hasFinancialAidStatus(personSearchRequest))
+		{
+			stringBuilder.append(", ExternalStudentFinancialAid esfa ");
+		}	
+		if(hasWatchStudent(personSearchRequest))
+		{
+			stringBuilder.append(", WatchStudent ws ");
+		}		
+	}
+
+
+	private boolean hasWatchStudent(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getMyPlans() != null;
 	}
 
 

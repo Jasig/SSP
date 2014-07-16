@@ -39,6 +39,19 @@ Ext.define('Ssp.view.StudentRecord', {
             },
             tools: [
         	{
+                tooltip: 'Watch Student',
+                text: '<u>Watch Student</u>',
+                width: 110,
+                height: 20,
+        		hidden: !me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'),
+                xtype: 'button',
+                cls: "makeTransparent",
+                itemId: 'watchStudentButton'
+            },                    
+			{
+                xtype: 'tbspacer',
+                flex: .05
+            },{
                 tooltip: 'Email Student',
                 text: '<u>Email Student</u>',
                 width: 110,

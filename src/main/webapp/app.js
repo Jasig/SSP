@@ -328,6 +328,7 @@ Ext.require([
 	'Ssp.util.Util',
 	'Ssp.store.Coaches',
 	'Ssp.store.Caseload',
+	'Ssp.store.WatchList',
     'Ssp.store.Tasks',
     'Ssp.store.StudentActivities',
     'Ssp.store.Goals',
@@ -432,6 +433,7 @@ Ext.require([
     'Ssp.service.AppointmentService',
     'Ssp.service.AssessmentService',
     'Ssp.service.CaseloadService',
+    'Ssp.service.WatchListService',
     'Ssp.service.CampusService',
     'Ssp.service.CampusEarlyAlertRoutingService',
     'Ssp.service.ConfidentialityDisclosureAgreementService',
@@ -556,6 +558,7 @@ var apiUrls = [
   {name: 'directoryPersonSearch', url: 'person/directoryperson/search'},
   {name: 'personSearch', url: 'person/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
+  {name: 'personWatch', url: 'person/{id}/watchstudent'},
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
   {name: 'studentDocument', url: 'person/{id}/studentdocument'},
@@ -1117,6 +1120,19 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },
+					watchListStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.WatchList', {
+							     storeId: 'watchListStoreMain',		
+							     params : {
+										page : 0,
+										start : 0,
+										limit : 100
+									}	
+							 });
+				    	},
+				    	singleton: true
+				    },				    
 					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
 					reassignCaseloadStore: 'Ssp.store.Caseload',
 					contactPersonStore: 'Ssp.store.ContactPerson',
@@ -1915,6 +1931,7 @@ Ext.onReady(function(){
 			        campusService: 'Ssp.service.CampusService',
 			        campusEarlyAlertRoutingService: 'Ssp.service.CampusEarlyAlertRoutingService',
 			        caseloadService: 'Ssp.service.CaseloadService',
+			        watchListService: 'Ssp.service.WatchListService',
 			        confidentialityDisclosureAgreementService: 'Ssp.service.ConfidentialityDisclosureAgreementService',
 			        accommodationService: 'Ssp.service.AccommodationService',
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',

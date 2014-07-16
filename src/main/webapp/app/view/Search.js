@@ -63,40 +63,6 @@ Ext.define('Ssp.view.Search', {
             }, {
                 xtype: 'toolbar',
                 dock: 'top',
-                itemId: 'caseloadBar',
-                hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS'),
-                items: [{
-                    xtype: 'combobox',
-                    itemId: 'caseloadStatusCombo',
-                    name: 'programStatusId',
-                    fieldLabel: '',
-                    emptyText: 'All',
-                    store: me.programStatusesStore,
-                    valueField: 'id',
-                    displayField: 'name',
-                    mode: 'local',
-                    typeAhead: false,
-                    editable: true,
-                    queryMode: 'local',
-                    allowBlank: true,
-                    forceSelection: false,
-                    width: 200,
-                    labelWidth: 125
-                }, {
-                    xtype: 'button',
-                    tooltip: 'Retrieve My Caseload (leave field blank for all program statuses)',
-                    itemId: 'retrieveCaseloadButton',
-					hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
-                    width: 32,
-                    height: 32,
-                    cls: 'retrieveCaseloadIcon'
-                }, {
-                    xtype: 'tbspacer',
-                    flex: 1
-                }]
-            }, {
-                xtype: 'toolbar',
-                dock: 'top',
                 items: [{
                     tooltip: 'Add Student',
                     text: '',
@@ -115,10 +81,10 @@ Ext.define('Ssp.view.Search', {
                     cls: 'editPersonIcon',
                     xtype: 'button',
                     itemId: 'editPersonButton'
-                }, {
+                },{
                     xtype: 'tbspacer',
                     flex: 1
-                }, {
+                },{
                     xtype: 'label',
                     text: 'Change Status:',
                     style: 'font-weight:bold;'
@@ -162,7 +128,29 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     action: 'no-show',
                     itemId: 'setNoShowStatusButton'
-                }]
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                } ,{
+                    xtype: 'combobox',
+                    itemId: 'caseloadStatusCombo',
+                    name: 'programStatusId',
+                    fieldLabel: '',
+                    emptyText: 'All',
+                    store: me.programStatusesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    align: 'center',
+                    typeAhead: false,
+                    editable: true,
+                    queryMode: 'local',
+                    allowBlank: true,
+                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
+                    forceSelection: false,
+                    width: 150,
+                    labelWidth: 100
+                }    ]
             }]
         });
         

@@ -66,6 +66,8 @@ public class PersonSearchRequest {
 	private SpecialServiceGroup specialServiceGroup;
 
 	private Person coach;
+	
+	private Person watcher;
 
 	private String declaredMajor;
 
@@ -90,6 +92,8 @@ public class PersonSearchRequest {
 	private Boolean myCaseload;
 	
 	private Boolean myPlans;
+	
+	private Boolean myWatchList;
 
 	private Date birthDate;
 	
@@ -313,6 +317,26 @@ public class PersonSearchRequest {
 
 	public void setSortAndPage(SortingAndPaging sortAndPage) {
 		this.sortAndPage = sortAndPage;
+	}
+
+
+	public Boolean getMyWatchList() {
+		return myWatchList;
+	}
+
+
+	public void setMyWatchList(Boolean myWatchList) {
+		this.myWatchList = myWatchList;
+	}
+
+
+	public Person getWatcher() {
+		return watcher;
+	}
+
+
+	public void setWatcher(Person watcher) {
+		this.watcher = watcher;
 	}
 
 

@@ -21,7 +21,8 @@ Ext.define('Ssp.view.SearchTab', {
     alias: 'widget.searchtab',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        appEventsController: 'appEventsController'
     },
   	initComponent: function() {
    		var me = this;
@@ -35,6 +36,11 @@ Ext.define('Ssp.view.SearchTab', {
             items: [
                 Ext.createWidget('tabpanel', {
                     activeTab: 0,
+                    listeners: {
+                    	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
+                    			newTab.items.items[0].fireEvent('viewready');
+                    	    }
+                    },
                     items: [{
                         title: 'My Caseload',
                         hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
@@ -42,6 +48,12 @@ Ext.define('Ssp.view.SearchTab', {
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: 'myCaseload'}]
+                    },{
+                        title: 'My Watch List',
+                        autoScroll: true,
+                        border: 0,
+                        layout: 'fit',
+                        items: [{xtype: 'search', tabContext: 'watchList'}]
                     },{
                         title: 'Search',
                         autoScroll: true,
