@@ -166,6 +166,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		if(!serviceResponses || !serviceResponses.responseText || serviceResponses.responseText.trim().length == 0) {
 
        	} else {
+			me.scope.currentMapPlan.clearMapPlan();
        		me.scope.currentMapPlan.loadFromServer(Ext.decode(serviceResponses.responseText));
        		me.scope.currentMapPlan.set('isTemplate',true);
 			me.scope.appEventsController.getApplication().fireEvent('onLoadTemplatePlan');
