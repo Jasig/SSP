@@ -755,7 +755,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	destroy:function(){
 	    var me=this;
 
-	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
+		
+		me.appEventsController.getApplication().removeListener('toolsNav', me.onToolsNav, me);
+
 		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
@@ -767,7 +769,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.removeEvent({eventName: 'onSavePlanRequest', callBackFunc: me.onSavePlanRequest, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSaveTemplateRequest', callBackFunc: me.onSaveTemplateRequest, scope: me});
 		
-		me.appEventsController.removeEvent({eventName: 'laodTemplateDialog', callBackFunc: me.laodTemplateDialog, scope: me});
+		me.appEventsController.removeEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
 		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
 		
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});

@@ -914,7 +914,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		  
         me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onLoadMapPlan', callBackFunc: me.onLoadMapPlan, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onLoadTemplatePlan', callBackFunc: me.onLoadTemplatePlan, scope: me});
+
 		me.appEventsController.removeEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me})
         
 		return me.callParent( arguments );
