@@ -755,7 +755,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	destroy:function(){
 	    var me=this;
 
-	    me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
+		
+		me.appEventsController.getApplication().removeListener('toolsNav', me.onToolsNav, me);
+
 		me.appEventsController.removeEvent({eventName: 'personNav', callBackFunc: me.onPersonNav, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personButtonAdd', callBackFunc: me.onPersonButtonAdd, scope: me});
 		me.appEventsController.removeEvent({eventName: 'personToolbarEdit', callBackFunc: me.onPersonToolbarEdit, scope: me});
