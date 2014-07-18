@@ -43,7 +43,7 @@ Ext.define('Ssp.view.StudentRecord', {
                 text: '<u>Watch Student</u>',
                 width: 110,
                 height: 20,
-        		hidden: !me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'),
+        		hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'),
                 xtype: 'button',
                 cls: "makeTransparent",
                 itemId: 'watchStudentButton'

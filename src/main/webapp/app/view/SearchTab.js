@@ -52,6 +52,7 @@ Ext.define('Ssp.view.SearchTab', {
                         title: 'My Watch List',
                         autoScroll: true,
                         border: 0,
+                        hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: 'watchList'}]
                     },{
