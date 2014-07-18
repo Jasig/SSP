@@ -92,17 +92,27 @@ Ext.define('Ssp.view.SearchForm',{
             items: [
 			{  layout:'column',
 			   border: false,
+	           manageOverflow: 3,
 			   items:[
 				{
 			       xtype: 'checkboxfield',
 			       fieldLabel: 'My Plans',
 			       name: 'myPlans',
-				   columnWidth: .5,
+				   columnWidth: .33,
 			       listeners: {
 			           change: function() {
 			           	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
 			           }
 			       }
+			   },
+				{
+			        xtype: 'checkboxfield',
+			        fieldLabel: 'My Watch List',
+			        name: 'myWatchList',
+				    enableKeyEvents:true,
+				    labelWidth:100,
+				    labelAlign: 'right',
+				    columnWidth: .33
 			   },
 				{
 			        xtype: 'checkboxfield',
@@ -116,7 +126,7 @@ Ext.define('Ssp.view.SearchForm',{
 			              }
 			        },
 				   labelAlign: 'right',
-				   columnWidth: .5
+				   columnWidth: .33
 			   }
 			]
 

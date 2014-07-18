@@ -98,6 +98,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setPlanStatus(to.getPlanStatus());
 		model.setMyCaseload(to.getMyCaseload());
 		model.setMyPlans(to.getMyPlans());
+		model.setMyWatchList(to.getMyWatchList());
 		model.setBirthDate(to.getBirthDate());
 		model.setEarlyAlertResponseLate(to.getEarlyAlertResponseLate());
 		model.setPersonTableType(to.getPersonTableType());
@@ -134,7 +135,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
-			Date birthDate, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+			Boolean myWatchList,Date birthDate, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);
@@ -154,6 +155,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setPlanStatus(planStatus);
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
+		to.setMyWatchList(myWatchList);
 		to.setBirthDate(birthDate);
 		to.setPersonTableType(personTableType);
 		to.setSortAndPage(sortAndPage);
@@ -166,7 +168,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
+			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,Boolean myWatchList,
 			Date birthDate) throws ObjectNotFoundException {
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
@@ -187,6 +189,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setPlanStatus(planStatus);
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
+		to.setMyWatchList(myWatchList);
 		to.setBirthDate(birthDate);
 		return from(to);
 	}

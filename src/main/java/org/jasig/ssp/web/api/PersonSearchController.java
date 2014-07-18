@@ -146,6 +146,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false)String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false)  Boolean myPlans,
+	 final @RequestParam(required = false)  Boolean myWatchList,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
 	 final @RequestParam(required = false) ObjectStatus status,
 	 final @RequestParam(required = false) Integer start,
@@ -172,7 +173,9 @@ public class PersonSearchController extends AbstractBaseController {
 				mapStatus,
 				planStatus,
 				myCaseload,
-				myPlans, birthDate);
+				myPlans,
+				myWatchList,
+				birthDate);
 		
 		
 		String sortConfigured = sort == null ? "lastName":sort;
@@ -215,6 +218,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false)String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
+	 final @RequestParam(required = false) Boolean myWatchList,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
 	 final @RequestParam(required = false)String personTableType,
 	 final @RequestParam(required = false) Integer start,
@@ -234,7 +238,7 @@ public class PersonSearchController extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				mapStatus,planStatus,
-				myCaseload,myPlans,birthDate, personTableType, sortAndPage));
+				myCaseload,myPlans,myWatchList,birthDate, personTableType, sortAndPage));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}

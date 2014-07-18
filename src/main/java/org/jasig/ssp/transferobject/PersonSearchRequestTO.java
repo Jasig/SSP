@@ -66,6 +66,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private Boolean myPlans;
 	
+	private Boolean myWatchList;
+	
 	private Date birthDate;
 	
 	private String personTableType;
@@ -246,6 +248,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setSortAndPage(SortingAndPaging sortAndPage) {
 		this.sortAndPage = sortAndPage;
+	}
+
+	public Boolean getMyWatchList() {
+		return myWatchList;
+	}
+
+	public void setMyWatchList(Boolean myWatchList) {
+		this.myWatchList = myWatchList;
 	}
 
 }

@@ -121,6 +121,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=planStatus]')[0].value,
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
 				me.getView().query('checkbox[name=myPlans]')[0].value,
+				me.getView().query('checkbox[name=myWatchList]')[0].value,
 				me.dateFieldValueFromName('birthDate'),
 				me.getView().query('combobox[name=personTableType]')[0].value,
 				{
