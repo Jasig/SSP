@@ -61,7 +61,7 @@ This project includes:
 
   A Hibernate Core Module under GNU Lesser General Public License
   AntLR Parser Generator under BSD License
-  AOP alliance under GNU Lesser General Public License
+  AOP alliance under Public Domain
   Apache Directory ASN.1 Shared under The Apache Software License, Version 2.0
   Apache Directory MINA ASN.1 Codec Shared under The Apache Software License, Version 2.0
   Apache Directory Protocol Ldap Shared under The Apache Software License, Version 2.0
