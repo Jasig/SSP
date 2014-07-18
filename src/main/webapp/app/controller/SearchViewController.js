@@ -393,7 +393,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	displaySearch: function() {
 	    var me = this;
-		//me.getCaseloadStatusCombo.hide();
 		me.getSearchBar().show();
 
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
@@ -407,13 +406,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	displayCaseload: function(){
 		var me=this;
-		//me.getCaseloadStatusCombo.show();
 		me.getSearchBar().hide();
 		me.setGridView();
 	},
 	displayWatchList: function(){
 		var me=this;
-		//me.getCaseloadStatusCombo.show();
 		me.getSearchBar().hide();
 		me.setGridView();
 		
@@ -433,7 +430,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if( me.getIsWatchList() )
 		{
 			store = me.watchListStore;
-			store.pageSize = store.data.length;
 		} else
 		{
 			store = me.searchStore;
