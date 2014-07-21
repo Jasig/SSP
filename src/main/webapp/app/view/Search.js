@@ -25,7 +25,7 @@ Ext.define('Ssp.view.Search', {
         authenticatedPerson: 'authenticatedPerson',
         apiProperties: 'apiProperties',
         columnRendererUtils: 'columnRendererUtils',
-        programStatusesStore: 'programStatusesStore'
+        programStatusesStore: 'caseloadProgramStatusesStore'
     },
     initComponent: function(){
         var me = this;
@@ -136,7 +136,7 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'caseloadStatusCombo',
                     name: 'programStatusId',
                     fieldLabel: '',
-                    emptyText: 'All',
+                    emptyText: 'Select One',
                     store: me.programStatusesStore,
                     valueField: 'id',
                     displayField: 'name',

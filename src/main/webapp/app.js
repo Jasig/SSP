@@ -451,6 +451,7 @@ Ext.require([
     'Ssp.service.PersonService',
     'Ssp.service.PlacementService',
 	'Ssp.service.PersonNoteService',
+    'Ssp.service.CaseloadProgramStatusService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
@@ -1739,6 +1740,7 @@ Ext.onReady(function(){
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',			    	
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
+					caseloadProgramStatusesStore: 'Ssp.store.reference.CaseloadProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 					programStatusChangeReasonsAllStore: {
 						fn: function(){
@@ -1952,6 +1954,7 @@ Ext.onReady(function(){
 					personNoteService: 'Ssp.service.PersonNoteService',
 			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
+			        caseloadProgramStatusService: 'Ssp.service.CaseloadProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
 			        searchService: 'Ssp.service.SearchService',
 					searchChallengeReferralService: 'Ssp.service.SearchChallengeReferralService',

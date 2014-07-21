@@ -813,7 +813,12 @@
                     "clsName": "Ssp.service.PlacementService",
                     "name": "PlacementService.js",
                     "path": "/app/service/"
-                },                
+                }, 
+                {
+                    "clsName": "Ssp.service.CaseloadProgramStatusService",
+                    "name": "CaseloadProgramStatusService.js",
+                    "path": "/app/service/"
+                },                               
                 {
                     "clsName": "Ssp.service.ProgramStatusService",
                     "name": "ProgramStatusService.js",
@@ -2726,6 +2731,11 @@
                 {
                     "clsName": "Ssp.store.reference.MaritalStatuses",
                     "name": "MaritalStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                                {
+                    "clsName": "Ssp.store.reference.CaseloadProgramStatuses",
+                    "name": "CaseloadProgramStatuses.js",
                     "path": "/app/store/reference/"
                 },
                 {
