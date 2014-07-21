@@ -38,6 +38,9 @@ Ext.define('Ssp.view.SearchTab', {
                     activeTab: 0,
                     listeners: {
                     	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
+                    		if(newTab.items.items[0].tabContext === 'search')
+                    			return;
+                    		else
                     			newTab.items.items[0].fireEvent('viewready');
                     	    }
                     },
@@ -58,6 +61,7 @@ Ext.define('Ssp.view.SearchTab', {
                     },{
                         title: 'Search',
                         autoScroll: true,
+                        hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') && !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: 'search'}]

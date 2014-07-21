@@ -731,6 +731,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     searchSuccess: function(){
     	var me=this;
+        me.setGridView();
     	me.getView().setLoading( false );
 		me.getSearchGridPager().onLoad();
     },
