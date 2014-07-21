@@ -45,6 +45,7 @@ Ext.define('Ssp.view.SearchTab', {
                     },{
                         title: 'Search',
                         autoScroll: true,
+                        hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: 'search'}]
