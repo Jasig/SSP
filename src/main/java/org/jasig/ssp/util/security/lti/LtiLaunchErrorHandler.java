@@ -105,6 +105,7 @@ public class LtiLaunchErrorHandler extends OAuthProcessingFilterEntryPoint {
 			response.sendRedirect(sb.toString());
 		} else {
 			response.setStatus(errorResponse.statusCode);
+			response.setContentType(MediaType.TEXT_HTML_VALUE);
 			final PrintWriter out = response.getWriter();
 			final StringBuilder sb = new StringBuilder("<html><body><p>").append(errorResponse.endUserMessage).append("</p></body></html>");
 			out.println(sb.toString());
