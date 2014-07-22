@@ -219,7 +219,7 @@ Ext.define('Ssp.view.SearchForm',{
 								   labelWidth: 110,
 				             	   labelSeparator: '',
 				             	   emptyText: 'mm/dd/yyyy',
-				             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob') ? me.textStore.getValueByCode('ssp.label.dob') : "DOB",
+				             	   fieldLabel: (me.textStore.getValueByCode('ssp.label.dob') ? me.textStore.getValueByCode('ssp.label.dob') : "DOB") + ":",
 				             	   name: 'birthDate',
 								   itemId: 'birthDate',
 								  onExpand: function() {
