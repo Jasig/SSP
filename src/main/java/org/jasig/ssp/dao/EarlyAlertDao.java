@@ -799,6 +799,7 @@ public class EarlyAlertDao extends
 				earlyAlertSearchResult.setCourseTermName(term.getName());
 				earlyAlertSearchResult.setCourseTermStartDate(term.getStartDate());
 			}
+			earlyAlertSearchResult.setStatus();
 		}
 		
 		int size = earlyAlertSearchResults.size();
