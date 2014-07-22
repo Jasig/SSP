@@ -1,4 +1,4 @@
-/**
+1/**
  * Licensed to Jasig under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -35,7 +35,7 @@
 /* Form Screen */
 
 .early-alert .alert-form {
-    width: 900px
+    width: 960px
 }
 
 .early-alert .ea-label {
@@ -52,11 +52,11 @@
 .early-alert .ea-input, .early-alert .ea-buttons {
     float: right;
     margin: 3px 0 3px 4px;
-    width: 700px;
+    width: 760px;
 }
 
 .early-alert .ea-input input, .early-alert .ea-input select, .early-alert .ea-input textarea {
-    width: 600px;
+    width: 660px;
 }
 
 .ea-input p {
@@ -99,22 +99,22 @@
 }
 
 td.createdDate{
-    width:180px
+    width:200px
 }
 td.status{
     width:50px
 }
 
 td.lastResponseDate{
-    width:180px
+    width:200px
 }
 
 td.courseTitle{
-    width:150px
+    width:200px
 }
 
 td.courseTermName{
-    width:150px
+    width:120px
 }
 
 

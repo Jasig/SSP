@@ -22,6 +22,8 @@ public class EarlyAlertSearchResult {
 	private String courseName;
 	
 	private UUID earlyAlertId;
+	
+	private EarlyAlertStatus status;
 
 	public EarlyAlertSearchResult() {
 
@@ -36,7 +38,17 @@ public class EarlyAlertSearchResult {
 	}
 
 	public EarlyAlertStatus getStatus() {
-		return closedDate == null ? EarlyAlertStatus.OPEN : EarlyAlertStatus.CLOSED;
+		if(status == null)
+			setStatus();
+		return status;
+	}
+	
+	public void setStatus() {
+		status = closedDate == null ? EarlyAlertStatus.OPEN : EarlyAlertStatus.CLOSED;
+	}
+	
+	public void setStatus(EarlyAlertStatus status) {
+		this.status = status;
 	}
 	
 
@@ -94,6 +106,9 @@ public class EarlyAlertSearchResult {
 	}
 
 	public void setClosedDate(Date closedDate) {
+		if(closedDate != null)
+			setStatus(EarlyAlertStatus.CLOSED);
+			
 		this.closedDate = closedDate;
 	}
 

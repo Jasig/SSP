@@ -306,9 +306,9 @@ public final class EarlyAlertPortletController {
 		SortingAndPaging sortAndPage = SortingAndPaging
 		.createForSingleSortWithPaging(ObjectStatus.ACTIVE, start, limit, "createdDate",
 				"DESC", null);
-		sortAndPage.prependSortField("status", SortDirection.ASC);
+		sortAndPage.prependSortField("status", SortDirection.DESC);
 		sortAndPage.prependSortField("courseTitle", SortDirection.ASC);
-		sortAndPage.prependSortField("courseTermStartDate", SortDirection.ASC);
+		sortAndPage.prependSortField("courseTermStartDate", SortDirection.DESC);
 		return sortAndPage;
 	}
 	
