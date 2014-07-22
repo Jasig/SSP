@@ -211,15 +211,15 @@ Ext.define('Ssp.view.SearchForm',{
 			                },	{
 							       xtype: 'datefield',
 							       format: 'm/d/Y',
-						    	   altFormats: 'm/d/Y|m-d-Y',
 				             	   allowBlank: true,
 				             	   showToday:false, 
-				             	   validateOnChange: false,
+				             	   validateOnChange: true,
 				 					columnWidth: .5,
 				             	   labelAlign: 'right',
 								   labelWidth: 110,
 				             	   labelSeparator: '',
-				             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)',
+				             	   emptyText: 'mm/dd/yyyy',
+				             	   fieldLabel: me.textStore.getValueByCode('ssp.label.dob') ? me.textStore.getValueByCode('ssp.label.dob') : "DOB",
 				             	   name: 'birthDate',
 								   itemId: 'birthDate',
 								  onExpand: function() {

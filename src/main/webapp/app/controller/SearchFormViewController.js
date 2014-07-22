@@ -184,6 +184,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
 	     	return;
 		}
+		if(!me.getView().getForm().isValid()){
+			Ext.Msg.alert('SSP Error', 'One or more search filters are invalid. Problems have been highlighted.');
+			return;
+		}
 		var message = "";
 		var valuesInvalid = false;
 		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
