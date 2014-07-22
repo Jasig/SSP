@@ -23,19 +23,19 @@
 }
 
 .early-alert .course-label {
-	font-size: 14px;
-	padding: .5em;
+    font-size: 14px;
+    padding: .5em;
 }
 .early-alert .course-select {
-	border: 1px solid darkGray;
-	font-size: 14px;
-	padding: .5em;
+    border: 1px solid darkGray;
+    font-size: 14px;
+    padding: .5em;
 }
 
 /* Form Screen */
 
 .early-alert .alert-form {
-    width: 600px
+    width: 900px
 }
 
 .early-alert .ea-label {
@@ -52,11 +52,11 @@
 .early-alert .ea-input, .early-alert .ea-buttons {
     float: right;
     margin: 3px 0 3px 4px;
-    width: 400px;
+    width: 700px;
 }
 
 .early-alert .ea-input input, .early-alert .ea-input select, .early-alert .ea-input textarea {
-    width: 300px;
+    width: 600px;
 }
 
 .ea-input p {
@@ -96,6 +96,25 @@
    this style to certain form fields (esp emailCc) */
 .early-alert .ea-input .invalid {
     border: 1px red solid;
+}
+
+td.createdDate{
+    width:180px
+}
+td.status{
+    width:50px
+}
+
+td.lastResponseDate{
+    width:180px
+}
+
+td.courseTitle{
+    width:150px
+}
+
+td.courseTermName{
+    width:150px
 }
 
 

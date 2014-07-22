@@ -32,6 +32,9 @@ import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
@@ -169,5 +172,8 @@ public interface EarlyAlertService
 	PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form);
 
 	Map<UUID,Number> getResponsesDueCountEarlyAlerts(List<UUID> personIds);
+	
 	void sendAllEarlyAlertReminderNotifications();
+	
+	PagedResponse<EarlyAlertSearchResultTO> searchEarlyAlert(EarlyAlertSearchForm form);
 }

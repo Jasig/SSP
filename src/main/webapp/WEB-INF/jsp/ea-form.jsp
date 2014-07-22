@@ -52,19 +52,19 @@
   
   <!-- Portlet Titlebar -->
   <div class="fl-widget-titlebar titlebar portlet-titlebar" role="sectionhead">
-  	<h2 class="title" role="heading"><spring:message code="early.alert.details"/></h2>
+    <h2 class="title" role="heading"><spring:message code="early.alert.details"/></h2>
   </div>
 
   <!-- Portlet Content -->
   <div class="fl-widget-content content portlet-content" role="main">
   
-  	<!-- Portlet Message -->
-  	<div class="portlet-msg-info portlet-msg info loading-message" role="status">
-    	<div class="titlebar">
+    <!-- Portlet Message -->
+    <div class="portlet-msg-info portlet-msg info loading-message" role="status">
+        <div class="titlebar">
         <h3 class="title"><spring:message code="loading"/> . . .</h3>
       </div>
       <div class="content">
-    	  <p><spring:message code="please.wait.while.the.system.finishes.loading.roster"/></p>
+          <p><spring:message code="please.wait.while.the.system.finishes.loading.roster"/></p>
       </div>
     </div>
     
@@ -150,6 +150,51 @@
         <span><spring:message code="student.type"/>:</span>
       </div>
       <div class="ea-clear"></div>
+      
+      <!-- Early Alert Summary -->
+      <c:choose>
+        <c:when test="${fn:length(earlyAlerts)==0}">
+            <div class="ea-input">
+                <span ><spring:message code="early.alert.summary.no.alerts"/></span>
+            </div>
+      <div class="ea-label">
+        <span><spring:message code="early.alert.summary"/>:</span>
+      </div>
+      <div class="ea-clear"></div>
+      </c:when>
+      <c:otherwise>
+          <div class="ea-input">
+            <table summary="<spring:message code="roster"/>" xmlns:rsf="http://ponder.org.uk" class="portlet-table roster-table" style="width:100%;">
+              <thead>
+                <tr>
+                  <th  class="flc-pager-sort-header"><spring:message code="early.alert.created.date"/></th>
+                  <th  class="flc-pager-sort-header"><spring:message code="early.alert.status"/></th>
+                  <th  class="flc-pager-sort-header"><spring:message code="early.alert.last.response.date"/></th>
+                  <th  class="flc-pager-sort-header"><spring:message code="early.alert.course.title"/></th>
+                  <th class="flc-pager-sort-header"><spring:message code="early.alert.course.term.name"/></th>
+                  
+                </tr>
+              </thead>
+              <tbody class="roster-body">
+              <c:forEach var="ob" varStatus="status" items="${earlyAlerts}">
+                <tr >
+                   <td class="createdDate"><fmt:formatDate pattern="MMMMM d, yyyy h:mm a" value="${ob.createdDate}" /></td>
+                  <td class="status"><c:out value="${ob.status}"/></td>
+                  <td class="lastResponseDate"><fmt:formatDate pattern="MMMMM d, yyyy h:mm a" value="${ob.lastResponseDate}" /></td>
+                  <td class="courseTitle"><c:out value="${ob.courseTitle}"/></td>
+                  <td class="courseTermName"><c:out value="${ob.courseTermName}"/></td>
+                </tr>
+               </c:forEach>
+              </tbody>
+            </table>
+        </div>
+          <div class="ea-label">
+            <span><spring:message code="early.alert.summary"/>:</span>
+         </div>
+         <div class="ea-clear"></div>
+      </c:otherwise>
+    </c:choose>
+     <!-- end: Early Alert Summary -->
 
       <!-- Assigned Counselor/Coach -->
       <div class="ea-input">
@@ -276,18 +321,18 @@
     
   </div> <!-- end: portlet-body -->
 
-  	<!-- Error Message Template -->
-  	<div class="portlet-msg-error portlet-msg error error-message-template" role="status" style="display: none;">
-    	<div class="titlebar">
+    <!-- Error Message Template -->
+    <div class="portlet-msg-error portlet-msg error error-message-template" role="status" style="display: none;">
+        <div class="titlebar">
         <h3 class="title"><span class="error-title"></span></h3>
       </div>
       <div class="content">
-    	  <p><span class="error-body"></span></p>
+          <p><span class="error-body"></span></p>
       </div>
     </div>
 
 </div> <!-- end: portlet -->
-    	
+        
 <script type="text/javascript">
     var ${n} = {};
     ${n}.jQuery = jQuery.noConflict(true);

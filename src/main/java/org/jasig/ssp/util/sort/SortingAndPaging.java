@@ -277,9 +277,9 @@ public final class SortingAndPaging { // NOPMD
 		}
 	}
 	
-	public StringBuilder addStatusFilterToQuery(final StringBuilder query, String objectName, Boolean initialRestriction) {
+	public StringBuilder addStatusFilterToQuery(final StringBuilder query, String objectName, Boolean isInitialRestriction) {
 		if (isFilteredByStatus()) {
-			if(initialRestriction == null){
+			if(isInitialRestriction == null || isInitialRestriction.equals(true)){
 				query.append(" where ");
 			}else{
 				query.append(" and ");
@@ -317,10 +317,11 @@ public final class SortingAndPaging { // NOPMD
 	}
 	
 	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Session session, final StringBuilder hql,
-			final boolean filterByStatus,String objectToAddStatusFilter, Boolean whereStarted, Map<String,Object> bindParams) {
+			final boolean filterByStatus,String objectToAddStatusFilter, Boolean isInitialRestriction, Map<String,Object> bindParams) {
 
 		if (filterByStatus && StringUtils.isNotBlank(objectToAddStatusFilter)) {
-			addStatusFilterToQuery(hql, objectToAddStatusFilter, whereStarted);
+			addStatusFilterToQuery(hql, objectToAddStatusFilter, isInitialRestriction);
+			bindParams.put("objectStatus", getStatus());
 		}
 		
 		addSortingToQuery(hql);

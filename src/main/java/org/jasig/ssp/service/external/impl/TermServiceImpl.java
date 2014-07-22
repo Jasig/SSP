@@ -69,4 +69,9 @@ public class TermServiceImpl extends AbstractExternalReferenceDataService<Term>
 	public List<Term> getTermsWithRegistrationWindowOpenIfAny() {
 		return dao.getTermsWithRegistrationWindowOpenIfAny();
 	}
+	
+	@Override
+	public List<Term> getTermsByCodes(List<String> codes){
+		return dao.getTermsByCodes(codes);
+	}
 }

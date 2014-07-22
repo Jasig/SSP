@@ -35,9 +35,10 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertDao;
-import org.jasig.ssp.model.AuditPerson;
+import org.jasig.ssp.factory.EarlyAlertSearchResultTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertRouting;
+import org.jasig.ssp.model.EarlyAlertSearchResult;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -67,7 +68,10 @@ import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
 import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
@@ -141,6 +145,9 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient SecurityService securityService;
+	
+	@Autowired
+	private transient EarlyAlertSearchResultTOFactory searchResultFactory;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -895,5 +902,13 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		
 	    return DateTimeUtils.getDateOffsetInDays(new Date(), -allowedDaysPastResponse);
 				
+	}
+
+	@Override
+	public PagedResponse<EarlyAlertSearchResultTO> searchEarlyAlert(
+			EarlyAlertSearchForm form) {
+		PagingWrapper<EarlyAlertSearchResult> models = dao.searchEarlyAlert(form);
+		return new PagedResponse<EarlyAlertSearchResultTO>(true,
+				models.getResults(), searchResultFactory.asTOList(models.getRows()));	
 	}
 }
