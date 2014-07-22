@@ -127,7 +127,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	dateFieldValueFromName: function(name){
 		var me =  this;
 		var value = me.getView().query('datefield[name=' + name + ']')[0].value;
-		if(value > 0)
+		if(value !== null && value !== undefined && !(value === ""))
 			return me.formUtils.toJSONStringifiableDate(value).formattedStr;
 		return null;
 	},
