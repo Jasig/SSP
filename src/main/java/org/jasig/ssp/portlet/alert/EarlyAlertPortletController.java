@@ -20,22 +20,28 @@ package org.jasig.ssp.portlet.alert;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.portlet.PortletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.ObjectExistsException;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
+import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.FacultyCourseService;
+import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
+import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
 import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
+import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
+import org.jasig.ssp.util.sort.SortDirection;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +60,15 @@ public final class EarlyAlertPortletController {
 	private static final String KEY_STUDENT_ID = "studentId";
 	private static final String KEY_COURSE = "course";
 	private static final String KEY_ENROLLMENT = "enrollment";
+	private static final String KEY_EARLY_ALERT_RESULTS = "earlyAlerts";
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private PersonService personService;
+	
+	@Autowired
+	private EarlyAlertService earlyAlertService;
 	
 	@Autowired
 	private FacultyCourseService facultyCourseService;
@@ -275,10 +285,31 @@ public final class EarlyAlertPortletController {
 					termCode,
                     sectionCode));
 		}
+		
+		EarlyAlertSearchForm form = new EarlyAlertSearchForm();
+		form.setAuthor(user);
+		form.setStudent(student);
+
+		form.setSortAndPage(buildSortAndPage(-1,  0));
+		PagedResponse<EarlyAlertSearchResultTO> results = earlyAlertService.searchEarlyAlert(form);
+		
 		model.put(KEY_STUDENT_ID, student.getId());  // Student UUID
 		model.put(KEY_COURSE, course);
 		model.put(KEY_ENROLLMENT, enrollment);
+		model.put(KEY_EARLY_ALERT_RESULTS, results.getRows());
+		
 		return new ModelAndView("ea-form", model);
+	}
+	
+	private SortingAndPaging buildSortAndPage(Integer limit, Integer start){
+		
+		SortingAndPaging sortAndPage = SortingAndPaging
+		.createForSingleSortWithPaging(ObjectStatus.ACTIVE, start, limit, "createdDate",
+				"DESC", null);
+		sortAndPage.prependSortField("status", SortDirection.ASC);
+		sortAndPage.prependSortField("courseTitle", SortDirection.ASC);
+		sortAndPage.prependSortField("courseTermStartDate", SortDirection.ASC);
+		return sortAndPage;
 	}
 	
 	@ModelAttribute("user")

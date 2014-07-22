@@ -186,7 +186,7 @@ public class DirectoryPersonSearchDao  {
 		
 		Pair<Long,Query> querySet =  personSearchRequest
 				.getSortAndPage()
-				.applySortingAndPagingToPagedQuery(sessionFactory.getCurrentSession(), stringBuilder, false, null, true, params);
+				.applySortingAndPagingToPagedQuery(sessionFactory.getCurrentSession(), stringBuilder, false, null, false, params);
 		
 		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(

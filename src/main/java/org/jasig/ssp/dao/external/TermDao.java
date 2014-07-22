@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao.external;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -140,6 +141,17 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 		String query = "from Term term where term.registrationStartDate <= current_date() and current_date() <= term.registrationEndDate";
 		List<Term> result = createHqlQuery(query).list();
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Term> getTermsByCodes(List<String> codes) {
+		if(codes == null || codes.size() == 0)
+			return new ArrayList<Term>();
+		
+		String hql = "from Term term where term.code in :codes";
+		Query query = createHqlQuery(hql);
+		query.setParameterList("codes", codes);
+		return query.list();
 	}
 	
 }
