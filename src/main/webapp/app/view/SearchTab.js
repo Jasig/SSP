@@ -50,7 +50,7 @@ Ext.define('Ssp.view.SearchTab', {
                         autoScroll: true,
                         border: 0,
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: 'myCaseload'}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload'}]
                     },{
                         title: 'My Watch List',
                         autoScroll: true,
@@ -61,7 +61,7 @@ Ext.define('Ssp.view.SearchTab', {
                     },{
                         title: 'Search',
                         autoScroll: true,
-                        hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') && !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
+                        hidden: me.hasOnlySearch(),
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: 'search'}]
@@ -72,5 +72,9 @@ Ext.define('Ssp.view.SearchTab', {
         });
 
         return me.callParent(arguments);
+    },
+    hasOnlySearch : function() {
+    	var me = this;
+    	return !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') && !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL');
     }
 });
