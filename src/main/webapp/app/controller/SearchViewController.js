@@ -42,9 +42,8 @@ Ext.define('Ssp.controller.SearchViewController', {
         searchStoreOld: 'studentsSearchStore',
         searchStore: 'directoryPersonSearchStore',
 		termsStore: 'termsStore',
-        configStore: 'configStore',
-        textStore:'sspTextStore',
-		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
+        configStore: 'configurationOptionsUnpagedStore',
+        textStore:'sspTextStore'
         
     },
     
@@ -126,9 +125,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
 		}
-		if(me.configurationOptionsUnpagedStore.getTotalCount() == 0){
-			me.configurationOptionsUnpagedStore.load();
-		}
 	   	// load program statuses
 		me.getProgramStatuses();
 		
@@ -147,8 +143,9 @@ Ext.define('Ssp.controller.SearchViewController', {
     
     onTextStoreLoad:function(){
     	var me = this;
-    	var birthDateField = Ext.ComponentQuery.query('searchForm')[1].query('datefield[itemId=birthDate]')[0];
-
+    	var index = !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ? 0 : 2;
+    	var birthDateField = Ext.ComponentQuery.query('searchForm')[index].query('datefield[itemId=birthDate]')[0];
+    	console.log(Ext.ComponentQuery.query('searchForm'));
     	if ( birthDateField ) {
     	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)' );
     	}
