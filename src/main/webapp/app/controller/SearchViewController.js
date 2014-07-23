@@ -145,7 +145,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me = this;
     	var index = !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ? 0 : 2;
     	var birthDateField = Ext.ComponentQuery.query('searchForm')[index].query('datefield[itemId=birthDate]')[0];
-    	console.log(Ext.ComponentQuery.query('searchForm'));
     	if ( birthDateField ) {
     	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/ccyy)' );
     	}
@@ -836,7 +835,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
 		me.getView().setLoading( true );
-		console.log(me.getCaseloadStatusCombo().getValue());
 		if(!me.getCaseloadStatusCombo().getValue())
 		{
 			me.caseloadService.getCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
