@@ -109,11 +109,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
             callBackFunc: me.onPrintActionPlan,
             scope: me
         });
-        me.appEventsController.assignEvent({
-            eventName: 'emailAPToUsers',
-            callBackFunc: me.onEmailAPToUsers,
-            scope: me
-        });
         return me.callParent(arguments);
     },
     
@@ -127,11 +122,6 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
         me.appEventsController.removeEvent({
             eventName: 'printActionPlan',
             callBackFunc: me.onPrintActionPlan,
-            scope: me
-        });
-        me.appEventsController.removeEvent({
-            eventName: 'emailAPToUsers',
-            callBackFunc: me.onEmailAPToUsers,
             scope: me
         });
         return me.callParent(arguments);
