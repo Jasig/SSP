@@ -796,8 +796,12 @@ public class EarlyAlertDao extends
 		for(EarlyAlertSearchResult earlyAlertSearchResult:earlyAlertSearchResults){
 			if(StringUtils.isNotBlank(earlyAlertSearchResult.getCourseTermCode())){
 				Term term = termMap.get(earlyAlertSearchResult.getCourseTermCode());
-				earlyAlertSearchResult.setCourseTermName(term.getName());
-				earlyAlertSearchResult.setCourseTermStartDate(term.getStartDate());
+				if(term != null){
+					earlyAlertSearchResult.setCourseTermName(term.getName());
+					earlyAlertSearchResult.setCourseTermStartDate(term.getStartDate());
+				}else{
+					earlyAlertSearchResult.setCourseTermName(earlyAlertSearchResult.getCourseTermCode());
+				}
 			}
 			earlyAlertSearchResult.setStatus();
 		}

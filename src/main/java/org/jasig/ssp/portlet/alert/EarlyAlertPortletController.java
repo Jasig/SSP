@@ -29,12 +29,14 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.FacultyCourseService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
@@ -61,6 +63,7 @@ public final class EarlyAlertPortletController {
 	private static final String KEY_COURSE = "course";
 	private static final String KEY_ENROLLMENT = "enrollment";
 	private static final String KEY_EARLY_ALERT_RESULTS = "earlyAlerts";
+	private static final String KEY_COURSE_TERM_NAME = "courseTermName";
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -72,6 +75,9 @@ public final class EarlyAlertPortletController {
 	
 	@Autowired
 	private FacultyCourseService facultyCourseService;
+	
+	@Autowired
+	private TermService termService;
 
 	@RenderMapping
 	public ModelAndView showRoster(final PortletRequest req,
@@ -297,6 +303,13 @@ public final class EarlyAlertPortletController {
 		model.put(KEY_COURSE, course);
 		model.put(KEY_ENROLLMENT, enrollment);
 		model.put(KEY_EARLY_ALERT_RESULTS, results.getRows());
+		try{
+			Term term =  termService.getByCode(course.getTermCode());
+			model.put(KEY_COURSE_TERM_NAME,term.getName());
+		}catch(Exception exp){
+			model.put(KEY_COURSE_TERM_NAME,course.getTermCode());
+		}
+		
 		
 		return new ModelAndView("ea-form", model);
 	}

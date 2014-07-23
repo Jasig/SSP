@@ -23,6 +23,7 @@
 <portlet:renderURL var="cancelUrl" >
     <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
     <portlet:param name="termCode" value="${course.termCode}"/>
+    <portlet:param name="termName" value="${courseTermName}"/>
      <portlet:param name="sectionCode" value="${course.sectionCode}"/>
 </portlet:renderURL>
 <portlet:renderURL var="doneUrl" escapeXml="false">
@@ -31,6 +32,7 @@
     <portlet:param name="formattedCourse" value="${course.formattedCourse}"/>
     <portlet:param name="sectionCode" value="${course.sectionCode}"/>
     <portlet:param name="termCode" value="${course.termCode}"/>
+    <portlet:param name="termName" value="${courseTermName}"/>
 </portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>
@@ -163,7 +165,16 @@
       <div class="ea-clear"></div>
       </c:when>
       <c:otherwise>
+     
+          <div class="ea-label early-alert-display-hide">
+           <a> <span><spring:message code="early.alert.summary.hide"/></span></a>
+         </div>
+         <div class="ea-label early-alert-display-show">
+            <a><span><spring:message code="early.alert.summary.show"/></span></a>
+         </div>
+         <div class="ea-clear"></div>
           <div class="ea-input">
+            <div class="early-alert-display">
             <table summary="<spring:message code="roster"/>" xmlns:rsf="http://ponder.org.uk" class="portlet-table roster-table" style="width:100%;">
               <thead>
                 <tr>
@@ -187,8 +198,9 @@
                </c:forEach>
               </tbody>
             </table>
-        </div>
-          <div class="ea-label">
+</div>
+            </div>
+         <div class="ea-label">
             <span><spring:message code="early.alert.summary"/>:</span>
          </div>
          <div class="ea-clear"></div>
@@ -354,7 +366,8 @@
             parameters: {
                 courseName:   '${course.formattedCourse}',
                 courseTitle:  '${course.title}',
-                term:         '${course.termCode}',
+                termCode:     '${course.termCode}',
+                termName:     '${courseTermName}',
                 sectionCode:  '${course.sectionCode}',
                 studentId:    '${studentId}',
                 enrollmentStatusCode: '${enrollment.statusCode}'
