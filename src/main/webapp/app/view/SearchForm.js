@@ -99,6 +99,7 @@ Ext.define('Ssp.view.SearchForm',{
 			       xtype: 'checkboxfield',
 			       fieldLabel: 'My Plans',
 			       name: 'myPlans',
+			       itemId: 'myPlans',
 				   columnWidth: .33,
 			       listeners: {
 			           change: function() {
@@ -110,6 +111,7 @@ Ext.define('Ssp.view.SearchForm',{
 			        xtype: 'checkboxfield',
 			        fieldLabel: 'My Watch List',
 			        name: 'myWatchList',
+				    itemId: 'myWatchList',
 				    enableKeyEvents:true,
 				    labelWidth:100,
 				    labelAlign: 'right',
@@ -119,6 +121,7 @@ Ext.define('Ssp.view.SearchForm',{
 			        xtype: 'checkboxfield',
 			        fieldLabel: 'My Caseload',
 			        name: 'myCaseload',
+				    itemId: 'myCaseload',
 				    enableKeyEvents:true,
 				    labelWidth:100,
 			        listeners: {
@@ -205,7 +208,8 @@ Ext.define('Ssp.view.SearchForm',{
 			   		   		    valueField: 'code',
 			   		   		    emptyText: 'Anywhere',
 					   		    displayField: 'displayValue',
-								 columnWidth: .5,
+								columnWidth: .5,
+				                itemId: 'personTableType',
 			                    name: 'personTableType',
 			                    editable: false
 			                },	{
@@ -239,6 +243,7 @@ Ext.define('Ssp.view.SearchForm',{
    		   		    valueField: 'id',
 		   		    displayField: 'name',
                     columnWidth: .5,
+	                itemId: 'programStatus',
                     name: 'programStatus',
                     editable: false
                 }, 
@@ -247,6 +252,7 @@ Ext.define('Ssp.view.SearchForm',{
                     fieldLabel: 'Registered',
 		   		    emptyText: 'Any',
 					columnWidth: .5,
+	                itemId: 'currentlyRegistered',
                     name: 'currentlyRegistered',
 					labelAlign: 'right',
 					labelWidth:100,
@@ -262,6 +268,7 @@ Ext.define('Ssp.view.SearchForm',{
 	   		   		    valueField: 'id',
 			   		    displayField: 'name',
 			            width:100,
+		                itemId: 'specialServiceGroup',
 	                    name: 'specialServiceGroup',
 	                    editable: false
 	                },
@@ -273,6 +280,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                    valueField: 'code',
 	                    displayField: 'name',
 	                    width: 50,
+		                itemId: 'actualStartTerm',
 	                    name: 'actualStartTerm',
 	                    mode: 'local',
 	                    editable: false
@@ -282,6 +290,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                    fieldLabel: 'Declared Major',
 	                    emptyText: 'Select Major',
 	                    width:100,
+		                itemId: 'declaredMajor',
 	                    name: 'declaredMajor',
 			   		    store: this.programsStore,
 	   		   		    valueField: 'code',
@@ -297,6 +306,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                    emptyText: 'Select Coach',
 	                    width: 100,
 	                    name: 'coachId',
+		                itemId: 'coachId',
 			   		    store: this.coachesStore,
 	   		   		    valueField: 'id',
 			   		    displayField: 'fullName',
@@ -310,6 +320,7 @@ Ext.define('Ssp.view.SearchForm',{
 				   		    emptyText: 'Any',
 							 columnWidth: .5,
 		                    name: 'earlyAlertResponseLate',
+			                itemId: 'earlyAlertResponseLate',
 		                    store: me.earlyAlertResponseLateStore,
 		   		   		    valueField: 'code',
 				   		    displayField: 'displayValue',
@@ -323,6 +334,7 @@ Ext.define('Ssp.view.SearchForm',{
 							labelAlign:'right',
 		                    emptyText: 'Any',
 		                    name: 'financialAidSapStatusCode',
+			                itemId: 'financialAidSapStatusCode',
 		                    store: me.sapStatusesStore,
 		   		   		    valueField: 'code',
 				   		    displayField: 'name',
@@ -338,6 +350,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                    columnWidth: .5,
 	                    emptyText: 'Any',
 	                    name: 'mapStatus',
+		                itemId: 'mapStatus',
 	                    store: me.mapStatusStore,
 	   		   		    valueField: 'code',
 			   		    displayField: 'displayValue',
@@ -349,6 +362,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                    columnWidth: .5,
 	                    emptyText: 'Any',
 	                    name: 'planStatus',
+		                itemId: 'planStatus',
 						labelAlign: 'right',
 						labelWidth:100,
 	                    store: me.planStatusStore,
