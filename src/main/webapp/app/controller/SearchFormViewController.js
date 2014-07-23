@@ -53,6 +53,54 @@ Ext.define('Ssp.controller.SearchFormViewController', {
    	'resetStudentSearchButton': {
     		click: 'onResetClick'
     	},
+     'myPlans':{
+			specialkey: "specialKeyPressed",
+	 },
+     'myCaseload':{
+			specialkey: "specialKeyPressed",
+	 },	
+     'schoolId':{
+			specialkey: "specialKeyPressed",
+	 },	
+     'personTableType':{
+			specialkey: "specialKeyPressed",
+	 },	 
+     'birthDate':{
+			specialkey: "specialKeyPressed",
+	 },	
+     'programStatus':{
+			specialkey: "specialKeyPressed",
+	 },	
+     'currentlyRegistered':{
+			specialkey: "specialKeyPressed",
+	 },	
+     'specialServiceGroup':{
+			specialkey: "specialKeyPressed",
+	 },	 
+     'actualStartTerm':{
+			specialkey: "specialKeyPressed",
+	 },	 	
+     'declaredMajor':{
+			specialkey: "specialKeyPressed",
+	 },	 
+     'coachId':{
+			specialkey: "specialKeyPressed",
+	 },		
+     'earlyAlertResponseLate':{
+			specialkey: "specialKeyPressed",
+	 },		
+     'financialAidSapStatusCode':{
+			specialkey: "specialKeyPressed",
+	 },	 
+     'mapStatus':{
+			specialkey: "specialKeyPressed",
+	 },		
+     'planStatus':{
+			specialkey: "specialKeyPressed",
+	 },	
+     'planStatus':{
+			specialkey: "specialKeyPressed",
+	 },		 
 	'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
 			blur: "hoursEarnedMinChanged"
@@ -70,7 +118,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			blur: 'gpaMaxChanged'
 	 },
 	 'schoolId': {
-	        specialkey: "specialKeyPressed",
+	        specialkey: "specialKeyPressed"
 	    }
     },
     
