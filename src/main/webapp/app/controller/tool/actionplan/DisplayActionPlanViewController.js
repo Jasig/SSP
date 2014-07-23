@@ -101,39 +101,40 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
         
         me.appEventsController.assignEvent({
             eventName: 'emailActionPlan',
-            callBackFunc: this.onEmailActionPlan,
-            scope: this
+            callBackFunc: me.onEmailActionPlan,
+            scope: me
         });
         me.appEventsController.assignEvent({
             eventName: 'printActionPlan',
-            callBackFunc: this.onPrintActionPlan,
-            scope: this
+            callBackFunc: me.onPrintActionPlan,
+            scope: me
         });
         me.appEventsController.assignEvent({
             eventName: 'emailAPToUsers',
-            callBackFunc: this.onEmailAPToUsers,
-            scope: this
+            callBackFunc: me.onEmailAPToUsers,
+            scope: me
         });
         return me.callParent(arguments);
     },
     
     destroy: function(){
-    
-        this.appEventsController.assignEvent({
+        var me = this;
+        me.appEventsController.removeEvent({
             eventName: 'emailActionPlan',
-            callBackFunc: this.onEmailActionPlan,
-            scope: this
+            callBackFunc: me.onEmailActionPlan,
+            scope: me
         });
-        this.appEventsController.assignEvent({
+        me.appEventsController.removeEvent({
             eventName: 'printActionPlan',
-            callBackFunc: this.onPrintActionPlan,
-            scope: this
+            callBackFunc: me.onPrintActionPlan,
+            scope: me
         });
-        this.appEventsController.assignEvent({
+        me.appEventsController.removeEvent({
             eventName: 'emailAPToUsers',
-            callBackFunc: this.onEmailAPToUsers,
-            scope: this
+            callBackFunc: me.onEmailAPToUsers,
+            scope: me
         });
+        return me.callParent(arguments);
     },
     
     onEmailActionPlan: function(button){
