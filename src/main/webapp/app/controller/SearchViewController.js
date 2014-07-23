@@ -288,10 +288,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			{
 				me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
 				// default caseload to Active students if no program status is defined
-				if ( me.caseloadFilterCriteria.get('programStatusId') == "")
-				{
-					me.caseloadFilterCriteria.set('programStatusId', Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID );
-				}
+
 				me.getCaseload(true);
 				me.displayCaseload();
 			}else{
@@ -769,6 +766,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if ( records.length > 0)
     	{
 			me.caseloadFilterCriteria.set('programStatusId', records[0].get('id') );
+			me.caseloadFilterCriteria.set('programStatusName', records[0].get('name') );
      	}
 		
         var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
@@ -800,7 +798,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var programStatus;
     	if ( me.programStatusesStore.getCount() > 0 && me.getCaseloadStatusCombo() != null)
     	{
-    		me.getCaseloadStatusCombo().setValue( me.caseloadFilterCriteria.get('programStatusId') );
+			me.getCaseloadStatusCombo().setValue(Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
     	}
     },	
 
@@ -811,9 +809,18 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=this;
 		me.setGridView();
 		me.getView().setLoading( true );
-		if(me.getCaseloadStatusCombo().getValue() || defaultToActive )
+		if(!me.getCaseloadStatusCombo().getValue())
 		{
-			me.watchListService.getWatchList( me.caseloadFilterCriteria.get( 'programStatusId' ),
+			me.watchListService.getWatchList( Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
+					me.watchListStore,
+					{success:me.getCaseloadSuccess, 
+				failure:me.getCaseloadFailure, 
+				scope: me});		
+		}
+		else
+		if(me.getCaseloadStatusCombo().getValue() != 'All' )
+		{
+			me.watchListService.getWatchList( me.getCaseloadStatusCombo().getValue(),
 					me.watchListStore,
 					{success:me.getCaseloadSuccess, 
 				failure:me.getCaseloadFailure, 
@@ -832,9 +839,18 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
 		me.getView().setLoading( true );
-		if(me.getCaseloadStatusCombo().getValue() || defaultToActive )
+		console.log(me.getCaseloadStatusCombo().getValue());
+		if(!me.getCaseloadStatusCombo().getValue())
 		{
-			me.caseloadService.getCaseload( me.caseloadFilterCriteria.get( 'programStatusId' ),
+			me.caseloadService.getCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
+					me.caseloadStore,
+					{success:me.getCaseloadSuccess, 
+				failure:me.getCaseloadFailure, 
+				scope: me});		
+		} else
+		if(me.getCaseloadStatusCombo().getValue() != 'All' )
+		{
+			me.caseloadService.getCaseload( me.getCaseloadStatusCombo().getValue(),
 					me.caseloadStore,
 					{success:me.getCaseloadSuccess, 
 				failure:me.getCaseloadFailure, 

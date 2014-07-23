@@ -18,5 +18,6 @@
  */
 Ext.define('Ssp.model.CaseloadFilterCriteria', {
     extend: 'Ext.data.Model',
-    fields: [{name:'programStatusId', type: 'string'}]
+    fields: [{name:'programStatusId', type: 'string'},
+             {name:'programStatusName', type: 'string'}]
 });

@@ -145,7 +145,7 @@ Ext.define('Ssp.view.Search', {
                     typeAhead: false,
                     editable: true,
                     queryMode: 'local',
-                    allowBlank: true,
+                    allowBlank: false,
                     hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
                     forceSelection: false,
                     width: 150,
