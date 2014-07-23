@@ -510,6 +510,25 @@ public final class SortingAndPaging { // NOPMD
 			for(Pair<Field, SortDirection> sorter:sorters){
 				Comparable<Object> prop1 = getComparableProperty(o1, sorter.getFirst());
 				Comparable<Object> prop2 = getComparableProperty(o2,  sorter.getFirst());
+				
+				if(prop1 == null && prop2 != null){
+					if(sorter.getSecond().equals(SortDirection.ASC))
+						return -1;
+					else
+						return 1;
+				}
+				
+				if(prop2 == null && prop1 != null){
+					if(sorter.getSecond().equals(SortDirection.ASC))
+						return 1;
+					else
+						return -1;
+				}
+				
+				if(prop2 == null && prop1 == null){
+					return 0;
+				}
+			
 			
 				if(sorter.getSecond().equals(SortDirection.ASC)){
 					compared = prop1.compareTo(prop2);

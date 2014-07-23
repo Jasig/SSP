@@ -35,6 +35,9 @@ var ssp = ssp || {};
     var buildSelectors = function(container) {
         var rslt = {};
         $.each({
+        	earlyAlertDisplay:         '.early-alert-display',
+        	earlyAlertDisplayShow:  '.early-alert-display-show',
+        	earlyAlertDisplayHide:  '.early-alert-display-hide',
             errorsDiv:               '.errors',
             errorTemplate:           '.error-message-template',
             loadingMessage:          '.loading-message',
@@ -178,7 +181,27 @@ var ssp = ssp || {};
         var clearErrors = function() {
             $(selectors.errorsDiv).html('');
         };
-
+        
+        /*
+         * Error Handling Functions
+         */
+        var showEarlyAlertDisplay = function() {
+            var display = $(selectors.earlyAlertDisplay);
+            display.slideDown(1000);
+            $(selectors.earlyAlertDisplayShow).hide();
+            $(selectors.earlyAlertDisplayHide).show();
+        };
+        var hideEarlyAlertDisplay = function() {
+        	 var display = $(selectors.earlyAlertDisplay);
+             display.slideUp(1000);
+             $(selectors.earlyAlertDisplayShow).show();
+             $(selectors.earlyAlertDisplayHide).hide();
+        };
+        
+        
+        $(selectors.earlyAlertDisplayHide).click(hideEarlyAlertDisplay);
+        $(selectors.earlyAlertDisplayShow).click(showEarlyAlertDisplay);
+        
         /*
          * Validation Function
          */
@@ -220,7 +243,7 @@ var ssp = ssp || {};
             var postData = {
                 courseName: options.parameters.courseName,
                 courseTitle: options.parameters.courseTitle,
-                courseTermCode: options.parameters.term,
+                courseTermCode: options.parameters.termCode,
                 courseSectionCode: options.parameters.sectionCode,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
@@ -286,7 +309,7 @@ var ssp = ssp || {};
         $(selectors.course).text(options.parameters.courseName + ' - ' + options.parameters.courseTitle);
 
         // term
-        $(selectors.term).text(options.parameters.term);
+        $(selectors.term).text(options.parameters.termName);
 
         // student
         $(selectors.student).text(studentName);
@@ -308,6 +331,8 @@ var ssp = ssp || {};
 
         // assignedCounselor
         $(selectors.assignedCounselor).text(student.coach && student.coach.lastName + ', ' + student.coach.firstName);
+        
+        showEarlyAlertDisplay();
 
         // office
         // phone
