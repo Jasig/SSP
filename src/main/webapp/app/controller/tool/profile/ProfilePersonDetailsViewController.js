@@ -440,6 +440,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     destroy: function(){
         var me = this;
     	me.closePopups();
+    	 me.appEventsController.removeEvent({
+             eventName: 'emailCoach',
+             callBackFunc: me.onEmailCoach,
+             scope: me
+         });
         return me.callParent(arguments);
     },
     

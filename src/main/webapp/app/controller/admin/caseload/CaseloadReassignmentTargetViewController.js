@@ -51,6 +51,13 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
     	me.appEventsController.assignEvent({eventName: 'studentAdded', callBackFunc: me.onStudentAdded, scope: me});
 		return me.callParent(arguments);
     },
+    
+    destroy: function() {
+    	var me = this;
+    	me.appEventsController.removeEvent({eventName: 'studentAdded', callBackFunc: me.onStudentAdded, scope: me});
+    	return me.callParent(arguments);
+    },
+    
     onRemove: function(button) {
 		var me=this;
         if (me.getView().getSelectionModel().getSelection().length > 0) 
