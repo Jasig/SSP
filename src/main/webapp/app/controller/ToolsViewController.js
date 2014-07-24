@@ -25,6 +25,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
         authenticatedPerson: 'authenticatedPerson',
         formUtils: 'formRendererUtils',
         personLite: 'personLite',
+		person: 'currentPerson',
+		personService:'personService',
         toolsStore: 'toolsStore'
     },
     control: {
@@ -93,11 +95,25 @@ Ext.define('Ssp.controller.ToolsViewController', {
     },
     
     onLoadPerson: function(){
-    	var tool = this.toolsStore.find('toolType', 'profile');
-    	if(tool == -1)
-    		this.loadFirstTool();
+		var me = this;
+		if(me.person.get('id') != me.personLite.get('id')){
+			var callbacks = {success: me.getPersonSuccess, failure:me.getPersonFailure, scope:me};
+			me.personService.getSync(me.personLite.get('id'), callbacks);
+		}    	
+   	},
+
+	getPersonSuccess: function(response, scope) {
+        var me = scope;
+        me.person.populateFromGenericObject(response);
+        var tool = me.toolsStore.find('toolType', 'profile');
+        if(tool == -1)
+    		me.loadFirstTool();
     	else
-    		this.loadPerson();
+    		me.loadPerson();
+		me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
+    },
+
+    getPersonFailure: function() {
     },
     
     onLoadIntake: function(){

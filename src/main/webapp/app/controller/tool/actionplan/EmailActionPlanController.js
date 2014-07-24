@@ -39,6 +39,7 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
     
     init: function(){
         var me = this;
+       
         return this.callParent(arguments);
     },
     

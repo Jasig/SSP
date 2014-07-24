@@ -114,14 +114,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
-                expectedResponseCnt: 3
-            }
+                expectedResponseCnt: 2
+            };
 
-            me.personService.get(id, {
-                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
-                scope: me
-            });
             me.transcriptService.getSummary(id, {
                 success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
@@ -145,6 +140,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 			});
 			
 		}
+		me.getPersonSuccess();
         return me.callParent(arguments);
     },
     onRegStoreLoaded: function() {
@@ -215,10 +211,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
     getPersonSuccess: function(serviceResponses) {
         var me = this;
-        var personResponse = serviceResponses.successes.person;
-        me.person.populateFromGenericObject(personResponse);
-        
-	    
         var nameField = me.getNameField();	
 		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
 		var primaryEmailAddressLabel = me.getPrimaryEmailAddressLabel();
@@ -239,17 +231,17 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var coachName = me.person.getCoachFullName();
        	
         // load referral sources
-        if (personResponse.referralSources != null) {
+        if (me.person.get('referralSources') != null) {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
         }
 
         // load service reasonssd
-        if (personResponse.serviceReasons != null) {
+        if (me.person.get('serviceReasons') != null) {
             me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
         }
 
 		// load special service groups
-        if (personResponse.specialServiceGroups != null) {
+        if (me.person.get('specialServiceGroups') != null) {
             me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
 
@@ -278,7 +270,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.handleNull(me.person.getActionPlanSummary()));
         studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
         studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
-        me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
     },
 
     getPersonFailure: function() {
