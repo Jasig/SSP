@@ -81,7 +81,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 		var objEvents = this.events[args.scope.view.id];
 		if(objEvents){
 			for(var i = 0; i < objEvents.length; i++){
-				if(objEvents.eventName === args.eventName){
+				if(objEvents[i].eventName === args.eventName){
 					objEvents.splice(i,1);
 					break;
 				}
