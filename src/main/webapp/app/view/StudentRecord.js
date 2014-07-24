@@ -85,6 +85,7 @@ Ext.define('Ssp.view.StudentRecord', {
                 height: 20,
                 xtype: 'button',
 				cls: "makeTransparent",
+				hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
                 itemId: 'viewCoachingHistoryButton'
             }, 
 			{
