@@ -184,58 +184,62 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     
     updateStudentRecord: function(args){
 		var me = this;
-    	if(args && args.person){
-    		
-            var successFunc = function(response, view){
-            	if(response.responseText === '')
-            	{
-                    me.getWatchStudentButton().setText('<u>Watch Student</u>');
-            	}
-            	else
-            	{
-        	    	if(response.responseText)
-        	    	{
-        	    		me.person.watchId = Ext.decode(response.responseText).id;
-        	    	}
-            		me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
-            	}
-            };  		
-            var failureFunc = function(response, view){
-            	me.getWatchStudentButton().setText('<u>Watch Student</u>');
-            };             
-            studentId = args.person.get('id');
-    		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
-
-    		url = url + '/' + studentId;
-            
-            me.apiProperties.makeRequest({
-                url: url,
-                method: 'GET',
-                successFunc: successFunc,
-    			failureFunc: failureFunc
-            });
-    		
-    		
-			me.showElement(me.getWatchStudentButton());
-			me.showElement(me.getEmailStudentButton());
-			me.showElement(me.getViewCoachingHistoryButton());
-			me.showElement(me.getStudentRecordEditButton());
-			me.showElement(me.getEmailCoachButton());
-			var fullName = args.person.getFullName();
-			var coachName = args.person.getCoachFullName();
-			if(me.getView())
-	        	me.getView().setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId'));
-			if(me.getEmailCoachButton())
-	        	me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
+		if(me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'))
+		{
+			if(args && args.person){
+				
+				var successFunc = function(response, view){
+					if(response.responseText === '')
+					{
+						me.getWatchStudentButton().setText('<u>Watch Student</u>');
+					}
+					else
+					{
+						if(response.responseText)
+						{
+							me.person.watchId = Ext.decode(response.responseText).id;
+						}
+						me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
+					}
+				};  		
+				var failureFunc = function(response, view){
+					me.getWatchStudentButton().setText('<u>Watch Student</u>');
+				};             
+				studentId = args.person.get('id');
+				var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
+				
+				url = url + '/' + studentId;
+				
+				me.apiProperties.makeRequest({
+					url: url,
+					method: 'GET',
+					successFunc: successFunc,
+					failureFunc: failureFunc
+				});
+				
+				
+				me.showElement(me.getWatchStudentButton());
+				me.showElement(me.getEmailStudentButton());
+				me.showElement(me.getViewCoachingHistoryButton());
+				me.showElement(me.getStudentRecordEditButton());
+				me.showElement(me.getEmailCoachButton());
+				var fullName = args.person.getFullName();
+				var coachName = args.person.getCoachFullName();
+				if(me.getView())
+					me.getView().setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId'));
+				if(me.getEmailCoachButton())
+					me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
+				
+			}else{
+				me.hideElement(me.getWatchStudentButton());
+				me.hideElement(me.getViewCoachingHistoryButton());
+				me.hideElement(me.getStudentRecordEditButton());
+				if(me.getView())
+					me.getView().setTitle('');
+				me.hideElement(me.getEmailStudentButton());
+				me.hideElement(me.getEmailCoachButton());
+			}
 			
-		}else{
-			me.hideElement(me.getWatchStudentButton());
-			me.hideElement(me.getViewCoachingHistoryButton());
-			me.hideElement(me.getStudentRecordEditButton());
-			if(me.getView())
-				me.getView().setTitle('');
-			me.hideElement(me.getEmailStudentButton());
-			me.hideElement(me.getEmailCoachButton());
 		}
     },
 
