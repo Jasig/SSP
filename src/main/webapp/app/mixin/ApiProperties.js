@@ -83,6 +83,7 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		var proxyObj = {
 			type: 'rest',
 			url: this.createUrl(url),
+			async: true,
 			simpleSortMode: true,
 			directionParam:'sortDirection',
 			actionMethods: {
@@ -143,9 +144,12 @@ Ext.define('Ssp.mixin.ApiProperties', {
 				var paramString  = "?" + paramString.substring(0, paramString.length - 1);
 			}
 		}
+		if(args.async !== false)
+		   args.async = true;
 		
 		Ext.Ajax.request({
 			url: args.url + paramString,
+			async:args.async,
 			method: args.method,
 			headers: { 'Content-Type': contentType },
 			jsonData: args.jsonData || '',

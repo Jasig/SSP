@@ -45,10 +45,11 @@ Ext.define('Ssp.service.PersonService', {
         callbacks.success( r, callbacks.scope );
     },
 
-    beforeGetRequestFailure: function ( response, callbacks ) {
+
+    beforeGetRequestFailure: function ( response, callback, scope) {
         var me=this;
         me.apiProperties.handleError( response );
-        callbacks.failure( response, callbacks.scope );
+        callbacks( response, scope );
     },
 
     newBeforeGetRequestSuccess: function(callbacks) {
@@ -73,6 +74,18 @@ Ext.define('Ssp.service.PersonService', {
 			method: 'GET',
 			successFunc: me.newBeforeGetRequestSuccess(callbacks),
 			failureFunc: me.newBeforeGetRequestFailure(callbacks),
+			scope: me
+		});
+    },
+
+	getSync: function( id, callbacks){
+    	var me=this;
+		me.apiProperties.makeRequest({
+			url: me.getBaseUrl()+'/'+id,
+			method: 'GET',
+			async: false,
+			successFunc:  me.newBeforeGetRequestSuccess(callbacks),
+			failureFunc:  me.newBeforeGetRequestFailure(callbacks),
 			scope: me
 		});
     },
