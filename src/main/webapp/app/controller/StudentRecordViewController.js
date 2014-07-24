@@ -23,6 +23,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		appEventsController: 'appEventsController',
 		formUtils: 'formRendererUtils',
 		apiProperties: 'apiProperties',
+		authenticatedPerson: 'authenticatedPerson',
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
         
 	},
@@ -107,8 +108,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     updateStudentRecord: function(args){
 		var me = this;
     	if(args && args.person){
-			me.showElement(me.getEmailStudentButton());
-			me.showElement(me.getViewCoachingHistoryButton());
+    		me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
+			me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
 			me.showElement(me.getStudentRecordEditButton());
 			me.showElement(me.getEmailCoachButton());
 			var fullName = args.person.getFullName();
@@ -127,6 +128,14 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 			me.hideElement(me.getEmailCoachButton());
 		}
     },
+    
+    showByPermission:function(element, hasPermission){
+		var me = this;
+		if(hasPermission)
+			me.showElement(me.getViewCoachingHistoryButton());
+		else
+			me.hideElement(me.getViewCoachingHistoryButton());
+	},
 
 	hideElement: function(element){
 		if(element)
