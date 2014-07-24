@@ -74,15 +74,7 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
 		me.appointment.data = appointment.data;
 		me.currentPersonAppointment.data = personAppointment.data;
 	},
-    
-    destroy: function(){
-    	var me = this;
-    	me.appEventsController.removeEvent({eventName: 'instantStudentNameChange', callBackFunc: this.onPersonNameChange, scope: this});
-		me.studentTypesStore.removeListener("load", me.onStoreLoaded, me, {single:true});
-
-    	return this.callParent( arguments );
-    },
-  
+	
     initForms: function(){
 		
 		var caseloadAssignmentView = Ext.ComponentQuery.query('#student')[0];
@@ -205,7 +197,7 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     			scope: me
     		};	
     		Ext.Msg.show(dialogOpts);
-    		me.getView().close();
+    		me.onCancelClick();
     		me.appEventsController.getApplication().fireEvent('updateSearchStoreRecord',{person:me.person});
 		}else{
 			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
@@ -448,6 +440,9 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     destroy: function() {
         var me=this;
         me.studentTypesStore.clearFilter(true);    
-		return me.callParent( arguments );
+    	me.appEventsController.removeEvent({eventName: 'instantStudentNameChange', callBackFunc: this.onPersonNameChange, scope: this});
+		me.studentTypesStore.removeListener("load", me.onStoreLoaded, me, {single:true});
+
+    	return this.callParent( arguments );
     }
 });
