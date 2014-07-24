@@ -26,6 +26,7 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
     },
     height: 400,
     width: 325,
+    modal: true,
 	
     initComponent: function(){
         var me = this;
