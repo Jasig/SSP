@@ -92,11 +92,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var id = me.personLite.get('id');
         me.resetForm();
-        me.appEventsController.assignEvent({
-            eventName: 'emailCoach',
-            callBackFunc: me.onEmailCoach,
-            scope: me
-        });
+
         if(me.sapStatusesStore.getTotalCount() <= 0){
 			me.sapStatusesStore.load();
         }
@@ -386,11 +382,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
-        me.appEventsController.removeEvent({
-            eventName: 'emailCoach',
-            callBackFunc: me.onEmailCoach,
-            scope: me
-        });
 	    me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
 		var view = Ext.ComponentQuery.query("#profileDetails");
     	if(view && view.length > 0)
@@ -398,12 +389,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         return me.callParent( arguments );
     },
 
-    onEmailCoach: function(){
-        var me = this;
-        if (me.person.getCoachPrimaryEmailAddress()) {
-            window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
-        }
-    },
 	
 	onServiceReasonEditButtonClick: function(button){
         var me=this;
