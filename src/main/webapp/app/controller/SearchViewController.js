@@ -136,7 +136,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var birthDateField = Ext.ComponentQuery.query('searchForm')[1].query('datefield[itemId=birthDate]')[0];
 
     	if ( birthDateField ) {
-    	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob')+': (mm/dd/yyyy)' );
+    	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob') + ':' );
     	}
 
     	me.onCollapseStudentRecord(true);
