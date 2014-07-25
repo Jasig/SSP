@@ -90,6 +90,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
         
         me.appEventsController.removeEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
 
+		
+		
         
         return me.callParent(arguments);
     },
@@ -99,19 +101,26 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		if(me.person.get('id') != me.personLite.get('id')){
 			var callbacks = {success: me.getPersonSuccess, failure:me.getPersonFailure, scope:me};
 			me.personService.getSync(me.personLite.get('id'), callbacks);
-		}    	
+		}else if(me.person.get('id') ){
+			me.loadToolWithPersonLoaded();
+		}  	
    	},
 
 	getPersonSuccess: function(response, scope) {
         var me = scope;
         me.person.populateFromGenericObject(response);
-        var tool = me.toolsStore.find('toolType', 'profile');
-        if(tool == -1)
-    		me.loadFirstTool();
-    	else
-    		me.loadPerson();
+		me.loadToolWithPersonLoaded();
 		me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
     },
+	
+	loadToolWithPersonLoaded: function(){
+		var me = this;
+		var tool = me.toolsStore.find('toolType', 'profile');
+    	if(tool == -1)
+			me.loadFirstTool();
+		else
+			me.loadPerson();
+	},
 
     getPersonFailure: function() {
     },
