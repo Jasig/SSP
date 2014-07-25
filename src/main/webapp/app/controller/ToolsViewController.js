@@ -110,7 +110,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
         var me = scope;
         me.person.populateFromGenericObject(response);
 		me.loadToolWithPersonLoaded();
-		me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
     },
 	
 	loadToolWithPersonLoaded: function(){
@@ -120,6 +119,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 			me.loadFirstTool();
 		else
 			me.loadPerson();
+    	me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
 	},
 
     getPersonFailure: function() {
