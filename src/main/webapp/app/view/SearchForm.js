@@ -217,7 +217,7 @@ Ext.define('Ssp.view.SearchForm',{
 							       format: 'm/d/Y',
 				             	   allowBlank: true,
 				             	   showToday:false, 
-				             	   validateOnChange: true,
+				             	   validateOnChange: false,
 				 					columnWidth: .5,
 				             	   labelAlign: 'right',
 								   labelWidth: 110,
