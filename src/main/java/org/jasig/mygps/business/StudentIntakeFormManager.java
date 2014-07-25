@@ -80,17 +80,7 @@ import org.jasig.ssp.service.PersonConfidentialityDisclosureAgreementService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.BlurbService;
-import org.jasig.ssp.service.reference.ChildCareArrangementService;
-import org.jasig.ssp.service.reference.CitizenshipService;
-import org.jasig.ssp.service.reference.CourseworkHoursService;
-import org.jasig.ssp.service.reference.EducationGoalService;
-import org.jasig.ssp.service.reference.EthnicityService;
-import org.jasig.ssp.service.reference.MaritalStatusService;
-import org.jasig.ssp.service.reference.RaceService;
-import org.jasig.ssp.service.reference.RegistrationLoadService;
-import org.jasig.ssp.service.reference.StudentStatusService;
-import org.jasig.ssp.service.reference.VeteranStatusService;
+import org.jasig.ssp.service.reference.*;
 import org.jasig.ssp.service.tool.PersonToolService;
 import org.jasig.ssp.util.SspStringUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -193,6 +183,11 @@ public class StudentIntakeFormManager { // NOPMD
 	
 	@Autowired
 	private transient TermService termService;
+
+    @Autowired
+    protected transient ConfigService configService;
+
+
 
 	// Default value for unfilled drop-down
 	public static final String DEFAULT_DROPDOWN_LIST_LABEL = "-- Select One --";
@@ -377,6 +372,9 @@ public class StudentIntakeFormManager { // NOPMD
 			.fromString("fd64c498-9d83-42a9-8e91-00aa0a65b0a3");
 	public static final UUID SECTION_CHECKLIST = UUID
 			.fromString("7ca8443d-ffc6-4545-90bb-bb4508999871");
+
+
+
 
 	public FormTO create() throws ObjectNotFoundException {
 
@@ -1801,6 +1799,13 @@ public class StudentIntakeFormManager { // NOPMD
 
 		final FormSectionTO personalSection = new FormSectionTO();
 		final List<FormQuestionTO> personalSectionQuestions = new ArrayList<FormQuestionTO>();
+        final boolean lockExternalDataFields;
+
+        if (configService.getByNameEmpty("syncStudentPersonalDataWithExternalData").trim().toLowerCase().equals("false")) {
+            lockExternalDataFields = false;
+        } else {
+            lockExternalDataFields = true;
+        }
 
 		personalSection.setId(SECTION_PERSONAL_ID);
 		personalSection.setLabel(getLabelNullSafe(blurbStore,"intake.tab1.label"));
@@ -1808,7 +1813,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// First Name
 		final FormQuestionTO firstNameQuestionTO = new FormQuestionTO();
 
-		firstNameQuestionTO.setReadOnly(true);
+		firstNameQuestionTO.setReadOnly(lockExternalDataFields);
 		firstNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_FIRSTNAME_ID);
 		firstNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.first-name"));
 		firstNameQuestionTO.setMaximumLength("50");
@@ -1820,7 +1825,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Middle Initial
 		final FormQuestionTO middleNameQuestionTO = new FormQuestionTO();
 
-		middleNameQuestionTO.setReadOnly(true);
+		middleNameQuestionTO.setReadOnly(lockExternalDataFields);
 		middleNameQuestionTO
 				.setId(SECTION_PERSONAL_QUESTION_MIDDLENAME_ID);
 		middleNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.middle-name"));
@@ -1832,7 +1837,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Last Name
 		final FormQuestionTO lastNameQuestionTO = new FormQuestionTO();
 
-		lastNameQuestionTO.setReadOnly(true);
+		lastNameQuestionTO.setReadOnly(lockExternalDataFields);
 		lastNameQuestionTO.setId(SECTION_PERSONAL_QUESTION_LASTNAME_ID);
 		lastNameQuestionTO.setLabel(getLabelNullSafe(blurbStore,"ssp.label.last-name"));
 		lastNameQuestionTO.setMaximumLength("50");
@@ -1844,7 +1849,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Birthdate
 		final FormQuestionTO birthDateQuestion = new FormQuestionTO();
 
-		birthDateQuestion.setReadOnly(true);
+		birthDateQuestion.setReadOnly(lockExternalDataFields);
 		birthDateQuestion.setId(SECTION_PERSONAL_QUESTION_BIRTHDATE_ID);
 		birthDateQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.dob"));
 		birthDateQuestion.setMaximumLength("10");
@@ -1855,7 +1860,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// School Email
 		final FormQuestionTO schoolEmailQuestion = new FormQuestionTO();
 
-		schoolEmailQuestion.setReadOnly(true);
+		schoolEmailQuestion.setReadOnly(lockExternalDataFields);
 		schoolEmailQuestion.setId(SECTION_PERSONAL_QUESTION_SCHOOLEMAIL_ID);
 		schoolEmailQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.school-email"));
 		schoolEmailQuestion.setMaximumLength("100");
@@ -1875,7 +1880,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Home Phone
 		final FormQuestionTO homePhoneQuestion = new FormQuestionTO();
 
-		homePhoneQuestion.setReadOnly(true);
+		homePhoneQuestion.setReadOnly(lockExternalDataFields);
 		homePhoneQuestion.setId(SECTION_PERSONAL_QUESTION_HOMEPHONE_ID);
 		homePhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.home-phone"));
 		homePhoneQuestion.setMaximumLength("12");
@@ -1886,7 +1891,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Work Phone
 		final FormQuestionTO workPhoneQuestion = new FormQuestionTO();
 
-		workPhoneQuestion.setReadOnly(true);
+		workPhoneQuestion.setReadOnly(lockExternalDataFields);
 		workPhoneQuestion.setId(SECTION_PERSONAL_QUESTION_WORKPHONE_ID);
 		workPhoneQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.work-phone"));
 		workPhoneQuestion.setMaximumLength("12");
@@ -1907,7 +1912,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Address
 		final FormQuestionTO addressQuestion = new FormQuestionTO();
 
-		addressQuestion.setReadOnly(true);
+		addressQuestion.setReadOnly(lockExternalDataFields);
 		addressQuestion.setId(SECTION_PERSONAL_QUESTION_ADDRESS_ID);
 		addressQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.address-1"));
 		addressQuestion.setMaximumLength("50");
@@ -1918,7 +1923,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// City
 		final FormQuestionTO cityQuestion = new FormQuestionTO();
 
-		cityQuestion.setReadOnly(true);
+		cityQuestion.setReadOnly(lockExternalDataFields);
 		cityQuestion.setId(SECTION_PERSONAL_QUESTION_CITY_ID);
 		cityQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.city"));
 		cityQuestion.setMaximumLength("50");
@@ -2049,7 +2054,7 @@ public class StudentIntakeFormManager { // NOPMD
 		stateQuestionOptions
 				.add(new FormOptionTO(UUID.randomUUID(), "WY", "WY"));
 
-		stateQuestion.setReadOnly(true);
+		stateQuestion.setReadOnly(lockExternalDataFields);
 		stateQuestion.setId(SECTION_PERSONAL_QUESTION_STATE_ID);
 		stateQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.state"));
 		stateQuestion.setMaximumLength("2");
@@ -2061,7 +2066,7 @@ public class StudentIntakeFormManager { // NOPMD
 		// Zip Code
 		final FormQuestionTO zipCodeQuestion = new FormQuestionTO();
 
-		zipCodeQuestion.setReadOnly(true);
+		zipCodeQuestion.setReadOnly(lockExternalDataFields);
 		zipCodeQuestion.setId(SECTION_PERSONAL_QUESTION_ZIPCODE_ID);
 		zipCodeQuestion.setLabel(getLabelNullSafe(blurbStore,"ssp.label.zip"));
 		zipCodeQuestion.setMaximumLength("10");
