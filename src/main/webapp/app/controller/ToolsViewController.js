@@ -60,6 +60,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
         });
         
         me.appEventsController.assignEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
+        me.appEventsController.assignEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
        
         if (me.personLite.get('id') != "") {
             me.loadPerson();
@@ -89,10 +90,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
         });
         
         me.appEventsController.removeEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
-
-		
-		
         
+        me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
+
         return me.callParent(arguments);
     },
     
@@ -177,6 +177,13 @@ Ext.define('Ssp.controller.ToolsViewController', {
         }
         else {
             me.authenticatedPerson.showUnauthorizedAccessAlert();
+        }
+    },
+    
+    onEmailCoach: function(){
+        var me = this;
+        if (me.person.getCoachPrimaryEmailAddress()) {
+            window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     }
 });
