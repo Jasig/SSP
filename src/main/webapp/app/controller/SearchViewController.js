@@ -174,18 +174,32 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 
-    updatePerson: function( record ) {
+    updatePerson: function( persons ) {
         var me=this;
-
-		if ( record.data.id != null ) {
-			me.personLite.set('id', record.data.id);
+        
+        var person = me.getRecordFromArray(persons);
+		if ( person.data.id != null ) {
+			me.personLite.set('id', person.data.id);
 		} else {
-			me.personLite.set('id', record.data.personId);
+			me.personLite.set('id', person.data.personId);
 		}
-		me.personLite.set('firstName', record.data.firstName);
-		me.personLite.set('middleName', record.data.middleName);
-		me.personLite.set('lastName', record.data.lastName);
-		me.personLite.set('displayFullName', record.data.firstName + ' ' + record.data.lastName);
+		me.personLite.set('firstName', person.data.firstName);
+		me.personLite.set('middleName', person.data.middleName);
+		me.personLite.set('lastName', person.data.lastName);
+		me.personLite.set('displayFullName', person.data.firstName + ' ' + person.data.lastName);
+	},
+	
+	getRecordFromArray: function(records){
+		var record;
+		if(Array.isArray(records)){
+			if(records.length == 1)
+				record = record[0];
+			else
+				throw "more than one record found, expect only one" 
+		}
+		else
+			record = records;
+		return record
 	},
 	
 	onViewReady: function(comp, eobj){
@@ -255,7 +269,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'retrieveCaseload', callBackFunc: me.onRetrieveCaseload, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
@@ -891,8 +904,14 @@ Ext.define('Ssp.controller.SearchViewController', {
     	record.set("firstName", params.person.get("firstName"));
     	record.set("middleName", params.person.get("middleName"));
     	record.set("lastName", params.person.get("lastName"));
+		var coach = params.person.get("coach");
+		if(coach){
+			record.set("coachLastName",  coach.lastName);
+			record.set("coachFirstName",  coach.firstName);
+			record.set("coachId",   coach.id);
+		}
     	record.set("currentProgramStatusName", "Active");
-    	me.updatePerson([record]);
+    	me.updatePerson(record);
 		me.appEventsController.getApplication().fireEvent('loadPerson');
     }
 });
