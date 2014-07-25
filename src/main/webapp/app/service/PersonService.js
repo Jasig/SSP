@@ -45,11 +45,10 @@ Ext.define('Ssp.service.PersonService', {
         callbacks.success( r, callbacks.scope );
     },
 
-
-    beforeGetRequestFailure: function ( response, callback, scope) {
+    beforeGetRequestFailure: function ( response, callbacks) {
         var me=this;
         me.apiProperties.handleError( response );
-        callbacks( response, scope );
+        callbacks.failure( response, callbacks.scope );
     },
 
     newBeforeGetRequestSuccess: function(callbacks) {
