@@ -66,7 +66,7 @@ Ext.define('Ssp.model.SearchPerson', {
 		var lastName = me.get('coachLastName');
 		if( me.get('coach')){
       		firstName = me.get('coach')? me.get('coach').firstName : "";
-      		astName = me.get('coach')? me.get('coach').lastName : "";
+      		lastName = me.get('coach')? me.get('coach').lastName : "";
 		}
       	return firstName + " " + lastName;
      },
