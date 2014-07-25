@@ -20,6 +20,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 	extend: 'Deft.mvc.ViewController',    
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
+		appEventsController: 'appEventsController',
     	campusesStore: 'campusesStore',
     	campusServicesStore: 'campusServicesStore',
     	challengeCategoriesAllStore: 'challengeCategoriesAllStore',
@@ -193,5 +194,11 @@ Ext.define('Ssp.controller.AdminViewController', {
 				}
 			});
 		}
+	},
+	
+	destroy: function(){
+		if(sspInDevelopMode)
+			this.appEventsController.checkAllObjectsForEvents();
+		return this.callParent(arguments);
 	}
 });

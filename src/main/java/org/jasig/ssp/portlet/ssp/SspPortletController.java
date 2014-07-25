@@ -37,6 +37,9 @@ public final class SspPortletController {
 	@Value("#{configProperties.ssp_main_use_minifed_js}")
 	private boolean sspMainUseMinifiedJs = false;
 	
+	@Value("#{configProperties.ssp_set_develop_mode_on}")
+	private boolean developModeOn = false;
+	
 	@Autowired
 	private ServerService serverService;
 	
@@ -44,6 +47,7 @@ public final class SspPortletController {
 	public ModelAndView show(){
 		Map<String,Object> model = new HashMap<String,Object>();
 		model.put("useMinified", sspMainUseMinifiedJs);
+		model.put("developModeOn", developModeOn);
 		
 		try{
 			String build = "/versioned/" + serverService.getVersionProfile().get("buildDate").toString();
