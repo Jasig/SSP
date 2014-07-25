@@ -132,9 +132,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     showByPermission:function(element, hasPermission){
 		var me = this;
 		if(hasPermission)
-			me.showElement(me.getViewCoachingHistoryButton());
+			me.showElement(element);
 		else
-			me.hideElement(me.getViewCoachingHistoryButton());
+			me.hideElement(element);
 	},
 
 	hideElement: function(element){
