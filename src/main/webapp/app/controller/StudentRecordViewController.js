@@ -110,8 +110,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     	if(args && args.person){
     		me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
 			me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
+			me.showByPermission(me.getEmailCoachButton(), me.authenticatedPerson.hasAccess('EMAIL_COACH_BUTTON'));
 			me.showElement(me.getStudentRecordEditButton());
-			me.showElement(me.getEmailCoachButton());
 			var fullName = args.person.getFullName();
 			var coachName = args.person.getCoachFullName();
 			if(me.getView())
