@@ -912,6 +912,5 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
     	record.set("currentProgramStatusName", "Active");
     	me.updatePerson(record);
-		me.appEventsController.getApplication().fireEvent('loadPerson');
     }
 });
