@@ -85,12 +85,18 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         'referralSourceEdit': {
             click: 'onReferralSourceEditButtonClick'
-        }
+        },
+        view: {
+    		afterlayout: {
+    			fn: 'onAfterLayout',
+    			single: true
+    		}
+    	}
     
     },
     init: function(){
         var me = this;
-        var id = me.personLite.get('id');
+        
         me.resetForm();
 
         if(me.sapStatusesStore.getTotalCount() <= 0){
@@ -99,7 +105,24 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if(me.financialAidFilesStore.getTotalCount() <= 0){
 			me.financialAidFilesStore.load();
         }
-        if (id != "") {
+        
+        if (!me.programStatusChangeReasonsStore.getTotalCount()) {
+			me.programStatusChangeReasonsStore.load({
+				params: {
+					start: 0,
+					limit: 50
+				}
+			});
+			
+		}
+        
+        return me.callParent(arguments);
+    },
+    
+    onAfterLayout:function(){
+		var me = this;
+    	var id = me.personLite.get('id');
+    	if (id != "") {
             // display loader
             me.getView().setLoading(true);
 
@@ -123,22 +146,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
                 scope: me
             });
-			
-			
+			me.getPersonSuccess();
         }
-		
-		if (!me.programStatusChangeReasonsStore.getTotalCount()) {
-			me.programStatusChangeReasonsStore.load({
-				params: {
-					start: 0,
-					limit: 50
-				}
-			});
-			
-		}
-		me.getPersonSuccess();
-        return me.callParent(arguments);
     },
+    
     onRegStoreLoaded: function() {
     	var me=this;
         var redTerms = '';
