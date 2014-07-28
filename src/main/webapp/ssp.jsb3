@@ -3019,6 +3019,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.store.LtiSspUserFieldNames",
+                    "name": "LtiSspUserFieldNames.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.controller.admin.apikey.lticonsumer.EditLTIConsumerAdminViewController",
                     "name": "EditLTIConsumerAdminViewController.js",
                     "path": "/app/controller/admin/apikey/lticonsumer/"
