@@ -507,7 +507,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	 showColumn: function( show, dataIndex ) {
 		var me=this;
-        var column = Ext.ComponentQuery.query('.gridcolumn[dataIndex='+dataIndex+']')[0];
+        var column = me.getView().query('.gridcolumn[dataIndex='+dataIndex+']')[0];
     	if ( column ) {
     	    if ( show ) {
                 column.show();
