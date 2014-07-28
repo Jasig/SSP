@@ -197,9 +197,10 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     			scope: me
     		};	
     		Ext.Msg.show(dialogOpts);
-    		me.onCancelClick();
-    		me.appEventsController.getApplication().fireEvent('updateSearchStoreRecord',{person:me.person});
-    		me.appEventsController.getApplication().fireEvent('loadPerson');
+			me.getView().close();
+			me.appEventsController.getApplication().fireEvent('updateSearchStoreRecord',{person:me.person});
+			me.appEventsController.getApplication().fireEvent('loadPerson');
+	    
 		}else{
 			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
 		}    	
@@ -435,6 +436,9 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     }, 
     
     onCancelClick: function(button){
+		this.person.set('id','');
+		this.personLite.set('id','');
+		this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     	this.getView().close();
     },
  
