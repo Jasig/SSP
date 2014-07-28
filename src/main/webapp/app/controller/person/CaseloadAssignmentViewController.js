@@ -653,7 +653,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var me=scope; 
     	me.getView().setLoading( false );
 		me.loadStudentToolsView();  	
-		
+		me.appEventsController.getApplication().fireEvent('updateStudentRecord', {'person':me.person}); 
 		var dialogOpts = {
 			buttons: Ext.Msg.OK,
 			icon: Ext.Msg.INFO,
@@ -696,6 +696,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     loadStudentToolsView: function(){
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
+		this.appEventsController.getApplication().fireEvent('updateStudentRecord', {'person':this.person}); 
     },
 
 });
