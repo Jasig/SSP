@@ -54,6 +54,8 @@ public class PersonSearchFormTO
 	
 	private PersonTO coach;
 	
+	private PersonTO watcher;
+	
 	private PersonTO odsCoach;
 	
 	private UUID disabilityStatusId;
@@ -275,6 +277,14 @@ public class PersonSearchFormTO
 	public void setSpecialServiceGroupRequired(
 			Boolean specialServiceGroupRequired) {
 		this.specialServiceGroupRequired = specialServiceGroupRequired;
+	}
+
+	public PersonTO getWatcher() {
+		return watcher;
+	}
+
+	public void setWatcher(PersonTO watcher) {
+		this.watcher = watcher;
 	}
 
 }

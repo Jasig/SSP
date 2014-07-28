@@ -62,6 +62,7 @@ public class SearchParameters {
 	static final String NOT_USED = "Not Used";
 	static final String ALL = "ALL";
 	private static final String COACH_NAME = "coachName";
+	private static final String WATCHER_NAME = "watcherName";
 	private static final String ODS_COACH_NAME = "odsCoachName";
 	private static final String TERM_CODE = "termCode";
 	private static final String TERM_NAME = "termName";
@@ -304,7 +305,9 @@ public class SearchParameters {
 	static final void addCoachNameToMap(final PersonTO coach, final Map<String, Object> parameters) {
 		addPersonToMap(COACH_NAME, ALL, coach, parameters);
 	}
-
+	static final void addWatcherNameToMap(final PersonTO watcher, final Map<String, Object> parameters) {
+		addPersonToMap(WATCHER_NAME, ALL, watcher, parameters);
+	}
 	static final void addPersonToMap(final String label, final String ifValueIsNull,
 			PersonTO person, Map<String, Object> parameters) {
 		parameters.put(label, getFullName(person, ifValueIsNull));
@@ -588,5 +591,25 @@ public class SearchParameters {
 			parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus().toString());
 		else
 			parameters.put(SearchParameters.PLAN_STATUS, NOT_USED);
+	}
+
+	public static void addWatcher(UUID watcherId,
+			Map<String, Object> parameters,
+			PersonSearchFormTO personSearchForm, PersonService personService,
+			PersonTOFactory personTOFactory) throws ObjectNotFoundException {
+		
+		PersonTO watcher = getPerson(watcherId, personService,
+				personTOFactory);
+		SearchParameters.addPersonToMap(WATCHER_NAME, NOT_USED, watcher, parameters);
+		personSearchForm.setWatcher(watcher);
+	}
+	public static void addWatcher(UUID watcherId,
+			Map<String, Object> parameters,
+			 PersonService personService,
+			PersonTOFactory personTOFactory) throws ObjectNotFoundException {
+		
+		PersonTO watcher = getPerson(watcherId, personService,
+				personTOFactory);
+		SearchParameters.addPersonToMap(WATCHER_NAME, NOT_USED, watcher, parameters);
 	}
 }

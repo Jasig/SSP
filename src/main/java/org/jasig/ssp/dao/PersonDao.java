@@ -42,6 +42,7 @@ import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -417,7 +418,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("coach", alias);
 		return true;
 	}
-	
 	protected Criteria setBasicSearchCriteria(Criteria criteria, final PersonSearchFormTO personSearchTO){
 		Boolean coachCriteriaCreated = false;
 		if (personSearchTO.getCoach() != null
@@ -425,10 +425,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
 			criteria.add(Restrictions.eq("c.id",
 					personSearchTO.getCoach().getId()));
-		}else{
-			
 		}
-		
+		if (personSearchTO.getWatcher() != null
+				&& personSearchTO.getWatcher().getId() != null) {
+			criteria.createCriteria("watchers").add(Restrictions.eq("person.id", personSearchTO.getWatcher().getId()));
+		}		
 		if (personSearchTO.getHomeDepartment() != null
 				&& personSearchTO.getHomeDepartment().length() > 0) {
 			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
@@ -694,6 +695,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("studentType.code").as("studentTypeAsCode"));
 
 		criteria.createAlias("coach", "c");
+		criteria.createAlias("watchers", "watcher", JoinType.LEFT_OUTER_JOIN);
+
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
 			// sql server requires all these to part of the grouping

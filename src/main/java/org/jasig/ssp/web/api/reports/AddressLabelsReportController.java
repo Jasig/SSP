@@ -117,7 +117,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 	public void getAddressLabels(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
-			final @RequestParam(required = false) UUID coachId,			
+			final @RequestParam(required = false) UUID coachId,		
+			final @RequestParam(required = false) UUID watcherId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
@@ -138,6 +139,8 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
+		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 

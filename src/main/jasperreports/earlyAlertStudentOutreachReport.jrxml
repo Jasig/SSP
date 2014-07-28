@@ -35,6 +35,7 @@
 	</subDataset>
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
+	<parameter name="watcherName" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
@@ -101,6 +102,16 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="295" y="40" width="119" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{watcherName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="230" y="40" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Watcher:]]></text>
+			</staticText>
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="11" y="40" width="100" height="15"/>
 				<textElement/>
@@ -131,6 +142,7 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
+			
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="72" width="116" height="15"/>
 				<textElement/>

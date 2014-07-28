@@ -127,6 +127,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = true) UUID coachId,	
+			final @RequestParam(required = true) UUID watcherId,	
 			final @RequestParam(required = false) UUID odsCoachId,
 			final @RequestParam(required = false) UUID disabilityStatusId,
 			final @RequestParam(required = false) UUID disabilityTypeId,
@@ -151,7 +152,7 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addOdsCoach(odsCoachId, parameters, personSearchForm, personService, personTOFactory);
-
+		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
 				referralSourcesIds,

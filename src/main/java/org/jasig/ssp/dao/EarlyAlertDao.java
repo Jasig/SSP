@@ -296,7 +296,7 @@ public class EarlyAlertDao extends
 							"earlyalert_closed"));
 
 			addBasicStudentProperties(projections, criteria);
-
+	
 			projections.add(Projections.groupProperty("id").as(
 					"earlyalert_earlyAlertId"));
 			criteria.setProjection(projections);
@@ -661,7 +661,11 @@ public class EarlyAlertDao extends
 			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
 					personSearchForm.getHomeDepartment()));
 		}
-
+		if (personSearchForm.getWatcher() != null
+				&&personSearchForm.getWatcher().getId() != null) {
+			criteria.createAlias("person.watchers", "watchers");
+			criteria.createCriteria("watchers").add(Restrictions.eq("person.id", personSearchForm.getWatcher().getId()));
+		}
 		if (personSearchForm.getProgramStatus() != null) {
 			criteria.createAlias("person.programStatuses",
 					"personProgramStatuses");

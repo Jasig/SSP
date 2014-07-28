@@ -34,6 +34,7 @@
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
+	<parameter name="watcherName" class="java.lang.String"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
 	<parameter name="initialTerm" class="java.lang.String"/>
 	<parameter name="comparisonTerm" class="java.lang.String"/>
@@ -57,6 +58,8 @@
 	<field name="earlyAlertsInitialTerm" class="java.lang.Long"/>
 	<field name="earlyAlertsComparisonTerm" class="java.lang.Long"/>
 	<field name="coachName" class="java.lang.String"/>
+	<field name="watcherName" class="java.lang.String"/>
+	
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
@@ -102,6 +105,16 @@
 				<textElement/>
 				<text><![CDATA[Coach:]]></text>
 			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="407" y="32" width="119" height="15" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{watcherName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="313" y="32" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Watcher:]]></text>
+			</staticText>			
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="115" y="47" width="100" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>

@@ -117,6 +117,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController 
 			final HttpServletResponse response,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) UUID coachId,
+			final @RequestParam(required = false) UUID watcherId,
 			final @RequestParam(required = false) UUID programStatus,	
 			final @RequestParam(required = false) Boolean hasStepDetails,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
@@ -134,6 +135,9 @@ public class JournalSessionDetailsReportController extends ReportBaseController 
 		final JournalStepSearchFormTO personSearchForm = new JournalStepSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
+		
+		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
+
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 

@@ -258,8 +258,10 @@ var ssp = ssp || {};
 			
 			// 1000 limit is max allowed by server side
 			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=-1&sortDirection=ASC", that
-					.locate('assignedCounselorGroup'));			
-
+					.locate('assignedCounselorGroup'));
+			
+			loadCoachInput("/ssp/api/1/person/coach/?sort=lastName&page=1&start=0&limit=-1&sortDirection=ASC", that
+					.locate('watcherGroup'));
 			loadHomeDepartmentInput("/ssp/api/1/personStaffDetails/homeDepartments/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('homeDepartmentGroup'))
 			loadTextForm(
@@ -465,6 +467,7 @@ var ssp = ssp || {};
 							referralSourceGroup : '.input-referral-source-group',
 							earlyAlertReferralGroup: '.input-early-alert-referral-group',
 							assignedCounselorGroup : '.input-assigned-counselor-group',
+							watcherGroup : '.input-watcher-group',
 							journalStepDetailGroup : '.input-journal-step-detail-group',
 							campusGroup: '.input-campus-group',
 							termGroup: '.input-term-group',

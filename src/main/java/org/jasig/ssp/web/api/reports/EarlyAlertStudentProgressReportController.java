@@ -135,6 +135,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) UUID coachId,	
+			final @RequestParam(required = false) UUID watcherId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) UUID programStatus,
@@ -148,7 +149,9 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
-		
+
+		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
+
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
 				null,

@@ -536,6 +536,10 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private Set<PersonDisabilityAgency> disabilityAgencies;	
 
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="student")
+	@Cascade({ CascadeType.LOCK })
+	private List<WatchStudent> watchers;
 	/**
 	 * Any Disability Types for a student.
 	 * 
@@ -1363,6 +1367,14 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	public void setCompletedItems(Set<PersonCompletedItem> completedItems) {
 		this.completedItems = completedItems;
+	}
+
+	public List<WatchStudent> getWatchers() {
+		return watchers;
+	}
+
+	public void setWatchers(List<WatchStudent> watchers) {
+		this.watchers = watchers;
 	}
 
 }

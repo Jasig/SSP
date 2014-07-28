@@ -38,6 +38,7 @@
 	<parameter name="reportDate" class="java.lang.String"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
 	<parameter name="coachName" class="java.lang.String"/>
+	<parameter name="watcherName" class="java.lang.String"/>
 	<parameter name="anticipatedStartTerm" class="java.lang.String"/>
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
@@ -145,6 +146,16 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="317" y="34" width="100" height="16"/>
+				<textElement/>
+				<text><![CDATA[Watcher:]]></text>
+			</staticText>			
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="411" y="34" width="100" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{watcherName}]]></textFieldExpression>
+			</textField>			
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" mode="Opaque" x="2" y="50" width="100" height="16"/>
 				<textElement>

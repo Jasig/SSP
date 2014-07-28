@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
@@ -45,6 +46,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -84,7 +86,8 @@ public class CaseloadActivityReportController extends ReportBaseController {
 	private transient PersonService personService;
 	@Autowired
 	protected transient StudentTypeService studentTypeService;
-	
+	@Autowired
+	private transient PersonTOFactory personTOFactory;
 	@Autowired
 	protected transient ServiceReasonService serviceReasonService;	
 	
@@ -118,6 +121,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 	void getCaseLoadActivity(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) UUID coachId,
+			final @RequestParam(required = false) UUID watcherId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
@@ -137,9 +141,14 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 		List<Person> coaches = SearchParameters.getCoaches(coachId, homeDepartment, personService);
 		Collections.sort(coaches, Person.PERSON_NAME_AND_ID_COMPARATOR);
-			
+		
 		final Map<String, Object> parameters = Maps.newHashMap();
-
+		
+		if(watcherId != null)
+		{
+			SearchParameters.addWatcher(watcherId, parameters, personService, personTOFactory);
+		}
+		
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
 		SearchParameters.addServiceReasonToMap(cleanServiceReasonIds, parameters, serviceReasonService);

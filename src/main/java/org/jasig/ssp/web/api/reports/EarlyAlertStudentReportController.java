@@ -123,7 +123,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String homeDepartment,
-			final @RequestParam(required = false) UUID coachId,			
+			final @RequestParam(required = false) UUID coachId,	
+			final @RequestParam(required = false) UUID watcherId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
@@ -140,7 +141,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController {
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
-		
+		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
+	
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
 				null,

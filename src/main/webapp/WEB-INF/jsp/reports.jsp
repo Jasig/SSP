@@ -111,7 +111,17 @@
 		</div>
 		<div class="ea-clear"></div>		
 		
-		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+				
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="programStatusGroup" name="programStatus" class="input-program-status-group">
@@ -312,7 +322,18 @@
 			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>
-
+		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+			
 
 		<!-- program Status -->
 		<div class="ea-input">
@@ -484,6 +505,18 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+		
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="caseloadActivityHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -494,7 +527,6 @@
 			<span>Home Department:</span>
 		</div>
 		<div class="ea-clear"></div>
-
 
 
 		<!-- Student Type -->
@@ -872,7 +904,16 @@
 		</div>
 		<div class="ea-clear"></div>		
 		
-		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>			
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgramStatusGroup" name="programStatus" class="input-program-status-group">
@@ -1028,7 +1069,16 @@
 		</div>
 		<div class="ea-clear"></div>		
 		
-		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>		
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentReferralProgramStatusGroup" name="programStatus" class="input-program-status-group">
@@ -1157,7 +1207,17 @@
 		</div>
 		<div class="ea-clear"></div>		
 		
-		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+						
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentProgressProgramStatusGroup" name="programStatus" class="input-program-status-group">
@@ -1282,7 +1342,17 @@
 			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
-		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+						
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachProgramStatusGroup" name="programStatus" class="input-program-status-group">
@@ -1444,7 +1514,16 @@
 			<span>Assigned Coach:</span>
 		</div>
 		<div class="ea-clear"></div>		
-		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>			
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeProgramStatusGroup" name="programStatus" class="input-program-status-group">
@@ -1656,6 +1735,17 @@
 		</div>
 		<div class="ea-clear"></div>	
 		
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+						
 		<!-- ODS Counselor -->
 		<div class="ea-input">
 			<select id="disabilityServicesODSCounselorGroup" name="odsCoachId" class="input-assigned-counselor-group">
@@ -1888,7 +1978,17 @@
 		</div>
 		<div class="ea-clear"></div>	
 		
-	
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>	
+					
 		<!-- Disability Status -->
 		<div class="ea-input">
 			<select class='input-disability-status-group' id="ddisabilityAccomodationDisabilityStatusId" name="disabilityStatusId">
@@ -2111,8 +2211,18 @@
 		<div class="ea-label">
 			<span>Assigned Coach:</span>
 		</div>
-		<div class="ea-clear"></div>		
-		
+		<div class="ea-clear"></div>	
+			
+		<!-- WatchList -->
+		<div class="ea-input">
+			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Watch List For:</span>
+		</div>
+		<div class="ea-clear"></div>			
 		<!-- program Status -->
 		<div class="ea-input">
 			<select id="journalSessionDetailProgramStatusGroup" name="programStatus" class="input-program-status-group">

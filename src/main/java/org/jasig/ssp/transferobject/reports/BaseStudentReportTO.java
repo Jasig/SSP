@@ -98,6 +98,9 @@ public class BaseStudentReportTO implements Serializable {
 	private String studentTypeCodes;
 	private Integer registrationStatus;
 	private CoachPersonLiteTO coach;
+	
+	private List<CoachPersonLiteTO> watchers = new ArrayList<CoachPersonLiteTO>();
+
 	private String coachFirstName;
 	private String coachLastName;
 	private String coachMiddleName;
@@ -411,7 +414,6 @@ public class BaseStudentReportTO implements Serializable {
 		setCoach(new CoachPersonLiteTO(person.getCoach()));
 		setStudentType(person.getStudentType().getName());
 		
-		
 		if(getStudentType().equals(ILP))
 			setIsIlp(true);
 		else
@@ -439,6 +441,7 @@ public class BaseStudentReportTO implements Serializable {
 		setCoachSchoolId(person.getCoachSchoolId());
 		setCoachUsername(person.getCoachUsername());
 		setCoach(person.getCoach());
+		setWatchers(person.getWatchers());
 		setStudentType(person.getStudentType());
 		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
 		setRegistrationStatus(person.getRegistrationStatus());
@@ -821,6 +824,14 @@ public String getLastTermRegistered() {
  */
 public void setLastTermRegistered(String lastTermRegistered) {
 	this.lastTermRegistered = lastTermRegistered;
+}
+
+public List<CoachPersonLiteTO> getWatchers() {
+	return watchers;
+}
+
+public void setWatchers(List<CoachPersonLiteTO> watchers) {
+	this.watchers = watchers;
 }
 
 }
