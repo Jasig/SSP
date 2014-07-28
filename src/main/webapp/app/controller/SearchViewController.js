@@ -121,6 +121,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
 		}
+		me.personLite.on('idchanged', me.personChanged, me);
 
         if ( tabSelection === 'myCaseload' ) {
             me.displayCaseloadBar();
@@ -129,6 +130,16 @@ Ext.define('Ssp.controller.SearchViewController', {
         }
 
 		return me.callParent(arguments);
+    },
+    
+    personChanged: function(){
+ 	   var record = this.getView().getStore().findRecord("id", this.personLite.get("id"));
+ 	   if(record != null){
+ 			if(!this.getView().getSelectionModel().isSelected(record ))
+ 				this.getView().getSelectionModel().select(record, false, true);
+ 		}else{
+ 			this.getView().getSelectionModel().deselectAll(true);
+ 		}
     },
     
     onTextStoreLoad:function(){
@@ -249,7 +260,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	
 		me.termsStore.removeListener("load", me.onTermsStoreLoad, me);
 		me.textStore.removeListener("load", me.onTextStoreLoad, me, {single: true});
-		
+		me.personLite.un('idchanged', me.personChanged, me);
 		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
@@ -709,6 +720,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     searchSuccess: function(){
     	var me=this;
+    	me.personChanged();
     	me.getView().setLoading( false );
 		me.getSearchGridPager().onLoad();
     },
