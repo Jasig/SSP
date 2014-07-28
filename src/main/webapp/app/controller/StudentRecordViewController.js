@@ -184,36 +184,40 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     
     updateStudentRecord: function(args){
 		var me = this;
-    	if(args && args.person){
+    	if(args && args.person)	{
     		
-            var successFunc = function(response, view){
-            	if(response.responseText === '')
-            	{
-                    me.getWatchStudentButton().setText('<u>Watch Student</u>');
-            	}
-            	else
-            	{
-        	    	if(response.responseText)
-        	    	{
-        	    		me.person.watchId = Ext.decode(response.responseText).id;
-        	    	}
-            		me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
-            	}
-            };  		
-            var failureFunc = function(response, view){
-            	me.getWatchStudentButton().setText('<u>Watch Student</u>');
-            };             
-            studentId = args.person.get('id');
-    		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
-
-    		url = url + '/' + studentId;
-            
-            me.apiProperties.makeRequest({
-                url: url,
-                method: 'GET',
-                successFunc: successFunc,
-    			failureFunc: failureFunc
-            });
+    		if(me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'))
+    		{
+    			
+	            var successFunc = function(response, view){
+	            	if(response.responseText === '')
+	            	{
+	                    me.getWatchStudentButton().setText('<u>Watch Student</u>');
+	            	}
+	            	else
+	            	{
+	        	    	if(response.responseText)
+	        	    	{
+	        	    		me.person.watchId = Ext.decode(response.responseText).id;
+	        	    	}
+	            		me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
+	            	}
+	            };  		
+	            var failureFunc = function(response, view){
+	            	me.getWatchStudentButton().setText('<u>Watch Student</u>');
+	            };             
+	            studentId = args.person.get('id');
+	    		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
+	
+	    		url = url + '/' + studentId;
+	            
+	            me.apiProperties.makeRequest({
+	                url: url,
+	                method: 'GET',
+	                successFunc: successFunc,
+	    			failureFunc: failureFunc
+	            });
+    		}
 
 			me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
 			me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
