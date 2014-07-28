@@ -107,7 +107,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     
     updateStudentRecord: function(args){
 		var me = this;
-    	if(args && args.person){
+		if(args && args.person && args.person.get("id") && args.person.get("id").length && args.person.get("id").length > 0){
     		me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
 			me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
 			me.showElement(me.getEmailCoachButton());
