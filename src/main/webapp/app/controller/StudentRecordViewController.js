@@ -184,7 +184,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     
     updateStudentRecord: function(args){
 		var me = this;
-    	if(args && args.person)	{
+		if(args && args.person && args.person.get("id") && args.person.get("id").length && args.person.get("id").length > 0){
     		
     		if(me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'))
     		{
