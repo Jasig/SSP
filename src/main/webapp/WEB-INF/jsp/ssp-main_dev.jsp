@@ -50,6 +50,7 @@
 	// in which to render the SSP App.
 	var renderSSPFullScreen = false;
 	var sspParentDivId = '${n}ssp';
+	 var sspInDevelopMode = ${model.developModeOn};
 </script>
 
 <!-- SSP Application -->
