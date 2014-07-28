@@ -114,17 +114,18 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if(me.termsStore.getTotalCount() == 0){
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
-		}
+		};
 		if(me.textStore.getTotalCount() == 0){
 			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.textStore.load();
 		}else{
 			me.onTextStoreLoad();
-		}
+		};
 		if(me.configStore.getTotalCount() == 0){
 			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
-		}
+		};
+		me.personLite.on('idchanged', me.personChanged, me);
 	   	// load program statuses
 		me.getProgramStatuses();
 		
@@ -140,6 +141,16 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 		return me.callParent(arguments);
     },
+    
+   personChanged: function(){
+	   var record = this.getView().getStore().findRecord("id", this.personLite.get("id"));
+	   if(record != null){
+			if(!this.getView().getSelectionModel().isSelected(record ))
+				this.getView().getSelectionModel().select(record, false, true);
+		}else{
+			this.getView().getSelectionModel().deselectAll(true);
+		}
+   },
     
     onTextStoreLoad:function(){
     	var me = this;
