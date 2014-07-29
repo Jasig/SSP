@@ -35,6 +35,14 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 		return this.app;
 	},
 	
+	loadMaskOn: function(){
+		Ext.ComponentQuery.query('sspview')[0].setLoading(true);
+	},
+	
+	loadMaskOff: function(){
+		Ext.ComponentQuery.query('sspview')[0].setLoading(false);
+	},
+	
 	/**
 	 * @args
 	 *   eventName - the name of an event to listen against
