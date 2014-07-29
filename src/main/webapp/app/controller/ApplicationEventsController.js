@@ -103,7 +103,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	checkAllObjectsForEvents:function(){
 		var objectCount = this.eventObjectCount();
 		if(!this.eventObjectCounts){
-			this.eventObjectCounts[objectCount];
+			this.eventObjectCounts = [objectCount];
 		}else if(this.eventObjectCounts.length < 2){
 			this.eventObjectCounts.push(objectCount);
 		}else{
