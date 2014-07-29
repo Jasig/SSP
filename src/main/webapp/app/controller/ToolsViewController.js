@@ -100,7 +100,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		var me = this;
 		if(me.person.get('id') != me.personLite.get('id')){
 			var callbacks = {success: me.getPersonSuccess, failure:me.getPersonFailure, scope:me};
-			me.personService.getSync(me.personLite.get('id'), callbacks);
+			me.appEventsController.loadMaskOn();
+			me.personService.get(me.personLite.get('id'), callbacks);
 		}else if(me.person.get('id') ){
 			me.loadToolWithPersonLoaded();
 		}  	
@@ -109,6 +110,8 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	getPersonSuccess: function(response, scope) {
         var me = scope;
         me.person.populateFromGenericObject(response);
+        
+		me.appEventsController.loadMaskOff();
 		me.loadToolWithPersonLoaded();
     },
 	
@@ -123,6 +126,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	},
 
     getPersonFailure: function() {
+		 me.appEventsController.loadMaskOff();
     },
     
     onLoadIntake: function(){
