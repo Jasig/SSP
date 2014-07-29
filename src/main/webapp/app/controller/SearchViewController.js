@@ -269,7 +269,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	
 		me.termsStore.removeListener("load", me.onTermsStoreLoad, me);
 		me.textStore.removeListener("load", me.onTextStoreLoad, me, {single: true});
-		
+		me.personLite.un('idchanged', me.personChanged, me);
 		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
