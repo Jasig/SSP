@@ -32,13 +32,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     	termsStore:'termsStore',
 		colorsAllUnpagedStore: 'colorsAllUnpagedStore'    	
 	},
-	destroy: function () {
-		//Overwritten so that object does not get destroyed when removed from the view
-		var me=this;
-		me.store.removeAll();
-	},
-	onDestroy: function () {
-	},
+	
 	store: null,
     controller: 'Ssp.controller.tool.map.SemesterPanelViewController',
     columnLines: false,

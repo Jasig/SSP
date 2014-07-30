@@ -16,71 +16,323 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
+Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
-    inject:{
+	inject:{
+		currentMapPlan:'currentMapPlan',
 		appEventsController: 'appEventsController',
-    	termsStore:'termsStore',
-    	mapPlanService:'mapPlanService',
-		formUtils: 'formRendererUtils',
-		person: 'currentPerson',
-		authenticatedPerson: 'authenticatedPerson',
-        personLite: 'personLite',
-    	currentMapPlan: 'currentMapPlan',
-    	mapEventUtils: 'mapEventUtils',
+    	courseService:'courseService',
+		electiveStore: 'electivesAllUnpagedStore',
+		transcriptStore: 'courseTranscriptsStore',
+    	formUtils: 'formRendererUtils',
 		semesterStores : 'currentSemesterStores',
-        electiveStore: 'electivesAllUnpagedStore',
-        configStore: 'configurationOptionsUnpagedStore',
-        colorStore: 'colorsAllUnpagedStore'
-    },
-    semesterPanels : new Array(),
-    yearFieldSets : new Array(),
-	control: {
-	    	view: {
-				afterlayout: {
-					fn: 'onAfterLayout',
-					single: true
-				}
-	    	}
+		mapPlanService:'mapPlanService',
+		person: 'currentPerson',
+		termsStore: 'termsStore',
+		formRendererUtils: 'formRendererUtils',
+		coursesStore: 'coursesStore'		
+	},
+	
+	control:{
+		termNotesButton:{
+			selector:"#termNotesButton",
+			listeners: {
+                click: 'onTermNotesButtonClick'
+             }
+		},
+		isImportantTermButton:'#isImportantTermButton',
+		deleteButton:{
+			selector:"#deleteButton",
+			listeners: {
+                click: 'onDeleteButtonClick'
+             }
+		},
+		view: {
+			itemdblclick: 'onItemDblClick',
+			afterlayout: {
+				fn: 'onAfterLayout',
+				single: true
+			}
+    	}
 	},
 	config:{
 		minHrs : '0',
 		maxHrs: '0'
-	},
-	
+	},	
 	init: function() {
 		var me=this;
-		var id = me.personLite.get('id');
-		
-		
-		me.configStore.clearFilter();
-		me.configStore.load({
-            extraParams: {
-                limit: "-1"
-            } 
-        });
-		
-		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
-		
-		
-		me.appEventsController.getApplication().addListener('onBeforePlanLoad', me.onBeforePlanLoad, me);
-		me.appEventsController.getApplication().addListener('onAfterPlanLoad', me.updateAllPlanHours, me);
-		me.appEventsController.getApplication().addListener('onPlanLoad', me.onPlanLoad, me);
-		
-		me.appEventsController.assignEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me});
-		me.appEventsController.assignEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
+		//me.appEventsController.getApplication().assignListener("onAfterPlanLoad", me.updatePastTermButton, me);
+		me.appEventsController.assignEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.updatePastTermButton, scope: me});
+		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
+		me.getView().view.addListener('drop', me.onDrop, me);	
 
-
+		var helpButton = me.getView().tools[0];
+		if(me.currentMapPlan.get('isTemplate'))
+		{
+			helpButton.hidden = true;
+		}
+		else
+		{
+			helpButton.hidden = !me.getView().editable;
+		}
 		return me.callParent(arguments);
     },
-    resetForm: function() {
-        var me = this;
-        me.getView().getForm().reset();
+
+	onAfterLayout: function(){
+		var me = this;
+		me.setTermNoteButton();
+	},
+	updatePastTermButton: function(){
+		var me = this;
+		var helpButton = me.getView().tools[0];
+		if(me.currentMapPlan.get('isTemplate'))
+		{
+			helpButton.hidden = true;
+		}
+		else
+		{
+			helpButton.hidden = !me.getView().editable;
+		}
+		me.setTermNoteButton();
+	},
+	setTermNoteButton: function(){
+		var me = this;
+		var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
+		var button = me.getTermNotesButton();
+		var isImportantTermButton = me.getIsImportantTermButton();
+		if(termNote != undefined && termNote != null && termNote.data.isImportant){
+			isImportantTermButton.show();
+			Ext.select('.importantIconSmall').setStyle('left', '1px');
+		}else{
+			isImportantTermButton.hide();
+		}
+		if((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
+			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ){
+			button.setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
+			var tooltip = "Term Notes: "
+			if(termNote.data.contactNotes && termNote.data.contactNotes.length > 0)
+				tooltip += "Contact Notes: " + termNote.data.contactNotes + " ";
+			if(termNote.data.studentNotes && termNote.data.studentNotes.length > 0)
+					tooltip += "Student Notes: " + termNote.data.studentNotes + " ";	
+			button.setTooltip(tooltip);
+			return;
+		}
+	     button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
+	},
+	
+	onTermNotesButtonClick: function() {
+		var me = this;
+		if(me.termNotesPopUp == null || me.termNotesPopUp.isDestroyed)
+        	me.termNotesPopUp = Ext.create('Ssp.view.tools.map.TermNotes');
+		
+	    var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
+	    me.termNotesPopUp.query('form')[0].getForm().loadRecord(termNote);
+		me.termNotesPopUp.query('[name=saveButton]')[0].addListener('click', me.onTermNotesSave, me, {single:true});
+
+		
+        me.termNotesPopUp.center();
+        me.termNotesPopUp.show();
+    },
+    onDeleteButtonClick: function() {
+		var me = this;
+		var grid = me.getView();
+		var record = grid.getSelectionModel().getSelection()[0];
+		if(!grid.editable && !me.currentMapPlan.get('isTemplate'))
+		{
+		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
+		    return;
+		}
+		if(!record)
+		{
+			 	Ext.Msg.alert('SSP Error', 'Please select an item.'); 
+	    }
+		else
+		{
+			grid.store.remove(record);
+		}
+    },
+	onTermNotesSave: function(button){
+		var me = this;
+		 var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
+		me.termNotesPopUp.query('form')[0].getForm().updateRecord(termNote);
+		me.setTermNoteButton();
+		me.termNotesPopUp.close();
+	},
+    onItemDblClick: function(grid, record, item, index, e, eOpts) {
+		var me = this;
+		var courseRecord = record;
+		
+    		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().editable});
+    		me.coursePlanDetails.parentGrid = me.getView();
+    		
+    		
+			var creditHours = me.coursePlanDetails.query('#creditHours')[0];
+			
+
+			if(courseRecord.modelName == 'Ssp.model.external.Course')
+			{
+				var planCourse = new Ssp.model.tool.map.SemesterCourse(courseRecord.data);
+				var indexOf = grid.store.indexOf(courseRecord);
+				var array = new Array();
+				array[0] = planCourse;
+				grid.store.insert( indexOf != -1 ? indexOf : index ,array);
+				grid.store.remove(courseRecord);
+				
+			}
+			else
+			{
+				var planCourse = courseRecord;
+			
+			}
+	
+	
+		
+			me.electiveStore.clearFilter(true);
+			me.electiveStore.load();
+			me.formRendererUtils.applyAssociativeStoreFilter(me.electiveStore, record.get('electiveId'));	
+		
+			me.coursePlanDetails.query('form')[0].getForm().loadRecord(planCourse);
+			
+			creditHours.setValue(planCourse.get('creditHours'));
+			
+			var course = me.coursesStore.findRecord('code', planCourse.get('code'), 0, false, false, true);
+		
+			if(me.getMinHrs() == 0){
+				if(course != null)
+					creditHours.setMinValue(course.get('minCreditHours'));
+			}
+			else
+			{
+				creditHours.setMinValue(me.getMinHrs());
+			}
+    		if(me.getMaxHrs() == 0){
+				if(course != null)
+					creditHours.setMaxValue(course.get('maxCreditHours'));
+			}
+			else
+			{
+				creditHours.setMaxValue(me.getMaxHrs());
+			}
+		    
+			me.coursePlanDetails.query('#electiveId')[0].select(me.coursePlanDetails.electiveStore.getById(planCourse.get('electiveId')));
+    		me.coursePlanDetails.rowIndex = index;
+    		me.coursePlanDetails.semesterStore = grid.store;
+			me.coursePlanDetails.setTitle(planCourse.get('formattedCourse') + ' - ' + planCourse.get('title'));
+    		me.coursePlanDetails.center();
+    		me.coursePlanDetails.show();
+			
+    },
+    
+    onDrop: function(node, data, overModel, dropPosition, eOpts){
+		var me = this;
+		me.getView().setLoading(true);
+		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
+		if(previousSemesterPanel != undefined && previousSemesterPanel != null){
+    		me.droppedFromStore = data.view.getStore();
+		}
+		me.droppedRecord = data.records[0];
+		
+		me.setMinHrs(me.droppedRecord.data.minCreditHours);
+		me.setMaxHrs(me.droppedRecord.data.maxCreditHours);
+		
+		
+		me.validateCourses();
+		return true;
+    },
+
+
+	validateCourses: function(){
+		var me = this;
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            };
+		me.setOrderInTerm();
+		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
+		me.planWasDirty = me.currentMapPlan.dirty;
+		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
+            success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
+            scope: me,
+            isPrivate: true
+        });
+	},
+    
+    onValidateSuccess: function(serviceResponses){
+		var me = this;
+		 me.getView().setLoading(false);
+		var mapResponse = serviceResponses.successes.validatedPlan;
+		var planAsJsonObject = Ext.decode(mapResponse.responseText);
+		me.currentMapPlan.loadFromServer(planAsJsonObject);
+		// If the plan came back as valid, then we know a course was added and
+		// thus must be dirty, thus the 2nd arg. If not the user is given the
+		// option to undo the course add. Also, we need to be sure to update
+		// the dirty flag here rather than in onDrop() b/c this
+		// function may fire after onDrop() has already returned and
+		// Plan.loadFromServer() above lowers the dirty flag
+		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid") ? true : me.planWasDirty);
+		var panel = me.getView();
+		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
+		
+		var invalidReasons = planCourse.invalidReasons;
+    	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
+    		var message = " \n Are you sure you want to add the course? " 
+						+ planCourse.formattedCourse
+						+ " generates the following concerns: " 
+						+ invalidReasons;
+    		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.handleInvalidCourse, me);
+    	}else{
+			me.currentMapPlan.dirty = true;
+			me.setOrderInTerm();
+		}
+    },
+
+	setOrderInTerm: function(){
+		var me = this;
+		var store = me.getView().getStore();
+		for(i = 0; i < store.getCount(); i++){
+			var record = store.getAt(i);
+			record.set("orderInTerm", i);
+		}
+		
+	},
+    
+    handleInvalidCourse: function(buttonId){
+		var me = this;
+    	if(buttonId != 'yes'){
+        	var index = me.getView().getStore().findExact('code', me.droppedRecord.get("code"));
+			if(index >= 0){
+        		me.getView().getStore().removeAt(index);
+        		//It would be nice if ExtJs has an option to 'remove silently'.  Removing this from the store triggers the
+        		// 'isDirty' check done during global navigation.  Since we don't want the cancellation of the drop
+        		// to trip dirty (see SSP-2032), we clear out the 'removed' array.
+				me.getView().getStore().removed = [];
+				me.currentMapPlan.dirty = me.planWasDirty;
+				me.getView().getStore().sort("orderInTerm", "ASC");
+			}
+			me.restoreCourse();
+    	}else{
+			me.currentMapPlan.dirty = true;
+		}
+    },
+    
+	restoreCourse: function(){
+		var me = this;
+		if(me.droppedFromStore){
+			var rec = me.droppedRecord.copy(); // clone the record
+			Ext.data.Model.id(rec);// generate unique id
+			me.droppedFromStore.add(rec);
+			me.droppedFromStore.sort("orderInTerm", "ASC");
+		}
+	},
+	
+    onValidateFailure: function(validate){
+    	var me = this;
+    	
+    	 me.getView().setLoading(false);
     },
     
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
@@ -107,629 +359,20 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
             if ( callback ) {
                 callback.apply(me, [ serviceResponses ]);
             }
+            me.afterServiceHandler(serviceResponses);
         };
     },
 
-    // Just to avoid creating needless closures
-    noOp: function() {},
-
-	onAfterLayout: function(){
-		var me = this;
-		me.mapEventUtils.loadCurrentMap();
-	},
-
-	fireInitialiseMap: function(){
-		var me = this;
-		var id = me.personLite.get('id');
-	    
-	    if (id != "") {
-			me.getView().setLoading(true);
-			var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-	    	 me.mapPlanService.getCurrent(id, {
-	             success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
-	             failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
-	             scope: me
-	         });
-	    }
-	},
-	
-	clearSemesterStores: function(){
-		var me = this;
+	afterServiceHandler: function(serviceResponses){
 		
-		for(var index in me.semesterStores){
-			delete me.semesterStores[index];
-		}
 	},
-	
-	getTerms: function(mapPlan){
-		var me = this;
-		var terms;
+	destroy: function(){
+		var me=this;
 		
-		var termsStore = me.termsStore.getCurrentAndFutureTermsStore(true, 5);			
-		if(mapPlan){
-			var mapTerms = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(mapPlan));
-			Ext.Array.forEach(mapTerms, function(mapTerm) {
-				if(termsStore.findExact("code", mapTerm.get("code")) < 0)
-						termsStore.add(mapTerm);	
-			});
-		}
-		termsStore.sort('startDate','ASC');
-		return termsStore.getRange(0);
-	},
-	
-	fillSemesterStores: function(terms){
-		var me = this;
-		me.clearSemesterStores();
-		Ext.Array.forEach(terms, function(term) {
-			me.semesterStores[term.get('code')] = new Ssp.store.SemesterCourses();
-			me.semesterStores[term.get('code')].termName = term.get('name');
-			me.semesterStores[term.get('code')].termCode = term.get('code');
-			me.semesterStores[term.get('code')].editPastTerms = me.editPastTerms;
-		});
-	},
-	
-	onTermsStoreLoad:function(){
-		var me = this;
-		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
-		if(me.termsStore.getTotalCount() == 0){
-			me.getView().setLoading(false);
-			me.currentMapPlan.clearMapPlan();
-			me.currentMapPlan.set('personId',  me.personLite.get('id'));
-			me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
-			me.currentMapPlan.set('name','No Terms Found.');
-		}else
-			me.fireInitialiseMap();
-	},
-	
-	onCreateNewMapPlan:function(){
-		var me = this;
-		me.currentMapPlan.clearMapPlan();
-		me.currentMapPlan.set('personId',  me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
-		me.currentMapPlan.set('name','New Plan');
-		me.onCreateMapPlan();
-	},
-	clearPlanState: function(){
-		var me = this;
-		me.currentMapPlan.clearMapPlan();		
-		view.removeAll();
-	},
-	onCreateMapPlan:function(){
-		var me = this;
-		var terms = me.getTerms(me.currentMapPlan);
+		me.getIsImportantTermButton().removeListener("move", me.setTermNoteButton, me);
+		me.appEventsController.removeEvent({eventName: 'onAfterPlanLoad', callBackFunc: me.updatePastTermButton, scope: me});
+		me.getView().view.removeListener('drop', me.onDrop, me);
 		
-		if(terms.length == 0){
-			return;
-		}
-		me.fillSemesterStores(terms);
-		var view  = me.getView().getComponent("semestersets");
-		Ext.suspendLayouts();
-		view.removeAll(true);
-		if(view == null){
-			return;
-		}		
-		var i=0;
-		var termsets = [];
-		Ext.Array.forEach(terms, function(term) {
-			if(termsets.hasOwnProperty(term.get("reportYear"))){
-				termsets[term.get("reportYear")][termsets[term.get("reportYear")].length] = term;
-			}else{
-				termsets[term.get("reportYear")]=[];
-				termsets[term.get("reportYear")][0] = term;
-			};
-		});
-		Ext.Array.forEach(me.yearFieldSets, function(fieldSet) {
-			fieldSet.removeAll(false);
-		});
-		var yearViews = new Array();
-		var yearView;
-		Ext.Array.forEach(termsets, function(termSet) {
-			if (termSet) {
-
-					yearView = new Ssp.view.tools.map.PersistentFieldSet({
-						xtype : 'fieldset',
-						border: 0,
-						title : '',
-						padding : '2 2 2 2',
-						margin : '0 0 0 0',
-						layout : 'hbox',
-						autoScroll : true,
-						minHeight: 204,
-						itemId : 'year' + termSet[0].get("reportYear"),
-						flex : 1
-					});
-					me.yearFieldSets[termSet[0].get("reportYear")] = yearView;
-				}
-				else
-				{
-					me.yearFieldSets[termSet[0].get("reportYear")].removeAll(false);
-					yearView = me.yearFieldSets[termSet[0].get("reportYear")];
-				}
-			if(Ext.isIE){  //without this check/alteration, scrollbars appear in IE10 per SSP-1308
-				yearView.minHeight = 214;
-			}
-			var semesterPanels = new Array();
-			
-			Ext.Array.forEach(termSet, function(term) {
-				var termCode = term.get('code');
-				var panelName = term.get("name");
-				var isPast = me.termsStore.isPastTerm(termCode);
-				semesterPanels.push(me.createSemesterPanel(panelName, termCode, me.semesterStores[termCode],me.editPastTerms));
-			});
-
-			yearView.add(semesterPanels);		
-			yearViews.push(yearView);
-			
-		});
-		me.currentMapPlan.repopulatePlanStores(me.semesterStores);
-		view.add(yearViews);	
-		me.currentMapPlan.dirty = false;
-		Ext.resumeLayouts(true);	
-		me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
-    },
-	
-	createSemesterPanel: function(semesterName, termCode, semesterStore,editPastTerms){
-		var me = this;
-		if(me.semesterPanels[termCode])
-		{
-			me.semesterPanels[termCode].reconfigure(semesterStore);
-			return me.semesterPanels[termCode];
-			
-		}
-		else
-		{
-			// TODO the boolean logic needs to be changed once we have a proper getConfigAsBoolean() API
-			// https://issues.jasig.org/browse/SSP-2591
-			var editable = me.editPastTerms === 'true' || me.editPastTerms === true || !me.termsStore.isPastTerm(termCode);
-			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
-				store:semesterStore,
-				editable: editable
-			});	
-			me.semesterPanels[termCode] = semesterPanel;
-			return semesterPanel;
-		}
-	},
-
-	onShowMain: function(){
-    	var me=this;
-    	var mainView = Ext.ComponentQuery.query('mainview')[0];
-    	var arrViewItems;
-    	
-    	if (mainView.items.length > 0)
-		{
-			mainView.removeAll(false);
-		}
-		
-		arrViewItems = [{xtype:'searchtab',flex: 2},
-					    {xtype: 'studentrecord', flex: 4}];
-		
-		mainView.add( arrViewItems );	
-	},	
-	
-	onBeforePlanLoad: function() {
-		var me = this;
-		me.currentMapPlan.clearMapPlan();
-		me.currentMapPlan.set('personId',  me.personLite.get('id'));
-		me.currentMapPlan.set('ownerId',  me.authenticatedPerson.get('id'));
-		me.currentMapPlan.set('name','New Plan');		
-		me.currentMapPlan.dirty = false;
-	},
-	onPlanLoad: function() {
-		var me = this;
-		me.onCreateMapPlan();
-	},
-
-  updateAllPlanHours: function(){
-		var me = this;
-		var parent =  me.getView();
-		var panels = parent.query("semesterpanel");
-		var planHours = 0;
-		var devHours = 0;
-		Ext.Array.forEach(panels, function(panel) {
-			var store = panel.getStore();
-			var semesterBottomDock = panel.getDockedComponent("semesterBottomDock");
-			
-			var hours = me.updateTermHours(store, semesterBottomDock);
-			planHours += hours.planHours;
-			devHours += hours.devHours;
-		});
-		if(Ext.getCmp('currentTotalPlanCrHrs')) {
-			Ext.getCmp('currentTotalPlanCrHrs').setValue((planHours/100).toFixed(2));
-		}
-		if(Ext.getCmp('currentPlanTotalDevCrHrs')) {
-			Ext.getCmp('currentPlanTotalDevCrHrs').setValue((devHours/100).toFixed(2));
-		}		
-	},
-	
-	updateTermHours: function(store, semesterBottomDock){
-		var models = store.getRange(0);
-		var totalHours = 0;
-		var totalDevHours = 0;
-		Ext.Array.forEach(models, function(model) {
-			var value = model.get('creditHours');
-			/**** TODO the following is in the constructor but drag and drop does not call the constructor *****/
-			if(!value){
-				value = model.get('minCreditHours');
-				model.set('creditHours', value);
-			}
-			value = parseInt((value * 100).toFixed(0));
-			totalHours += value
-			if(model.get('isDev')){
-				totalDevHours += value;
-			}
-		});
-		var termCreditHours = semesterBottomDock.getComponent('termCrHrs');
-		termCreditHours.setText("" +  (totalHours / 100).toFixed(2) + "");
-		var hours = new Object();
-		hours.planHours = totalHours;
-		hours.devHours = totalDevHours;
-		return hours;
-	},
-	
-
-	
-	onEmailMapPlan: function(metaData){
-		var me = this;
-		me.getView().setLoading(true);
-		var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-		me.mapPlanService.email(me.semesterStores, metaData, {
-            success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
-            scope: me,
-            isPrivate: true
-        });
-	},
-	
-	 emailMapPlanServiceSuccess: function(serviceResponses) {
-	        var me = this;
-	        var mapResponse = serviceResponses.successes.emailMap;
-	       	me.onEmailComplete(mapResponse.responseText);
-			me.getView().setLoading(false);
-	 },
-
-	emailMapPlanServiceFailure: function() {
-		var me = this;
-		me.getView().setLoading(false);
-	},
-	
-	onEmailComplete: function(responseText){
-		Ext.Msg.alert('SSP Email Service', responseText);
-	},
-	
-	
-	onPrintMapPlan: function(metaData){
-		var me = this;
-		me.getView().setLoading(true);
-		var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            }
-		me.mapPlanService.print(me.semesterStores, metaData, {
-            success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
-            scope: me,
-            isPrivate: true
-        });
-	},
-	
-	onShowMapPlanOverView: function(){
-		var me = this;
-		me.getView().setLoading(true);
-		var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1,
-				show: true
-            }
-		var metaData = new Ssp.model.tool.map.PlanOutputData();
-		
-		metaData.set('includeCourseDescription', true);
-		metaData.set('includeHeaderFooter', true);
-		metaData.set('includeTotalTimeExpected', true);
-		metaData.set('includeFinancialAidInformation', true);
-		
-		var planType = "plan";
-		if(me.currentMapPlan.get("isTemplate") == true){
-			planType = "template";
-			metaData.set('outputFormat', 'matrixFormat');
-		}else{
-			metaData.set('outputFormat', 'fullFormat');
-		}
-			
-		me.mapPlanService.print(me.semesterStores, 
-			metaData,
-			{
-            success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
-            scope: me,
-            isPrivate: false
-        	},
-			planType);
-	},
-	
-	 printMapPlanServiceSuccess: function(serviceResponses) {
-	        var me = this;
-	        var mapResponse = serviceResponses.successes.printMap;
-	       	me.onPrintComplete(mapResponse.responseText, serviceResponses.show);
-			me.getView().setLoading(false);
-	 },
-
-	printMapPlanServiceFailure: function() {
-		var me = this;
-		me.getView().setLoading(false);
-	},
-	
-	onPrintComplete: function(htmlPrint, show){
-		var me = this;
-        var myWindow = window.open('', '', 'width=500,height=600,scrollbars=yes,resizable=1');
-        myWindow.document.write(htmlPrint);
-		myWindow.document.title = me.currentMapPlan.get("name");
-		if(!show)
-        	myWindow.print();
-	},
-	
-/************** Methods Required To Support Bump ********************/
-	
-	onBumpRequested: function(args){
-		var me = this;
-		me.clonedMap = me.currentMapPlan.clonePlan();
-		me.clonedMap.updatePlanCourses(me.semesterStores);
-		var terms = me.clonedMap.getTermCodes()
-		if(terms.length <= 0) {
-			Ext.Msg.alert('There are no courses to bump. Can not continue.');
-			return; 
-		}
-		var maps = me.createBumpTermMap(args);
-		me.maps	= maps;
-		if(maps == null)
-			return;
-		me.bumpCourses(maps, true);
-		if(maps.numberToRemoveNoTerm > 0){
-			Ext.Msg.alert("Move Plan Aborted", 'Can not move plan, some required terms do not exist. \n Please see administrator to add terms.');
-		}else if(maps.numberToRemove > 0){
-			var message = 'Completing the move will overwrite ' + maps.numberToRemove + ' courses. Do you wish to?';
-			
-			var messageBox = Ext.Msg.confirm({
-       		     title:'Delete Courses ?',
-       		     msg: message,
-       		     buttons: Ext.Msg.YESNOCANCEL,
-       		     fn: me.completeBump,
-       		     scope: me
-       		});
-			messageBox.msgButtons['yes'].setText("Overwrite Courses");
-		    messageBox.msgButtons['no'].setText("Append Courses");
-		    messageBox.msgButtons['cancel'].setText("Cancel");
-		}else
-			me.completeBump('yes');
-	},
-	
-	completeBump: function(btnId){
-		if (btnId=="yes" || btnId=="no")
-     	{
-			var me = this;
-			me.maps.overwrite = btnId;
-			me.bumpCourses(me.maps);
-			me.validatePlan(me.clonedMap);
-		}
-	},
-	
-	validatePlan: function(plan){
-		var me = this;
-		
-		me.getView().setLoading(true);
-		var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1,
-				show: true
-            }
-		me.mapPlanService.validate(me.clonedMap, me.currentMapPlan.get("isTemplate"),{
-            success: me.newServiceSuccessHandler('validatePlan', me.validateMapPlanServiceSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('validatePlan', me.validateMapPlanServiceFailure, serviceResponses),
-            scope: me,
-            isPrivate: true
-        });
-	},
-	
-	validateMapPlanServiceSuccess: function(serviceResponses){
-		var me = this;
-		me.getView().setLoading(false);
-		var mapResponse = serviceResponses.successes.validatePlan;
-		
-		me.clonedMap.loadFromServer(Ext.decode(mapResponse.responseText));
-	    if(me.clonedMap.get("isValid"))
-	    	me.onValidateAccept('ok');
-		else{
-			var validationResponse = me.clonedMap.getPlanValidation();
-			if(!validationResponse.valid){
-				Ext.Msg.confirm({
-       		     	title:'Invalid Courses',
-       		     	msg: validationResponse.message + "\n Do you wish to continue with the move?",
-       		     	buttons: Ext.Msg.OKCANCEL,
-       		     	fn: me.onValidateAccept,
-       		     	scope: me
-       			});
-			}
-		}
-	},
-	
-	validateMapPlanServiceFailure: function(serviceResponses){
-		var me = this;
-		
-		me.getView().setLoading(false);
-		Ext.Msg.confirm({
-  		     title:'Server Error On Validation',
-  		     msg: "Server Error unable to validate. Should continue?",
-  		     buttons: Ext.Msg.OKCANCEL,
-  		     fn: me.onValidateAccept,
-  		     scope: me
-  		});
-	},
-	
-	onValidateAccept: function(btnId){
-		var me = this;
-		if(btnId == 'ok'){
-			me.mapEventUtils.withMapPlanRenderingDependencies({
-					fn: function() {
-						me.currentMapPlan.loadPlan(me.clonedMap, true);
-						me.onCreateMapPlan();
-						me.currentMapPlan.dirty = true;
-					},
-					scope: me
-			});
-		}
-	},
-	
-	createBumpTermMap: function(args){
-		if(args.endTermCode == args.startTermCode){
-			Ext.Msg.alert('No Bump Required', "Bump does not require change, Start Term and End Term the same.");
-			return null;
-		}
-		var me = this;
-
-		var startTermIndex = me.termsStore.findExact('code', args.startTermCode);
-		var endTermIndex =  me.termsStore.findExact('code', args.endTermCode);
-		if(startTermIndex < 0 || endTermIndex < 0){
-				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
-				return null;
-		}
-				
-		var delta = endTermIndex - startTermIndex;
-			
-		return me.bumpTerms(startTermIndex, delta, args.split);
-	},
-	
-	bumpTerms: function(startTermIndex, delta){
-		var me = this;
-		var termMap = {};
-		var bumpedTermMap = {};
-		
-		var terms = me.getTerms(me.clonedMap);
-		replaceTermCodes = false;
-		var numberToRemove = 0;
-		Ext.Array.forEach(terms, function(term) {
-			var termIndex = me.termsStore.findExact('code', term.get('code'));
-			if(termIndex >= 0){
-				if (termIndex == startTermIndex){
-					replaceTermCodes = true;
-				}
-				if(replaceTermCodes == false)
-					termMap[term.get('code')] = term.get('code');
-				else{
-					var bumpedTerm = me.termsStore.getAt(termIndex + delta);
-					if(bumpedTerm != undefined && bumpedTerm != null){
-						if(termMap[bumpedTerm.get('code')] == bumpedTerm.get('code')){
-							bumpedTermMap[bumpedTerm.get('code')]  = true;
-						}					
-						termMap[term.get('code')] = bumpedTerm.get('code');
-					}else{
-						termMap[term.get('code')] = false;
-					}
-				}
-			}
-		});
-		var maps = {};
-		maps.termMap = termMap;
-		maps.bumpedTermMap = bumpedTermMap;
-		return maps;
-	},
-	
-	bumpCourses:function(maps, evaluate){
-		var me = this;
-		if(evaluate){
-		 	maps.numberToRemoveNoTerm = 0;
-			maps.numberToRemove = 0;
-		}
-		var planCourses = me.clonedMap.get('planCourses');
-		var coursesToDelete = [];
-		var k = 0;
-		var transcriptedTerms = {};
-		var termMap = maps.termMap;
-		var bumpedTermMap = maps.bumpedTermMap;
-		if(planCourses && planCourses.length > 0){
-			var transcriptedTerms = {};
-			for(var i = 0; i < planCourses.length; i++){
-				var planCourse = planCourses[i];
-				if(planCourse.isTranscript  && !planCourse.duplicateOfTranscript){
-					transcriptedTerms[termCode] = termCode;
-				}
-			}
-			for(var i = 0; i < planCourses.length; i++){
-				var planCourse = planCourses[i];				
-				var currentCourseTerm = planCourse.termCode;
-				var termCourseCode = termMap[currentCourseTerm];
-				if(termCourseCode == false && !planCourse.duplicateOfTranscript){
-					maps.numberToRemoveNoTerm++;
-					continue;
-				}
-				if(termCourseCode != null && termCourseCode != ""){
-					//Following if statements removes courses from terms that have been bumped and terms that are to be put in transcripted terms
-					if(((maps.overwrite == "yes" || evaluate) && bumpedTermMap[currentCourseTerm] == true) || (transcriptedTerms[termCourseCode] != undefined && transcriptedTerms[termCourseCode] != null)){
-						if(evaluate){
-							if(bumpedTermMap[currentCourseTerm])
-								maps.numberToRemove++;
-						}else{
-							planCourses.splice(i,1);
-							i--;
-						}
-					}else{
-						if(!evaluate)
-							planCourse.termCode = termCourseCode;
-					}
-				}
-			}
-		}
-		if(evaluate)
-			return;
-		var termNotes = me.clonedMap.get("termNotes");
-		if(termNotes && termNotes.length > 0){
-			for(var i = 0; i < termNotes.length; i++){
-				var termNote = termNotes[i];
-				var currentNoteTerm = termNote.get('termCode')
-				var termCode = termMap[currentNoteTerm];
-				if(termCode != null && termCode != ""){
-					//Following if statements removes notes from terms that have been bumped and notes that are to be put in transcripted terms
-					if(bumpedTermMap[currentNoteTerm] == true || (transcriptedTerms[currentNoteTerm] != undefined && transcriptedTerms[termCode] != null)){
-						termNotes.splice(i,1);
-					}else{
-						termNote.set('termCode', termCode);
-					}
-				}	
-			}
-		}
-	},
-	destroy: function() {
-        var me=this;
-		if(me.coursePlanDetails != null && !me.coursePlanDetails.isDestroyed){
-			me.coursePlanDetails.close();
-		}
-        
-		me.appEventsController.getApplication().removeListener('onBeforePlanLoad', me.onBeforePlanLoad, me);
-		me.appEventsController.getApplication().removeListener('onAfterPlanLoad', me.updateAllPlanHours, me);
-		me.appEventsController.getApplication().removeListener('onPlanLoad', me.onPlanLoad, me);
-		
-		
-		me.appEventsController.removeEvent({eventName: 'onShowMain', callBackFunc: me.onShowMain, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onPrintMapPlan', callBackFunc: me.onPrintMapPlan, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onShowMapPlanOverView', callBackFunc: me.onShowMapPlanOverView, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onEmailMapPlan', callBackFunc: me.onEmailMapPlan, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onBumpRequested', callBackFunc: me.onBumpRequested, scope: me});
-		me.appEventsController.removeEvent({eventName: 'updateAllPlanHours', callBackFunc: me.updateAllPlanHours, scope: me});
-		
-		return me.callParent( arguments );
-    }
+		 return me.callParent( arguments );
+	}
 });
