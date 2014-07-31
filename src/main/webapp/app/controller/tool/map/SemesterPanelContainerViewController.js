@@ -34,8 +34,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         configStore: 'configurationOptionsUnpagedStore',
         colorStore: 'colorsAllUnpagedStore'
     },
-    semesterPanels : new Array(),
-    yearFieldSets : new Array(),
+    
 	control: {
 	    	view: {
 				afterlayout: {
@@ -54,12 +53,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var id = me.personLite.get('id');
 		
 		
+		me.configStore.on('load', me.onLoadConfig, me,{single:true});
+		
 		me.configStore.clearFilter();
 		me.configStore.load({
             extraParams: {
                 limit: "-1"
             } 
         });
+		
+		me.semesterPanels = new Array(),
+		me.yearFieldSets = new Array(),
 		
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		
@@ -78,6 +82,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 
 		return me.callParent(arguments);
     },
+    
+    onLoadConfig: function(){
+		this.editPastTerms = this.configStore.getConfigByName('map_edit_past_terms');
+	},
+	
     resetForm: function() {
         var me = this;
         me.getView().getForm().reset();
@@ -275,24 +284,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore,editPastTerms){
 		var me = this;
-		if(me.semesterPanels[termCode])
-		{
-			me.semesterPanels[termCode].reconfigure(semesterStore);
-			return me.semesterPanels[termCode];
-			
-		}
-		else
-		{
-			// TODO the boolean logic needs to be changed once we have a proper getConfigAsBoolean() API
-			// https://issues.jasig.org/browse/SSP-2591
-			var editable = me.editPastTerms === 'true' || me.editPastTerms === true || !me.termsStore.isPastTerm(termCode);
-			var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
-				store:semesterStore,
-				editable: editable
-			});	
-			me.semesterPanels[termCode] = semesterPanel;
-			return semesterPanel;
-		}
+		
+		// TODO the boolean logic needs to be changed once we have a proper getConfigAsBoolean() API
+		// https://issues.jasig.org/browse/SSP-2591
+		var editable = me.editPastTerms === 'true' || me.editPastTerms === true || !me.termsStore.isPastTerm(termCode);
+		var semesterPanel = new Ssp.view.tools.map.SemesterPanel({
+			store:semesterStore,
+			editable: editable
+		});	
+		me.semesterPanels[termCode] = semesterPanel;
+		return semesterPanel;
 	},
 
 	onShowMain: function(){
@@ -716,6 +717,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
         var me=this;
 		if(me.coursePlanDetails != null && !me.coursePlanDetails.isDestroyed){
 			me.coursePlanDetails.close();
+		}
+		
+		for (var key in this.semesterPanels) {
+			this.semesterPanels[key].getView().destroy();
+			this.semesterPanels[key].destroy();
+		}
+	
+		for (var key in this.yearFieldSets) {
+			this.yearFieldSets[key].destroy();
 		}
         
 		me.appEventsController.getApplication().removeListener('onBeforePlanLoad', me.onBeforePlanLoad, me);
