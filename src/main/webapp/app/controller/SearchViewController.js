@@ -515,17 +515,25 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.refreshPagingToolBar();
 	},
 
+
 	 showColumn: function( show, dataIndex ) {
 		var me=this;
-        var column = me.getView().query('.gridcolumn[dataIndex='+dataIndex+']')[0];
-    	if ( column ) {
-    	    if ( show ) {
-                column.show();
-            } else {
-                column.hide();
-            }
-        }
-    },
+	    var column = me.getColumn(dataIndex);
+
+		if ( column ) {
+		   column.setVisible(show);
+	    }
+	},
+	
+	getColumn:function(dataIndex){
+		var me=this;
+		var columns = me.getView().columns;
+		for(var i = 0; i < columns.length; i++){
+			if(columns[i].dataIndex == dataIndex)
+				return columns[i];
+		}
+		return null;
+	},
 
     onAddPersonClick: function( button ){
     	var me=this;
