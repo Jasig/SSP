@@ -64,6 +64,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me=this;
 		me.appEventsController.getApplication().addListener("onAfterPlanLoad", me.updatePastTermButton, me);
 		me.getIsImportantTermButton().addListener("move", me.setTermNoteButton, me);
+		me.appEventsController.assignEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.getView().view.addListener('drop', me.onDrop, me);	
 
 		var helpButton = me.getView().tools[0];
@@ -370,6 +371,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		
 		me.getIsImportantTermButton().removeListener("move", me.setTermNoteButton, me);
 		me.getView().view.removeListener('drop', me.onDrop, me);
+		me.appEventsController.removeEvent({eventName: 'onViewCourseNotes', callBackFunc: me.onViewCourseNotes, scope: me});
 		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.updatePastTermButton, me);
 
 		
