@@ -131,7 +131,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 		for (var key in this.events) {
 			if (this.events.hasOwnProperty(key)) {
 			   if(this.events[key].length > 0 && this.events[key][0].doNotDestroyAll !== true){
-					var msg = this.destroyObjectEvents(this.events[key], key);
+					var msg = this.eventsDestroyed(this.events[key], key);
 					if(msg){
 						eventsFound = true;
 						errorMessage += msg;
