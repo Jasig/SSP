@@ -19,11 +19,5 @@
 Ext.define('Ssp.view.tools.map.PersistentFieldSet', {
     extend: 'Ext.form.FieldSet',
     alias: 'widget.persistentfieldset',
-	destroy: function () {
-		//Do nothing since we want this component to live beyong autodestroy
-	},
-	onDestroy: function () {
-		//Do nothing since we want this component to live beyong autodestroy
-	}
     
 });
