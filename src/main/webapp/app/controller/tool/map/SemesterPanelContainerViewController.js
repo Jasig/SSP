@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
+Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
 	inject:{
