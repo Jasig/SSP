@@ -197,6 +197,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 							" person records have already been processed"
 							+ " in this execution. Will resume at index"
 							+ " [{}] on next execution.", nextPersonIndex);
+					break;
 				}
 
 				// Mismatch between the PagedResponse and SortingAndPaging
