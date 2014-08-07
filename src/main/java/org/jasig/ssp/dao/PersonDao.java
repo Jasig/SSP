@@ -97,18 +97,29 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 
-		if (!sAndP.isSorted()) {
-			sAndP.appendSortField("lastName", SortDirection.ASC);
-			sAndP.appendSortField("firstName", SortDirection.ASC);
-		}
+		
 
 		Criteria criteria = createCriteria();
+		
+		sAndP.addStatusFilterToCriteria(criteria);
+		
+		Long totalRows = (Long) criteria.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		criteria.setProjection(null);
+
+		if ( sAndP == null || !(sAndP.isSorted())) {
+			criteria.addOrder(Order.asc("lastName")).addOrder(Order.asc("firstName"));
+		} else {
+			if ( sAndP.isSorted() ) {
+				sAndP.addSortingToCriteria(criteria);
+			}
+			sAndP.addPagingToCriteria(criteria);
+		}
 
 		criteria = createCriteria(sAndP);
 
-		List results = criteria.list();
-		
-		return new PagingWrapper<Person>(results.size(), results);
+		return new PagingWrapper<Person>(totalRows, criteria.list());
 	}
 
 	public Person fromUsername(@NotNull final String username) {

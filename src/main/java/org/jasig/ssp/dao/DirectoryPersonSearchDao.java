@@ -89,15 +89,21 @@ public class DirectoryPersonSearchDao  {
 		
 		if(isPostgresSession()){
 			try{
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON started");
 				Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON();");
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON ended successfully");
 				query.list();
 			}catch(Exception exp){
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON started after catch.");
 				Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
 				query.list();
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON ended succesfully after catch.");
 			}
 		}else{
+			LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON started");
 			Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
 			query.list();
+			LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON ended successfully");
 		}
 	}
 	
@@ -105,15 +111,21 @@ public class DirectoryPersonSearchDao  {
 		
 		if(isPostgresSession()){
 			try{
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON_BLUE started");
 				Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON_BLUE();");
 				query.list();
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON_BLUE ended");
 			}catch(Exception exp){
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON_BLUE started after catch");
 				Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
 				query.list();
+				LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON_BLUE ended successfully after catch.");
 			}
 		}else{
+			LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON_BLUE started");
 			Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
 			query.list();
+			LOGGER.debug("REFRESH_MV_DIRECTORY_PERSON_BLUE ended successfully");
 		}
 	}
 	
