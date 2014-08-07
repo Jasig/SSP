@@ -154,7 +154,6 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         Ext.Array.each(unique, function(assoc, index) {
         	if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalTrackJournalStepAssociation(assoc) ) {
         		var journalStep = me.journalStepNodeItemFromTrackAssociation(assoc);
-				journalStep.sortOrder = assoc.sortOrder;
         		journalStep.extraObsoleteText = '';
         		if(assoc.objectStatus !== "ACTIVE"){
         			journalStep.associatedToTrack = false;
@@ -201,9 +200,11 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
             var key = keyBuilder.apply(me, [ assoc ]);
             var indexRecord = index[key];
             if ( indexRecord && indexRecord.objectStatus !== 'ACTIVE' && assoc.objectStatus === 'ACTIVE' ) {
-                // replace inactive record with active record
-                unique[indexRecord.pos] = assoc;
-                indexRecord.objectStatus = 'ACTIVE';
+            	recordsToDelete[deleteCount++]=indexRecord;
+            	index[key] = {
+                        objectStatus: assoc.objectStatus,
+                        pos: (unique.push(assoc) - 1)
+                    }
             } else if ( !(indexRecord) ) {
                 index[key] = {
                     objectStatus: assoc.objectStatus,
@@ -213,6 +214,9 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
                 // true duplicate, do nothing
             }
         });
+		for(i = deleteCount-1;i >= 0; i--){
+			unique.splice(recordsToDelete[i].pos,1);
+		}
         return unique;
     },
 
