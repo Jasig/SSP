@@ -43,6 +43,7 @@ Ext.define('Ssp.controller.tool.actionplan.CustomActionPlanViewController', {
     
      init: function() {
         var me = this;
+        me.formUtils.applyActiveOnlyFilter(me.confidentialityLevelsStore);
         return me.callParent(arguments);
     },
     
