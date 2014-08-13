@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
@@ -339,9 +341,12 @@ public class PlanController  extends AbstractBaseController {
 		SubjectAndBody messageText = service.createOutput(planOutputDataTO);
 		if(messageText == null)
 			return null;
-
-	    messageService.createMessage(planOutputDataTO.getEmailTo(), 
-							planOutputDataTO.getEmailCC(),
+		Person person = personService.get(UUID.fromString(planOutputDataTO.getPlan().getPersonId()));
+		Set<String> watcherAddresses = new HashSet<String>(person.getWatcherEmailAddresses());
+		watcherAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(planOutputDataTO.getEmailCC()));
+	    
+	    messageService.createMessage(planOutputDataTO.getEmailTo(),org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
+	    				.toArray(new String[watcherAddresses.size()])),
 							messageText);
 		
 		return "Map Plan has been queued.";
@@ -369,8 +374,12 @@ public class PlanController  extends AbstractBaseController {
 		if(messageText == null)
 			return null;
 
+		Person person = personService.get(UUID.fromString(planOutputDataTO.getPlan().getPersonId()));
+		Set<String> watcherAddresses = new HashSet<String>(person.getWatcherEmailAddresses());
+		watcherAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(planOutputDataTO.getEmailCC()));
 	    messageService.createMessage(planOutputDataTO.getEmailTo(), 
-							planOutputDataTO.getEmailCC(),
+	    		org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
+	    				.toArray(new String[watcherAddresses.size()])),
 							messageText);
 		
 		return "Map Plan has been queued.";

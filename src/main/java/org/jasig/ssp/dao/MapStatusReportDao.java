@@ -84,11 +84,11 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 	@SuppressWarnings("unchecked")
 	public List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner) {
 		String getAllActivePlanIdQuery = "select new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.catalogYearCode,plan.person.firstName,plan.person.lastName,plan.person.coach.id,plan.owner.id) "
-									   + "from org.jasig.ssp.model.Plan plan , MapStatusReport msr "
-									   + "where  msr.plan = plan and msr.planStatus = :planStatus and plan.owner = :owner";
+				   + "from org.jasig.ssp.model.Plan plan , MapStatusReport msr "
+				   + "where  msr.plan = plan and msr.planStatus = :planStatus and plan.owner = :owner";
 		Query query = createHqlQuery(getAllActivePlanIdQuery);
 		List<MapStatusReportPerson> result  = query.setEntity("owner", owner).setString("planStatus", PlanStatus.OFF.name()).list();
-									   
+
 		return result;
 	}
 	
@@ -118,6 +118,25 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 		for (MapStatusReport mapStatusReport : allForPersonId) {
 			delete(mapStatusReport);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportOwnerAndCoachInfo> getWatchersOffPlanStudent() {
+		String detailsQuery = " select distinct new org.jasig.ssp.transferobject.reports.MapStatusReportOwnerAndCoachInfo(ws.person.id, ws.person.primaryEmailAddress) "
+				+ "from Plan plan, MapStatusReport msr , org.jasig.ssp.model.WatchStudent ws"
+				+ " where msr.plan = plan and msr.plan.person = ws.student and msr.planStatus = :planStatus ";
+
+		return createHqlQuery(detailsQuery).setString("planStatus", PlanStatus.OFF.name()).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person watcher) {
+		String getAllActivePlanIdQueryForWatcher = "select distinct new org.jasig.ssp.transferobject.reports.MapStatusReportPerson(plan.id, plan.person.id, plan.person.schoolId, plan.programCode,plan.catalogYearCode,plan.person.firstName,plan.person.lastName,plan.person.coach.id,plan.owner.id,ws.person.id) "
+				   + "from org.jasig.ssp.model.Plan plan , MapStatusReport msr , org.jasig.ssp.model.WatchStudent ws "
+				   + "where  msr.plan = plan and msr.planStatus = :planStatus and msr.plan.person = ws.student and ws.person = :watcher";
+		Query query = createHqlQuery(getAllActivePlanIdQueryForWatcher);
+		List<MapStatusReportPerson> result  = query.setEntity("watcher", watcher).setString("planStatus", PlanStatus.OFF.name()).list();
+		return result;
 	}
 
 

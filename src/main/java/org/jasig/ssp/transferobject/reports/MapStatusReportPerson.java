@@ -31,6 +31,7 @@ public class MapStatusReportPerson {
 	private String catalogYearCode;
 	private UUID coachId;
 	private UUID ownerId;
+	private UUID watcherId;
 	
 	/**
 	 * 
@@ -52,7 +53,20 @@ public class MapStatusReportPerson {
 		this.coachId = coachId;
 		this.ownerId = ownerId;
 	}
-
+	public MapStatusReportPerson(UUID planId, UUID personId, String schoolId, String programCode,String catalogYearCode,
+			 String firstName, String lastName, UUID coachId, UUID ownerId, UUID watcherId) {
+		super();
+		this.planId = planId;
+		this.personId = personId;
+		this.schoolId = schoolId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.programCode = programCode;
+		this.catalogYearCode = catalogYearCode;
+		this.coachId = coachId;
+		this.ownerId = ownerId;
+		this.watcherId = watcherId;
+}
 	public UUID getPlanId() {
 		return planId;
 	}
@@ -123,6 +137,14 @@ public class MapStatusReportPerson {
 
 	public void setOwnerId(UUID ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public UUID getWatcherId() {
+		return watcherId;
+	}
+
+	public void setWatcherId(UUID watcherId) {
+		this.watcherId = watcherId;
 	}
 
 }

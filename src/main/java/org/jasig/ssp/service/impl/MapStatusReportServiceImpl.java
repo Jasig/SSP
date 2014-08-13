@@ -789,4 +789,14 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		return externalSubstitutableCourseDao.getAllPossibleSubstitutableCoursesForStudent(plan, transcript);
 	}
 
+	@Override
+	public List<MapStatusReportOwnerAndCoachInfo> getWatchersOffPlanStudent() {
+		return dao.getWatchersOffPlanStudent();
+	}
+
+	@Override
+	public List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person person) {
+		return dao.getOffPlanPlansForWatcher(person);
+	}
+
 }

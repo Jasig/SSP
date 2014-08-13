@@ -18,6 +18,9 @@
  */
 package org.jasig.mygps.web;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.mail.SendFailedException;
 
 import org.jasig.mygps.model.transferobject.MessageTO;
@@ -70,12 +73,16 @@ public class MyGpsMessageController extends AbstractBaseController {
 		}
 
 		final Person coach = student.getCoach();
+		 
 
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createContactCoachMessage(
 						messageTO.getMessage(), messageTO.getSubject(), student);
 
-		messageService.createMessage(coach, null, subjAndBody);
+		Set<String> watcherAddresses = new HashSet<String>(student .getWatcherEmailAddresses());
+		
+		messageService.createMessage(coach, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
+				.toArray(new String[watcherAddresses.size()])), subjAndBody);
 
 		return true;
 	}

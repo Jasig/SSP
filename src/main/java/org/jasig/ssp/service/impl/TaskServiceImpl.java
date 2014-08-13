@@ -21,8 +21,10 @@ package org.jasig.ssp.service.impl; // NOPMD
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
@@ -325,9 +327,22 @@ public class TaskServiceImpl
 
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createActionPlanMessage(student, taskTOs, goalTOs, strengthTOs);
+		Set<String> watcherAddresses = null;
+		if(form.getEmailAPToWatchers() != null && form.getEmailAPToWatchers())
+		{
+			watcherAddresses = new HashSet<String>(student.getWatcherEmailAddresses());
+			if(!addresses.getCc().isEmpty())
+			{
+				watcherAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
+			}
+		}
+		else {
+			watcherAddresses = new HashSet<String>(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
 
+		}
 
-		messageService.createMessage(addresses.getTo(), addresses.getCc(), subjAndBody);
+		messageService.createMessage(addresses.getTo(),  org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
+				.toArray(new String[watcherAddresses.size()])), subjAndBody);
 	}
 	
 	@Override
@@ -343,8 +358,10 @@ public class TaskServiceImpl
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createActionPlanMessage(student, taskTOs, null, null);
 
-
-		messageService.createMessage(emailAdresses, null, subjAndBody);
+		List<String> watcherEmailAddresses = student.getWatcherEmailAddresses();
+		
+		messageService.createMessage(emailAdresses, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherEmailAddresses
+				.toArray(new String[watcherEmailAddresses.size()])), subjAndBody);
 	}
 	
 	

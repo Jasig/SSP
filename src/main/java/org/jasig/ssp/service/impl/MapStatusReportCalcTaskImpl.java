@@ -31,11 +31,13 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
@@ -191,13 +193,16 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		}
 
 		final List<MapStatusReportOwnerAndCoachInfo> distinctOwnerCoachPairs = mapStatusReportService.getOwnersAndCoachesWithOffPlanStudent();
+		final List<MapStatusReportOwnerAndCoachInfo> distinctWatchers = mapStatusReportService.getWatchersOffPlanStudent();
+
+
 		if ( distinctOwnerCoachPairs == null || distinctOwnerCoachPairs.isEmpty() ) {
 			return;
 		}
 
 		final Set<UUID> ownerIds = new HashSet<UUID>();
 		final Map<UUID,String> emailAddressByPersonId = new HashMap<UUID,String>();
-		final Map<UUID,Map<PersonToPlanRelationship,List<MapStatusReportPerson>>> statusesByOwnerOrCoach =
+		final Map<UUID,Map<PersonToPlanRelationship,List<MapStatusReportPerson>>> statusesByOwnerOrCoachOrWatcher =
 				new HashMap<UUID,Map<PersonToPlanRelationship,List<MapStatusReportPerson>>>();
 
 		for ( MapStatusReportOwnerAndCoachInfo ownerCoachPair : distinctOwnerCoachPairs ) {
@@ -212,23 +217,30 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 
 			ownerIds.add(ownerId);
 
-			if ( !(statusesByOwnerOrCoach.containsKey(ownerId)) ) {
-				statusesByOwnerOrCoach.put(ownerId, newPlanStatusContainerForOffPlanEmailsToCoaches());
+			if ( !(statusesByOwnerOrCoachOrWatcher.containsKey(ownerId)) ) {
+				statusesByOwnerOrCoachOrWatcher.put(ownerId, newPlanStatusContainerForOffPlanEmailsToCoaches());
 			}
-			if ( coachId != null && !(statusesByOwnerOrCoach.containsKey(coachId)) ) {
-				statusesByOwnerOrCoach.put(coachId, newPlanStatusContainerForOffPlanEmailsToCoaches());
+			if ( coachId != null && !(statusesByOwnerOrCoachOrWatcher.containsKey(coachId)) ) {
+				statusesByOwnerOrCoachOrWatcher.put(coachId, newPlanStatusContainerForOffPlanEmailsToCoaches());
 			}
 		}
-
+		for (MapStatusReportOwnerAndCoachInfo mapStatusReportOwnerAndCoachInfo : distinctWatchers) {
+			final UUID watcherId = mapStatusReportOwnerAndCoachInfo.getWatcherId();
+			ownerIds.add(watcherId);
+			if ( !(statusesByOwnerOrCoachOrWatcher.containsKey(watcherId)) ) {
+				statusesByOwnerOrCoachOrWatcher.put(watcherId, newPlanStatusContainerForOffPlanEmailsToCoaches());
+			}
+				
+		}
 		for ( UUID ownerId : ownerIds ) {
 			final List<MapStatusReportPerson> offPlanPlansForOwner = mapStatusReportService.getOffPlanPlansForOwner(new Person(ownerId));
-			if ( offPlanPlansForOwner == null || offPlanPlansForOwner.isEmpty() ) {
-				continue;
-			}
+//			if ( offPlanPlansForOwner == null || offPlanPlansForOwner.isEmpty() ) {
+//				continue;
+//			}
 			for (MapStatusReportPerson status : offPlanPlansForOwner) {
 				final UUID planCoachId = status.getCoachId();
 				final boolean sameOwnerAndCoach = ownerId.equals(planCoachId);
-				final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForOwner = statusesByOwnerOrCoach.get(ownerId);
+				final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForOwner = statusesByOwnerOrCoachOrWatcher.get(ownerId);
 				if ( sameOwnerAndCoach ) {
 					final List<MapStatusReportPerson> categorizedStatuses = statusesForOwner.get(PersonToPlanRelationship.OWNER_AND_COACH);
 					categorizedStatuses.add(status);
@@ -237,7 +249,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 					ownerCategorizedStatuses.add(status);
 
 					if ( planCoachId != null ) {
-						final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForCoach = statusesByOwnerOrCoach.get(planCoachId);
+						final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForCoach = statusesByOwnerOrCoachOrWatcher.get(planCoachId);
 						// Seen this lookup come up empty in practice. Possibly b/c coach assignments changed since
 						// the original list of owners and coaches was pulled? Not really worth it to try to
 						// read/repair here, e.g. would have to go look up the coach email. So for now we're just
@@ -252,10 +264,25 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 					}
 				}
 			}
+				final List<MapStatusReportPerson> offPlanPlansForWatcher = mapStatusReportService.getOffPlanPlansForWatcher(new Person(ownerId));
+				for (MapStatusReportPerson mapStatusReportPerson : offPlanPlansForWatcher) {
+					//If watcher is was already owner/coach of a student, it has already been added
+					final boolean isOwnerOrCoach = ownerId.equals(mapStatusReportPerson.getOwnerId()) || ownerId.equals(mapStatusReportPerson.getCoachId());
+					if(!isOwnerOrCoach)
+					{
+						final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForPerson = statusesByOwnerOrCoachOrWatcher.get(ownerId);
+						List<MapStatusReportPerson> watcherPlans = statusesForPerson.get(PersonToPlanRelationship.WATCHER_ONLY);
+						watcherPlans.add(mapStatusReportPerson);
+						
+					}
+
+					
+				}
+
 		}
 
 		final MapStatusReportPersonNameComparator sorter = new MapStatusReportPersonNameComparator();
-		for ( Map.Entry<UUID, Map<PersonToPlanRelationship, List<MapStatusReportPerson>>> statusesForOwnerOrCoach : statusesByOwnerOrCoach.entrySet() ) {
+		for ( Map.Entry<UUID, Map<PersonToPlanRelationship, List<MapStatusReportPerson>>> statusesForOwnerOrCoach : statusesByOwnerOrCoachOrWatcher.entrySet() ) {
 
 			final UUID sendToPersonId = statusesForOwnerOrCoach.getKey();
 			final String sendToEmailAddress = emailAddressByPersonId.get(sendToPersonId);
@@ -277,6 +304,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.OWNER_AND_COACH, "Assigned to You (and You Planned the MAP)", sb);
 			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.COACH_ONLY, "Assigned to You (but Somebody Else Planned the MAP)", sb);
 			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.OWNER_ONLY, "Not Assigned to You (but You Planned the MAP)", sb);
+			appendOffPlanStanza(statusesByCategory, PersonToPlanRelationship.WATCHER_ONLY, "Plans of Students you watch (but you did not Plan the map or are not the coach) ", sb);
 
 			sb.append("<br/>\n</body></html>");
 
@@ -292,7 +320,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	}
 
 	private static enum PersonToPlanRelationship {
-		OWNER_ONLY,COACH_ONLY,OWNER_AND_COACH
+		OWNER_ONLY,COACH_ONLY,OWNER_AND_COACH, WATCHER_ONLY
 	}
 
 	private void appendOffPlanStanza(Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesByCategory,

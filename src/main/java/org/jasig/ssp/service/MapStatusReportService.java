@@ -76,4 +76,8 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 
 	Boolean calculateStatusForStudent(UUID personId) throws ObjectNotFoundException, ValidationException;
 
+	List<MapStatusReportOwnerAndCoachInfo> getWatchersOffPlanStudent();
+
+	List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person person);
+
 }

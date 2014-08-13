@@ -18,11 +18,14 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -992,11 +995,25 @@ public class PersonServiceImpl implements PersonService {
 		String subject = "A coaching assignment has changed in "+appTitle;
 
 		SubjectAndBody subjectAndBody = new SubjectAndBody(subject, message);
-		if(oldCoach.hasEmailAddresses()){
+		if(oldCoach.hasEmailAddresses() && model.getWatcherEmailAddresses().isEmpty()){
 			messageService.createMessage(model.getCoach(), 
 				StringUtils.arrayToCommaDelimitedString(oldCoach.getEmailAddresses()
 						.toArray(new String[oldCoach.getEmailAddresses().size()])), subjectAndBody);
-		}else{
+		}
+		if(oldCoach.hasEmailAddresses() && !model.getWatcherEmailAddresses().isEmpty()){
+			Set<String> emails = new HashSet<String>();
+			emails.addAll(oldCoach.getEmailAddresses());
+			emails.addAll(model.getWatcherEmailAddresses());
+			messageService.createMessage(model.getCoach(), 
+					StringUtils.arrayToCommaDelimitedString(emails
+							.toArray(new String[emails.size()])), subjectAndBody);
+		}
+		if(!oldCoach.hasEmailAddresses() && model.getWatcherEmailAddresses().isEmpty()){
+			messageService.createMessage(model.getCoach(), 
+					StringUtils.arrayToCommaDelimitedString(model.getWatcherEmailAddresses()
+							.toArray(new String[model.getWatcherEmailAddresses().size()])), subjectAndBody);			
+		}
+		else{
 			messageService.createMessage(model.getCoach(),"", subjectAndBody);
 		}
 	}

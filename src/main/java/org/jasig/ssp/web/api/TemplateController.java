@@ -341,6 +341,7 @@ public class TemplateController  extends AbstractBaseController {
 		if(messageText == null)
 			return null;
 
+		
 	   messageService.createMessage(planOutputDataTO.getEmailTo(), 
 							planOutputDataTO.getEmailCC(),
 							messageText);

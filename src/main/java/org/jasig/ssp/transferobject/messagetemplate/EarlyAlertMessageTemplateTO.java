@@ -18,6 +18,10 @@
  */
 package org.jasig.ssp.transferobject.messagetemplate;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
@@ -33,6 +37,8 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 	
 	private CoachPersonLiteMessageTemplateTO creator;
 	
+	private Set<String> watcherEmails = new HashSet<String>();
+	
 	public EarlyAlertMessageTemplateTO(EarlyAlert earlyAlert, Person creator) {
 		super(earlyAlert);
 		if(creator != null)
@@ -43,6 +49,16 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 		super(earlyAlert);
 	}
 	
+	public EarlyAlertMessageTemplateTO(EarlyAlert earlyAlert, Person creator2,
+			List<String> watcherEmailAddresses) {
+		super(earlyAlert);
+		if(creator != null)
+			this.creator = new CoachPersonLiteMessageTemplateTO(creator2);
+		
+		if(watcherEmailAddresses != null)
+			getWatcherEmails().addAll(watcherEmailAddresses);
+	}
+
 	public CoachPersonLiteMessageTemplateTO getPerson() {
 		return person;
 	}
@@ -74,6 +90,14 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 		if(model.getPerson().getCoach() != null){
 			coach = new CoachPersonLiteMessageTemplateTO(model.getPerson().getCoach());
 		}
+	}
+
+	public Set<String> getWatcherEmails() {
+		return watcherEmails;
+	}
+
+	public void setWatcherEmails(Set<String> watcherEmails) {
+		this.watcherEmails = watcherEmails;
 	}
 
 }

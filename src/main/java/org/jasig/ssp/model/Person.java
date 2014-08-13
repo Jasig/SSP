@@ -733,6 +733,17 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		return false;
 	}
 
+	public List<String> getWatcherEmailAddresses() {
+		List<WatchStudent> watcherz = getWatchers();
+		List<String> emails = new ArrayList<String>();
+		for (WatchStudent watcher : watcherz) {
+			if(watcher.getPerson().hasEmailAddresses() && !watcher.getPerson().getPrimaryEmailAddress().isEmpty())
+			{
+				emails.add(watcher.getPerson().getPrimaryEmailAddress());
+			}
+		}
+		return emails;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

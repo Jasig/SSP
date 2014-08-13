@@ -30,6 +30,11 @@ public class MapStatusReportOwnerAndCoachInfo {
 	
 	private String coachPrimaryEmail;
 	
+	private UUID watcherId;
+	
+	private String watcherEmail;
+	
+	
 	public MapStatusReportOwnerAndCoachInfo(UUID ownerId, String ownerPrimaryEmail,
 											UUID coachId, String coachPrimaryEmail) {
 		super();
@@ -39,6 +44,11 @@ public class MapStatusReportOwnerAndCoachInfo {
 		this.coachPrimaryEmail = coachPrimaryEmail;
 	}
 	
+	public MapStatusReportOwnerAndCoachInfo(UUID watcherId, String watcherEmail) {
+		super();
+		this.setWatcherId(watcherId);
+		this.setWatcherEmail(watcherEmail);
+	}	
 	
 	public UUID getOwnerId() {
 		return ownerId;
@@ -70,5 +80,21 @@ public class MapStatusReportOwnerAndCoachInfo {
 
 	public void setCoachPrimaryEmail(String coachPrimaryEmail) {
 		this.coachPrimaryEmail = coachPrimaryEmail;
+	}
+
+	public UUID getWatcherId() {
+		return watcherId;
+	}
+
+	public void setWatcherId(UUID watcherId) {
+		this.watcherId = watcherId;
+	}
+
+	public String getWatcherEmail() {
+		return watcherEmail;
+	}
+
+	public void setWatcherEmail(String watcherEmail) {
+		this.watcherEmail = watcherEmail;
 	}
 }

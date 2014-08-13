@@ -36,7 +36,6 @@ public abstract class AbstractEmailForm {
 	
 	private List<String> recipientEmailAddresses;
 	
-	
 	private String coachEmail;
 	
 	private String emailSubject;

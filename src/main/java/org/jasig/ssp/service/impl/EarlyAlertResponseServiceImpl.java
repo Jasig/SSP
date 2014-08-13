@@ -361,9 +361,12 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		} else {
 			final SubjectAndBody subjAndBody = messageTemplateService
 					.createEarlyAlertResponseToFacultyMessage(fillTemplateParameters(earlyAlertResponse));
-
+			
+			Set<String> watcherAddresses = new HashSet<String>(earlyAlertResponse.getEarlyAlert().getPerson().getWatcherEmailAddresses());
+			
 			// Create and queue the message
-			final Message message = messageService.createMessage(person, null,
+			final Message message = messageService.createMessage(person, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
+					.toArray(new String[watcherAddresses.size()])),
 					subjAndBody);
 
 			LOGGER.info("Message {} created for EarlyAlertResponse {}", message,

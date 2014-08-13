@@ -148,6 +148,32 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                         labelSeparator : '',
                         fieldStyle: 'color:blue'
 				    }]
+					},{
+						xtype: 'fieldcontainer',
+						fieldLabel: '',
+						height: 30,
+						layout: {
+							type: 'hbox'
+						},
+						items: [
+                        {
+                            xtype: 'checkboxfield',
+                            anchor: '100%',
+                            fieldLabel: '',
+                            boxLabel: 'Send To Watchers' ,
+							itemId: 'emailAPToWatchers'
+                        }
+						,
+						{
+		                xtype: 'tbspacer',
+		                width: 178
+		            },				    
+				    {
+		            	xtype: 'displayfield',
+				    	fieldLabel: "(Will send to watcher's primary email address if any exist)",
+                        labelSeparator : '',
+                        fieldStyle: 'color:blue'
+				    }]
 					},
 						
                         {

@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import javax.mail.SendFailedException;
@@ -44,6 +46,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
@@ -449,14 +452,18 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		final Person person = earlyAlert.getPerson().getCoach();
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createEarlyAlertAdvisorConfirmationMessage(fillTemplateParameters(earlyAlert));
-
+		
+		Set<String> watcherEmailAddresses = new HashSet<String>(earlyAlert.getPerson().getWatcherEmailAddresses());
+		watcherEmailAddresses.add(emailCC);
+		
 		if ( person == null ) {
 			LOGGER.warn("Student {} had no coach when EarlyAlert {} was"
 					+ " created. Unable to send message to coach.",
 					earlyAlert.getPerson(), earlyAlert);
 		} else {
 			// Create and queue the message
-			final Message message = messageService.createMessage(person, emailCC,
+			final Message message = messageService.createMessage(person, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherEmailAddresses
+					.toArray(new String[watcherEmailAddresses.size()])),
 					subjAndBody);
 			LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
 		}
@@ -525,8 +532,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createEarlyAlertToStudentMessage(fillTemplateParameters(earlyAlert));
 
+		Set<String> watcheremails = new HashSet<String>(person.getWatcherEmailAddresses());
 		// Create and queue the message
-		final Message message = messageService.createMessage(person, null,
+		final Message message = messageService.createMessage(person, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcheremails
+				.toArray(new String[watcheremails.size()])),
 				subjAndBody);
 
 		LOGGER.info("Message {} created for EarlyAlert {}", message, earlyAlert);
@@ -795,7 +804,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if(lastResponseDate == null)
 			return;
 		List<EarlyAlert> eaOutOfCompliance = dao.getResponseDueEarlyAlerts(lastResponseDate);
-		Map<UUID, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, List<EarlyAlertMessageTemplateTO>>();
+		Map<UUID, SortedSet<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, SortedSet<EarlyAlertMessageTemplateTO>>();
 		Map<UUID, Person> coaches = new HashMap<UUID, Person>();
 		for(EarlyAlert earlyAlert: eaOutOfCompliance){
 			Person coach = earlyAlert.getPerson().getCoach();
@@ -824,29 +833,51 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			}
 			// We've definitely got a coach by this point
 			if(easByCoach.containsKey(coach.getId())){
-				List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
+				Set<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
 				coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
 			}else{
 				coaches.put(coach.getId(), coach);
-				easByCoach.put(coach.getId(), Lists.newArrayList(createEarlyAlertTemplateTO( earlyAlert)));
+				SortedSet<EarlyAlertMessageTemplateTO> eam = new TreeSet<EarlyAlertMessageTemplateTO>(new Comparator<EarlyAlertTO>() {
+			        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
+			        	Date p1Date = p1.getLastResponseDate();
+			        	if(p1Date == null)
+			        		p1Date = p1.getCreatedDate();
+			        	Date p2Date = p2.getLastResponseDate();
+			        	if(p2Date == null)
+			        		p2Date = p2.getCreatedDate();
+			            return p1Date.compareTo(p2Date);
+			        }
+
+			    });
+				eam.add(createEarlyAlertTemplateTO( earlyAlert));
+				easByCoach.put(coach.getId(), eam);
+			}
+			List<WatchStudent> watchers = earlyAlert.getPerson().getWatchers();
+			for (WatchStudent watcher : watchers) {
+				if(easByCoach.containsKey(watcher.getPerson().getId())){
+					Set<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(watcher.getPerson().getId());
+					coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
+				}else{
+					coaches.put(watcher.getPerson().getId(), watcher.getPerson());
+					SortedSet<EarlyAlertMessageTemplateTO> eam = new TreeSet<EarlyAlertMessageTemplateTO>(new Comparator<EarlyAlertTO>() {
+				        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
+				        	Date p1Date = p1.getLastResponseDate();
+				        	if(p1Date == null)
+				        		p1Date = p1.getCreatedDate();
+				        	Date p2Date = p2.getLastResponseDate();
+				        	if(p2Date == null)
+				        		p2Date = p2.getCreatedDate();
+				            return p1Date.compareTo(p2Date);
+				        }
+
+				    });
+					eam.add(createEarlyAlertTemplateTO( earlyAlert));
+					easByCoach.put(watcher.getPerson().getId(), eam);
+				}				
 			}
 		}
 		for(UUID coachId: easByCoach.keySet()){
 			Map<String,Object> messageParams = new HashMap<String,Object>();
-			
-			Collections.sort(easByCoach.get(coachId), new Comparator<EarlyAlertTO>() {
-		        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
-		        	Date p1Date = p1.getLastResponseDate();
-		        	if(p1Date == null)
-		        		p1Date = p1.getCreatedDate();
-		        	Date p2Date = p2.getLastResponseDate();
-		        	if(p2Date == null)
-		        		p2Date = p2.getCreatedDate();
-		            return p1Date.compareTo(p2Date);
-		        }
-
-		    });
-			
 			Integer daysSince1900ResponseExpected =  DateTimeUtils.daysSince1900(lastResponseDate);
 			List<Pair<EarlyAlertMessageTemplateTO,Integer>> earlyAlertTOPairs = new ArrayList<Pair<EarlyAlertMessageTemplateTO,Integer>>();
 			for(EarlyAlertMessageTemplateTO ea:easByCoach.get(coachId)){
@@ -866,6 +897,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			messageParams.put("DateTimeUtils", DateTimeUtils.class);
 			messageParams.put("termToRepresentEarlyAlert",
 					configService.getByNameEmpty("term_to_represent_early_alert"));
+			
+			
 			SubjectAndBody subjAndBody = messageTemplateService.createEarlyAlertResponseRequiredToCoachMessage(messageParams);
 			try{
 				messageService.createMessage(coaches.get(coachId), null, subjAndBody);
@@ -883,7 +916,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		}catch(ObjectNotFoundException exp){
 			LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid creator: " + earlyAlert.getCreatedBy(), exp);
 		}
-		return new EarlyAlertMessageTemplateTO(earlyAlert, creator);
+		return new EarlyAlertMessageTemplateTO(earlyAlert, creator,earlyAlert.getPerson().getWatcherEmailAddresses());
 	}
 	
 	public Map<UUID,Number> getResponsesDueCountEarlyAlerts(List<UUID> personIds){
