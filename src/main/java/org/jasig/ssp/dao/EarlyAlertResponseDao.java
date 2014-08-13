@@ -558,7 +558,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		if (personSearchFormTO.getWatcher() != null
 				&& personSearchFormTO.getWatcher().getId() != null) {
 			criteria.createAlias("person.watchers", "watchers");
-			criteria.createCriteria("watchers").add(Restrictions.eq("person.id", personSearchFormTO.getWatcher().getId()));
+			criteria.add(Restrictions.eq("watchers.person.id", personSearchFormTO.getWatcher().getId()));
 		}	
 		if (personSearchFormTO.getProgramStatus() != null) {	
 			criteria.createAlias("person.programStatuses",

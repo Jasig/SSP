@@ -58,7 +58,6 @@
 	<field name="earlyAlertsInitialTerm" class="java.lang.Long"/>
 	<field name="earlyAlertsComparisonTerm" class="java.lang.Long"/>
 	<field name="coachName" class="java.lang.String"/>
-	<field name="watcherName" class="java.lang.String"/>
 	
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
