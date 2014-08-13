@@ -267,4 +267,5 @@
 	<include file="org/jasig/ssp/database/ltichangesets/lti000003.xml" />
 	<include file="org/jasig/ssp/database/ltichangesets/lti000004.xml" />
 	<include file="org/jasig/ssp/database/changesets/000147.xml" />
+	<include file="org/jasig/ssp/database/changesets/000148.xml" />
 </databaseChangeLog>
