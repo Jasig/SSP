@@ -356,7 +356,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasSpecialServiceGroup(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" specialServiceGroup = :specialServiceGroup ");
+			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup = :specialServiceGroup ");
 		}
 		
 		
