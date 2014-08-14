@@ -164,12 +164,12 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     savePersonSuccess: function( r, scope ){
 		var me=scope;
 		var personProgramStatus;
-		me.getView().setLoading( false );    	
+
     	if (r.id != "")
 		{
     		// new student save an Active program status
     		// non-new student w/o status (Early Alert generated but not sent, or logged in, etc) also gets Active status
-    		if ( (me.person.get('id') == "") || (r.currentProgramStatusName == null ) )
+    		if ( !(r.currentProgramStatusName) )
     		{
     			personProgramStatus = new Ssp.model.PersonProgramStatus();
     			personProgramStatus.set('programStatusId',Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
@@ -182,26 +182,11 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
                     failure: me.saveProgramStatusFailure,
                     scope: me 
                 });
+    		} else {
+                me.saveProgramStatusSuccessForPersonId(r.id);
     		}
-    		
-    		// populate the person object with result
-    		me.person.populateFromGenericObject( r );
-    		me.getView().setLoading( false );
-        	
-    		var dialogOpts = {
-    			buttons: Ext.Msg.OK,
-    			icon: Ext.Msg.INFO,
-    			fn: Ext.emptyFn,
-    			title: '',
-    			msg: 'Student Information updated successfully',
-    			scope: me
-    		};	
-    		Ext.Msg.show(dialogOpts);
-			me.getView().close();
-			me.appEventsController.getApplication().fireEvent('updateSearchStoreRecord',{person:me.person});
-			me.appEventsController.getApplication().fireEvent('loadPerson');
-	    
 		}else{
+			me.getView().setLoading( false );
 			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
 		}    	
     },
@@ -416,13 +401,64 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
 	},
     
     saveProgramStatusSuccess: function( r, scope ){
-		var me=scope;	
-    },    
-    
+        var me=scope;
+        me.saveProgramStatusSuccessForPersonId(r.personId);
+    },
+
+    saveProgramStatusSuccessForPersonId: function( personId ) {
+        var me = this;
+        // reload the created person now that it's been fully initialized on the back end
+        me.personService.get(personId, {
+            success: me.createdPersonReloadSuccess,
+            failure: me.createdPersonReloadFailure,
+            scope: me
+        });
+    },
+
     saveProgramStatusFailure: function( response, scope ){
-    	var me=scope;  	
-    },       
-    
+        var me=scope;
+        me.getView().setLoading( false );
+        Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
+    },
+
+    createdPersonReloadSuccess: function(r, scope) {
+        var me=scope;
+        // Regenerating the singleton Person's internal
+        // data structure ensures populateFromGenericObject() doesn't
+        // skip meaningful response fields. E.g. there are click
+        // paths that result in the current singleton Person's
+        // internal data structure losing the currentProgramStatusName
+        // field. And populateFromGenericObject() uses the *target*
+        // object's fields to copy values out of the response, not
+        // the response object's fields. So in that case currentProgramStatusName
+        // simply won't be set on the singleton Person even if the
+        // current response contains that field. There's a very similar
+        // workaround for this problem
+        // in EditPersonViewController.getPersonSuccess().
+        var cleanPerson = new Ssp.model.Person();
+        me.person.data = cleanPerson.data;
+        me.person.populateFromGenericObject( r );
+        me.getView().setLoading( false );
+
+        var dialogOpts = {
+            buttons: Ext.Msg.OK,
+            icon: Ext.Msg.INFO,
+            fn: Ext.emptyFn,
+            title: '',
+            msg: 'Student Information updated successfully',
+            scope: me
+        };
+        Ext.Msg.show(dialogOpts);
+        me.getView().close();
+        me.appEventsController.getApplication().fireEvent('updateSearchStoreRecord',{person:me.person});
+        me.appEventsController.getApplication().fireEvent('loadPerson');
+    },
+
+    createdPersonReloadFailure: function(r, scope) {
+        var me=scope;
+        me.getView().setLoading( false );
+        Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
+    },
     
     getSelectedItemSelectorIdsForTransfer: function(values){
 		var selectedIds = new Array();
