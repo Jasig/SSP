@@ -445,7 +445,7 @@ public class DirectoryPersonSearchDao  {
 		if(hasSpecialServiceGroup(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" specialServiceGroup = :specialServiceGroup and specialServiceGroup is not null ");
+			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup = :specialServiceGroup and specialServiceGroup is not null ");
 		}
 	}
 
