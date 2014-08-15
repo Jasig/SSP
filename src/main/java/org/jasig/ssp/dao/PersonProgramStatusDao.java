@@ -25,6 +25,7 @@ import javax.validation.ValidationException;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
@@ -100,4 +101,28 @@ public class PersonProgramStatusDao
 		criteria.add(Restrictions.eq("person.id", personId));
 		return criteria.list();
 	}
+
+	/**
+	 * PersonProgramStatus often needs to update an existing row and then insert
+	 * another; this gives the client a way to ensure those underlying SQL
+	 * statements execute in the correct order. Ordering is important b/c triggers
+	 * fire on both updates and inserts and assume those stmts run in a certain order
+	 * e.g. such that the table is never in an inconsistent state w/r/t a person
+	 * having multiple active statuses.
+	 *
+	 * @param pps
+	 */
+	public PersonProgramStatus saveAndFlush(PersonProgramStatus pps) {
+		final UUID id = pps.getId();
+		final boolean isNew = id == null;
+		final PersonProgramStatus saved = super.save(pps);
+		if ( isNew ) {
+			//super.save() takes care of the flush for us
+			return saved;
+		}
+		final Session session = sessionFactory.getCurrentSession();
+		session.flush();
+		return saved;
+	}
+
 }
