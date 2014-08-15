@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author='paul.spaude' id='adding mygps tools list' >
+        <insert tableName="config">
+            <column name="id" value="f7158593-2250-4b03-bab7-3af851810b80" />
+            <column name="name" value="mygps_visible_tools" />
+            <column name="description" value="MyGPS Tools List Config:  Comma seperated list of the tools that appear on the home page of MyGPS." />
+            <column name="value" value="Self Help Guides, Contact Coach, Search, Map" />
+            <column name="default_value" value="Self Help Guides, Contact Coach, Search, Map" />
+            <column name="created_date" valueDate="2014-07-11T12:00:00" />
+            <column name="modified_date" valueDate="2014-07-11T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="650" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='f7158593-2250-4b03-bab7-3af851810b80'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    <changeSet id="Template Message for MyGPS Welcome Message" author="paul.spaude">
+        <insert tableName="message_template">
+            <column name="id" value="bfae38f8-53b0-486f-8bc5-a9d99beb514e" />
+            <column name="name" value="MyGPS Welcome Message" />
+            <column name="description"
+                value="Welcome Message displayed on the home screen of MyGPS. Subject is the Title and Body is the message." />
+            <column name="subject"><![CDATA[<h2>Welcome</h2>]]></column>
+            <column name="body"><![CDATA[<p>This self help tool will assist you in identifying and overcoming challenges 
+         or barriers to your success at this college. Please use the Self Help Guides to begin the process of identifying 
+         the challenges you might face, and discovering the solutions available to meet those challenges. 
+         The tool will assist you in building a Personal Road Map that will guide you on your journey to success. 
+         Good luck on that journey!</p>]]>
+            </column>
+            <column name="created_date" valueDate="2014-07-24T16:00:00" />
+            <column name="modified_date" valueDate="2014-07-24T16:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="message_template">
+                <where>id = 'bfae38f8-53b0-486f-8bc5-a9d99beb514e'</where>
+            </delete>
+        </rollback>
+    </changeSet>   
+</databaseChangeLog>

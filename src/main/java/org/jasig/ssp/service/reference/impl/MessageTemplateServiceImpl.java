@@ -406,4 +406,10 @@ public class MessageTemplateServiceImpl extends
 					MessageTemplate.EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE_ID,
 					messageParams);
 	}
+
+    @Override
+    public SubjectAndBody createMyGPSWelcomeMessage () {
+        return populateFromTemplate(MessageTemplate.MYGPS_WELCOME_MESSAGE_ID,
+                new HashMap<String, Object>());
+    }
 }

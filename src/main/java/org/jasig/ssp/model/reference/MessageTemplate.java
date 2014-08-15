@@ -86,6 +86,9 @@ public class MessageTemplate
 	public static final UUID EARLYALERT_RESPONSE_REQUIRED_ID = UUID.
 			fromString("bfae36f8-53d0-486f-8bc5-a9d98beb544e");
 
+    public static final UUID MYGPS_WELCOME_MESSAGE_ID = UUID.
+            fromString("bfae38f8-53b0-486f-8bc5-a9d99beb514e");
+
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;

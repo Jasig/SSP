@@ -185,7 +185,7 @@ public class StudentIntakeFormManager { // NOPMD
 	private transient TermService termService;
 
     @Autowired
-    protected transient ConfigService configService;
+    private transient ConfigService configService;
 
 
 
