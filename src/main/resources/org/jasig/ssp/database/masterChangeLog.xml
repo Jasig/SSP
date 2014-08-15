@@ -269,4 +269,6 @@
 	<include file="org/jasig/ssp/database/changesets/000148.xml" />
 	<include file="org/jasig/ssp/database/changesets/000149.xml" />
 	<include file="org/jasig/ssp/database/changesets/000150.xml" />
+	<!-- 000151.xml intentionally skipped for 2.5.x -->
+	<include file="org/jasig/ssp/database/changesets/000152.xml" />
 </databaseChangeLog>
