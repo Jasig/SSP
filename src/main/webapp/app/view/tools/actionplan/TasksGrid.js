@@ -56,7 +56,13 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
            
         }
     },
-    
+    addToolTipWithValue: function() {
+        return function(value, metadata) {
+            metadata.tdAttr = 'data-qtip="' + value + '"';
+            return value;
+        }
+    },
+
     initComponent: function(){
         var me = this;
         
@@ -72,7 +78,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 }
             }
         });
-        
+
         Ext.apply(me, {
             plugins: cellEditor,
             selType: 'rowmodel',
@@ -92,6 +98,12 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
             },
             columns: [{
                 header: 'Task',
+                flex: .35,
+                dataIndex: 'name',
+                renderer: me.addToolTipWithValue(),
+                rowEditable: false
+            }, {
+                header: 'Description',
                 flex: 1,
                 dataIndex: 'description',
                 rowEditable: false,
@@ -104,7 +116,8 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 field: {
                     xtype: 'textfield',
                     fieldStyle: "margin-bottom:12px;"
-                }
+                },
+                renderer: me.addToolTipWithValue()
             },{
                 xtype: 'datecolumn',
                 header: 'Due Date',
@@ -117,12 +130,15 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 	var dt = record.get('dueDate');
 
 					if (Ext.isObject(dt) && dt.apStr) {
+					    metaData.tdAttr = 'data-qtip="' + dt.apStr + '"';
 						return dt.apStr;
 					} else {
 						if (Ext.isDate(dt)) {
+                            metaData.tdAttr = 'data-qtip="' + Ext.Date.format(dt,'m/d/y') + '"';
 							return Ext.Date.format(dt,'m/d/y');
 						}
 						else {
+						    metaData.tdAttr = 'data-qtip="' + dt + '"';
 							return dt;
 						}
 					}
@@ -164,11 +180,8 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     allowBlank: false,
                     emptyText: 'Select One'
                 
-                }
-            
-			
-            
-            
+                },
+                renderer: me.addToolTipWithValue()
             }],
             
             dockedItems: [{
