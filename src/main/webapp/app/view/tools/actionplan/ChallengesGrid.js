@@ -43,6 +43,12 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
             //return fullDesc;
         }
     },
+    addToolTipWithValue: function() {
+        return function(value, metadata) {
+            metadata.tdAttr = 'data-qtip="' + value + '"';
+            return value;
+        }
+    },
     
     initComponent: function(){
         var me = this;
@@ -56,15 +62,21 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
                 xtype: 'gridcolumn',
                 renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
                     var tpl = new Ext.Template('<div class="wrappable-cell">{NAME}</div>');
-                    
+                    metaData.tdAttr = 'data-qtip="' + value + '"';
                     return tpl.apply({
                         NAME: record.get('challengeName')
                     });
                 },
-                width: 150
+                width: 100
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'challengeReferralName',
+                header: 'Name',
+                flex: 0.6 ,
+                renderer: me.addToolTipWithValue()
+            }, {
+                xtype: 'gridcolumn',
+                dataIndex: 'challengeReferralDescription',
                 header: 'Referrals',
                 flex: 1,
                 renderer: me.fullReferralDescription()
