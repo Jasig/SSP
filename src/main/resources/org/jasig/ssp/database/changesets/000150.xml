@@ -57,4 +57,97 @@
 
                         END ]]></sql>
     </changeSet>
+
+    <changeSet dbms="mssql" id="drop trig tr_insert_directory_person_early_alert_response msql" author="dan.mccallum">
+        <sql splitStatements="false"><![CDATA[
+                drop TRIGGER tr_insert_directory_person_early_alert_response;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="edit early_alert_response change trigger to iterate msql" author="dan.mccallum">
+        <!-- Indebted to: http://stackoverflow.com/questions/17050959/while-loop-inside-a-trigger-to-loop-through-all-the-columns-of-table-in-sql -->
+        <sql splitStatements="false"><![CDATA[
+                   CREATE TRIGGER ${schema}.tr_insert_directory_person_early_alert_response on ${schema}.early_alert_response FOR INSERT, UPDATE AS
+                       IF ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
+                       BEGIN
+
+                           DECLARE @person_id UNIQUEIDENTIFIER
+                           DECLARE inserted_cur CURSOR FORWARD_ONLY READ_ONLY LOCAL FOR
+                               SELECT distinct person_id from inserted as ins, early_alert as ea where ea.id = ins.early_alert_id
+
+                           OPEN inserted_cur
+
+                           FETCH NEXT FROM inserted_cur INTO @person_id
+                           WHILE @@FETCH_STATUS = 0 BEGIN
+                               EXEC ${schema}.update_directory_person_from_view_where_person_id @person_id
+                               FETCH NEXT FROM inserted_cur INTO @person_id
+                           END
+
+                           CLOSE inserted_cur
+                           DEALLOCATE inserted_cur
+
+                        END ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="re-drop trigger tr_insert_directory_person_early_alert msql" author="dan.mccallum">
+        <sql splitStatements="false"><![CDATA[
+                drop TRIGGER tr_insert_directory_person_early_alert;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="edit early_alert change trigger to iterate distinct msql" author="dan.mccallum">
+        <!-- Indebted to: http://stackoverflow.com/questions/17050959/while-loop-inside-a-trigger-to-loop-through-all-the-columns-of-table-in-sql -->
+        <sql splitStatements="false"><![CDATA[
+                   CREATE TRIGGER ${schema}.tr_insert_directory_person_early_alert on ${schema}.early_alert FOR INSERT, UPDATE AS
+                       IF ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
+                       BEGIN
+
+                           DECLARE @person_id UNIQUEIDENTIFIER
+                           DECLARE inserted_cur CURSOR FORWARD_ONLY READ_ONLY LOCAL FOR
+                               SELECT distinct person_id FROM inserted
+
+                           OPEN inserted_cur
+
+                           FETCH NEXT FROM inserted_cur INTO @person_id
+                           WHILE @@FETCH_STATUS = 0 BEGIN
+                               EXEC ${schema}.update_directory_person_from_view_where_person_id @person_id
+                               FETCH NEXT FROM inserted_cur INTO @person_id
+                           END
+
+                           CLOSE inserted_cur
+                           DEALLOCATE inserted_cur
+
+                        END ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="drop trigger tr_insert_directory_person_program_status msql" author="dan.mccallum">
+        <sql splitStatements="false"><![CDATA[
+                drop TRIGGER tr_insert_directory_person_program_status;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="edit person_program_status change trigger to iterate msql" author="dan.mccallum">
+        <!-- Indebted to: http://stackoverflow.com/questions/17050959/while-loop-inside-a-trigger-to-loop-through-all-the-columns-of-table-in-sql -->
+        <sql splitStatements="false"><![CDATA[
+                   CREATE TRIGGER ${schema}.tr_insert_directory_person_program_status on ${schema}.person_program_status FOR INSERT, UPDATE AS
+                       IF ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
+                       BEGIN
+
+                           DECLARE @person_id UNIQUEIDENTIFIER
+                           DECLARE inserted_cur CURSOR FORWARD_ONLY READ_ONLY LOCAL FOR
+                               SELECT distinct person_id FROM inserted
+
+                           OPEN inserted_cur
+
+                           FETCH NEXT FROM inserted_cur INTO @person_id
+                           WHILE @@FETCH_STATUS = 0 BEGIN
+                               EXEC ${schema}.update_directory_person_from_view_where_person_id @person_id
+                               FETCH NEXT FROM inserted_cur INTO @person_id
+                           END
+
+                           CLOSE inserted_cur
+                           DEALLOCATE inserted_cur
+
+                        END ]]></sql>
+    </changeSet>
 </databaseChangeLog>
