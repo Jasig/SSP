@@ -156,11 +156,11 @@
     
      <changeSet dbms="mssql" id="update tr_insert_directory_person_person msql" author="jim.stanley">
         <sql splitStatements="false"><![CDATA[
-             CREATE TRIGGER dbo.tr_insert_directory_person_person on dbo.person FOR INSERT, UPDATE AS
+             CREATE TRIGGER ${schema}.tr_insert_directory_person_person on ${schema}.person FOR INSERT, UPDATE AS
                     declare @school_ids VARCHAR(50)
                     set @school_ids = (SELECT school_id FROM inserted where 1=1);
                     IF @@ROWCOUNT > 0 AND ${schema}.DIRECTORY_PERSON_REFRESH_RUNNING() = 0
-                    EXEC dbo.update_directory_person_from_view_where_school_id @school_ids;
+                    EXEC ${schema}.update_directory_person_from_view_where_school_id @school_ids;
         ]]></sql>
     </changeSet>
 
