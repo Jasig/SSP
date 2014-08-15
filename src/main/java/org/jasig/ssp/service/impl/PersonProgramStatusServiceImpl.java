@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * PersonProgramStatus service implementation
@@ -137,7 +138,11 @@ public class PersonProgramStatusServiceImpl extends
 		PersonProgramStatus pps = getActiveExcluding(person, savingStatus);
 		if ( pps != null ) {
 			pps.setExpirationDate(new Date());
-			dao.save(pps);
+			// make sure this runs before a subsequent insert (if any), else
+			// the next Hib session flush might run the insert before the
+			// update and we'd get two active statuses at the same time,
+			// which will break db triggers
+			dao.saveAndFlush(pps);
 		}
 	}
 
