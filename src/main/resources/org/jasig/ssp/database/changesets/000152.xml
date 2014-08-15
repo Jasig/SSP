@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet dbms="mssql" id="allow directory insert and update by person_id msql" author="dan.mccallum">
+        <sql splitStatements="false" ><![CDATA[
+            ALTER PROCEDURE ${schema}.update_directory_person_from_view_where_person_id
+                @input uniqueidentifier
+            as
+            BEGIN
+              IF EXISTS (select 1 from ${schema}.mv_directory_person where person_id=@input)
+              BEGIN
+                UPDATE ${schema}.mv_directory_person
+                SET
+            id =                        subquery.id,
+            object_status =             subquery.object_status,
+            person_id =                 subquery.person_id,
+            school_id =                subquery.school_id,
+            username =                  subquery.username,
+            first_name =                subquery.first_name,
+            middle_name =               subquery.middle_name,
+            last_name =                 subquery.last_name,
+            birth_date =                subquery.birth_date,
+            primary_email_address =     subquery.primary_email_address,
+            address_line_1 =            subquery.address_line_1,
+            address_line_2 =            subquery.address_line_2,
+            city =                      subquery.city,
+            state =                     subquery.state,
+            zip_code =                  subquery.zip_code,
+            home_phone =                subquery.home_phone,
+            work_phone =                subquery.work_phone,
+            actual_start_term =         subquery.actual_start_term,
+            actual_start_year =         subquery.actual_start_year,
+            cell_phone =                subquery.cell_phone,
+            photo_url =                 subquery.photo_url,
+            residency_county =          subquery.residency_county,
+            f1_status =                 subquery.f1_status,
+            coach_id =                  subquery.coach_id,
+            coach_first_name =          subquery.coach_first_name,
+            coach_last_name =           subquery.coach_last_name,
+            student_type_name =         subquery.student_type_name,
+            student_intake_complete_date = subquery.student_intake_complete_date,
+            program_status_name =       subquery.program_status_name,
+            credit_hours_earned =       subquery.credit_hours_earned,
+            sap_status_code =           subquery.sap_status_code,
+            grade_point_average =       subquery.grade_point_average,
+            active_alerts_count =       subquery.active_alerts_count,
+            closed_alerts_count =       subquery.closed_alerts_count,
+            early_alert_response_due_count = subquery.early_alert_response_due_count,
+            early_alert_response_current_count = subquery.early_alert_response_current_count,
+            current_registration_status = subquery.current_registration_status
+            FROM (SELECT    vpd.id,
+                vpd.person_id,
+                vpd.object_status,
+                vpd.school_id,
+                vpd.username,
+                vpd.first_name,
+                vpd.middle_name,
+                vpd.last_name,
+                vpd.birth_date,
+                vpd.primary_email_address,
+                vpd.address_line_1,
+                vpd.address_line_2,
+                vpd.city,
+                vpd.state,
+                vpd.zip_code,
+                vpd.home_phone,
+                vpd.work_phone,
+                vpd.actual_start_term,
+                vpd.actual_start_year,
+                vpd.cell_phone,
+                vpd.photo_url,
+                vpd.residency_county,
+                vpd.f1_status,
+                vpd.coach_id,
+                vpd.coach_first_name,
+                vpd.coach_last_name,
+                vpd.student_type_name,
+                vpd.student_intake_complete_date,
+                vpd.program_status_name,
+                vpd.credit_hours_earned,
+                vpd.sap_status_code,
+                vpd.grade_point_average,
+                vpd.active_alerts_count,
+                vpd.closed_alerts_count,
+                vpd.early_alert_response_due_count,
+                vpd.early_alert_response_current_count,
+                vpd.current_registration_status
+                  FROM  ${schema}.v_directory_person as vpd WHERE vpd.person_id=@input) AS subquery
+            WHERE ${schema}.mv_directory_person.id=subquery.id;
+              END
+              ELSE
+                INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where person_id = @input
+            END;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="allow directory insert and update by school_id msql" author="dan.mccallum">
+        <sql splitStatements="false" ><![CDATA[
+            ALTER PROCEDURE ${schema}.update_directory_person_from_view_where_school_id
+                @input VARCHAR(50)
+            as
+            BEGIN
+              IF EXISTS (select 1 from ${schema}.mv_directory_person where id=@input)
+              BEGIN
+            UPDATE ${schema}.mv_directory_person
+            SET
+            id =                        subquery.id,
+            object_status =             subquery.object_status,
+            person_id =                 subquery.person_id,
+            school_id =                 subquery.school_id,
+            username =                  subquery.username,
+            first_name =                subquery.first_name,
+            middle_name =               subquery.middle_name,
+            last_name =                 subquery.last_name,
+            birth_date =                subquery.birth_date,
+            primary_email_address =     subquery.primary_email_address,
+            address_line_1 =            subquery.address_line_1,
+            address_line_2 =            subquery.address_line_2,
+            city =                      subquery.city,
+            state =                     subquery.state,
+            zip_code =                  subquery.zip_code,
+            home_phone =                subquery.home_phone,
+            work_phone =                subquery.work_phone,
+            actual_start_term =         subquery.actual_start_term,
+            actual_start_year =         subquery.actual_start_year,
+            cell_phone =                subquery.cell_phone,
+            photo_url =                 subquery.photo_url,
+            residency_county =          subquery.residency_county,
+            f1_status =                 subquery.f1_status,
+            coach_id =                  subquery.coach_id,
+            coach_first_name =          subquery.coach_first_name,
+            coach_last_name =           subquery.coach_last_name,
+            student_type_name =         subquery.student_type_name,
+            student_intake_complete_date = subquery.student_intake_complete_date,
+            program_status_name =       subquery.program_status_name,
+            credit_hours_earned =       subquery.credit_hours_earned,
+            sap_status_code =           subquery.sap_status_code,
+            grade_point_average =       subquery.grade_point_average,
+            active_alerts_count =       subquery.active_alerts_count,
+            closed_alerts_count =       subquery.closed_alerts_count,
+            early_alert_response_due_count = subquery.early_alert_response_due_count,
+            early_alert_response_current_count = subquery.early_alert_response_current_count,
+            current_registration_status = subquery.current_registration_status
+            FROM (SELECT    vpd.id,
+                vpd.person_id,
+                vpd.object_status,
+                vpd.school_id,
+                vpd.username,
+                vpd.first_name,
+                vpd.middle_name,
+                vpd.last_name,
+                vpd.birth_date,
+                vpd.primary_email_address,
+                vpd.address_line_1,
+                vpd.address_line_2,
+                vpd.city,
+                vpd.state,
+                vpd.zip_code,
+                vpd.home_phone,
+                vpd.work_phone,
+                vpd.actual_start_term,
+                vpd.actual_start_year,
+                vpd.cell_phone,
+                vpd.photo_url,
+                vpd.residency_county,
+                vpd.f1_status,
+                vpd.coach_id,
+                vpd.coach_first_name,
+                vpd.coach_last_name,
+                vpd.student_type_name,
+                vpd.student_intake_complete_date,
+                vpd.program_status_name,
+                vpd.credit_hours_earned,
+                vpd.sap_status_code,
+                vpd.grade_point_average,
+                vpd.active_alerts_count,
+                vpd.closed_alerts_count,
+                vpd.early_alert_response_due_count,
+                vpd.early_alert_response_current_count,
+                vpd.current_registration_status
+                  FROM  ${schema}.v_directory_person as vpd WHERE vpd.id=@input) AS subquery
+            WHERE ${schema}.mv_directory_person.id=subquery.id;
+              END
+              ELSE
+                INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where id = @input
+            END;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="postgresql" id="allow directory insert and update by person_id pg" author="dan.mccallum">
+        <sql splitStatements="false"><![CDATA[
+            create or replace FUNCTION ${schema}.update_directory_person_from_view_where_person_id()
+            RETURNS TRIGGER as $$
+            BEGIN
+            IF (TG_OP = 'UPDATE' OR TG_OP = 'INSERT') THEN
+              IF EXISTS (select 1 from ${schema}.mv_directory_person where person_id=NEW.person_id) THEN
+            UPDATE ${schema}.mv_directory_person
+            SET
+            id =                        subquery.id,
+            object_status =             subquery.object_status,
+            person_id =                 subquery.person_id,
+            school_id =                subquery.school_id,
+            username =                  subquery.username,
+            first_name =                subquery.first_name,
+            middle_name =               subquery.middle_name,
+            last_name =                 subquery.last_name,
+            birth_date =                subquery.birth_date,
+            primary_email_address =     subquery.primary_email_address,
+            address_line_1 =            subquery.address_line_1,
+            address_line_2 =            subquery.address_line_2,
+            city =                      subquery.city,
+            state =                     subquery.state,
+            zip_code =                  subquery.zip_code,
+            home_phone =                subquery.home_phone,
+            work_phone =                subquery.work_phone,
+            actual_start_term =         subquery.actual_start_term,
+            actual_start_year =         subquery.actual_start_year,
+            cell_phone =                subquery.cell_phone,
+            photo_url =                 subquery.photo_url,
+            residency_county =          subquery.residency_county,
+            f1_status =                 subquery.f1_status,
+            coach_id =                  subquery.coach_id,
+            coach_first_name =          subquery.coach_first_name,
+            coach_last_name =           subquery.coach_last_name,
+            student_type_name =         subquery.student_type_name,
+            student_intake_complete_date = subquery.student_intake_complete_date,
+            program_status_name =       subquery.program_status_name,
+            credit_hours_earned =       subquery.credit_hours_earned,
+            sap_status_code =           subquery.sap_status_code,
+            grade_point_average =       subquery.grade_point_average,
+            active_alerts_count =       subquery.active_alerts_count,
+            closed_alerts_count =       subquery.closed_alerts_count,
+            early_alert_response_due_count = subquery.early_alert_response_due_count,
+            early_alert_response_current_count = subquery.early_alert_response_current_count,
+            current_registration_status = subquery.current_registration_status
+            FROM (SELECT    vpd.id,
+                vpd.person_id,
+                vpd.object_status,
+                vpd.school_id,
+                vpd.username,
+                vpd.first_name,
+                vpd.middle_name,
+                vpd.last_name,
+                vpd.birth_date,
+                vpd.primary_email_address,
+                vpd.address_line_1,
+                vpd.address_line_2,
+                vpd.city,
+                vpd.state,
+                vpd.zip_code,
+                vpd.home_phone,
+                vpd.work_phone,
+                vpd.actual_start_term,
+                vpd.actual_start_year,
+                vpd.cell_phone,
+                vpd.photo_url,
+                vpd.residency_county,
+                vpd.f1_status,
+                vpd.coach_id,
+                vpd.coach_first_name,
+                vpd.coach_last_name,
+                vpd.student_type_name,
+                vpd.student_intake_complete_date,
+                vpd.program_status_name,
+                vpd.credit_hours_earned,
+                vpd.sap_status_code,
+                vpd.grade_point_average,
+                vpd.active_alerts_count,
+                vpd.closed_alerts_count,
+                vpd.early_alert_response_due_count,
+                vpd.early_alert_response_current_count,
+                vpd.current_registration_status
+                  FROM  ${schema}.v_directory_person as vpd WHERE vpd.person_id=NEW.person_id) AS subquery
+            WHERE ${schema}.mv_directory_person.id=subquery.id;
+              ELSE
+                INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where person_id = NEW.person_id;
+              END IF;
+            END IF;
+            RETURN NULL;
+            END;
+            $$ LANGUAGE plpgsql;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="postgresql" id="allow directory insert and update by school_id pg" author="dan.mccallum">
+        <sql splitStatements="false"><![CDATA[
+            create or replace FUNCTION ${schema}.update_directory_person_from_view_where_school_id()
+            RETURNS TRIGGER as $$
+            BEGIN
+            IF (TG_OP = 'UPDATE' OR TG_OP = 'INSERT') THEN
+              IF EXISTS (select 1 from ${schema}.mv_directory_person where id=NEW.school_id) THEN
+            UPDATE ${schema}.mv_directory_person
+            SET
+            id =                        subquery.id,
+            person_id =                 subquery.person_id,
+            object_status =             subquery.object_status,
+            school_id =                 subquery.school_id,
+            username =                  subquery.username,
+            first_name =                subquery.first_name,
+            middle_name =               subquery.middle_name,
+            last_name =                 subquery.last_name,
+            birth_date =                subquery.birth_date,
+            primary_email_address =     subquery.primary_email_address,
+            address_line_1 =            subquery.address_line_1,
+            address_line_2 =            subquery.address_line_2,
+            city =                      subquery.city,
+            state =                     subquery.state,
+            zip_code =                  subquery.zip_code,
+            home_phone =                subquery.home_phone,
+            work_phone =                subquery.work_phone,
+            actual_start_term =         subquery.actual_start_term,
+            actual_start_year =         subquery.actual_start_year,
+            cell_phone =                subquery.cell_phone,
+            photo_url =                 subquery.photo_url,
+            residency_county =          subquery.residency_county,
+            f1_status =                 subquery.f1_status,
+            coach_id =                  subquery.coach_id,
+            coach_first_name =          subquery.coach_first_name,
+            coach_last_name =           subquery.coach_last_name,
+            student_type_name =         subquery.student_type_name,
+            student_intake_complete_date = subquery.student_intake_complete_date,
+            program_status_name =       subquery.program_status_name,
+            credit_hours_earned =       subquery.credit_hours_earned,
+            sap_status_code =           subquery.sap_status_code,
+            grade_point_average =       subquery.grade_point_average,
+            active_alerts_count =       subquery.active_alerts_count,
+            closed_alerts_count =       subquery.closed_alerts_count,
+            early_alert_response_due_count = subquery.early_alert_response_due_count,
+            early_alert_response_current_count = subquery.early_alert_response_current_count,
+            current_registration_status = subquery.current_registration_status
+            FROM (SELECT    vpd.id,
+                vpd.person_id,
+                vpd.object_status,
+                vpd.school_id,
+                vpd.username,
+                vpd.first_name,
+                vpd.middle_name,
+                vpd.last_name,
+                vpd.birth_date,
+                vpd.primary_email_address,
+                vpd.address_line_1,
+                vpd.address_line_2,
+                vpd.city,
+                vpd.state,
+                vpd.zip_code,
+                vpd.home_phone,
+                vpd.work_phone,
+                vpd.actual_start_term,
+                vpd.actual_start_year,
+                vpd.cell_phone,
+                vpd.photo_url,
+                vpd.residency_county,
+                vpd.f1_status,
+                vpd.coach_id,
+                vpd.coach_first_name,
+                vpd.coach_last_name,
+                vpd.student_type_name,
+                vpd.student_intake_complete_date,
+                vpd.program_status_name,
+                vpd.credit_hours_earned,
+                vpd.sap_status_code,
+                vpd.grade_point_average,
+                vpd.active_alerts_count,
+                vpd.closed_alerts_count,
+                vpd.early_alert_response_due_count,
+                vpd.early_alert_response_current_count,
+                vpd.current_registration_status
+                  FROM  ${schema}.v_directory_person as vpd WHERE vpd.id=NEW.school_id) AS subquery
+            WHERE ${schema}.mv_directory_person.id=subquery.id;
+              ELSE
+                INSERT INTO ${schema}.mv_directory_person SELECT * FROM ${schema}.v_directory_person where id = NEW.school_id;
+              END IF;
+            END IF;
+            RETURN NULL;
+            END;
+            $$ LANGUAGE plpgsql;
+        ]]></sql>
+    </changeSet>
+</databaseChangeLog>
