@@ -66,6 +66,12 @@ Ext.define('Ssp.service.SearchService', {
 				activeParams[key] = params[key] 
 			}
 		}
+		if(!activeParams['sort'])
+		{
+			activeParams['sort'] = 'lastName';
+			activeParams['sortDirection'] = 'ASC'
+			
+		}	
 		var encodedUrl = Ext.urlEncode(activeParams);
 
 		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
@@ -90,7 +96,6 @@ Ext.define('Ssp.service.SearchService', {
 			},
 			scope: me
 		});
-		me.store.sort('sortableName','ASC');
 	},
 
     search: function( searchTerm, outsideCaseload, callbacks ){
