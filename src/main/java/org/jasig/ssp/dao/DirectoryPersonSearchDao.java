@@ -185,20 +185,22 @@ public class DirectoryPersonSearchDao  {
 			currentTerm.setEndDate(Calendar.getInstance().getTime());
 			
 		}
-		StringBuilder stringBuilder = buildSelect();
-		
-		if(!buildFrom(personSearchRequest,stringBuilder))
+		final String hqlSelect = buildSelect().toString();
+
+		final StringBuilder hqlWithoutSelect = new StringBuilder();
+		if(!buildFrom(personSearchRequest,hqlWithoutSelect))
 			return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
 		
-		buildJoins(personSearchRequest,stringBuilder);
+		buildJoins(personSearchRequest,hqlWithoutSelect);
 		
-		buildWhere(personSearchRequest, filterTracker, stringBuilder);
+		buildWhere(personSearchRequest, filterTracker, hqlWithoutSelect);
 		
 		Map<String,Object> params = getBindParams(personSearchRequest, currentTerm);
 		
 		Pair<Long,Query> querySet =  personSearchRequest
 				.getSortAndPage()
-				.applySortingAndPagingToPagedQuery(sessionFactory.getCurrentSession(), stringBuilder, false, null, false, params);
+				.applySortingAndPagingToPagedQuery(sessionFactory.getCurrentSession(), "dp.schoolId", hqlSelect,
+						hqlWithoutSelect, false, null, false, params);
 		
 		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
