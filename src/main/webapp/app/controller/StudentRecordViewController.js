@@ -179,7 +179,12 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     },
 	onViewCoachingHistoryButtonClick: function(button){
         var me=this;
-        me.appEventsController.getApplication().fireEvent('viewCoachHistory');
+        var personId = me.person.get('id');
+        var personViewHistoryUrl = (me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory')).replace('{id}',personId);
+        me.apiProperties.getReporter().load({
+            url:personViewHistoryUrl,
+            params: ""
+        });
     },
     
     updateStudentRecord: function(args){

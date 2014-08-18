@@ -28,40 +28,11 @@ Ext.define('Ssp.controller.tool.profile.ProfileToolViewController', {
     config: {
     	printConfidentialityAgreementUrl: ''
     },
-    control: {
-    	
-    },
 	init: function() {
 		
 		var me=this;
 		var personId = me.personLite.get('id');
-		
-		me.appEventsController.assignEvent({
-            eventName: 'viewCoachHistory',
-            callBackFunc: me.onViewCoachHistory,
-            scope: me
-        });
-
 		me.printConfidentialityAgreementUrl = me.apiProperties.getContext() + me.apiProperties.getItemUrl('printConfidentialityDisclosureAgreement');
 		return this.callParent(arguments);
-    },
-	
-	destroy: function() {
-        var me=this;
-       me.appEventsController.removeEvent({eventName: 'viewCoachHistory', callBackFunc: me.onViewCoachHistory, scope: me});
-        
-        return me.callParent( arguments );
-    },
-    
-	
-	
-	onViewCoachHistory: function(){
-      var me=this;
-      var personId = me.personLite.get('id');
-      var personViewHistoryUrl = (me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory')).replace('{id}',personId);
-      me.apiProperties.getReporter().load({
-            url:personViewHistoryUrl,
-            params: ""
-        });
     }
 });
