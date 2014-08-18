@@ -309,28 +309,48 @@ public final class SortingAndPaging { // NOPMD
 	 * @param criteria
 	 *            Paging filter will be added to this criteria
 	 */
-	public void addPagingToQuery(final Query query) {
+	public Query addPagingToQuery(final Query query) {
 		if (isPaged()) {
 			query.setFirstResult(firstResult);
 			query.setMaxResults(maxResults);
 		}
+		return query;
 	}
 	
-	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Session session, final StringBuilder hql,
+	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Session session,
+															  final String countColumn,
+															  final String hqlSelectClause,
+															  final StringBuilder hqlWithoutSelect,
 			final boolean filterByStatus,String objectToAddStatusFilter, Boolean isInitialRestriction, Map<String,Object> bindParams) {
 
 		if (filterByStatus && StringUtils.isNotBlank(objectToAddStatusFilter)) {
-			addStatusFilterToQuery(hql, objectToAddStatusFilter, isInitialRestriction);
+			addStatusFilterToQuery(hqlWithoutSelect, objectToAddStatusFilter, isInitialRestriction);
 			bindParams.put("objectStatus", getStatus());
 		}
-		
-		addSortingToQuery(hql);
-		
-		Query query = session.createQuery(hql.toString());
-		query.setProperties(bindParams);
-		final Long totalRows = new Integer(query.list().size()).longValue();
-		addPagingToQuery(query);
-		return new Pair<Long,Query>(totalRows,query);
+
+		// When using HQL, subqueries can only occur in the select and the where, not in the from.
+		// So we have the client explicitly tell us where the select clause ends and the from+where
+		// clause begins so we can unambiguously execute the latter twice, once with our count()
+		// function and once for the "real" results. (Parsing to find where the from clause starts is
+		// fraught. E.g. see https://issues.jasig.org/browse/SSP-2192 and related tickets.)
+		final StringBuilder rowCntHql = new StringBuilder("select ");
+		if ( StringUtils.isBlank(countColumn) ) {
+			rowCntHql.append("count(*) ");
+		} else {
+			rowCntHql.append("count(distinct ").append(countColumn).append(") ");
+		}
+		rowCntHql.append(hqlWithoutSelect);
+
+		final Query rowCntQuery = session.createQuery(rowCntHql.toString());
+		rowCntQuery.setProperties(bindParams);
+		final Long totalRows = (Long)rowCntQuery.iterate().next();
+
+		// Sorting not added until here b/c if it's present in the count() query
+		// above, the db will usually complain about that field not being
+		// present in a group by/aggr function
+		final StringBuilder fullHql = new StringBuilder(hqlSelectClause).append(addSortingToQuery(hqlWithoutSelect));
+		final Query fullQuery = addPagingToQuery(session.createQuery(fullHql.toString())).setProperties(bindParams);
+		return new Pair<Long,Query>(totalRows,fullQuery);
 	}
 
 	public Long applySortingAndPagingToPagedQuery(final Criteria query,
