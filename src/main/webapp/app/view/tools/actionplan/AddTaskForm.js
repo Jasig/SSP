@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				    },{
 				    	xtype: 'textarea',
 				        fieldLabel: 'Link (No HTML)',
-				        inputAttrTpl: " data-qtip='Example: www.google.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
+				        inputAttrTpl: " data-qtip='Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
 				        name: 'link',
 				        maxLength: 256,
 				        allowBlank:true

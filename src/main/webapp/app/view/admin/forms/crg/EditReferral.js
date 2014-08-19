@@ -48,7 +48,7 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                 ,{
                     xtype: 'textareafield',
                     fieldLabel: 'Link (No HTML)',
-                    inputAttrTpl: " data-qtip='Example: www.google.com  <br /> Remove any existing HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
+                    inputAttrTpl: " data-qtip='Example: https://www.sample.com  <br /> Remove any existing HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
                     anchor: '100%',
                     maxLength: 256,
                     name: 'link'
