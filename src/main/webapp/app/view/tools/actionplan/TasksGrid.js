@@ -58,7 +58,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
     },
     addToolTipWithValue: function() {
         return function(value, metadata) {
-            metadata.tdAttr = 'data-qtip="' + value + '"';
+            if ( value && value.trim() ) {
+                metadata.tdAttr = 'data-qtip="' + value + '"';
+            }
             return value;
         }
     },
@@ -66,20 +68,23 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
         return function(value, metadata) {
             var returnValueFormatted = "";
             var valueHref = value;
-            if ( valueHref.match(/href="([^"]*)/igm) ) {
-                valueHref = (value.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
-            }
-            if ( valueHref.indexOf("http://") < 0 ) {
-                valueHref = "http://" + valueHref;
-            }
 
-            if ( valueHref.search(/<(.|\n)*?>/igm) < 0 ) {
-                metadata.tdAttr = 'data-qtip="' + valueHref + '"';
-                returnValueFormatted = "<a href=\"" + valueHref + "\" target=\"blank\"> " + valueHref.replace("http://", "") + "</a>";
-            } else {
-                valueHref = Ext.String.htmlEncode(value);
-                metadata.tdAttr = 'data-qtip="' + Ext.String.htmlEncode(valueHref) + '"';
-                returnValueFormatted = value.replace(/<(.|\n)*?>/igm, "");
+            if ( value && value.trim() ) {
+                if ( valueHref.match(/href="([^"]*)/igm) ) {
+                    valueHref = (value.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
+                }
+                if ( valueHref.indexOf("//") < 0 ) {
+                    valueHref = "http://" + valueHref;
+                }
+
+                if ( valueHref.search(/<(.|\n)*?>/igm) < 0 ) {
+                    metadata.tdAttr = 'data-qtip="' + valueHref + '"';
+                    returnValueFormatted = "<a href=\"" + valueHref + "\" target=\"blank\"> " + valueHref.replace('/^.+\/\//', '') + "</a>";
+                } else {
+                    valueHref = Ext.String.htmlEncode(value);
+                    metadata.tdAttr = 'data-qtip="' + Ext.String.htmlEncode(valueHref) + '"';
+                    returnValueFormatted = value.replace(/<(.|\n)*?>/igm, "");
+                }
             }
             return returnValueFormatted;
         }
@@ -135,9 +140,17 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 flex: .45,
                 dataIndex: 'link',
                 rowEditable: true,
-                field: {
+                editor: {
                     xtype: 'textfield',
-                    fieldStyle: "margin-bottom:12px;"
+                    fieldStyle: "margin-bottom:12px;",
+                    listeners: {
+                        render: function(field){
+                            Ext.create('Ext.tip.ToolTip', {
+                                target: field.getEl(),
+                                html: 'Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot;'
+                            });
+                        }
+                    }
                 },
                 renderer: me.renderLink()
             },{
@@ -160,7 +173,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
 							return Ext.Date.format(dt,'m/d/y');
 						}
 						else {
-						    metaData.tdAttr = 'data-qtip="' + dt + '"';
+						    if ( dt ) {
+						        metaData.tdAttr = 'data-qtip="' + dt + '"';
+                            }
 							return dt;
 						}
 					}
@@ -203,7 +218,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     emptyText: 'Select One'
                 },
                 renderer: function(value, metadata) {
-                    metadata.tdAttr = 'data-qtip="' + value.name + '"';
+                    if ( value && value.name ) {
+                        metadata.tdAttr = 'data-qtip="' + value.name + '"';
+                    }
                     return value.name;
                 }
             }],
