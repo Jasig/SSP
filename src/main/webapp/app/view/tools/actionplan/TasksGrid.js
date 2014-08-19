@@ -62,6 +62,28 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
             return value;
         }
     },
+    renderLink: function() {
+        return function(value, metadata) {
+            var returnValueFormatted = "";
+            var valueHref = value;
+            if ( valueHref.match(/href="([^"]*)/igm) ) {
+                valueHref = (value.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
+            }
+            if ( valueHref.indexOf("http://") < 0 ) {
+                valueHref = "http://" + valueHref;
+            }
+
+            if ( valueHref.search(/<(.|\n)*?>/igm) < 0 ) {
+                metadata.tdAttr = 'data-qtip="' + valueHref + '"';
+                returnValueFormatted = "<a href=\"" + valueHref + "\" target=\"blank\"> " + valueHref.replace("http://", "") + "</a>";
+            } else {
+                valueHref = Ext.String.htmlEncode(value);
+                metadata.tdAttr = 'data-qtip="' + Ext.String.htmlEncode(valueHref) + '"';
+                returnValueFormatted = value.replace(/<(.|\n)*?>/igm, "");
+            }
+            return returnValueFormatted;
+        }
+    },
 
     initComponent: function(){
         var me = this;
@@ -117,7 +139,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     xtype: 'textfield',
                     fieldStyle: "margin-bottom:12px;"
                 },
-                renderer: me.addToolTipWithValue()
+                renderer: me.renderLink()
             },{
                 xtype: 'datecolumn',
                 header: 'Due Date',
@@ -179,9 +201,11 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     queryMode: 'local',
                     allowBlank: false,
                     emptyText: 'Select One'
-                
                 },
-                renderer: me.addToolTipWithValue()
+                renderer: function(value, metadata) {
+                    metadata.tdAttr = 'data-qtip="' + value.name + '"';
+                    return value.name;
+                }
             }],
             
             dockedItems: [{
