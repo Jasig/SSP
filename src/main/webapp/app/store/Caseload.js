@@ -25,6 +25,10 @@ Ext.define('Ssp.store.Caseload', {
         apiProperties: 'apiProperties'
     },
 	remoteSort: true,
+    sorters: [{
+        property: 'lastName',
+        direction: 'ASC'
+    }],	
 	constructor: function(){
 		var me=this;
 		Ext.apply(me, {

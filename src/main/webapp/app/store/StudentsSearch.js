@@ -26,6 +26,11 @@ Ext.define('Ssp.store.StudentsSearch', {
     config: {
         baseUrlName: 'studentSearch'
     },
+    sorters: [{
+        property: 'lastName',
+        direction: 'ASC'
+    }],
+
 	remoteSort: true,
 	constructor: function(){
 		var me=this;

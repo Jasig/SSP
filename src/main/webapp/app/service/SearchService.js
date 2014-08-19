@@ -60,12 +60,6 @@ Ext.define('Ssp.service.SearchService', {
 				}
 			}
 		}
-		if(!me.store.params['sort'])
-		{
-			me.store.params['sort'] = 'lastName';
-			me.store.params['sortDirection'] = 'ASC'
-				
-		}	
 	    var birthDate = "";
 		for (key in params) {
 		    if(params[key] && params[key] != null){
