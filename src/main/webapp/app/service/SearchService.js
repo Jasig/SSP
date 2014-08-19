@@ -60,18 +60,18 @@ Ext.define('Ssp.service.SearchService', {
 				}
 			}
 		}
+		if(!me.store.params['sort'])
+		{
+			me.store.params['sort'] = 'lastName';
+			me.store.params['sortDirection'] = 'ASC'
+				
+		}	
 	    var birthDate = "";
 		for (key in params) {
 		    if(params[key] && params[key] != null){
 				activeParams[key] = params[key] 
 			}
 		}
-		if(!activeParams['sort'])
-		{
-			activeParams['sort'] = 'lastName';
-			activeParams['sortDirection'] = 'ASC'
-			
-		}	
 		var encodedUrl = Ext.urlEncode(activeParams);
 
 		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
