@@ -210,6 +210,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		PersonSearchRequest form = new PersonSearchRequest();
 		form.setCoach(coach);
 		form.setProgramStatus(programStatus);
+		form.setPersonTableType(PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
 		form.setSortAndPage(sAndP);
 		return searchPersonDirectory(form);
 	}
