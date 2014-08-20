@@ -175,6 +175,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
 						else {
 						    if ( dt ) {
 						        metaData.tdAttr = 'data-qtip="' + dt + '"';
+                            } else {
+                                metaData.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
+                                dt = "Double-Click ";
                             }
 							return dt;
 						}
@@ -220,6 +223,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 renderer: function(value, metadata) {
                     if ( value && value.name ) {
                         metadata.tdAttr = 'data-qtip="' + value.name + '"';
+                    } else {
+                        metadata.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
+                        value.name = " to Add";
                     }
                     return value.name;
                 }
