@@ -223,6 +223,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 renderer: function(value, metadata) {
                     if ( value && value.name ) {
                         metadata.tdAttr = 'data-qtip="' + value.name + '"';
+                    } else if ( !value ) {
+                        //handles initial drag where value is undefined
+                        return value;
                     } else {
                         metadata.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
                         value.name = " to Add";
