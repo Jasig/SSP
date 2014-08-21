@@ -103,8 +103,8 @@ This project includes:
   Castor under Apache License, Version 2.0
   classworlds under BSD Style License
   Code Generation Library under ASF 2.0
-  Codec under The Apache Software License, Version 2.0
   Commons BeanUtils under The Apache Software License, Version 2.0
+  Commons Codec under The Apache Software License, Version 2.0
   Commons Collections under The Apache Software License, Version 2.0
   Commons Configuration under The Apache Software License, Version 2.0
   Commons DBCP under The Apache Software License, Version 2.0
@@ -173,6 +173,7 @@ This project includes:
   Maven Project Builder under The Apache Software License, Version 2.0
   Maven Repository Metadata Model under The Apache Software License, Version 2.0
   Maven Wagon API under The Apache Software License, Version 2.0
+  OAuth 1(a) for Spring Security under Apache 2.0
   OAuth2 for Spring Security under Apache 2.0
   Objenesis under Apache 2
   oro under Apache License, Version 2.0
