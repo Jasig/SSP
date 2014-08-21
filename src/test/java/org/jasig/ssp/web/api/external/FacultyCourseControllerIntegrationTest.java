@@ -124,7 +124,7 @@ public class FacultyCourseControllerIntegrationTest {
 				controller);
 
 		final PagedResponse<ExternalFacultyCourseRosterTO> obj = controller.getRoster(
-				"invalid id", "invalid id", null);
+				"invalid id", "invalid id", null, null);
 
 		assertEquals(
 				"Returned FacultyCourseTO from the controller should have been null.",
@@ -225,7 +225,7 @@ public class FacultyCourseControllerIntegrationTest {
 			ValidationException {
 		// arrange, act
 		final PagedResponse<ExternalFacultyCourseRosterTO> list = controller
-				.getRoster(FACULTY_SCHOOL_ID, FORMATTED_COURSE, null);
+				.getRoster(FACULTY_SCHOOL_ID, FORMATTED_COURSE, null, null);
 
 		// assert
 		assertEquals("List should have returned 2 students.", 2,
@@ -245,7 +245,7 @@ public class FacultyCourseControllerIntegrationTest {
 		// enrollment wasn't somehow already in the getRoster() result set.
 		final PagedResponse<ExternalFacultyCourseRosterTO> initialEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
-						"MTH101", null);
+						"MTH101", null, null);
 
 		assertEquals(1, initialEnrollments.getRows().size());
 		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
@@ -282,7 +282,7 @@ public class FacultyCourseControllerIntegrationTest {
 
 		final PagedResponse<ExternalFacultyCourseRosterTO> modifiedEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
-						"MTH101", Stubs.TermFixture.SPRING_2013.code());
+						"MTH101", Stubs.TermFixture.SPRING_2013.code(), null);
 
 		assertEquals(2, modifiedEnrollments.getRows().size());
 		final Iterator<ExternalFacultyCourseRosterTO> modifiedEnrollmentsIterator =
@@ -308,7 +308,7 @@ public class FacultyCourseControllerIntegrationTest {
 		// enrollment wasn't somehow already in the getRoster() result set.
 		final PagedResponse<ExternalFacultyCourseRosterTO> initialEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
-						"MTH101", null);
+						"MTH101", null, null);
 
 		assertEquals(1, initialEnrollments.getRows().size());
 		assertEquals(Stubs.PersonFixture.STUDENT_0.schoolId(),
@@ -347,7 +347,7 @@ public class FacultyCourseControllerIntegrationTest {
 
 		final PagedResponse<ExternalFacultyCourseRosterTO> modifiedEnrollments =
 				controller.getRoster(Stubs.PersonFixture.KEN.schoolId(),
-						"MTH101", Stubs.TermFixture.SPRING_2013.code());
+						"MTH101", Stubs.TermFixture.SPRING_2013.code(), null);
 
 		assertEquals(1, modifiedEnrollments.getRows().size());
 			

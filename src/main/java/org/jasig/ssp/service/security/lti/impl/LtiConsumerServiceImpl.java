@@ -34,6 +34,7 @@ import org.jasig.ssp.security.exception.UserNotAuthorizedException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.impl.PersonAttributesSearchException;
@@ -82,7 +83,7 @@ public class LtiConsumerServiceImpl extends
 	private LtiConsumerDao ltiConsumerDao;
 
 	@Autowired
-	private UPortalPersonAttributesService personAttributesService;
+	private PersonAttributesService personAttributesService;
 
 	@Value("#{configProperties.ssp_platform_sso_ticket_service_shared_secret}")
 	private String sharedSsoSecret;

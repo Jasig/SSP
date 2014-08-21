@@ -36,11 +36,6 @@ public class StubPersonAttributesService implements PersonAttributesService {
 	private Collection<String> coachUsernames;
 
 	@Override
-	public PersonAttributesResult getAttributes(HttpServletRequest req, HttpServletResponse res, String username) throws ObjectNotFoundException {
-		throw new UnsupportedOperationException("Not needed yet, so not implemented yet");
-	}
-
-	@Override
 	public PersonAttributesResult getAttributes(String username) throws ObjectNotFoundException {
 		throw new UnsupportedOperationException("Not needed yet, so not implemented yet");
 	}
@@ -51,7 +46,7 @@ public class StubPersonAttributesService implements PersonAttributesService {
 	}
 
 	@Override
-	public List<Map<String, Object>> searchForUsers(HttpServletRequest req, HttpServletResponse res, Map<String, String> query) {
+	public List<Map<String, Object>> searchForUsers(Map<String, String> query) {
 		throw new UnsupportedOperationException("Not needed yet, so not implemented yet");
 	}
 
