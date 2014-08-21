@@ -398,49 +398,56 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         var isValid = true;
         var badTasks = "";
         var seperator = "";
-        me.store.each(function(item, index, count){
-        
-            item.set('type', 'SSP');
-            item.set('personId', me.personLite.get('id'));
-            item.set('confidentialityLevel', {
-                id: item.data.confidentialityLevel.id
-            });
-            if(!item.get('confidentialityLevel') || !item.get('dueDate')){
-            	isValid = false;
-            	badTasks += seperator + item.get('name');
-            	seperator = " : ";
-        	}
-            
-            data.push(item.getData());
-            
-        });
-
-		if(!isValid){
-			me.getView().setLoading(false);
-			Ext.Msg.alert('SSP Error', 'There are errors in your task definitions: Confidentiality Level must be selected and a due date set. Tasks missing necessary data: ' + badTasks);
-			return;
+		
+		if (me.store.data.length) {
+			me.store.each(function(item, index, count){
+			
+				item.set('type', 'SSP');
+				item.set('personId', me.personLite.get('id'));
+				item.set('confidentialityLevel', {
+					id: item.data.confidentialityLevel.id
+				});
+				if (!item.get('confidentialityLevel') || !item.get('dueDate')) {
+					isValid = false;
+					badTasks += seperator + item.get('name');
+					seperator = " : ";
+				}
+				
+				data.push(item.getData());
+				
+			});
+			
+			if (!isValid) {
+				me.getView().setLoading(false);
+				Ext.Msg.alert('SSP Error', 'There are errors in your task definitions: Confidentiality Level must be selected and a due date set. Tasks missing necessary data: ' + badTasks);
+				return;
+			}
+			successFunc = function(response, view){
+			
+				me.getView().setLoading(false);
+				me.loadDisplay();
+				
+				
+			};
+			failureFunc = function(response){
+				me.getView().setLoading(false);
+				
+				me.apiProperties.handleError(response);
+			};
+			
+			me.apiProperties.makeRequest({
+				url: me.url + "/bulk",
+				method: 'POST',
+				jsonData: data,
+				successFunc: successFunc,
+				failureFunc: failureFunc
+			});
 		}
-        successFunc = function(response, view){
-        
-            me.getView().setLoading(false);
-            me.loadDisplay();
-            
-            
-        };
-        failureFunc = function(response){
-            me.getView().setLoading(false);
-            
-            me.apiProperties.handleError(response);
-        };
-        
-        me.apiProperties.makeRequest({
-            url: me.url + "/bulk",
-            method: 'POST',
-            jsonData: data,
-            successFunc: successFunc,
-            failureFunc: failureFunc
-        });
-        
+		else
+		{
+			me.getView().setLoading(false);
+			Ext.Msg.alert('SSP Error', 'Please first create a Task to save it');
+		} 
     },
     
     onCancelClick: function(button){
