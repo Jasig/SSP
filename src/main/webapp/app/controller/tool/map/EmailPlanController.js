@@ -79,6 +79,8 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 		
 		var emailCCOwner = me.handleNull(me.currentMapPlan.get('ownerEmail'));
 		
+		
+		
 		var emailCC = '';
 		
 		if (emailCCCoach != "")
@@ -89,23 +91,27 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 		if (emailCCContact != "")
 		{
 			if(emailCC != '')
-				emailCC = emailCC + "," + emailCCContact;
+				{
+					if(emailCC.indexOf(emailCCContact) == -1)
+						emailCC = emailCC + "," + emailCCContact;
+				}
 			else
 				emailCC = emailCCContact;
 		}
 		
+		
+		
 		if (emailCCOwner != "")
 		{
-			if(emailCC != '')
-				emailCC = emailCC + "," + emailCCOwner;
-			else
+			if (emailCC != '') {
+				if(emailCC.indexOf(emailCCOwner) == -1)
+					emailCC = emailCC + "," + emailCCOwner;
+			}
+			else 
 				emailCC = emailCCOwner;
 		}
 		
 		
-		
-		
-			
 		emailCCField.setValue(emailCC);
 		return this.callParent(arguments);
     },
