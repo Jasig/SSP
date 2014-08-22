@@ -682,10 +682,12 @@ public class DirectoryPersonSearchDao  {
 	{
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
+			appendAndOrWhere(stringBuilder,filterTracker);
 			if(personSearchRequest.getCurrentlyRegistered())
 			{
-				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append("dp.currentRegistrationStatus > 0");
+			} else {
+				stringBuilder.append("dp.currentRegistrationStatus is null or dp.currentRegistrationStatus <= 0");
 			}
 		}
 	}
