@@ -728,7 +728,7 @@ public class DirectoryPersonSearchDao  {
 			{
 				stringBuilder.append("dp.currentRegistrationStatus > 0");
 			} else {
-				stringBuilder.append("dp.currentRegistrationStatus is null or dp.currentRegistrationStatus <= 0");
+				stringBuilder.append(" (dp.currentRegistrationStatus is null or dp.currentRegistrationStatus <= 0) ");
 			}
 		}
 	}
