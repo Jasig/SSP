@@ -33,6 +33,7 @@ Ext.define('Ssp.store.LtiSspUserFieldNames', {
         var me=this;
         var values = [{ displayValue:'username', code: 'username'},
                       { displayValue:'schoolId', code: 'schoolId'},
+                      { displayValue: 'primaryEmailAddress', code: 'primaryEmailAddress'}
         ];
         // set the model
         me.loadData( values );
