@@ -61,7 +61,7 @@ This project includes:
 
   A Hibernate Core Module under GNU Lesser General Public License
   AntLR Parser Generator under BSD License
-  AOP alliance under GNU Lesser General Public License
+  AOP alliance under Public Domain
   Apache Directory ASN.1 Shared under The Apache Software License, Version 2.0
   Apache Directory MINA ASN.1 Codec Shared under The Apache Software License, Version 2.0
   Apache Directory Protocol Ldap Shared under The Apache Software License, Version 2.0
@@ -176,6 +176,7 @@ This project includes:
   OAuth 1(a) for Spring Security under Apache 2.0
   OAuth2 for Spring Security under Apache 2.0
   Objenesis under Apache 2
+  opencsv under Apache 2
   oro under Apache License, Version 2.0
   Plexus Common Utilities under The Apache Software License, Version 2.0
   Portal REST API under Apache License Version 2.0
