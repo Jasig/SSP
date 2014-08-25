@@ -126,7 +126,28 @@ public class WatchStudentController
 		return new PagedResponse<PersonSearchResult2TO>(true, new Long(watchList.getRows().size()),
 				searchTOFactory.asTOList(watchList.getRows()));
 	}
+	  
+	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_READ')")
+	@RequestMapping(value = "/count", method = RequestMethod.GET)
+	public @ResponseBody
+	Long myWatchlistCount(
+			@PathVariable @NotNull final UUID personId,
+			final @RequestParam(required = false) UUID programStatusId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection)
+			throws ObjectNotFoundException, ValidationException {
 
+		ProgramStatus programStatus = null;
+		if (null != programStatusId) {
+			programStatus = programStatusService.get(programStatusId);
+		}
+		Person person = personService.get(personId);
+		
+		return  service.watchListCountFor(programStatus, person, buildSortAndPage( limit,  start,  sort,  sortDirection));
+	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_DELETE')")
 	public @ResponseBody

@@ -27,10 +27,12 @@ Ext.define('Ssp.controller.SearchViewController', {
         caseloadStore: 'caseloadStore',
         watchListStore: 'watchListStore',
         caseloadService: 'caseloadService',
+        exportService: 'exportService',
         watchListService: 'watchListService',
         columnRendererUtils: 'columnRendererUtils',
         formUtils: 'formRendererUtils',
         person: 'currentPerson',
+        caseloadActionsStore: 'caseloadActionsStore',
         personLite: 'personLite',
         personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
@@ -64,7 +66,13 @@ Ext.define('Ssp.controller.SearchViewController', {
     			select: 'onCaseloadStatusComboSelect'
     		} 
     	},
-    	
+    	caseloadActionCombo: {
+    		selector: '#caseloadActionCombo',
+    		listeners: {
+    			select: 'onCaseloadActionComboSelect'
+    		} 
+    	},
+    	    	
     	searchGridPager: '#searchGridPager',
     	searchBar: '#searchBar',
 
@@ -110,7 +118,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH = 0;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD = 1;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_WATCHLIST = 2;
-
+	   	
+		if(me.caseloadActionsStore.getTotalCount() == 0){
+			me.caseloadActionsStore.load();
+		};
 		if(me.termsStore.getTotalCount() == 0){
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
@@ -221,7 +232,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});	
-
+		me.appEventsController.assignEvent({eventName: 'exportCaseload', callBackFunc: me.onExportCaseload, scope: me});
 		
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
@@ -283,7 +294,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.removeEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
+	   	me.appEventsController.removeEvent({eventName: 'exportCaseload', callBackFunc: me.onExportCaseload, scope: me});
 
+	   	
 		if(me.instantCaseload != null && !me.instantCaseload.isDestroyed)
 			me.instantCaseload.close();
 		
@@ -810,7 +823,136 @@ Ext.define('Ssp.controller.SearchViewController', {
         	}
         }
 	},
-    
+	onExportWatchlistConfirm: function() {
+	   var me = this;
+	   if(!me.getCaseloadStatusCombo().getValue())
+	   {
+		   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'watchlist',
+				   me.caseloadStore,
+				   {success:me.getCaseloadSuccess, 
+			   failure:me.getCaseloadFailure, 
+			   scope: me});		
+	   } else
+	   if(me.getCaseloadStatusCombo().getValue() != 'All' )
+	   {
+		   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'watchlist',
+				   me.caseloadStore,
+				   {success:me.getCaseloadSuccess, 
+			   failure:me.getCaseloadFailure, 
+			   scope: me});		
+	   } else
+	   {
+		   me.exportService.exportCaseload( null,'watchlist',
+				   me.caseloadStore,
+				   {success:me.getCaseloadSuccess, 
+			   failure:me.getCaseloadFailure, 
+			   scope: me});
+	   }		
+	},
+	onExportCaseloadConfirm: function() {
+		   var me = this;
+	 	   if(!me.getCaseloadStatusCombo().getValue())
+		   {
+			   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});		
+		   } else
+		   if(me.getCaseloadStatusCombo().getValue() != 'All' )
+		   {
+			   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});		
+		   } else
+		   {
+			   me.exportService.exportCaseload( null,'caseload',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});
+		   }		
+		},
+	onExportSearchConfirm: function() {
+		   var me = this;
+	 	   if(!me.getCaseloadStatusCombo().getValue())
+		   {
+			   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});		
+		   } else
+		   if(me.getCaseloadStatusCombo().getValue() != 'All' )
+		   {
+			   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});		
+		   } else
+		   {
+			   me.exportService.exportCaseload( null,'caseload',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});
+		   }		
+		},			
+	onExportCaseload: function(action, count) {
+		var me = this;
+		var maxExport =  me.configStore.getConfigByName('ssp_max_export_row_count');
+		var message;
+		if(count > maxExport)
+		{
+			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum'
+			+' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
+		}
+		else {
+			message = count + " students will be exported.  Continue? ";
+		}
+		if(action === 'caseload' && me.getIsCaseload())
+		{
+			Ext.Msg.confirm({
+   		     	title:'Confirm',
+   		     	msg: message,
+   		     	buttons: Ext.Msg.OKCANCEL,
+   		     	fn: me.onExportCaseloadConfirm,
+   		     	scope: me
+   			});
+
+		}
+		if(action === 'watchlist' && me.getIsWatchList())
+		{
+			Ext.Msg.confirm({
+   		     	title:'Confirm',
+   		     	msg: message,
+   		     	buttons: Ext.Msg.OKCANCEL,
+   		     	fn: me.onExportWatchlistConfirm,
+   		     	scope: me
+   			});
+
+		}	
+	
+	},
+	onCaseloadActionComboSelect: function( comp, records, eOpts ){
+		var me=this;
+		console.log(records[0].get('id'));
+		if(records.length > 0 && records[0].get('id') === 'EXPORT')
+		{
+	       if(me.getIsCaseload())
+	       {
+				var count = me.caseloadService.getCaseloadCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);	
+	    	   
+	       } else
+	       if(me.getIsWatchList())
+	       {
+				var count = me.watchListService.getWatchlistCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);		    	   
+	       }
+		}
+	},    
 	getProgramStatuses: function(){
 		var me=this;
 		me.programStatusService.getAll({

@@ -426,6 +426,8 @@ Ext.require([
 	'Ssp.store.reference.FacetedTags',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
+    'Ssp.store.reference.YesNo',
+    'Ssp.store.reference.CaseloadActions',
     'Ssp.store.PlanStatus',
     'Ssp.store.MAPStatus',
     'Ssp.store.PersonTableTypes',
@@ -455,6 +457,7 @@ Ext.require([
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
+    'Ssp.service.ExportService',
 	'Ssp.service.SearchChallengeReferralService',
     'Ssp.service.SpecialServiceGroupService',
 	'Ssp.service.ServiceReasonsService',
@@ -541,6 +544,7 @@ var apiUrls = [
   {name: 'personAppointment', url: 'person/{id}/appointment'},
   {name: 'personAssessment', url: 'person/{id}/test'},
   {name: 'personCaseload', url: 'person/caseload'},
+  {name: 'exportableCaseload', url: 'exportableCaseload'},
   {name: 'personCaseloadId', url: 'person/{id}/caseload'},
   {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
   {name: 'personChallenge', url: 'person/{id}/challenge'},
@@ -1915,6 +1919,7 @@ Ext.onReady(function(){
 				    studentActivitiesStore: 'Ssp.store.StudentActivities',
 				    toolsStore: 'Ssp.store.Tools',
 			    	veteranStatusesStore: 'Ssp.store.reference.VeteranStatuses',
+			    	caseloadActionsStore: 'Ssp.store.reference.CaseloadActions',
 					veteranStatusesAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.VeteranStatuses', {
@@ -1957,6 +1962,7 @@ Ext.onReady(function(){
 			        caseloadProgramStatusService: 'Ssp.service.CaseloadProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
 			        searchService: 'Ssp.service.SearchService',
+			        exportService: 'Ssp.service.ExportService',
 					searchChallengeReferralService: 'Ssp.service.SearchChallengeReferralService',
 			        specialServiceGroupService: 'Ssp.service.SpecialServiceGroupService',
 					serviceReasonsService: 'Ssp.service.ServiceReasonsService',

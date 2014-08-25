@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
@@ -62,9 +61,9 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.form.EmailAddress;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;

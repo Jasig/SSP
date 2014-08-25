@@ -18,12 +18,15 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
@@ -58,6 +61,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 @Controller
 @RequestMapping("/1/person")
@@ -125,7 +130,12 @@ public class PersonSearchController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResultTO>(true,
 				results.getResults(), factory.asTOList(results.getRows()));
 	}
-		
+	
+    protected CSVWriter initCsvWriter(Map<String, Object> model,
+            HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
+        return new CSVWriter(response.getWriter());
+    }		
 	@DynamicPermissionChecking
 	@ResponseBody
 	@RequestMapping(value="/students/search", method = RequestMethod.GET)
@@ -245,7 +255,52 @@ public class PersonSearchController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
-	
+	@DynamicPermissionChecking
+	@ResponseBody
+	@RequestMapping(value="/directoryperson/search/count", method = RequestMethod.GET)
+	Long  personDirectorySearchCount(	
+	 final @RequestParam(required = false) String schoolId,
+	 final @RequestParam(required = false) String firstName,
+	 final @RequestParam(required = false) String lastName,
+	 final @RequestParam(required = false) String programStatus,
+	 final @RequestParam(required = false) String coachId,
+	 final @RequestParam(required = false) String declaredMajor,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMin,
+	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
+	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+	 final @RequestParam(required = false) Boolean currentlyRegistered,
+	 final @RequestParam(required = false) String earlyAlertResponseLate,
+	 final @RequestParam(required = false) String sapStatusCode,
+	 final @RequestParam(required = false) String specialServiceGroup,
+	 final @RequestParam(required = false) String mapStatus,
+	 final @RequestParam(required = false) String planStatus,
+	 final @RequestParam(required = false) Boolean myCaseload,
+	 final @RequestParam(required = false) Boolean myPlans,
+	 final @RequestParam(required = false) Boolean myWatchList,
+	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
+     final @RequestParam(required = false) String actualStartTerm,
+	 final @RequestParam(required = false) String personTableType,
+	 final @RequestParam(required = false) Integer start,
+	 final @RequestParam(required = false) Integer limit,
+	 final @RequestParam(required = false) String sort,
+	 final @RequestParam(required = false) String sortDirection,
+	 final HttpServletRequest request) throws ObjectNotFoundException
+	 {
+		assertSearchApiAuthorization(request);
+		SortingAndPaging sortAndPage = buildSortAndPage( limit,  start,  sort,  sortDirection);
+		return  service.searchPersonDirectoryCount(personSearchRequestFactory.from(schoolId,
+				firstName, lastName, 
+				programStatus,specialServiceGroup, 
+				coachId,declaredMajor,
+				hoursEarnedMin,hoursEarnedMax,
+				gpaEarnedMin,gpaEarnedMax,
+				currentlyRegistered,earlyAlertResponseLate,
+				sapStatusCode,
+				mapStatus,planStatus,
+				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage));
+	}
+		
 	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
 		String sortConfigured = sort == null ? "dp.lastName":"dp."+ sort;
 		if(sortConfigured.equals("dp.coach")){

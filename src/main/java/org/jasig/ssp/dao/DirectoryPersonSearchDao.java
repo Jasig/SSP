@@ -19,6 +19,7 @@
 package org.jasig.ssp.dao;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -27,7 +28,11 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -37,6 +42,7 @@ import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
 import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
@@ -44,8 +50,10 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.ScheduledTaskWrapperServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +90,7 @@ public class DirectoryPersonSearchDao  {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(DirectoryPersonSearchDao.class);
 
-
+ 
 	FileWriter fileWriter;
 
 	public void refreshDirectoryPerson(){
@@ -169,7 +177,23 @@ public class DirectoryPersonSearchDao  {
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
 	{
+		
+//        final StringBuilder hqlWithoutSelect = new StringBuilder();
+//        
+//		if(!buildFrom(personSearchRequest,hqlWithoutSelect))
+//			return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
+		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);
+		
+		
+		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+				PersonSearchResult2.class, "person_"));
+		 return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
+	}
+
+	private Pair<Long, Query> prepSearchQuery(Object session,
+			PersonSearchRequest personSearchRequest) {
 		Term currentTerm;
+		Map<String,Object> params = null;
 		FilterTracker filterTracker = new FilterTracker();
 		try
 		{
@@ -188,24 +212,24 @@ public class DirectoryPersonSearchDao  {
 		final String hqlSelect = buildSelect().toString();
 
 		final StringBuilder hqlWithoutSelect = new StringBuilder();
-		if(!buildFrom(personSearchRequest,hqlWithoutSelect))
-			return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
+		
+		buildFrom(personSearchRequest,hqlWithoutSelect);
 		
 		buildJoins(personSearchRequest,hqlWithoutSelect);
 		
 		buildWhere(personSearchRequest, filterTracker, hqlWithoutSelect);
 		
-		Map<String,Object> params = getBindParams(personSearchRequest, currentTerm);
+		params = getBindParams(personSearchRequest, currentTerm);
 		
 		Pair<Long,Query> querySet =  personSearchRequest
 				.getSortAndPage()
-				.applySortingAndPagingToPagedQuery(sessionFactory.getCurrentSession(), "dp.schoolId", hqlSelect,
+				.applySortingAndPagingToPagedQuery(session, "dp.schoolId", hqlSelect,
 						hqlWithoutSelect, false, null, false, params);
 		
 		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
-		 return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
+		return querySet;
 	}
 
 	private StringBuilder buildSelect(){
@@ -871,6 +895,45 @@ public class DirectoryPersonSearchDao  {
 		public void setFirstFilter(boolean isFirstFilter) {
 			this.isFirstFilter = isFirstFilter;
 		}
+	}
+
+	public void exportableSearch(
+			CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest) throws IOException {
+        
+		//if(!buildFrom(personSearchRequest,hqlWithoutSelect)) {}
+		//	return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
+		
+		StatelessSession openStatelessSession = sessionFactory.openStatelessSession();
+		openStatelessSession.beginTransaction();
+		Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession,personSearchRequest);
+    	Long maxCount = getMaxExportCount();	
+    		
+		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+				PersonSearchResult2.class, "person_"));
+		Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+		ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+		
+		csvWriterHelper.renderMergedOutputModel(results,maxCount);		
+		
+	 }
+
+	private Long getMaxExportCount() {
+		Long maxCount;
+		try {
+    		maxCount = Long.parseLong(configService.getByNameEmpty("ssp_max_export_row_count").trim());
+    	}
+    	catch (Exception e)
+    	{
+    		maxCount = 500L;
+    	}
+		return maxCount;
+	}
+
+	public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
+		
+		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);
+
+		return querySet.getFirst();
 	}
 
 }

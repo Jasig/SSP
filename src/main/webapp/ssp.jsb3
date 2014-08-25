@@ -840,6 +840,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.service.ExportService",
+                    "name": "ExportService.js",
+                    "path": "/app/service/"
+                },                
+                {
                     "clsName": "Ssp.service.SearchService",
                     "name": "SearchService.js",
                     "path": "/app/service/"
@@ -2796,6 +2801,16 @@
                 {
                     "clsName": "Ssp.store.reference.VeteranStatuses",
                     "name": "VeteranStatuses.js",
+                    "path": "/app/store/reference/"
+                },
+                                {
+                    "clsName": "Ssp.store.reference.YesNo",
+                    "name": "YesNo.js",
+                    "path": "/app/store/reference/"
+                },
+                                {
+                    "clsName": "Ssp.store.reference.CaseloadActions",
+                    "name": "CaseloadActions.js",
                     "path": "/app/store/reference/"
                 },
 				{

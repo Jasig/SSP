@@ -21,7 +21,8 @@ Ext.define('Ssp.service.SearchService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	store: 'directoryPersonSearchStore'
+    	store: 'directoryPersonSearchStore',
+    	appEventsController: 'appEventsController'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -31,6 +32,41 @@ Ext.define('Ssp.service.SearchService', {
 		var me=this;
 		return me.apiProperties.createUrl( me.apiProperties.getItemUrl(me.store.getBaseUrlName()) );
     },
+	searchCountWithParams: function(params, callbacks) {
+		var me=this;
+
+		me.store.removeAll();
+		me.store.currentPage = 1;
+
+		// Set params in the url for Search Store
+		// because the params need to be applied prior to load and not in a params
+		// definition from the load method or the paging
+		// toolbar applied to the SearchView will not
+		// apply the params when using next or previous page
+		var activeParams = {};
+		
+
+		for (key in params) {
+		    if(params[key] && params[key] != null){
+				activeParams[key] = params[key];
+			}
+		}
+
+		
+		var encodedUrl = Ext.urlEncode(activeParams);
+		var count;
+
+		 Ext.Ajax.request({
+				url: me.getBaseUrl()+'/count?' + encodedUrl,
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+				success: function(response, view) {
+					count = response.responseText;
+			        var skipCallBack = me.appEventsController.getApplication().fireEvent('exportSearch','search', count);
+				},
+				failure: this.apiProperties.handleError
+			}, this);		
+	},
 
 	searchWithParams: function(params, callbacks) {
 		var me=this;
@@ -152,5 +188,57 @@ Ext.define('Ssp.service.SearchService', {
 		 actualStartTerm: actualStartTerm,
 		 personTableType: personTableType
 		}, callbacks);
-    }
+    },
+    search2Count: function( 
+   		 schoolId,
+		 firstName,
+		 lastName,
+		 programStatus,
+		 specialServiceGroup,
+		 coachId,
+		 declaredMajor,
+		 hoursEarnedMin,
+		 hoursEarnedMax,
+		 gpaEarnedMin,
+		 gpaEarnedMax,
+		 currentlyRegistered,
+		 earlyAlertResponseLate,
+		 sapStatusCode,
+		 mapStatus,
+		 planStatus,
+		 myCaseload,
+		 myPlans,
+		 myWatchList,
+		 birthDate,
+		 actualStartTerm,
+		 personTableType,
+		callbacks ){
+	var me = this;
+	
+	me.searchCountWithParams({
+     schoolId: schoolId,
+     firstName: firstName,
+     lastName: lastName,
+	 programStatus: programStatus,
+	 specialServiceGroup: specialServiceGroup,
+	 coachId: coachId,
+	 declaredMajor: declaredMajor,
+	 hoursEarnedMin: hoursEarnedMin,
+	 hoursEarnedMax: hoursEarnedMax,
+	 gpaEarnedMin: gpaEarnedMin,
+	 gpaEarnedMax: gpaEarnedMax,
+	 // required because false is not sent as a parameter we are depending on null to indicate no search
+	 currentlyRegistered: currentlyRegistered == null ? null : new Boolean(currentlyRegistered).toString(),
+	 earlyAlertResponseLate: earlyAlertResponseLate,
+	 sapStatusCode: sapStatusCode,
+	 mapStatus: mapStatus,
+	 planStatus: planStatus,
+	 myCaseload: myCaseload,
+	 myPlans: myPlans,
+	 myWatchList: myWatchList,
+	 birthDate: birthDate,
+	 actualStartTerm: actualStartTerm,
+	 personTableType: personTableType
+	}, callbacks);
+}
 });

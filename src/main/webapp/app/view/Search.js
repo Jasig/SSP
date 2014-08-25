@@ -24,6 +24,7 @@ Ext.define('Ssp.view.Search', {
     inject: {
         authenticatedPerson: 'authenticatedPerson',
         apiProperties: 'apiProperties',
+        caseloadActionsStore: 'caseloadActionsStore',
         columnRendererUtils: 'columnRendererUtils',
         programStatusesStore: 'caseloadProgramStatusesStore'
     },
@@ -84,6 +85,29 @@ Ext.define('Ssp.view.Search', {
                 },{
                     xtype: 'tbspacer',
                     flex: 1
+                },{
+                    xtype: 'label',
+                    text: 'Action:',
+                    style: 'font-weight:bold;'
+                },{
+                    xtype: 'combobox',
+                    itemId: 'caseloadActionCombo',
+                    //name: 'programStatusId',
+                    fieldLabel: '',
+                    emptyText: 'Select Action',
+                    store: me.caseloadActionsStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    //mode: 'local',
+                    align: 'center',
+                    typeAhead: false,
+                    editable: false,
+                    queryMode: 'local',
+                    allowBlank: true,
+                    //hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
+                    forceSelection: false,
+                    width: 100,
+                    labelWidth: 75
                 },{
                     xtype: 'label',
                     text: 'Change Status:',
@@ -148,8 +172,8 @@ Ext.define('Ssp.view.Search', {
                     allowBlank: false,
                     hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
                     forceSelection: false,
-                    width: 150,
-                    labelWidth: 100
+                    width: 100,
+                    labelWidth: 75
                 }    ]
             }]
         });

@@ -25,16 +25,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
+ 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.util.collections.Pair;
 
 import com.google.common.collect.Lists;
@@ -317,17 +317,17 @@ public final class SortingAndPaging { // NOPMD
 		return query;
 	}
 	
-	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Session session,
-															  final String countColumn,
-															  final String hqlSelectClause,
-															  final StringBuilder hqlWithoutSelect,
-			final boolean filterByStatus,String objectToAddStatusFilter, Boolean isInitialRestriction, Map<String,Object> bindParams) {
+	public Pair<Long,Query> applySortingAndPagingToPagedQuery(Object session,
+			  final String countColumn,
+			  final String hqlSelectClause,
+			  final StringBuilder hqlWithoutSelect,
+			  final boolean filterByStatus,String objectToAddStatusFilter, Boolean isInitialRestriction, Map<String,Object> bindParams) {
 
 		if (filterByStatus && StringUtils.isNotBlank(objectToAddStatusFilter)) {
 			addStatusFilterToQuery(hqlWithoutSelect, objectToAddStatusFilter, isInitialRestriction);
 			bindParams.put("objectStatus", getStatus());
 		}
-
+		
 		// When using HQL, subqueries can only occur in the select and the where, not in the from.
 		// So we have the client explicitly tell us where the select clause ends and the from+where
 		// clause begins so we can unambiguously execute the latter twice, once with our count()
@@ -340,19 +340,35 @@ public final class SortingAndPaging { // NOPMD
 			rowCntHql.append("count(distinct ").append(countColumn).append(") ");
 		}
 		rowCntHql.append(hqlWithoutSelect);
+		
+		Query fullQuery = null;
+		Query rowCntQuery = null;
+		final StringBuilder fullHql = new StringBuilder(hqlSelectClause).append(addSortingToQuery(hqlWithoutSelect));
+		if(session instanceof Session)
+		{
+			Session thisSession = (Session)session;
+			fullQuery = addPagingToQuery(thisSession.createQuery(fullHql.toString())).setProperties(bindParams);
+			rowCntQuery = thisSession.createQuery(rowCntHql.toString());
+		} else
+		if(session instanceof StatelessSession)
+		{
+			StatelessSession thisStatelessSession = (StatelessSession)session;
+			fullQuery = addPagingToQuery(thisStatelessSession.createQuery(fullHql.toString())).setProperties(bindParams);
+			rowCntQuery = thisStatelessSession.createQuery(rowCntHql.toString());
+		} else
+		{
+			throw new IllegalArgumentException("session paramter for org.jasig.ssp.util.sort.SortingAndPaging.applySortingAndPagingToPagedQuery(Object, StringBuilder, boolean, String, Boolean, Map<String, Object>) must "+
+					"must be of type Session or StatelessSession");
+		}
 
-		final Query rowCntQuery = session.createQuery(rowCntHql.toString());
 		rowCntQuery.setProperties(bindParams);
-		final Long totalRows = (Long)rowCntQuery.iterate().next();
+		final Long totalRows = (Long)rowCntQuery.list().get(0);
 
 		// Sorting not added until here b/c if it's present in the count() query
 		// above, the db will usually complain about that field not being
 		// present in a group by/aggr function
-		final StringBuilder fullHql = new StringBuilder(hqlSelectClause).append(addSortingToQuery(hqlWithoutSelect));
-		final Query fullQuery = addPagingToQuery(session.createQuery(fullHql.toString())).setProperties(bindParams);
 		return new Pair<Long,Query>(totalRows,fullQuery);
 	}
-
 	public Long applySortingAndPagingToPagedQuery(final Criteria query,
 			final boolean filterByStatus) {
 

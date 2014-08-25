@@ -18,10 +18,13 @@
  */
 package org.jasig.ssp.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
@@ -32,6 +35,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
+import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -171,4 +175,15 @@ public interface PersonSearchService {
 			String homeDepartment);
 
 	void reassignStudents(CaseloadReassignmentRequestTO obj) throws ObjectNotFoundException;
+
+	void exportableCaseLoadFor(
+			CaseloadCsvWriterHelper csvWriterHelper, ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage) throws IOException;
+
+	void exportDirectoryPersonSearch(HttpServletResponse response, PersonSearchRequest form) throws IOException;
+
+	Long caseLoadCountFor(ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage);
+
+	Long searchPersonDirectoryCount(PersonSearchRequest from);
 }

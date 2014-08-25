@@ -81,6 +81,14 @@ Ext.define('Ssp.view.SearchForm',{
                         itemId: 'searchStudentButton',
                         align: 'left'
             		},
+                    {
+                        text: 'Export',
+                        tooltip: 'Export Search Result',
+                        xtype: 'button',
+                        type: 'export',
+                        itemId: 'exportSearchButton',
+                        align: 'left'
+            		},            		
         			{
                         tooltip: 'Reset',
                         text: 'Reset',

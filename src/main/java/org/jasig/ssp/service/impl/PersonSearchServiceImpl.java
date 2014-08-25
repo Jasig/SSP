@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -28,14 +29,13 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.dao.CaseloadDao;
 import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.PersonSearchDao;
-import org.jasig.ssp.model.Appointment;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
-import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult;
@@ -51,9 +51,9 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
+import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.PersonSearchController;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -339,6 +339,46 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	@Override
 	public void refreshDirectoryPersonBlue(){
 		directoryPersonDao.refreshDirectoryPersonBlue();
+	}
+
+
+	@Override
+	public void exportableCaseLoadFor(CaseloadCsvWriterHelper csvWriterHelper,
+			ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage) throws IOException 
+		{
+			PersonSearchRequest form = new PersonSearchRequest();
+			form.setCoach(person);
+			form.setProgramStatus(programStatus);
+			form.setSortAndPage(buildSortAndPage);
+			directoryPersonDao.exportableSearch(csvWriterHelper,form);
+		}
+
+
+	@Override
+	public void exportDirectoryPersonSearch(
+			HttpServletResponse response, PersonSearchRequest form) throws IOException {
+				
+		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(response),form);
+
+	}
+
+
+	@Override
+	public Long caseLoadCountFor(ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage) {
+		PersonSearchRequest form = new PersonSearchRequest();
+		form.setCoach(person);
+		form.setProgramStatus(programStatus);
+		form.setSortAndPage(buildSortAndPage);
+		
+		return directoryPersonDao.getCaseloadCountFor( form , buildSortAndPage);
+	}
+
+
+	@Override
+	public Long searchPersonDirectoryCount(PersonSearchRequest form) {
+		return directoryPersonDao.getCaseloadCountFor( form , form.getSortAndPage());
 	}
 
 

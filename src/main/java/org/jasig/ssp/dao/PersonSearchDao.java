@@ -308,7 +308,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 	}
 
-
+ 
 	private boolean hasBirthDate(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getBirthDate() != null;
 	}
@@ -768,7 +768,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<PersonSearchResult2> directoryPersonSearch(PersonSearchRequest personSearchRequest)
 	{
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(DirectoryPerson.class);

@@ -101,6 +101,27 @@ public class CaseloadController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
 	}
+	
+	@RequestMapping(value = "/caseload/count", method = RequestMethod.GET)
+	public @ResponseBody
+	Long myCaseloadCount(
+			final @RequestParam(required = false) UUID programStatusId,
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection)
+			throws ObjectNotFoundException, ValidationException {
+
+		ProgramStatus programStatus = null;
+		if (null != programStatusId) {
+			programStatus = programStatusService.get(programStatusId);
+		}
+		
+		return service.caseLoadCountFor(
+				programStatus, securityService.currentUser().getPerson(),
+				 buildSortAndPage( limit,  start,  sort,  sortDirection));
+	}
 
 	@RequestMapping(value = "/{personId}/caseload", method = RequestMethod.GET)
 	public @ResponseBody

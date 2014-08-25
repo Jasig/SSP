@@ -20,7 +20,8 @@ Ext.define('Ssp.service.CaseloadService', {
     extend: 'Ssp.service.AbstractService',   		
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	apiProperties: 'apiProperties'
+    	apiProperties: 'apiProperties',
+    	appEventsController: 'appEventsController'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -63,6 +64,41 @@ Ext.define('Ssp.service.CaseloadService', {
 		    },
 		    scope: me
 		});
+    },
+    getCaseloadCount: function( programStatusId, callbacks ){
+    	var me=this;
+	    
+		var activeParams = {};
+		
+		// Set the Url for the Caseload Store
+		// including param definitions because the params need
+		// to be applied prior to load and not in a params 
+		// definition from the load method or the paging
+		// toolbar applied to the SearchView will not
+		// apply the params when using next or previous
+		// page
+		var url;
+		if(programStatusId)
+		{
+			activeParams['programStatusId'] = programStatusId;
+		}
+		
+		activeParams['status'] = 'ACTIVE';
+		
+		var encodedUrl = Ext.urlEncode(activeParams);
+		var count;
+
+		 Ext.Ajax.request({
+				url: me.getBaseUrl()+'/count?' + encodedUrl,
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+				success: function(response, view) {
+					count = response.responseText;
+					
+			        var skipCallBack = me.appEventsController.getApplication().fireEvent('exportCaseload','caseload', count);
+				},
+				failure: this.apiProperties.handleError
+			}, this);
     },
     getCaseload: function( programStatusId, store, callbacks ){
     	var me=this;

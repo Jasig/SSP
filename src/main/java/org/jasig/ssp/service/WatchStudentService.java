@@ -18,7 +18,10 @@
  */
 package org.jasig.ssp.service;
 
+import java.io.IOException;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult2;
@@ -36,6 +39,12 @@ public interface WatchStudentService extends PersonAssocAuditableService<WatchSt
 
 	PagingWrapper<PersonSearchResult2> watchListFor(
 			ProgramStatus programStatus, Person person, SortingAndPaging sAndP);
+
+	void exportWatchListFor(HttpServletResponse response, ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage) throws IOException;
+
+	Long watchListCountFor(ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage);
 
 
 }

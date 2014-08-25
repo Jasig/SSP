@@ -18,7 +18,10 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.io.IOException;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.PersonSearchDao;
@@ -32,6 +35,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.WatchStudentService;
+import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -79,4 +83,29 @@ public class WatchStudentServiceImpl
 
 		dao.delete(current);
 	}
+
+	@Override
+	public void exportWatchListFor(HttpServletResponse response,
+			ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage) throws IOException {
+		PersonSearchRequest form = new PersonSearchRequest();
+		form.setWatcher(person);
+		form.setMyWatchList(true);
+		form.setProgramStatus(programStatus);
+		form.setSortAndPage(buildSortAndPage);
+		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(response), form);
+	}
+
+	@Override
+	public Long watchListCountFor(ProgramStatus programStatus, Person person,
+			SortingAndPaging buildSortAndPage) {
+		PersonSearchRequest form = new PersonSearchRequest();
+		form.setWatcher(person);
+		form.setMyWatchList(true);
+		form.setProgramStatus(programStatus);
+		form.setSortAndPage(buildSortAndPage);
+		return directoryPersonDao.getCaseloadCountFor(form, buildSortAndPage);
+	}
+
+
 }
