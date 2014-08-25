@@ -63,7 +63,8 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 				ObjectStatus.ACTIVE,
 				null,
 				Stubs.HomeDepartmentFixture.MATHEMATICS.name(),
-				Stubs.PersonFixture.COACH_1.id(),	
+				Stubs.PersonFixture.COACH_1.id(),
+				null,
 				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				Stubs.ProgramStatusFixture.ACTIVE.id(),
@@ -91,8 +92,9 @@ public class EarlyAlertStudentOutreachReportControllerIntegrationTest extends
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
-		controller.getEarlyAlertStudentOutcomeReport(response, 
+		controller.getEarlyAlertStudentOutcomeReport(response,
 				"earlyAlertOutreachIds",
+				null,
 				null,
 				null,
 				null,

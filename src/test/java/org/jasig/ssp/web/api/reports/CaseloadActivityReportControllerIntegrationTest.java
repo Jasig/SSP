@@ -48,7 +48,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDefaultDataSet()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null,  "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -72,9 +72,10 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDataSetAllFiltersButHomeDepartment()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, 
-				Stubs.PersonFixture.COACH_1.id(), 
-				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+		controller.getCaseLoadActivity(response,
+				Stubs.PersonFixture.COACH_1.id(),
+				null,
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null,
 				Stubs.TermFixture.FALL_2012.code(), null, null, null,  "csv");
@@ -100,9 +101,10 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDataSetAllFiltersButCoach()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, 
-				null, 
-				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+		controller.getCaseLoadActivity(response,
+				null,
+				null,
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null,
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
@@ -128,7 +130,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 				.add(Stubs.PersonFixture.KEVIN_SMITH.username());
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null,  "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -164,7 +166,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null,  "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null, null,  "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe
@@ -213,7 +215,7 @@ public class CaseloadActivityReportControllerIntegrationTest
 		sessionFactory.getCurrentSession().flush();
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null, "csv");
+		controller.getCaseLoadActivity(response, null, null, null, null, null, null, null, null, null, "csv");
 
 		// "body" is the actual results and the header that describes its columns.
 		// This is as opposed to rows which precede the header, which describe

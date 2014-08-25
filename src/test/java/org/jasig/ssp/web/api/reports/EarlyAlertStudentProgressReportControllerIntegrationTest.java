@@ -59,15 +59,16 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertStudentProgressReport(response,
-				ObjectStatus.ACTIVE, 
+				ObjectStatus.ACTIVE,
 				null,//roster status
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
-				PersonFixture.COACH_1.id(), 
-				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
+				PersonFixture.COACH_1.id(),
+				null,
+				Lists.newArrayList(StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
-				ProgramStatusFixture.ACTIVE.id(), 
-				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
-				TermFixture.FALL_2012.code(), 
+				ProgramStatusFixture.ACTIVE.id(),
+				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()),
+				TermFixture.FALL_2012.code(),
 				TermFixture.SPRING_2013.code(),
 				"csv");
 
@@ -88,17 +89,18 @@ public class EarlyAlertStudentProgressReportControllerIntegrationTest extends
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
-		controller.getEarlyAlertStudentProgressReport(response, 
-				null, 
+		controller.getEarlyAlertStudentProgressReport(response,
 				null,
 				null,
-				null, 
-				null, 
-				null, 
-				null, 
 				null,
-				TermFixture.FALL_2012.code(), 
-				TermFixture.SPRING_2013.code(), 
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				TermFixture.FALL_2012.code(),
+				TermFixture.SPRING_2013.code(),
 				"csv");;
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 

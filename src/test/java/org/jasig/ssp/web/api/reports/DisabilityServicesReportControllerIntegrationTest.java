@@ -80,6 +80,7 @@ public class DisabilityServicesReportControllerIntegrationTest
         controller.getDisabilityServicesReport(response,
                 ObjectStatus.ACTIVE,
                 coachId,
+                null,
                 odsCoachId,
                 getReferences(disabilityStatusService, 1).get(0),
                 null,
@@ -128,6 +129,7 @@ public class DisabilityServicesReportControllerIntegrationTest
         final UUID odsCoachId = Stubs.PersonFixture.ADVISOR_0.id();
         controller.getDisabilityServicesReport(response,
                 ObjectStatus.ACTIVE,
+                null,
                 null,
                 null,
                 null,

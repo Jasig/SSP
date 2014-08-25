@@ -56,18 +56,19 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.getEarlyAlertStudentReport(response, 
-				ObjectStatus.ACTIVE, 
+		controller.getEarlyAlertStudentReport(response,
+				ObjectStatus.ACTIVE,
 				null,//roster status
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
-				PersonFixture.COACH_1.id(), 
-				ProgramStatusFixture.ACTIVE.id(), 
-				Lists.newArrayList(SpecialServiceGroupFixture.TEST_SSG.id()), 
-				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
-				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
-				null, 
+				PersonFixture.COACH_1.id(),
 				null,
-				TermFixture.FALL_2012.code(), 
+				ProgramStatusFixture.ACTIVE.id(),
+				Lists.newArrayList(SpecialServiceGroupFixture.TEST_SSG.id()),
+				Lists.newArrayList(StudentTypeFixture.ILP.id()),
+				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
+				null,
+				null,
+				TermFixture.FALL_2012.code(),
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -87,18 +88,19 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
-		controller.getEarlyAlertStudentReport(response, 
-				null, 
+		controller.getEarlyAlertStudentReport(response,
 				null,
 				null,
-				null, 
-				null, 
-				null, 
-				null, 
 				null,
-				null, 
 				null,
-				null, 
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
 				"csv");;
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!

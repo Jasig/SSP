@@ -52,7 +52,7 @@ public class PretransistionedReportControllerIntegrationTest extends
 			throws IOException, ObjectNotFoundException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
-		controller.getPreTransitioned(response, null, null, null, null, null, null, null, null,
+		controller.getPreTransitioned(response, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, "csv");
 
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
@@ -84,17 +84,18 @@ public class PretransistionedReportControllerIntegrationTest extends
 		// Alan Turing, i.e. the coach assigned to our test student users
 		// in our standard fixture
 		controller.getPreTransitioned(response, 
-				null, 
+				null,
 				PersonFixture.COACH_1.id(),
-				ProgramStatusFixture.ACTIVE.id(), 
-				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
-				Lists.newArrayList(ReferralSourceFixture.TEST_REFERRAL_SOURCE.id()), 
-				Lists.newArrayList(StudentTypeFixture.ILP.id()), 
+				null,
+				ProgramStatusFixture.ACTIVE.id(),
+				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()),
+				Lists.newArrayList(ReferralSourceFixture.TEST_REFERRAL_SOURCE.id()),
+				Lists.newArrayList(StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
-				null, 
-				null, 
+				null,
+				null,
 				TermFixture.FALL_2012.year(),
-				TermFixture.FALL_2012.code(), 
+				TermFixture.FALL_2012.code(),
 				null,
 				null,
 				"csv");
@@ -121,17 +122,18 @@ public class PretransistionedReportControllerIntegrationTest extends
 		// Alan Turing, i.e. the coach assigned to our test student users
 		// in our standard fixture
 		controller.getPreTransitioned(response, 
-				null, 
 				null,
-				ProgramStatusFixture.ACTIVE.id(), 
-				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
-				Lists.newArrayList(ReferralSourceFixture.TEST_REFERRAL_SOURCE.id()), 
+				null,
+				null,
+				ProgramStatusFixture.ACTIVE.id(),
+				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()),
+				Lists.newArrayList(ReferralSourceFixture.TEST_REFERRAL_SOURCE.id()),
 				Lists.newArrayList(StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
-				null, 
-				null, 
+				null,
+				null,
 				TermFixture.FALL_2012.year(),
-				TermFixture.FALL_2012.code(), 
+				TermFixture.FALL_2012.code(),
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
 				null,
 				"csv");

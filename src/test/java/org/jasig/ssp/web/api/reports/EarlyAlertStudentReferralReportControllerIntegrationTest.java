@@ -55,15 +55,16 @@ public class EarlyAlertStudentReferralReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 		
 		controller.getEarlyAlertStudentReferralReport(response, 
-				ObjectStatus.ACTIVE, 
+				ObjectStatus.ACTIVE,
 				null,// roster status
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
-				PersonFixture.COACH_1.id(), 
+				PersonFixture.COACH_1.id(),
+				null,
 				ProgramStatusFixture.ACTIVE.id(), 
-				EarlyAlertReferralFixture.ACADEMIC_COUNSELORS.id(), 
-				null, 
-				null, 
-				TermFixture.FALL_2012.code(), 
+				EarlyAlertReferralFixture.ACADEMIC_COUNSELORS.id(),
+				null,
+				null,
+				TermFixture.FALL_2012.code(),
 				"csv");
 
 		// "body" is the actual results and the header that describes its columns.
@@ -84,15 +85,16 @@ public class EarlyAlertStudentReferralReportControllerIntegrationTest extends
 		final MockHttpServletResponse response = new MockHttpServletResponse();
 
 		controller.getEarlyAlertStudentReferralReport(response, 
-				null, 
 				null,
 				null,
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
-				null, 
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
 				"csv");;
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Understand why no filters does not bring back a result!
