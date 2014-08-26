@@ -273,6 +273,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
 			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
 		}
+		person = me.watchListStore.findRecord("id",params.personId, 0, false, false, true);
+		if(person != null){
+			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
+			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
+		}
 	},
 
     destroy: function() {
