@@ -31,6 +31,7 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.transferobject.reference.CampusTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 
@@ -55,6 +56,9 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	private String emailCC;
 
 	private UUID campusId;
+
+	@JsonIgnore
+	private CampusTO campus;
 
 	private String earlyAlertReasonOtherDescription;
 
@@ -85,6 +89,7 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
     @JsonIgnore
     private Set<EarlyAlertSuggestionTO> earlyAlertSuggestionTOs;
 
+
 	/**
 	 * Empty constructor
 	 */
@@ -113,6 +118,8 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		emailCC = earlyAlert.getEmailCC();
 		campusId = earlyAlert.getCampus() == null ? null : earlyAlert
 				.getCampus().getId();
+		campus = earlyAlert.getCampus() == null ? null :
+				new CampusTO(earlyAlert.getCampus());
 		earlyAlertReasonOtherDescription = earlyAlert
 				.getEarlyAlertReasonOtherDescription();
 		earlyAlertSuggestionOtherDescription = earlyAlert
@@ -248,6 +255,14 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	 */
 	public void setCampusId(final UUID campusId) {
 		this.campusId = campusId;
+	}
+
+	public CampusTO getCampus() {
+		return campus;
+	}
+
+	public void setCampus(CampusTO campus) {
+		this.campus = campus;
 	}
 
 	/**
