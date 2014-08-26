@@ -163,7 +163,18 @@ Ext.define('Ssp.controller.ToolsViewController', {
         var skipCallBack = this.appEventsController.getApplication().fireEvent('toolsNav', record, me);  
         
         if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
-            this.loadTool(record.get('toolType'));
+			if (record.get('name') === 'Message Student'){
+				me.getView().getSelectionModel().deselectAll();
+					if (me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON')) {
+						me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
+						me.emailStudentPopup.show();
+					}
+					else{
+						Ext.Msg.alert('You do not have permission to email this student');
+					}
+			}
+			else
+            	this.loadTool(record.get('toolType'));
         }
         else
         if(record.get('toolType') === 'toolcaseloadreassignment' && skipCallBack) {
