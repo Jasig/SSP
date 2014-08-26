@@ -178,11 +178,11 @@ public class MessageTemplateIT extends AbstractReferenceTest {
                         .contentType("application/json")
                         .statusCode(200)
                         .log().ifError()
-                        .body("results", equalTo(16))
+                        .body("results", equalTo(17))
                         .and()
                         .body("success", equalTo("true"))
                         .and()
-                        .body("rows", hasSize(16))
+                        .body("rows", hasSize(17))
                         .and();
 
         spec = expectListResponseObjectAtIndex(spec, 0, MESSAGE_TEMPLATE_ROWS);
