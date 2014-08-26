@@ -231,7 +231,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         	// used the treeUtils.getIdFromNodeId() method to trim the id of the category description
         	// so the id from the database could be ascertained. The actual parentId attribute in the data
         	// from the record is separated by a character like this: 'guid_category'
-        	parentNode = tree.getView().getStore().findRecord('id', records[0].data.parentId ); 
+        	parentNode = tree.getView().getStore().findRecord('id', records[0].data.parentId, 0, false, false, true ); 
 
         	Ext.Array.each(records, function(rec){
     	        var associatedItemId = treeUtils.getIdFromNodeId( rec.data.id );

@@ -56,7 +56,7 @@ Ext.define('Ssp.controller.admin.shg.EditSelfHelpGuideChallengesViewController',
     	var me=this;
 		//Since the panels use two different models we need to remove the record from 
 		//the store and recreate it so it conforms to the appropriate model
-		var badRecord = me.store.findRecord('id', data.records[0].data.id);
+		var badRecord = me.store.findRecord('id', data.records[0].data.id, 0, false, false, true);
         var newQuestionNumber = me.store.indexOf(badRecord) + 1;
         var newRecord = new Ssp.model.tool.shg.SelfHelpGuideQuestions();
         newRecord.data.critical = false;

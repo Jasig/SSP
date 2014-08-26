@@ -248,7 +248,7 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		var colorsStore = me.colorsAllUnpagedStore;
 		colorsStore.clearFilter(true);
 		
-		var color = colorsStore.findRecord('id', val);
+		var color = colorsStore.findRecord('id', val, 0, false, false, true);
 		
 		if(color == null || color.data == null) {
 			return '';
