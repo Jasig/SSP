@@ -40,10 +40,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		},
 		'watchStudentButton': {
             click: 'onWatchStudentButtonClick'
-        },		
-		'emailStudentButton': {
-            click: 'onEmailStudentButtonClick'
-        },		
+        },	
 		'studentRecordEditButton': {
             click: 'onStudentRecordEditButtonClick'
         },
@@ -83,11 +80,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     	var me=this;
     	me.appEventsController.getApplication().fireEvent('expandStudentRecord');
     },
-    onEmailStudentButtonClick: function(button){
-        var me = this;
-   		me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
-   		me.emailStudentPopup.show();
-    },	
+    
     getBaseUrl: function(id){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personWatch') );
@@ -160,7 +153,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 			});
     	
 	    }
-    },	    
+    },	   
 	onStudentRecordEditButtonClick: function(button){
         var me=this;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personToolbarEdit',me);  
@@ -225,15 +218,25 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     		}
 
 			me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
-			me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
+			//me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
 			me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
 			
 			me.showElement(me.getStudentRecordEditButton());
 			me.showElement(me.getEmailCoachButton());
 			var fullName = args.person.getFullName();
 			var coachName = args.person.getCoachFullName();
+			if(args.person.get('homePhone') != '')
+				var homePhone = '    ' + args.person.get('homePhone') + ' (H)' ;
+			else
+				var homePhone = '';
+			if(args.person.get('cellPhone') != '')
+				var cellPhone = '    ' + args.person.get('cellPhone') + ' (C)';
+			else
+				var cellPhone = '';
+			
+			
 			if(me.getView())
-	        	me.getView().setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId'));
+	        	me.getView().setTitle(fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId') + homePhone + cellPhone);
 			if(me.getEmailCoachButton())
 	        	me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
 			
@@ -243,7 +246,6 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 			me.hideElement(me.getStudentRecordEditButton());
 			if(me.getView())
 				me.getView().setTitle('');
-			me.hideElement(me.getEmailStudentButton());
 			me.hideElement(me.getEmailCoachButton());
 		}
     },

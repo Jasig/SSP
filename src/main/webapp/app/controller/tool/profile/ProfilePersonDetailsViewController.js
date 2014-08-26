@@ -214,7 +214,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		
 		var anticipatedStartYearTermField = Ext.ComponentQuery.query('#anticipatedStartYearTerm', me.getView())[0];
 		
-        
+        if(me.person.get('homePhone') != '')
+				var homePhone = '    ' + me.person.get('homePhone') + ' (H)' ;
+			else
+				var homePhone = '';
+			if(me.person.get('cellPhone') != '')
+				var cellPhone = '    ' + me.person.get('cellPhone') + ' (C)';
+			else
+				var cellPhone = '';
         // load general student record
         me.getView().loadRecord(me.person);
         
@@ -240,7 +247,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
         var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-        studentRecordComp.setTitle('Student: ' + fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId'));
+        studentRecordComp.setTitle(fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId') + homePhone + cellPhone);
         studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
         
         me.appEventsController.assignEvent({

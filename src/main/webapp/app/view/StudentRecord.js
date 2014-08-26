@@ -41,47 +41,28 @@ Ext.define('Ssp.view.StudentRecord', {
         	{
                 tooltip: 'Watch Student',
                 text: '<u>Watch Student</u>',
-                width: 110,
+                width: 105,
                 height: 20,
         		hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'),
                 xtype: 'button',
                 cls: "makeTransparent",
                 itemId: 'watchStudentButton'
             },                    
-			{
-                xtype: 'tbspacer',
-                flex: .05
-            },{
-                tooltip: 'Email Student',
-                text: '<u>Email Student</u>',
-                width: 110,
-                height: 20,
-        		hidden: !me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'),
-                xtype: 'button',
-                cls: "makeTransparent",
-                itemId: 'emailStudentButton'
-            },                    
-			{
-                xtype: 'tbspacer',
-                flex: .05
-            },
+			
 			{
                 
                 text: '',
-                width: 200,
+                width: 170,
                 height: 20,
                 xtype: 'button',
                 itemId: 'emailCoachButton',
 				cls: "makeTransparent"
             },
-			{
-				xtype: 'tbspacer',
-                flex: .03
-			},
+			
 			{
                 tooltip: 'Coaching History',
                 text: '<u>Coaching History</u>',
-                width: 110,
+                width: 105,
                 height: 20,
                 xtype: 'button',
 				cls: "makeTransparent",
@@ -89,9 +70,6 @@ Ext.define('Ssp.view.StudentRecord', {
                 itemId: 'viewCoachingHistoryButton'
             }, 
 			{
-                xtype: 'tbspacer',
-                flex: .03
-            },{
                 xtype: 'button',
                 itemId: 'studentRecordEditButton',
                 text: '',
@@ -101,7 +79,7 @@ Ext.define('Ssp.view.StudentRecord', {
             },
 			{
                 xtype: 'tbspacer',
-                flex: .02
+                width: 1
             }],
             items: [{
                 xtype: 'toolsmenu',
