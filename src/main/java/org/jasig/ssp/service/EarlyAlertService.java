@@ -159,11 +159,13 @@ public interface EarlyAlertService
 
 	Long getCountOfEarlyAlertsForSchoolIds(Collection<String> schoolIds, Campus campus);
 	
-	Long getCountOfEarlyAlertsByCreatedDate(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
+	Long getEarlyAlertCountForCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-	Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus);
-	
-	Long getCountOfEarlyAlertStudentsByDate(Date createdDateFrom, Date createdDateTo, Campus campu, String rosterStatuss);
+	Long getClosedEarlyAlertCountForClosedDateRange(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus);
+
+	Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
+
+	Long getStudentCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campu, String rosterStatuss);
 
 	Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm);
 
@@ -176,4 +178,5 @@ public interface EarlyAlertService
 	void sendAllEarlyAlertReminderNotifications();
 	
 	PagedResponse<EarlyAlertSearchResultTO> searchEarlyAlert(EarlyAlertSearchForm form);
+
 }

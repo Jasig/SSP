@@ -170,8 +170,8 @@ public class EarlyAlertResponseDao extends
 	
 	
 
-	public Long getEarlyAlertRespondedToCount(Date createDateFrom,
-			Date createDateTo, Campus campus, String rosterStatus) {
+	public Long getRespondedToEarlyAlertCountForResponseCreatedDateRange(Date createDateFrom,
+																		 Date createDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 		
 		if (createDateFrom != null) {
@@ -189,6 +189,34 @@ public class EarlyAlertResponseDao extends
 					Restrictions.eq("earlyAlert.campus", campus));
 		}
 		
+		// item count
+		Long totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.id"))
+				.uniqueResult();
+
+		return totalRows;
+	}
+
+	public Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(Date createDateFrom, Date createDateTo, Campus campus, String rosterStatus) {
+		final Criteria query = createCriteria();
+
+		if(campus != null || createDateFrom != null || createDateTo != null){
+			final Criteria alias = query.createAlias("earlyAlert", "earlyAlert");
+
+			if (createDateFrom != null) {
+				alias.add(Restrictions.ge("earlyAlert.createdDate",
+						createDateFrom));
+			}
+
+			if (createDateTo != null) {
+				alias.add(Restrictions.le("earlyAlert.createdDate",
+						createDateTo));
+			}
+
+			if ( campus != null ) {
+				alias.add(Restrictions.eq("earlyAlert.campus", campus));
+			}
+		}
+
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.countDistinct("earlyAlert.id"))
 				.uniqueResult();
@@ -626,6 +654,5 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return criteria;
 	}
-	
-	
+
 }

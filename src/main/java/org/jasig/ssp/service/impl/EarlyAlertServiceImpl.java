@@ -20,7 +20,6 @@ package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -92,7 +91,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -756,28 +754,33 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Override
 	public Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
-		return dao.getEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo, studentTypeIds);
+		return dao.getEarlyAlertCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 
 	@Override
 	public Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
-		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo, studentTypeIds);
+		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 	
 	@Override
-	public Long getCountOfEarlyAlertsByCreatedDate(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getCountOfEarlyAlertsByCreatedDate(createDatedFrom,  createdDateTo, campus, rosterStatus);
+	public Long getEarlyAlertCountForCreatedDateRange(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getEarlyAlertCountForCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
-	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
-		return dao.getCountOfEarlyAlertsClosedByDate(closedDateFrom,  closedDateTo, campus, rosterStatus);
+	public Long getClosedEarlyAlertCountForClosedDateRange(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
+		return dao.getClosedEarlyAlertCountForClosedDateRange(closedDateFrom, closedDateTo, campus, rosterStatus);
 	}
 
 	@Override
-	public Long getCountOfEarlyAlertStudentsByDate(Date createDatedFrom,
-			Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus, rosterStatus);
+	public Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
+	}
+
+	@Override
+	public Long getStudentCountForEarlyAlertCreatedDateRange(Date createDatedFrom,
+															 Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getStudentCountForEarlyAlertCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
@@ -849,7 +852,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			        }
 
 			    });
-				eam.add(createEarlyAlertTemplateTO( earlyAlert));
+				eam.add(createEarlyAlertTemplateTO(earlyAlert));
 				easByCoach.put(coach.getId(), eam);
 			}
 			List<WatchStudent> watchers = earlyAlert.getPerson().getWatchers();
