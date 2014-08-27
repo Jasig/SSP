@@ -41,7 +41,6 @@ import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertTermCaseCountsTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,14 +126,14 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 			{			
 				EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO(term.getCode(),
 						term.getName(),
-						earlyAlertService.getCountOfEarlyAlertStudentsByDate(term.getStartDate(), 
+						earlyAlertService.getStudentCountForEarlyAlertCreatedDateRange(term.getStartDate(),
 								term.getEndDate(), campus, rosterStatus),
-						earlyAlertService.getCountOfEarlyAlertsByCreatedDate(term.getStartDate(), 
+						earlyAlertService.getEarlyAlertCountForCreatedDateRange(term.getStartDate(),
 								term.getEndDate(), campus, rosterStatus),
-						earlyAlertResponseService.getEarlyAlertRespondedToCount(term.getStartDate(), 
-										term.getEndDate(), campus, rosterStatus),
-						earlyAlertService.getCountOfEarlyAlertsClosedByDate(term.getStartDate(), 
-												term.getEndDate(), campus, rosterStatus)
+						earlyAlertResponseService.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(term.getStartDate(),
+								term.getEndDate(), campus, rosterStatus),
+						earlyAlertService.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(term.getStartDate(),
+								term.getEndDate(), campus, rosterStatus)
 										);
 			
 				caseLoads.add(caseCounts);
@@ -145,10 +144,10 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 			
 			EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO("All",
 					"All",
-					earlyAlertService.getCountOfEarlyAlertStudentsByDate(null, null, campus, rosterStatus),
-					earlyAlertService.getCountOfEarlyAlertsByCreatedDate(null, null, campus, rosterStatus),
-					earlyAlertResponseService.getEarlyAlertRespondedToCount(null, null, campus, rosterStatus),
-					earlyAlertService.getCountOfEarlyAlertsClosedByDate(null, null, campus, rosterStatus)
+					earlyAlertService.getStudentCountForEarlyAlertCreatedDateRange(null, null, campus, rosterStatus),
+					earlyAlertService.getEarlyAlertCountForCreatedDateRange(null, null, campus, rosterStatus),
+					earlyAlertResponseService.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(null, null, campus, rosterStatus),
+					earlyAlertService.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(null, null, campus, rosterStatus)
 									);
 			caseLoads.add(caseCounts);
 		}

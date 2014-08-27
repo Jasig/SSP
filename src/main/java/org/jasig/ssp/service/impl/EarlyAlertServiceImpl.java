@@ -33,6 +33,7 @@ import java.util.UUID;
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertDao;
 import org.jasig.ssp.factory.EarlyAlertSearchResultTOFactory;
@@ -89,7 +90,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -747,28 +747,33 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Override
 	public Long getEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
-		return dao.getEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo, studentTypeIds);
+		return dao.getEarlyAlertCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 
 	@Override
 	public Long getStudentEarlyAlertCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
-		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom,  createDateTo, studentTypeIds);
+		return dao.getStudentEarlyAlertCountForCoach(coach, createDateFrom, createDateTo, studentTypeIds);
 	}
 	
 	@Override
-	public Long getCountOfEarlyAlertsByCreatedDate(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getCountOfEarlyAlertsByCreatedDate(createDatedFrom,  createdDateTo, campus, rosterStatus);
+	public Long getEarlyAlertCountForCreatedDateRange(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getEarlyAlertCountForCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
-	public Long getCountOfEarlyAlertsClosedByDate(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
-		return dao.getCountOfEarlyAlertsClosedByDate(closedDateFrom,  closedDateTo, campus, rosterStatus);
+	public Long getClosedEarlyAlertCountForClosedDateRange(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus) {
+		return dao.getClosedEarlyAlertCountForClosedDateRange(closedDateFrom, closedDateTo, campus, rosterStatus);
 	}
 
 	@Override
-	public Long getCountOfEarlyAlertStudentsByDate(Date createDatedFrom,
-			Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getCountOfEarlyAlertStudentsByDate(createDatedFrom, createdDateTo, campus, rosterStatus);
+	public Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
+	}
+
+	@Override
+	public Long getStudentCountForEarlyAlertCreatedDateRange(Date createDatedFrom,
+															 Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getStudentCountForEarlyAlertCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
@@ -828,24 +833,25 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
 			}else{
 				coaches.put(coach.getId(), coach);
-				easByCoach.put(coach.getId(), Lists.newArrayList(createEarlyAlertTemplateTO( earlyAlert)));
+				easByCoach.put(coach.getId(), Lists.newArrayList(createEarlyAlertTemplateTO(earlyAlert)));
 			}
 		}
 		for(UUID coachId: easByCoach.keySet()){
 			Map<String,Object> messageParams = new HashMap<String,Object>();
 			
 			Collections.sort(easByCoach.get(coachId), new Comparator<EarlyAlertTO>() {
-		        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
-		        	Date p1Date = p1.getLastResponseDate();
-		        	if(p1Date == null)
-		        		p1Date = p1.getCreatedDate();
-		        	Date p2Date = p2.getLastResponseDate();
-		        	if(p2Date == null)
-		        		p2Date = p2.getCreatedDate();
-		            return p1Date.compareTo(p2Date);
-		        }
+                @Override
+                public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
+                    Date p1Date = p1.getLastResponseDate();
+                    if (p1Date == null)
+                        p1Date = p1.getCreatedDate();
+                    Date p2Date = p2.getLastResponseDate();
+                    if (p2Date == null)
+                        p2Date = p2.getCreatedDate();
+                    return p1Date.compareTo(p2Date);
+                }
 
-		    });
+            });
 			
 			Integer daysSince1900ResponseExpected =  DateTimeUtils.daysSince1900(lastResponseDate);
 			List<Pair<EarlyAlertMessageTemplateTO,Integer>> earlyAlertTOPairs = new ArrayList<Pair<EarlyAlertMessageTemplateTO,Integer>>();

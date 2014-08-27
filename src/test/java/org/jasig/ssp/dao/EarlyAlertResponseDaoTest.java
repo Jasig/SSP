@@ -284,7 +284,7 @@ public class EarlyAlertResponseDaoTest {
 	@Test
 	public void getEarlyAlertRespondedToCount() throws ObjectNotFoundException {
 		// TODO
-		dao.getEarlyAlertRespondedToCount(null, null, null, null);
+		dao.getRespondedToEarlyAlertCountForResponseCreatedDateRange(null, null, null, null);
 		assertEquals("Should be equal to 1.", 1,1);
 	}
 	

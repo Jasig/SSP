@@ -75,8 +75,11 @@ public interface EarlyAlertResponseService
 	Long getEarlyAlertResponseCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
 
-	Long getEarlyAlertRespondedToCount(Date createDateFrom,
-			Date createDateTo, Campus campus, String rosterStatus);
+	Long getRespondedToEarlyAlertCountForResponseCreatedDateRange(Date createDateFrom,
+																  Date createDateTo, Campus campus, String rosterStatus);
+
+	Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(Date startDate,
+																	Date endDate, Campus campus, String rosterStatus);
 
 	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach);
