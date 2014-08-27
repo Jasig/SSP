@@ -828,88 +828,98 @@ Ext.define('Ssp.controller.SearchViewController', {
         	}
         }
 	},
-	onExportWatchlistConfirm: function() {
+	onExportWatchlistConfirm: function(btnId) {
 	   var me = this;
-	   if(!me.getCaseloadStatusCombo().getValue())
-	   {
-		   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'watchlist',
-				   me.caseloadStore,
-				   {success:me.getCaseloadSuccess, 
-			   failure:me.getCaseloadFailure, 
-			   scope: me});		
-	   } else
-	   if(me.getCaseloadStatusCombo().getValue() != 'All' )
-	   {
-		   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'watchlist',
-				   me.caseloadStore,
-				   {success:me.getCaseloadSuccess, 
-			   failure:me.getCaseloadFailure, 
-			   scope: me});		
-	   } else
-	   {
-		   me.exportService.exportCaseload( null,'watchlist',
-				   me.caseloadStore,
-				   {success:me.getCaseloadSuccess, 
-			   failure:me.getCaseloadFailure, 
-			   scope: me});
-	   }		
+       if (btnId=="ok")
+       {	   
+		   if(!me.getCaseloadStatusCombo().getValue())
+		   {
+			   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'watchlist',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});		
+		   } else
+		   if(me.getCaseloadStatusCombo().getValue() != 'All' )
+		   {
+			   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'watchlist',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});		
+		   } else
+		   {
+			   me.exportService.exportCaseload( null,'watchlist',
+					   me.caseloadStore,
+					   {success:me.getCaseloadSuccess, 
+				   failure:me.getCaseloadFailure, 
+				   scope: me});
+		   }	
+       }
 	},
-	onExportCaseloadConfirm: function() {
+	onExportCaseloadConfirm: function(btnId) {
 		   var me = this;
-	 	   if(!me.getCaseloadStatusCombo().getValue())
-		   {
-			   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});		
-		   } else
-		   if(me.getCaseloadStatusCombo().getValue() != 'All' )
-		   {
-			   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});		
-		   } else
-		   {
-			   me.exportService.exportCaseload( null,'caseload',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});
-		   }		
+	       if (btnId=="ok")
+	       {
+		 	   if(!me.getCaseloadStatusCombo().getValue())
+			   {
+				   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
+						   me.caseloadStore,
+						   {success:me.getCaseloadSuccess, 
+					   failure:me.getCaseloadFailure, 
+					   scope: me});		
+			   } else
+			   if(me.getCaseloadStatusCombo().getValue() != 'All' )
+			   {
+				   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
+						   me.caseloadStore,
+						   {success:me.getCaseloadSuccess, 
+					   failure:me.getCaseloadFailure, 
+					   scope: me});		
+			   } else
+			   {
+				   me.exportService.exportCaseload( null,'caseload',
+						   me.caseloadStore,
+						   {success:me.getCaseloadSuccess, 
+					   failure:me.getCaseloadFailure, 
+					   scope: me});
+			   }		
+	       }
 		},
-	onExportSearchConfirm: function() {
+	onExportSearchConfirm: function(btnId) {
 		   var me = this;
-	 	   if(!me.getCaseloadStatusCombo().getValue())
-		   {
-			   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});		
-		   } else
-		   if(me.getCaseloadStatusCombo().getValue() != 'All' )
-		   {
-			   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});		
-		   } else
-		   {
-			   me.exportService.exportCaseload( null,'caseload',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});
-		   }		
+	       if (btnId=="ok")
+	       {		   
+		 	   if(!me.getCaseloadStatusCombo().getValue())
+			   {
+				   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
+						   me.caseloadStore,
+						   {success:me.getCaseloadSuccess, 
+					   failure:me.getCaseloadFailure, 
+					   scope: me});		
+			   } else
+			   if(me.getCaseloadStatusCombo().getValue() != 'All' )
+			   {
+				   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
+						   me.caseloadStore,
+						   {success:me.getCaseloadSuccess, 
+					   failure:me.getCaseloadFailure, 
+					   scope: me});		
+			   } else
+			   {
+				   me.exportService.exportCaseload( null,'caseload',
+						   me.caseloadStore,
+						   {success:me.getCaseloadSuccess, 
+					   failure:me.getCaseloadFailure, 
+					   scope: me});
+			   }	
+	       }
 		},			
 	onExportCaseload: function(action, count) {
 		var me = this;
-		var maxExport =  me.configStore.getConfigByName('ssp_max_export_row_count');
 		var message;
+		count = parseInt(count);
+		var maxExport =  parseInt(me.configStore.getConfigByName('ssp_max_export_row_count').trim());
 		if(count > maxExport)
 		{
 			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum'
@@ -944,7 +954,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	onCaseloadActionComboSelect: function( comp, records, eOpts ){
 		var me=this;
-		console.log(records[0].get('id'));
 		if(records.length > 0 && records[0].get('id') === 'EXPORT')
 		{
 	       if(me.getIsCaseload())

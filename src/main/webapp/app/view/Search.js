@@ -92,7 +92,6 @@ Ext.define('Ssp.view.Search', {
                 },{
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
-                    //name: 'programStatusId',
                     fieldLabel: '',
                     emptyText: 'Select Action',
                     store: me.caseloadActionsStore,
@@ -104,7 +103,6 @@ Ext.define('Ssp.view.Search', {
                     editable: false,
                     queryMode: 'local',
                     allowBlank: true,
-                    //hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
                     forceSelection: false,
                     width: 100,
                     labelWidth: 75

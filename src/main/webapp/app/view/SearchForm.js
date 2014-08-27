@@ -37,6 +37,7 @@ Ext.define('Ssp.view.SearchForm',{
         configStore: 'configurationOptionsUnpagedStore',
         specialServiceGroupsActiveUnpagedStore: 'specialServiceGroupsActiveUnpagedStore',
         textStore:'sspTextStore',
+        caseloadActionsStore: 'caseloadActionsStore',
         termsStore: 'termsStore'
     },
     collapsible: true,
@@ -74,6 +75,7 @@ Ext.define('Ssp.view.SearchForm',{
 			},
             tools: [
                     {
+              
                         text: 'Search',
                         tooltip: 'Search for Student',
                         xtype: 'button',
@@ -81,14 +83,6 @@ Ext.define('Ssp.view.SearchForm',{
                         itemId: 'searchStudentButton',
                         align: 'left'
             		},
-                    {
-                        text: 'Export',
-                        tooltip: 'Export Search Result',
-                        xtype: 'button',
-                        type: 'export',
-                        itemId: 'exportSearchButton',
-                        align: 'left'
-            		},            		
         			{
                         tooltip: 'Reset',
                         text: 'Reset',
@@ -96,7 +90,25 @@ Ext.define('Ssp.view.SearchForm',{
                         xtype: 'button',
                         itemId: 'resetStudentSearchButton',
                         align: 'left'
-        			}  
+        			}  ,{
+                        xtype: 'tbspacer',
+                    }, {
+		                xtype: 'combobox',
+		                itemId: 'searchActionCombo',
+		                fieldLabel: '',
+		                emptyText: 'Select Action',
+		                store: me.caseloadActionsStore,
+		                valueField: 'id',
+		                displayField: 'name',
+		                align: 'center',
+		                typeAhead: false,
+		                editable: false,
+		                queryMode: 'local',
+		                allowBlank: true,
+		                forceSelection: false,
+		                width: 100,
+		                labelWidth: 75
+		            }
                     ], 
             items: [
 			{  layout:'column',
