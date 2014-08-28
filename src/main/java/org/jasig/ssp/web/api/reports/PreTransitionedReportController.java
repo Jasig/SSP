@@ -20,11 +20,8 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
@@ -51,13 +47,11 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.transferobject.reports.PersonReportTO;
+import org.jasig.ssp.transferobject.reports.ProgramStatusReportTO;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +208,6 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			report.setStudentTranscript(externalStudentTranscriptService, externalStudentFinancialAidService);
 			report.setCurrentRegistrationStatus(registrationStatusByTermService);
 			report.setLastTermGPAAndLastTermRegistered(externalStudentTranscriptTermService, currentTerm);
-			report.setCurrentProgramStatusCode(programStatusCodeOrNull(report));
 		}
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
@@ -287,13 +280,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		csvWriter.write((Collection<BaseStudentReportTO>)beanCollection, -1L);
 	}
 
-	private String programStatusCodeOrNull(BaseStudentReportTO report) {
-		if ( report.getProgramStatusId() == null ) {
-			return null;
-		}
-		String statusIdStr = report.getProgramStatusId().toString();
-		return ProgramStatus.PROGRAM_STATUS_CODES.get(statusIdStr);
-	}
+
 
 	@Override
 	protected Logger getLogger() {

@@ -113,26 +113,27 @@ abstract class ReportBaseController extends AbstractBaseController {
 				"Content-disposition",
 				"attachment; filename=" + reportName + "." + REPORT_TYPE_CSV);
 	}
-	
-	List<BaseStudentReportTO> processStudentReportTOs(PagingWrapper<BaseStudentReportTO> people){
+
+	<T extends BaseStudentReportTO> List<T> processStudentReportTOs(PagingWrapper<T> people){
 		if(people == null || people.getRows().size() <= 0)
-			return new ArrayList<BaseStudentReportTO>();
-		 return processStudentReportTOs(new ArrayList<BaseStudentReportTO>(people.getRows()));
+			return new ArrayList<T>();
+		 return processStudentReportTOs(new ArrayList<T>(people.getRows()));
 	}
-	
-	List<BaseStudentReportTO> processStudentReportTOs(Collection<BaseStudentReportTO> reports){
-		ArrayList<BaseStudentReportTO> compressedReports = new ArrayList<BaseStudentReportTO>();
+
+	<T extends BaseStudentReportTO> List<T> processStudentReportTOs(Collection<T> reports){
+		ArrayList<T> compressedReports = new ArrayList<T>();
 		if(reports == null || reports.size() <= 0)
 			return compressedReports;
 		
-		for(BaseStudentReportTO reportTO: reports){
+		for(T reportTO: reports){
 			Integer index = compressedReports.indexOf(reportTO);
 			if(index != null && index >= 0)
 			{
-				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
+				T compressedReportTo = compressedReports.get(index);
 				compressedReportTo.processDuplicate(reportTO);
 			}else{
 				compressedReports.add(reportTO);
+				reportTO.normalizeCurrentProgramStatus();
 			}
 		}
 		return compressedReports;
