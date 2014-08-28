@@ -27,7 +27,8 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
         columnRendererUtils: 'columnRendererUtils',
         model: 'currentTask',
         store: 'addTasksStore',
-        confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
+        configStore: 'configStore'
     },
     width: '100%',
     height: '100%',
@@ -39,13 +40,11 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
         
         return function(value, metaData, record){
             var fullDesc = record.get('description');
-            if(fullDesc && fullDesc.length > 150)
-            {
-            	truncDesc = fullDesc.substring(0, 149) + "...";
+            if (fullDesc && fullDesc.length > 150) {
+                truncDesc = fullDesc.substring(0, 149) + "...";
             }
-            else 
-            {
-            	truncDesc = fullDesc;
+            else {
+                truncDesc = fullDesc;
             }
             metaData.tdAttr = 'data-qtip="' + fullDesc + '"';
             var tpl = new Ext.Template('<div class="wrappable-cell">{NAME}</div>');
@@ -53,34 +52,35 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
             return tpl.apply({
                 NAME: truncDesc
             });
-           
+            
         }
     },
-    addToolTipWithValue: function() {
-        return function(value, metadata) {
-            if ( value && value.trim() ) {
+    addToolTipWithValue: function(){
+        return function(value, metadata){
+            if (value && value.trim()) {
                 metadata.tdAttr = 'data-qtip="' + value + '"';
             }
             return value;
         }
     },
-    renderLink: function() {
-        return function(value, metadata) {
+    renderLink: function(){
+        return function(value, metadata){
             var returnValueFormatted = "";
             var valueHref = value;
-
-            if ( value && value.trim() ) {
-                if ( valueHref.match(/href="([^"]*)/igm) ) {
+            
+            if (value && value.trim()) {
+                if (valueHref.match(/href="([^"]*)/igm)) {
                     valueHref = (value.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
                 }
-                if ( valueHref.indexOf("//") < 0 ) {
+                if (valueHref.indexOf("//") < 0) {
                     valueHref = "http://" + valueHref;
                 }
-
-                if ( valueHref.search(/<(.|\n)*?>/igm) < 0 ) {
+                
+                if (valueHref.search(/<(.|\n)*?>/igm) < 0) {
                     metadata.tdAttr = 'data-qtip="' + valueHref + '"';
                     returnValueFormatted = "<a href=\"" + valueHref + "\" target=\"blank\"> " + valueHref.replace('/^.+\/\//', '') + "</a>";
-                } else {
+                }
+                else {
                     valueHref = Ext.String.htmlEncode(value);
                     metadata.tdAttr = 'data-qtip="' + Ext.String.htmlEncode(valueHref) + '"';
                     returnValueFormatted = value.replace(/<(.|\n)*?>/igm, "");
@@ -89,7 +89,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
             return returnValueFormatted;
         }
     },
-
+    
     initComponent: function(){
         var me = this;
         
@@ -105,22 +105,22 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 }
             }
         });
-
+        
         Ext.apply(me, {
             plugins: cellEditor,
             selType: 'rowmodel',
             cls: 'challengesgrid',
-			rowLines: true,
-			enableDragDrop: true,
+            rowLines: true,
+            enableDragDrop: true,
             viewConfig: {
-				itemId: 'gridView',
+                itemId: 'gridView',
                 markDirty: false,
                 plugins: {
                     ptype: 'gridviewdragdrop',
-	                  dropGroup: 'gridtogrid',
-	                  dragGroup: 'gridtogrid',
-			          enableDrop: true,
-			          enableDrag: true
+                    dropGroup: 'gridtogrid',
+                    dragGroup: 'gridtogrid',
+                    enableDrop: true,
+                    enableDrag: true
                 }
             },
             columns: [{
@@ -153,44 +153,49 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     }
                 },
                 renderer: me.renderLink()
-            },{
+            }, {
                 xtype: 'datecolumn',
                 header: 'Due Date',
                 dataIndex: 'dueDate',
                 width: 85,
                 name: 'dueDate',
-				format:'m/d/Y',
+                format: 'm/d/Y',
                 itemId: 'actionPlanDueDate',
                 renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
-                	var dt = record.get('dueDate');
-
-					if (Ext.isObject(dt) && dt.apStr) {
-					    metaData.tdAttr = 'data-qtip="' + dt.apStr + '"';
-						return dt.apStr;
-					} else {
-						if (Ext.isDate(dt)) {
-                            metaData.tdAttr = 'data-qtip="' + Ext.Date.format(dt,'m/d/y') + '"';
-							return Ext.Date.format(dt,'m/d/y');
-						}
-						else {
-						    if ( dt ) {
-						        metaData.tdAttr = 'data-qtip="' + dt + '"';
-                            } else {
-                                metaData.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
-                                dt = "Double-Click ";
+                    var dt = record.get('dueDate');
+                    
+                    
+                    if (Ext.isObject(dt) && dt.apStr) {
+                        metaData.tdAttr = 'data-qtip="' + dt.apStr + '"';
+                        return dt.apStr;
+                    }
+                    else {
+                        if (Ext.isDate(dt)) {
+                            metaData.tdAttr = 'data-qtip="' + Ext.Date.format(dt, 'm/d/y') + '"';
+                            return Ext.Date.format(dt, 'm/d/y');
+                        }
+                        else {
+                            if (dt) {
+                                metaData.tdAttr = 'data-qtip="' + dt + '"';
                             }
-							return dt;
-						}
-					}
+                            else {
+                                metaData.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
+                                
+                                var dt = me.taskDueDate;
+                                
+                            }
+                            return dt;
+                        }
+                    }
                 },
                 editor: {
                     xtype: 'datefield',
                     allowBlank: false,
                     altFormats: 'm/d/Y|m-d-Y',
-					format:'m/d/Y',
+                    format: 'm/d/Y',
                     showToday: false,
-					minValue: Ext.Date.format(new Date(), 'm/d/Y'),
-					minText: 'Cannot have a due date before today!',
+                    minValue: Ext.Date.format(new Date(), 'm/d/Y'),
+                    minText: 'Cannot have a due date before today!',
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -200,7 +205,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                         }
                     }
                 }
-
+            
             }, {
                 header: 'Confidentiality',
                 dataIndex: 'confidentialityLevel',
@@ -220,16 +225,19 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     allowBlank: false,
                     emptyText: 'Select One'
                 },
-                renderer: function(value, metadata) {
-                    if ( value && value.name ) {
+                renderer: function(value, metadata){
+                    if (value && value.name) {
                         metadata.tdAttr = 'data-qtip="' + value.name + '"';
-                    } else if ( !value ) {
-                        //handles initial drag where value is undefined
-                        return value;
-                    } else {
-                        metadata.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
-                        value.name = " to Add";
                     }
+                    else 
+                        if (!value) {
+                            //handles initial drag where value is undefined
+                            return value;
+                        }
+                        else {
+                            metadata.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
+                            value.name = "EVERYONE";
+                        }
                     return value.name;
                 }
             }],

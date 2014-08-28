@@ -31,13 +31,16 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
         searchChallengeReferralService: 'searchChallengeReferralService',
         store: 'addTasksStore',
-        task: 'currentTask'
+        task: 'currentTask',
+		configStore: 'configStore'
     },
     
     config: {
         containerToLoadInto: 'tools',
         formToDisplay: 'actionplan',
-        dueDatesArray: []
+        dueDatesArray: [],
+		taskDueDate: '',
+		confLevel: []
     },
     
     control: {
@@ -131,7 +134,29 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             scope: me
         });
         
+        taskDueDate = new Date();
+		
+		var confLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE' , 0, false, false, true).get('id');
         
+		confLevel = {
+            id: confLevelId,
+            name: 'EVERYONE'
+        };
+		
+		me.configStore.each(function(rec){
+             if (rec.get('name') == 'student_intake_default_due_date_offset') {
+				 var s = rec.get('value');
+                 var date_offset  = parseInt(s);
+				 if (date_offset) {
+				 	taskDueDate = Ext.Date.add(new Date(), Ext.Date.DAY, date_offset);
+				 }
+				 return false;
+             }
+		
+             
+         });
+		 
+		
         
         return me.callParent(arguments);
     },
@@ -339,7 +364,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
     
     onAddChallengeReferralButtonClick: function(button){
         var me = this;
-        
+		
+		
         var s = Ext.ComponentQuery.query('.challengesgrid')[0].getView().getSelectionModel().getSelection();
         Ext.each(s, function(item){
             var task = new Ssp.model.tool.actionplan.Task();
@@ -347,7 +373,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             task.set('description', item.data.challengeReferralDescription);
             task.set('link', item.data.challengeReferralLink);
             task.set('challengeReferralId', item.data.challengeReferralId);
-            
+            task.set('dueDate', taskDueDate);
+			task.set('confidentialityLevel',confLevel);
             task.set('challengeId', item.data.challengeId);
             me.store.add(task);
             
@@ -367,7 +394,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
             task.set('description', item.data.challengeReferralDescription);
             task.set('link', item.data.challengeReferralLink);
             task.set('challengeReferralId', item.data.challengeReferralId);
-            
+            task.set('dueDate', taskDueDate);
+			task.set('confidentialityLevel',confLevel);
             task.set('challengeId', item.data.challengeId);
             me.store.add(task);
             
@@ -385,7 +413,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         task.set('description', referralRecord.get('challengeReferralDescription'));
         task.set('link', referralRecord.get('challengeReferralLink'));
         task.set('challengeReferralId', referralRecord.get('challengeReferralId'));
-        
+        task.set('dueDate', taskDueDate);
+		task.set('confidentialityLevel',confLevel);
         task.set('challengeId', referralRecord.get('challengeId'));
         
         me.store.add(task);

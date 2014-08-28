@@ -27,7 +27,13 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
         model: 'currentTask',
         personLite: 'personLite',
         store: 'addTasksStore',
-        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+		configStore: 'configStore'
+    },
+	
+	config: {
+		taskDueDate: '',
+		confLevel: []
     },
     
     control: {
@@ -66,6 +72,31 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     init: function(){
         var me = this;
         me.store.removeAll();
+		
+		taskDueDate = new Date();
+		
+		var confLevelId = me.confidentialityLevelsStore.findRecord('name', 'EVERYONE' , 0, false, false, true).get('id');
+        
+		confLevel = {
+            id: confLevelId,
+            name: 'EVERYONE'
+        };
+		
+		me.configStore.each(function(rec){
+             if (rec.get('name') == 'student_intake_default_due_date_offset') {
+				 var s = rec.get('value');
+                 var date_offset  = parseInt(s);
+				 if (date_offset) {
+				 	taskDueDate = Ext.Date.add(new Date(), Ext.Date.DAY, date_offset);
+				 }
+				 return false;
+             }
+		
+             
+         });
+
+		
+		 
         return me.callParent(arguments);
     },
     
@@ -220,7 +251,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             task.set('link',badRecord.data.challengeReferralLink);
             task.set('challengeReferralId', badRecord.data.challengeReferralId);
             task.set('challengeId', badRecord.data.challengeId);
-			
+			task.set('dueDate', taskDueDate);
+			task.set('confidentialityLevel',confLevel);
 		if(badRecord)
         {
         	me.store.data.replace(this.store.data.getKey(badRecord),task);
