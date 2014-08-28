@@ -397,7 +397,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		
 		
 		if (studentStatus) {
-                    programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus);
+                    programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus, 0, false, false, true);
 					
                     if (programStatusReason) {
 							programStatusReasonField.show();
