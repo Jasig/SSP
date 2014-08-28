@@ -213,6 +213,13 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;
 	},
 	
+	renderEarlyAlertReason: function(val, metaData, record) {
+		var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + record.get('earlyAlertReason').name.toLowerCase() + '</p>';
+		strHtml += '</div>';
+	    return strHtml;		
+	},
+	
 	
 	renderObjectStatus: function(val, metadata, record) {
 		var active;

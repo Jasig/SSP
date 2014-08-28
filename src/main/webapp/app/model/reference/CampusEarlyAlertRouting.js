@@ -21,7 +21,22 @@ Ext.define('Ssp.model.reference.CampusEarlyAlertRouting', {
     fields: [{name:'earlyAlertReasonId',type:'string'},
              {name:'person',type:'auto'},
              {name:'groupName',type:'string'},
-             {name:'groupEmail',type:'string'}],
+             {name:'groupEmail',type:'string'},
+			 {name:'earlyAlertReason',
+                 convert: function(value, record) {
+                	 
+                	 var obj  = {id:'',name: ''};
+                	 if (value != null)
+                	 {
+                		 if (value != "")
+                		 {
+                    		 obj.id  = value.id;
+                    		 obj.name = value.name;                			 
+                		 }
+                	 }
+   		            return obj;
+                 }
+   		      },],
              
     getPersonFullName: function(){
     	var me=this;

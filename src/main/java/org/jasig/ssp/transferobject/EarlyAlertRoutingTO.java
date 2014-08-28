@@ -29,6 +29,9 @@ import org.jasig.ssp.model.EarlyAlertRouting;
 
 import com.google.common.collect.Lists;
 
+import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
+
 /**
  * EarlyAlertRouting transfer object
  * 
@@ -49,6 +52,8 @@ public class EarlyAlertRoutingTO
 	private UUID earlyAlertReasonId;
 
 	private PersonLiteTO person;
+	
+	private EarlyAlertReasonTO earlyAlertReason;
 
 	/**
 	 * Empty constructor
@@ -79,6 +84,9 @@ public class EarlyAlertRoutingTO
 				.getEarlyAlertReason().getId();
 		person = model.getPerson() == null ? null : new PersonLiteTO(
 				model.getPerson());
+		earlyAlertReason = model.getEarlyAlertReason() == null ? null : new EarlyAlertReasonTO(
+				model.getEarlyAlertReason());
+		
 	}
 
 	/**
@@ -191,5 +199,14 @@ public class EarlyAlertRoutingTO
 	 */
 	public void setPerson(final PersonLiteTO person) {
 		this.person = person;
+	}
+	
+	public EarlyAlertReasonTO getEarlyAlertReason() {
+		return earlyAlertReason;
+	}
+	
+	public void setEarlyAlertReason(
+			final EarlyAlertReasonTO earlyAlertReason) {
+		this.earlyAlertReason = earlyAlertReason;
 	}
 }
