@@ -252,13 +252,6 @@ public class BaseStudentReportTO implements Serializable {
 	}
 
 	public String getCurrentProgramStatusName() {
-		currentProgramStatusName = "";
-		for(ProgramStatusReportTO programStatus:this.getProgramStatuses()){
-			if(programStatus.getExpirationDate() == null && programStatus.getName() != null){
-				currentProgramStatusName = addValueToStringList(currentProgramStatusName, 
-						programStatus.getName());
-			}
-		}
 		return currentProgramStatusName;
 	}
 
@@ -281,6 +274,57 @@ public class BaseStudentReportTO implements Serializable {
 	
 	public void setCurrentProgramStatusCode(String code){
 		this.currentProgramStatusCode = code;
+	}
+
+	public void normalizeCurrentProgramStatus() {
+		final ProgramStatusReportTO normalizeTo = findCurrentProgramStatus();
+		if ( normalizeTo == null ) {
+			setCurrentProgramStatusCode(unexpiredProgramStatusCodeOrNull());
+			if ( getCurrentProgramStatusCode() == null ) {
+				clearCurrentProgramStatus();
+			}
+		} else {
+			applyCurrentProgramStatus(normalizeTo);
+		}
+	}
+
+	private ProgramStatusReportTO findCurrentProgramStatus() {
+		final List<ProgramStatusReportTO> programStatuses = getProgramStatuses();
+		if ( programStatuses == null || programStatuses.isEmpty() ) {
+			return null;
+		}
+		for ( ProgramStatusReportTO status : programStatuses ) {
+			if ( status.getExpirationDate() == null ) {
+				return status;
+			}
+		}
+		return null;
+	}
+
+	private void applyCurrentProgramStatus(ProgramStatusReportTO toApply) {
+		setCurrentProgramStatusId(toApply == null ? null : toApply.getId());
+		setCurrentProgramStatusName(toApply == null ? null : toApply.getName());
+		setCurrentProgramStatusCode(toApply == null ? null : programStatusCodeOrNull(toApply.getId()));
+	}
+
+	private void clearCurrentProgramStatus() {
+		applyCurrentProgramStatus(null);
+	}
+
+	private String unexpiredProgramStatusCodeOrNull() {
+		if ( programStatusExpirationDate != null ) {
+			return null;
+		}
+		return programStatusCodeOrNull(getProgramStatusId());
+	}
+
+	private String programStatusCodeOrNull(UUID programStatusId) {
+		if ( programStatusId == null ) {
+			return null;
+		}
+
+		String statusIdStr = programStatusId.toString();
+		return ProgramStatus.PROGRAM_STATUS_CODES.get(statusIdStr);
 	}
 	
 	public void setProgramStatusExpirationDate(Date programStatusExpirationDate) {
@@ -309,8 +353,20 @@ public class BaseStudentReportTO implements Serializable {
 	
 	
 	public void addProgramStatuses(ProgramStatusReportTO programStatus) {
-			if(!this.getProgramStatuses().contains(programStatus))
-				this.programStatuses.add(programStatus);
+		for ( ProgramStatusReportTO alreadyIn : this.getProgramStatuses() ) {
+			// Manual equality check here b/c we can't gauge the impact
+			// of changing ProgramStatusReportTO.equals()
+			if ( alreadyIn.getId().equals(programStatus.getId()) ) {
+				if ( alreadyIn.getExpirationDate() == null ) {
+					if ( programStatus.getExpirationDate() == null ) {
+						return;
+					}
+				} else if ( alreadyIn.getExpirationDate().equals(programStatus.getExpirationDate()) ) {
+					return;
+				}
+			}
+		}
+		this.programStatuses.add(programStatus);
 	}
 	
 	public void addProgramStatuses(List<ProgramStatusReportTO> programStatuses) {
@@ -719,6 +775,7 @@ public class BaseStudentReportTO implements Serializable {
 		addSpecialServiceGroups(reportTO.getSpecialServiceGroups(), reportTO.getSpecialServiceGroupObjectStatuses());
 		addStudentTypes(reportTO.getStudentTypes());
 		addProgramStatuses(reportTO.getProgramStatuses());
+		normalizeCurrentProgramStatus();
 	}
 	
 	
@@ -833,5 +890,7 @@ public List<CoachPersonLiteTO> getWatchers() {
 public void setWatchers(List<CoachPersonLiteTO> watchers) {
 	this.watchers = watchers;
 }
+
+
 
 }

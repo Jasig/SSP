@@ -48,6 +48,7 @@ import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -196,27 +197,13 @@ public class DisabilityServicesReportController extends ReportBaseController { /
 		// building
 		final PagingWrapper<DisabilityServicesReportTO> people = personService.getDisabilityReport(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
-		ArrayList<DisabilityServicesReportTO> compressedReport = null;
-		if(people != null){
-			ArrayList<DisabilityServicesReportTO> report = new ArrayList<DisabilityServicesReportTO>(people.getRows());
-			SearchParameters.addStudentCount(report, parameters);
-			compressedReport = new ArrayList<DisabilityServicesReportTO>();
-			for(DisabilityServicesReportTO reportTO: report){
-				Integer index = compressedReport.indexOf(reportTO);
-				if(index != null && index >= 0)
-				{
-					DisabilityServicesReportTO compressedReportTo = compressedReport.get(index);
-					compressedReportTo.processDuplicate(reportTO);
-				}else{
-					//reportTO.setCurrentRegistrationStatus(registrationStatusByTermService);
-					compressedReport.add(reportTO);
-				}
-			}
-		}
-		
+		List<DisabilityServicesReportTO> compressedReports = this.processStudentReportTOs(people);
+
+		SearchParameters.addStudentCount(compressedReports, parameters);
+
 		generateReport(response, 
 				parameters, 
-				compressedReport, 
+				compressedReports,
 				REPORT_URL, 
 				reportType, 
 				REPORT_FILE_TITLE);
