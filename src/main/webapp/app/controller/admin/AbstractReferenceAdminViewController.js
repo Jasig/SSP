@@ -80,6 +80,20 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				me.formRendererUtils.applyAssociativeStoreFilter(item.store, e.record.get(item.associativeField));
 			}
 		});
+		
+		var record = e.record;
+		var jsonData = record.data;
+		var store = editor.grid.getStore();
+		var persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
+		if(persistMethod == 'PUT' && store.$className == 'Ssp.store.reference.JournalSources')
+			{
+				
+				if(jsonData.name == 'Email' || jsonData.name == 'Early Alert'){
+					Ext.Msg.alert('SSP Error', 'These values cannot be modified'); 
+					return false;
+				}
+			}
+		
     	return access;
     },
     
@@ -93,6 +107,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 			var store = editor.grid.getStore();
 			var persistMethod= record.data.createdDate != null ? 'PUT' : 'POST';
 			
+			
 			Ext.each(editor.editor.items.items, function(item) {
 				if(item.store != undefined && item.store != null) {
 					item.store.clearFilter(true);
@@ -100,6 +115,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 				
 			});
 	
+			
 			Ext.Ajax.request({
 				url: editor.grid.getStore().getProxy().url+"/"+id,
 				method: persistMethod,
