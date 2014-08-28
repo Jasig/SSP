@@ -617,7 +617,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     showHideFieldByStoreValue: function( elementName, compareValue, compareFieldName, store, recordField, recordValue ){
 		var queryValue = '#'+elementName;
     	var field = Ext.ComponentQuery.query(queryValue)[0];
-		var record = store.findRecord(recordField, recordValue);
+		var record = store.findRecord(recordField, recordValue , 0, false, false, true);
 		if ( compareValue==record.get( compareFieldName ) )
 		{
 			field.show();
