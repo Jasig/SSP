@@ -152,7 +152,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
         this.loadTool('studentintake');
     },
     selectTool: function(toolType){
-        var tool = this.toolsStore.find('toolType', toolType)
+        var tool = this.toolsStore.findExact('toolType', toolType)
         this.getView().getSelectionModel().select(tool);
     },
     
