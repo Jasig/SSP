@@ -121,7 +121,6 @@ public class CaseloadActivityReportController extends ReportBaseController {
 	void getCaseLoadActivity(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) UUID coachId,
-			final @RequestParam(required = false) UUID watcherId,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
@@ -144,10 +143,6 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		
-		if(watcherId != null)
-		{
-			SearchParameters.addWatcher(watcherId, parameters, personService, personTOFactory);
-		}
 		
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 		SearchParameters.addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);

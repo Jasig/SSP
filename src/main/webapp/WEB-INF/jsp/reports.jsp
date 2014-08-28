@@ -506,17 +506,6 @@
 		<div class="ea-clear"></div>
 
 		
-		<!-- WatchList -->
-		<div class="ea-input">
-			<select id="watcherGroup" name="watcherId" class="input-watcher-group">
-				<option value="">${all_found}</option>
-			</select>
-		</div>
-		<div class="ea-label">
-			<span>Watch List For:</span>
-		</div>
-		<div class="ea-clear"></div>	
-		
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="caseloadActivityHomeDepartment" name="homeDepartment" class="input-home-department-group">
