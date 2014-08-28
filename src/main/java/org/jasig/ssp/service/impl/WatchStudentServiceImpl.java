@@ -18,15 +18,8 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.jasig.ssp.dao.DirectoryPersonSearchDao;
-import org.jasig.ssp.dao.PersonSearchDao;
 import org.jasig.ssp.dao.WatchStudentDao;
-import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
@@ -38,10 +31,13 @@ import org.jasig.ssp.service.WatchStudentService;
 import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.UUID;
 
 /**
  * WatchStudent service implementation
@@ -85,7 +81,7 @@ public class WatchStudentServiceImpl
 	}
 
 	@Override
-	public void exportWatchListFor(HttpServletResponse response,
+	public void exportWatchListFor(PrintWriter writer,
 			ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) throws IOException {
 		PersonSearchRequest form = new PersonSearchRequest();
@@ -93,7 +89,7 @@ public class WatchStudentServiceImpl
 		form.setMyWatchList(true);
 		form.setProgramStatus(programStatus);
 		form.setSortAndPage(buildSortAndPage);
-		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(response), form);
+		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(writer), form);
 	}
 
 	@Override

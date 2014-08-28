@@ -114,7 +114,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		String fileName = "caseload_"+Calendar.getInstance().getTimeInMillis()+".csv";
 		response.setHeader("Content-Disposition", "attachment; filename="+fileName); 	
 
-		CaseloadCsvWriterHelper csvWriterHelper = new CaseloadCsvWriterHelper(response);
+		CaseloadCsvWriterHelper csvWriterHelper = new CaseloadCsvWriterHelper(response.getWriter());
 	    service.exportableCaseLoadFor(csvWriterHelper,
 				programStatus, securityService.currentUser().getPerson(),
 				buildSortAndPage( limit,  start,  sort,  sortDirection));
@@ -139,7 +139,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		}
 		String fileName = "watchlist_"+Calendar.getInstance().getTimeInMillis()+".csv";
 		response.setHeader("Content-Disposition", "attachment; filename="+fileName); 
-		watchStudentService.exportWatchListFor(response,programStatus, securityService.currentUser().getPerson(), buildSortAndPage( limit,  start,  sort,  sortDirection));
+		watchStudentService.exportWatchListFor(response.getWriter(),programStatus, securityService.currentUser().getPerson(), buildSortAndPage( limit,  start,  sort,  sortDirection));
 	}
 	
 	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
@@ -189,7 +189,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				sapStatusCode,
 				mapStatus,planStatus,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage);
-		service.exportDirectoryPersonSearch(response, form);
+		service.exportDirectoryPersonSearch(response.getWriter(), form);
 		
 	}
 		

@@ -89,10 +89,7 @@ abstract class ReportBaseController extends AbstractBaseController {
 			JasperExportManager.exportReportToPdfStream(decodedInput,
 					response.getOutputStream());
 		} else if ("csv".equals(reportType)) {
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader(
-					"Content-disposition",
-					"attachment; filename=" + reportName + "." + REPORT_TYPE_CSV);
+			writeCsvHttpResponseHeaders(response, reportName);
 
 			final JRCsvExporter exporter = new JRCsvExporter();
 			exporter.setParameter(JRExporterParameter.INPUT_STREAM,
@@ -108,6 +105,13 @@ abstract class ReportBaseController extends AbstractBaseController {
 		response.flushBuffer();
 		is.close();
 		os.close();		
+	}
+
+	protected void writeCsvHttpResponseHeaders(HttpServletResponse response, String reportName) {
+		response.setContentType("application/vnd.ms-excel");
+		response.setHeader(
+				"Content-disposition",
+				"attachment; filename=" + reportName + "." + REPORT_TYPE_CSV);
 	}
 	
 	List<BaseStudentReportTO> processStudentReportTOs(PagingWrapper<BaseStudentReportTO> people){

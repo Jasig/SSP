@@ -18,17 +18,16 @@
  */
 package org.jasig.ssp.service;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.UUID;
 
 /**
  * WatchStudent service
@@ -40,7 +39,7 @@ public interface WatchStudentService extends PersonAssocAuditableService<WatchSt
 	PagingWrapper<PersonSearchResult2> watchListFor(
 			ProgramStatus programStatus, Person person, SortingAndPaging sAndP);
 
-	void exportWatchListFor(HttpServletResponse response, ProgramStatus programStatus, Person person,
+	void exportWatchListFor(PrintWriter writer, ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) throws IOException;
 
 	Long watchListCountFor(ProgramStatus programStatus, Person person,

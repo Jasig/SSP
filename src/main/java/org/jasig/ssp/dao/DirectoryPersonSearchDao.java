@@ -913,7 +913,7 @@ public class DirectoryPersonSearchDao  {
 		Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
 		ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
 		
-		csvWriterHelper.renderMergedOutputModel(results,maxCount);		
+		csvWriterHelper.write(results,maxCount);
 		
 	 }
 

@@ -19,6 +19,7 @@
 package org.jasig.ssp.util.csvwriter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,12 +38,8 @@ import org.springframework.util.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class CaseloadCsvWriterHelper {
+public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearchResult2> {
 
-	
-
-
-	private HttpServletResponse response;
 	private static String[] colHeaders = new String[16];
 	
 	private static String COL_PERSON_ID = "PERSON_ID";
@@ -60,7 +57,7 @@ public class CaseloadCsvWriterHelper {
 	private static String COL_COACH_FIRST_NAME = "COACH_FIRST_NAME";
 	private static String COL_COACH_LAST_NAME = "COACH_LAST_NAME";
 	private static String COL_CURRENT_PROGRAM_STATUS = "CURRENT_PROGRAM_STATUS";
-	private static String COL_START_TERM = "TART_TERM";
+	private static String COL_START_TERM = "START_TERM";
 	
 	static {
 		colHeaders[0] = COL_PERSON_ID;
@@ -79,99 +76,34 @@ public class CaseloadCsvWriterHelper {
 		colHeaders[13] = COL_COACH_LAST_NAME;
 		colHeaders[14] = COL_CURRENT_PROGRAM_STATUS;
 		colHeaders[15] = COL_START_TERM;
-
-	}
-	
-	
-
-	public CaseloadCsvWriterHelper(HttpServletResponse response) {
-		super();
-		this.response = response;
 	}
 
-	public CSVWriter initCsvWriter()
-			throws IOException {
-		return new CSVWriter(response.getWriter());
+	public CaseloadCsvWriterHelper(PrintWriter writer) {
+		super(writer);
 	}
 
-	public void renderMergedOutputModel(ScrollableResults results, Long maxCount) throws IOException {
-		CSVWriter csvWriter = initCsvWriter();
-		writeCsvHeader(csvWriter);
-		writeCsvBody(csvWriter, results,maxCount);
-		writingDone(csvWriter);		
-	}
-	public void writingDone(CSVWriter csvWriter)
-			throws IOException {
-		csvWriter.flush();
-		csvWriter.close();
-	}
-
-	public void writeCsvHeader(CSVWriter csvWriter) {
-		writeLine(colHeaders, csvWriter);
-	}
-
-	public void writeLine(String[] line, CSVWriter csvWriter) {
-		csvWriter.writeNext(normalizeLine(line));
-	}
-
-	/**
-	 * Have to make sure all elements are wrapped in quotes, even those with
-	 * null values, in order to make it easier on the SBC client to load CSV
-	 * files up into HSQLDB.
-	 * 
-	 * @param line
-	 * @return
-	 */
-	protected String[] normalizeLine(String[] line) {
-		for (int i = 0; i < line.length; i++) {
-			line[i] = StringUtils.hasLength(line[i]) ? line[i] : "";
-		}
-		return line;
-	}
-
-	protected String[] csvHeaderForModel(Map<String, Object> model) {
+	@Override
+	protected String[] csvHeaderRow() {
 		return colHeaders;
 	}
 
-
-    protected void writeCsvBody(CSVWriter csvWriter, ScrollableResults results, Long maxCount) {
-    	int i = 0;
-
-            while ( results.next() && i < maxCount ) {
-                Object result = results.get()[0];
-				String[] bodyRow = csvRowForCaseloadRecord((PersonSearchResult2)result);
-                if ( bodyRow != null ) {
-                    writeLine(bodyRow, csvWriter);
-                }
-                i++;
-        }
-    }
-
-	private String[] csvRowForCaseloadRecord(PersonSearchResult2 result) {
+	@Override
+	protected String[] csvBodyRow(PersonSearchResult2 model) {
 		List<String> row = new ArrayList<String>();
-		row.add(result.getPersonId() == null ? null : result.getPersonId().toString());
-		row.add(result.getSchoolId());
-		row.add(result.getFirstName());
-		row.add(result.getMiddleName());
-		row.add(result.getLastName());
-		row.add(formatDate(result.getBirthDate()));
-		row.add(result.getStudentTypeName());
-		row.add(formatDate(result.getCurrentAppointmentStartTime()));
-		row.add(formatDate(result.getStudentIntakeCompleteDate()));
-		row.add(new Integer(result.getActiveAlerts()).toString());
-		row.add(new Integer(result.getClosedAlerts()).toString());
-		row.add(new Integer(result.getNumberEarlyAlertResponsesRequired()).toString());
-		row.add(result.getActualStartTerm());
-        return row.toArray(new String[row.size()]);
+		row.add(formatUuid(model.getPersonId()));
+		row.add(model.getSchoolId());
+		row.add(model.getFirstName());
+		row.add(model.getMiddleName());
+		row.add(model.getLastName());
+		row.add(formatDate(model.getBirthDate()));
+		row.add(model.getStudentTypeName());
+		row.add(formatDate(model.getCurrentAppointmentStartTime()));
+		row.add(formatDate(model.getStudentIntakeCompleteDate()));
+		row.add(formatInt(model.getActiveAlerts()));
+		row.add(formatInt(model.getClosedAlerts()));
+		row.add(formatInt(model.getNumberEarlyAlertResponsesRequired()));
+		row.add(model.getActualStartTerm());
+		return row.toArray(new String[row.size()]);
 	}
 
-	private String formatDate(Date date) {
-		if(date == null)
-		{
-			return null;
-		}
-		SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
-		return formatter.format(date);
-	}
- 
 }

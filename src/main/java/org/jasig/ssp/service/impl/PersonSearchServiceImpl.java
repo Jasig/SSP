@@ -18,20 +18,8 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.jasig.ssp.dao.CaseloadDao;
 import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.PersonSearchDao;
@@ -61,8 +49,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.UUID;
 
 /**
  * PersonSearch service implementation
@@ -357,9 +355,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Override
 	public void exportDirectoryPersonSearch(
-			HttpServletResponse response, PersonSearchRequest form) throws IOException {
+			PrintWriter writer, PersonSearchRequest form) throws IOException {
 				
-		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(response),form);
+		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(writer),form);
 
 	}
 

@@ -19,6 +19,7 @@
 package org.jasig.ssp.service;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -180,7 +181,7 @@ public interface PersonSearchService {
 			CaseloadCsvWriterHelper csvWriterHelper, ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) throws IOException;
 
-	void exportDirectoryPersonSearch(HttpServletResponse response, PersonSearchRequest form) throws IOException;
+	void exportDirectoryPersonSearch(PrintWriter writer, PersonSearchRequest form) throws IOException;
 
 	Long caseLoadCountFor(ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage);
