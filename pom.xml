@@ -21,9 +21,9 @@
 		<jasperreports.version>4.6.0</jasperreports.version>
 		<groovy.version>1.8.6</groovy.version>
 
-		<targetJdk>1.6</targetJdk>
-		<project.build.sourceVersion>1.6</project.build.sourceVersion>
-		<project.build.targetVersion>1.6</project.build.targetVersion>
+		<targetJdk>1.7</targetJdk>
+		<project.build.sourceVersion>1.7</project.build.sourceVersion>
+		<project.build.targetVersion>1.7</project.build.targetVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<gmaven.runtime>1.8</gmaven.runtime>
@@ -342,7 +342,7 @@
 		<dependency>
 			<groupId>org.jasig.ssp.platform</groupId>
 			<artifactId>platform-java-api</artifactId>
-			<version>0.1.1</version>
+			<version>0.2.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
