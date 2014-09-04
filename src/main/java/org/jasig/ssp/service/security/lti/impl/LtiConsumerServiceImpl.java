@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.security.lti.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.jasig.portal.api.sso.SsoPersonLookupService;
 import org.jasig.portal.api.sso.SsoTicket;
 import org.jasig.portal.api.sso.SsoTicketService;
 import org.jasig.portal.api.url.BuildUrlRequest;
@@ -89,8 +90,6 @@ public class LtiConsumerServiceImpl extends
 	private String sharedSsoSecret;
 
 	private static String SSP_ROSTER_CLASS_IDENTIFIER = "sectionCode";
-
-	private static String USERNAME_KEY = "name";
 
 	@Override
 	protected LtiConsumerDao getDao() {
@@ -247,14 +246,14 @@ public class LtiConsumerServiceImpl extends
 			throw new PersonAttributesSearchException("No user identifier specified");
 		}
 
-		final Map<String, String> query = new HashMap<String, String>();
-		query.put(client.getSspUserIdField(), userId);
 		final List<Map<String, Object>> people;
 		try {
-			people = personAttributesService.searchForUsers(query);
+			people = personAttributesService.searchForSsoUsers(client.getSspUserIdField(), userId);
 			if(people == null || people.isEmpty()){
 				throw new UserNotEnabledException("UserId:" + userId + " not found");
 			}
+		} catch ( UserNotEnabledException e ) {
+			throw e;
 		} catch ( PersonAttributesSearchException e ) {
 			throw e;
 		} catch ( Exception e ) {
@@ -262,8 +261,13 @@ public class LtiConsumerServiceImpl extends
 					client.getSspUserIdField() + "] identifier [" + userId + "]", e);
 		}
 
+		if ( people.size() > 1 ) {
+			throw new PersonAttributesSearchException("Expected 1 user with [" +
+					client.getSspUserIdField() + "] identifier [" + userId + "]. Found [" + people.size() + "]");
+		}
+
 		final Map<String, Object> personMap = people.get(0);
-		final String userName = (String) personMap.get(USERNAME_KEY);
+		final String userName = (String) personMap.get(SsoPersonLookupService.USERNAME_ATTRIBUTE_NAME);
 		if ( StringUtils.isBlank(userName) ) {
 			throw new PersonAttributesSearchException("User with [" +
 					client.getSspUserIdField() + "] identifier [" + userId + "] exists but has no username");

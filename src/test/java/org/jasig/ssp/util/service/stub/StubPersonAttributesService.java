@@ -51,6 +51,11 @@ public class StubPersonAttributesService implements PersonAttributesService {
 	}
 
 	@Override
+	public List<Map<String, Object>> searchForSsoUsers(String attribute, String value) {
+		throw new UnsupportedOperationException("Not needed yet, so not implemented yet");
+	}
+
+	@Override
 	public Collection<String> getCoaches() {
 		return coachUsernames == null ? new ArrayList<String>(0) : coachUsernames;
 	}

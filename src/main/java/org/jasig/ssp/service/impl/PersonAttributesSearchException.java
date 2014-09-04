@@ -34,4 +34,8 @@ public class PersonAttributesSearchException extends RuntimeException {
 			final Throwable t) {
 		super(message, t);
 	}
+
+	public PersonAttributesSearchException(final Throwable t) {
+		super(t);
+	}
 }
