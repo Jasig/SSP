@@ -796,7 +796,7 @@ public void setLastTermGPAAndLastTermRegistered(ExternalStudentTranscriptTermSer
 			   getExternalStudentTranscriptTermsBySchoolId(getSchoolId());
 
 	   for(ExternalStudentTranscriptTerm transcript:termTranscripts){
-		   if(transcript.getCreditHoursAttempted().floatValue() > 0.0){
+		   if(transcript.getCreditHoursAttempted() != null && transcript.getCreditHoursAttempted().floatValue() > 0.0){
 			   if(currentTerm == null || !transcript.getTermCode().equals(currentTerm.getCode())){
 				   setLastTermGradePointAverage(transcript.getGradePointAverage());
 				   setLastTermRegistered(transcript.getTermCode());
