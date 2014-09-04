@@ -143,4 +143,9 @@ public class LdapPersonAttributesService implements PersonAttributesService {
 	public List<Map<String, Object>> searchForUsers(final Map<String, String> query) {
 		throw new NotImplementedException();
 	}
+
+	@Override
+	public List<Map<String, Object>> searchForSsoUsers(String attribute, String value) {
+		throw new NotImplementedException();
+	}
 }

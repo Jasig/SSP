@@ -20,6 +20,7 @@ package org.jasig.ssp.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jasig.portal.api.sso.SsoPersonLookupService;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
 import org.jasig.ssp.security.PersonAttributesResult;
@@ -229,6 +230,16 @@ public class UPortalPersonAttributesService
 
 		return rslt;
 
+	}
+
+	@Override
+	public List<Map<String, Object>> searchForSsoUsers(String attribute, String value) {
+		try {
+			return SsoPersonLookupService.IMPL.get().findSsoPerson(attribute, value);
+		} catch ( RuntimeException e ) {
+			throw new PersonAttributesSearchException("System failure looking up user having attribute [" +
+					attribute + "] with value [" + value + "]", e);
+		}
 	}
 
 	/**

@@ -44,6 +44,8 @@ public interface PersonAttributesService {
 	
 	List<Map<String, Object>> searchForUsers(Map<String,String> query);
 
+	List<Map<String, Object>> searchForSsoUsers(String attribute, String value);
+
 	/*
 	 * @returns usernames of coaches
 	 */
