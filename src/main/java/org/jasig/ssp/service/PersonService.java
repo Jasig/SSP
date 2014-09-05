@@ -150,23 +150,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	/**
-	 * Gets a list of {@link Person} objects based on the specified criteria and
-	 * {@link SpecialServiceGroup} identifiers.
-	 * 
-	 * @param specialServiceGroupIDs
-	 *            list of {@link SpecialServiceGroup} service group identifiers
-	 * @param createForSingleSort
-	 * @return A list of {@link Person} objects based on the specified criteria
-	 *         and special service groups.
-	 * @throws ObjectNotFoundException
-	 *             If any of the special service groups could not be found.
-	 */
-	List<Person> peopleFromSpecialServiceGroups(
-			List<UUID> specialServiceGroupIDs,
-			SortingAndPaging createForSingleSort)
-			throws ObjectNotFoundException;
-
-	/**
 	 * Get a list of all Coaches
 	 * 
 	 * @param sAndP

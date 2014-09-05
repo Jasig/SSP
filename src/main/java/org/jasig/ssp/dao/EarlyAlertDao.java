@@ -356,8 +356,12 @@ public class EarlyAlertDao extends
 		criteria.createAlias("personProgramStatuses.programStatus",
 				"programStatus", JoinType.LEFT_OUTER_JOIN);
 
+		projections.add(Projections.groupProperty("personSpecialServiceGroups.objectStatus")
+				.as("earlyalert_specialServiceGroupAssocObjectStatus"));
 		projections.add(Projections.groupProperty("specialServiceGroup.name")
-				.as("earlyalert_specialServiceGroup"));
+				.as("earlyalert_specialServiceGroupName"));
+		projections.add(Projections.groupProperty("specialServiceGroup.id")
+				.as("earlyalert_specialServiceGroupId"));
 
 		projections.add(Projections.groupProperty("programStatus.name").as(
 				"earlyalert_programStatusName"));
@@ -372,7 +376,9 @@ public class EarlyAlertDao extends
 				JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as(
-				"earlyalert_studentType"));
+				"earlyalert_studentTypeName"));
+		projections.add(Projections.groupProperty("studentType.code").as(
+				"earlyalert_studentTypeCode"));
 
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory)
 				.getDialect();
@@ -584,6 +590,7 @@ public class EarlyAlertDao extends
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions.in("serviceReason.id",
 					form.getServiceReasonIds()));
+			query.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 
 		}
 
@@ -595,6 +602,7 @@ public class EarlyAlertDao extends
 					"specialServiceGroup");
 			query.add(Restrictions.in("specialServiceGroup.id",
 					form.getSpecialServiceGroupIds()));
+			query.add(Restrictions.eq("specialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		return query;
@@ -672,12 +680,14 @@ public class EarlyAlertDao extends
 		if (personSearchForm.getCoach() != null
 				&& personSearchForm.getCoach().getId() != null) {
 			// restrict to coach
+			// See PersonDao for notes on why no objectstatus filter here
 			criteria.add(Restrictions.eq("person.coach.id", personSearchForm
 					.getCoach().getId()));
 		}
 
 		if (personSearchForm.getHomeDepartment() != null
 				&& personSearchForm.getHomeDepartment().length() > 0) {
+			// See PersonDao for notes on why no objectstatus filter here
 			criteria.createAlias("person.coach", "c");
 			criteria.createAlias("c.staffDetails", "coachStaffDetails");
 			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
@@ -685,6 +695,7 @@ public class EarlyAlertDao extends
 		}
 
 		if (personSearchForm.getProgramStatus() != null) {
+			// Not filtering on object status here b/c throughout the app it's just a filter on expiry
 			criteria.createAlias("person.programStatuses",
 					"personProgramStatuses");
 			criteria.add(Restrictions.eq(
@@ -700,6 +711,7 @@ public class EarlyAlertDao extends
 			criteria.add(Restrictions.in(
 					"personSpecialServiceGroups.specialServiceGroup.id",
 					personSearchForm.getSpecialServiceGroupIds()));
+			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchForm.getReferralSourcesIds() != null) {
@@ -707,6 +719,7 @@ public class EarlyAlertDao extends
 					"personReferralSources").add(
 					Restrictions.in("personReferralSources.referralSource.id",
 							personSearchForm.getReferralSourcesIds()));
+			criteria.add(Restrictions.eq("personReferralSources.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchForm.getAnticipatedStartTerm() != null) {
@@ -741,6 +754,7 @@ public class EarlyAlertDao extends
 					"serviceReason");
 			criteria.add(Restrictions.in("serviceReason.id",
 					personSearchForm.getServiceReasonsIds()));
+			criteria.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		// don't bring back any non-students, there will likely be a better way

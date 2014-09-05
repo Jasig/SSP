@@ -27,6 +27,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.AuditPerson;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.security.SspUser;
@@ -244,7 +245,7 @@ public class TaskDao
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions
 					.in("serviceReason.id",form.getServiceReasonIds()));
-			
+			query.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 		
 		if(form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty()){
@@ -252,7 +253,7 @@ public class TaskDao
 			query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
 			query.add(Restrictions
 					.in("specialServiceGroup.id",form.getSpecialServiceGroupIds()));
-			
+			query.add(Restrictions.eq("specialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 				
 		return query;

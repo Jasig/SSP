@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="name" class="java.lang.String"/>
@@ -58,8 +58,8 @@
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
-	<field name="studentTypeNames" class="java.lang.String">
-		<fieldDescription><![CDATA[studentTypeNames]]></fieldDescription>
+	<field name="studentTypeName" class="java.lang.String">
+		<fieldDescription><![CDATA[studentTypeName]]></fieldDescription>
 	</field>
 	<field name="addressLine1" class="java.lang.String">
 		<fieldDescription><![CDATA[addressLine1]]></fieldDescription>
@@ -90,7 +90,7 @@
 	<field name="coachName" class="java.lang.String">
 		<fieldDescription><![CDATA[coachName]]></fieldDescription>
 	</field>
-	<field name="specialServiceGroupsName" class="java.lang.String"/>
+	<field name="activeSpecialServiceGroupNames" class="java.lang.String"/>
 	<field name="gradePointAverage" class="java.math.BigDecimal"/>
 	<field name="actualStartTerm" class="java.lang.String"/>
 	<field name="actualStartYear" class="java.lang.Integer"/>
@@ -408,7 +408,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{studentTypeNames}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{studentTypeName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="804cadab-5574-4274-b756-e4ae6a1fb403" stretchType="RelativeToBandHeight" x="139" y="0" width="84" height="14"/>
@@ -478,13 +478,13 @@
 				<reportElement uuid="58856228-b85e-4845-a11c-58a3a37d2ee8" stretchType="RelativeToBandHeight" x="543" y="14" width="40" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{lastTermRegistered}]]></textFieldExpression>
-			</textField>		
+			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="97983083-41cf-41f7-b967-db6fc3624cee" stretchType="RelativeToTallestObject" x="600" y="2" width="57" height="28"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{specialServiceGroupsName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{activeSpecialServiceGroupNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

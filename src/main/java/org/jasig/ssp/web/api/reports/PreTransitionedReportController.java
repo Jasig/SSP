@@ -262,7 +262,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 						model.getSchoolId(),
 						model.getHomePhone(),
 						model.getCellPhone(),
-						model.getStudentTypeNames(),
+						model.getStudentTypeName(),
 						model.getCurrentProgramStatusName(),
 						model.getActualStartTerm(),
 						model.getAcademicStanding(),
@@ -271,7 +271,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 						formatBigDecimal(model.getGradePointAverage()),
 						formatBigDecimal(model.getLastTermGradePointAverage()),
 						model.getLastTermRegistered(),
-						model.getSpecialServiceGroupsName(),
+						model.getActiveSpecialServiceGroupNames(),
 						model.getCoachFirstName(),
 						model.getCoachLastName()
 				};

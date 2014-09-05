@@ -39,6 +39,7 @@ import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -252,6 +253,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 			query.createAlias("serviceReasons", "serviceReasons");
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions.in("serviceReason.id", serviceReasonIds));
+			query.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 		
 		if (specialServiceGroupIds != null && !specialServiceGroupIds.isEmpty()) {
@@ -260,6 +262,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 				.add(Restrictions
 						.in("personSpecialServiceGroups.specialServiceGroup.id",
 								specialServiceGroupIds));
+			query.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 
