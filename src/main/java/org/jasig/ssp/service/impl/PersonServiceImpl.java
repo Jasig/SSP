@@ -606,19 +606,6 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public List<Person> peopleFromSpecialServiceGroups(
-			final List<UUID> specialServiceGroupIDs,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-
-		final List<Person> people = dao.getPeopleBySpecialServices(
-				specialServiceGroupIDs,
-				sAndP);
-
-		return people;
-	}
-	
-
-	@Override
 	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP) {
 		long methodStart = new Date().getTime();
 		final Collection<String> coachUsernames =

@@ -142,13 +142,13 @@ public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
 	
 	@Override
 	public void processDuplicate(BaseStudentReportTO reportTO){
-		super.processDuplicate(reportTO);
 		EarlyAlertStudentReportTO earlyReportTO = (EarlyAlertStudentReportTO)reportTO;
 		if(!getEarlyAlertIds().contains(earlyReportTO.getEarlyAlertId())){
 			this.addEarlyAlertIds(earlyReportTO.getEarlyAlertIds());
 			this.setTotal(this.getTotal() + earlyReportTO.getTotal());
 			this.setClosed(this.getClosed() + earlyReportTO.getClosed());
 		}
+		super.processDuplicate(reportTO);
 	}
 
 }

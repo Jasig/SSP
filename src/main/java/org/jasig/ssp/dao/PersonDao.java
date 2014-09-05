@@ -251,42 +251,6 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return criteria.list();
 	}
 
-	/**
-	 * Retrieves a List of People, likely used by the Address Labels Report
-	 * 
-	 * @param specialServiceGroups
-	 *            Search criteria
-	 * @param sAndP
-	 *            Sorting and paging parameters.
-	 * @return List of People, filtered appropriately
-	 * @throws ObjectNotFoundException
-	 *             If any referenced data is not found.
-	 */
-	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleBySpecialServices(
-			final List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
-			throws ObjectNotFoundException {
-
-		final Criteria criteria = createCriteria(sAndP);
-
-		if (specialServiceGroups != null && !specialServiceGroups.isEmpty()) {
-			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups")
-					.add(Restrictions
-							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									specialServiceGroups));
-		}
-
-		// don't bring back any non-students, there will likely be a better way
-		// to do this later
-		criteria.add(Restrictions.isNotNull("studentType"));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
-		return criteria.list();
-	}
-	
-	
-
 	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
 			final Collection<String> coachUsernames, final SortingAndPaging sAndP) {
@@ -434,17 +398,34 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (personSearchTO.getCoach() != null
 				&& personSearchTO.getCoach().getId() != null) {
 			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
+
+			// Not 100% clear whether this should or shouldn't include a coach.objectStatus = ACTIVE
+			// filter. Could argue it's a direct association so the status of coach shouldn't matter.
+			// But it's an operational->operational association (not operational->reference), which
+			// is a little bit different, semantically. E.g. studenttype.objectStatus doesn't matter
+			// for person->studenttype, but journalentry.status does matter for person->journalentry.
+			// In this case we've chosen not to filter since for persons in particular, soft-deletion
+			// is strongly discouraged since ~2.4.0 since it leads to strange UI behaviors.
 			criteria.add(Restrictions.eq("c.id",
 					personSearchTO.getCoach().getId()));
 		}
+
 		if (personSearchTO.getWatcher() != null
 				&& personSearchTO.getWatcher().getId() != null) {
-			criteria.createCriteria("watchers").add(Restrictions.eq("person.id", personSearchTO.getWatcher().getId()));
+			criteria.createCriteria("watchers")
+					.add(Restrictions.eq("person.id", personSearchTO.getWatcher().getId()))
+					.add(Restrictions.eq("watchers.objectStatus", ObjectStatus.ACTIVE));
 		}		
 		if (personSearchTO.getHomeDepartment() != null
 				&& personSearchTO.getHomeDepartment().length() > 0) {
 			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
-			
+
+			// As with coaches, it's not 100% clear whether or not this should have a objectstatus filter.
+			// If staffdetails were a reference type, we'd ignore its status. But, as noted above, the
+			// status of directly associated operational types usually *does* matter. But in this
+			// case the API and UI effectively ignore staffdetails.objectstatus (e.g. even if
+			// coach.staffdetails.objectstatus=2, the coach's department will still render in the
+			// caseload add/edit form). So we ignore it here as well.
 			criteria.createAlias("c.staffDetails", "coachStaffDetails");
 			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
 					personSearchTO.getHomeDepartment()));
@@ -453,6 +434,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (personSearchTO.getProgramStatus() != null) {
 			criteria.createAlias("programStatuses",
 					"personProgramStatuses");
+			// Not filtering on object status here b/c throughout the app it's just a filter on expiry
 			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchTO
@@ -467,6 +449,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchTO
 											.getSpecialServiceGroupIds()));
+			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}else if(personSearchTO.getSpecialServiceGroupRequired()){
 			/* Makes sure that at least one special service group has an active status */
 			criteria.createAlias("specialServiceGroups",
@@ -478,7 +461,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.createAlias("referralSources", "personReferralSources")
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
-							personSearchTO.getReferralSourcesIds()));
+							personSearchTO.getReferralSourcesIds()))
+					.add(Restrictions.eq("personReferralSources.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchTO.getAnticipatedStartTerm() != null && personSearchTO.getAnticipatedStartTerm().length() > 0) {
@@ -519,24 +503,33 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 		
 		if (personSearchTO.getDisabilityIsNotNull() != null && personSearchTO.getDisabilityIsNotNull() == true) {
+			// Not filtering on object status here b/c technically the person->persondisability association is
+			// direct and thus the status of the associated object (persondisability) doesn't matter
 			criteria.createAlias("disability", "personDisability");
 			criteria.add(Restrictions.isNotNull("personDisability.id"));
 		}
 		
 		if (personSearchTO.getDisabilityStatusId() != null) {
 			if (personSearchTO.getDisabilityIsNotNull() == null || personSearchTO.getDisabilityIsNotNull() == false)
-				criteria.createAlias("disability", "personDisability");
-			
+
+			criteria.createAlias("disability", "personDisability");
+
+
 			criteria.add(Restrictions.eq(
 					"personDisability.disabilityStatus.id",
 					personSearchTO.getDisabilityStatusId()));
+
+			// Direct operational-to-operational relationship, so probably should have a persondisability.objectstatus
+			// filter, but the UI completely disregards that field, so have decided against adding such a filter here.
+
 		}
 		
 		if (personSearchTO.getDisabilityTypeId() != null) {
 			criteria.createAlias("disabilityTypes", "personDisabilityTypes")
 			.add(Restrictions.eq(
 					"personDisabilityTypes.disabilityType.id",
-					personSearchTO.getDisabilityTypeId()));
+					personSearchTO.getDisabilityTypeId()))
+			.add(Restrictions.eq("personDisabilityTypes.objectStatus", ObjectStatus.ACTIVE));
 		}
 		
 		if (personSearchTO.getServiceReasonsIds() != null && personSearchTO.getServiceReasonsIds().size() > 0) {
@@ -544,6 +537,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
 			criteria.add(Restrictions.in("serviceReason.id",
 					personSearchTO.getServiceReasonsIds()));
+			criteria.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		// don't bring back any non-students, there will likely be a better way
@@ -691,8 +685,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		
-		projections.add(Projections.groupProperty("specialServiceGroup.name").as("specialServiceGroup"));
-		projections.add(Projections.groupProperty("specialServiceGroup.objectStatus").as("specialServiceGroupObjectStatus"));
+		projections.add(Projections.groupProperty("specialServiceGroup.id").as("specialServiceGroupId"));
+		projections.add(Projections.groupProperty("specialServiceGroup.name").as("specialServiceGroupName"));
+		projections.add(Projections.groupProperty("personSpecialServiceGroups.objectStatus").as("specialServiceGroupAssocObjectStatus"));
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("programStatus.name").as("programStatusName"));
@@ -702,8 +697,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// Join to Student Type
 		criteria.createAlias("studentType", "studentType", JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
-		projections.add(Projections.groupProperty("studentType.name").as("studentType"));
-		projections.add(Projections.groupProperty("studentType.code").as("studentTypeAsCode"));
+		projections.add(Projections.groupProperty("studentType.name").as("studentTypeName"));
+		projections.add(Projections.groupProperty("studentType.code").as("studentTypeCode"));
 
 		criteria.createAlias("coach", "c");
 		criteria.createAlias("watchers", "watcher", JoinType.LEFT_OUTER_JOIN);

@@ -37,6 +37,7 @@ import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.EarlyAlertResponse;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -403,10 +404,12 @@ public class EarlyAlertResponseDao extends
 		
 		criteria.createAlias("earlyAlertReferralIds", "earlyAlertReferral");
 		if (earlyAlertReferralIds != null) {
+			// EarlyAlertResponse->EarlyAlertReferral not modeled as an operational
+			// join type, so no filtering on object status since for a direct
+			// operational->reference association, the status of the reference type
+			// does not matter
 			criteria 
-				.add(Restrictions
-				.in("earlyAlertReferral.id",
-								earlyAlertReferralIds));
+				.add(Restrictions.in("earlyAlertReferral.id",earlyAlertReferralIds));
 		}
 		
 		criteria.createAlias("earlyAlert", "earlyAlert");
@@ -444,7 +447,7 @@ public class EarlyAlertResponseDao extends
 		return processor.getSortedAndPagedResultsAsList();
 	}
 	
-private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
+	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
 		
 		criteria.createAlias("person.specialServiceGroups",
 			"personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);	
@@ -468,8 +471,11 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		projections.add(Projections.groupProperty("person.zipCode").as("early_alert_response_zipCode"));
 		projections.add(Projections.groupProperty("person.id").as("early_alert_response_id"));
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup",JoinType.LEFT_OUTER_JOIN);
-		projections.add(Projections.groupProperty("specialServiceGroup.name").as("early_alert_response_specialServiceGroup"));
-		
+		projections.add(Projections.groupProperty("personSpecialServiceGroups.objectStatus").as("early_alert_response_specialServiceGroupAssocObjectStatus"));
+		projections.add(Projections.groupProperty("specialServiceGroup.name").as("early_alert_response_specialServiceGroupName"));
+		projections.add(Projections.groupProperty("specialServiceGroup.id").as("early_alert_response_specialServiceGroupId"));
+
+
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
 		projections.add(Projections.groupProperty("programStatus.name").as("early_alert_response_programStatusName"));
@@ -480,8 +486,9 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		criteria.createAlias("person.studentType", "studentType",
 				JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
-		projections.add(Projections.groupProperty("studentType.name").as("early_alert_response_studentType"));
-		
+		projections.add(Projections.groupProperty("studentType.name").as("early_alert_response_studentTypeName"));
+		projections.add(Projections.groupProperty("studentType.code").as("early_alert_response_studentTypeCode"));
+
 		
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
@@ -540,6 +547,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 				query.createAlias("serviceReasons.serviceReason", "serviceReason");
 				query.add(Restrictions
 						.in("serviceReason.id",form.getServiceReasonIds()));
+				query.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 			}
 			
 			
@@ -548,6 +556,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 				query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
 				query.add(Restrictions
 						.in("specialServiceGroup.id", form.getSpecialServiceGroupIds()));
+				query.add(Restrictions.eq("specialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 			}
 			
 			query.setProjection(Projections.projectionList().
@@ -570,6 +579,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		if (personSearchFormTO.getCoach() != null
 				&& personSearchFormTO.getCoach().getId() != null) {
 			// restrict to coach
+			// See PersonDao for notes on why no objectstatus filter here
 			criteria.add(Restrictions.eq("person.coach.id",
 					personSearchFormTO.getCoach().getId()));
 		}
@@ -578,7 +588,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		
 		if (personSearchFormTO.getHomeDepartment() != null
 				&& personSearchFormTO.getHomeDepartment().length() > 0) {
-			
+			// See PersonDao for notes on why no objectstatus filter here
 			criteria.createAlias("coach.staffDetails", "staffDetails");
 			criteria.add(Restrictions.eq("staffDetails.departmentName",
 					personSearchFormTO.getHomeDepartment()));
@@ -587,8 +597,10 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 				&& personSearchFormTO.getWatcher().getId() != null) {
 			criteria.createAlias("person.watchers", "watchers");
 			criteria.add(Restrictions.eq("watchers.person.id", personSearchFormTO.getWatcher().getId()));
+			criteria.add(Restrictions.eq("watchers.objectStatus", ObjectStatus.ACTIVE));
 		}	
-		if (personSearchFormTO.getProgramStatus() != null) {	
+		if (personSearchFormTO.getProgramStatus() != null) {
+			// Not filtering on object status here b/c throughout the app it's just a filter on expiry
 			criteria.createAlias("person.programStatuses",
 					"personProgramStatuses");
 			criteria.add(Restrictions
@@ -605,6 +617,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchFormTO
 											.getSpecialServiceGroupIds()));
+			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchFormTO.getReferralSourcesIds() != null) {
@@ -612,6 +625,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
 							personSearchFormTO.getReferralSourcesIds()));
+			criteria.add(Restrictions.eq("personReferralSources.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchFormTO.getAnticipatedStartTerm() != null) {
@@ -645,6 +659,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
 			criteria.add(Restrictions.in("serviceReason.id",
 					personSearchFormTO.getServiceReasonsIds()));
+			criteria.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 

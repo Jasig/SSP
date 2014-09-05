@@ -39,6 +39,7 @@ import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
@@ -167,7 +168,7 @@ public class JournalEntryDao
 			query.createAlias("serviceReasons.serviceReason", "serviceReason");
 			query.add(Restrictions
 					.in("serviceReason.id",form.getServiceReasonIds()));
-			
+			query.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 		
 		if(form.getSpecialServiceGroupIds()!= null && !form.getSpecialServiceGroupIds().isEmpty()){
@@ -175,7 +176,7 @@ public class JournalEntryDao
 			query.createAlias("specialServiceGroups.specialServiceGroup", "specialServiceGroup");
 			query.add(Restrictions
 					.in("specialServiceGroup.id",form.getSpecialServiceGroupIds()));
-			
+			query.add(Restrictions.eq("specialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 		return query;	
 	}
@@ -284,10 +285,12 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		projections.add(Projections.groupProperty("person.id").as("journalentry_id"));
 		
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN );
+		projections.add(Projections.groupProperty("personSpecialServiceGroups.objectStatus").as("journalentry_specialServiceGroupAssocObjectStatus"));
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus", JoinType.LEFT_OUTER_JOIN);
 		
-		projections.add(Projections.groupProperty("specialServiceGroup.name").as("journalentry_specialServiceGroup"));
-				
+		projections.add(Projections.groupProperty("specialServiceGroup.id").as("journalentry_specialServiceGroupId"));
+		projections.add(Projections.groupProperty("specialServiceGroup.name").as("journalentry_specialServiceGroupName"));
+
 		projections.add(Projections.groupProperty("programStatus.name").as("journalentry_programStatusName"));
 		projections.add(Projections.groupProperty("personProgramStatuses.id").as("journalentry_programStatusId"));
 		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("journalentry_programStatusExpirationDate"));
@@ -296,8 +299,9 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		criteria.createAlias("person.studentType", "studentType",
 				JoinType.LEFT_OUTER_JOIN);
 		// add StudentTypeName Column
-		projections.add(Projections.groupProperty("studentType.name").as("journalentry_studentType"));
-		
+		projections.add(Projections.groupProperty("studentType.name").as("journalentry_studentTypeName"));
+		projections.add(Projections.groupProperty("studentType.code").as("journalentry_studentTypeCode"));
+
 		
 
 		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
@@ -362,6 +366,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 							.in("personSpecialServiceGroups.specialServiceGroup.id",
 									personSearchForm
 											.getSpecialServiceGroupIds()));
+			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}else{
 			criteria.createAlias("person.specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		}
@@ -371,6 +376,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 					.add(Restrictions.in(
 							"personReferralSources.referralSource.id",
 							personSearchForm.getReferralSourcesIds()));
+			criteria.add(Restrictions.eq("personReferralSources.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchForm.getAnticipatedStartTerm() != null) {
@@ -394,6 +400,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
 			criteria.add(Restrictions.in("serviceReason.id",
 					personSearchForm.getServiceReasonsIds()));
+			criteria.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		// don't bring back any non-students, there will likely be a better way

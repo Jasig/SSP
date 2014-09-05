@@ -22,10 +22,16 @@ package org.jasig.ssp.transferobject.reports;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.ObjectStatus;
@@ -90,12 +96,8 @@ public class BaseStudentReportTO implements Serializable {
 	private String zipCode;
     private String cellPhone;
     private String homePhone;
-	private String studentType;
-	private List<String> studentTypes = new ArrayList<String>();
-	private String studentTypeAsCode;
-	private List<String> studentTypesAsCode = new ArrayList<String>();
-	private String studentTypeNames;
-	private String studentTypeCodes;
+	private String studentTypeName;
+	private String studentTypeCode;
 	private Integer registrationStatus;
 	private CoachPersonLiteTO coach;
 	
@@ -111,15 +113,13 @@ public class BaseStudentReportTO implements Serializable {
 	private Date programStatusExpirationDate;
 	private UUID programStatusId;
 	private String programStatusName;
-	private List<ProgramStatusReportTO> programStatuses = null;
+	private List<ProgramStatusReportTO> programStatuses = new ArrayList<ProgramStatusReportTO>();
 	
-	private List<String> specialServiceGroups = new ArrayList<String>();
-	private String specialServiceGroup;
-	private String specialServiceGroupsName;
-	
-	private List<ObjectStatus> specialServiceGroupObjectStatuses = new ArrayList<ObjectStatus>();
-	private ObjectStatus specialServiceGroupObjectStatus;
-	
+	private Map<UUID, String> activeSpecialServiceGroups = new LinkedHashMap<UUID, String>();
+	private UUID specialServiceGroupId;
+	private String specialServiceGroupName;
+	private ObjectStatus specialServiceGroupAssocObjectStatus;
+
 	private Boolean isIlp;
 	
 	private String actualStartTerm;
@@ -276,7 +276,7 @@ public class BaseStudentReportTO implements Serializable {
 		this.currentProgramStatusCode = code;
 	}
 
-	public void normalizeCurrentProgramStatus() {
+	private void normalizeProgramStatuses() {
 		final ProgramStatusReportTO normalizeTo = findCurrentProgramStatus();
 		if ( normalizeTo == null ) {
 			setCurrentProgramStatusCode(unexpiredProgramStatusCodeOrNull());
@@ -350,9 +350,8 @@ public class BaseStudentReportTO implements Serializable {
 	public String getProgramStatusName(){
 			return programStatusName;
 	}
-	
-	
-	public void addProgramStatuses(ProgramStatusReportTO programStatus) {
+
+	private void mergeProgramStatus(ProgramStatusReportTO programStatus) {
 		for ( ProgramStatusReportTO alreadyIn : this.getProgramStatuses() ) {
 			// Manual equality check here b/c we can't gauge the impact
 			// of changing ProgramStatusReportTO.equals()
@@ -369,19 +368,29 @@ public class BaseStudentReportTO implements Serializable {
 		this.programStatuses.add(programStatus);
 	}
 	
-	public void addProgramStatuses(List<ProgramStatusReportTO> programStatuses) {
-		for(ProgramStatusReportTO programStatus:programStatuses)
-			addProgramStatuses(programStatus);
+	private void mergeProgramStatus(BaseStudentReportTO reportTO) {
+		ProgramStatusReportTO otherStatus = reportTO.getProgramStatusAsTO();
+		if ( otherStatus == null ) {
+			return;
+		}
+		mergeProgramStatus(otherStatus);
 	}
-	
-	
-	public List<ProgramStatusReportTO> getProgramStatuses(){
-		if(programStatuses == null)
-			programStatuses = Lists.newArrayList(new ProgramStatusReportTO( 
-					programStatusName, 
-					programStatusId,
-					programStatusExpirationDate));
+
+	private List<ProgramStatusReportTO> getProgramStatuses(){
+		if(programStatuses.isEmpty() && programStatusId != null) {
+			programStatuses.add(getProgramStatusAsTO());
+		}
 		return programStatuses;
+	}
+
+	protected ProgramStatusReportTO getProgramStatusAsTO() {
+		if ( programStatusId == null ) {
+			return null;
+		}
+		return new ProgramStatusReportTO(
+				programStatusName,
+				programStatusId,
+				programStatusExpirationDate);
 	}
 
 	public Integer getRegistrationStatus() {
@@ -405,7 +414,6 @@ public class BaseStudentReportTO implements Serializable {
 			return coach.getFirstName() + " " + coach.getLastName();
 		return getCoachFirstName() + " " + getCoachLastName();
 	}
-
 
 	public String getCoachFirstName() {
 		return coachFirstName;
@@ -451,7 +459,6 @@ public class BaseStudentReportTO implements Serializable {
 		return person;
 	}
 
-	
 	public void setPerson(Person person) {
 		this.person = person;
 		setFirstName(person.getFirstName());
@@ -468,12 +475,10 @@ public class BaseStudentReportTO implements Serializable {
 		setCellPhone(person.getCellPhone());
 		setSchoolId(person.getSchoolId());
 		setCoach(new CoachPersonLiteTO(person.getCoach()));
-		setStudentType(person.getStudentType().getName());
-		
-		if(getStudentType().equals(ILP))
-			setIsIlp(true);
-		else
-			setIsIlp(false);
+		setStudentTypeName(person.getStudentType().getName());
+		setStudentTypeCode(person.getStudentType().getCode());
+
+		normalize();
 	}
 	
 	public void setPerson(BaseStudentReportTO person) {
@@ -498,182 +503,93 @@ public class BaseStudentReportTO implements Serializable {
 		setCoachUsername(person.getCoachUsername());
 		setCoach(person.getCoach());
 		setWatchers(person.getWatchers());
-		setStudentType(person.getStudentType());
+		setStudentTypeName(person.getStudentTypeName());
+		setStudentTypeCode(person.getStudentTypeCode());
+		setCurrentProgramStatusCode(person.getCurrentProgramStatusCode());
 		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
+		setCurrentProgramStatusId(person.getCurrentProgramStatusId());
+		setProgramStatusId(person.getProgramStatusId());
+		setProgramStatusName(person.getProgramStatusName());
+		setProgramStatusExpirationDate(person.getProgramStatusExpirationDate());
+		setSpecialServiceGroupId(person.getSpecialServiceGroupId());
+		setSpecialServiceGroupName(person.getSpecialServiceGroupName());
+		setSpecialServiceGroupAssocObjectStatus(person.getSpecialServiceGroupAssocObjectStatus());
 		setRegistrationStatus(person.getRegistrationStatus());
-		setSpecialServiceGroupsName(person.getSpecialServiceGroupsName());
-		setSpecialServiceGroupObjectStatuses(person.getSpecialServiceGroupObjectStatuses());
-		
-		if(getStudentType().equals(ILP))
-			setIsIlp(true);
-		else
-			setIsIlp(false);
+
+		normalize();
 	}
 
-		
-	public void setSpecialServiceGroup(String specialServiceGroup) {
-		this.specialServiceGroup = specialServiceGroup;
-		addSpecialServiceGroups(specialServiceGroup);
+	public void setSpecialServiceGroupId(UUID specialServiceGroupId) {
+		this.specialServiceGroupId = specialServiceGroupId;
+	}
+
+	public UUID getSpecialServiceGroupId(){
+		return specialServiceGroupId;
+	}
+
+	public void setSpecialServiceGroupName(String specialServiceGroupName) {
+		this.specialServiceGroupName = specialServiceGroupName;
 	}
 	
-	public String getSpecialServiceGroup(){
-		return specialServiceGroup;
+	public String getSpecialServiceGroupName(){
+		return specialServiceGroupName;
 	}
 
-	public void addSpecialServiceGroups(List<String> specialServiceGroups, List<ObjectStatus> specialServiceGroupOjectStatuses) {
-		Integer i = 0;
-		for(String specialServiceGroup:specialServiceGroups){
-			if(!this.specialServiceGroups.contains(specialServiceGroup) && (specialServiceGroupOjectStatuses.size() > i && specialServiceGroupOjectStatuses.get(i).equals(ObjectStatus.ACTIVE)))
-				this.specialServiceGroups.add(specialServiceGroup);
-			i = i + 1;
+	public void setSpecialServiceGroupAssocObjectStatus(ObjectStatus specialServiceGroupAssocObjectStatus) {
+		this.specialServiceGroupAssocObjectStatus = specialServiceGroupAssocObjectStatus;
+	}
+	
+	public ObjectStatus getSpecialServiceGroupAssocObjectStatus(){
+		return specialServiceGroupAssocObjectStatus;
+	}
+
+	public String getActiveSpecialServiceGroupNames() {
+		final Map<UUID, String> activeSsgs = getActiveSpecialServiceGroups();
+		if (activeSsgs == null || activeSsgs.isEmpty()) {
+			return ""; // legacy
+		}
+		StringBuilder sb = new StringBuilder();
+		final Collection<String> sortedValues = Sets.newTreeSet(activeSsgs.values());
+		for ( String name : sortedValues ) {
+			addValueToStringList(sb, name);
+		}
+		return sb.toString();
+	}
+
+	private Map<UUID, String> getActiveSpecialServiceGroups() {
+		if(activeSpecialServiceGroups.isEmpty() && specialServiceGroupId != null && specialServiceGroupAssocObjectStatus == ObjectStatus.ACTIVE) {
+			activeSpecialServiceGroups.put(specialServiceGroupId, specialServiceGroupName);
+		}
+		return activeSpecialServiceGroups;
+	}
+
+	private void mergeSpecialServiceGroup(BaseStudentReportTO reportTO) {
+		if ( reportTO.getSpecialServiceGroupId() != null && reportTO.getSpecialServiceGroupAssocObjectStatus() == ObjectStatus.ACTIVE ) {
+			getActiveSpecialServiceGroups().put(reportTO.getSpecialServiceGroupId(), reportTO.getSpecialServiceGroupName());
 		}
 	}
 
-	public void addSpecialServiceGroups(String specialServiceGroup) {
-		this.specialServiceGroups.add(specialServiceGroup);
+	private void normalizeSpecialServiceGroups() {
+		// not strictly necessary. just initializes a private field that would be auto-initialized anyway
+		// by the logical public acccessor (getActiveSpecialServiceGroupNames()). But provides for some
+		// symmetry w/r/t normalizeProgramStatuses()
+		getActiveSpecialServiceGroups();
 	}
 	
-	public List<String> getSpecialServiceGroups() {
-			return this.specialServiceGroups;
+	public void setStudentTypeName(String studentTypeName) {
+		this.studentTypeName = studentTypeName;
 	}
 	
-	public void setSpecialServiceGroups(List<String> specialServiceGroups) {
-		this.specialServiceGroups = specialServiceGroups;
-}
-	
-
-	public void setSpecialServiceGroupsName(String specialServiceGroupsName) {
-		this.specialServiceGroupsName = specialServiceGroupsName;
+	public String getStudentTypeName(){
+		return studentTypeName;
 	}
 
-	public String getSpecialServiceGroupsName() {
-		List<String> addedSpecialGroups = new ArrayList<String>();
-		if(specialServiceGroupsName == null || specialServiceGroupsName.length() == 0){
-			specialServiceGroupsName = "";
-			Integer i = 0;
-			for(String specialServiceGroup:specialServiceGroups){
-				if(specialServiceGroup == null || addedSpecialGroups.contains(specialServiceGroup)){
-					i = i + 1;
-					continue;
-				}
-				addedSpecialGroups.add(specialServiceGroup);
-				specialServiceGroupsName = addValueToStringList(specialServiceGroupsName, specialServiceGroup);
-				i = i + 1;
-			}
-		}
-		return specialServiceGroupsName;
-	}
-
-	
-	public void setSpecialServiceGroupObjectStatus(ObjectStatus specialServiceGroupObjectStatus) {
-		this.specialServiceGroupObjectStatus = specialServiceGroupObjectStatus;
-		addSpecialServiceGroupObjectStatuses(specialServiceGroupObjectStatus);
+	public void setStudentTypeCode(String studentTypeCode) {
+		this.studentTypeCode = studentTypeCode;
 	}
 	
-	public ObjectStatus getSpecialServiceGroupObjectStatus(){
-		return specialServiceGroupObjectStatus;
-	}
-
-	public void addSpecialServiceGroupObjectStatuses(List<ObjectStatus> specialServiceGroupObjectStatuses) {
-		for(ObjectStatus specialServiceGroupObjectStatus:specialServiceGroupObjectStatuses)
-				this.specialServiceGroupObjectStatuses.add(specialServiceGroupObjectStatus);
-	}
-
-	public void addSpecialServiceGroupObjectStatuses(ObjectStatus specialServiceGroupObjectStatus) {
-			this.specialServiceGroupObjectStatuses.add(specialServiceGroupObjectStatus);
-	}
-	
-	public List<ObjectStatus> getSpecialServiceGroupObjectStatuses() {
-			return this.specialServiceGroupObjectStatuses;
-	}
-	
-	public void setSpecialServiceGroupObjectStatuses(List<ObjectStatus> specialServiceGroupObjectStatuses) {
-		this.specialServiceGroupObjectStatuses = specialServiceGroupObjectStatuses;
-	}
-	
-	public void setStudentType(String studentType) {
-		this.studentType = studentType;
-		addStudentTypes(studentType);
-	}
-	
-	public String getStudentType(){
-		return studentType;
-	}
-
-	public void addStudentTypes(List<String> studentTypes) {
-		for(String studentType:studentTypes)
-			addStudentTypes(studentType);
-	}
-
-	public void addStudentTypes(String studentType) {
-		if(!this.studentTypes.contains(studentType))
-			this.studentTypes.add(studentType);
-	}
-	
-	public List<String> getStudentTypes() {
-			return this.studentTypes;
-	}
-	
-	public void setStudentTypes(List<String> studentTypes) {
-		this.studentTypes = studentTypes;
-	}
-
-	public void setStudentTypeNames(String studentTypeNames) {
-		this.studentTypeNames = studentTypeNames;
-	}
-
-	public String getStudentTypeNames() {
-		if(studentTypeNames == null || studentTypeNames.length() == 0){
-			studentTypeNames = "";
-			for(String studentType:studentTypes){
-				studentTypeNames = addValueToStringList(studentTypeNames, studentType);
-			}
-		}
-		return studentTypeNames;
-	}
-	
-	public void setStudentTypesAsCode(List<String> studentTypesAsCode) {
-		this.studentTypesAsCode = studentTypesAsCode;
-	}
-	
-
-	public void setStudentTypeAsCode(String studentTypeAsCode) {
-		this.studentTypeAsCode = studentTypeAsCode;
-		addStudentTypes(studentTypeAsCode);
-	}
-	
-	public String getStudentTypeAsCode(){
-		return studentTypeAsCode;
-	}
-
-	public void addStudentTypesAsCode(List<String> studentTypesAsCode) {
-		for(String studentTypeAsCode:studentTypesAsCode)
-			addStudentTypesAsCode(studentTypeAsCode);
-	}
-
-	public void addStudentTypesAsCode(String studentTypeAsCode) {
-		if(!this.studentTypesAsCode.contains(studentTypeAsCode))
-			this.studentTypesAsCode.add(studentTypeAsCode);
-	}
-	
-	public List<String> getStudentTypesAsCode() {
-			return this.studentTypesAsCode;
-	}
-	
-	
-	
-	public void setStudentTypeCodes(String studentTypeCodes) {
-		this.studentTypeCodes = studentTypeCodes;
-	}
-
-	public String getStudentTypeCodes() {
-		if(studentTypeCodes == null || studentTypeCodes.length() == 0){
-			studentTypeCodes = "";
-			for(String studentType:studentTypesAsCode){
-				studentTypeCodes = addValueToStringList(studentTypeCodes, studentType);
-			}
-		}
-		return studentTypeCodes;
+	public String getStudentTypeCode(){
+		return studentTypeCode;
 	}
 
 	public Boolean getIsIlp() {
@@ -752,7 +668,7 @@ public class BaseStudentReportTO implements Serializable {
 		result = prime * result
 				+ ((schoolId == null) ? 0 : schoolId.hashCode());
 		result = prime * result
-				+ ((studentType == null) ? 0 : studentType.hashCode());
+				+ ((studentTypeName == null) ? 0 : studentTypeName.hashCode());
 		return result;
 	}
 
@@ -764,18 +680,24 @@ public class BaseStudentReportTO implements Serializable {
 		}
 		return ((BaseStudentReportTO)obj).getId().equals(getId());
 	}
-	
-	
+
+	protected StringBuilder addValueToStringList(StringBuilder sb, String value) {
+		return (sb.length() == 0 ? sb : sb.append(" - ")).append(value);
+	}
 
 	protected String addValueToStringList(String str, String value){
 		return str + ((str.length() != 0) ? " - ":"") + value;
 	}
-	
+
 	public void processDuplicate(BaseStudentReportTO reportTO){
-		addSpecialServiceGroups(reportTO.getSpecialServiceGroups(), reportTO.getSpecialServiceGroupObjectStatuses());
-		addStudentTypes(reportTO.getStudentTypes());
-		addProgramStatuses(reportTO.getProgramStatuses());
-		normalizeCurrentProgramStatus();
+		mergeSpecialServiceGroup(reportTO);
+		mergeProgramStatus(reportTO);
+		normalize();
+	}
+
+	public void normalize() {
+		normalizeProgramStatuses();
+		normalizeSpecialServiceGroups();
 	}
 	
 	

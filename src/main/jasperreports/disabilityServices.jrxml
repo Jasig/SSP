@@ -62,8 +62,8 @@
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
-	<field name="studentType" class="java.lang.String">
-		<fieldDescription><![CDATA[studentType]]></fieldDescription>
+	<field name="studentTypeName" class="java.lang.String">
+		<fieldDescription><![CDATA[studentTypeName]]></fieldDescription>
 	</field>
 	<field name="disabilityTypesName" class="java.lang.String">
 		<fieldDescription><![CDATA[disabilityTypesName]]></fieldDescription>

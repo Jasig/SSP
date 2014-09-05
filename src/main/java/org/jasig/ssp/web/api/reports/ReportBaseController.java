@@ -132,8 +132,8 @@ abstract class ReportBaseController extends AbstractBaseController {
 				T compressedReportTo = compressedReports.get(index);
 				compressedReportTo.processDuplicate(reportTO);
 			}else{
+				reportTO.normalize();
 				compressedReports.add(reportTO);
-				reportTO.normalizeCurrentProgramStatus();
 			}
 		}
 		return compressedReports;
@@ -152,6 +152,7 @@ abstract class ReportBaseController extends AbstractBaseController {
 				BaseStudentReportTO compressedReportTo = compressedReports.get(index);
 				compressedReportTo.processDuplicate(reportTO);
 			}else{
+				reportTO.normalize();
 				compressedReports.add(reportTO);
 			}
 		}
