@@ -127,7 +127,7 @@ public class PersonHistoryReportController extends ReportBaseController {
 	@RequestMapping(value = "/{personId}/history/print", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
-	void getAddressLabels(
+	void getReport(
 			final HttpServletResponse response,
 			final @PathVariable UUID personId,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)

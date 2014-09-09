@@ -18,19 +18,24 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.reference.AbstractReference;
+import org.jasig.ssp.model.reference.ServiceReason;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 
-import com.google.common.collect.Lists;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.List;
+
+import static com.google.common.collect.Iterables.addAll;
+import static com.google.common.collect.Iterables.filter;
 
 public class PersonReportTO extends PersonTO {
 
@@ -66,26 +71,28 @@ public class PersonReportTO extends PersonTO {
 		return tos;
 	}
 
-	public String getSpecialServiceGroupNames()
-	{
-		List<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroups = this.getSpecialServiceGroups();
-		if ( specialServiceGroups == null || specialServiceGroups.isEmpty() ) {
-			return "";
-		}
-		StringBuffer sb = new StringBuffer();
-		Iterator<ReferenceLiteTO<SpecialServiceGroup>> specialServiceGroupsIter = specialServiceGroups.iterator();
-		while(specialServiceGroupsIter.hasNext())
-		{
-			ReferenceLiteTO<SpecialServiceGroup> tempSpecialServiceGroup = specialServiceGroupsIter.next();
-			sb.append("\u2022 " + tempSpecialServiceGroup.getName());
-			sb.append("\n");
-
-		}
-		sb.append("\n");
-
-		return sb.toString();
+	public List<ReferenceLiteTO<ServiceReason>> getActiveServiceReasons() {
+		return getActiveAssociationsIn(getServiceReasons());
 	}
-	
+
+	public List<ReferenceLiteTO<SpecialServiceGroup>> getActiveSpecialServiceGroups() {
+		return getActiveAssociationsIn(getSpecialServiceGroups());
+	}
+
+	protected <R extends AbstractReference> List<ReferenceLiteTO<R>> getActiveAssociationsIn(List<ReferenceLiteTO<R>> all) {
+		final List<ReferenceLiteTO<R>> active = Lists.newArrayList();
+		if ( all == null || all.isEmpty() ) {
+			return active;
+		}
+		addAll(active, filter(all, new Predicate<ReferenceLiteTO<R>>() {
+			@Override
+			public boolean apply(@Nullable ReferenceLiteTO<R> candidate) {
+				return candidate.getObjectStatus() == ObjectStatus.ACTIVE;
+			}
+		}));
+		return ReferenceLiteTO.sortByName(active);
+	}
+
 	public List<RegistrationStatusByTerm> getRegistrationStatusByTersm(){
 		return registrationStatusByTerms;
 	}
