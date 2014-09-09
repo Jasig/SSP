@@ -141,6 +141,11 @@
 		<url-pattern>/WEB-INF/servlet/view</url-pattern>
 	</servlet-mapping>
 
+	<mime-mapping>
+		<extension>ico</extension>
+		<mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
