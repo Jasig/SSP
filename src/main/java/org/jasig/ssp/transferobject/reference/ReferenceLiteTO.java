@@ -20,6 +20,8 @@ package org.jasig.ssp.transferobject.reference;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -156,6 +158,28 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 			}
 		}
 		return tos;
+	}
+
+	public static <T extends AbstractReference> List<ReferenceLiteTO<T>> sortByName(List<ReferenceLiteTO<T>> toSort) {
+		Collections.sort(toSort, new Comparator<ReferenceLiteTO<T>>() {
+			@Override
+			public int compare(ReferenceLiteTO<T> o1, ReferenceLiteTO<T> o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+				if (o1.getName() == null && o2.getName() == null) {
+					return 0;
+				}
+				if (o1.getName() == null) {
+					return -1;
+				}
+				if (o2.getName() == null) {
+					return 1;
+				}
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		return toSort;
 	}
 
 	public UUID getId() {

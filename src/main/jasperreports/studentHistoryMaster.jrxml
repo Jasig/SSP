@@ -414,7 +414,7 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="92ac4194-afb8-4447-8fa0-12067c4e0223" positionType="Float" stretchType="RelativeToBandHeight" x="100" y="0" width="160" height="22" isPrintWhenDetailOverflows="true"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{studentTO}.getSpecialServiceGroups())]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{studentTO}.getActiveServiceReasons())]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -424,7 +424,7 @@
 			</staticText>
 			<subreport>
 				<reportElement uuid="b5111b50-c04a-4ba8-a82c-9d08b3b0091c" positionType="Float" stretchType="RelativeToBandHeight" x="413" y="0" width="159" height="22" isPrintWhenDetailOverflows="true"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{studentTO}.getServiceReasons())]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{studentTO}.getActiveSpecialServiceGroups())]]></dataSourceExpression>
 				<subreportExpression><![CDATA["reports/sessionDetails_subsubreport.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
