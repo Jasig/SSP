@@ -507,7 +507,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="d22d3cb7-2cc0-431e-889a-5ab8d11ae874" x="278" y="3" width="31" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{isIlp}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{isIlp} ? 'Y' : 'N']]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="38f4248d-b512-4939-a59b-10dc3c8d3513" isPrintRepeatedValues="false" x="309" y="3" width="59" height="20"/>
