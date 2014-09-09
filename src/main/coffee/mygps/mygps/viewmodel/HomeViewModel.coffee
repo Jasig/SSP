@@ -31,6 +31,9 @@ namespace 'mygps.viewmodel'
 				@showMap = ko.observable(false)
 				@personId = ko.dependentObservable(@evaluatePersonId, this)
 				@mapUrl = ko.dependentObservable(@evaluateMapUrl, this)
+				@appName = ko.dependentObservable(@evaulateAppName, this)
+				@welcomeMessage = ko.dependentObservable(@evaluateWelcomeMessage, this)
+				@toolsList = ko.dependentObservable(@evaluateTools, this)
 				
 			load: () ->
 				super()
@@ -56,9 +59,84 @@ namespace 'mygps.viewmodel'
 		                callback(false)
                 })
 
+			getAppName = (callback) ->
+                $.ajax({
+	                type: "GET"
+	                url: "/ssp/api/1/mygps/home/appname"
+	                success: (result) ->
+                        if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
+                            callback(result)
+                        else
+                            callback(false)
+	                error: (fault) ->
+                        callback(false)
+                })
+
+			getWelcomeMessage = (callback) ->
+                $.ajax({
+	                type: "GET"
+	                url: "/ssp/api/1/mygps/home/welcome"
+	                success: (result) ->
+                        if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
+                            callback(result)
+                        else
+                            callback(false)
+	                error: (fault) ->
+                        callback(false)
+                })
+
+			getToolsList = (callback) ->
+                $.ajax({
+	                type: "GET"
+	                url: "/ssp/api/1/mygps/home/appname"
+	                success: (result) ->
+                        if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
+                            callback(result)
+                        else
+                            callback(false)
+	                error: (fault) ->
+                        callback(false)
+                })
+
 			evaluateShowMap: () ->
-				if @session?.authenticatedPerson()?.id()?
-                    getCurrentMap(@session?.authenticatedPerson()?.id(), @showMap)
+                if @session?.authenticatedPerson()?.id()?
+	                getCurrentMap(@session?.authenticatedPerson()?.id(), @showMap)
+
+			evaulateAppName: () ->
+                getAppName(@appName)
+                if @appName is false
+	                @appName = null
+
+			evaluateWelcomeMessage: () ->
+                getWelcomeMessage(@welcomeMessage)
+                if (@welcomeMessage is false or (@welcomeMessage.indexOf("<h" < 0) and @welcomeMessage.indexOf("<p" < 0)))
+	                @welcomeMessage = null
+
+			evaluateTools: () ->
+                getToolsList(@toolsList)
+                if @toolsList is false
+	                @toolsList = null
+                else
+	                tools = ["<li><a href=\"guides.html\">Self Help Guides</a></li> \n",
+	                "<li style=\"display: none;\" data-bind=\"visible: canContactCoach\"><a href=\"contact.html\">Contact Your Coach</a></li> \n",
+	                "<li><a href=\"search.html\">Search for Resources</a></li> \n",
+	                "<li style=\"display: none;\" data-bind=\"visible: showMap\"><a href=\"#\" data-bind=\"popupWindow: { url: mapUrl, height: '550px', width: '1010px' }\">View My Map</a></li> \n"]
+	                generatedToolList = ""
+
+	                if @toolsList.indexOf "Self Help" > -1
+	                    generatedToolList = generatedToolList + tools[0]
+
+	                if @toolsList.indexOf "Contact" > -1
+	                    generatedToolList = generatedToolList + tools[1]
+
+	                if @toolsList.indexOf "Search" > -1
+	                    generatedToolList = generatedToolList + tools[2]
+
+	                if @toolsList.indexOf "Map" > -1
+	                    generatedToolList = generatedToolList + tools[3]
+
+	                @toolsList = generatedToolList
+
 
 			ko.bindingHandlers.popupWindow = init: (element, valueAccessor) ->
 				values = ko.utils.unwrapObservable(valueAccessor())

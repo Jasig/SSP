@@ -23,13 +23,14 @@ namespace 'mygps.model'
 	
 		class Person
 		
-			constructor: ( id, firstName, lastName, phoneNumber, emailAddress, photoURL, coach ) ->
+			constructor: ( id, firstName, lastName, phoneNumber, emailAddress, photoURL, coach, permissions ) ->
 				@id = ko.observable( id )
 				@firstName = ko.observable( firstName )
 				@lastName = ko.observable( lastName )
 				@phoneNumber = ko.observable( phoneNumber )
 				@photoURL = ko.observable( photoURL )
 				@coach = ko.observable( coach )
+				@permissions = ko.observable( permissions )
 				
 			@createFromTransferObject: ( personTO ) ->
 				if personTO.coach?

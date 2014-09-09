@@ -49,4 +49,12 @@ namespace 'mygps.model'
 						d.setTime(d.getTime() + (d.getTimezoneOffset() * 60 * 1000))
 						d
 					else null
+				parseLink = ( taskLink ) ->
+					if taskLink isnt null and taskLink.search /<(.|\n)*?>/igm < 0
+						http = ""
+					if fullLink.indexOf "http://" < 0
+						http = "http://"
+						fullLink = "<a href=\"" + http + taskLink + "\" target=\"blank\"> " + taskLink + " </a>"
+						fullLink
+					else taskLink
 				return new Task( taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate( taskTO.dueDate ), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId )

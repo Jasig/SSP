@@ -25,16 +25,24 @@ namespace 'mygps.viewmodel'
 			
 			constructor: ( session ) ->
 				@session = session
-				
 				@authenticated = ko.dependentObservable( @evaluateAuthenticated, this )
 				@authenticatedPersonName = ko.dependentObservable( @authenticatedPersonName, this )
+				@isnonstudent = ko.dependentObservable( @evaluateNonStudentPermission, this )
 				
 			load: () ->
 				return
 				
 			evaluateAuthenticated: () ->
 				return @session?.authenticatedPerson()?;
-			
+
+			evaluateNonStudentPermission: () ->
+				person = @session?.authenticatedPerson()
+				if person? and person.permissions()?
+					permissions = person.permissions()
+					if permissions.indexOf("ROLE_PERSON_READ") isnt -1 or permissions.indexOf("ROLE_PERSON_FILTER") isnt -1
+						return true
+				return false
+
 			authenticatedPersonName: () ->
 				person = @session?.authenticatedPerson()
 				if person?
