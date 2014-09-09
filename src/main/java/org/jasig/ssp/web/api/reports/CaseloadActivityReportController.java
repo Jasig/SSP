@@ -72,7 +72,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/caseloadactivity")
-public class CaseloadActivityReportController extends ReportBaseController {
+public class CaseloadActivityReportController extends ReportBaseController<CaseLoadActivityReportTO> {
 
 	private static String REPORT_URL = "/reports/caseLoadActivity.jasper";
 	private static String REPORT_FILE_TITLE = "CaseLoad_Activity_Report";
@@ -126,7 +126,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 
 		// populate coaches to search for
 		
@@ -148,7 +148,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 		
 		if(coaches.size() == 0){
-			generateReport(response, parameters, null, REPORT_URL, reportType, REPORT_FILE_TITLE);
+			renderReport(response, parameters, null, REPORT_URL, reportType, REPORT_FILE_TITLE);
 			return;
 		}
 		
@@ -195,7 +195,7 @@ public class CaseloadActivityReportController extends ReportBaseController {
 		}
 
 		
-		generateReport(response, parameters, caseLoadActivityReportList, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, caseLoadActivityReportList, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

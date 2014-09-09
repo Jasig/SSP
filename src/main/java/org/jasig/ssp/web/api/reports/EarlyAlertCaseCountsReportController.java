@@ -64,7 +64,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertcasecounts")
-public class EarlyAlertCaseCountsReportController extends ReportBaseController {
+public class EarlyAlertCaseCountsReportController extends ReportBaseController<EarlyAlertTermCaseCountsTO> {
 	
 	private static String REPORT_URL = "/reports/earlyAlertCaseCounts.jasper";
 	private static String REPORT_URL_CSV = "/reports/earlyAlertCaseCounts_csv.jasper";
@@ -113,7 +113,7 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) List<String> termCodes,			
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		Campus campus = SearchParameters.getCampus(campusId, campusService);	
 		
@@ -156,7 +156,7 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController {
 		SearchParameters.addCampusToParameters(campus, parameters);
 		
 		SearchParameters.addTermsToMap(terms, parameters);
-		generateReport( response,  parameters, caseLoads,  reportType.equals("csv") ? REPORT_URL_CSV : REPORT_URL, 
+		renderReport( response,  parameters, caseLoads,  reportType.equals("csv") ? REPORT_URL_CSV : REPORT_URL,
 				 reportType, REPORT_FILE_TITLE);
 	}
 

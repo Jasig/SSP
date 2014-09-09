@@ -74,7 +74,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/pretransitioned")
-public class PreTransitionedReportController extends ReportBaseController { // NOPMD
+public class PreTransitionedReportController extends ReportBaseController<BaseStudentReportTO> {
 	
 	private static final String REPORT_URL_PDF = "/reports/preTransitioned.jasper";
 	private static final String REPORT_FILE_TITLE = "Counselor_Case_Management_Report";
@@ -147,7 +147,7 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -212,78 +212,68 @@ public class PreTransitionedReportController extends ReportBaseController { // N
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
 
-		generateReport(response, parameters, compressedReports, reportType.equals("pdf") ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, compressedReports, reportType.equals("pdf") ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
 
 	}
 
 	@Override
-	protected void generateReport(HttpServletResponse response, Map<String, Object> parameters,
-								  Collection<?> beanCollection, String url, String reportType, String reportName) throws JRException, IOException{
-		if (REPORT_TYPE_PDF.equals(reportType)) {
-			super.generateReport(response, parameters, beanCollection, url, reportType, reportName);
-		} else {
-			generateCsvReport(response, parameters, beanCollection, reportName); // once we have more manual CSV generation, this can be abstracted and moved up
-		}
+	protected boolean overridesCsvRendering() {
+		return true;
 	}
 
-	protected void generateCsvReport(HttpServletResponse response, Map<String, Object> parameters,
-								   Collection<?> beanCollection, String reportName) throws IOException {
-		writeCsvHttpResponseHeaders(response, reportName);
-		AbstractCsvWriterHelper<BaseStudentReportTO> csvWriter = new AbstractCsvWriterHelper<BaseStudentReportTO>(response.getWriter()) {
-
-			@Override
-			protected String[] csvHeaderRow() {
-				return new String[] {
-						"STUDENT_FIRST_NAME",
-						"STUDENT_LAST_NAME",
-						"STUDENT_ID",
-						"PHONE_HOME",
-						"PHONE_CELL",
-						"STUDENT_TYPE",
-						"PROGRAM_STATUS",
-						"ACTUAL_START_TERM",
-						"ACADEMIC_STANDING",
-						"REGISTERED",
-						"CURRENT_YEAR_FINANCIAL_AID_AWARDED",
-						"CUMULATIVE_GPA",
-						"LAST_TERM_GPA",
-						"LAST_TERM_REGISTERED",
-						"SERVICE_GROUPS",
-						"COACH_FIRST_NAME",
-						"COACH_LAST_NAME"
-				};
-			}
-
-			@Override
-			protected String[] csvBodyRow(BaseStudentReportTO model) {
-				return new String[] {
-						model.getFirstName(),
-						model.getLastName(),
-						model.getSchoolId(),
-						model.getHomePhone(),
-						model.getCellPhone(),
-						model.getStudentTypeName(),
-						model.getCurrentProgramStatusName(),
-						model.getActualStartTerm(),
-						model.getAcademicStanding(),
-						formatIntegerAsFriendlyBoolean(model.getRegistrationStatus(), 0, false),
-						model.getFinancialAidStatus(),
-						formatBigDecimal(model.getGradePointAverage()),
-						formatBigDecimal(model.getLastTermGradePointAverage()),
-						model.getLastTermRegistered(),
-						model.getActiveSpecialServiceGroupNames(),
-						model.getCoachFirstName(),
-						model.getCoachLastName()
-				};
-			}
+	@Override
+	public String[] csvHeaderRow(Map<String, Object> reportParameters, Collection<BaseStudentReportTO> reportResults,
+								 String reportViewUrl, String reportType, String reportName,
+								 AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				"STUDENT_FIRST_NAME",
+				"STUDENT_LAST_NAME",
+				"STUDENT_ID",
+				"PHONE_HOME",
+				"PHONE_CELL",
+				"STUDENT_TYPE",
+				"PROGRAM_STATUS",
+				"ACTUAL_START_TERM",
+				"ACADEMIC_STANDING",
+				"REGISTERED",
+				"CURRENT_YEAR_FINANCIAL_AID_AWARDED",
+				"CUMULATIVE_GPA",
+				"LAST_TERM_GPA",
+				"LAST_TERM_REGISTERED",
+				"SERVICE_GROUPS",
+				"COACH_FIRST_NAME",
+				"COACH_LAST_NAME"
 		};
-		csvWriter.write((Collection<BaseStudentReportTO>)beanCollection, -1L);
 	}
 
-
+	@Override
+	public String[] csvBodyRow(BaseStudentReportTO reportResultElement, Map<String, Object> reportParameters,
+							   Collection<BaseStudentReportTO> reportResults, String reportViewUrl, String reportType, String reportName,
+							   AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				reportResultElement.getFirstName(),
+				reportResultElement.getLastName(),
+				reportResultElement.getSchoolId(),
+				reportResultElement.getHomePhone(),
+				reportResultElement.getCellPhone(),
+				reportResultElement.getStudentTypeName(),
+				reportResultElement.getCurrentProgramStatusName(),
+				reportResultElement.getActualStartTerm(),
+				reportResultElement.getAcademicStanding(),
+				csvHelper.formatIntegerAsFriendlyBoolean(reportResultElement.getRegistrationStatus(), 0, false),
+				reportResultElement.getFinancialAidStatus(),
+				csvHelper.formatBigDecimal(reportResultElement.getGradePointAverage()),
+				csvHelper.formatBigDecimal(reportResultElement.getLastTermGradePointAverage()),
+				reportResultElement.getLastTermRegistered(),
+				reportResultElement.getActiveSpecialServiceGroupNames(),
+				reportResultElement.getCoachFirstName(),
+				reportResultElement.getCoachLastName()
+		};
+	}
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+
 }

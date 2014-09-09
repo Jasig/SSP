@@ -72,9 +72,10 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDataSetAllFiltersButHomeDepartment()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, 
-				Stubs.PersonFixture.COACH_1.id(), 
-				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+
+		controller.getCaseLoadActivity(response,
+				Stubs.PersonFixture.COACH_1.id(),
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null,
 				Stubs.TermFixture.FALL_2012.code(), null, null, null,  "csv");
@@ -100,9 +101,9 @@ public class CaseloadActivityReportControllerIntegrationTest
 	public void testDataSetAllFiltersButCoach()
 			throws ObjectNotFoundException, IOException, JRException {
 		final MockHttpServletResponse response = new MockHttpServletResponse();
-		controller.getCaseLoadActivity(response, 
-				null, 
-				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()), 
+		controller.getCaseLoadActivity(response,
+				null,
+				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				null,
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),

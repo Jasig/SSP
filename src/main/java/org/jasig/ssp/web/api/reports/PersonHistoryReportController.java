@@ -74,7 +74,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/person")
-public class PersonHistoryReportController extends ReportBaseController {
+public class PersonHistoryReportController extends ReportBaseController<StudentHistoryTO> {
 
 	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
 	private static final String REPORT_FILE_TITLE = "StudentHistoryReport-";
@@ -131,7 +131,7 @@ public class PersonHistoryReportController extends ReportBaseController {
 			final HttpServletResponse response,
 			final @PathVariable UUID personId,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 
 		final Person person = personService.get(personId);
 		final PersonReportTO personTO = new PersonReportTO(person);
@@ -226,7 +226,7 @@ public class PersonHistoryReportController extends ReportBaseController {
         parameters.put(STUDENT_MAP_STATUS_TO, mapStatusTO);
         parameters.put(STUDENT_MAP_PROJECTED_GRADUATION_TERM, planProjectedGraduationTerm);
 		
-		this.generateReport(response, parameters, studentHistoryTOs, REPORT_URL, reportType, 
+		this.renderReport(response, parameters, studentHistoryTOs, REPORT_URL, reportType,
 				REPORT_FILE_TITLE + personTO.getLastName());
 
 	}

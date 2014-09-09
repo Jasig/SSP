@@ -42,12 +42,13 @@ import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract class ReportBaseController extends AbstractBaseController {
+abstract class ReportBaseController<R> extends AbstractBaseController {
 
 	protected static final String DEFAULT_REPORT_TYPE = "pdf";
 	protected static final String REPORT_TYPE_PDF = "pdf";
@@ -57,28 +58,69 @@ abstract class ReportBaseController extends AbstractBaseController {
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReportBaseController.class);
-	
+
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+
+	protected void renderReport(HttpServletResponse response, Map<String, Object> reportParameters,
+								  Collection<R> reportResults, String reportViewUrl, String reportType,
+								  String reportName)
+			throws IOException {
+		// TODO this should really all be shunted off to Spring's View mechanism
+		if (REPORT_TYPE_PDF.equals(reportType)) {
+			renderPdfReport(response, reportParameters, reportResults, reportViewUrl, reportType, reportName);
+		} else if ( REPORT_TYPE_CSV.equals(reportType) ) {
+			renderCsvReport(response, reportParameters, reportResults, reportViewUrl, reportType, reportName);
+		} else {
+			throw new IllegalArgumentException("Unrecognized report type");
+		}
+	}
+
+	protected void renderPdfReport(HttpServletResponse response, Map<String, Object> reportParameters,
+								   Collection<R> reportResults, String reportViewUrl, String reportType,
+								   String reportName)
+			throws IOException {
+		try {
+			renderJasperReport(response, reportParameters, reportResults, reportViewUrl, reportType, reportName);
+		} catch ( JRException e ) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected void renderCsvReport(HttpServletResponse response, Map<String, Object> reportParameters,
+								   Collection<R> reportResults, String reportViewUrl, String reportType,
+								   String reportName)
+			throws IOException {
+		if ( overridesCsvRendering() ) {
+			renderCsvReportWithFromattingOverrides(response, reportParameters, reportResults, reportViewUrl, reportType, reportName);
+		} else {
+			try {
+				renderJasperReport(response, reportParameters, reportResults, reportViewUrl, reportType, reportName);
+			} catch ( JRException e ) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 	
-	protected void generateReport(HttpServletResponse response, Map<String, Object> parameters, 
-			Collection<?> beanCollection, String url, String reportType, String reportName) throws JRException, IOException{
-		
-		SearchParameters.addReportDateToMap(parameters);
-		final InputStream is = getClass().getResourceAsStream(url);
+	protected void renderJasperReport(HttpServletResponse response, Map<String, Object> reportParameters,
+									  Collection<R> reportResults, String reportViewUrl, String reportType,
+									  String reportName) throws JRException, IOException{
+
+		SearchParameters.addReportDateToMap(reportParameters);
+		final InputStream is = getClass().getResourceAsStream(reportViewUrl);
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
 		
 		JRDataSource beanDS;
-		if (beanCollection == null || beanCollection.size() <= 0) {
+		if (reportResults == null || reportResults.size() <= 0) {
 			beanDS = new JREmptyDataSource();
 		} else {
-			beanDS = new JRBeanCollectionDataSource(beanCollection);
+			beanDS = new JRBeanCollectionDataSource(reportResults);
 		}
 		
-		JasperFillManager.fillReportToStream(is, os, parameters, beanDS);
+		JasperFillManager.fillReportToStream(is, os, reportParameters, beanDS);
 		final InputStream decodedInput = new ByteArrayInputStream(
 				os.toByteArray());
 
@@ -105,6 +147,62 @@ abstract class ReportBaseController extends AbstractBaseController {
 		response.flushBuffer();
 		is.close();
 		os.close();		
+	}
+
+	/**
+	 * If {@code true}, subclasses will have the opportunity to participate in more fine-grained, i.e. non-Jasper CSV
+	 * report rendering. In particular, CSV rendering will rely on
+	 * {@link #csvBodyRow(Object, java.util.Map, java.util.Collection, String, String, String, org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper)}
+	 * and
+	 * {@link #csvBodyRow(Object, java.util.Map, java.util.Collection, String, String, String, org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper)}
+	 * via {@link #renderCsvReportWithFromattingOverrides(javax.servlet.http.HttpServletResponse, java.util.Map, java.util.Collection, String, String, String)}.
+	 * This is designed with a flag method rather than a mixin interface b/c Spring will not map {@code Controllers} that
+	 * mix in interfaces unless we change our proxying mode (See <a href="http://stackoverflow.com/a/16970812">this SO
+	 * answer</a>)
+	 */
+	protected boolean overridesCsvRendering() {
+		return false;
+	}
+
+	protected void renderCsvReportWithFromattingOverrides(final HttpServletResponse response,
+														  final Map<String, Object> reportParameters,
+														  final Collection<R> reportResults, final String reportViewUrl,
+														  final String reportType, final String reportName)
+			throws IOException {
+		writeCsvHttpResponseHeaders(response, reportName);
+		AbstractCsvWriterHelper<R> csvWriter = new AbstractCsvWriterHelper<R>(response.getWriter()) {
+			@Override
+			protected String[] csvHeaderRow() {
+				return ReportBaseController.this
+						.csvHeaderRow(reportParameters, reportResults, reportViewUrl, reportType, reportName, this);
+			}
+
+			@Override
+			protected String[] csvBodyRow(R model) {
+				return ReportBaseController.this
+						.csvBodyRow(model, reportParameters, reportResults, reportViewUrl, reportType, reportName, this);
+			}
+		};
+		csvWriter.write((Collection<R>)reportResults, -1L);
+	}
+
+	/** Defaults to an angry no-op. See {@link #overridesCsvRendering()}. Should not be called unless that op returns
+	 * true */
+	protected String[] csvHeaderRow(Map<String, Object> reportParameters,
+											 Collection<R> reportResults, String reportViewUrl,
+											 String reportType, String reportName,
+											 AbstractCsvWriterHelper csvHelper) {
+		throw new UnsupportedOperationException();
+	}
+
+	/** Defaults to an angry no-op. See {@link #overridesCsvRendering()}. Should not be called unless that op returns
+	 * true */
+	protected String[] csvBodyRow(R reportResultElement,
+										   Map<String, Object> reportParameters,
+										   Collection<R> reportResults, String reportViewUrl,
+										   String reportType, String reportName,
+										   AbstractCsvWriterHelper csvHelper) {
+		throw new UnsupportedOperationException();
 	}
 
 	protected void writeCsvHttpResponseHeaders(HttpServletResponse response, String reportName) {

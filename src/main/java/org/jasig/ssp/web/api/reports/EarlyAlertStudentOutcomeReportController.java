@@ -80,7 +80,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentoutcome")
-public class EarlyAlertStudentOutcomeReportController extends ReportBaseController {
+public class EarlyAlertStudentOutcomeReportController extends ReportBaseController<EarlyAlertStudentResponseOutcomeReportTO> {
 
 	private static final String REPORT_URL = "/reports/earlyAlertStudentOutcomeReport.jasper";
 	private static final String[] REPORT_FILE_TITLE = {"Early_Alert_Student_Outcome_Report", "Early_Alert_Student_Outreach_Report"};
@@ -164,7 +164,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -247,7 +247,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		parameters.put(COLUMN_TITLE_LABEL, COLUMN_TITLE[index]);
 		parameters.put(DETAIL_COLUMN_TITLE_LABEL,DETAIL_COLUMN_TITLE[index]);
 		
-		generateReport(response,  parameters, reportTOs,  REPORT_URL, reportType, REPORT_FILE_TITLE[index]);
+		renderReport(response,  parameters, reportTOs,  REPORT_URL, reportType, REPORT_FILE_TITLE[index]);
 	}
 	
 	private List<Pair<String,Long>> getOutcomes(final List<UUID> cleanOutcomeIds, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{

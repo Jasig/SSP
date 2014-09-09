@@ -66,7 +66,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentoutreach")
-public class EarlyAlertStudentOutreachReportController extends ReportBaseController {
+public class EarlyAlertStudentOutreachReportController extends ReportBaseController<EarlyAlertStudentOutreachReportTO> {
 
 	private static final String REPORT_URL = "/reports/earlyAlertStudentOutreachReport.jasper";
 	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Outreach_Report";
@@ -114,7 +114,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 				
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
@@ -135,7 +135,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 
 
-		generateReport(response,  parameters, outreachOutcomes,  REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response,  parameters, outreachOutcomes,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override
