@@ -75,7 +75,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentprogress")
-public class EarlyAlertStudentProgressReportController extends ReportBaseController {
+public class EarlyAlertStudentProgressReportController extends ReportBaseController<EarlyAlertStudentProgressReportTO> {
 
 	private static final String REPORT_URL = "/reports/earlyAlertStudentProgressReport.jasper";
 	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Progress_Report";
@@ -143,7 +143,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 			final @RequestParam(required = true) String termCodeInitial,
 			final @RequestParam(required = true) String termCodeComparitor,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
@@ -220,7 +220,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		parameters.put(INITIAL_TERM, initialTerm.getName());
 		parameters.put(COMPARISON_TERM, comparisonTerm.getName());
 		
-		generateReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response,  parameters, people,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

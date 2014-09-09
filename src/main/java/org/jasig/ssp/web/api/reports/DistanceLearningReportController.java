@@ -59,7 +59,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
 
-public class DistanceLearningReportController extends ReportBaseController {
+public class DistanceLearningReportController extends ReportBaseController<BaseStudentReportTO> {
 	private static String REPORT_URL = "/reports/journalSessionDetails.jasper";
 	private static String REPORT_FILE_TITLE = "Journal_Session_Details_Report";
 	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
@@ -111,7 +111,7 @@ public class DistanceLearningReportController extends ReportBaseController {
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
@@ -153,7 +153,7 @@ public class DistanceLearningReportController extends ReportBaseController {
 		
 		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
 		SearchParameters.addStudentCount(compressedReports, parameters);
-		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

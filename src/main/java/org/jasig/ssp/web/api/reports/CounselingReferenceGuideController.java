@@ -53,7 +53,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/counselingreference")
-public class CounselingReferenceGuideController extends ReportBaseController {
+public class CounselingReferenceGuideController extends ReportBaseController<ChallengeTO> {
 
 	private static final String REPORT_TITLE =  "Counseling Reference Guide";
 	private static final String REPORT_FILE_TITLE = "Counseling_Reference_Guide";
@@ -76,7 +76,7 @@ public class CounselingReferenceGuideController extends ReportBaseController {
 	void getCounselingReferenceGuide(
 			final HttpServletResponse response,		
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 
 		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(SortingAndPaging.
 				createForSingleSortAll(ObjectStatus.ACTIVE, "name", "ASC"));
@@ -85,7 +85,7 @@ public class CounselingReferenceGuideController extends ReportBaseController {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
-		generateReport(response, parameters, challengeTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, challengeTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
 		
 	}
 

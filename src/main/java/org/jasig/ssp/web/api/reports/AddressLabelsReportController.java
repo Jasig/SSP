@@ -74,7 +74,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/AddressLabels")
-public class AddressLabelsReportController extends ReportBaseController { // NOPMD
+public class AddressLabelsReportController extends ReportBaseController<BaseStudentReportTO> { // NOPMD
 
 	private static String REPORT_URL = "/reports/addressLabels.jasper";
 	private static String REPORT_FILE_TITLE = "General_Student_Report";
@@ -133,7 +133,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
@@ -182,7 +182,7 @@ public class AddressLabelsReportController extends ReportBaseController { // NOP
 		
 		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
 		SearchParameters.addStudentCount(compressedReports, parameters);
-		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

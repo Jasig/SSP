@@ -21,6 +21,7 @@ package org.jasig.ssp.web.api.reports;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -45,8 +46,10 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
+import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -67,8 +70,9 @@ import com.google.common.collect.Maps;
 
 @Controller
 @RequestMapping("/1/report/journalsessiondetail")
-public class JournalSessionDetailsReportController extends ReportBaseController {
-	private static String REPORT_URL = "/reports/journalSessionDetailReport.jasper";
+public class JournalSessionDetailsReportController extends ReportBaseController<JournalStepStudentReportTO> {
+
+	private static String REPORT_URL_PDF = "/reports/journalSessionDetailReport.jasper";
 	private static String REPORT_FILE_TITLE = "Journal_Step_Details_Report";
 	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
 	
@@ -129,7 +133,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController 
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final JournalStepSearchFormTO personSearchForm = new JournalStepSearchFormTO();
@@ -190,12 +194,48 @@ public class JournalSessionDetailsReportController extends ReportBaseController 
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status,"person")));
 		
 		SearchParameters.addStudentCount(reports, parameters);
-		generateReport(response, parameters, reports, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, reports, reportType.equals("pdf") ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
 
+	}
+
+	@Override
+	protected boolean overridesCsvRendering() {
+		return true;
+	}
+
+	@Override
+	public String[] csvHeaderRow(Map<String, Object> reportParameters, Collection<JournalStepStudentReportTO> reportResults,
+								 String reportViewUrl, String reportType, String reportName, AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				"STUDENT_ID",
+				"STUDENT_FIRST_NAME",
+				"STUDENT_MIDDLE_NAME",
+				"STUDENT_LAST_NAME",
+				"COACH_FIRST_NAME",
+				"COACH_LAST_NAME",
+				"JOURNAL_DETAIL"
+		};
+	}
+
+	@Override
+	public String[] csvBodyRow(JournalStepStudentReportTO reportResultElement, Map<String, Object> reportParameters,
+							   Collection<JournalStepStudentReportTO> reportResults, String reportViewUrl,
+							   String reportType, String reportName, AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				reportResultElement.getSchoolId(),
+				reportResultElement.getFirstName(),
+				reportResultElement.getMiddleName(),
+				reportResultElement.getLastName(),
+				reportResultElement.getCoachFirstName(),
+				reportResultElement.getCoachLastName(),
+				reportResultElement.getJournalStepDetailName()
+		};
 	}
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+
+
 }

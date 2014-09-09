@@ -68,7 +68,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/Caseload")
-public class CaseloadReportController extends ReportBaseController {
+public class CaseloadReportController extends ReportBaseController<CaseLoadReportTO> {
 
 	private static String REPORT_URL = "/reports/caseLoad.jasper";
 	private static String REPORT_FILE_TITLE = "CaseLoad_Report";
@@ -182,7 +182,7 @@ public class CaseloadReportController extends ReportBaseController {
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		final List<UUID> cleanStudentTypeIds = SearchParameters.cleanUUIDListOfNulls(studentTypeIds);
 		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
@@ -191,7 +191,7 @@ public class CaseloadReportController extends ReportBaseController {
 		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(searchForm);		
 		final Map<String, Object> parameters = collectParamsForReport(searchForm);
 
-		generateReport(response, parameters, caseLoadReportList, REPORT_URL,
+		renderReport(response, parameters, caseLoadReportList, REPORT_URL,
 				reportType, REPORT_FILE_TITLE);
 
 	}

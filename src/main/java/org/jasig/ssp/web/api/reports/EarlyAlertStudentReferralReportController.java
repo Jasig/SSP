@@ -73,7 +73,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentreferral")
-public class EarlyAlertStudentReferralReportController extends ReportBaseController {
+public class EarlyAlertStudentReferralReportController extends ReportBaseController<EarlyAlertStudentReportTO> {
 
 	private static final String REPORT_URL = "/reports/earlyAlertStudentReferralReport.jasper";
 	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Referral_Report";
@@ -124,7 +124,7 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 		
 		
 		PersonTO coachTO = SearchParameters.getPerson(coachId, personService, personTOFactory);
@@ -164,7 +164,7 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
 		List<EarlyAlertStudentReportTO> processedPeople = processReports(peopleInfo);
 		SearchParameters.addStudentCount(processedPeople, parameters);
-		generateReport( response,  parameters, processedPeople,  REPORT_URL, 
+		renderReport( response,  parameters, processedPeople,  REPORT_URL,
 				 reportType, REPORT_FILE_TITLE);
 	}
 	

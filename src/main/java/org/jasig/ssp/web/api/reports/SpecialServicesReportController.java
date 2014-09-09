@@ -63,7 +63,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/SpecialServices")
-public class SpecialServicesReportController extends ReportBaseController {
+public class SpecialServicesReportController extends ReportBaseController<BaseStudentReportTO> {
 
 	private static final String REPORT_URL = "/reports/specialServiceGroups.jasper";
 	private static final String REPORT_FILE_TITLE = "SpecialServicesReport";
@@ -94,7 +94,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, JRException, IOException {
+			throws ObjectNotFoundException, IOException {
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
@@ -122,7 +122,7 @@ public class SpecialServicesReportController extends ReportBaseController {
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
 		SearchParameters.addDataFIleToMap(DATA_FILE, parameters);
 		
-		generateReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
 	@Override

@@ -130,30 +130,30 @@ public abstract class AbstractCsvWriterHelper<T> {
 
 	protected abstract String[] csvBodyRow(T model);
 
-	protected String formatDate(Date date) {
+	public String formatDate(Date date) {
 		return date == null ? null : new SimpleDateFormat("MM-dd-yyyy").format(date);
 	}
 
-	protected String formatBigDecimal(BigDecimal bigDecimal) {
+	public String formatBigDecimal(BigDecimal bigDecimal) {
 		return bigDecimal == null ? null : bigDecimal.toString();
 	}
 
-	protected String formatInt(int integer) {
+	public String formatInt(int integer) {
 		return ""+integer;
 	}
 
-	protected String formatUuid(UUID uuid) {
+	public String formatUuid(UUID uuid) {
 		return uuid == null ? null : uuid.toString();
 	}
 
-	protected String formatFriendlyBoolean(Boolean booleanVal) {
+	public String formatFriendlyBoolean(Boolean booleanVal) {
 		if ( booleanVal == null ) {
 			return null;
 		}
 		return booleanVal ? "Y" : "N";
 	}
 
-	protected String formatIntegerAsFriendlyBoolean(Integer integer, int threshold, Boolean whenNull) {
+	public String formatIntegerAsFriendlyBoolean(Integer integer, int threshold, Boolean whenNull) {
 		return formatFriendlyBoolean(integer == null ? whenNull : integer > threshold);
 	}
 
