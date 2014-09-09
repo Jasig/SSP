@@ -574,6 +574,7 @@ public class BaseStudentReportTO implements Serializable {
 	
 	public void setStudentTypeName(String studentTypeName) {
 		this.studentTypeName = studentTypeName;
+		setIsIlp(ILP.equals(studentTypeName));
 	}
 	
 	public String getStudentTypeName(){
