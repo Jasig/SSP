@@ -74,8 +74,7 @@ public class CounselingReferenceGuideController extends ReportBaseController<Cha
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
 	void getCounselingReferenceGuide(
-			final HttpServletResponse response,		
-			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
+			final HttpServletResponse response)
 			throws ObjectNotFoundException, IOException {
 
 		final PagingWrapper<Challenge> challengeWrapper = challengeService.getAll(SortingAndPaging.
@@ -85,7 +84,7 @@ public class CounselingReferenceGuideController extends ReportBaseController<Cha
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addReportTitleToMap(REPORT_TITLE, parameters);
-		renderReport(response, parameters, challengeTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, challengeTOs, REPORT_URL, REPORT_TYPE_PDF, REPORT_FILE_TITLE);
 		
 	}
 

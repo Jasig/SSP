@@ -28,9 +28,11 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusByCourseTO;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
+import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +48,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,7 +60,7 @@ import java.util.Map;
 @RequestMapping("/1/report/map/numberstudentsbystatus")
 public class MapStudentsByStatusReportController extends ReportBaseController<PlanStudentStatusByCourseTO> {
 
-	private static String REPORT_URL_NUMBER_STUDENTS_BY_STATUS = "/reports/numberStudentsByStatus.jasper";
+	private static String REPORT_URL_PDF = "/reports/numberStudentsByStatus.jasper";
 	private static String REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS = "Number_Of_Students_By_Status";
 
 	@Autowired
@@ -120,8 +123,45 @@ public class MapStudentsByStatusReportController extends ReportBaseController<Pl
 		Collections.sort(courseList, PlanStudentStatusByCourseTO.FORMATTED_COURSE_COMPARATOR);
 		SearchParameters.addTermsToMap(terms , parameters);
 		SearchParameters.addPlanSearchForm(form, parameters);
-		renderReport(response,  parameters, courseList,  REPORT_URL_NUMBER_STUDENTS_BY_STATUS,
+		renderReport(response,  parameters, courseList,  REPORT_TYPE_PDF.equals(reportType) ? REPORT_URL_PDF : null,
 				reportType, REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS);
+	}
+
+	@Override
+	protected boolean overridesCsvRendering() {
+		return true;
+	}
+
+	@Override
+	public String[] csvHeaderRow(Map<String, Object> reportParameters, Collection<PlanStudentStatusByCourseTO> reportResults,
+								 String reportViewUrl, String reportType, String reportName,
+								 AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				"COURSE",
+				"COURSE_TITLE",
+				"STUDENT_ID",
+				"PLAN_STATUS",
+				"PLAN_STATUS_DETAILS"
+		};
+	}
+
+	@Override
+	public List<String[]> csvBodyRows(PlanStudentStatusByCourseTO reportResultElement, Map<String, Object> reportParameters,
+							   Collection<PlanStudentStatusByCourseTO> reportResults, String reportViewUrl, String reportType, String reportName,
+							   AbstractCsvWriterHelper csvHelper) {
+		// take a copy b/c we know the list is rebuilt on every getter invocation
+		final List<PlanStudentStatusTO> studentStatuses = reportResultElement.getStudentStatusByCourse();
+		final List<String[]> csvRows = Lists.newArrayListWithCapacity(studentStatuses.size());
+		for (  PlanStudentStatusTO studentStatus :  studentStatuses ) {
+			csvRows.add(new String[] {
+					reportResultElement.getFormattedCourse(),
+					reportResultElement.getCourseTitle(),
+					studentStatus.getStudentId(),
+					studentStatus.getPlanStatus().getDisplayName(),
+					studentStatus.getStatusDetails()
+			});
+		}
+		return csvRows;
 	}
 
 }

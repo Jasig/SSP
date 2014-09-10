@@ -50,9 +50,9 @@ import org.slf4j.LoggerFactory;
 
 abstract class ReportBaseController<R> extends AbstractBaseController {
 
-	protected static final String DEFAULT_REPORT_TYPE = "pdf";
-	protected static final String REPORT_TYPE_PDF = "pdf";
-	protected static final String REPORT_TYPE_CSV = "csv";
+	public static final String REPORT_TYPE_PDF = "pdf";
+	public static final String REPORT_TYPE_CSV = "csv";
+	public static final String DEFAULT_REPORT_TYPE = REPORT_TYPE_PDF;
 	
 	public static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
 	
@@ -178,9 +178,9 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 			}
 
 			@Override
-			protected String[] csvBodyRow(R model) {
+			protected List<String[]> csvBodyRows(R model) {
 				return ReportBaseController.this
-						.csvBodyRow(model, reportParameters, reportResults, reportViewUrl, reportType, reportName, this);
+						.csvBodyRows(model, reportParameters, reportResults, reportViewUrl, reportType, reportName, this);
 			}
 		};
 		csvWriter.write((Collection<R>)reportResults, -1L);
@@ -197,7 +197,7 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 
 	/** Defaults to an angry no-op. See {@link #overridesCsvRendering()}. Should not be called unless that op returns
 	 * true */
-	protected String[] csvBodyRow(R reportResultElement,
+	protected List<String[]> csvBodyRows(R reportResultElement,
 										   Map<String, Object> reportParameters,
 										   Collection<R> reportResults, String reportViewUrl,
 										   String reportType, String reportName,

@@ -19,6 +19,7 @@
 package org.jasig.ssp.util.csvwriter;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import com.google.common.collect.Lists;
 import org.hibernate.ScrollableResults;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.springframework.util.StringUtils;
@@ -118,9 +119,13 @@ public abstract class AbstractCsvWriterHelper<T> {
 
 		while ( model.hasNext() && ( maxCount < 0 || i < maxCount ) ) {
 			Object result = model.next();
-			String[] bodyRow = csvBodyRow((T)result);
-			if ( bodyRow != null ) {
-				writeLine(bodyRow, csvWriter);
+			final List<String[]> bodyRows = csvBodyRows((T)result);
+			if ( bodyRows != null && !(bodyRows.isEmpty()) ) {
+				for ( String[] bodyRow : bodyRows ) {
+					if ( bodyRow != null ) {
+						writeLine(bodyRow, csvWriter);
+					}
+				}
 			}
 			i++;
 		}
@@ -128,7 +133,29 @@ public abstract class AbstractCsvWriterHelper<T> {
 
 	protected abstract String[] csvHeaderRow();
 
-	protected abstract String[] csvBodyRow(T model);
+	/**
+	 * Map the given model to one or more CSV document body records. Each element in the given list
+	 * is interpreted as a separate record. Typically the list contains a single element, i.e. a single array
+	 * of field values. Allowing multiple rows to be returned allows for support of nested models which need
+	 * to be flatted for CSV representation.
+	 *
+	 * @param model
+	 * @return
+	 */
+	protected abstract List<String[]> csvBodyRows(T model);
+
+	/**
+	 * Utility to support the common case where {@link #csvBodyRows(Object)} only needs to return a single-element
+	 * list.
+	 *
+	 * @param row
+	 * @return
+	 */
+	public List<String[]> wrapCsvRowInList(String[] row) {
+		final List<String[]> wrapper = Lists.newArrayListWithCapacity(1);
+		wrapper.add(row);
+		return wrapper;
+	}
 
 	public String formatDate(Date date) {
 		return date == null ? null : new SimpleDateFormat("MM-dd-yyyy").format(date);
@@ -157,4 +184,15 @@ public abstract class AbstractCsvWriterHelper<T> {
 		return formatFriendlyBoolean(integer == null ? whenNull : integer > threshold);
 	}
 
+	public String formatFriendlyBoolean(Boolean isIlp, boolean whenNull) {
+		return formatFriendlyBoolean(isIlp == null ? whenNull : isIlp);
+	}
+
+	public String formatLong(Long longVal) {
+		return longVal == null ? null : longVal.toString();
+	}
+
+	public String formatLong(Long longVal, long whenNull) {
+		return formatLong(longVal == null ? whenNull : longVal);
+	}
 }

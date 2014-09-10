@@ -100,7 +100,7 @@
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Number of Courses In Plan]]></text>
+				<text><![CDATA[Number of Plans By Course]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -111,7 +111,7 @@
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Course]]></text>
+				<text><![CDATA[COURSE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16" stretchType="RelativeToBandHeight" x="70" y="7" width="183" height="15"/>
@@ -125,7 +125,7 @@
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[NUMBER OF STUDENTS]]></text>
+				<text><![CDATA[PLAN COUNT]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
