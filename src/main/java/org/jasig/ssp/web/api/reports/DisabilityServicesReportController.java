@@ -18,24 +18,9 @@
  */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
+import com.google.common.collect.Maps;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
-import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
@@ -47,12 +32,10 @@ import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +49,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.Maps;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -77,7 +68,7 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/disabilityservices")
 public class DisabilityServicesReportController extends ReportBaseController<DisabilityServicesReportTO> { // NOPMD
 
-	private static String REPORT_URL = "/reports/disabilityServices.jasper";
+	private static String REPORT_URL_PDF = "/reports/disabilityServices.jasper";
 	private static String REPORT_FILE_TITLE = "Disability_Services_Report";
 	
 	private static final Logger LOGGER = LoggerFactory
@@ -204,10 +195,67 @@ public class DisabilityServicesReportController extends ReportBaseController<Dis
 		renderReport(response,
 				parameters, 
 				compressedReports,
-				REPORT_URL, 
+				REPORT_TYPE_PDF.equals(reportType) ? REPORT_URL_PDF : null,
 				reportType, 
 				REPORT_FILE_TITLE);
 
+	}
+
+	@Override
+	protected boolean overridesCsvRendering() {
+		return true;
+	}
+
+	@Override
+	public String[] csvHeaderRow(Map<String, Object> reportParameters, Collection<DisabilityServicesReportTO> reportResults,
+								 String reportViewUrl, String reportType, String reportName,
+								 AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				"STUDENT_FIRST_NAME",
+				"STUDENT_MIDDLE_NAME",
+				"STUDENT_LAST_NAME",
+				"STUDENT_ID",
+				"ILP",
+				"DISABILITY_TYPES",
+				"PROGRAM_STATUS",
+				"ODS_STATUS",
+				"INELIGIBILITY",
+				"ODS_REGISTRATION_DATE",
+				"REGISTERED_IN_CURRENT_TERM",
+				"MAJOR",
+				"VETERAN_STATUS",
+				"ETHNICITY",
+				"ASSIGNMENT_DATES",
+				"AGENCY_CONTACTS",
+				"COACH_FIRST_NAME",
+				"COACH_LAST_NAME"
+		};
+	}
+
+	@Override
+	public List<String[]> csvBodyRows(DisabilityServicesReportTO reportResultElement, Map<String, Object> reportParameters,
+							   Collection<DisabilityServicesReportTO> reportResults, String reportViewUrl, String reportType, String reportName,
+							   AbstractCsvWriterHelper csvHelper) {
+		return csvHelper.wrapCsvRowInList(new String[] {
+				reportResultElement.getFirstName(),
+				reportResultElement.getMiddleName(),
+				reportResultElement.getLastName(),
+				reportResultElement.getSchoolId(),
+				csvHelper.formatFriendlyBoolean(reportResultElement.getIsIlp(), false),
+				reportResultElement.getdisabilityTypesName(),
+				reportResultElement.getCurrentProgramStatusName(),
+				reportResultElement.getOdsStatus(),
+				reportResultElement.getOdsReason(),
+				reportResultElement.getOdsRegistrationDateString(),
+				csvHelper.formatIntegerAsFriendlyBoolean(reportResultElement.getRegistrationStatus(), 0, false),
+				reportResultElement.getMajor(),
+				reportResultElement.getVeteranStatus(),
+				reportResultElement.getEthnicity(),
+				reportResultElement.getAssignmentDates(),
+				reportResultElement.getAgencyContacts(),
+				reportResultElement.getCoachFirstName(),
+				reportResultElement.getCoachLastName()
+		});
 	}
 
 	@Override

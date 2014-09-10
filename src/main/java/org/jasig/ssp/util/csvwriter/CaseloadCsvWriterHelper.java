@@ -88,22 +88,22 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 	}
 
 	@Override
-	protected String[] csvBodyRow(PersonSearchResult2 model) {
-		List<String> row = new ArrayList<String>();
-		row.add(formatUuid(model.getPersonId()));
-		row.add(model.getSchoolId());
-		row.add(model.getFirstName());
-		row.add(model.getMiddleName());
-		row.add(model.getLastName());
-		row.add(formatDate(model.getBirthDate()));
-		row.add(model.getStudentTypeName());
-		row.add(formatDate(model.getCurrentAppointmentStartTime()));
-		row.add(formatDate(model.getStudentIntakeCompleteDate()));
-		row.add(formatInt(model.getActiveAlerts()));
-		row.add(formatInt(model.getClosedAlerts()));
-		row.add(formatInt(model.getNumberEarlyAlertResponsesRequired()));
-		row.add(model.getActualStartTerm());
-		return row.toArray(new String[row.size()]);
+	protected List<String[]> csvBodyRows(PersonSearchResult2 model) {
+		return wrapCsvRowInList(new String[] {
+			formatUuid(model.getPersonId()),
+			model.getSchoolId(),
+			model.getFirstName(),
+			model.getMiddleName(),
+			model.getLastName(),
+			formatDate(model.getBirthDate()),
+			model.getStudentTypeName(),
+			formatDate(model.getCurrentAppointmentStartTime()),
+			formatDate(model.getStudentIntakeCompleteDate()),
+			formatInt(model.getActiveAlerts()),
+			formatInt(model.getClosedAlerts()),
+			formatInt(model.getNumberEarlyAlertResponsesRequired()),
+			model.getActualStartTerm()
+		});
 	}
 
 }

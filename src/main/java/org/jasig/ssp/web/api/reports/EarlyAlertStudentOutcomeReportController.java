@@ -164,7 +164,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
-			final @RequestParam(required = false, defaultValue = "pdf") String reportType)
+			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
 		
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);

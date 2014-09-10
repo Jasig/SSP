@@ -194,7 +194,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status,"person")));
 		
 		SearchParameters.addStudentCount(reports, parameters);
-		renderReport(response, parameters, reports, reportType.equals("pdf") ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, reports, REPORT_TYPE_PDF.equals(reportType) ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
 
 	}
 
@@ -218,10 +218,10 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 	}
 
 	@Override
-	public String[] csvBodyRow(JournalStepStudentReportTO reportResultElement, Map<String, Object> reportParameters,
+	public List<String[]> csvBodyRows(JournalStepStudentReportTO reportResultElement, Map<String, Object> reportParameters,
 							   Collection<JournalStepStudentReportTO> reportResults, String reportViewUrl,
 							   String reportType, String reportName, AbstractCsvWriterHelper csvHelper) {
-		return new String[] {
+		return csvHelper.wrapCsvRowInList(new String[] {
 				reportResultElement.getSchoolId(),
 				reportResultElement.getFirstName(),
 				reportResultElement.getMiddleName(),
@@ -229,7 +229,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				reportResultElement.getCoachFirstName(),
 				reportResultElement.getCoachLastName(),
 				reportResultElement.getJournalStepDetailName()
-		};
+		});
 	}
 
 	@Override

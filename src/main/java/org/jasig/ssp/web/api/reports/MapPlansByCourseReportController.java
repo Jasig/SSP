@@ -20,7 +20,6 @@ package org.jasig.ssp.web.api.reports;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
@@ -30,6 +29,7 @@ import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
+import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +54,7 @@ import java.util.Map;
 @RequestMapping("/1/report/map/numbercourses")
 public class MapPlansByCourseReportController extends ReportBaseController<PlanCourseCountTO> {
 
-	private static String REPORT_URL_NUMBER_COURSES_IN_PLAN = "/reports/numberCoursesInPlan.jasper";
+	private static String REPORT_URL_PDF = "/reports/numberPlansByCourse.jasper";
 	private static String REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN = "Number_Of_Courses_In_Plan";
 
 	@Autowired
@@ -97,7 +98,34 @@ public class MapPlansByCourseReportController extends ReportBaseController<PlanC
 		SearchParameters.addPlanSearchForm(form, parameters);
 
 
-		renderReport( response,  parameters, counts,  REPORT_URL_NUMBER_COURSES_IN_PLAN,
+		renderReport( response,  parameters, counts,  REPORT_TYPE_PDF.equals(reportType) ? REPORT_URL_PDF : null,
 				reportType, REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN);
+	}
+
+	@Override
+	protected boolean overridesCsvRendering() {
+		return true;
+	}
+
+	@Override
+	public String[] csvHeaderRow(Map<String, Object> reportParameters, Collection<PlanCourseCountTO> reportResults,
+								 String reportViewUrl, String reportType, String reportName,
+								 AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				"COURSE",
+				"COURSE_TITLE",
+				"PLAN_COUNT"
+		};
+	}
+
+	@Override
+	public List<String[]> csvBodyRows(PlanCourseCountTO reportResultElement, Map<String, Object> reportParameters,
+							   Collection<PlanCourseCountTO> reportResults, String reportViewUrl, String reportType, String reportName,
+							   AbstractCsvWriterHelper csvHelper) {
+		return csvHelper.wrapCsvRowInList(new String[] {
+				reportResultElement.getFormattedCourse(),
+				reportResultElement.getCourseTitle(),
+				csvHelper.formatLong(reportResultElement.getStudentCount())
+		});
 	}
 }

@@ -19,16 +19,15 @@
 package org.jasig.ssp.web.api.reports;
 
 import com.google.common.collect.Maps;
-import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
-import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.DateTerm;
+import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +53,7 @@ import java.util.Map;
 @RequestMapping("/1/report/map/numberplansbyadvisor")
 public class MapPlansByAdvisorReportController extends ReportBaseController<PlanAdvisorCountTO> {
 
-	private static String REPORT_URL_NUMBER_PLANS_BY_ADVISOR = "/reports/numberPlansByAdvisor.jasper";
+	private static String REPORT_URL_PDF = "/reports/numberPlansByAdvisor.jasper";
 	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "Number_Of_Plans_By_Advisor";
 
 	@Autowired
@@ -93,8 +93,37 @@ public class MapPlansByAdvisorReportController extends ReportBaseController<Plan
 		SearchParameters.addPlanSearchForm(form, parameters);
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
 
-		renderReport( response,  parameters, counts,  REPORT_URL_NUMBER_PLANS_BY_ADVISOR,
+		renderReport( response,  parameters, counts,  REPORT_TYPE_PDF.equals(reportType) ? REPORT_URL_PDF : null,
 				reportType, REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR);
+	}
+
+	@Override
+	protected boolean overridesCsvRendering() {
+		return true;
+	}
+
+	@Override
+	public String[] csvHeaderRow(Map<String, Object> reportParameters, Collection<PlanAdvisorCountTO> reportResults,
+								 String reportViewUrl, String reportType, String reportName,
+								 AbstractCsvWriterHelper csvHelper) {
+		return new String[] {
+				"OWNER",
+				"ACTIVE_PLANS",
+				"INACTIVE_PLANS",
+				"TOTAL_PLANS"
+		};
+	}
+
+	@Override
+	public List<String[]> csvBodyRows(PlanAdvisorCountTO reportResultElement, Map<String, Object> reportParameters,
+							   Collection<PlanAdvisorCountTO> reportResults, String reportViewUrl, String reportType, String reportName,
+							   AbstractCsvWriterHelper csvHelper) {
+		return csvHelper.wrapCsvRowInList(new String[] {
+				reportResultElement.getCoachName(),
+				csvHelper.formatLong(reportResultElement.getActivePlanCount(), 0),
+				csvHelper.formatLong(reportResultElement.getInactivePlanCount(), 0),
+				csvHelper.formatLong(reportResultElement.getTotalPlanCount(), 0)
+		});
 	}
 
 }

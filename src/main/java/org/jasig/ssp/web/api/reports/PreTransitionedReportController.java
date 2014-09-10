@@ -215,7 +215,7 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 		
 		SearchParameters.addStudentCount(compressedReports, parameters);
 
-		renderReport(response, parameters, compressedReports, reportType.equals("pdf") ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
+		renderReport(response, parameters, compressedReports, REPORT_TYPE_PDF.equals(reportType) ? REPORT_URL_PDF : null, reportType, REPORT_FILE_TITLE);
 
 	}
 
@@ -238,7 +238,7 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 				"PROGRAM_STATUS",
 				"ACTUAL_START_TERM",
 				"ACADEMIC_STANDING",
-				"REGISTERED",
+				"REGISTERED_IN_CURRENT_TERM",
 				"CURRENT_YEAR_FINANCIAL_AID_AWARDED",
 				"CUMULATIVE_GPA",
 				"LAST_TERM_GPA",
@@ -250,10 +250,10 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 	}
 
 	@Override
-	public String[] csvBodyRow(BaseStudentReportTO reportResultElement, Map<String, Object> reportParameters,
+	public List<String[]> csvBodyRows(BaseStudentReportTO reportResultElement, Map<String, Object> reportParameters,
 							   Collection<BaseStudentReportTO> reportResults, String reportViewUrl, String reportType, String reportName,
 							   AbstractCsvWriterHelper csvHelper) {
-		return new String[] {
+		return csvHelper.wrapCsvRowInList(new String[] {
 				reportResultElement.getFirstName(),
 				reportResultElement.getLastName(),
 				reportResultElement.getSchoolId(),
@@ -271,7 +271,7 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 				reportResultElement.getActiveSpecialServiceGroupNames(),
 				reportResultElement.getCoachFirstName(),
 				reportResultElement.getCoachLastName()
-		};
+		});
 	}
 
 	@Override

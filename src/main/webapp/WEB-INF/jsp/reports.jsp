@@ -761,21 +761,12 @@
 <div class="hideable-form counseling-reference-guide" style="display:none">
 	<h1>Counseling Reference Guide</h1>
 	<form action="/ssp/api/1/report/counselingreference" method="get" class="alert-form">
-		<!-- output type -->
-		<div class="ea-input">
-			<label><span>pdf</span></label><input type="radio" name="reportType"
-				value="pdf" checked /><br /> <label><span>csv</span></label><input
-				type="radio" name="reportType" value="csv" />
-		</div>
-		<div class="ea-label">
-			<span>Output Type:</span>
-		</div>
 		<div class="ea-clear"></div>
 
 		<div class="ea-buttons">
 			<div class="buttons">
 				<input class="button primary button-send" type="submit"
-					value="submit" />
+					value="Download" />
 			</div>
 		</div>
 	</form>
@@ -784,7 +775,7 @@
  
 <div class="hideable-form confidentiality-agreement-form" style="width:800; display:none" >
 <h1>Confidentiality Agreement Form</h1>
-<p><a class='print-conf-form'>print</a></p>
+<p><a class='print-conf-form'>Print</a></p>
 
 <div class="confidentiality-agreement-form-content" style="width:800; padding: 5px; margin:25px; border-width:1px; border-style:solid;" ></div>
 </div>
@@ -2347,7 +2338,7 @@
 
 
 <div class="hideable-form number-courses-in-plan-report" style="display:none">
-	<h1>Number Of Courses In Plans</h1>
+	<h1>Number Of Plans by Course</h1>
 	<form action="/ssp/api/1/report/map/numbercourses" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
