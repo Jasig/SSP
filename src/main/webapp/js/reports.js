@@ -455,7 +455,7 @@ var ssp = ssp || {};
 							journalSessionDetail : '.journal-session-detail-report',
 							earlyAlertClass : '.early-alert-class-report',
 							numberCoursesInPlan : '.number-courses-in-plan-report',
-							numberPlansByAdvisor : '.number-plans-by-advisor-report',
+							numberPlansByOwner : '.number-plans-by-owner-report',
 							numberStudentsByStatus : '.number-students-by-status-report',
 							disabilityServices : '.disability-services-report',
 							programStatusGroup : '.input-program-status-group',

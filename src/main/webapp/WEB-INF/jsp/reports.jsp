@@ -2323,9 +2323,9 @@
 	</form>
 </div><!-- end number courses in plan report -->
 
-<div class="hideable-form number-plans-by-advisor-report" style="display:none">
+<div class="hideable-form number-plans-by-owner-report" style="display:none">
 	<h1>Number Of Plans By Owner</h1>
-	<form action="/ssp/api/1/report/map/numberplansbyadvisor" method="get"
+	<form action="/ssp/api/1/report/map/numberplansbyowner" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Date Range Description -->
@@ -2339,7 +2339,7 @@
 		<div class="ea-time-span">
 			<div class="ea-term">
 				<div class="ea-input">
-					<select id="numberPlansByAdvisorTermCode" name="termCode" class="input-term-group">
+					<select id="numberPlansByOwnerTermCode" name="termCode" class="input-term-group">
 						<option value="">${not_applicable}</option>
 						</select>
 				</div>
@@ -2351,14 +2351,14 @@
 			<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="numberPlansByAdvisorCreateDateFrom">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="numberPlansByOwnerCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="numberPlansByAdvisorCreateDateTo">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="numberPlansByOwnerCreateDateTo">
 				</div>
 				<div class="ea-label">
 					<span>End Date (exclusive)::</span>
@@ -2391,7 +2391,7 @@
 			</div>
 		</div>
 	</form>
-</div><!-- number plans by advisor report -->
+</div><!-- number plans by owner report -->
 
 <div class="hideable-form number-students-by-status-report" style="display:none">
 	<h1>Number Of Students By Status</h1>
