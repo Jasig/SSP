@@ -55,7 +55,7 @@ import java.util.Map;
 public class MapPlansByCourseReportController extends ReportBaseController<PlanCourseCountTO> {
 
 	private static String REPORT_URL_PDF = "/reports/numberPlansByCourse.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN = "Number_Of_Courses_In_Plan";
+	private static String REPORT_FILE_TITLE_NUMBER_COURSES_IN_PLAN = "Number_Of_Plans_By_Course";
 
 	@Autowired
 	protected transient TermService termService;
