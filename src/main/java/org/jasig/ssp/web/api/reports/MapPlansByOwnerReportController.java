@@ -50,11 +50,11 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/1/report/map/numberplansbyadvisor")
-public class MapPlansByAdvisorReportController extends ReportBaseController<PlanAdvisorCountTO> {
+@RequestMapping("/1/report/map/numberplansbyowner")
+public class MapPlansByOwnerReportController extends ReportBaseController<PlanAdvisorCountTO> {
 
-	private static String REPORT_URL_PDF = "/reports/numberPlansByAdvisor.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "Number_Of_Plans_By_Advisor";
+	private static String REPORT_URL_PDF = "/reports/numberPlansByOwner.jasper";
+	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "Number_Of_Plans_By_Owner";
 
 	@Autowired
 	protected transient TermService termService;
@@ -74,7 +74,7 @@ public class MapPlansByAdvisorReportController extends ReportBaseController<Plan
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	public @ResponseBody
-	void getNumberOfPlansByAdvisor(
+	void getNumberOfPlansByOwner(
 			final HttpServletResponse response,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
@@ -87,7 +87,7 @@ public class MapPlansByAdvisorReportController extends ReportBaseController<Plan
 		if(dateTerm != null && dateTerm.getTerm() != null)
 			terms.add(dateTerm.getTerm());
 		SearchPlanTO form = new SearchPlanTO(null, null, null, null, terms, dateTerm.getStartDate(), dateTerm.getEndDate());
-		List<PlanAdvisorCountTO> counts = planService.getAdvisorsPlanCount(form);
+		List<PlanAdvisorCountTO> counts = planService.getOwnerPlanCounts(form);
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addPlanSearchForm(form, parameters);

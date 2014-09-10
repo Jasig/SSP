@@ -96,7 +96,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PlanAdvisorCountTO> getAdvisorsPlanCount(SearchPlanTO form){
+	public List<PlanAdvisorCountTO> getOwnerPlanCount(SearchPlanTO form){
 		Criteria criteria = createCriteria();
 		
 		if(form.getDateFrom() != null)

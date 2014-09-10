@@ -177,8 +177,8 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	}
 	
 	@Override
-	public List<PlanAdvisorCountTO> getAdvisorsPlanCount(SearchPlanTO form){
-		return dao.getAdvisorsPlanCount(form);
+	public List<PlanAdvisorCountTO> getOwnerPlanCounts(SearchPlanTO form){
+		return dao.getOwnerPlanCount(form);
 	}
 	
 	@Override

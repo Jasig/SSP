@@ -42,7 +42,6 @@ import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -324,7 +323,7 @@ public class PlanDaoTest {
 	public void  testDaoReportMethodsNull(){
 		SearchPlanTO form = new SearchPlanTO(null, null, null, null, null, null, null);
 		List<PlanCourseCountTO>  planCount = dao.getPlanCourseCount(form);
-		List<PlanAdvisorCountTO>  advisorsCount = dao.getAdvisorsPlanCount(form);
+		List<PlanAdvisorCountTO>  advisorsCount = dao.getOwnerPlanCount(form);
 		List<PlanStudentStatusTO>  studentStatus = dao.getPlanStudentStatusByCourse(form);
 		
 		assertEquals(0, planCount.size());

@@ -48,7 +48,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("journalSessionDetail","Journal Step Detail Report"));
 		reports.add(new Pair<String,String>(null, "- MAP Reports -"));
 		reports.add(new Pair<String,String>("numberCoursesInPlan","Number of Plans by Course"));
-		reports.add(new Pair<String,String>("numberPlansByAdvisor","Number of Plans by Owner"));
+		reports.add(new Pair<String,String>("numberPlansByOwner","Number of Plans by Owner"));
 		reports.add(new Pair<String,String>("numberStudentsByStatus","Number of Students by Status"));
 	}
 	
