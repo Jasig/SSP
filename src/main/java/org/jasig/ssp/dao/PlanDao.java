@@ -105,10 +105,16 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 			criteria.add(Restrictions.lt("modifiedDate", form.getDateTo()));
 		
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		
+
+		criteria.createAlias("owner", "owner");
 		criteria.setProjection(Projections.projectionList().
-        		add(Projections.countDistinct("id").as("plan_entityCount")).
-        		add(Projections.groupProperty("createdBy").as("plan_coach")));
+				add(Projections.countDistinct("id").as("plan_entityCount")).
+				// cannot just group by owner, else you get a N+1
+				// http://stackoverflow.com/questions/4330480/prevent-hibernate-n1-selects-when-grouping-by-an-entity
+				// (plus EntityStudentCountByCoachTO doesn't map Persons, just AuditPersons)
+				add(Projections.groupProperty("owner.id").as("plan_coachId")).
+				add(Projections.groupProperty("owner.firstName").as("plan_coachFirstName")).
+				add(Projections.groupProperty("owner.lastName").as("plan_coachLastName")));
 		
 		List<EntityStudentCountByCoachTO> activePlansByCoaches = criteria.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
@@ -122,10 +128,16 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 			criteria.add(Restrictions.lt("modifiedDate", form.getDateTo()));
 		
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.INACTIVE));
-		
+
+		criteria.createAlias("owner", "owner");
 		criteria.setProjection(Projections.projectionList().
-        		add(Projections.countDistinct("id").as("plan_entityCount")).
-        		add(Projections.groupProperty("createdBy").as("plan_coach")));
+				add(Projections.countDistinct("id").as("plan_entityCount")).
+				// cannot just group by owner, else you get a N+1
+				// http://stackoverflow.com/questions/4330480/prevent-hibernate-n1-selects-when-grouping-by-an-entity
+				// (plus EntityStudentCountByCoachTO doesn't map Persons, just AuditPersons)
+				add(Projections.groupProperty("owner.id").as("plan_coachId")).
+				add(Projections.groupProperty("owner.firstName").as("plan_coachFirstName")).
+				add(Projections.groupProperty("owner.lastName").as("plan_coachLastName")));
 		
 		List<EntityStudentCountByCoachTO> inactivePlansByCoaches = criteria.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
