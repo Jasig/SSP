@@ -157,7 +157,11 @@ public class MapStudentsByStatusReportController extends ReportBaseController<Pl
 					reportResultElement.getFormattedCourse(),
 					reportResultElement.getCourseTitle(),
 					studentStatus.getStudentId(),
-					studentStatus.getPlanStatus().getDisplayName(),
+					// The PDF report renders 'No Status' in this case b/c it just looks better. Chose to output an
+					// empty field for CSV b/c that's fundamentally about data, and the data reality here is
+					// a nullity, not a special 'No Status' status. A flimsy justification, to be sure, but that's
+					// why CSV and PDF don't behave identically
+					studentStatus.getPlanStatus() == null ? null : studentStatus.getPlanStatus().getDisplayName(),
 					studentStatus.getStatusDetails()
 			});
 		}

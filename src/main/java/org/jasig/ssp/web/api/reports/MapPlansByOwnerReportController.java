@@ -87,7 +87,7 @@ public class MapPlansByOwnerReportController extends ReportBaseController<PlanAd
 		if(dateTerm != null && dateTerm.getTerm() != null)
 			terms.add(dateTerm.getTerm());
 		SearchPlanTO form = new SearchPlanTO(null, null, null, null, terms, dateTerm.getStartDate(), dateTerm.getEndDate());
-		List<PlanAdvisorCountTO> counts = planService.getOwnerPlanCounts(form);
+		List<PlanAdvisorCountTO> counts = planService.getPlanCountByOwner(form);
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addPlanSearchForm(form, parameters);

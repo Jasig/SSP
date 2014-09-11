@@ -62,7 +62,7 @@
 					<font isBold="true" isItalic="false"/>
 					<paragraph leftIndent="10"/>
 				</textElement>
-				<text><![CDATA[OFF PLAN DETAILS]]></text>
+				<text><![CDATA[PLAN STATUS DETAILS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -86,7 +86,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="130" y="0" width="153" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{planStatus}.getDisplayName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{planStatus} == null ? "No Status" : $F{planStatus}.getDisplayName()]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="cf0a0b36-ec1e-4907-9744-d45e1dfaa9ab" x="283" y="0" width="289" height="16" isRemoveLineWhenBlank="true"/>
