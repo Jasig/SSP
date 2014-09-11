@@ -107,6 +107,11 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	   	<property name="corePoolSize" value="#{configProperties.bulk_job_queue_pool_size}" />
+	    <property name="maxPoolSize" value="#{configProperties.bulk_job_queue_pool_size_max}" />    
+    </bean>
+    
 	<bean id="securityService" class="org.jasig.ssp.service.impl.SecurityServiceImpl" />
 
 	<bean id="uuidCustomType" class="org.jasig.ssp.util.uuid.UUIDCustomTypeSetup"

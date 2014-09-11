@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.transferobject.jobqueue.BulkEmailStudentRequestForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,27 @@ public class EmailStudentRequestForm extends AbstractEmailForm implements Serial
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EmailStudentRequestForm.class);
 	
+	public EmailStudentRequestForm(BulkEmailStudentRequestForm form,
+			Person student, Person runAs) {
+		this.setStudentId(student.getId());
+		this.setCoachEmail(runAs.getPrimaryEmailAddress());
+		this.setConfidentialityLevelId(form.getConfidentialityLevelId());
+		this.setCreateJournalEntry(form.getCreateJournalEntry());
+		this.setUseStrictValidation(form.getUseStrictValidation());
+		this.setEmailBody(form.getEmailBody());
+		this.setEmailSubject(form.getEmailSubject());
+		
+		if(form.getSendToPrimaryEmail())
+		{
+			this.setPrimaryEmail(student.getPrimaryEmailAddress());
+		}
+		if(form.getSendToSecondaryEmail())
+		{
+			this.setSecondaryEmail(student.getSecondaryEmailAddress());
+		}
+		
+	}
+
 	@Override
 	protected Logger getLogger(){
 		return LOGGER;

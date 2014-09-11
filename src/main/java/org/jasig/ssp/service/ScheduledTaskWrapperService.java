@@ -46,4 +46,6 @@ public interface ScheduledTaskWrapperService {
 	public void resetTaskStatus();
 
     public void cullOAuth1Nonces();
+
+	void bulkJobQueue();
 }

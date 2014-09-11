@@ -954,19 +954,43 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	onCaseloadActionComboSelect: function( comp, records, eOpts ){
 		var me=this;
-		if(records.length > 0 && records[0].get('id') === 'EXPORT')
+		if(records.length > 0)
 		{
-	       if(me.getIsCaseload())
-	       {
-				var count = me.caseloadService.getCaseloadCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);	
-	    	   
-	       } else
-	       if(me.getIsWatchList())
-	       {
-				var count = me.watchListService.getWatchlistCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);		    	   
-	       }
+			if(records[0].get('id') === 'EXPORT')
+			{
+		       if(me.getIsCaseload())
+		       {
+					var count = me.caseloadService.getCaseloadCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);	
+		    	   
+		       } else
+		       if(me.getIsWatchList())
+		       {
+					var count = me.watchListService.getWatchlistCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);		    	   
+		       }
+			}
+			if(records[0].get('id') === 'EMAIL')
+			{
+				me.bulkEmail();
+			}
 		}
 	},    
+	bulkEmail: function(){
+		var me=this;
+		var store = null;
+		if ( me.getIsCaseload() )
+		{
+			store = me.caseloadStore;
+		}else
+		if( me.getIsWatchList() )
+		{
+			store = me.watchListStore;
+		} else
+		{
+			store = me.searchStore;
+		}		
+   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: store});
+   		me.emailStudentPopup.show();
+	},	
 	getProgramStatuses: function(){
 		var me=this;
 		me.programStatusService.getAll({

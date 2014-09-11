@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="create table job_queue" author="tony.arland">
+        <createTable tableName="job_queue">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="owner_id" type="uuid" >
+                <constraints nullable="false"
+                    foreignKeyName="job_queue_owner_id"
+                    references="person(id)" />            
+            </column>   
+            <column name="run_as_id" type="uuid" >
+                <constraints nullable="false"
+                    foreignKeyName="job_queue_run_as_id"
+                    references="person(id)" />            
+            </column>  
+			<column name="execution_component_name" type="${nvarchar.type}(150)">
+				<constraints nullable="false" />
+			</column>
+			<column name="execution_spec" type="text">
+				<constraints nullable="true" />
+			</column>		
+			<column name="execution_state" type="text">
+				<constraints nullable="false" />
+			</column>	
+			<column name="workflow_status" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>	
+			<column name="workflow_status_desc" type="text">
+				<constraints nullable="true" />
+			</column>	
+            <column name="scheduling_started_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
+			<column name="scheduled_by_process" type="${nvarchar.type}(150)">
+				<constraints nullable="true" />
+			</column>  
+            <column name="execution_started_date" type="datetime">
+                <constraints nullable="true" />
+            </column>	
+            <column name="workflow_stopped_date" type="datetime">
+                <constraints nullable="true" />
+            </column>            		          											
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false"
+                    foreignKeyName="watch_created_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true"
+                    foreignKeyName="watch_modified_person_id"
+                    references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>  
+        <sql>grant all on job_queue to ${database.app.username}</sql>
+   </changeSet>
+	<changeSet author='tony.arland' id='seeding bulk job queue config'>
+		<insert tableName="config">
+			<column name="id" value="6eb58750-c598-47bf-a4f5-616fc7024501" />
+			<column name="name" value="task_bulk_job_queue_trigger" />
+			<column name="description"
+				value="Bulk Job Queue Config:  Drives the frequency of the cron job that executes bulk actions" />
+            <column name="value" value="0,5,10,15,20,25,30,35,40,45,50,55 * * * *" /> 
+            <column name="default_value" value="0,5,10,15,20,25,30,35,40,45,50,55 * * * *" /> 			
+			<column name="created_date" valueDate="2014-09-03T12:00:00" />
+			<column name="modified_date" valueDate="2014-09-03T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='6eb58750-c598-47bf-a4f5-616fc7024501'</where>
+            </delete>
+        </rollback>		
+	</changeSet>
+	<changeSet author='tony.arland' id='seeding bulk job queue batch size config'>
+		<insert tableName="config">
+			<column name="id" value="9948c28d-7318-4f42-9dea-71bca72159cc" />
+			<column name="name" value="bulk_job_queue_batch_size" />
+			<column name="description"
+				value="Bulk Job Queue Batch Size Config:  Drives how many bulk jobs get executed at once" />
+            <column name="value" value="10" /> 
+            <column name="default_value" value="10" /> 			
+			<column name="created_date" valueDate="2014-09-03T12:00:00" />
+			<column name="modified_date" valueDate="2014-09-03T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='6eb58750-c598-47bf-a4f5-616fc7024501'</where>
+            </delete>
+        </rollback>		
+	</changeSet>	
+	<changeSet id="add retry_count to job_queue" author="tony.arland">
+		<addColumn tableName="job_queue">
+			<column name="retry_count" type="integer"></column>
+		</addColumn>
+	</changeSet>		   
+</databaseChangeLog>

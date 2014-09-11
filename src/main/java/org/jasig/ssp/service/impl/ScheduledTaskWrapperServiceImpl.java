@@ -36,6 +36,7 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
+import org.jasig.ssp.service.jobqueue.BulkJobQueueTask;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.security.oauth.OAuth1NonceServiceMaintenance;
 import org.jasig.ssp.util.CallableExecutor;
@@ -92,6 +93,7 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String REFRESH_DIRECTORY_PERSON_TASK_NAME = "directory-person-refresh";
 	public static final String REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME = "directory-person-refresh-blue";
 	public static final String CALC_MAP_STATUS_REPORTS_TASK_NAME = "calc-map-status-reports";
+	public static final String BULK_JOB_QUEUE_TASK_NAME = "bulk-job-queue";
 	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
     public static final String OAUTH1_CULL_NONCE_TABLE_TASK_NAME = "cull-oauth1-nonces";
@@ -99,6 +101,7 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
+	private static final String EVERY_15_SECONDS = "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *";
 	private static final String FIFTEEN_MINUTES_IN_MILLIS = 15 * 60 * 1000 + "";
 	private static final String NEVER = "0 0 0 31 12 *";
 
@@ -124,6 +127,10 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String MAP_STATUS_REPORT_CALC_TASK_ID = "task_map_plan_status_calc";
 	private static final String MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_map_plan_status_calculation_trigger";
 	private static final String MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER = EVERY_DAY_3_AM;
+
+	private static final String BULK_JOB_QUEUE_TASK_ID = "task_bulk_job_queue";
+	private static final String BULK_JOB_QUEUE_TASK_CONFIG_NAME = "task_bulk_job_queue_trigger";
+	private static final String BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER = EVERY_15_SECONDS;
 	
 	private static final String EARLY_ALERT_TASK_ID = "task_early_alert_scheduled_tasks";
 	private static final String EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_early_alert_trigger";
@@ -149,9 +156,12 @@ public class ScheduledTaskWrapperServiceImpl
 	
 	@Autowired
 	private transient RefreshDirectoryPersonBlueTask directoryPersonRefreshBlueTask;
-	
+
 	@Autowired
 	private transient MapStatusReportCalcTask mapStatusReportCalcTask;
+	
+	@Autowired
+	private transient BulkJobQueueTask bulkJobQueueTask;
 
 	@Autowired
 	private transient SendQueuedMessagesTask sendQueuedMessagesTask;
@@ -248,6 +258,15 @@ public class ScheduledTaskWrapperServiceImpl
 				},
 				MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER,
 				MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME));
+		this.tasks.put(BULK_JOB_QUEUE_TASK_ID, new Task(BULK_JOB_QUEUE_TASK_ID,
+				new Runnable() {
+					@Override
+					public void run() {
+						bulkJobQueue();
+					}
+				},
+				BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER,
+				BULK_JOB_QUEUE_TASK_CONFIG_NAME));		
 		this.tasks.put(SCHEDULER_CONFIG_POLL_TASK_ID, new Task(SCHEDULER_CONFIG_POLL_TASK_ID,
 				new Runnable() {
 					@Override
@@ -913,7 +932,10 @@ public class ScheduledTaskWrapperServiceImpl
 	public void calcMapStatusReports() {
 		execBatchedTaskWithName(CALC_MAP_STATUS_REPORTS_TASK_NAME, mapStatusReportCalcTask);
 	}
-	
+	@Override
+	public void bulkJobQueue() {
+		execBatchedTaskWithName(BULK_JOB_QUEUE_TASK_NAME,bulkJobQueueTask );
+	}	
 	@Override
 	public void sendEarlyAlertReminders() {
 		execWithTaskContext(SEND_EARLY_ALERT_REMINDERS_TASK_NAME, new Runnable() {
