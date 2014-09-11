@@ -59,8 +59,9 @@ public class BulkEmailRunnable extends AbstractBulkRunnable<BulkEmailStudentRequ
 		List<List<UUID>> batches = organizeJobInBatches(studentIds,numJobs);
 		for (List<UUID> batch : batches) {
 			if ( Thread.currentThread().isInterrupted() ) {
-				LOGGER.info("Abandoning external person sync because of thread interruption");
+				LOGGER.info("Bulk job processing because of thread interruption");
 				return;
+			}
 			removeCurrentWorkFromRemainingWork(remainingWork, batch);
 			form.setStudentIds(formCommaSeparatedValue(remainingWork));
 			getJob().setExecutionState(AbstractBulkRunnable.serialize(form));

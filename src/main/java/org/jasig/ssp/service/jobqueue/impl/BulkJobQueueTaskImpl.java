@@ -83,14 +83,14 @@ public class BulkJobQueueTaskImpl implements BulkJobQueueTask {
 	public void exec(CallableExecutor<Void> batchExecutor) {
 		
 		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Abandoning external person sync because of thread interruption");
+			LOGGER.info("Bulk job processing because of thread interruption");
 			return;
 		}
 		
 		List<Job> jobs = jobService.getNextQueuedJobsForExecution(10,getProcessIdentifier());
 		for (Job job : jobs) {
 			if ( Thread.currentThread().isInterrupted() ) {
-				LOGGER.info("Abandoning external person sync because of thread interruption");
+				LOGGER.info("Bulk job processing because of thread interruption");
 				return;
 			}
 			if(job.getExecutionComponentName().equals("bulk-email-executor") )
