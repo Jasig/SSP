@@ -96,7 +96,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PlanAdvisorCountTO> getOwnerPlanCount(SearchPlanTO form){
+	public List<PlanAdvisorCountTO> getPlanCountByOwner(SearchPlanTO form){
 		Criteria criteria = createCriteria();
 		
 		if(form.getDateFrom() != null)
@@ -174,125 +174,143 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form){
-		
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
-		String planStatusSelect = calculateMapPlanStatus ? " MapStatusReport msr " : " ExternalPersonPlanStatus ps ";
-		StringBuilder selectPlanCourses = new  StringBuilder("select count(distinct pc.id) as plan_studentCount, " +
-				"pc.courseCode as plan_courseCode, " +
-				"pc.formattedCourse as plan_formattedCourse, " +
-				"pc.courseTitle as plan_courseTitle, " +
-				"pc.termCode as plan_termCode " +
-				"from Plan p, PlanCourse pc, Person person, ExternalCourse ec,"+ planStatusSelect);
-		
-		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
-		if(!calculateMapPlanStatus)
-		{
-			selectPlanCourses.append(" and ps.schoolId = person.schoolId ");
+	public List<PlanCourseCountTO> getPlanCountByCourse(SearchPlanTO form){
+
+		final StringBuilder selectAndFrom = new  StringBuilder("select count(distinct pc.id) as plan_studentCount, ")
+				.append("pc.courseCode as plan_courseCode, ")
+				.append("pc.formattedCourse as plan_formattedCourse, ")
+				.append("pc.courseTitle as plan_courseTitle, ")
+				.append("pc.termCode as plan_termCode ")
+				.append("from Plan p, PlanCourse pc, Person person");
+
+		final StringBuilder where = new StringBuilder(" where p.objectStatus = :objectStatus and pc.plan.id = p.id and p.person.id = person.id ");
+
+		final boolean isPlanStatusFilter = form.getPlanStatus() != null;
+		boolean calculateMapPlanStatus = false;
+		if ( isPlanStatusFilter ) {
+			calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim().toLowerCase());
+			if ( calculateMapPlanStatus ) {
+				selectAndFrom.append(", MapStatusReport msr ");
+				where.append(" and msr.planStatus = :planStatus ");
+				where.append(" and msr.plan = p and msr.person.id = person.id");
+			} else {
+				selectAndFrom.append(", ExternalPersonPlanStatus ps ");
+				where.append(" and ps.status = :planStatus ");
+				where.append(" and ps.schoolId = person.schoolId ");
+			}
 		}
-		if(form.getPlanStatus() != null && calculateMapPlanStatus)
-		{
-			selectPlanCourses.append(" and msr.plan in elements(person.plans) and msr.person.id = person.id");
-			
-		}
-		selectPlanCourses.append(" group by pc.courseCode, pc.formattedCourse, pc.courseTitle, pc.termCode");
+
+		buildQueryCourseFilters(form, selectAndFrom, where);
+		final String queryStr = selectAndFrom.append(where).append(" group by pc.courseCode, pc.formattedCourse, pc.courseTitle, pc.termCode").toString();
 		
-		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
-		buildCourseSearchParamList(form,  query);
+		Query query = createHqlQuery(queryStr).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
+		bindSearchPlanQueryParams(form,  query);
 		List<PlanCourseCountTO> planCoursesCount = query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 								PlanCourseCountTO.class, "plan_")).list();
 		
 		return planCoursesCount;
 	}
-	
-	private void buildQueryWhereClause(StringBuilder query, SearchPlanTO form, boolean calculateMapPlanStatus){
-		query.append(" where p.objectStatus = :objectStatus and pc.plan.id = p.id and p.person.id = person.id  and ec.code = pc.courseCode ");
-		if(!StringUtils.isEmpty(form.getSubjectAbbreviation()))
-		{			
-			query.append(" and ec.subjectAbbreviation = :subjectAbbreviation ");
-		}
-		
-		if(!StringUtils.isEmpty(form.getNumber()))
-		{
-						
-			query.append(" and ec.number = :courseNumber ");
-		}
-		
-		if(!form.getTermCodes().isEmpty())
-		{
-			query.append(" and pc.termCode in :termCodes ");
-		}
-		
-		if(!StringUtils.isEmpty(form.getFormattedCourse()))
-		{
-			query.append(" and ec.formattedCourse = :formattedCourse ");
-		}
-		
-		if(form.getPlanStatus() != null && !calculateMapPlanStatus)
-		{
-			query.append(" and ps.status = :planStatus ");
-		}
-		
-		if(form.getPlanStatus() != null && calculateMapPlanStatus)
-		{
-			query.append(" and msr.planStatus = :planStatus ");
-		}
-		
-	}
-	
-	private void buildCourseSearchParamList(SearchPlanTO form, Query hqlQuery) {
-		
-		if(!StringUtils.isEmpty(form.getSubjectAbbreviation()))
-		{
-			hqlQuery.setString("subjectAbbreviation", form.getSubjectAbbreviation());
-		}
-		
-		if(!StringUtils.isEmpty(form.getNumber()))
-		{
-			hqlQuery.setString("courseNumber", form.getNumber());
-		}
-		if(!StringUtils.isEmpty(form.getFormattedCourse()))
-		{
-			hqlQuery.setString("formattedCourse", form.getFormattedCourse());
-		}
-		if(!form.getTermCodes().isEmpty())
-		{
-			hqlQuery.setParameterList("termCodes", form.getTermCodes());
-		}
-		
-		if(form.getPlanStatus() != null)
-		{
-			hqlQuery.setString("planStatus", form.getPlanStatus().toString());
-		}
-	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
-		
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
-		String planStatusFrom = calculateMapPlanStatus ? " MapStatusReport msr " : " ExternalPersonPlanStatus ps ";
-		String planStatusSelectReason = calculateMapPlanStatus ? " msr.planNote as plan_statusDetails,   " : " ps.statusReason as plan_statusDetails,   ";
-		String planStatusSelectStatus = calculateMapPlanStatus ? " msr.planStatus as plan_planStatus  " : " ps.status as plan_planStatus  ";
-		
-		StringBuilder selectPlanCourses = new  StringBuilder("select " +
-				"distinct person.schoolId as plan_studentId, " +
-				"pc.formattedCourse as plan_formattedCourse, " +
-				"pc.courseTitle as plan_courseTitle, " +
-				"p.objectStatus as plan_planObjectStatus, " +
-				 planStatusSelectReason +
-				 planStatusSelectStatus +
-				"from Plan p, Person person, PlanCourse pc, ExternalCourse ec, "+planStatusFrom);
-		
-		buildQueryWhereClause(selectPlanCourses, form,calculateMapPlanStatus);
-		selectPlanCourses.append(calculateMapPlanStatus ? "and msr.person = person " : " and ps.schoolId = person.schoolId ");
-		
-		
-		Query query = createHqlQuery(selectPlanCourses.toString()).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
-		buildCourseSearchParamList(form,  query);
+
+		final StringBuilder selectAndFrom = new StringBuilder("select ")
+				.append("distinct person.schoolId as plan_studentId, ")
+				.append("pc.formattedCourse as plan_formattedCourse, ")
+				.append("pc.courseTitle as plan_courseTitle, ")
+				.append("p.objectStatus as plan_planObjectStatus, ");
+
+		final boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim().toLowerCase());
+		final boolean isPlanStatusFilter = form.getPlanStatus() != null;
+
+		// subqueries b/c you can't do outer joins with Hibernate Theta-style joins, but if no plan status filter is
+		// specified we want to return plans w/o status
+		if ( calculateMapPlanStatus ) {
+			selectAndFrom.append("(select msr.planStatus from MapStatusReport msr where msr.plan.id = p.id and msr.person.id = person.id")
+					.append(isPlanStatusFilter ? " and msr.planStatus = :planStatus" : "")
+					.append(") as plan_planStatus, ");
+			selectAndFrom.append("(select msr.planNote from MapStatusReport msr where msr.plan.id = p.id and msr.person.id = person.id")
+					.append(isPlanStatusFilter ? " and msr.planStatus = :planStatus" : "")
+					.append(") as plan_statusDetails ");
+		} else {
+			selectAndFrom.append("(select ps.status from ExternalPersonPlanStatus ps where ps.schoolId = person.schoolId")
+					.append(isPlanStatusFilter ? " and ps.status = :planStatus" : "")
+					.append(") as plan_planStatus, ");
+			selectAndFrom.append("(select ps.statusReason from ExternalPersonPlanStatus ps where ps.schoolId = person.schoolId")
+					.append(isPlanStatusFilter ? " and ps.status = :planStatus" : "")
+					.append(") as plan_statusDetails ");
+		}
+
+		selectAndFrom.append(" from Plan p, Person person, PlanCourse pc ");
+		final StringBuilder where = new StringBuilder(" where p.objectStatus = :objectStatus and pc.plan.id = p.id and p.person.id = person.id ");
+		buildQueryCourseFilters(form, selectAndFrom, where);
+		final String queryStr = selectAndFrom.append(where).toString();
+
+		Query query = createHqlQuery(queryStr).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal() );
+		bindSearchPlanQueryParams(form, query);
 		List<PlanStudentStatusTO> planStudentStatus = query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PlanStudentStatusTO.class, "plan_")).list();
 		
 		return planStudentStatus;
+	}
+
+	private void buildQueryCourseFilters(SearchPlanTO form, StringBuilder selectAndFrom, StringBuilder where) {
+
+		final boolean isNonOperationalCourseFilter = StringUtils.isNotBlank(form.getSubjectAbbreviation()) || StringUtils.isNotBlank(form.getNumber());
+		if ( isNonOperationalCourseFilter ) {
+			selectAndFrom.append(", ExternalCourse ec");
+			where.append(" and ec.code = pc.courseCode ");
+		}
+
+		if(StringUtils.isNotBlank(form.getSubjectAbbreviation()))
+		{
+			where.append(" and ec.subjectAbbreviation = :subjectAbbreviation ");
+		}
+
+		if(StringUtils.isNotBlank(form.getNumber()))
+		{
+			where.append(" and ec.number = :courseNumber ");
+		}
+
+		if(!form.getTermCodes().isEmpty())
+		{
+			where.append(" and pc.termCode in :termCodes ");
+		}
+
+		if(StringUtils.isNotBlank(form.getFormattedCourse()))
+		{
+			where.append(" and pc.formattedCourse = :formattedCourse ");
+		}
+
+	}
+
+	private void bindSearchPlanQueryParams(SearchPlanTO form, Query hqlQuery) {
+
+		if(StringUtils.isNotBlank(form.getSubjectAbbreviation()))
+		{
+			hqlQuery.setString("subjectAbbreviation", form.getSubjectAbbreviation());
+		}
+
+		if(StringUtils.isNotBlank(form.getNumber()))
+		{
+			hqlQuery.setString("courseNumber", form.getNumber());
+		}
+
+		if(StringUtils.isNotBlank(form.getFormattedCourse()))
+		{
+			hqlQuery.setString("formattedCourse", form.getFormattedCourse());
+		}
+
+		if(!form.getTermCodes().isEmpty())
+		{
+			hqlQuery.setParameterList("termCodes", form.getTermCodes());
+		}
+
+		if(form.getPlanStatus() != null)
+		{
+			hqlQuery.setString("planStatus", form.getPlanStatus().toString());
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")

@@ -91,7 +91,7 @@ public class MapPlansByCourseReportController extends ReportBaseController<PlanC
 			terms = SearchParameters.getTerms(Lists.newArrayList(termCode), termService);
 
 		SearchPlanTO form = new SearchPlanTO(planStatus, subjectAbbreviation, courseNumber, formattedCourse, terms, null, null);
-		List<PlanCourseCountTO> counts = planService.getPlanCourseCount(form);
+		List<PlanCourseCountTO> counts = planService.getPlanCountByCourse(form);
 
 		final Map<String, Object> parameters = Maps.newHashMap();
 		SearchParameters.addTermsToMap( terms, parameters);

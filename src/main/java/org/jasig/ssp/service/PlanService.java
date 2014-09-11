@@ -48,9 +48,9 @@ PlanOutputTO, MessageTemplatePlanPrintParams> {
 			SortingAndPaging createForSingleSortWithPaging,UUID personId);
 	
 
-	List<PlanAdvisorCountTO> getOwnerPlanCounts(SearchPlanTO form);
+	List<PlanAdvisorCountTO> getPlanCountByOwner(SearchPlanTO form);
 	
-	List<PlanCourseCountTO> getPlanCourseCount(SearchPlanTO form);
+	List<PlanCourseCountTO> getPlanCountByCourse(SearchPlanTO form);
 	
 	List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form);
 
