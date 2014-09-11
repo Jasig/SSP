@@ -2271,6 +2271,17 @@
 		</div>
 		<div class="ea-clear"></div>
 
+       <!-- Actual Start Term -->
+            <div class="ea-input">
+                <select id="journalSessionActualStartTermCode" name="actualStartTerm" class="input-term-group">
+                <option value="">${not_applicable}</option>
+            </select>
+        </div>
+        <div class="ea-label">
+            <span>Actual Start Term:</span>
+        </div>
+        <div class="ea-clear"></div>
+
 		<!-- Date Range Description -->
 		<div class="ea-input">
 		</div>
@@ -2291,7 +2302,7 @@
 				</div>
 				<div class="ea-clear"></div>
 			</div>
-			<div class="ea-date-range">
+         	<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="journalSessionDetailCreateDateFrom">
@@ -2309,10 +2320,7 @@
 				<div class="ea-clear"></div>
 			</div>
 			<div class="ea-buttons">
-
-								<button class="switch-date-range-type button" value="setbyrange">
-								</button>
-							
+    			<button class="switch-date-range-type button" value="setbyrange"></button>
 			</div>
 		</div>
 		<!-- output type -->

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStepDetail;
@@ -131,6 +132,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false) String termCode,
+            final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
@@ -142,6 +144,10 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 		
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 
+        if ( StringUtils.isNotBlank(actualStartTerm) ) {
+            SearchParameters.addactualStartTerm(actualStartTerm, null, parameters);
+            personSearchForm.setActualStartTerm(actualStartTerm);
+        }
 		
 		SearchParameters.addReferenceLists(studentTypeIds, 
 				specialServiceGroupIds, 
@@ -170,6 +176,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				personSearchForm, 
 				programStatusService, 
 				null);
+
 		List<UUID> cleanJournalStepDetailIds = SearchParameters.cleanUUIDListOfNulls(journalStepDetailIds);
 		SearchParameters.addUUIDSToMap(JOURNAL_SESSION_DETAILS, 
 				SearchParameters.ALL, 

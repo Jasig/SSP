@@ -185,7 +185,7 @@ public class JournalEntryDao
 	public PagingWrapper<JournalStepStudentReportTO> getJournalStepStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  
 			SortingAndPaging sAndP){
 		final Criteria criteria = createCriteria(sAndP);
-		
+
 		setPersonCriteria(criteria,personSearchForm);
 		
 		if (personSearchForm.getCreateDateFrom() != null) {
@@ -334,7 +334,7 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.add(Restrictions.eq("coach.id",
 					personSearchForm.getCoach().getId()));
 		}
-		
+
 		if (personSearchForm.getHomeDepartment() != null
 				&& personSearchForm.getHomeDepartment().length() > 0) {
 			criteria.createAlias("coach.staffDetails","coachStaffDetails");
@@ -389,6 +389,11 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.add(Restrictions.eq("person.anticipatedStartYear",
 					personSearchForm.getAnticipatedStartYear()));
 		}
+
+        if (personSearchForm.getActualStartTerm() != null) {
+            criteria.add(Restrictions.eq("person.actualStartTerm",
+                    personSearchForm.getActualStartTerm()));
+        }
 
 		if (personSearchForm.getStudentTypeIds() != null) {
 			criteria.add(Restrictions.in("person.studentType.id",
