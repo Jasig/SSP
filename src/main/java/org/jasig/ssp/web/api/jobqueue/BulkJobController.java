@@ -29,7 +29,6 @@ import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.jobqueue.impl.AbstractBulkRunnable;
 import org.jasig.ssp.service.jobqueue.impl.BulkJobFactory;
 import org.jasig.ssp.transferobject.jobqueue.BulkEmailStudentRequestForm;
-import org.jasig.ssp.transferobject.jobqueue.BulkTO;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;

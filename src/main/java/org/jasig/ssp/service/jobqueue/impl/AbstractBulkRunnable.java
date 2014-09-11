@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.concurrent.Callable;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.model.jobqueue.Job;
 import org.jasig.ssp.model.jobqueue.WorkflowStatus;
 import org.jasig.ssp.service.jobqueue.JobService;
@@ -12,9 +15,7 @@ import org.jasig.ssp.util.transaction.WithTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public abstract class AbstractBulkRunnable<T extends Serializable> implements Runnable{
 
