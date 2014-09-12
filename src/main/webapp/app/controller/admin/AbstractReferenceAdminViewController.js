@@ -88,7 +88,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
 		if(persistMethod == 'PUT' && store.$className == 'Ssp.store.reference.JournalSources')
 			{
 				
-				if(jsonData.name == 'Email' || jsonData.name == 'Early Alert'){
+				if(jsonData.name == 'Email' || jsonData.name == 'Early Alert Response'){
 					Ext.Msg.alert('SSP Error', 'These values cannot be modified'); 
 					return false;
 				}
