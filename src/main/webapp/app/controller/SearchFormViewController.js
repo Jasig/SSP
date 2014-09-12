@@ -370,41 +370,44 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		},  	
 	onSearchClick: function(button){
 		var me=this;
-		if(!me.getView().getForm().isDirty())
-		{
-	     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
-	     	return;
-		}
-		if(!me.getView().getForm().isValid()){
-			Ext.Msg.alert('SSP Error', 'One or more search filters are invalid. Problems have been highlighted.');
-			return;
-		}
-		var message = "";
-		var valuesInvalid = false;
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-			valuesInvalid = true;
-			message += "GPA Min is greater than GPA Maximum. ";
-		}
-		
-		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-			me.getGpaMin().setValue(0);
-		}
-		
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+	    if (btnId=="ok")
+	    {
+			if(!me.getView().getForm().isDirty())
+			{
+		     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
+		     	return;
+			}
+			if(!me.getView().getForm().isValid()){
+				Ext.Msg.alert('SSP Error', 'One or more search filters are invalid. Problems have been highlighted.');
+				return;
+			}
+			var message = "";
+			var valuesInvalid = false;
+			if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
 				valuesInvalid = true;
-				message += "Hours Earned Min is greater than Hours Earned Maximum. ";
-		}
-
-		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
+				message += "GPA Min is greater than GPA Maximum. ";
+			}
+			
+			if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
 				me.getGpaMin().setValue(0);
-		}
-		
-		if(valuesInvalid == true){
-	     	Ext.Msg.alert('SSP Error', message + "Search will return no values."); 
-	     	return;
-		}
-		
-		me.search();	
+			}
+			
+			if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+					valuesInvalid = true;
+					message += "Hours Earned Min is greater than Hours Earned Maximum. ";
+			}
+	
+			if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
+					me.getGpaMin().setValue(0);
+			}
+			
+			if(valuesInvalid == true){
+		     	Ext.Msg.alert('SSP Error', message + "Search will return no values."); 
+		     	return;
+			}
+			
+			me.search();	
+	    }
 	},  
 	
 	specialKeyPressed: function(field, el){
