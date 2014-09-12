@@ -188,7 +188,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	me.getView().setLoading( false );
 		me.getView().collapse();
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
-    },    
+    },  
+    exportSearchSuccess: function( r, scope){
+    	var me=scope;
+    }, 
 	search: function(){
 		var me=this;		
 		me.searchService.search2( 
@@ -247,7 +250,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=actualStartTerm]')[0].value,
 				me.getView().query('combobox[name=personTableType]')[0].value,
 				{
-				success: me.searchSuccess,
+				success: me.exportSearchSuccess,
 				failure: me.searchFailure,
 				scope: me
 		});	
