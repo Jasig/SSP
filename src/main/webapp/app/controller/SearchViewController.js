@@ -357,6 +357,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.applyColumns();
 		}
         me.showColumn(false,'birthDate');
+		me.showColumn(false,'primaryEmailAddress');
 		if(me.getIsCaseload() || me.getIsWatchList()){
 			me.showColumn(false,'coach');
 			me.showColumn(false,'currentProgramStatusName');
@@ -383,6 +384,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}else{
 			me.showColumn(true,'coach');	
 			me.showColumn(true,'currentProgramStatusName');
+			me.showColumn(true,'primaryEmailAddress');
 		}
 	},  
 
@@ -478,6 +480,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	              { sortable: sortableColumns, header: coachIdAlias, dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
 	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? .5:.2},
 				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: me.getIsExpanded() ? .5:1},
+				  { sortable: sortableColumns, header: 'Email', dataIndex: 'primaryEmailAddress', flex: .8},
 	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .2},   	              
 	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
 	              ];

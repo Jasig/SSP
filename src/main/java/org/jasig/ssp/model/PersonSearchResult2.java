@@ -45,6 +45,8 @@ public class PersonSearchResult2 {
 
 	@NotNull
 	private String lastName;
+	
+	private String primaryEmailAddress;
 
     private Date birthDate;
 
@@ -168,6 +170,14 @@ public class PersonSearchResult2 {
 
 	public void setLastName(final String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public String getPrimaryEmailAddress() {
+		return primaryEmailAddress;
+	}
+
+	public void setPrimaryEmailAddress(@NotNull final String primaryEmailAddress) {
+		this.primaryEmailAddress = primaryEmailAddress;
 	}
 
 	public String getStudentTypeName() {

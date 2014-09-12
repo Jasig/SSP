@@ -23,6 +23,7 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'firstName', type: 'string'},
              {name: 'middleName', type: 'string'},
              {name: 'lastName', type: 'string'},
+			 {name: 'primaryEmailAddress', type: 'string'},
              {name: 'photoUrl', type: 'string'},
 			 {name: 'coachFirstName', type: 'string'},
 			 {name: 'coachLastName', type: 'string'},

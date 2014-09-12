@@ -47,6 +47,8 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 
 	@NotNull
 	private String lastName;
+	
+	private String primaryEmailAddress;
 
     @JsonSerialize(using = DateOnlySerializer.class)
     @JsonDeserialize(using = DateOnlyDeserializer.class)
@@ -88,6 +90,7 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 		setFirstName(model.getFirstName());
 		setLastName(model.getLastName());
 		setMiddleName(model.getMiddleName());
+		setPrimaryEmailAddress(model.getPrimaryEmailAddress());
 		setPersonId(model.getPersonId());
 		setSchoolId(model.getSchoolId());
 		setStudentTypeName(model.getStudentTypeName());
@@ -143,6 +146,14 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 
 	public final void setLastName(final String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public String getPrimaryEmailAddress() {
+		return primaryEmailAddress;
+	}
+
+	public void setPrimaryEmailAddress(final String primaryEmailAddress) {
+		this.primaryEmailAddress = primaryEmailAddress;
 	}
 
 	public String getStudentTypeName() {

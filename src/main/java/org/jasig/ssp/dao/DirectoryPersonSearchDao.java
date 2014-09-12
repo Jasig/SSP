@@ -245,6 +245,7 @@ public class DirectoryPersonSearchDao  {
 				 "dp.firstName as person_firstName, " +
 				 "dp.middleName as person_middleName, " +
 				 "dp.lastName as person_lastName, " +
+				 "dp.primaryEmailAddress as person_primaryEmailAddress, " +
 				 "dp.personId as person_id, " +
 				 "dp.studentIntakeCompleteDate as person_studentIntakeCompleteDate, " +
 				 "dp.birthDate as person_birthDate, " +
