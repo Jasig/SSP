@@ -121,20 +121,8 @@
                     <a href="/ssp-platform/" id="backButton" rel="external" class="ui-btn-right" data-bind="visible: viewModel.authenticated() && viewModel.isnonstudent()" data-role="button" data-icon="custom">Back To SSP</a>
 				</div>
 			</div>
-            		<div data-role="content" class="content">
-				<div class="introduction">
-					<h2>Tools for Your Success</h2>
-					<ul id="toolsList" data-role="listview" data-inset="true">
-                        			<li><a href="guides.html">Self Help GuidesOld</a></li>
-                        			<li style="display: none;" data-bind="visible: canContactCoach"><a href="contact.html">Contact Your CoachOld</a></li>
-                        			<li><a href="search.html">Search for ResourcesOld</a></li>
-                        			<li style="display: none;" data-bind="visible: showMap"><a href="#" data-bind="popupWindow: { url: mapUrl, height: '550px', width: '1010px' }">View My MapOld</a></li>
-                    			</ul>
-                    			<div id="welcomeMessage">
-                        			<h2>OldWelcomeOld</h2>
-                				<p>OldThis self help tool will assist you in identifying and overcoming challenges or barriers to your success at this college. Please use the Self Help Guides to begin the process of identifying the challenges you might face, and discovering the solutions available to meet those challenges. The tool will assist you in building a Personal Road Map that will guide you on your journey to success. Good luck on that journey!Old</p>
-                    			</div>
-				</div>
+            <div data-role="content" class="content" >
+				<div class="introduction" data-bind="template: { name: 'topMenuTemplate' }"></div>
 				<div class="task-list" data-bind="template: { name: 'tasksTemplate' }"></div>
 			</div>
 			<div class="footer" data-bind="template: { name: 'footerTemplate' }"></div>

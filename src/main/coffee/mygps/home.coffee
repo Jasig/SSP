@@ -45,7 +45,8 @@ $('#home-page').live( 'pagecreate', ( event ) ->
         .loadTemplates( 
             bannerTemplate:     "/ssp/MyGPS/templates/banner.html"
             footerTemplate:     "/ssp/MyGPS/templates/footer.html"
-            tasksTemplate:      "/ssp/MyGPS/templates/tasks.html" 
+            topMenuTemplate:     "/ssp/MyGPS/templates/topmenu.html"
+            tasksTemplate:      "/ssp/MyGPS/templates/tasks.html"
             taskTemplate:       "/ssp/MyGPS/templates/task.html"
             taskDetailTemplate: "/ssp/MyGPS/templates/taskdetail.html"
         )

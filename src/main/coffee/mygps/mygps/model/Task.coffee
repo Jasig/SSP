@@ -53,10 +53,10 @@ namespace 'mygps.model'
 					if taskLink isnt null and taskLink.replace(/^\s+|\s+$/g, "") isnt ""
 						if taskLink.match /<(.|\n)*?>/igm
 							taskLink = (taskLink.match(/href="([^"]*)/igm)[0]).replace("href=\"", "")
-						if taskLink.indexOf "//" < 0
+						if taskLink.indexOf("//") < 0
 							taskLink = "http://" + taskLink
-						if taskLink.search /<(.|\n)*?>/igm < 0
-							taskLink = "<a href=\"" + taskLink + "\" target=\"blank\"> " + taskLink.replace('/^.+\/\//', '') + " </a>"
+						if taskLink.search(/<(.|\n)*?>/igm) < 0
+							taskLink = "<a href=\"" + taskLink + "\" target=\"_blank\"> " + taskLink.replace('/^.+\/\//', '') + " </a>"
 						taskLink
 					else taskLink
-				return new Task( taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate( taskTO.dueDate ), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId )
+				return new Task( taskTO.id, taskTO.type, taskTO.name, taskTO.description, parseLink(taskTO.link), taskTO.details, parseDate( taskTO.dueDate ), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId )

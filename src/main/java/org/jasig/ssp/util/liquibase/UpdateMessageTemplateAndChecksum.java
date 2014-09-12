@@ -39,40 +39,46 @@ import liquibase.exception.ValidationErrors;
 import liquibase.resource.ResourceAccessor;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RawSqlStatement;
-/*** Use this after a message template has been updated to update the checksum
- *   WARNING DO NOT USE UPDATE MESSAGE TEMPLATES WITHOUT VALIDATING CHECKSUMS 
- *   with MessageTemplateCheckSumPrecondition
- *   or you may override user changes
- * 
- * @author jamesstanley
+/**
+ * Use this after a message template has been updated to update the checksum
+ * WARNING DO NOT USE UPDATE MESSAGE TEMPLATES WITHOUT VALIDATING CHECKSUMS
+ * with {@link MessageTemplateCheckSumPrecondition} or you may override user changes.
  *
+ * <p>
  * Example:
- * <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
- *   <param name="messageTemplateId" value="0b7e484d-44e4-4f0d-8db5-3518d015b495"/>
- *   <param name="columnName" value="body"/>
- *   <param name="columnValue"><![CDATA[ <p>Templte Update<p>
-                                <p>"Please See your advisor" </p>]]>]]</param>
- * </customChange>
- * 
- *                FULL SAMPLE CHANGE SET:
- *<changeSet id="sample change set" author="jim.stanley">
+ * </p>
+ *
+ * <pre>
+ * {@code <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+ *     <param name="messageTemplateId" value="0b7e484d-44e4-4f0d-8db5-3518d015b495"/>
+ *     <param name="columnName" value="body"/>
+ *     <param name="columnValue"><![CDATA[ <p>Template Update<p>
+ *                             <p>"Please See your advisor" </p>]]>]]</param>
+ *   </customChange>
+ * }
+ * </pre>
+ *
+ * <p>FULL SAMPLE CHANGE SET:</p>
+ *
+ * <pre>
+ * {@code <changeSet id="sample change set" author="jim.stanley">
  *      <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
  *           <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
  *                 <param name="messageTemplateId" value="d6d1f68a-0533-426f-bd0b-d129a92edf81"/>
  *                <param name="columnName" value="subject"/>
  *          </customPrecondition>
  *      </preConditions>
- *          <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+ *       <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
  *               <param name="messageTemplateId" value="d6d1f68a-0533-426f-bd0b-d129a92edf81"/>
  *              <param name="columnName" value="subject"/>
- *              <param name="columnValue"><![CDATA[ <p>Templte Update<p>
-                                <p>"Please See your advisor" </p>]]></param>
- *          </customChange>
+ *              <param name="columnValue"><![CDATA[ <p>Template Update<p>
+ *                              <p>"Please See your advisor" </p>]]></param>
+ *       </customChange>
  *  </changeSet>
- *  
- *  
- ***/
-
+ * }
+ * </pre>
+ *
+ */
 public class UpdateMessageTemplateAndChecksum implements CustomSqlChange {
 	
 	public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";

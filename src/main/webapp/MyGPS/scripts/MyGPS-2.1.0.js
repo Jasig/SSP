@@ -415,13 +415,14 @@
   namespace('mygps.model', {
     Person: Person = (function() {
 
-      function Person(id, firstName, lastName, phoneNumber, emailAddress, photoURL, coach) {
+      function Person(id, firstName, lastName, phoneNumber, emailAddress, photoURL, coach, permissions) {
         this.id = ko.observable(id);
         this.firstName = ko.observable(firstName);
         this.lastName = ko.observable(lastName);
         this.phoneNumber = ko.observable(phoneNumber);
         this.photoURL = ko.observable(photoURL);
         this.coach = ko.observable(coach);
+        this.permissions = ko.observable(permissions);
       }
 
       Person.createFromTransferObject = function(personTO) {
@@ -559,7 +560,7 @@
       }
 
       Task.createFromTransferObject = function(taskTO) {
-        var parseDate;
+        var parseDate, parseLink;
         parseDate = function(msSinceEpoch) {
           var d;
           if (msSinceEpoch != null) {
@@ -570,7 +571,23 @@
             return null;
           }
         };
-        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
+        parseLink = function(taskLink) {
+          if (taskLink !== null && taskLink.replace(/^\s+|\s+$/g, "") !== "") {
+            if (taskLink.match(/<(.|\n)*?>/igm)) {
+              taskLink = (taskLink.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
+            }
+            if (taskLink.indexOf("//") < 0) {
+              taskLink = "http://" + taskLink;
+            }
+            if (taskLink.search(/<(.|\n)*?>/igm) < 0) {
+              taskLink = "<a href=\"" + taskLink + "\" target=\"_blank\"> " + taskLink.replace('/^.+\/\//', '') + " </a>";
+            }
+            return taskLink;
+          } else {
+            return taskLink;
+          }
+        };
+        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, parseLink(taskTO.link), taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
       };
 
       return Task;
@@ -1121,6 +1138,7 @@
         this.session = session;
         this.authenticated = ko.dependentObservable(this.evaluateAuthenticated, this);
         this.authenticatedPersonName = ko.dependentObservable(this.authenticatedPersonName, this);
+        this.isnonstudent = ko.dependentObservable(this.evaluateNonStudentPermission, this);
       }
 
       AbstractSessionViewModel.prototype.load = function() {};
@@ -1128,6 +1146,18 @@
       AbstractSessionViewModel.prototype.evaluateAuthenticated = function() {
         var _ref;
         return ((_ref = this.session) != null ? _ref.authenticatedPerson() : void 0) != null;
+      };
+
+      AbstractSessionViewModel.prototype.evaluateNonStudentPermission = function() {
+        var permissions, person, _ref;
+        person = (_ref = this.session) != null ? _ref.authenticatedPerson() : void 0;
+        if ((person != null) && (person.permissions() != null)) {
+          permissions = person.permissions();
+          if (permissions.indexOf("ROLE_PERSON_READ") !== -1 || permissions.indexOf("ROLE_PERSON_FILTER") !== -1) {
+            return true;
+          }
+        }
+        return false;
       };
 
       AbstractSessionViewModel.prototype.authenticatedPersonName = function() {
@@ -1153,7 +1183,7 @@
         AbstractTasksViewModel.__super__.constructor.call(this, session);
         this.taskService = taskService;
         this.tasks = ko.observableArray([]);
-        this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators);
+        this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators());
         this.selectedTaskFilter = ko.observable(mygps.enumeration.TaskFilter.ACTIVE);
         this.filteredTasks = ko.dependentObservable(this.filterTasks, this);
         this.printingTasks = ko.observable(false);
@@ -1511,26 +1541,62 @@
 
   namespace('mygps.viewmodel', {
     HomeViewModel: HomeViewModel = (function(_super) {
-      var getCurrentMap;
 
       __extends(HomeViewModel, _super);
 
+      HomeViewModel.CONTACT_COACH_TOOL = "CONTACT_COACH";
+
+      HomeViewModel.SELF_HELP_GUIDE_TOOL = "SELF_HELP_GUIDES";
+
+      HomeViewModel.RESOURCES_TOOL = "SEARCH";
+
+      HomeViewModel.MAP_TOOL = "MAP";
+
+      HomeViewModel.TOOLS = [HomeViewModel.CONTACT_COACH_TOOL, HomeViewModel.SELF_HELP_GUIDE_TOOL, HomeViewModel.RESOURCES_TOOL, HomeViewModel.MAP_TOOL];
+
+      HomeViewModel.MAP_PRINT_CURRENT_API_URL = "/ssp/api/1/mygps/plan/print";
+
+      HomeViewModel.MAP_CURRENT_API_URL = "/ssp/api/1/mygps/plan/current";
+
+      HomeViewModel.APP_NAME_API_URL = "/ssp/api/1/mygps/home/appname";
+
+      HomeViewModel.WELCOME_MESSAGE_API_URL = "/ssp/api/1/mygps/home/welcome";
+
+      HomeViewModel.TOOLS_LIST_API_URL = "/ssp/api/1/mygps/home/tools";
+
       function HomeViewModel(session, taskService) {
         HomeViewModel.__super__.constructor.call(this, session, taskService);
-        this.canContactCoach = ko.dependentObservable(this.evaluateCanContactCoach, this);
-        this.currentMapJson = ko.dependentObservable(this.evaluateShowMap, this);
-        this.showMap = ko.observable(false);
         this.personId = ko.dependentObservable(this.evaluatePersonId, this);
-        this.mapUrl = ko.dependentObservable(this.evaluateMapUrl, this);
+        this.appName = ko.observable(null);
+        this.welcomeMessage = ko.observable(null);
+        this.toolsList = ko.observableArray([]);
+        this.showSelfHelpGuides = ko.dependentObservable(this.evaluateShowSelfHelpGuides, this);
+        this.showContactCoach = ko.dependentObservable(this.evaluateShowContactCoach, this);
+        this.showResources = ko.dependentObservable(this.evaluateShowResources, this);
+        this.mapToolEnabled = ko.dependentObservable(this.evaluateMapToolEnabled, this);
+        this.mapLoadAttempted = ko.observable(false);
+        this.currentMapExists = ko.observable(false);
+        this.showMap = ko.dependentObservable(this.evaluateShowMap, this);
+        this.showAnyTools = ko.dependentObservable(this.evaluateShowAnyTools, this);
+        this.mapPrintUrl = this.constructor.MAP_PRINT_CURRENT_API_URL;
       }
 
       HomeViewModel.prototype.load = function() {
         HomeViewModel.__super__.load.call(this);
+        this.loadContent();
       };
 
-      HomeViewModel.prototype.evaluateCanContactCoach = function() {
+      HomeViewModel.prototype.isToolEnabled = function(toolName) {
+        return this.toolsList().indexOf(toolName.toUpperCase()) !== -1;
+      };
+
+      HomeViewModel.prototype.evaluateShowAnyTools = function() {
+        return this.showContactCoach() || this.showSelfHelpGuides() || this.showResources() || this.showMap();
+      };
+
+      HomeViewModel.prototype.evaluateShowContactCoach = function() {
         var _ref, _ref1;
-        return ((_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.coach() : void 0 : void 0) != null;
+        return (((_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.coach() : void 0 : void 0) != null) && this.isToolEnabled(this.constructor.CONTACT_COACH_TOOL);
       };
 
       HomeViewModel.prototype.evaluatePersonId = function() {
@@ -1538,29 +1604,130 @@
         return (_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.id() : void 0 : void 0;
       };
 
-      HomeViewModel.prototype.evaluateMapUrl = function() {
-        return "/ssp/api/1/mygps/plan/print";
+      HomeViewModel.prototype.evaluateMapToolEnabled = function() {
+        return this.isToolEnabled(this.constructor.MAP_TOOL);
       };
 
-      getCurrentMap = function(personId, callback) {
+      HomeViewModel.prototype.evaluateShowMap = function(lazyLoad) {
+        if (this.mapToolEnabled() === true && this.currentMapExists() !== true) {
+          this.loadMapExistenceOnce(this.currentMapExists);
+        }
+        return this.currentMapExists();
+      };
+
+      HomeViewModel.prototype.evaluateShowSelfHelpGuides = function() {
+        return this.isToolEnabled(this.constructor.SELF_HELP_GUIDE_TOOL);
+      };
+
+      HomeViewModel.prototype.evaluateShowResources = function() {
+        return this.isToolEnabled(this.constructor.RESOURCES_TOOL);
+      };
+
+      HomeViewModel.prototype.loadMapExistenceOnce = function(callback) {
+        var _ref;
+        if (((_ref = this.session) != null ? _ref.initialized() : void 0) && (this.personId() != null) && this.mapLoadAttempted() !== true) {
+          this.mapLoadAttempted(true);
+          return $.ajax({
+            type: "GET",
+            url: this.constructor.MAP_CURRENT_API_URL,
+            dataType: "json",
+            success: function(result) {
+              if (result !== null && result !== {} && result !== []) {
+                return callback(true);
+              } else {
+                return callback(false);
+              }
+            },
+            error: function(fault) {
+              return callback(false);
+            }
+          });
+        }
+      };
+
+      HomeViewModel.prototype.loadAppName = function(callback) {
         return $.ajax({
           type: "GET",
-          url: "/ssp/api/1/mygps/plan/current",
-          dataType: "json",
+          url: this.constructor.APP_NAME_API_URL,
           success: function(result) {
-            return callback(result);
+            if (result !== null && result.replace(/^\s+|\s+$/g, "") !== "") {
+              return callback(result);
+            } else {
+              return callback(null);
+            }
           },
           error: function(fault) {
-            return callback(false);
+            return callback(null);
           }
         });
       };
 
-      HomeViewModel.prototype.evaluateShowMap = function() {
-        var _ref, _ref1, _ref2, _ref3;
-        if (((_ref = this.session) != null ? (_ref1 = _ref.authenticatedPerson()) != null ? _ref1.id() : void 0 : void 0) != null) {
-          return getCurrentMap((_ref2 = this.session) != null ? (_ref3 = _ref2.authenticatedPerson()) != null ? _ref3.id() : void 0 : void 0, this.showMap);
-        }
+      HomeViewModel.prototype.loadWelcomeMessage = function(callback) {
+        return $.ajax({
+          type: "GET",
+          url: this.constructor.WELCOME_MESSAGE_API_URL,
+          success: function(result) {
+            var trimmed;
+            if (result !== null) {
+              trimmed = result.replace(/^\s+|\s+$/g, "");
+              return callback(trimmed === "" ? null : trimmed);
+            } else {
+              return callback(null);
+            }
+          },
+          error: function(fault) {
+            return callback(null);
+          }
+        });
+      };
+
+      HomeViewModel.prototype.loadToolsList = function(callback) {
+        var _this = this;
+        return $.ajax({
+          type: "GET",
+          url: this.constructor.TOOLS_LIST_API_URL,
+          success: function(result) {
+            var toolName, trimmed;
+            if (result !== null) {
+              trimmed = result.replace(/^\s+|\s+$/g, "");
+              if (trimmed !== "") {
+                return callback((function() {
+                  var _i, _len, _ref, _results;
+                  _ref = trimmed.split(",");
+                  _results = [];
+                  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    toolName = _ref[_i];
+                    _results.push(toolName.trim().toUpperCase());
+                  }
+                  return _results;
+                })());
+              } else {
+                return callback([]);
+              }
+            } else {
+              return callback([]);
+            }
+          },
+          error: function(fault) {
+            return callback([]);
+          }
+        });
+      };
+
+      HomeViewModel.prototype.resetContent = function() {
+        this.toolsList([]);
+        this.appName(null);
+        this.welcomeMessage(null);
+        this.welcomeMessage(null);
+        this.mapLoadAttempted(false);
+        return this.currentMapExists(false);
+      };
+
+      HomeViewModel.prototype.loadContent = function() {
+        this.resetContent();
+        this.loadAppName(this.appName);
+        this.loadWelcomeMessage(this.welcomeMessage);
+        this.loadToolsList(this.toolsList);
       };
 
       ko.bindingHandlers.popupWindow = {

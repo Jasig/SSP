@@ -23,120 +23,148 @@ namespace 'mygps.viewmodel'
 		
 		class HomeViewModel extends mygps.viewmodel.AbstractTasksViewModel
 
+			@CONTACT_COACH_TOOL: "CONTACT_COACH"
+			@SELF_HELP_GUIDE_TOOL: "SELF_HELP_GUIDES"
+			@RESOURCES_TOOL: "SEARCH"
+			@MAP_TOOL: "MAP"
+			@TOOLS = [@CONTACT_COACH_TOOL,@SELF_HELP_GUIDE_TOOL,@RESOURCES_TOOL,@MAP_TOOL]
+			@MAP_PRINT_CURRENT_API_URL = "/ssp/api/1/mygps/plan/print"
+			@MAP_CURRENT_API_URL = "/ssp/api/1/mygps/plan/current"
+			@APP_NAME_API_URL = "/ssp/api/1/mygps/home/appname"
+			@WELCOME_MESSAGE_API_URL = "/ssp/api/1/mygps/home/welcome"
+			@TOOLS_LIST_API_URL = "/ssp/api/1/mygps/home/tools"
+
+
 			constructor: ( session, taskService ) ->
 				super( session, taskService )
-				
-				@canContactCoach = ko.dependentObservable( @evaluateCanContactCoach, this )
-				@currentMapJson = ko.dependentObservable(@evaluateShowMap, this)
-				@showMap = ko.observable(false)
 				@personId = ko.dependentObservable(@evaluatePersonId, this)
-				@mapUrl = ko.dependentObservable(@evaluateMapUrl, this)
-				@appName = ko.dependentObservable(@evaulateAppName, this)
-				@welcomeMessage = ko.dependentObservable(@evaluateWelcomeMessage, this)
-				@toolsList = ko.dependentObservable(@evaluateTools, this)
-				
+				@appName = ko.observable( null )
+				@welcomeMessage = ko.observable( null )
+				@toolsList = ko.observableArray( [] )
+				@showSelfHelpGuides = ko.dependentObservable( @evaluateShowSelfHelpGuides, this )
+				@showContactCoach = ko.dependentObservable( @evaluateShowContactCoach, this )
+				@showResources = ko.dependentObservable( @evaluateShowResources, this )
+				@mapToolEnabled = ko.dependentObservable( @evaluateMapToolEnabled, this )
+				@mapLoadAttempted = ko.observable( false )
+				@currentMapExists = ko.observable( false )
+				@showMap = ko.dependentObservable( @evaluateShowMap, this )
+				@showAnyTools = ko.dependentObservable( @evaluateShowAnyTools, this)
+				@mapPrintUrl = @constructor.MAP_PRINT_CURRENT_API_URL
+
 			load: () ->
 				super()
+				@loadContent()
 				return
-				
-			evaluateCanContactCoach: () ->
-				return @session?.authenticatedPerson()?.coach()?
+
+			isToolEnabled: (toolName) ->
+				@toolsList().indexOf(toolName.toUpperCase()) isnt -1
+
+			evaluateShowAnyTools: () ->
+				@showContactCoach() or @showSelfHelpGuides() or @showResources() or @showMap()
+
+			evaluateShowContactCoach: () ->
+				@session?.authenticatedPerson()?.coach()? and @isToolEnabled(@constructor.CONTACT_COACH_TOOL)
 
 			evaluatePersonId: () ->
-				return @session?.authenticatedPerson()?.id()
+				@session?.authenticatedPerson()?.id()
 
-			evaluateMapUrl: () ->
-				return "/ssp/api/1/mygps/plan/print"
-           
-			getCurrentMap = (personId, callback) ->
-                $.ajax({
-	                type: "GET"
-	                url: "/ssp/api/1/mygps/plan/current"
-	                dataType: "json"
-	                success: (result) ->
-                        callback(result)
-	                error: (fault) ->
-		                callback(false)
-                })
+			evaluateMapToolEnabled: () ->
+				@isToolEnabled(@constructor.MAP_TOOL)
 
-			getAppName = (callback) ->
-                $.ajax({
-	                type: "GET"
-	                url: "/ssp/api/1/mygps/home/appname"
-	                success: (result) ->
-                        if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
-                            callback(result)
-                        else
-                            callback(false)
-	                error: (fault) ->
-                        callback(false)
-                })
+			evaluateShowMap: (lazyLoad) ->
+				if ( @mapToolEnabled() is true and @currentMapExists() isnt true )
+					@loadMapExistenceOnce(@currentMapExists)
+				@currentMapExists()
 
-			getWelcomeMessage = (callback) ->
-                $.ajax({
-	                type: "GET"
-	                url: "/ssp/api/1/mygps/home/welcome"
-	                success: (result) ->
-                        if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
-                            callback(result)
-                        else
-                            callback(false)
-	                error: (fault) ->
-                        callback(false)
-                })
+			evaluateShowSelfHelpGuides: () ->
+				@isToolEnabled(@constructor.SELF_HELP_GUIDE_TOOL)
 
-			getToolsList = (callback) ->
-                $.ajax({
-	                type: "GET"
-	                url: "/ssp/api/1/mygps/home/appname"
-	                success: (result) ->
-                        if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
-                            callback(result)
-                        else
-                            callback(false)
-	                error: (fault) ->
-                        callback(false)
-                })
+			evaluateShowResources: () ->
+				@isToolEnabled(@constructor.RESOURCES_TOOL)
 
-			evaluateShowMap: () ->
-                if @session?.authenticatedPerson()?.id()?
-	                getCurrentMap(@session?.authenticatedPerson()?.id(), @showMap)
+			loadMapExistenceOnce: (callback) ->
+				if @session?.initialized() and @personId()? and @mapLoadAttempted() isnt true
+					@mapLoadAttempted(true)
+					$.ajax({
+						type: "GET"
+						url: @constructor.MAP_CURRENT_API_URL
+						dataType: "json"
+						success: (result) ->
+							if result isnt null and result isnt {} and result isnt []
+								callback(true)
+							else
+								callback(false)
+						error: (fault) ->
+								callback(false)
+					})
 
-			evaulateAppName: () ->
-                getAppName(@appName)
-                if @appName is false
-	                @appName = null
 
-			evaluateWelcomeMessage: () ->
-                getWelcomeMessage(@welcomeMessage)
-                if (@welcomeMessage is false or (@welcomeMessage.indexOf("<h" < 0) and @welcomeMessage.indexOf("<p" < 0)))
-	                @welcomeMessage = null
+			loadAppName: (callback) ->
+				$.ajax({
+					type: "GET"
+					url: @constructor.APP_NAME_API_URL
+					success: (result) ->
+						if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
+							callback(result)
+						else
+							callback(null)
+					error: (fault) ->
+						callback(null)
+				})
 
-			evaluateTools: () ->
-                getToolsList(@toolsList)
-                if @toolsList is false
-	                @toolsList = null
-                else
-	                tools = ["<li><a href=\"guides.html\">Self Help Guides</a></li> \n",
-	                "<li style=\"display: none;\" data-bind=\"visible: canContactCoach\"><a href=\"contact.html\">Contact Your Coach</a></li> \n",
-	                "<li><a href=\"search.html\">Search for Resources</a></li> \n",
-	                "<li style=\"display: none;\" data-bind=\"visible: showMap\"><a href=\"#\" data-bind=\"popupWindow: { url: mapUrl, height: '550px', width: '1010px' }\">View My Map</a></li> \n"]
-	                generatedToolList = ""
+			loadWelcomeMessage: (callback) ->
+				$.ajax({
+					type: "GET"
+					url: @constructor.WELCOME_MESSAGE_API_URL
+					success: (result) ->
+						if result isnt null
+							trimmed = result.replace(/^\s+|\s+$/g, "")
+							callback(if trimmed is "" then null else trimmed)
+						else
+							callback(null)
+					error: (fault) ->
+						callback(null)
+				})
 
-	                if @toolsList.indexOf "Self Help" > -1
-	                    generatedToolList = generatedToolList + tools[0]
+			loadToolsList: (callback) ->
+				$.ajax({
+					type: "GET"
+					url: @constructor.TOOLS_LIST_API_URL
+					success: (result) =>
+						if result isnt null
+							trimmed = result.replace(/^\s+|\s+$/g, "")
+							if trimmed isnt ""
+								callback(toolName.trim().toUpperCase() for toolName in (trimmed.split ","))
+							else callback([])
+						else
+							callback([])
+					error: (fault) ->
+						callback([])
+				})
 
-	                if @toolsList.indexOf "Contact" > -1
-	                    generatedToolList = generatedToolList + tools[1]
+			resetContent: () ->
+				# Clear toolsList first b/c if we clear other fields, it might cause observable functions to
+				# fire while the toolsList is in a stale state, e.g. when you use the back-button to return
+				# to this page. That's mostly a non-issue except for MAP, which we only attempt to load once.
+				# So if cascading observer functions happen to cause it to load before we get around to updating
+				# the toolsList, you might still see the MAP tool link on a back-button nav, even if MAP has been
+				# disabled since you last visited the page.
+				#
+				# On a more mechanical note, would be nice if we didn't have to know what the default should
+				# be to reset to: http://anasnakawa.com/posts/resetting-knockout-observables/
+				@toolsList( [] )
+				@appName( null )
+				@welcomeMessage( null )
+				@welcomeMessage( null )
+				@mapLoadAttempted(false)
+				@currentMapExists(false)
 
-	                if @toolsList.indexOf "Search" > -1
-	                    generatedToolList = generatedToolList + tools[2]
-
-	                if @toolsList.indexOf "Map" > -1
-	                    generatedToolList = generatedToolList + tools[3]
-
-	                @toolsList = generatedToolList
-
+			loadContent: () ->
+				@resetContent()
+				@loadAppName(@appName)
+				@loadWelcomeMessage(@welcomeMessage)
+				@loadToolsList(@toolsList)
+				return
 
 			ko.bindingHandlers.popupWindow = init: (element, valueAccessor) ->
 				values = ko.utils.unwrapObservable(valueAccessor())

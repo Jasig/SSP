@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <!-- Changing these tool names to Java constant naming styles to match convention
+        established by map_plan_status_addition_course_matching_criteria -->
+    <changeSet author="dan.mccallum" id="change naming conventions for MyGPS tools" >
+        <update tableName="config">
+            <column name="value">
+                SELF_HELP_GUIDES,CONTACT_COACH,SEARCH,MAP
+            </column>
+            <column name="default_value">
+                SELF_HELP_GUIDES,CONTACT_COACH,SEARCH,MAP
+            </column>
+            <where>id = 'f7158593-2250-4b03-bab7-3af851810b80'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="dan.mccallum" id="redescribe config for enabling MyGPS tools" >
+        <update tableName="config">
+            <column name="description">
+                Comma seperated list of the tools that appear on the home page of MyGPS. Valid values: SELF_HELP_GUIDES, CONTACT_COACH, SEARCH, MAP.
+            </column>
+            <where>id = 'f7158593-2250-4b03-bab7-3af851810b80'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="dan.mccallum" author="set checksum on MyGPS welcome message template body">
+        <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+            <param name="messageTemplateId" value="bfae38f8-53b0-486f-8bc5-a9d99beb514e" />
+            <param name="columnName" value="body"/>
+            <param name="resetChecksum" value="true"/>
+        </customChange>
+    </changeSet>
+
+    <changeSet id="dan.mccallum" author="set checksum on MyGPS welcome message template subject">
+        <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+            <param name="messageTemplateId" value="bfae38f8-53b0-486f-8bc5-a9d99beb514e" />
+            <param name="columnName" value="subject"/>
+            <param name="resetChecksum" value="true"/>
+        </customChange>
+    </changeSet>
+
+</databaseChangeLog>

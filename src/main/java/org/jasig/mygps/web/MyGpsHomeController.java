@@ -52,8 +52,8 @@ public class MyGpsHomeController extends AbstractBaseController {
     @RequestMapping(value = "/tools", method = RequestMethod.GET)
     public @ResponseBody
     String getMyGPSTools() throws ObjectNotFoundException {
-
-        return configService.getByNameNullOrDefaultValue("mygps_visible_tools");
+        // Don't fall back to default b/c we want to allow admins to specify an empty list
+        return configService.getByNameNull("mygps_visible_tools");
     }
 
     @PreAuthorize("hasAnyRole('ROLE_MY_GPS_TOOL', 'ROLE_ANONYMOUS')")
