@@ -178,7 +178,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 title: 'Email Message',
                 border: 1,
 				items: [{
-				        xtype: 'textareafield',
+				        xtype: 'htmleditor',
 				        name: 'emailBody',
                         allowBlank: false,
 				        fieldLabel: '',

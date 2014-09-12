@@ -112,6 +112,12 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
         
         me.getView().getForm().reset();
         me.getView().getForm().loadRecord(me.model);
+		
+		var comment = Ext.ComponentQuery.query('#commentTxt')[0].getValue();
+		if (comment !== '') {
+			var replaceComment = comment.replace(new RegExp('\r?\n', 'g'), '<br />');
+			var comments = Ext.ComponentQuery.query('#commentTxt')[0].setValue(replaceComment);
+		}
 
         me.confidentialityLevelsStore.clearFilter(true);
 		me.formUtils.applyAssociativeStoreFilter(me.confidentialityLevelsStore,me.model.getConfidentialityLevelId());

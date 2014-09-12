@@ -37,7 +37,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
         Ext.apply(me, {
             border: 0,
             bodyPadding: 0,
-            
             items: [{
                 xtype: 'label',
                 text: 'Journal Entry',
@@ -109,16 +108,25 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         allowBlank: false,
                         forceSelection: true,
                         anchor: '98%'
-                    }, {
-                        xtype: 'textareafield',
-                        fieldLabel: 'Comment (Optional)',
-                        itemId: 'commentTxt',
-                        name: 'comment',
-                        //minHeight: 1,
-                        //flex:1,
-                        height: 350,
-                        anchor: '98%'
-                    }]
+                    }, 
+					{
+		                xtype: 'fieldset',
+		                title: 'Comment (Optional)',
+		                border: 1,
+						margin: '0 0 0 0',
+						padding: '0 0 0 0',
+						items: [{
+						        xtype: 'htmleditor',
+						        itemId: 'commentTxt',
+		                        name: 'comment',
+		                        allowBlank: false,
+						        fieldLabel: '',
+						        anchor: '100%',
+						        labelSeparator: '',
+				                width: '100%',
+				                height: 350
+						    }]
+            		}]
                 
                 }, {
                     xtype: 'fieldset',
