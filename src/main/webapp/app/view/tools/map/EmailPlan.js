@@ -26,7 +26,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController'
     },
-    height: 500,
+    height: 550,
     width: 700,
     resizable: true,
     initComponent: function(){
@@ -48,7 +48,8 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                 },
                  width: '100%',
                 height: '100%',
-                bodyPadding: 5,
+                bodyPadding: 10,
+				bodyStyle : 'background:none',
                 autoScroll: true,
                 itemId: 'faEmailPlan',
                 items: [{
@@ -99,13 +100,14 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
 											itemId: 'emailCC'
                                            }]
                                },
-                               {
-                            	   xtype: 'textareafield',
+							   
+                              {
+                            	   xtype: 'htmleditor',
                             	   name: 'notes',
-                            	   fieldLabel: 'notes',
+                            	   fieldLabel: 'Notes',
                             	   labelWidth: 48,
 								   inputWidth:400,
-                            	   rows: 5,
+                            	   rows: 6,
                             	   grow: true
                                }]
                     	},
