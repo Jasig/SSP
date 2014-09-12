@@ -19,6 +19,10 @@
 Ext.define('Ssp.store.reference.CaseloadActions', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.AbstractReference',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	authenticatedPerson: 'authenticatedPerson'
+    },
     constructor: function(){
         var me=this;
         me.callParent( arguments );
@@ -28,13 +32,17 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
     },
     load: function() {
     	var me = this;
-        var values = [{id: "EXPORT", name: "Export to CSV"},
-    			    {id: "PROGRAM_STATUS", name: "Change Program Status"},
-    			    {id: "WATCH_STUDENT", name: "Watch/UnWatch Students"},
-    			    {id: "EMAIL", name: "Email Students"}                     
-        ];
-
-        me.loadData( values );
+    	if(me.getCount() < 1)
+    	{
+    		if(me.authenticatedPerson.hasAccess('EXPORT_TO_CSV'))
+    		{
+    			me.add({id: "EXPORT", name: "Export to CSV"});
+    		}
+    		if(me.authenticatedPerson.hasAccess('BULK_EMAIL'))
+    		{
+    			me.add({id: "EMAIL", name: "Email Students"});
+    		}
+    	}
         return me;   	
     	
     }
