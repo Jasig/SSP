@@ -43,7 +43,7 @@ public class TaskMessageEnqueueDao extends AbstractAuditableCrudDao<TaskMessageE
 	private transient ConfidentialityLevelService confidentialityLevelService;
 	
 	protected static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractRestrictedPersonAssocAuditableCrudDao.class);
+			.getLogger(TaskMessageEnqueueDao.class);
 	/**
 	 * Constructor
 	 */

@@ -72,7 +72,7 @@ public class DisabilityServicesReportController extends ReportBaseController<Dis
 	private static String REPORT_FILE_TITLE = "Disability_Services_Report";
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AddressLabelsReportController.class);
+			.getLogger(DisabilityServicesReportController.class);
 
 	@Autowired
 	private transient PersonService personService;

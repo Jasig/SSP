@@ -52,7 +52,7 @@ public class ExternalPersonNoteController extends
 		AbstractExternalController<ExternalPersonNoteTO, ExternalPersonNote> {
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(FacultyCourseController.class);
+			.getLogger(ExternalPersonNoteController.class);
 
 	@Autowired
 	private transient PersonService personService;

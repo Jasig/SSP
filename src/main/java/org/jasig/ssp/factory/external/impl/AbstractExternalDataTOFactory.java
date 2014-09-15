@@ -41,7 +41,7 @@ public abstract class AbstractExternalDataTOFactory<TO extends ExternalDataTO<M>
 	protected final transient Class<M> mClass;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractAuditableTOFactory.class);
+			.getLogger(AbstractExternalDataTOFactory.class);
 
 	/**
 	 * Constructor that initializes specific class instances for use by the

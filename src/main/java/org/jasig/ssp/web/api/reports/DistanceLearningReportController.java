@@ -65,7 +65,7 @@ public class DistanceLearningReportController extends ReportBaseController<BaseS
 	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(JournalSessionDetailsReportController.class);
+			.getLogger(DistanceLearningReportController.class);
 
 	@Autowired
 	private transient PersonService personService;

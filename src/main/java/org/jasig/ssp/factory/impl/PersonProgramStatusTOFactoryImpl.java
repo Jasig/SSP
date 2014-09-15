@@ -54,7 +54,7 @@ public class PersonProgramStatusTOFactoryImpl
 		implements PersonProgramStatusTOFactory {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonServiceReasonTOFactoryImpl.class);
+			.getLogger(PersonProgramStatusTOFactoryImpl.class);
 
 	public PersonProgramStatusTOFactoryImpl() {
 		super(PersonProgramStatusTO.class, PersonProgramStatus.class);

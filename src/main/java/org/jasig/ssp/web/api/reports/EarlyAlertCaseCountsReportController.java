@@ -71,7 +71,7 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController<E
 	private static String REPORT_FILE_TITLE = "Early_Alert_Case_Counts_Report";
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(CaseloadActivityReportController.class);
+			.getLogger(EarlyAlertCaseCountsReportController.class);
 	
 	@Autowired
 	protected transient TermService termService;

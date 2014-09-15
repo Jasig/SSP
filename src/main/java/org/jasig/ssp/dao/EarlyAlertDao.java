@@ -78,7 +78,7 @@ public class EarlyAlertDao extends
 		PersonAssocAuditableCrudDao<EarlyAlert> {
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonSearchServiceImpl.class);
+			.getLogger(EarlyAlertDao.class);
 
 	@Autowired
 	private transient TermService termService;

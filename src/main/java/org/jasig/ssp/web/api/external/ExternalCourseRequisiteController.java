@@ -50,7 +50,7 @@ public class ExternalCourseRequisiteController
 	protected transient ExternalCourseRequisiteService service;
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ExternalCourseController.class);
+			.getLogger(ExternalCourseRequisiteController.class);
 
 
 	@Override

@@ -36,7 +36,7 @@ public abstract class AbstractTOFactory<M, TObject extends TransferObject<M>> {
 	protected final transient Class<M> mClass;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractAuditableTOFactory.class);
+			.getLogger(AbstractTOFactory.class);
 
 	/**
 	 * Constructor that initializes specific class instances for use by the

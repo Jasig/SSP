@@ -58,7 +58,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ExternalPersonRegistrationStatusByTermController extends AbstractBaseController {
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(FacultyCourseController.class);
+			.getLogger(ExternalPersonRegistrationStatusByTermController.class);
 
 	@Autowired
 	private transient PersonService personService;

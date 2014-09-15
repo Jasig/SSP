@@ -72,7 +72,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 	private static final String REPORT_FILE_TITLE = "Early_Alert_Student_Outreach_Report";
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AddressLabelsReportController.class);
+			.getLogger(EarlyAlertStudentOutreachReportController.class);
 
 	@Autowired
 	private transient PersonService personService;

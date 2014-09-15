@@ -96,7 +96,7 @@ public class ServerServiceImpl implements ServerService {
 	private Map<String,Object> versionProfile;
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ServerController.class);
+			.getLogger(ServerServiceImpl.class);
 
 	public Map<String,Object> getDateTimeProfile() {
 		final Date now = new Date();

@@ -84,7 +84,7 @@ public class SpecialServicesReportingTO implements Serializable {
 	}
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SpecialServicesReportController.class);
+			.getLogger(SpecialServicesReportingTO.class);
 
 	public List<String> getSpecialServices() {
 		final List<String> retVal = new ArrayList<String>();

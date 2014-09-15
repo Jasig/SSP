@@ -97,7 +97,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	private static final String OUTCOME_TOTALS = "outcomeTotals";
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AddressLabelsReportController.class);
+			.getLogger(EarlyAlertStudentOutcomeReportController.class);
 
 	@Autowired
 	private transient PersonService personService;

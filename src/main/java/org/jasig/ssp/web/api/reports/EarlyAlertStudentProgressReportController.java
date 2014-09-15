@@ -84,7 +84,7 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 	
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AddressLabelsReportController.class);
+			.getLogger(EarlyAlertStudentProgressReportController.class);
 
 	@Autowired
 	private transient PersonService personService;

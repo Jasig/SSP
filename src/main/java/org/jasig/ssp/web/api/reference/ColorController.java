@@ -64,7 +64,7 @@ public class ColorController
 	}
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(StudentTypeController.class);
+			.getLogger(ColorController.class);
 
 	@Override
 	protected Logger getLogger() {
