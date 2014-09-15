@@ -95,7 +95,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 						        		queryMode: 'local',
 						        		allowBlank: false,
 						        		itemId: 'visibility',
-						        		width: 290,
+						        		width: 290
 						    		}
                 			    ]},
                 			{

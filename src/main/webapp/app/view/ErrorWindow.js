@@ -40,13 +40,13 @@ Ext.define('Ssp.view.ErrorWindow', {
 		 				           dataIndex: 'label',
 						           sortable: false,
 						           menuDisabled: true,
-						           flex:.25 
+						           flex:0.25
 						         },{ header: 'Message', 
 						           dataIndex: 'errorMessage',
 						           renderer: me.columnRendererUtils.renderErrorMessage,
 						           sortable: false,
 						           menuDisabled: true,
-						           flex:.75 
+						           flex:0.75
 						         }],     
     			        store: me.store
     			    }],

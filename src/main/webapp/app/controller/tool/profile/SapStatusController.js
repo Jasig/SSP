@@ -26,7 +26,7 @@ Ext.define('Ssp.controller.tool.profile.SapStatusController', {
 	control: {
         codeField: '#code',
         nameField: '#name',
-		descriptionField: '#description',
+		descriptionField: '#description'
 	},
 
 	init: function() {

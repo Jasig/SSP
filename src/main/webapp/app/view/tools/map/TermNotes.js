@@ -77,8 +77,7 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
                         hideLabel: true,
                         boxLabel: 'Mark As Important',
                         fieldLabel: 'Mark As Important' 
-                        }]
-				    ,
+                        }],
 				    dockedItems: [{
 		                xtype: 'toolbar',
 		                dock: 'top',

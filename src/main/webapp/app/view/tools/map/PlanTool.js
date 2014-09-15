@@ -41,12 +41,12 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
         	items: [   
 			{
 			    xtype: 'tbspacer',
-			    flex: .02
+			    flex: 0.02
 			},         	        
            {
                     tooltip: 'View all',
                     height: 30,
-                    flex:.10,
+                    flex:0.10,
                     cls: 'overviewIcon',
                     xtype: 'button',
                     itemId: 'planOverviewButton',
@@ -57,7 +57,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
            {
                     tooltip: 'Plan Notes',
                     height: 30,
-                    flex:.10,
+                    flex:0.10,
                     cls: 'mapNotesIcon',
                     xtype: 'button',
                     itemId: 'planNotesButton',
@@ -68,7 +68,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
              	{
 		                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
 		                    height: 30,
-		                    flex:.10,
+		                    flex:0.10,
 		                    cls: 'mapMovePlanIcon',
 		                    xtype: 'button',							
 		                    itemId: 'movePlanButton',
@@ -80,7 +80,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
            {
                     tooltip: 'Email Plan',
                     height: 30,
-                    flex:.10,
+                    flex:0.10,
                     cls: 'planEmailIcon',
                     xtype: 'button',
                     itemId: 'emailPlanButton',
@@ -92,7 +92,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 {
                     tooltip: 'Print Plan',
                     height: 30,
-                    flex:.10,
+                    flex:0.10,
                     cls: 'mapPrintIcon',
                     xtype: 'button',
                     itemId: 'printPlanButton',
@@ -104,7 +104,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
             	{
 	                    tooltip: 'Financial Aid',
 	                    height: 30,
-	                    flex:.10,
+	                    flex:0.10,
 	                    cls: 'mapFAIcon',
 	                    xtype: 'button',
 	                    itemId: 'planFAButton',
@@ -116,7 +116,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			        {
 			                    tooltip:  'View of Student\'s Course History',
 			                    height: 30,
-			                    flex:.10,
+			                    flex:0.10,
 			                    cls: 'transcriptIcon',
 			                    xtype: 'button',
 			                    itemId: 'showStudentTranscript',
@@ -128,7 +128,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			           {
 			                    tooltip:  'View of Student\'s Map Status Detail',
 			                    height: 30,
-			                    flex:.10,
+			                    flex:0.10,
 			                    cls: 'studentHistoryIcon',
 			                    xtype: 'button',
 			                    itemId: 'showMapStatus',
@@ -140,8 +140,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                }, 
 						{
 						    xtype: 'tbspacer',
-						    flex: .3
-						}, 			          
+						    flex: 0.3
+						}
 			          ]
 
         });

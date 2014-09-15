@@ -151,7 +151,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         	                        typeAhead: true,
         	                        queryMode: 'local',
 									width: '80%',
-        	                        allowBlank: true,
+        	                        allowBlank: true
         	                    },{        	                    
         	                        xtype: 'combobox',
         	                        name: 'catalogYearCode',
@@ -163,7 +163,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         	                        mode: 'local',
         	                        typeAhead: true,
 									width: '80%',
-        	                        allowBlank: true,
+        	                        allowBlank: true
         	                    } ,{
             				        fieldLabel: 'Contact Name',
             				        name: 'contactName',

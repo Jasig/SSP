@@ -36,7 +36,7 @@ Ext.define('Ssp.model.reference.CampusEarlyAlertRouting', {
                 	 }
    		            return obj;
                  }
-   		      },],
+   		      }],
              
     getPersonFullName: function(){
     	var me=this;

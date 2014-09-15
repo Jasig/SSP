@@ -24,7 +24,7 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController',
-        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
     height: 375,
     width: 600,

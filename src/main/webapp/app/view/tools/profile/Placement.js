@@ -46,7 +46,7 @@ Ext.define('Ssp.view.tools.profile.Placement', {
 							return '<a title="Click to get more detailed information about test results from Smarter Measure." target="_test_results" href="'+record.get("testProviderLink")+'">'+value+'</a>';
 						}
 			             return value;
-			         },
+			         }
                 },
                 {
                     xtype: 'gridcolumn',

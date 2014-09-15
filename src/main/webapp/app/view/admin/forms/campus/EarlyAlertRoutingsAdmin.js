@@ -43,16 +43,16 @@ Ext.define('Ssp.view.admin.forms.campus.EarlyAlertRoutingsAdmin', {
             }, {
                 header: 'Group Name',
                 dataIndex: 'groupName',
-                flex: .2
+                flex: 0.2
             }, {
                 header: 'Group Email',
                 dataIndex: 'groupEmail',
-                flex: .3
+                flex: 0.3
             }, {
                 header: 'Person',
                 dataIndex: 'person',
                 renderer: me.columnRendererUtils.renderPersonFullName,
-                flex: .2
+                flex: 0.2
             }],
             
             dockedItems: [{

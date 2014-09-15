@@ -42,7 +42,7 @@ Ext.define('Ssp.controller.admin.apikey.lticonsumer.EditLTIConsumerAdminViewCont
             listeners: {
                 change: 'onSecretDeleteChange'
             }
-        },
+        }
 
     },
     init: function() {

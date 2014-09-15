@@ -62,7 +62,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
             },
             columns: [{
                 header: 'Name',
-                flex: .25,
+                flex: 0.25,
                 dataIndex: 'name',
                 rowEditable: true,
                 field: {
@@ -73,7 +73,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                 }
             }, {
                 header: 'Description',
-                flex: .50,
+                flex: 0.50,
                 dataIndex: 'description',
                 rowEditable: true,
                 field: {
@@ -88,7 +88,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                 itemId: 'goalsCFCombo',
                 renderer: me.columnRendererUtils.renderConfidentialityLevel,
                 required: true,
-                flex: .25,
+                flex: 0.25,
                 field: {
                     xtype: 'combo',
                     store: me.confidentialityLevelsAllUnpagedStore,

@@ -127,10 +127,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                     var jsonData = [];
 
                     Ext.each(items, function(item) {
-                        if(item.data.id == droppedItem.id
-                            || item.data.sortOrder == previousSortOrder
-                            ||	(item.data.sortOrder - previousSortOrder) > 1) {
-
+                        if(item.data.id == droppedItem.id || item.data.sortOrder == previousSortOrder || (item.data.sortOrder - previousSortOrder) > 1) {
                             item.data.sortOrder = previousSortOrder + 1;
                             jsonData.push(Ext.encode(item.data));
                         }
@@ -172,7 +169,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         dataIndex: 'objectStatus',
 						defaultValue: true,
                         renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: .10,
+                        flex: 0.10,
                         field: {
                             xtype: 'oscheckbox'
                         }

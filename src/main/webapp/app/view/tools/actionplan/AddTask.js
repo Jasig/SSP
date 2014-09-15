@@ -33,8 +33,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTask', {
 				align: 'stretch'
 			},
 			title: 'Add Action Plan Tasks',
-			items: [{ xtype: 'tasktree', flex: .5 },
-			        { xtype: 'addtaskform', flex: .5 }]
+			items: [{ xtype: 'tasktree', flex: 0.5 },
+			        { xtype: 'addtaskform', flex: 0.5 }]
 		});
 		
 		return this.callParent(arguments);

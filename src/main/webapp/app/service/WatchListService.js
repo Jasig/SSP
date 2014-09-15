@@ -160,5 +160,5 @@ Ext.define('Ssp.service.WatchListService', {
 				},
 				failure: this.apiProperties.handleError
 			}, this);
-    },
+    }
 });

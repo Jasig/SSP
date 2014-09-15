@@ -56,7 +56,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .45,
+                    flex: 0.45,
                     items: [{
                         xtype: 'profileperson'
                     }, {
@@ -158,7 +158,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .25,
+                    flex: 0.25,
                     height: '470',
                     margin: '0 0 10 0',
                     items: [
@@ -307,7 +307,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
                     padding: 2,
                     margin: '0 0 0 5',
-                    flex: .30,
+                    flex: 0.30,
                     items: [{
                         fieldLabel: 'Residency',
                         name: 'residencyCounty',

@@ -57,7 +57,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         anchor: '100%'
                     },
                     padding: 0,
-                    flex: .60,
+                    flex: 0.60,
                     items: [{
                         xtype: 'fieldset',
                         border: 1,
@@ -67,7 +67,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         defaults: {
                             anchor: '100%'
                         },
-                        flex: .40,
+                        flex: 0.40,
                         items: [{
                             fieldLabel: me.textStore.getValueByCode('ssp.label.non-local'),
                             name: 'nonLocalAddress',
@@ -84,7 +84,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 0,
                         title: '',
-                        flex: .80,
+                        flex: 0.80,
                         defaultType: 'displayfield',
                         padding: '0 0 10 0',
                         defaults: {
@@ -122,7 +122,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     xtype: 'fieldset',
                     border: 0,
                     
-                    flex: .05
+                    flex: 0.05
                 
                 }, {
                     xtype: 'fieldset',
@@ -133,7 +133,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         anchor: '100%'
                     },
                     padding: 0,
-                    flex: .40,
+                    flex: 0.40,
                     items: [{
                         fieldLabel: '',
                         padding: '0 0 0 10',

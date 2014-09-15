@@ -30,7 +30,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
         parentItemType: "",
         parentIdAttribute: "",
         associatedItemIdAttribute: "",
-		nodeSortFunction: "",
+		nodeSortFunction: ""
     },
     
     control: {

@@ -89,7 +89,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				    },{
 				        fieldLabel: 'Plan Note',
 				        name: 'planNote',
-				        itemId: 'planNote',
+				        itemId: 'planNote'
 				    },{
 	                    tooltip: 'Re-Calculate Plan Status',
 	                    text: 'Re-Calculate Plan Status',
@@ -109,22 +109,22 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'termCode',
 			                text: 'Plan Term',
-			                flex: .10
+			                flex: 0.10
 			            }, {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'termRatio',
 			                text: 'Term Ratio',
-			                flex: .15
+			                flex: 0.15
 			            }, {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'anomalyCode',
 			                text: 'Anomaly Code',
-			                flex: .20
+			                flex: 0.20
 			            }, {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'anomalyNote',
 			                text: 'Note',
-			                flex: .20
+			                flex: 0.20
 			            }],
 			            viewConfig: {
 			                markDirty: false
@@ -143,27 +143,27 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'termCode',
 				                text: 'Plan Term',
-				                flex: .10
+				                flex: 0.10
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'formattedCourse',
 				                text: 'Plan Formatted Course',
-				                flex: .15
+				                flex: 0.15
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'courseCode',
 				                text: 'Plan Course Code',
-				                flex: .20
+				                flex: 0.20
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'anomalyCode',
 				                text: 'Anomaly Code',
-				                flex: .20
+				                flex: 0.20
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'anomalyNote',
 				                text: 'Note',
-				                flex: .20
+				                flex: 0.20
 				            }],
 				            viewConfig: {
 				                markDirty: false
@@ -182,37 +182,37 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'termCode',
 					                text: 'Plan Term',
-					                flex: .12
+					                flex: 0.12
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'formattedCourse',
 					                text: 'Plan Formatted Course',
-					                flex: .22
+					                flex: 0.22
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'courseCode',
 					                text: 'Plan Course Code',
-					                flex: .20
+					                flex: 0.20
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedTermCode',
 					                text: 'Transcript Term Code',
-					                flex: .23
+					                flex: 0.23
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedFormattedCourse',
 					                text: 'Transcript Formatted Course',
-					                flex: .27
+					                flex: 0.27
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedCourseCode',
 					                text: 'Transcript Course Course',
-					                flex: .27
+					                flex: 0.27
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutionCode',
 					                text: 'Substitution Reason',
-					                flex: .27
+					                flex: 0.27
 					            }],
 					            viewConfig: {
 					                markDirty: false

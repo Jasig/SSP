@@ -105,19 +105,16 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
         var me=this;
         var reqs= '';
         me.courseRequisitesStore.each(function(req) {
-    	{
-    		reqFormattedCourse = req.get('requiredFormattedCourse') == me.courseDetailsPopUp.record.get("formattedCourse") 
-    		? req.get('requiringCourseCode') : req.get('requiredFormattedCourse');
+    		reqFormattedCourse = req.get('requiredFormattedCourse') == me.courseDetailsPopUp.record.get("formattedCourse") ? req.get('requiringCourseCode') : req.get('requiredFormattedCourse');
     		reqs = reqs + reqFormattedCourse+': '+req.get('requisiteCode')+','
-    	}
-    		});
-            reqs = reqs.substring(0, reqs.length - 1);
-        	me.courseDetailsPopUp.query("#prereqs")[0].setValue(reqs);
-        	me.courseDetailsPopUp.show();
-        },
+    	});
+        reqs = reqs.substring(0, reqs.length - 1);
+        me.courseDetailsPopUp.query("#prereqs")[0].setValue(reqs);
+        me.courseDetailsPopUp.show();
+    },
     destroy:function(){
-	    var me=this;
-		me.appEventsController.getApplication().removeListener("onRequisiteLoad", me.showCourseDetails, me);
+        var me=this;
+        me.appEventsController.getApplication().removeListener("onRequisiteLoad", me.showCourseDetails, me);
 		if(me.courseDetailsPopUp != null && !me.courseDetailsPopUp.isDestroyed)
 			me.courseDetailsPopUp.close();
 	    return me.callParent( arguments );

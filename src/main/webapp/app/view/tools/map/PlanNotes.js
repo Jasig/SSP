@@ -74,8 +74,7 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 				        xtype: 'textareafield',
 				        flex:1,
 				        autoscroll: true
-				    }]
-				    ,
+				    }],
 				    dockedItems: [{
 		                xtype: 'toolbar',
 		                dock: 'top',

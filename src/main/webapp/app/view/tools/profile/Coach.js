@@ -58,7 +58,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     
                     padding: '0 5 15 5',
                     
-                    flex: .30,
+                    flex: 0.30,
                     items: [{
                     
                         fieldLabel: 'Assigned Coach',
@@ -115,7 +115,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .50,
+                    flex: 0.50,
                     padding: '0 5 5 5',
                     items: [{
                         fieldLabel: 'Date',

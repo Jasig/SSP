@@ -79,11 +79,11 @@ Ext.define('Ssp.view.person.Student', {
                     title: 'Student Intake',
 					border: 0,
                     layout: {
-						flex: .90
+						flex: 0.90
                     },
                     items: [{
-                        xtype: 'studentIntakeRequest',
-                        //flex: .50
+                        xtype: 'studentIntakeRequest'
+                        //flex: 0.50
                     },{
                             fieldLabel: 'Student Intake Request Last Sent ',
                             name: 'studentIntakeRequestDateInCaseload',

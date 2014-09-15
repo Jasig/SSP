@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.person.StudentViewController', {
     },
     control: {
 		studentIntakeRequestDateInCaseloadField: '#studentIntakeRequestDateInCaseload',
-        studentIntakeCompleteDateInCaseloadField: '#studentIntakeCompleteDateInCaseload',
+        studentIntakeCompleteDateInCaseloadField: '#studentIntakeCompleteDateInCaseload'
     },  
 	init: function() {
 		var me=this;

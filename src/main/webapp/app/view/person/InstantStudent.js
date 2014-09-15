@@ -76,7 +76,7 @@ Ext.define('Ssp.view.person.InstantStudent', {
                     xtype: 'personappointment',
                     instantCaseloadAssignment:me.instantCaseloadAssignment,
                     studentTypeNameValue:me.studentTypeNameValue,
-                    hidden: false,
+                    hidden: false
                 },
                 {
                     xtype: 'personcoach',
@@ -102,10 +102,10 @@ Ext.define('Ssp.view.person.InstantStudent', {
                     hidden:true,
 					border: 0,
                     layout: {
-						flex: .90
+						flex: 0.90
                     },
                     items: [{
-                        xtype: 'studentIntakeRequest',
+                        xtype: 'studentIntakeRequest'
                     },{
                             fieldLabel: 'Student Intake Request Last Sent ',
                             name: 'studentIntakeRequestDateInCaseload',

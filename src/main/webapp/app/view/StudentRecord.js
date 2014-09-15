@@ -83,7 +83,7 @@ Ext.define('Ssp.view.StudentRecord', {
             }],
             items: [{
                 xtype: 'toolsmenu',
-                flex: .60
+                flex: 0.60
             }, {
                 xtype: 'tools',
                 flex: 4.40

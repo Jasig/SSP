@@ -236,8 +236,8 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 	            remainingOpNames: ['electives','colors'],
 	            afterLastOp: {
 	                callback: work.fn,
-	                callbackScope: work.scope,
-	            },
+	                callbackScope: work.scope
+	            }
 	        });
 	        me.electiveStore.clearFilter(true);
 	        me.electiveStore.load(responseDispatcher.setSuccessCallback('electives', me.noOp, me));

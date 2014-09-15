@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         anchor: '100%,100%'
                     },
                     
-                    flex: .35,
+                    flex: 0.35,
                     
                     items: [{
                         xtype: 'datefield',
@@ -138,7 +138,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     },
                     padding: '0 0 0 5',
                     margin: '0 0 0 0',
-                    flex: .65,
+                    flex: 0.65,
                     items: [{
                         xtype: 'label',
                         text: 'Track-Step-Detail',
@@ -181,7 +181,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         }]
                     }, {
                         xtype: 'journaltracktree',
-                        flex: .90,
+                        flex: 0.90,
                         itemId: 'journalTrackTree',
                         minHeight: 1
                     

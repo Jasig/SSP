@@ -52,8 +52,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 	},
     initComponent: function(){
     	var me=this;
-    	var sm = Ext.create('Ext.selection.CheckboxModel'
-		);
+    	var sm = Ext.create('Ext.selection.CheckboxModel');
     	Ext.apply(me,
     			{
     		        scroll: 'vertical',
@@ -135,7 +134,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        }]
 		    	    },{
 		    	        text: 'Challenge',
-		    	        flex: .20,
+		    	        flex: 0.20,
 		    	        sortable: true,
 		    	        dataIndex: 'group',
 						renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
@@ -151,8 +150,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	        flex: 1,
 		    	        sortable: true,
 		    	        dataIndex: 'name',
-		    	        renderer: me.fullDescription(),
-						
+		    	        renderer: me.fullDescription()
 		    	    },{
 		    	        header: 'Due Date',
 		    	        width: 80,
@@ -183,18 +181,18 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	    },
 					{
 		    	        text: 'Author',
-		    	        flex: .20,
+		    	        flex: 0.20,
 		    	        sortable: true,
 		    	        dataIndex: 'name',
 		    	        renderer: me.columnRendererUtils.renderTaskAuthor
 		    	    },
 					{
 		    	        text: 'Confidentiality',
-		    	        flex: .20,
+		    	        flex: 0.20,
 		    	        sortable: true,
 		    	        dataIndex: 'name',
 		    	        renderer: me.columnRendererUtils.renderTaskCFLevel
-		    	    },
+		    	    }
 					
 					],
 					dockedItems: [{
@@ -214,7 +212,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                                 xtype: 'emailandprintactionplan'
                             }, {
                                 xtype: 'tbspacer',
-                                flex: .50
+                                flex: 0.50
                             }, 
 							{
 								xtype: 'label',
@@ -237,7 +235,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                             },
 							{
                                 xtype: 'tbspacer',
-                                flex: .05
+                                flex: 0.05
                             }
 							]
                         }, {

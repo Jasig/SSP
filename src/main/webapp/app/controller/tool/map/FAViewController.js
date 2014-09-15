@@ -67,7 +67,7 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 		            click: 'onShowFinancialAidFileStatuses'
 		        }
      		},
-       financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
+       financialAidAcceptedTermsField: '#financialAidAcceptedTerms'
     
     },
     init: function(){

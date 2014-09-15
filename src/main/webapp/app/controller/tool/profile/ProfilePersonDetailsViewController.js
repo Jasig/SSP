@@ -81,7 +81,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         termsLeftField: '#termsLeft',
         institutionalLoanAmountField: '#institutionalLoanAmount',
         financialAidFileStatusField: '#financialAidFileStatusDetails',
-		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
+		financialAidAcceptedTermsField: '#financialAidAcceptedTerms'
 
     },
     init: function(){

@@ -56,7 +56,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                         }, 	
                         {
                             xtype: 'tbspacer',
-                            flex: .5
+                            flex: 0.5
                         },                        
         				{
         								 xtype: 'button',
@@ -72,7 +72,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
         				   },
                            {
                                xtype: 'tbspacer',
-                               flex: .5
+                               flex: 0.5
                            },         				   
         		{
                     fieldLabel: 'Plan Hrs',
@@ -83,7 +83,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                 
                 },                        {
                     xtype: 'tbspacer',
-                    flex: .5
+                    flex: 0.5
                 },  {
                     fieldLabel: 'Dev Hrs',
                     itemId: 'currentPlanTotalDevCrHrs',
@@ -93,7 +93,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                 
                 },	{
 		                    xtype: 'tbspacer',
-		                    flex: .05
+		                    flex: 0.05
 		                }]
         
         });

@@ -38,22 +38,22 @@ Ext.define('Ssp.view.tools.profile.FinancialAidFiles', {
             	xtype: 'gridcolumn',
                 text: 'File Code',
                 dataIndex: 'code',
-                flex: .2
+                flex: 0.2
             },{
             	xtype: 'gridcolumn',
             	text: 'File Name',
                 dataIndex: 'name',
-                flex: .2
+                flex: 0.2
             },{
             	xtype: 'gridcolumn',
             	text: 'File Description',
                 dataIndex: 'description',
-                flex: .4
+                flex: 0.4
             },{
             	xtype: 'gridcolumn',
                 text: 'File Status',
                 dataIndex: 'status',
-                flex: .2
+                flex: 0.2
             }]
         });
         

@@ -71,7 +71,7 @@ Ext.define('Ssp.view.SearchForm',{
 			
 		    bodyPadding: 10,
 			defaults:{
-			    	 enableKeyEvents:true,
+			    	 enableKeyEvents:true
 			},
             tools: [
                     {
@@ -93,7 +93,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                    height: 25,
                         align: 'left'
         			}  ,{
-                        xtype: 'tbspacer',
+                        xtype: 'tbspacer'
                     }, {
 		                xtype: 'combobox',
 		                itemId: 'searchActionCombo',
@@ -123,7 +123,7 @@ Ext.define('Ssp.view.SearchForm',{
 			       fieldLabel: 'My Plans',
 			       name: 'myPlans',
 			       itemId: 'myPlans',
-				   columnWidth: .33,
+				   columnWidth: 0.33,
 			       listeners: {
 			           change: function() {
 			           	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
@@ -138,7 +138,7 @@ Ext.define('Ssp.view.SearchForm',{
 				    enableKeyEvents:true,
 				    labelWidth:100,
 				    labelAlign: 'right',
-				    columnWidth: .33
+				    columnWidth: 0.33
 			   },
 				{
 			        xtype: 'checkboxfield',
@@ -153,7 +153,7 @@ Ext.define('Ssp.view.SearchForm',{
 			              }
 			        },
 				   labelAlign: 'right',
-				   columnWidth: .33
+				   columnWidth: 0.33
 			   }
 			]
 
@@ -181,7 +181,7 @@ Ext.define('Ssp.view.SearchForm',{
                                 xtype: 'textfield',
                                 fieldLabel: 'First',
                                 emptyText: 'Enter All or Part of First Name',
-                                columnWidth: .5,
+                                columnWidth: 0.5,
                                 name: 'firstName',
             					enableKeyEvents:true,
             					listeners: {
@@ -202,7 +202,7 @@ Ext.define('Ssp.view.SearchForm',{
                                 xtype: 'textfield',
                                 fieldLabel: 'Last',
                                 emptyText: 'Enter All or Part of Last Name ',
-                                columnWidth: .5,
+                                columnWidth: 0.5,
 								labelWidth:50,
                                 name: 'lastName',
 								labelAlign: 'right',
@@ -231,7 +231,7 @@ Ext.define('Ssp.view.SearchForm',{
 			   		   		    valueField: 'code',
 			   		   		    emptyText: 'Anywhere',
 					   		    displayField: 'displayValue',
-								columnWidth: .5,
+								columnWidth: 0.5,
 				                itemId: 'personTableType',
 			                    name: 'personTableType',
 			                    editable: false
@@ -241,7 +241,7 @@ Ext.define('Ssp.view.SearchForm',{
 				             	   allowBlank: true,
 				             	   showToday:false, 
 				             	   validateOnChange: false,
-				 					columnWidth: .5,
+				 					columnWidth: 0.5,
 				             	   labelAlign: 'right',
 								   labelWidth: 110,
 				             	   labelSeparator: '',
@@ -265,7 +265,7 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    store: me.programStatusesStore,
    		   		    valueField: 'id',
 		   		    displayField: 'name',
-                    columnWidth: .5,
+                    columnWidth: 0.5,
 	                itemId: 'programStatus',
                     name: 'programStatus',
                     editable: false
@@ -274,7 +274,7 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    xtype: 'combobox',
                     fieldLabel: 'Registered',
 		   		    emptyText: 'Any',
-					columnWidth: .5,
+					columnWidth: 0.5,
 	                itemId: 'currentlyRegistered',
                     name: 'currentlyRegistered',
 					labelAlign: 'right',
@@ -341,7 +341,7 @@ Ext.define('Ssp.view.SearchForm',{
 				   		    xtype: 'combobox',
 		                    fieldLabel: 'Early Alert Status',
 				   		    emptyText: 'Any',
-							 columnWidth: .5,
+							 columnWidth: 0.5,
 		                    name: 'earlyAlertResponseLate',
 			                itemId: 'earlyAlertResponseLate',
 		                    store: me.earlyAlertResponseLateStore,
@@ -352,7 +352,7 @@ Ext.define('Ssp.view.SearchForm',{
 		                {
 				   		    xtype: 'combobox',
 		                    fieldLabel: 'FA SAP Status',
-		                     columnWidth: .5,
+		                     columnWidth: 0.5,
 							labelWidth:100,
 							labelAlign:'right',
 		                    emptyText: 'Any',
@@ -370,7 +370,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                {
 			   		    xtype: 'combobox',
 	                    fieldLabel: 'MAP Status',
-	                    columnWidth: .5,
+	                    columnWidth: 0.5,
 	                    emptyText: 'Any',
 	                    name: 'mapStatus',
 		                itemId: 'mapStatus',
@@ -382,7 +382,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                {
 			   		    xtype: 'combobox',
 	                    fieldLabel: 'Plan Status',
-	                    columnWidth: .5,
+	                    columnWidth: 0.5,
 	                    emptyText: 'Any',
 	                    name: 'planStatus',
 		                itemId: 'planStatus',
@@ -399,14 +399,14 @@ Ext.define('Ssp.view.SearchForm',{
                 {
                     xtype: 'label',
                     text: 'Hours Earned',
-                    columnWidth: .10
+                    columnWidth: 0.10
                 },
                 {
                      xtype: 'numberfield',
                      allowDecimals: true,
                      allowBlank: true,
                      minValue: 0.0,
-                     columnWidth: .45,
+                     columnWidth: 0.45,
                      labelAlign: 'right',
                      fieldLabel: 'From',
                      name: 'hoursEarnedMin',
@@ -418,7 +418,7 @@ Ext.define('Ssp.view.SearchForm',{
                    minValue: 0.0,
                    allowDecimals: true,
                    allowBlank: true,
-            	   columnWidth: .45,
+            	   columnWidth: 0.45,
                    labelAlign: 'right',
                    fieldLabel: 'To',
                    name: 'hoursEarnedMax',
@@ -432,7 +432,7 @@ Ext.define('Ssp.view.SearchForm',{
                            {
                         	   xtype: 'label',
                         	   text: 'GPA',
-                        	   columnWidth: .10
+                        	   columnWidth: 0.10
                            },             
                            {
                         	   xtype: 'numberfield',
@@ -442,7 +442,7 @@ Ext.define('Ssp.view.SearchForm',{
                         	   allowDecimals: true,
                         	   allowBlank: true,
                         	   labelAlign: 'right',
-                        	   columnWidth: .45,
+                        	   columnWidth: 0.45,
                         	   fieldLabel: 'From',
                         	   name: 'gpaMin',
 							   itemId: 'gpaMin',
@@ -456,7 +456,7 @@ Ext.define('Ssp.view.SearchForm',{
                         	   allowDecimals: true,
                         	   allowBlank: true,
                         	   labelAlign: 'right',
-                        	   columnWidth: .45,
+                        	   columnWidth: 0.45,
                         	   fieldLabel: 'To',
                         	   name: 'gpaMax',
 							   itemId: 'gpaMax',

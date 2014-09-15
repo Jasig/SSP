@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.admin.campus.CampusAdminViewController', {
     	model: 'currentCampus',
 		adminSelectedIndex: 'adminSelectedIndex',
 		apiProperties: 'apiProperties',
-		storeUtils: 'storeUtils',
+		storeUtils: 'storeUtils'
     },
     config: {
     	containerToLoadInto: 'adminforms',

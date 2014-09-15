@@ -475,15 +475,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 		
 		columns = [
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? .4:.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? 0.4:0.2},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
-				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: .5},
+				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 0.5},
 	              { sortable: sortableColumns, header: coachIdAlias, dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
-	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? .5:.2},
-				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: me.getIsExpanded() ? .5:1},
-				  { sortable: sortableColumns, header: 'Email', dataIndex: 'primaryEmailAddress', flex: .8},
-	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: .2},   	              
-	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: .2}
+	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
+				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: me.getIsExpanded() ? 0.5:1},
+				  { sortable: sortableColumns, header: 'Email', dataIndex: 'primaryEmailAddress', flex: 0.8},
+	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: 0.2},
+	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
 	              ];
 
 		grid.getView().getRowClass = function(row, index)
@@ -898,8 +898,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var maxExport =  parseInt(me.configStore.getConfigByName('ssp_max_export_row_count').trim());
 		if(count > maxExport)
 		{
-			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum'
-			+' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
+			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum' +
+			' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
 		}
 		else {
 			message = count + " students will be exported.  Continue? ";

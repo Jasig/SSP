@@ -98,8 +98,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 							labelSeparator : "",
 							fieldLabel: 'Target Term: Choose the target term to the move term selected above (start term). All term and course information will be moved into the new terms in the same order.'
 
-			            }]
-				    ,
+			            }],
 				    dockedItems: [{
 		                xtype: 'toolbar',
 		                dock: 'top',

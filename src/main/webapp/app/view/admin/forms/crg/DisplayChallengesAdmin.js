@@ -53,7 +53,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayChallengesAdmin', {
 	                        dataIndex: 'objectStatus',
 							defaultValue: true,
 	                        renderer: me.columnRendererUtils.renderObjectStatus,
-	                        flex: .10,
+	                        flex: 0.10,
 	                        field: {
 	                            xtype: 'oscheckbox'
 	                        }

@@ -38,43 +38,43 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
 			{
                 dataIndex: 'termCode',
                 text: 'Term',
-                flex: .10
+                flex: 0.10
             }, {
                 dataIndex: 'formattedCourse',
                 text: 'Course',
-				flex: .14
+				flex: 0.14
             }, 
 			{
                 dataIndex: 'sectionNumber',
                 text: 'Section',
-				flex: .10
+				flex: 0.10
             },  
 			{
             
                 dataIndex: 'title',
                 text: 'Course Title',
-				flex: .25
+				flex: 0.25
             },
 			{
                 dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
-				flex: .07
+				flex: 0.07
             },
 			{
             
                 dataIndex: 'facultyName',
                 text: 'Instructor',
-                flex: .20
+                flex: 0.20
             }, {
             
                 dataIndex: 'statusCode',
                 text: 'Status',
-                flex: .07
+                flex: 0.07
             }, {
             
                 dataIndex: 'audited',
                 text: 'Audited',
-                flex: .07
+                flex: 0.07
             }
 			],
             viewConfig: {}

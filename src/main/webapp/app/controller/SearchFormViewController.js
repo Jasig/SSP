@@ -65,55 +65,55 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     		click: 'onResetClick'
     	},
      'myPlans':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },   
      'myWatchList':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	 
      'myCaseload':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	
      'schoolId':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	
      'personTableType':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	 
      'birthDate':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	
      'programStatus':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	
      'currentlyRegistered':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	
      'specialServiceGroup':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	 
      'actualStartTerm':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	 	
      'declaredMajor':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	 
      'coachId':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },		
      'earlyAlertResponseLate':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },		
      'financialAidSapStatusCode':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	 
      'mapStatus':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },		
      'planStatus':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },	
      'planStatus':{
-			specialkey: "specialKeyPressed",
+			specialkey: "specialKeyPressed"
 	 },		 
 	'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
@@ -166,8 +166,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var message;
 		if(count > maxExport)
 		{
-			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum'
-			+' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
+			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum' +
+			' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
 		}
 		else {
 			message = count + " students will be exported.  Continue? ";

@@ -63,7 +63,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
 	                        dataIndex: 'objectStatus',
 							defaultValue: true,
 	                        renderer: me.columnRendererUtils.renderObjectStatus,
-	                        flex: .10,
+	                        flex: 0.10,
 	                        field: {
 	                            xtype: 'oscheckbox'
 	                        }

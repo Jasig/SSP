@@ -70,21 +70,21 @@ Ext.define('Ssp.controller.admin.config.RegistrationLoadAdminViewController', {
 		
 		if(valuesString.length)
 		{
-			var addString = "," + "\n\t\t\t\t\t\t\t\t\t\t\t{" + '"name":' + '"' + me.getRlNameField().getValue() + '",'
-							+ '"description":' + '"'  + me.getRlDescriptionField().getValue() + '",'
-							+ '"rangeStart":' + me.getRlRangeStartField().getValue() + ','
-							+ '"rangeEnd":' + me.getRlRangeEndField().getValue() + ','
-							+ '"rangeLabel":' + '"' + me.getRlLabelField().getValue() + '"' + "}"
-							+ "]";
+			var addString = "," + "\n\t\t\t\t\t\t\t\t\t\t\t{" + '"name":' + '"' + me.getRlNameField().getValue() + '",' +
+							 '"description":' + '"'  + me.getRlDescriptionField().getValue() + '",' +
+							 '"rangeStart":' + me.getRlRangeStartField().getValue() + ',' +
+							 '"rangeEnd":' + me.getRlRangeEndField().getValue() + ',' +
+							 '"rangeLabel":' + '"' + me.getRlLabelField().getValue() + '"' + "}" +
+							 "]";
 		}
 							
 		else{
 			var addString = "[" + "{" + '"name":' + '"' + me.getRlNameField().getValue() + '",'
-							+ '"description":' + '"'  + me.getRlDescriptionField().getValue() + '",'
-							+ '"rangeStart":' + me.getRlRangeStartField().getValue() + ','
-							+ '"rangeEnd":' + me.getRlRangeEndField().getValue() + ','
-							+ '"rangeLabel":' + '"' + me.getRlLabelField().getValue() + '"' + "}"
-							+ "]";
+							 '"description":' + '"'  + me.getRlDescriptionField().getValue() + '",' +
+							 '"rangeStart":' + me.getRlRangeStartField().getValue() + ',' +
+							 '"rangeEnd":' + me.getRlRangeEndField().getValue() + ',' +
+							 '"rangeLabel":' + '"' + me.getRlLabelField().getValue() + '"' + "}" +
+							 "]";
 		}
 		var newValueString = subVS + addString;
 		configData.value = newValueString;

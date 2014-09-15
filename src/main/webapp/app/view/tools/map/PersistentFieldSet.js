@@ -18,6 +18,5 @@
  */
 Ext.define('Ssp.view.tools.map.PersistentFieldSet', {
     extend: 'Ext.form.FieldSet',
-    alias: 'widget.persistentfieldset',
-    
+    alias: 'widget.persistentfieldset'
 });

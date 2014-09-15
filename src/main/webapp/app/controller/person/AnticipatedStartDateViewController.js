@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.person.AnticipatedStartDateViewController', {
     control: {
     	anticipatedStartTermField: '#anticipatedStartTerm',
     	anticipatedStartYearField: '#anticipatedStartYear',
-    	abilityToBenefitField: '#abilityToBenefit',
+    	abilityToBenefitField: '#abilityToBenefit'
     
     },
     
@@ -42,5 +42,5 @@ Ext.define('Ssp.controller.person.AnticipatedStartDateViewController', {
     	me.getAnticipatedStartTermField().hide();
         me.getAnticipatedStartYearField().hide();
         me.getAbilityToBenefitField().hide();
-    },
+    }
 });

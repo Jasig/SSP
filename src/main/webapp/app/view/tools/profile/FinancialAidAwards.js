@@ -38,12 +38,12 @@ Ext.define('Ssp.view.tools.profile.FinancialAidAwards', {
             	xtype: 'gridcolumn',
                 text: 'Term',
                 dataIndex: 'termCode',
-                flex: .2
+                flex: 0.2
             },{
             	xtype: 'gridcolumn',
             	text: 'Accepted',
                 dataIndex: 'acceptedLong',
-                flex: .2
+                flex: 0.2
             }]
         });
         

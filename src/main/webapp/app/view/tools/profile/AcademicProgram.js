@@ -67,7 +67,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                     items: [
 					{
                         xtype: 'tbspacer',
-                       flex: .50
+                       flex: 0.50
                     },
 					{
                         tooltip: 'Email MAP',
@@ -91,7 +91,7 @@ Ext.define('Ssp.view.tools.profile.AcademicProgram', {
                     },
 					{
                         xtype: 'tbspacer',
-                       flex: .05
+                       flex: 0.05
                     }]
                 }, {
                     xtype: 'fieldset',

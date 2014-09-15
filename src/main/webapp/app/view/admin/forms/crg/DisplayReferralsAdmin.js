@@ -54,7 +54,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
 	                        dataIndex: 'objectStatus',
 							defaultValue: true,
 	                        renderer: me.columnRendererUtils.renderObjectStatus,
-	                        flex: .10,
+	                        flex: 0.10,
 	                        field: {
 	                            xtype: 'oscheckbox'
 	                        }
@@ -77,7 +77,7 @@ Ext.define('Ssp.view.admin.forms.crg.DisplayReferralsAdmin', {
      		       			xtype: 'pagingtoolbar',
      		       		    dock: 'bottom',
      		       		    displayInfo: true,
-							pageSize: me.apiProperties.getPagingSize(),
+							pageSize: me.apiProperties.getPagingSize()
      		       		},
      		              {
      		               xtype: 'toolbar',

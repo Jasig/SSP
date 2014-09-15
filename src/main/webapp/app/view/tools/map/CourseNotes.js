@@ -153,8 +153,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		               }
 				    }
 				    ]}
-					]
-				    ,
+					],
 				    dockedItems: [{
 		                xtype: 'toolbar',
 		                dock: 'top',

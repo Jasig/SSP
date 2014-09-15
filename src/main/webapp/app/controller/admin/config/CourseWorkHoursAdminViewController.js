@@ -73,22 +73,22 @@ Ext.define('Ssp.controller.admin.config.CourseWorkHoursAdminViewController', {
 		
 		if(valuesString.length)
 		{
-			var addString = "," + "\n\t\t{" + '"name":' + '"' + me.getCwNameField().getValue() + '",'
-							+ '"description":' + '"'  + me.getCwDescriptionField().getValue() + '",'
-							+ '"rangeStart":' + me.getCwRangeStartField().getValue() + ','
-							+ '"rangeEnd":' + me.getCwRangeEndField().getValue() + ','
-							+ '"rangeLabel":' + '"' + me.getCwLabelField().getValue() + '"' + "}"
-							+ "]";
+			var addString = "," + "\n\t\t{" + '"name":' + '"' + me.getCwNameField().getValue() + '",' +
+							 '"description":' + '"'  + me.getCwDescriptionField().getValue() + '",' +
+							 '"rangeStart":' + me.getCwRangeStartField().getValue() + ',' +
+							 '"rangeEnd":' + me.getCwRangeEndField().getValue() + ',' +
+							 '"rangeLabel":' + '"' + me.getCwLabelField().getValue() + '"' + "}" +
+							 "]";
 				
 		}
 							
 		else{
-			var addString = "[" + "{" + '"name":' + '"' + me.getCwNameField().getValue() + '",'
-							+ '"description":' + '"'  + me.getCwDescriptionField().getValue() + '",'
-							+ '"rangeStart":' + me.getCwRangeStartField().getValue() + ','
-							+ '"rangeEnd":' + me.getCwRangeEndField().getValue() + ','
-							+ '"rangeLabel":' + '"' + me.getCwLabelField().getValue() + '"' + "}"
-							+ "]";
+			var addString = "[" + "{" + '"name":' + '"' + me.getCwNameField().getValue() + '",' +
+							 '"description":' + '"'  + me.getCwDescriptionField().getValue() + '",' +
+							 '"rangeStart":' + me.getCwRangeStartField().getValue() + ',' +
+							 '"rangeEnd":' + me.getCwRangeEndField().getValue() + ',' +
+							 '"rangeLabel":' + '"' + me.getCwLabelField().getValue() + '"' + "}" +
+							 "]";
 					
 		}
 		var newValueString = subVS + addString;

@@ -600,8 +600,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 					"Could not overwrite the existing record" +
 					" because the system might have found multiple" +
 					" conflicting records or detected it was at risk of" +
-					" updating the wrong record your edits. Please contact"
-					+ " your system administrators.");
+					" updating the wrong record your edits. Please contact" +
+					" your system administrators.");
 				return false;
 			}
 		}
@@ -697,6 +697,6 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     loadStudentToolsView: function(){
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
 		this.appEventsController.getApplication().fireEvent('updateStudentRecord', {'person':this.person}); 
-    },
+    }
 
 });

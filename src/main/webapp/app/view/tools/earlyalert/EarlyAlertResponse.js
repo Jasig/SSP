@@ -100,7 +100,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     xtype: 'checkboxfield',
                     fieldLabel: 'Closed',
                     name: 'closed',
-                    itemId: 'closedField',
+                    itemId: 'closedField'
                 },{
                    xtype:'earlyalertreferrals',
                    flex: 1

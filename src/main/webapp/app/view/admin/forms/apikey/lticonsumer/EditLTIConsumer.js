@@ -118,7 +118,7 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                     fieldLabel: 'Lti User Id Field',
                     allowBlank: false,
                     anchor: '40%',
-                    name: 'ltiUserIdField',
+                    name: 'ltiUserIdField'
                 },
                 {
                 	 xtype: 'combobox',
@@ -128,14 +128,14 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
 					displayField: 'displayValue',
                     allowBlank: false,
                     anchor: '40%',
-                    name: 'sspUserIdField',
+                    name: 'sspUserIdField'
                 },
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Lti Section Code Field',
                     allowBlank: false,
                     anchor: '40%',
-                    name: 'ltiSectionCodeField',
+                    name: 'ltiSectionCodeField'
                 },
                 {
                     xtype: 'checkboxfield',

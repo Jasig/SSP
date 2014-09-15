@@ -110,7 +110,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                 },
                 {
                     xtype: 'tbspacer',
-                    flex: .05
+                    flex: 0.05
                 }
                 
 				]

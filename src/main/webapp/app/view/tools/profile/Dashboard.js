@@ -58,7 +58,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .45,
+                    flex: 0.45,
                     items: [                  
                     {
                         xtype: 'profileperson'
@@ -82,7 +82,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                         },{
                             fieldLabel: 'Student Intake',
                             name: 'studentintakeLabel',
-                            itemId: 'studentintakeLabel',
+                            itemId: 'studentintakeLabel'
                         },{
                                 fieldLabel: 'Assigned',
                                 name: 'studentIntakeAssigned',
@@ -114,7 +114,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                 title: '',
                 defaultType: 'displayfield',
                 margin: '0 0 0 2',
-                flex: .25,
+                flex: 0.25,
                 defaults: {
                     anchor: '100%'
                 },items:[                
@@ -127,7 +127,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .25,
+                    flex: 0.25,
                     height: '370',
                     
                     items: [{
@@ -221,7 +221,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                     },
                     padding: '0 0 0 5',
                     margin: '0 0 0 0',
-                    flex: .30,
+                    flex: 0.30,
                     items: [{
                         xtype: 'profileservicereasons'
                     }, {

@@ -125,7 +125,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
             },
             columns: [{
                 header: 'Task',
-                flex: .35,
+                flex: 0.35,
                 dataIndex: 'name',
                 renderer: me.addToolTipWithValue(),
                 rowEditable: false
@@ -137,7 +137,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 renderer: me.truncateDesc()
             }, {
                 header: 'Link',
-                flex: .45,
+                flex: 0.45,
                 dataIndex: 'link',
                 rowEditable: true,
                 editor: {
@@ -213,7 +213,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 name: 'confidentialityLevelId',
                 renderer: me.columnRendererUtils.renderConfidentialityLevel,
                 required: true,
-                flex: .30,
+                flex: 0.30,
                 field: {
                     xtype: 'combo',
                     store: me.confidentialityLevelsAllUnpagedStore,

@@ -68,7 +68,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
             columns: [
 			{
                 header: 'Name',
-                flex: .25,
+                flex: 0.25,
                 dataIndex: 'name',
 				
 				field: {
@@ -79,7 +79,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
                 }
             }, {
                 header: 'Description',
-                flex: .50,
+                flex: 0.50,
                 dataIndex: 'description',
 				field: {
                     xtype: 'textfield',
@@ -92,7 +92,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
                 dataIndex: 'confidentialityLevel',
                 renderer: me.columnRendererUtils.renderConfidentialityLevel,
                 required: true,
-                flex: .25,
+                flex: 0.25,
                 field: {
                     xtype: 'combo',
                     store: me.confidentialityLevelsAllUnpagedStore,

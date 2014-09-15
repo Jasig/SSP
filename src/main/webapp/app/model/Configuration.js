@@ -41,8 +41,6 @@ Ext.define('Ssp.model.Configuration', {
     	    	defaultValue: true
     	     },
     	     /*
- 
-    	     /*
     	      * Set this option to the label you would like to see for the studentId values in the system.
     	      * For instance: Use this to label your studentId for your institution's naming convention.
     	      */

@@ -45,7 +45,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
             
             columns: [{
                 text: 'Responses',
-                flex: .5,
+                flex: 0.5,
                 dataIndex: 'noOfResponses',
                 sortable: true
             }, {
@@ -62,7 +62,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
                 sortable: true
             }, {
                 text: 'Status',
-                flex: .5,
+                flex: 0.5,
                 sortable: true,
                 dataIndex: 'closedDate',
                 renderer: me.columnRendererUtils.renderEarlyAlertStatus

@@ -42,28 +42,28 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                         xtype: 'gridcolumn',
                         dataIndex: 'modifiedDate',
                         text: 'Date',
-                        flex: .10,
+                        flex: 0.10,
                         renderer: me.columnRendererUtils.renderModifiedByDate
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'name',
                         text: 'Name',
-                        flex: .20
+                        flex: 0.20
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'fileName',
                         text: 'File',
-                        flex: .20
+                        flex: 0.20
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'author',
                         text: 'Author',
-                        flex: .10
+                        flex: 0.10
                     }, 
 					{
 						xtype: 'gridcolumn',
 						dataIndex: 'confidentialityLevelName',
-	                	flex: .15,
+	                	flex: 0.15,
 						header: 'Confidentiality'
                     },
 					{
@@ -71,7 +71,7 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                         dataIndex: 'comment',
                         text: 'Comments',
                         sortable: 'false',
-                        flex: .25
+                        flex: 0.25
                     }],
             dockedItems: [{
                 dock: 'top',

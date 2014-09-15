@@ -62,8 +62,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
             } 
         });
 		
-		me.semesterPanels = new Array(),
-		me.yearFieldSets = new Array(),
+		me.semesterPanels = new Array();
+		me.yearFieldSets = new Array();
 		
 		me.editPastTerms = me.configStore.getConfigByName('map_edit_past_terms');
 		

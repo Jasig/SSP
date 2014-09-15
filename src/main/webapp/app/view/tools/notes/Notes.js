@@ -46,33 +46,33 @@ Ext.define('Ssp.view.tools.notes.Notes', {
 					xtype: 'gridcolumn',
 				    dataIndex: 'dateNoteTaken',
 				    text: 'Date',
-				    flex: .08,
+				    flex: 0.08,
 					renderer: me.renderDate
 				},
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'noteType',
                     text: 'Type',
-                    flex: .12
+                    flex: 0.12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'author',
                     text: 'Author',
-                    flex: .12
+                    flex: 0.12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'department',
                     text: 'Department',
-                    flex: .12
+                    flex: 0.12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'note',
                     text: 'Note',
 					sortable: 'false',
-                    flex: .50,
+                    flex: 0.50,
 					renderer: me.columnWrap
                 }
             ],

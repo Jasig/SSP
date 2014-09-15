@@ -226,7 +226,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 
             },	{
                     xtype: 'tbspacer',
-                    flex: .8
+                    flex: 0.8
                 },{
                 xtype: 'button',
                 itemId: 'pastTermButton',
@@ -263,7 +263,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 items: [
                 {
                     xtype: 'tbspacer',
-                    flex: .5
+                    flex: 0.5
                 },{
                     text: 'Term Cr. Hrs:',
                     xtype: 'label'
@@ -277,7 +277,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 ,
                  {
                     xtype: 'tbspacer',
-                    flex: .5
+                    flex: 0.5
                 }]
             }]
         

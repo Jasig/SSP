@@ -33,7 +33,7 @@ Ext.define('Ssp.view.tools.journal.Journal',{
 	          items: [
 	                  {
 	                  	xtype: 'journallist', 
-	                  	flex: .32,
+	                  	flex: 0.32,
 						maintainFlex: true
 	                  },
 					  {
@@ -49,7 +49,7 @@ Ext.define('Ssp.view.tools.journal.Journal',{
 					  
 					  {
 	                  	xtype: 'editjournal', 
-	                  	flex: .68
+	                  	flex: 0.68
 	                  }
 	                 ]});
     	return this.callParent(arguments);

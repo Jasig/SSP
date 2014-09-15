@@ -62,7 +62,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .40,
+                    flex: 0.40,
                     items: [{
                     
                         fieldLabel: 'Created By',
@@ -140,7 +140,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                             sortable: true
                         }, {
                             text: 'Status',
-                            flex: .5,
+                            flex: 0.5,
                             sortable: true,
                             dataIndex: 'closedDate',
                             renderer: me.columnRendererUtils.renderEarlyAlertStatus
@@ -160,7 +160,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                     defaults: {
                         anchor: '100%'
                     },
-                    flex: .30,
+                    flex: 0.30,
                     items: [{
                         fieldLabel: 'Status',
                         name: 'status',

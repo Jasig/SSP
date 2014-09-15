@@ -38,33 +38,33 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
                 xtype: 'gridcolumn',
                 dataIndex: 'termCode',
                 text: 'Term',
-                flex: .10
+                flex: 0.10
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'formattedCourse',
                 text: 'Course',
-                flex: .15
+                flex: 0.15
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'title',
                 text: 'Course Title',
-                flex: .30
+                flex: 0.30
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
-                flex: .10
+                flex: 0.10
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'grade',
                 text: 'Grade',
                 sortable: 'false',
-                flex: .20
+                flex: 0.20
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'creditType',
                 text: 'Credit Type',
-                flex: .20
+                flex: 0.20
             }],
             viewConfig: {
                 markDirty: false

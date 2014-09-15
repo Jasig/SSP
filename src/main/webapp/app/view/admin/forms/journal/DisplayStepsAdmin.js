@@ -52,7 +52,7 @@ Ext.define('Ssp.view.admin.forms.journal.DisplayStepsAdmin', {
 		                        required: true,
 		                        dataIndex: 'objectStatus',
 		                        renderer: me.columnRendererUtils.renderObjectStatus,
-		                        flex: .20,
+		                        flex: 0.20,
 		                        field: {
 		                            xtype: 'oscheckbox'
 		                        }
