@@ -81,6 +81,7 @@ Ext.define('Ssp.view.SearchForm',{
                         xtype: 'button',
                         type: 'search',
                         itemId: 'searchStudentButton',
+	                    height: 25,
                         align: 'left'
             		},
         			{
@@ -89,6 +90,7 @@ Ext.define('Ssp.view.SearchForm',{
                         type: 'refresh',
                         xtype: 'button',
                         itemId: 'resetStudentSearchButton',
+	                    height: 25,
                         align: 'left'
         			}  ,{
                         xtype: 'tbspacer',
@@ -107,6 +109,7 @@ Ext.define('Ssp.view.SearchForm',{
 		                allowBlank: true,
 		                forceSelection: false,
 		                width: 100,
+	                    height: 25,
 		                labelWidth: 75
 		            }
                     ], 

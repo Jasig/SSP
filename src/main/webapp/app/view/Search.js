@@ -105,6 +105,7 @@ Ext.define('Ssp.view.Search', {
                     allowBlank: true,
                     forceSelection: false,
                     width: 100,
+                    height: 25,
                     labelWidth: 75
                 },{
                     xtype: 'label',
@@ -171,6 +172,7 @@ Ext.define('Ssp.view.Search', {
                     hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
                     forceSelection: false,
                     width: 100,
+                    height: 25,
                     labelWidth: 75
                 }    ]
             }]
