@@ -18,35 +18,21 @@
  */
 package org.jasig.ssp.util.csvwriter;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.hibernate.ScrollableResults;
 import org.jasig.ssp.model.PersonSearchResult2;
-import org.jasig.ssp.service.reference.ConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearchResult2> {
 
-	private static String[] colHeaders = new String[16];
+	private static String[] colHeaders = new String[17];
 	
 	private static String COL_PERSON_ID = "PERSON_ID";
 	private static String COL_SCHOOL_ID = "SCHOOL_ID";
 	private static String COL_FIRST_NAME = "FIRST_NAME";
 	private static String COL_MIDDLE_NAME = "MIDDLE_NAME";
 	private static String COL_LAST_NAME = "LAST_NAME";
+	private static String COL_PRIMARY_EMAIL = "PRIMARY_EMAIL";
 	private static String COL_BIRTH_DATE = "BIRTH_DATE";
 	private static String COL_STUDENT_TYPE_NAME = "STUDENT_TYPE";
 	private static String COL_CURRENT_APPOINTMENT_START_TIME = "CURRENT_APPOINTMENT_START_TIME";
@@ -65,17 +51,18 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 		colHeaders[2] = COL_FIRST_NAME;
 		colHeaders[3] = COL_MIDDLE_NAME;
 		colHeaders[4] = COL_LAST_NAME;
-		colHeaders[5] = COL_BIRTH_DATE;
-		colHeaders[6] = COL_STUDENT_TYPE_NAME;
-		colHeaders[7] = COL_CURRENT_APPOINTMENT_START_TIME;
-		colHeaders[8] = COL_STUDENT_INTAKE_COMPLETE_DATE;
-		colHeaders[9] = COL_ACTIVE_ALERTS;
-		colHeaders[10] = COL_CLOSED_ALERTS;
-		colHeaders[11] = COL_NUM_EARLY_ALERT_RESPONSES_REQUIRED;
-		colHeaders[12] = COL_COACH_FIRST_NAME;
-		colHeaders[13] = COL_COACH_LAST_NAME;
-		colHeaders[14] = COL_CURRENT_PROGRAM_STATUS;
-		colHeaders[15] = COL_START_TERM;
+		colHeaders[5] = COL_PRIMARY_EMAIL;
+		colHeaders[6] = COL_BIRTH_DATE;
+		colHeaders[7] = COL_STUDENT_TYPE_NAME;
+		colHeaders[8] = COL_CURRENT_APPOINTMENT_START_TIME;
+		colHeaders[9] = COL_STUDENT_INTAKE_COMPLETE_DATE;
+		colHeaders[10] = COL_ACTIVE_ALERTS;
+		colHeaders[11] = COL_CLOSED_ALERTS;
+		colHeaders[12] = COL_NUM_EARLY_ALERT_RESPONSES_REQUIRED;
+		colHeaders[13] = COL_COACH_FIRST_NAME;
+		colHeaders[14] = COL_COACH_LAST_NAME;
+		colHeaders[15] = COL_CURRENT_PROGRAM_STATUS;
+		colHeaders[16] = COL_START_TERM;
 	}
 
 	public CaseloadCsvWriterHelper(PrintWriter writer) {
@@ -95,6 +82,7 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 			model.getFirstName(),
 			model.getMiddleName(),
 			model.getLastName(),
+			model.getPrimaryEmailAddress(),
 			formatDate(model.getBirthDate()),
 			model.getStudentTypeName(),
 			formatDate(model.getCurrentAppointmentStartTime()),
