@@ -975,6 +975,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			{
 				me.bulkEmail();
 			}
+			comp.setValue(null);
 		}
 	},    
 	bulkEmail: function(){
