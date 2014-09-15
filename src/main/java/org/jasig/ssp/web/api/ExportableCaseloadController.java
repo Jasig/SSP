@@ -111,8 +111,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 			programStatus = programStatusService.get(programStatusId);
 		}
 		
-		String fileName = "caseload_"+Calendar.getInstance().getTimeInMillis()+".csv";
-		response.setHeader("Content-Disposition", "attachment; filename="+fileName); 	
+		response.setHeader("Content-Disposition", "attachment; filename="+buildFileName("caseload_")); 	
 
 		CaseloadCsvWriterHelper csvWriterHelper = new CaseloadCsvWriterHelper(response.getWriter());
 	    service.exportableCaseLoadFor(csvWriterHelper,
@@ -137,11 +136,27 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		if (null != programStatusId) {
 			programStatus = programStatusService.get(programStatusId);
 		}
-		String fileName = "watchlist_"+Calendar.getInstance().getTimeInMillis()+".csv";
-		response.setHeader("Content-Disposition", "attachment; filename="+fileName); 
+		
+
+		response.setHeader("Content-Disposition", "attachment; filename="+buildFileName("watchlist_")); 
+		response.setContentType("text/csv");
 		watchStudentService.exportWatchListFor(response.getWriter(),programStatus, securityService.currentUser().getPerson(), buildSortAndPage( limit,  start,  sort,  sortDirection));
 	}
 	
+	private String buildFileName(String string) 
+	{
+		StringBuilder fileName = new StringBuilder();
+		Calendar now = Calendar.getInstance();
+
+		fileName.append(string);
+		fileName.append(now.get(Calendar.MONTH));
+		fileName.append(now.get(Calendar.DAY_OF_MONTH));
+		fileName.append(now.get(Calendar.YEAR)+"_");
+		fileName.append(now.get(Calendar.HOUR));
+		fileName.append(now.get(Calendar.MINUTE)+".csv");
+
+		return fileName.toString();
+	}
 	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
 	@RequestMapping(value="/search", method = RequestMethod.GET)
 	public @ResponseBody void  search2(	
@@ -176,8 +191,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	 {
 
 		
-		String fileName = "search_"+Calendar.getInstance().getTimeInMillis()+".csv";
-		response.setHeader("Content-Disposition", "attachment; filename="+fileName); 
+		response.setHeader("Content-Disposition", "attachment; filename="+buildFileName("search_")); 
 		SortingAndPaging sortAndPage = buildSortAndPage( limit,  start,  sort,  sortDirection);
 		PersonSearchRequest form = personSearchRequestFactory.from(schoolId,
 				firstName, lastName, 
