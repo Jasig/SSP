@@ -192,6 +192,16 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 				parameters, 
 				personSearchForm, 
 				termService);
+
+		// These params are added to the *person* filter, not the EA/EAR field, so make sure no term/date params are
+		// set. (Unclear whether we could just skip this call altogether. Keeping it b/c it was here previously (albeit
+		// with non-null date/term params being passed through), and b/c EarlyAlertStudentReportController also has it.)
+		SearchParameters.addDateRange(null,
+				null,
+				null,
+				parameters,
+				personSearchForm,
+				termService);
 		
 		SearchParameters.addReferenceTypes(programStatus, 
 				null, 
@@ -205,9 +215,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		
 		final List<UUID> cleanOutcomeIds = SearchParameters.cleanUUIDListOfNulls(outcomeIds);
 		SearchParameters.addUUIDSToMap(SELECTED_OUTCOME_NAMES, "Not Used", cleanOutcomeIds, parameters, earlyAlertOutcomeService);
-		
-		
-		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
+
+		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm,
 				dateTerm.getStartDate(), dateTerm.getEndDate());
 		
 		searchForm.setOutcomeIds(cleanOutcomeIds);

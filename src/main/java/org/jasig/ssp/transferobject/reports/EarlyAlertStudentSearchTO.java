@@ -56,7 +56,7 @@ public class EarlyAlertStudentSearchTO
 				startDate.getTime());
 	}
 
-	public void setStarDate(final Date startDate) {
+	public void setStartDate(final Date startDate) {
 		this.startDate = startDate == null ? null : new Date(
 				startDate.getTime());
 	}
