@@ -94,7 +94,7 @@
 			<column name="id" value="87a07d85-b81d-4c24-8796-5f4843c984c6" />
 			<column name="name" value="task_message_queue_pruning_trigger" />
 			<column name="description"
-				value="Bulk Job Queue Config:  Drives the frequency of the cron job that executes bulk actions" />
+				value="Message Queue pruning Config:  Drives the frequency of the cron job that prunes and archives the message table" />
             <column name="value" value="0 0 22 * * *" /> 
             <column name="default_value" value="0 0 22 * * *" /> 			
 			<column name="created_date" valueDate="2014-09-16T12:00:00" />
