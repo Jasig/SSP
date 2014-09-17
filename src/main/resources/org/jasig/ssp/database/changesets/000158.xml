@@ -106,7 +106,7 @@
 		</insert>
 		<insert tableName="config">
 			<column name="id" value="fdea8018-0d13-455f-a7bd-98d74295b08b" />
-			<column name="name" value="message_age_in_days" />
+			<column name="name" value="mail_age_in_days_limit" />
 			<column name="description"
 				value="Message Age for Pruning Config:  The background job the prunes the message table uses this config to decide which messages will get archived.  Anything older in days than this config gets moved to the archive table" />
             <column name="value" value="30" /> 
@@ -120,9 +120,9 @@
 		</insert>
 		<insert tableName="config">
 			<column name="id" value="5a735420-afb6-440a-bbc7-2fd2663af652" />
-			<column name="name" value="message_queue_retry_count" />
+			<column name="name" value="mail_delivery_retry_limit" />
 			<column name="description"
-				value="Message age queue retry Config:  Drives how many times the message queue tries to send a message before it gives up" />
+				value="Message queue retry Config:  Drives how many times the message queue tries to send a message before it gives up" />
             <column name="value" value="3" /> 
             <column name="default_value" value="3" /> 			
 			<column name="created_date" valueDate="2014-09-03T12:00:00" />

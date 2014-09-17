@@ -509,13 +509,13 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	private void handleSendMessageError(Message message) {
-		String retryCountString = configService.getByNameEmpty("message_queue_retry_count").trim();
+		String retryCountString = configService.getByNameEmpty("mail_delivery_retry_limit").trim();
 		Integer retryCount;
 		try {
 			retryCount = Integer.parseInt(retryCountString);
 		} catch (Exception e)
 		{
-			LOGGER.error("ERROR in config named 'message_queue_retry_count'.  Value not parsable as integer");
+			LOGGER.error("ERROR in config named 'mail_delivery_retry_limit'.  Value not parsable as integer");
 			retryCount = 3;
 		}
 		if(message.getRetryCount() == null || message.getRetryCount() < retryCount)
@@ -524,7 +524,7 @@ public class MessageServiceImpl implements MessageService {
 		}
 		else
 		{
-			LOGGER.error("ERROR: deleting message with id" + message.getId() + " because it has exceeded the retry count");
+			LOGGER.error("ERROR: deleting message with id " + message.getId() + " because it has exceeded the retry count");
 			messageDao.delete(message);
 		}
 		
@@ -641,11 +641,11 @@ public class MessageServiceImpl implements MessageService {
 	public int archiveAndPruneMessages() {
 		Integer messageAgeInDays = Integer.MAX_VALUE;
 		try{
-			 messageAgeInDays = Integer.parseInt(configService.getByNameEmpty("message_age_in_days"));
+			 messageAgeInDays = Integer.parseInt(configService.getByNameEmpty("mail_age_in_days_limit"));
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Config value 'message_age_in_days' cannot be parsed into an integer");
+			LOGGER.error("Config value 'mail_age_in_days_limit' cannot be parsed into an integer");
 		}
 		return messageDao.archiveAndPruneMessages(messageAgeInDays);
 	}
