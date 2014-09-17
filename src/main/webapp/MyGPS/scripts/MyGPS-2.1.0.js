@@ -430,7 +430,7 @@
         if (personTO.coach != null) {
           coach = mygps.model.Person.createFromTransferObject(personTO.coach);
         }
-        return new Person(personTO.id, personTO.firstName, personTO.lastName, personTO.phoneNumber, personTO.emailAddress, personTO.photoURL, coach);
+        return new Person(personTO.id, personTO.firstName, personTO.lastName, personTO.phoneNumber, personTO.emailAddress, personTO.photoURL, coach, personTO.permissions);
       };
 
       return Person;
