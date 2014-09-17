@@ -18,14 +18,19 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Message;
+import org.jasig.ssp.service.impl.MessageServiceImpl;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -43,6 +48,8 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 		super(Message.class);
 	}
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(MessageDao.class);
 	/**
 	 * Return messages that have not been sent, up to the specified maximum
 	 * 
@@ -69,10 +76,29 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 		// cannot use createCriteria(sAndP) b/c that applies the sort order
 		// immediately, which breaks the 'select count()' that runs as part
 		// of the query pagination mechanism. The sort order will be applied
-		// to the criteria as part of processCriteriaWithSortingAndPaging()
+		// to the criteria asˇ part of processCriteriaWithSortingAndPaging()
 		// below.
 		Criteria criteria = this.createCriteria();
 		criteria.add(Restrictions.isNull("sentDate"));
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
+	}
+
+	public int archiveAndPruneMessages(Integer messageAgeInDays) {
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DAY_OF_MONTH, messageAgeInDays * -1);
+		String hql = "INSERT INTO ArchivedMessage(id,createdDate, createdBy,modifiedDate, modifiedBy, objectStatus,subject,  body,  sender, recipient,  recipientEmailAddress,  "
+				+ "carbonCopy,	 sentToAddresses,  sentCcAddresses,	 sentBccAddresses,  sentFromAddress, sentReplyToAddress,  sentDate) "  + 
+	             "SELECT id,createdDate, createdBy,modifiedDate, modifiedBy,objectStatus,subject,  body,  sender, recipient,  recipientEmailAddress,  "
+				+ "carbonCopy,	 sentToAddresses,  sentCcAddresses,	 sentBccAddresses,  sentFromAddress, sentReplyToAddress,  sentDate FROM Message msg"
+				+ " Where createdDate < :date and id not in (select message.id from TaskMessageEnqueue)";
+		
+		int executedInsert = createHqlQuery(hql).setDate("date", date.getTime()).executeUpdate();
+		String deleteHql = "delete from Message where createdDate < :date and id not in (select message.id from TaskMessageEnqueue)";
+		int executedDelete = createHqlQuery(deleteHql).setDate("date", date.getTime()).executeUpdate();
+		if(executedInsert != executedDelete)
+		{
+			throw new RuntimeException("Number of messages being archived and deleted are not equal, so transaction is being rolled back");
+		}
+		return executedInsert;
 	}
 }

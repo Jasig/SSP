@@ -19,6 +19,7 @@
 package org.jasig.ssp.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,18 +27,47 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
 
 /**
  * Email (Message) model
  */
 @Entity
+@Table(name = "message_archive")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-final public class Message
+final public class ArchivedMessage
 		extends AbstractAuditable
 		implements Auditable {
+
+	public ArchivedMessage(UUID id,Date createdDate, AuditPerson createdBy, Date modifiedDate, AuditPerson modifiedBy,ObjectStatus objectStatus,String subject, String body, Person sender,
+			Person recipient, String recipientEmailAddress, String carbonCopy,
+			String sentToAddresses, String sentCcAddresses,
+			String sentBccAddresses, String sentFromAddress,
+			String sentReplyToAddress, Date sentDate) {
+		super();
+		setId(id);
+		setCreatedBy(createdBy);
+		setModifiedBy(modifiedBy);
+		setCreatedDate(createdDate);
+		setModifiedDate(modifiedDate);
+		setObjectStatus(objectStatus);
+		this.subject = subject;
+		this.body = body;
+		this.sender = sender;
+		this.recipient = recipient;
+		this.recipientEmailAddress = recipientEmailAddress;
+		this.carbonCopy = carbonCopy;
+		this.sentToAddresses = sentToAddresses;
+		this.sentCcAddresses = sentCcAddresses;
+		this.sentBccAddresses = sentBccAddresses;
+		this.sentFromAddress = sentFromAddress;
+		this.sentReplyToAddress = sentReplyToAddress;
+		this.sentDate = sentDate;
+	}
 
 	private static final long serialVersionUID = -7643811408668209143L;
 
@@ -80,11 +110,10 @@ final public class Message
 	@Column(nullable = true)
 	private Date sentDate;
 
-	private Integer retryCount;
 	/**
 	 * Empty constructor
 	 */
-	public Message() {
+	public ArchivedMessage() {
 		super();
 	}
 
@@ -102,7 +131,7 @@ final public class Message
 	 * @param recipientEmailAddress
 	 *            Recipient e-mail address
 	 */
-	public Message(final String subject, final String body,
+	public ArchivedMessage(final String subject, final String body,
 			final Person sender,
 			final Person recipient, final String recipientEmailAddress) {
 		super();
@@ -114,7 +143,7 @@ final public class Message
 		this.recipientEmailAddress = recipientEmailAddress;
 	}
 
-	public Message(final SubjectAndBody subjAndMessage) {
+	public ArchivedMessage(final SubjectAndBody subjAndMessage) {
 		super();
 		setObjectStatus(ObjectStatus.ACTIVE);
 		subject = subjAndMessage.getSubject();
@@ -262,13 +291,5 @@ final public class Message
 		result *= hashField("carbonCopy", carbonCopy);
 
 		return result;
-	}
-
-	public Integer getRetryCount() {
-		return retryCount;
-	}
-
-	public void setRetryCount(Integer retryCount) {
-		this.retryCount = retryCount;
 	}
 }

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="create table message_archive" author="tony.arland">
+		<createTable tableName="message_archive">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="created_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified_date" type="datetime" />
+			<column name="created_by" type="uuid">
+				<constraints nullable="false" foreignKeyName="message_created_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="modified_by" type="uuid">
+				<constraints nullable="true" foreignKeyName="message_modified_by_person_id"
+					references="person(id)" />
+			</column>
+			<column name="object_status" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="subject" type="${nvarchar.type}(250)">
+				<constraints nullable="false" />
+			</column>
+			<column name="body" type="text">
+				<constraints nullable="false" />
+			</column>
+			<column name="sender_id" type="uuid">
+				<constraints nullable="false" foreignKeyName="message_sender_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="recipient_id" type="uuid">
+				<constraints nullable="true" foreignKeyName="message_recipient_id_person_id"
+					references="person(id)" />
+			</column>
+			<column name="recipient_email_address" type="${nvarchar.type}(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="sent_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+		</createTable>  
+		<update tableName='message_archive'>
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message_archive'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<addColumn tableName="message_archive">
+	        <column name="sent_to_addresses" type="${nvarchar.type}(512)"></column>
+	        <column name="sent_cc_addresses" type="${nvarchar.type}(512)"></column>
+	        <column name="sent_bcc_addresses" type="${nvarchar.type}(512)"></column>
+	        <column name="sent_from_address" type="${nvarchar.type}(100)"></column>
+	        <column name="sent_reply_to_address" type="${nvarchar.type}(100)"></column>
+	    </addColumn>
+        <sql>grant all on message_archive to ${database.app.username}</sql>
+		<modifySql dbms="postgresql">
+			<replace replace="WITH TIME ZONE" with="WITHOUT TIME ZONE" />
+		</modifySql>
+   </changeSet>
+	<changeSet author='tony.arland' id='seeding message queue pruning config'>
+		<insert tableName="config">
+			<column name="id" value="87a07d85-b81d-4c24-8796-5f4843c984c6" />
+			<column name="name" value="task_message_queue_pruning_trigger" />
+			<column name="description"
+				value="Bulk Job Queue Config:  Drives the frequency of the cron job that executes bulk actions" />
+            <column name="value" value="0 0 22 * * *" /> 
+            <column name="default_value" value="0 0 22 * * *" /> 			
+			<column name="created_date" valueDate="2014-09-16T12:00:00" />
+			<column name="modified_date" valueDate="2014-09-16T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="fdea8018-0d13-455f-a7bd-98d74295b08b" />
+			<column name="name" value="message_age_in_days" />
+			<column name="description"
+				value="Message Age for Pruning Config:  The background job the prunes the message table uses this config to decide which messages will get archived.  Anything older in days than this config gets moved to the archive table" />
+            <column name="value" value="30" /> 
+            <column name="default_value" value="30" /> 			
+			<column name="created_date" valueDate="2014-09-03T12:00:00" />
+			<column name="modified_date" valueDate="2014-09-03T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>
+		<insert tableName="config">
+			<column name="id" value="5a735420-afb6-440a-bbc7-2fd2663af652" />
+			<column name="name" value="message_queue_retry_count" />
+			<column name="description"
+				value="Message age queue retry Config:  Drives how many times the message queue tries to send a message before it gives up" />
+            <column name="value" value="3" /> 
+            <column name="default_value" value="3" /> 			
+			<column name="created_date" valueDate="2014-09-03T12:00:00" />
+			<column name="modified_date" valueDate="2014-09-03T12:00:00" />
+			<column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+			<column name="object_status" value="1" />
+			<column name="sort_order" value="600" />
+		</insert>		
+        <rollback>
+            <delete tableName="config">
+                <where>id='87a07d85-b81d-4c24-8796-5f4843c984c6'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='fdea8018-0d13-455f-a7bd-98d74295b08b'</where>
+            </delete>
+            <delete tableName="config">
+                <where>id='5a735420-afb6-440a-bbc7-2fd2663af652'</where>
+            </delete>             
+        </rollback>		
+	</changeSet>
+	
+	<changeSet id="Add CC to Message_archive" author="tony.arland">
+		<addColumn tableName="message_archive">
+			<column name="carbon_copy" type="${nvarchar.type}(512)">
+				<constraints nullable="true" />
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="message" columnName="carbon_copy" />
+		</rollback>
+	</changeSet>
+	<changeSet id="add retry_count to message" author="tony.arland">
+		<addColumn tableName="message">
+			<column name="retry_count" type="integer"></column>
+		</addColumn>
+	</changeSet>	
+</databaseChangeLog>

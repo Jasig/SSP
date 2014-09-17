@@ -26,6 +26,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.PruneMessageQueueTask;
 import org.jasig.ssp.service.RefreshDirectoryPersonBlueTask;
 import org.jasig.ssp.service.RefreshDirectoryPersonTask;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
@@ -98,6 +99,7 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
     public static final String OAUTH1_CULL_NONCE_TABLE_TASK_NAME = "cull-oauth1-nonces";
 
+	private static final String EVERY_DAY_10_PM = "0 0 22 * * *";
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
@@ -132,6 +134,10 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String BULK_JOB_QUEUE_TASK_CONFIG_NAME = "task_bulk_job_queue_trigger";
 	private static final String BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER = EVERY_15_SECONDS;
 	
+	private static final String MESSAGE_QUEUE_PRUNING_TASK_ID = "task_message_queue_pruning";
+	private static final String MESSAGE_QUEUE_PRUNING_TASK_NAME = "task_message_queue_pruning_trigger";
+	private static final String MESSAGE_QUEUE_PRUNING_TASK_DEFAULT_TRIGGER = EVERY_DAY_10_PM;
+	
 	private static final String EARLY_ALERT_TASK_ID = "task_early_alert_scheduled_tasks";
 	private static final String EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_early_alert_trigger";
 	private static final String EARLY_ALERT_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
@@ -162,6 +168,9 @@ public class ScheduledTaskWrapperServiceImpl
 	
 	@Autowired
 	private transient BulkJobQueueTask bulkJobQueueTask;
+	
+	@Autowired
+	private transient PruneMessageQueueTask pruneMessageQueueTask;
 
 	@Autowired
 	private transient SendQueuedMessagesTask sendQueuedMessagesTask;
@@ -267,6 +276,15 @@ public class ScheduledTaskWrapperServiceImpl
 				},
 				BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER,
 				BULK_JOB_QUEUE_TASK_CONFIG_NAME));		
+		this.tasks.put(MESSAGE_QUEUE_PRUNING_TASK_ID, new Task(MESSAGE_QUEUE_PRUNING_TASK_ID,
+				new Runnable() {
+					@Override
+					public void run() {
+						pruneMessageQueue();
+					}
+				},
+				MESSAGE_QUEUE_PRUNING_TASK_DEFAULT_TRIGGER,
+				MESSAGE_QUEUE_PRUNING_TASK_NAME));			
 		this.tasks.put(SCHEDULER_CONFIG_POLL_TASK_ID, new Task(SCHEDULER_CONFIG_POLL_TASK_ID,
 				new Runnable() {
 					@Override
@@ -936,6 +954,11 @@ public class ScheduledTaskWrapperServiceImpl
 	public void bulkJobQueue() {
 		execBatchedTaskWithName(BULK_JOB_QUEUE_TASK_NAME,bulkJobQueueTask );
 	}	
+	
+	@Override
+	public void pruneMessageQueue() {
+		execBatchedTaskWithName(MESSAGE_QUEUE_PRUNING_TASK_NAME,pruneMessageQueueTask );
+	}
 	@Override
 	public void sendEarlyAlertReminders() {
 		execWithTaskContext(SEND_EARLY_ALERT_REMINDERS_TASK_NAME, new Runnable() {

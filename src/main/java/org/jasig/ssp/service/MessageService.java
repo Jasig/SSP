@@ -123,4 +123,7 @@ public interface MessageService {
 	boolean sendMessage(Message message) throws SendFailedException,
 			ObjectNotFoundException, UnsupportedEncodingException;
 
+
+	int archiveAndPruneMessages();
+
 }

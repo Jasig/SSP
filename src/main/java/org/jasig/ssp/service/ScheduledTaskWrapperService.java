@@ -48,4 +48,6 @@ public interface ScheduledTaskWrapperService {
     public void cullOAuth1Nonces();
 
 	void bulkJobQueue();
+
+	void pruneMessageQueue();
 }

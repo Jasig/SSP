@@ -424,6 +424,7 @@ public class MessageServiceImpl implements MessageService {
 					 message.setSentReplyToAddress(from.toString());
 				} catch(AddressException e)
 				{
+					handleSendMessageError(message);
 					LOGGER.error("The config outbound_email_address has been configured with an invalid email address!!");
 					throw e;
 				}
@@ -473,6 +474,7 @@ public class MessageServiceImpl implements MessageService {
 					message.setSentBccAddresses(StringUtils.join(bccs,","));
 				}
 			}catch(Exception exp){
+				handleSendMessageError(message);
 				LOGGER.warn("Unrecoverable errors were generated adding carbon copy to message: " + message.getId() + "Attempt to send message still initiated.", exp);
 			}
 			
@@ -483,6 +485,7 @@ public class MessageServiceImpl implements MessageService {
 					message.setSentCcAddresses(StringUtils.join(carbonCopies,","));
 				}
 			}catch(Exception exp){
+				handleSendMessageError(message);
 				LOGGER.warn("Unrecoverable errors were generated adding bcc to message: " + message.getId() + "Attempt to send message still initiated.", exp);
 			}
 			
@@ -496,6 +499,7 @@ public class MessageServiceImpl implements MessageService {
 			messageDao.save(message);
 		} catch (final MessagingException e) {
 			LOGGER.error("ERROR : sendMessage() : {}", e);
+			handleSendMessageError(message);
 			throw new SendFailedException(
 					addMessageIdToError(message) + "The message parameters were invalid.", e);
 		}
@@ -504,6 +508,28 @@ public class MessageServiceImpl implements MessageService {
 		return true;
 	}
 	
+	private void handleSendMessageError(Message message) {
+		String retryCountString = configService.getByNameEmpty("message_queue_retry_count").trim();
+		Integer retryCount;
+		try {
+			retryCount = Integer.parseInt(retryCountString);
+		} catch (Exception e)
+		{
+			LOGGER.error("ERROR in config named 'message_queue_retry_count'.  Value not parsable as integer");
+			retryCount = 3;
+		}
+		if(message.getRetryCount() == null || message.getRetryCount() < retryCount)
+		{
+			message.setRetryCount(message.getRetryCount() == null ? 1 : message.getRetryCount() + 1);
+		}
+		else
+		{
+			LOGGER.error("ERROR: deleting message with id" + message.getId() + " because it has exceeded the retry count");
+			messageDao.delete(message);
+		}
+		
+	}
+
 	private String addMessageIdToError(Message message){
 		return "Message Id: " + message.getId().toString() + ": ";
 	}
@@ -525,6 +551,7 @@ public class MessageServiceImpl implements MessageService {
 				}
 			}
 		} else {
+			
 			LOGGER.warn("_ : JavaMailSender was not called; message was marked sent but was not actually sent.  To enable mail, update the configuration of the app.");
 		}
 	}
@@ -608,5 +635,18 @@ public class MessageServiceImpl implements MessageService {
 			LOGGER.warn("Invalid email address found: " + address + " for " + type +  "of message " + messageId, e);
 		}
 		return null;
+	}
+
+	@Override
+	public int archiveAndPruneMessages() {
+		Integer messageAgeInDays = Integer.MAX_VALUE;
+		try{
+			 messageAgeInDays = Integer.parseInt(configService.getByNameEmpty("message_age_in_days"));
+		}
+		catch (Exception e)
+		{
+			LOGGER.error("Config value 'message_age_in_days' cannot be parsed into an integer");
+		}
+		return messageDao.archiveAndPruneMessages(messageAgeInDays);
 	}
 }
