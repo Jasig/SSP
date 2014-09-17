@@ -559,7 +559,7 @@
       }
 
       Task.createFromTransferObject = function(taskTO) {
-        var parseDate;
+        var parseDate, parseLink;
         parseDate = function(msSinceEpoch) {
           var d;
           if (msSinceEpoch != null) {
@@ -570,7 +570,23 @@
             return null;
           }
         };
-        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.link, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
+        parseLink = function(taskLink) {
+          if (taskLink !== null && taskLink.replace(/^\s+|\s+$/g, "") !== "") {
+            if (taskLink.match(/<(.|\n)*?>/igm)) {
+              taskLink = (taskLink.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
+            }
+            if (taskLink.indexOf("//") < 0) {
+              taskLink = "http://" + taskLink;
+            }
+            if (taskLink.search(/<(.|\n)*?>/igm) < 0) {
+              taskLink = "<a href=\"" + taskLink + "\" target=\"_blank\"> " + taskLink.replace('/^.+\/\//', '') + " </a>";
+            }
+            return taskLink;
+          } else {
+            return taskLink;
+          }
+        };
+        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, parseLink(taskTO.link), taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
       };
 
       return Task;
@@ -1153,7 +1169,7 @@
         AbstractTasksViewModel.__super__.constructor.call(this, session);
         this.taskService = taskService;
         this.tasks = ko.observableArray([]);
-        this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators);
+        this.taskFilters = ko.observableArray(mygps.enumeration.TaskFilter.enumerators());
         this.selectedTaskFilter = ko.observable(mygps.enumeration.TaskFilter.ACTIVE);
         this.filteredTasks = ko.dependentObservable(this.filterTasks, this);
         this.printingTasks = ko.observable(false);
