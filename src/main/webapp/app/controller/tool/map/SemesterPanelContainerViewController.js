@@ -720,7 +720,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		}
 		
 		for (var key in this.semesterPanels) {
-			this.semesterPanels[key].getView().destroy();
 			this.semesterPanels[key].destroy();
 		}
 	
