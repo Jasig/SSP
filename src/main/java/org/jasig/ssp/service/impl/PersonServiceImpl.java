@@ -985,7 +985,7 @@ public class PersonServiceImpl implements PersonService {
 			messageService.createMessage(model.getCoach(), 
 				StringUtils.arrayToCommaDelimitedString(oldCoach.getEmailAddresses()
 						.toArray(new String[oldCoach.getEmailAddresses().size()])), subjectAndBody);
-		}
+		} else
 		if(oldCoach.hasEmailAddresses() && !model.getWatcherEmailAddresses().isEmpty()){
 			Set<String> emails = new HashSet<String>();
 			emails.addAll(oldCoach.getEmailAddresses());
@@ -993,7 +993,7 @@ public class PersonServiceImpl implements PersonService {
 			messageService.createMessage(model.getCoach(), 
 					StringUtils.arrayToCommaDelimitedString(emails
 							.toArray(new String[emails.size()])), subjectAndBody);
-		}
+		} else
 		if(!oldCoach.hasEmailAddresses() && model.getWatcherEmailAddresses().isEmpty()){
 			messageService.createMessage(model.getCoach(), 
 					StringUtils.arrayToCommaDelimitedString(model.getWatcherEmailAddresses()
