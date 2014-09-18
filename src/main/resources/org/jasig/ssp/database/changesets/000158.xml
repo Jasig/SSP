@@ -40,11 +40,11 @@
 			</column>
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
-				<constraints nullable="false" foreignKeyName="message_created_by_person_id"
+				<constraints nullable="false" foreignKeyName="message_a_created_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
-				<constraints nullable="true" foreignKeyName="message_modified_by_person_id"
+				<constraints nullable="true" foreignKeyName="message_a_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">
@@ -57,11 +57,11 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="sender_id" type="uuid">
-				<constraints nullable="false" foreignKeyName="message_sender_id_person_id"
+				<constraints nullable="false" foreignKeyName="message_a_sender_id_person_id"
 					references="person(id)" />
 			</column>
 			<column name="recipient_id" type="uuid">
-				<constraints nullable="true" foreignKeyName="message_recipient_id_person_id"
+				<constraints nullable="true" foreignKeyName="message_a_recipient_id_person_id"
 					references="person(id)" />
 			</column>
 			<column name="recipient_email_address" type="${nvarchar.type}(100)">

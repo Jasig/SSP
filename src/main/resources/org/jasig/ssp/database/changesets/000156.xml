@@ -78,12 +78,12 @@
             <column name="modified_date" type="datetime" />
             <column name="created_by" type="uuid">
                 <constraints nullable="false"
-                    foreignKeyName="watch_created_person_id"
+                    foreignKeyName="job_q_created_person_id"
                     references="person(id)" />
             </column>
             <column name="modified_by" type="uuid">
                 <constraints nullable="true"
-                    foreignKeyName="watch_modified_person_id"
+                    foreignKeyName="job_q_modified_person_id"
                     references="person(id)" />
             </column>
             <column name="object_status" type="int">
