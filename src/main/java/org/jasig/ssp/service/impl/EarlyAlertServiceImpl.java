@@ -452,8 +452,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				.createEarlyAlertAdvisorConfirmationMessage(fillTemplateParameters(earlyAlert));
 		
 		Set<String> watcherEmailAddresses = new HashSet<String>(earlyAlert.getPerson().getWatcherEmailAddresses());
-		watcherEmailAddresses.add(emailCC);
-		
+		if(emailCC != null && !emailCC.isEmpty())
+		{
+			watcherEmailAddresses.add(emailCC);
+		}
 		if ( person == null ) {
 			LOGGER.warn("Student {} had no coach when EarlyAlert {} was"
 					+ " created. Unable to send message to coach.",
