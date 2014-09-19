@@ -39,7 +39,6 @@ public class EmailPersonTasksForm extends AbstractEmailForm {
 	
 	private List<UUID> strengthIds;
 	
-	private Boolean emailAPToWatchers;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EmailPersonTasksForm.class);
@@ -77,16 +76,6 @@ public class EmailPersonTasksForm extends AbstractEmailForm {
 
 	public void setStrengthIds(List<UUID> strengthIds) {
 		this.strengthIds = strengthIds;
-	}
-
-
-	public Boolean getEmailAPToWatchers() {
-		return emailAPToWatchers;
-	}
-
-
-	public void setEmailAPToWatchers(Boolean emailAPToWatchers) {
-		this.emailAPToWatchers = emailAPToWatchers;
 	}
 
 }

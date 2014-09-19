@@ -66,8 +66,6 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
         
         var secondaryEmailAddress = me.person.get('secondaryEmailAddress');
         
-        var emailAPToWatchers = Ext.ComponentQuery.query('#emailAPToWatchers', me.getView())[0].getValue();
-      
         
         if (!(emailForm.isValid())) {
             Ext.Msg.alert('SSP Error', 'Please correct the highlighted errors before resubmitting the form.');
@@ -165,8 +163,7 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
             "sendToCoachEmail": emailAPToCoach,
             "coachEmail": coachPrimaryEmailAddress,
             "sendToAdditionalEmail": sendToAdditionalEmail,
-            "additionalEmail": ccAddresses,
-            "emailAPToWatchers": emailAPToWatchers
+            "additionalEmail": ccAddresses
         };
         
         personId = me.personLite.get('id');
