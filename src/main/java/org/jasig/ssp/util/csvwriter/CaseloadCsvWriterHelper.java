@@ -90,6 +90,9 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 			formatInt(model.getActiveAlerts()),
 			formatInt(model.getClosedAlerts()),
 			formatInt(model.getNumberEarlyAlertResponsesRequired()),
+			model.getCoachFirstName(),
+			model.getCoachLastName(),
+			model.getCurrentProgramStatusName(),
 			model.getActualStartTerm()
 		});
 	}
