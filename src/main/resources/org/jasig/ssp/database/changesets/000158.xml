@@ -71,12 +71,7 @@
 				<constraints nullable="true" />
 			</column>
 		</createTable>  
-		<update tableName='message_archive'>
-			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
-		</update>
-		<update tableName='message_archive'>
-			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
-		</update>
+
 		<addColumn tableName="message_archive">
 	        <column name="sent_to_addresses" type="${nvarchar.type}(512)"></column>
 	        <column name="sent_cc_addresses" type="${nvarchar.type}(512)"></column>
@@ -160,4 +155,12 @@
 			<column name="retry_count" type="integer"></column>
 		</addColumn>
 	</changeSet>	
+	<changeSet id="update audit date data type on message_archive table" author="tony.arland" dbms='postgresql'>
+		<update tableName='message_archive' >
+			<column name='created_date' valueComputed='(created_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+		<update tableName='message_archive'>
+			<column name='modified_date' valueComputed='(modified_date AT TIME ZONE &apos;${database.timezone.legacy}&apos;) AT TIME ZONE &apos;${database.timezone}&apos;' />
+		</update>
+	</changeSet>
 </databaseChangeLog>
