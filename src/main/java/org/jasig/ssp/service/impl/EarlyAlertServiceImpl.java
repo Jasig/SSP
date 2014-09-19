@@ -20,6 +20,7 @@ package org.jasig.ssp.service.impl; // NOPMD by jon.adams
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import java.util.UUID;
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertDao;
 import org.jasig.ssp.factory.EarlyAlertSearchResultTOFactory;
@@ -809,7 +811,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if(lastResponseDate == null)
 			return;
 		List<EarlyAlert> eaOutOfCompliance = dao.getResponseDueEarlyAlerts(lastResponseDate);
-		Map<UUID, SortedSet<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, SortedSet<EarlyAlertMessageTemplateTO>>();
+		Map<UUID, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, List<EarlyAlertMessageTemplateTO>>();
 		Map<UUID, Person> coaches = new HashMap<UUID, Person>();
 		for(EarlyAlert earlyAlert: eaOutOfCompliance){
 			Person coach = earlyAlert.getPerson().getCoach();
@@ -838,51 +840,44 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			}
 			// We've definitely got a coach by this point
 			if(easByCoach.containsKey(coach.getId())){
-				Set<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
+				final List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
 				coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
 			}else{
 				coaches.put(coach.getId(), coach);
-				SortedSet<EarlyAlertMessageTemplateTO> eam = new TreeSet<EarlyAlertMessageTemplateTO>(new Comparator<EarlyAlertTO>() {
-			        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
-			        	Date p1Date = p1.getLastResponseDate();
-			        	if(p1Date == null)
-			        		p1Date = p1.getCreatedDate();
-			        	Date p2Date = p2.getLastResponseDate();
-			        	if(p2Date == null)
-			        		p2Date = p2.getCreatedDate();
-			            return p1Date.compareTo(p2Date);
-			        }
-
-			    });
-				eam.add(createEarlyAlertTemplateTO(earlyAlert));
+				final ArrayList<EarlyAlertMessageTemplateTO> eam = Lists.newArrayList();
+				eam.add(createEarlyAlertTemplateTO(earlyAlert)); // add separately from newArrayList() call else list will be sized to 1
 				easByCoach.put(coach.getId(), eam);
 			}
 			List<WatchStudent> watchers = earlyAlert.getPerson().getWatchers();
 			for (WatchStudent watcher : watchers) {
 				if(easByCoach.containsKey(watcher.getPerson().getId())){
-					Set<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(watcher.getPerson().getId());
+					final List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(watcher.getPerson().getId());
 					coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
 				}else{
 					coaches.put(watcher.getPerson().getId(), watcher.getPerson());
-					SortedSet<EarlyAlertMessageTemplateTO> eam = new TreeSet<EarlyAlertMessageTemplateTO>(new Comparator<EarlyAlertTO>() {
-				        @Override public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
-				        	Date p1Date = p1.getLastResponseDate();
-				        	if(p1Date == null)
-				        		p1Date = p1.getCreatedDate();
-				        	Date p2Date = p2.getLastResponseDate();
-				        	if(p2Date == null)
-				        		p2Date = p2.getCreatedDate();
-				            return p1Date.compareTo(p2Date);
-				        }
-
-				    });
-					eam.add(createEarlyAlertTemplateTO( earlyAlert));
+					final ArrayList<EarlyAlertMessageTemplateTO> eam = Lists.newArrayList();
+					eam.add(createEarlyAlertTemplateTO( earlyAlert)); // add separately from newArrayList() call else list will be sized to 1
 					easByCoach.put(watcher.getPerson().getId(), eam);
 				}				
 			}
 		}
 		for(UUID coachId: easByCoach.keySet()){
 			Map<String,Object> messageParams = new HashMap<String,Object>();
+
+			Collections.sort(easByCoach.get(coachId), new Comparator<EarlyAlertTO>() {
+				@Override
+				public int compare(EarlyAlertTO p1, EarlyAlertTO p2) {
+					Date p1Date = p1.getLastResponseDate();
+					if (p1Date == null)
+						p1Date = p1.getCreatedDate();
+					Date p2Date = p2.getLastResponseDate();
+					if (p2Date == null)
+						p2Date = p2.getCreatedDate();
+					return p1Date.compareTo(p2Date);
+				}
+
+			});
+
 			Integer daysSince1900ResponseExpected =  DateTimeUtils.daysSince1900(lastResponseDate);
 			List<Pair<EarlyAlertMessageTemplateTO,Integer>> earlyAlertTOPairs = new ArrayList<Pair<EarlyAlertMessageTemplateTO,Integer>>();
 			for(EarlyAlertMessageTemplateTO ea:easByCoach.get(coachId)){
