@@ -718,7 +718,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		if(me.coursePlanDetails != null && !me.coursePlanDetails.isDestroyed){
 			me.coursePlanDetails.close();
 		}
-		
+
+		Ext.suspendLayouts();
 		for (var key in this.semesterPanels) {
 			this.semesterPanels[key].destroy();
 		}
@@ -726,7 +727,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		for (var key in this.yearFieldSets) {
 			this.yearFieldSets[key].destroy();
 		}
-        
+		Ext.resumeLayouts(true);
+
 		me.appEventsController.getApplication().removeListener('onBeforePlanLoad', me.onBeforePlanLoad, me);
 		me.appEventsController.getApplication().removeListener('onAfterPlanLoad', me.updateAllPlanHours, me);
 		me.appEventsController.getApplication().removeListener('onPlanLoad', me.onPlanLoad, me);
