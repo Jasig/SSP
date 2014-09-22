@@ -327,16 +327,19 @@ public class TaskServiceImpl
 
 		final SubjectAndBody subjAndBody = messageTemplateService
 				.createActionPlanMessage(student, taskTOs, goalTOs, strengthTOs);
-		Set<String> watcherAddresses = null;
+		Set<String> ccAddresses = new HashSet<String>();
 
-		watcherAddresses = new HashSet<String>(student.getWatcherEmailAddresses());
+		if(form.getCoachEmail() != null && !form.getCoachEmail().isEmpty())
+		{
+			ccAddresses.addAll(student.getWatcherEmailAddresses());
+		}
 		if(!addresses.getCc().isEmpty())
 		{
-			watcherAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
+			ccAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
 		}
 
-		messageService.createMessage(addresses.getTo(),  org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
-				.toArray(new String[watcherAddresses.size()])), subjAndBody);
+		messageService.createMessage(addresses.getTo(),  org.springframework.util.StringUtils.arrayToCommaDelimitedString(ccAddresses
+				.toArray(new String[ccAddresses.size()])), subjAndBody);
 	}
 	
 	@Override
