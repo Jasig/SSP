@@ -75,10 +75,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/1/person/{personId}/map/plan")
-public class PlanController  extends AbstractBaseController {
+public class PersonPlanController extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PlanController.class);
+			.getLogger(PersonPlanController.class);
 
 	@Override
 	protected Logger getLogger() {

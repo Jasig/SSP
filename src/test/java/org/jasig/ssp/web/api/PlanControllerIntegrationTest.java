@@ -25,28 +25,18 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.SessionFactory;
-import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PlanCourse;
-import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.impl.SecurityServiceInTestEnvironment;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
-import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
-import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,8 +48,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 
 /**
  * {@link PersonTaskController} tests
@@ -73,7 +61,7 @@ import com.google.common.collect.Lists;
 public class PlanControllerIntegrationTest {
 
 	@Autowired
-	private transient PlanController controller;
+	private transient PersonPlanController controller;
 
 	@Autowired
 	protected transient SessionFactory sessionFactory;

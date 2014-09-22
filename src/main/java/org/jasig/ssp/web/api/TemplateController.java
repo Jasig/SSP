@@ -63,7 +63,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
  
 @Controller
-@RequestMapping("/1/reference/map/template")
+@RequestMapping({ "/1/reference/map/template", "/1/map/template" })
 public class TemplateController  extends AbstractBaseController {
 
 	

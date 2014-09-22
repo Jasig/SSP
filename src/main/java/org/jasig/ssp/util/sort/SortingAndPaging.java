@@ -376,12 +376,16 @@ public final class SortingAndPaging { // NOPMD
 			addStatusFilterToCriteria(query);
 		}
 
-		Long totalRows = null;
+		Long totalRows = 0L;
 		// Only query for total count if query is paged or filtered
 		if (isPaged()
 				|| (filterByStatus && isFilteredByStatus())) {
-			totalRows = (Long) query.setProjection(
-					Projections.rowCount()).uniqueResult();
+
+			final List list = query.setProjection(
+					Projections.rowCount()).list();
+			for ( Object cnt : list ) {
+				totalRows += (Long)cnt;
+			}
 
 			// clear the count projection from the query
 			query.setProjection(null);
