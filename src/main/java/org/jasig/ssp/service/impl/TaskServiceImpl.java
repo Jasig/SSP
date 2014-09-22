@@ -334,9 +334,6 @@ public class TaskServiceImpl
 		{
 			watcherAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
 		}
-		else {
-			watcherAddresses = new HashSet<String>(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
-		}
 
 		messageService.createMessage(addresses.getTo(),  org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
 				.toArray(new String[watcherAddresses.size()])), subjAndBody);
