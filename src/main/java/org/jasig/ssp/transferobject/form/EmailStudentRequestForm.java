@@ -40,9 +40,14 @@ public class EmailStudentRequestForm extends AbstractEmailForm implements Serial
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EmailStudentRequestForm.class);
-	
+
+	public EmailStudentRequestForm() {
+		super();
+	}
+
 	public EmailStudentRequestForm(BulkEmailStudentRequestForm form,
 			Person student, Person runAs) {
+		super();
 		this.setStudentId(student.getId());
 		this.setCoachEmail(runAs.getPrimaryEmailAddress());
 		this.setConfidentialityLevelId(form.getConfidentialityLevelId());
