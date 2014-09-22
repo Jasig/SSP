@@ -725,6 +725,11 @@
                     "path": "/app/store/"
                 },
                 {
+                    "clsName": "Ssp.store.CaseloadUnpaged",
+                    "name": "CaseloadUnpaged.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.store.JournalEntryDetails",
                     "name": "JournalEntryDetails.js",
                     "path": "/app/store/"

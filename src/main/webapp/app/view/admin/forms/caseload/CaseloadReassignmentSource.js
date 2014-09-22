@@ -27,7 +27,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
         allCoachesCurrentStore: 'allCoachesCurrentStore',
-        reassignCaseloadStore: 'reassignCaseloadStore'
+        reassignCaseloadStore: 'reassignCaseloadStore',
+		columnRendererUtils: 'columnRendererUtils'
     },
 	height: '100%',
 	width: '100%',
@@ -58,10 +59,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
       		                },    		                
     		                { 
     		                  header: 'Name',  
-    		                  dataIndex: 'fullName',
-    		                  field: {
-    		                      xtype: 'textfield'
-    		                  },
+    		                  dataIndex: 'firstName',
+							 renderer: me.columnRendererUtils.renderStudentFullName,
     		                  flex: 2
     		                },
     		                { 

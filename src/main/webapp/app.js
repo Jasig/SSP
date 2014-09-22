@@ -165,6 +165,8 @@ Ext.require([
 	'Ssp.view.tools.map.CoursesGridPanel',
 	'Ssp.view.tools.map.StudentCourseHistory',
 	
+	
+	
 	//PERSON NOTES TOOL
 	'Ssp.view.tools.notes.Notes',
 	
@@ -1149,8 +1151,8 @@ Ext.onReady(function(){
 				    	},
 				    	singleton: true
 				    },				    
-					reassignCaseloadStagingStore: 'Ssp.store.Caseload',
-					reassignCaseloadStore: 'Ssp.store.Caseload',
+					reassignCaseloadStagingStore: 'Ssp.store.CaseloadUnpaged',
+					reassignCaseloadStore: 'Ssp.store.CaseloadUnpaged',
 					contactPersonStore: 'Ssp.store.ContactPerson',
 					challengesStore: 'Ssp.store.reference.Challenges',
 					challengesAllStore: {
