@@ -38,6 +38,7 @@ import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.WatchStudentService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PersonSearchResult2TO;
@@ -71,8 +72,12 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		return LOGGER;
 	}
 	
+
+    @Autowired
+    private transient ConfigService configService;
+    
 	@Autowired
-	private PersonService personService;
+	private transient PersonService personService;
 	
 	@Autowired
 	private transient ProgramStatusService programStatusService;
@@ -112,7 +117,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		}
 		
 		response.setHeader("Content-Disposition", "attachment; filename="+buildFileName("caseload_")); 	
-
+		response.setContentType("text/csv");
+		
 		CaseloadCsvWriterHelper csvWriterHelper = new CaseloadCsvWriterHelper(response.getWriter());
 	    service.exportableCaseLoadFor(csvWriterHelper,
 				programStatus, securityService.currentUser().getPerson(),
@@ -147,7 +153,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	{
 		StringBuilder fileName = new StringBuilder();
 		Calendar now = Calendar.getInstance();
-
+		String appTitle = configService.getByNameNullOrDefaultValue("app_title");
+		fileName.append(appTitle+"_");
 		fileName.append(string);
 		fileName.append(now.get(Calendar.MONTH));
 		fileName.append(now.get(Calendar.DAY_OF_MONTH));
@@ -192,6 +199,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 
 		
 		response.setHeader("Content-Disposition", "attachment; filename="+buildFileName("search_")); 
+		response.setContentType("text/csv");
+		
 		SortingAndPaging sortAndPage = buildSortAndPage( limit,  start,  sort,  sortDirection);
 		PersonSearchRequest form = personSearchRequestFactory.from(schoolId,
 				firstName, lastName, 
@@ -203,6 +212,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				sapStatusCode,
 				mapStatus,planStatus,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage);
+
 		service.exportDirectoryPersonSearch(response.getWriter(), form);
 		
 	}
