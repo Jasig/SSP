@@ -17,14 +17,14 @@
  * under the License.
  */
 Ext.define('Ssp.view.EmailStudentForm', {
-	extend: 'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     alias: 'widget.emailstudentform',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController',
-		columnRendererUtils : 'columnRendererUtils',
-    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        apiProperties: 'apiProperties',
+        appEventsController: 'appEventsController',
+        columnRendererUtils: 'columnRendererUtils',
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
         person: 'currentPerson',
         textStore: 'sspTextStore'
     },
@@ -36,167 +36,158 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 type: 'vbox',
                 align: 'stretch'
             },
-            bodyStyle : 'background:none',            
-            bodyPadding: 10,
+            bodyStyle: 'background:none',
+            bodyPadding: 8,
             items: [{
+                xtype: 'label',
+                text: 'Fill-in the address(es), subject and message information below to send an email to the selected student. Optionally, a Journal Entry can be created to record the email content. Only the subject and message entered will be sent to the student. To email Action Plans and MAP plans, use those tools to email the content.'
+            }, {
+                xtype: 'tbspacer',
+                height: 10
+            }, {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
-                height:30,
+                height: 30,
                 layout: {
                     type: 'hbox'
-                },                
-				items: [{
-				        xtype: 'checkbox',
-				        name: 'createJournalEntry',
-				        fieldLabel: '',
-				        itemId: 'createJournalEntry',
-				        labelSeparator: '',
-				        hideLabel: true,
-				        boxLabel: 'Record this Email as a Journal Entry',
-				        fieldLabel: 'text'				        
-				    },
-					{
-		                xtype: 'tbspacer',
-		                width: 85
-		            },
-		            {
-		                xtype: 'combobox',
-		                itemId: 'confidentialityLevel',
-		                name: 'confidentialityLevelId',
-		                fieldLabel: '',
-		                emptyText: 'Confidentiality Level',
-		                store: me.confidentialityLevelsStore,
-		                valueField: 'id',
-		                displayField: 'name',
-		                mode: 'local',
-		                typeAhead: true,
-		                queryMode: 'local',
-		                allowBlank: true,
-                        width:180,
-		                forceSelection: true
-		            }]
-            },
-            {
+                },
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'createJournalEntry',
+                    fieldLabel: '',
+                    itemId: 'createJournalEntry',
+                    labelSeparator: '',
+                    hideLabel: true,
+                    boxLabel: 'Record this Email as a Journal Entry',
+                    fieldLabel: 'text'
+                }, {
+                    xtype: 'tbspacer',
+                    width: 85
+                }, {
+                    xtype: 'combobox',
+                    itemId: 'confidentialityLevel',
+                    name: 'confidentialityLevelId',
+                    fieldLabel: '',
+                    emptyText: 'Confidentiality Level',
+                    store: me.confidentialityLevelsStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    typeAhead: true,
+                    queryMode: 'local',
+                    allowBlank: true,
+                    width: 180,
+                    forceSelection: true
+                }]
+            }, {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
-                height:30,
+                height: 30,
                 layout: {
                     type: 'hbox'
-                },                
-				items: [{
-				        xtype: 'checkbox',
-				        name: 'sendToPrimaryEmail',
-				        fieldLabel: '',
-				        itemId: 'sendToPrimaryEmail',
-				        labelSeparator: '',
-				        hideLabel: true,
-				        disabled: !me.person.get('primaryEmailAddress'),
-				        boxLabel: 'Send To '+me.textStore.getValueByCode('ssp.label.school-email')+' Address',
-				        fieldLabel: 'text'				        
-				    },
-					{
-		                xtype: 'tbspacer',
-		                width: 178
-		            },				    
-				    {
-		            	xtype: 'displayfield',
-				    	fieldLabel: '',
-                        name: 'primaryEmail',
-                        itemId: 'primaryEmail',
-                        labelSeparator : '',
-                        fieldStyle: 'color:blue'
-				    }]
-            },
-            {
+                },
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'sendToPrimaryEmail',
+                    fieldLabel: '',
+                    itemId: 'sendToPrimaryEmail',
+                    labelSeparator: '',
+                    hideLabel: true,
+                    disabled: !me.person.get('primaryEmailAddress'),
+                    boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.school-email') + ' Address',
+                    fieldLabel: 'text'
+                }, {
+                    xtype: 'tbspacer',
+                    width: 178
+                }, {
+                    xtype: 'displayfield',
+                    fieldLabel: '',
+                    name: 'primaryEmail',
+                    itemId: 'primaryEmail',
+                    labelSeparator: '',
+                    fieldStyle: 'color:blue'
+                }]
+            }, {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
-                height:30,
+                height: 30,
                 layout: {
                     type: 'hbox'
-                },                
-				items: [{
-				        xtype: 'checkbox',
-				        name: 'sendToSecondaryEmail',
-				        fieldLabel: '',
-				        itemId: 'sendToSecondaryEmail',
-				        labelSeparator: '',
-				        disabled: !me.person.get('secondaryEmailAddress'),
-				        hideLabel: true,
-				        boxLabel: 'Send To '+me.textStore.getValueByCode('ssp.label.alternate-email')+' Address',
-				        fieldLabel: 'text'				        
-				    },
-					{
-		                xtype: 'tbspacer',
-		                width: 162
-		            },				    
-				    {
-		            	xtype: 'displayfield',
-				    	fieldLabel: '',
-                        name: 'secondaryEmail',
-                        itemId: 'secondaryEmail',
-                        labelSeparator : '',
-                        fieldStyle: 'color:blue'
-                        
-				    }]
-            },
-            {
+                },
+                items: [{
+                    xtype: 'checkbox',
+                    name: 'sendToSecondaryEmail',
+                    fieldLabel: '',
+                    itemId: 'sendToSecondaryEmail',
+                    labelSeparator: '',
+                    disabled: !me.person.get('secondaryEmailAddress'),
+                    hideLabel: true,
+                    boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.alternate-email') + ' Address',
+                    fieldLabel: 'text'
+                }, {
+                    xtype: 'tbspacer',
+                    width: 162
+                }, {
+                    xtype: 'displayfield',
+                    fieldLabel: '',
+                    name: 'secondaryEmail',
+                    itemId: 'secondaryEmail',
+                    labelSeparator: '',
+                    fieldStyle: 'color:blue'
+                
+                }]
+            }, {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
-                height:30,
+                height: 30,
                 layout: {
                     type: 'hbox'
-                },                
-				items: [
-					    {
-				            xtype: 'displayfield',
-		                    value: 'CC This email to additional recipients (comma separated)',
-		                    fieldStyle: 'color:black'
-					    },
-						{
-			                xtype: 'tbspacer',
-			                width: 50
-			            },						    
-					    {
-			            	xtype: 'textfield',
-					    	fieldLabel: '',
-	                        name: 'additionalEmail',
-	                        itemId: 'additionalEmail',
-	                        width:180,
-	                        labelSeparator : ''
-				    }]
-            },
-            {
-            	xtype: 'textfield',
-		    	fieldLabel: 'Subject',
+                },
+                items: [{
+                    xtype: 'displayfield',
+                    value: 'CC This email to additional recipients (comma separated)',
+                    fieldStyle: 'color:black'
+                }, {
+                    xtype: 'tbspacer',
+                    width: 50
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '',
+                    name: 'additionalEmail',
+                    itemId: 'additionalEmail',
+                    width: 180,
+                    labelSeparator: ''
+                }]
+            }, {
+                xtype: 'textfield',
+                fieldLabel: 'Subject',
                 name: 'emailSubject',
                 itemId: 'emailSubject',
                 allowBlank: false,
                 width: '100%'
-		    },
-            {
+            }, {
                 xtype: 'fieldset',
                 title: 'Email Message',
                 border: 1,
-				items: [{
-				        xtype: 'htmleditor',
-				        name: 'emailBody',
-                        allowBlank: false,
-				        fieldLabel: '',
-				        itemId: 'emailBody',
-				        labelSeparator: '',
-		                width: '100%',
-		                height: 200
-				    }]
-            }
-            ],
-		    dockedItems: [{
+                items: [{
+                    xtype: 'htmleditor',
+                    name: 'emailBody',
+                    allowBlank: false,
+                    fieldLabel: '',
+                    itemId: 'emailBody',
+                    labelSeparator: '',
+                    width: '100%',
+                    height: 200
+                }]
+            }],
+            dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
                 items: [{
                     xtype: 'button',
                     itemId: 'saveButton',
                     text: 'Save'
-                    
+                
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
@@ -204,7 +195,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 }]
             
             }]
-            
+        
         
         });
         

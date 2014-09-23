@@ -36,11 +36,12 @@ Ext.define('Ssp.store.Tools', {
             { group:'beta', name: "Journal", toolType: "journal", active: true },
             { group:'rc1', name: "Early Alert", toolType: "earlyalert", active: true },
             { group:'rc1', name: "MAP", toolType: "map", active: true },
+			{ group:'rc1', name: "Email Student", toolType: "profile", active: true },
             { group:'rc1', name: "Accommodation", toolType: "accommodation", active: true },
             { group:'rc1', name: "Documents", toolType: "documents", active: true },
 			{ group:'rc1', name: "Notes", toolType: "personnotes", active: true },
-			{ group:'rc1', name: "Caseload Reassign", toolType: "toolcaseloadreassignment", active: true },
-			{ group:'rc1', name: "Message Student", toolType: "profile", active: true },
+			{ group:'rc1', name: "Caseload Reassign", toolType: "toolcaseloadreassignment", active: true }
+			
 			
 //            { group:'rc1', name: "", toolType: "earlyalert", active: false },
 //            { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },

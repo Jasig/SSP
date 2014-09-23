@@ -163,7 +163,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
         var skipCallBack = this.appEventsController.getApplication().fireEvent('toolsNav', record, me);  
         
         if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
-			if (record.get('name') === 'Message Student'){
+			if (record.get('name') === 'Email Student'){
 				me.getView().getSelectionModel().deselectAll();
 					if (me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON')) {
 						me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
