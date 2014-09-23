@@ -171,7 +171,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob') + ':' );
     	}
 
-    	me.onCollapseStudentRecord(true);
+    	me.setGridView();
     },
     
 	onSelectionChange: function( view, record, item, index, eventObj ) {
@@ -377,14 +377,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.applyColumns();
 		}
 	    me.showColumn(true,'birthDate');
-		me.showColumn(true,'studentType')
+		me.showColumn(true,'studentType');
+		me.showColumn(true,'primaryEmailAddress');
 		if(me.getIsCaseload() || me.getIsWatchList()){
 			me.showColumn(false,'coach');
 			me.showColumn(false,'currentProgramStatusName');
 		}else{
 			me.showColumn(true,'coach');	
 			me.showColumn(true,'currentProgramStatusName');
-			me.showColumn(true,'primaryEmailAddress');
+			
 		}
 	},  
 

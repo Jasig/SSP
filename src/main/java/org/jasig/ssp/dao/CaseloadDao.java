@@ -126,7 +126,8 @@ public class CaseloadDao extends AbstractDao<Person> {
 		// add StudentTypeName Column
 		projections.add(Projections.property("studentType.name").as(
 				"clr_studentTypeName"));
-
+		projections.add(Projections.property("primaryEmailAddress").as(
+				"clr_primaryEmailAddress"));
 		query.setProjection(projections);
 
 		query.setResultTransformer(
