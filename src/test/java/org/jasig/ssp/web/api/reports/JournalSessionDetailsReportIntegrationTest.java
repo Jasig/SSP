@@ -68,6 +68,7 @@ public class JournalSessionDetailsReportIntegrationTest extends
 						Stubs.DateFixture.START_FALL_2012.date(),
 						Stubs.DateFixture.END_FALL_2012.date(),
 						Stubs.TermFixture.FALL_2012.code(),
+						null,
 						Stubs.HomeDepartmentFixture.MATHEMATICS.name(),
 						"csv");
 
@@ -103,6 +104,7 @@ public class JournalSessionDetailsReportIntegrationTest extends
 				null,
 				null,
 				null,
+				null,
 				"csv");
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Eliminate ,, from code
@@ -126,6 +128,7 @@ public class JournalSessionDetailsReportIntegrationTest extends
 				null,
 				null,
 				false,
+				null,
 				null,
 				null,
 				null,
