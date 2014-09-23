@@ -35,24 +35,4 @@ Ext.define('Ssp.store.CaseloadUnpaged', {
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('personCaseload')});
         return this.callParent(arguments);
     }
-	/*remoteSort: true,
-	constructor: function(){
-		var me=this;
-		Ext.apply(me, {
-						proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personCaseload')),
-						autoLoad: false,
-						autoSync: false,
-					    pageSize: 100,
-					    params : {
-							page : 0,
-							start : 0,
-							limit : 100
-						}
-					});
-		return me.callParent(arguments);
-	},
-	onBeforeSort: function() {
-		this.callParent(arguments);
-		this.currentPage = 1;
-	 }*/
 });
