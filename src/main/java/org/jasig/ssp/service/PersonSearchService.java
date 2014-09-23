@@ -187,4 +187,6 @@ public interface PersonSearchService {
 			SortingAndPaging buildSortAndPage);
 
 	Long searchPersonDirectoryCount(PersonSearchRequest from);
+
+	List<UUID> idSearch(PersonSearchRequest criteria);
 }

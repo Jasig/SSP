@@ -94,7 +94,7 @@ public abstract class AbstractBulkRunnable<T extends Serializable> implements Ru
 	 
 	}
 	protected void markAsTerminated() throws Exception {
-		if(job.getWorkflowStatusDesc().isEmpty())
+		if(job.getWorkflowStatusDesc() == null || job.getWorkflowStatusDesc().isEmpty())
 		{
 			job.setWorkflowStatus(WorkflowStatus.COMPLETED);
 		} else

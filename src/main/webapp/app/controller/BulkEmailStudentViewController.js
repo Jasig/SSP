@@ -46,7 +46,7 @@ Ext.define('Ssp.controller.BulkEmailStudentViewController', {
 		
 		studentIds =studentIds.substring(0, studentIds.length - 1)
 		var model = new  Ext.create('Ssp.model.BulkEmailStudentRequest');
-		model.set('studentIds',studentIds);
+		//model.set('studentIds',studentIds);
 		me.getView().query('bulkemailstudentform')[0].loadRecord(model);
  		return this.callParent(arguments);
     },
@@ -91,11 +91,9 @@ Ext.define('Ssp.controller.BulkEmailStudentViewController', {
 		    }
 	    }
 		    
-        
-      
-        
         var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('bulk') )+'/email';
         var jsonData = 	record.data;
+        jsonData.criteria = me.getView().criteria;
 
         var success = function()
         {

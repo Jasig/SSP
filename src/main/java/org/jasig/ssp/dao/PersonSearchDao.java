@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -217,7 +218,38 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				PersonSearchResult2.class, "person_"));
 		return query.list();
 	}
-
+	@SuppressWarnings("unchecked")
+	public List<UUID> idSearch(PersonSearchRequest personSearchRequest)
+	{
+		Term currentTerm;
+		FilterTracker filterTracker = new FilterTracker();
+		try
+		{
+			currentTerm = termService.getCurrentTerm();
+		}
+		//If there is no current term, lets degrade silently
+		catch(ObjectNotFoundException e)
+		{
+			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.idSearch(PersonSearchRequest) is being called but will not function properly");
+			currentTerm = new Term();
+			currentTerm.setName("CURRENT TERM NOT SET");
+			currentTerm.setStartDate(Calendar.getInstance().getTime());
+			currentTerm.setEndDate(Calendar.getInstance().getTime());
+			
+		}
+		StringBuilder stringBuilder = buildIdSelect();
+		
+		buildFrom(personSearchRequest,stringBuilder);
+		
+		buildJoins(personSearchRequest,stringBuilder);
+		
+		buildWhere(personSearchRequest, filterTracker, stringBuilder);
+		
+		Query query = createHqlQuery(stringBuilder.toString());
+		
+		addBindParams(personSearchRequest,query,currentTerm);
+		return query.list();
+	}
 	private StringBuilder buildSelect(){
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(" select distinct p.id as person_id, p.firstName as person_firstName, " +
@@ -234,7 +266,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				"p.photoUrl as person_photoUrl");
 		return stringBuilder;
 	}
-
+	private StringBuilder buildIdSelect(){
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(" select distinct p.id as person_id");
+		return stringBuilder;
+	}
 	private void buildWhere(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
 		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
@@ -293,7 +329,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ws.person = :coach ");		
-			stringBuilder.append(" ws.student = p ");			
+			stringBuilder.append("and ws.student = p ");			
 		}
 	}
 
@@ -436,6 +472,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest) || hasWatchStudent(personSearchRequest))
 		{
 			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
+			if(coach == null && personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList())
+			{
+				coach = securityService.currentlyAuthenticatedUser().getPerson();
+			}
 			query.setEntity("coach", coach);
 		}
 		

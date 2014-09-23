@@ -19,10 +19,14 @@
 package org.jasig.ssp.web.api.jobqueue;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.jobqueue.Job;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.jobqueue.JobService;
@@ -61,6 +65,12 @@ public class BulkJobController  extends AbstractBaseController {
 	private PersonService personService;
 	
 	@Autowired
+	private PersonSearchService personSearchService;
+	
+	@Autowired
+	private transient PersonSearchRequestTOFactory personSearchRequestFactory;
+	
+	@Autowired
 	private JobService jobService;
 	
 	@Autowired
@@ -71,7 +81,17 @@ public class BulkJobController  extends AbstractBaseController {
 	public @ResponseBody
 	JobTO bulkEmail(@RequestBody BulkEmailStudentRequestForm form )
 			throws ObjectNotFoundException, ValidationException, IOException {
-		
+		if(form.getStudentIds()== null || form.getStudentIds().isEmpty())
+		{
+			PersonSearchRequest criteria = personSearchRequestFactory.from(form.getCriteria());
+			List<UUID> scope = personSearchService.idSearch(criteria);
+			StringBuilder idString = new StringBuilder();
+			for (UUID uuid : scope) {
+				idString.append(uuid+",");
+			}
+			idString.deleteCharAt(idString.length()-1);
+			form.setStudentIds(idString.toString());
+		}
 		String serializedJobRequest = AbstractBulkRunnable.serialize(form);
 		Job job = bulkJobFactory.getNewJob(form,serializedJobRequest);
 		jobService.create(job);

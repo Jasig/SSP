@@ -28,6 +28,8 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +59,8 @@ public class BulkEmailStudentRequestForm implements Serializable {
 	private String emailSubject;
 	
 	private String emailBody;
+	
+	private PersonSearchRequestTO criteria;
 	
 	private Boolean useStrictValidation = true;
 
@@ -169,4 +173,13 @@ public class BulkEmailStudentRequestForm implements Serializable {
 	    }
 	    return pc;
 	}
+
+	public PersonSearchRequestTO getCriteria() {
+		return criteria;
+	}
+
+	public void setCriteria(PersonSearchRequestTO criteria) {
+		this.criteria = criteria;
+	}
+
 }

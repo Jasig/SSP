@@ -889,35 +889,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			   }		
 	       }
 		},
-	onExportSearchConfirm: function(btnId) {
-		   var me = this;
-	       if (btnId=="ok")
-	       {		   
-		 	   if(!me.getCaseloadStatusCombo().getValue())
-			   {
-				   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
-						   me.caseloadStore,
-						   {success:me.getCaseloadSuccess, 
-					   failure:me.getCaseloadFailure, 
-					   scope: me});		
-			   } else
-			   if(me.getCaseloadStatusCombo().getValue() != 'All' )
-			   {
-				   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
-						   me.caseloadStore,
-						   {success:me.getCaseloadSuccess, 
-					   failure:me.getCaseloadFailure, 
-					   scope: me});		
-			   } else
-			   {
-				   me.exportService.exportCaseload( null,'caseload',
-						   me.caseloadStore,
-						   {success:me.getCaseloadSuccess, 
-					   failure:me.getCaseloadFailure, 
-					   scope: me});
-			   }	
-	       }
-		},			
+			
 	onExportCaseload: function(action, count) {
 		var me = this;
 		var message;
@@ -981,18 +953,34 @@ Ext.define('Ssp.controller.SearchViewController', {
 	bulkEmail: function(){
 		var me=this;
 		var store = null;
+		var criteria = {};
+		if(!me.getCaseloadStatusCombo().getValue())
+		{
+			criteria.programStatus = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+		} else
+		if(me.getCaseloadStatusCombo().getValue() != 'All' )
+		{
+			criteria.programStatus = me.getCaseloadStatusCombo().getValue();
+		} else
+		{
+		   criteria.programStatus = null;
+		}
+		
+		
 		if ( me.getIsCaseload() )
 		{
 			store = me.caseloadStore;
+			criteria.myCaseload = true;
 		}else
 		if( me.getIsWatchList() )
 		{
 			store = me.watchListStore;
+			criteria.myWatchList = true;
 		} else
 		{
 			store = me.searchStore;
 		}		
-   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: store});
+   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: store, criteria: criteria});
    		me.emailStudentPopup.show();
 	},	
 	getProgramStatuses: function(){

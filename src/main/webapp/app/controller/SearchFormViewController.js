@@ -381,7 +381,31 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		bulkEmail: function(){
 			var me=this;
 			var store = null;
-	   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: me.searchStore});
+			var criteria = {
+		     schoolId: me.textFieldValueFromName('schoolId'),
+		     firstName: me.textFieldValueFromName('firstName'),
+		     lastName: me.textFieldValueFromName('lastName'),
+			 programStatus: me.getView().query('combobox[name=programStatus]')[0].value,
+			 specialServiceGroup: me.getView().query('combobox[name=specialServiceGroup]')[0].value,
+			 coachId: me.getView().query('combobox[name=coachId]')[0].value,
+			 declaredMajor: me.getView().query('combobox[name=declaredMajor]')[0].value,
+			 hoursEarnedMin: me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,
+			 hoursEarnedMax: me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,
+			 gpaEarnedMin: me.getView().query('numberfield[name=gpaMin]')[0].value,
+			 gpaEarnedMax: me.getView().query('numberfield[name=gpaMax]')[0].value,
+			 currentlyRegistered: me.getView().query('combobox[name=currentlyRegistered]')[0].value == null ? null : new Boolean(me.getView().query('combobox[name=currentlyRegistered]')[0].value).toString(),
+			 earlyAlertResponseLate: me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
+			 sapStatusCode: me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
+			 mapStatus: me.getView().query('combobox[name=mapStatus]')[0].value,
+			 planStatus: me.getView().query('combobox[name=planStatus]')[0].value,
+			 myCaseload: me.getView().query('checkbox[name=myCaseload]')[0].value,
+			 myPlans: me.getView().query('checkbox[name=myPlans]')[0].value,
+			 myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,
+			 birthDate: me.dateFieldValueFromName('birthDate'),
+			 actualStartTerm: me.getView().query('combobox[name=actualStartTerm]')[0].value,
+			 personTableType: me.getView().query('combobox[name=personTableType]')[0].value
+			}
+	   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: me.searchStore, criteria: criteria});
 	   		me.emailStudentPopup.show();
 		},		
 	onSearchClick: function(button){
