@@ -103,7 +103,7 @@ public class ScheduledTaskWrapperServiceImpl
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
-	private static final String EVERY_15_SECONDS = "0,5,10,15,20,25,30,35,40,45,50,55 * * * * *";
+	private static final String EVERY_5_SECONDS_WITH_30_SECOND_DELAY = "5000/30000";
 	private static final String FIFTEEN_MINUTES_IN_MILLIS = 15 * 60 * 1000 + "";
 	private static final String NEVER = "0 0 0 31 12 *";
 
@@ -132,7 +132,7 @@ public class ScheduledTaskWrapperServiceImpl
 
 	private static final String BULK_JOB_QUEUE_TASK_ID = "task_bulk_job_queue";
 	private static final String BULK_JOB_QUEUE_TASK_CONFIG_NAME = "task_bulk_job_queue_trigger";
-	private static final String BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER = EVERY_15_SECONDS;
+	private static final String BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER = EVERY_5_SECONDS_WITH_30_SECOND_DELAY;
 	
 	private static final String MESSAGE_QUEUE_PRUNING_TASK_ID = "task_message_queue_pruning";
 	private static final String MESSAGE_QUEUE_PRUNING_TASK_NAME = "task_message_queue_pruning_trigger";
