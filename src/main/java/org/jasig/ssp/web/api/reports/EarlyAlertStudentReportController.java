@@ -179,7 +179,7 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
-		final PagingWrapper<EarlyAlertStudentReportTO> reports = earlyAlertService.getStudentsEarlyAlertCountSetForCritera(
+		final PagingWrapper<EarlyAlertStudentReportTO> reports = earlyAlertService.getStudentsEarlyAlertCountSetForCriteria(
 				searchForm, 
 				SearchParameters.getReportPersonSortingAndPagingAll(status, ""));
 		

@@ -28,13 +28,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.UUID;
-
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
-
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertDao;
@@ -78,10 +74,7 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
 import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
-import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
-import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -92,7 +85,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Maps;
 
 /**
@@ -752,8 +744,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	
 	@Override
 	public Long getCountOfEarlyAlertsForSchoolIds(
-			final Collection<String> shoolIds, Campus campus) {
-		return dao.getCountOfAlertsForSchoolIds(shoolIds, campus);
+			final Collection<String> schoolIds, Campus campus) {
+		return dao.getCountOfAlertsForSchoolIds(schoolIds, campus);
 	}
 
 	@Override
@@ -788,11 +780,17 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 
 	@Override
-	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(
+	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCriteria(
 			EarlyAlertStudentSearchTO earlyAlertStudentSearchTO,
 			SortingAndPaging createForSingleSort) {
-		return dao.getStudentsEarlyAlertCountSetForCritera(earlyAlertStudentSearchTO, createForSingleSort);
+		return dao.getStudentsEarlyAlertCountSetForCriteria(earlyAlertStudentSearchTO, createForSingleSort);
 	}
+
+    @Override
+    public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
+            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus ) {
+        return dao.getStudentEarlyAlertCountSetPerCourses(createdDateFrom, createdDateTo, campus, objectStatus);
+    }
 	
 	@Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form) {
@@ -800,8 +798,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 	
 	@Override
-	public Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm){
-		return dao.getEarlyAlertCountSetForCritera(searchForm);
+	public Long getEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm){
+		return dao.getEarlyAlertCountSetForCriteria(searchForm);
 	}
 	
 	@Override

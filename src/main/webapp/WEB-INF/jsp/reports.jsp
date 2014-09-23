@@ -844,6 +844,100 @@
 </div>
 
 
+<div class="hideable-form early-alert-course-counts-report" style="display:none">
+	<h1>Early Alert Course Counts</h1>
+	<form action="/ssp/api/1/report/earlyalertcoursecounts" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertCourseCountsCampusName" name="campusId" class="input-campus-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Roster Status
+		<div class="ea-input">
+			<select id="earlyAlertCourseCountsRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		-->
+
+	        <!-- Date Range Description -->
+                <div class="ea-input"></div>
+                <div class="ea-label">
+                        <span>${date_range_early_alert}</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Semester Date Range Selection -->
+                <div class="ea-time-span">
+                        <div class="ea-term">
+                                <div class="ea-input">
+                                        <select id="earlyAlertStudentTermCode" name="termCode" class="input-term-group">
+                                                <option value="">${not_applicable}</option>
+                                        </select>
+                                </div>
+                                <div class="ea-label">
+                                        <span>Term:</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                        </div>
+                        <div class="ea-date-range">
+                                <!-- Date From -->
+                                <div class="ea-input">
+                                        <input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom">
+                                </div>
+                                <div class="ea-label">
+                                        <span>Start Date (inclusive)::</span>
+                                </div>
+                                <div class="ea-clear"></div><!-- Date To -->
+                                <div class="ea-input">
+                                        <input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo">
+                                </div>
+                                <div class="ea-label">
+                                        <span>End Date (exclusive)::</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                        </div>
+                        <div class="ea-buttons">
+                                <div>
+                                        <button class="switch-date-range-type button" value="setbyrange"></button>
+                                </div>
+                        </div>
+                </div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div>
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
 <div class="hideable-form early-alert-student-report" style="display:none">
 	<h1>Early Alert Student Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudent" method="get"
@@ -2271,77 +2365,78 @@
 		</div>
 		<div class="ea-clear"></div>
 
-       <!-- Actual Start Term -->
-            <div class="ea-input">
-                <select id="journalSessionActualStartTermCode" name="actualStartTerm" class="input-term-group">
-                <option value="">${not_applicable}</option>
-            </select>
-        </div>
-        <div class="ea-label">
-            <span>Actual Start Term:</span>
-        </div>
-        <div class="ea-clear"></div>
+                <!-- Actual Start Term -->
+                <div class="ea-input">
+                        <select id="journalSessionActualStartTermCode" name="actualStartTerm" class="input-term-group">
+                                <option value="">${not_applicable}</option>
+                        </select>
+                </div>
+                <div class="ea-label">
+                    <span>Actual Start Term:</span>
+                </div>
+                <div class="ea-clear"></div>
 
-		<!-- Date Range Description -->
-		<div class="ea-input">
-		</div>
-		<div class="ea-label">
-			<span>${date_range_journal_entry}</span>
-		</div>
-		<div class="ea-clear"></div>
-		<!-- Semester -->
-		<div class="ea-time-span">
-			<div class="ea-term">
-				<div class="ea-input">
-					<select id="journalSessionDetailTermCode" name="termCode" class="input-term-group">
-						<option value="">${not_applicable}</option>
-						</select>
-				</div>
-				<div class="ea-label">
-					<span>Term:</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
-         	<div class="ea-date-range">
-				<!-- Date From -->
-				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="journalSessionDetailCreateDateFrom">
-				</div>
-				<div class="ea-label">
-					<span>Start Date (inclusive)::</span>
-				</div>
-				<div class="ea-clear"></div><!-- Date To -->
-				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="journalSessionDetailCreateDateTo">
-				</div>
-				<div class="ea-label">
-					<span>End Date (exclusive)::</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
-			<div class="ea-buttons">
-    			<button class="switch-date-range-type button" value="setbyrange"></button>
-			</div>
-		</div>
-		<!-- output type -->
-		<div class="ea-input">
-			<label><span>pdf</span></label><input type="radio" name="reportType"
-				value="pdf" checked /><br /> <label><span>csv</span></label><input
-				type="radio" name="reportType" value="csv" />
-		</div> 
+                <!-- Date Range Description -->
+                <div class="ea-input"></div>
+                <div class="ea-label">
+                        <span>${date_range_journal_entry}</span>
+                </div>
+                <div class="ea-clear"></div>
 
-		<div class="ea-label">
-			<span>Output Type:</span>
-		</div>
-		<div class="ea-clear"></div>
+                <!-- Semester -->
+                <div class="ea-time-span">
+                        <div class="ea-term">
+                                <div class="ea-input">
+                                        <select id="journalSessionDetailTermCode" name="termCode" class="input-term-group">
+                                                <option value="">${not_applicable}</option>
+                                        </select>
+                                </div>
+                                <div class="ea-label">
+                                        <span>Term:</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                        </div>
+                        <div class="ea-date-range">
+                                <!-- Date From -->
+                                <div class="ea-input">
+                                        <input class="input-calendar-type" type="textbox" name="createDateFrom" id="journalSessionDetailCreateDateFrom">
+                                </div>
+                                <div class="ea-label">
+                                        <span>Start Date (inclusive)::</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                                <!-- Date To -->
+                                <div class="ea-input">
+                                        <input class="input-calendar-type" type="textbox" name="createDateTo" id="journalSessionDetailCreateDateTo">
+                                </div>
+                                <div class="ea-label">
+                                        <span>End Date (exclusive)::</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                        </div>
+                        <div class="ea-buttons">
+                                <button class="switch-date-range-type button" value="setbyrange"></button>
+                        </div>
+                </div>
+                <!-- output type -->
+                <div class="ea-input">
+                        <label><span>pdf</span></label><input type="radio" name="reportType"
+                                value="pdf" checked /><br /> <label><span>csv</span></label><input
+                                type="radio" name="reportType" value="csv" />
+                </div>
 
-		<div class="ea-buttons">
-			<div class="buttons">
-				<input class="button primary button-send" type="submit"
-					value="submit" />
-			</div>
-		</div>
-	</form>
+                <div class="ea-label">
+                        <span>Output Type:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <div class="ea-buttons">
+                        <div class="buttons">
+                                <input class="button primary button-send" type="submit"
+                                        value="submit" />
+                        </div>
+                </div>
+        </form>
 </div><!-- end journal session detail report -->
 
 

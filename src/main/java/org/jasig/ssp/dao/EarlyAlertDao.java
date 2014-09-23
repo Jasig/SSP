@@ -49,11 +49,7 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.PersonSearchServiceImpl;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
-import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
-import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
@@ -262,7 +258,7 @@ public class EarlyAlertDao extends
 	}
 
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(
+	public PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCriteria(
 			EarlyAlertStudentSearchTO criteriaTO, SortingAndPaging sAndP) {
 
 		final Criteria query = createCriteria();
@@ -608,7 +604,7 @@ public class EarlyAlertDao extends
 		return query;
 	}
 
-	public Long getEarlyAlertCountSetForCritera(
+	public Long getEarlyAlertCountSetForCriteria(
 			EarlyAlertStudentSearchTO searchForm) {
 		final Criteria criteria = setPersonCriteria(createCriteria()
 				.createAlias("person", "person"),
@@ -628,6 +624,59 @@ public class EarlyAlertDao extends
 		return total;
 
 	}
+
+    public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
+            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+
+        final Criteria query = createCriteria();
+
+        if (createdDateFrom != null) {
+            query.add(Restrictions.ge("createdDate", createdDateFrom));
+        }
+
+        if (createdDateTo != null) {
+            query.add(Restrictions.le("createdDate", createdDateTo));
+        }
+
+        if (campus != null) {
+            query.add(Restrictions.eq("campus", campus));
+        }
+
+        if (objectStatus != null) {
+            query.add(Restrictions.eq("objectStatus", objectStatus));
+        }
+
+        query.setProjection(null);
+
+        List<UUID> ids = query.setProjection(
+                Projections.distinct(Projections.property("id"))).list();
+
+        if (ids.size() <= 0) {
+            return null;
+        }
+
+        BatchProcessor<UUID, EarlyAlertCourseCountsTO> processor = new BatchProcessor<UUID, EarlyAlertCourseCountsTO>(
+                ids);
+        do {
+            final Criteria criteria = createCriteria();
+            ProjectionList projections = Projections
+                    .projectionList()
+                    .add(Projections.countDistinct("person").as("earlyalertcoursecount_totalStudentsReported"))
+                    .add(Projections.count("id").as("earlyalertcoursecount_totalAlerts"));
+
+            projections.add(Projections.groupProperty("courseName").as("earlyalertcoursecount_courseName"));
+            projections.add(Projections.groupProperty("courseTitle").as("earlyalertcoursecount_courseTitle"));
+            projections.add(Projections.groupProperty("courseTermCode").as("earlyalertcoursecount_termCode"));
+
+            criteria.setProjection(projections);
+            criteria.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+                    EarlyAlertCourseCountsTO.class, "earlyalertcoursecount_"));
+
+            processor.process(criteria, "id");
+        } while (processor.moreToProcess());
+
+        return processor.getSortedAndPagedResults();
+    }
 
 	public List<EarlyAlert> getResponseDueEarlyAlerts(Date lastResponseDate) {
 		String sql = "select distinct ea " + responseQuery();

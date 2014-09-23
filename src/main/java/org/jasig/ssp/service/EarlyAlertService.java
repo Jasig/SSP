@@ -23,10 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -35,10 +33,7 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
-import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
-import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -165,11 +160,13 @@ public interface EarlyAlertService
 
 	Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-	Long getStudentCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campu, String rosterStatuss);
+	Long getStudentCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-	Long getEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm);
+    PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
-	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCritera(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);
+	Long getEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm);
+
+	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);
 	
 	PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form);
 
