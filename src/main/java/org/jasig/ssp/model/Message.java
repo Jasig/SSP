@@ -70,10 +70,10 @@ final public class Message
 	@Column(length = 512, nullable = true)
 	private String sentBccAddresses;
 	
-	@Column(length = 100, nullable = true)
+	@Column(length = 256, nullable = true)
 	private String sentFromAddress;
 	
-	@Column(length = 100, nullable = true)
+	@Column(length = 256, nullable = true)
 	private String sentReplyToAddress;
 
 	@Temporal(TemporalType.TIMESTAMP)
