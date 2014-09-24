@@ -25,6 +25,26 @@ Ext.define('Ssp.util.Util', {
 		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
 	},
 
+    statics: {
+        decorateFormField: function(field) {
+            var fl=field.getFieldLabel(), ab=field.allowBlank;
+            if (fl){
+                field.labelStyle=Ssp.util.Constants.SSP_LABEL_STYLE; // this may or may not affect an already-rendered field. but is no setter to call.
+            }
+            if (ab===false) {
+                // definitely have to use the setter if changing the fieldLabel here, else won't affect an already-rendered field
+                if (fl && fl.indexOf(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY) < 0) {
+                    field.setFieldLabel(fl + Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+                }
+            } else if (fl) {
+                while ( fl.indexOf(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY) >= 0 ) {
+                    field.setFieldLabel(fl.replace(Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY, ''));
+                    fl = field.getFieldLabel();
+                }
+            }
+        }
+    },
+
 	initComponent: function() {
 		return this.callParent( arguments );
 	},

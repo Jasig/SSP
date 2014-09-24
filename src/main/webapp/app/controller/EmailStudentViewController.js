@@ -33,7 +33,11 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
         },		
 		'cancelButton': {
             click: 'onCancelClick'
-        }
+        },
+        'createJournalEntry': {
+            change: 'onCreateJournalEntryChange'
+        },
+        confidentialityLevel: true
 	},
 	
     init: function() {
@@ -143,6 +147,17 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
     validateEmailAddress: function( value ){
     	var emailExpression = filter = new RegExp('^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$');
     	return emailExpression.test( value );
+    },
+    onCreateJournalEntryChange: function(field, newValue, oldValue, eOpts) {
+        var me = this;
+        var clCtrl = me.getConfidentialityLevel();
+        clCtrl.allowBlank = !(newValue);
+        Ssp.util.Util.decorateFormField(clCtrl); // highlight required fields or undo that highlighting
+        if ( newValue ) {
+            clCtrl.show();
+        } else {
+            clCtrl.hide();
+        }
     }
     
 });

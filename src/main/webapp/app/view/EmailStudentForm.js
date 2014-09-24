@@ -62,13 +62,14 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     fieldLabel: 'text'
                 }, {
                     xtype: 'tbspacer',
-                    width: 85
+                    width: 45
                 }, {
                     xtype: 'combobox',
                     itemId: 'confidentialityLevel',
                     name: 'confidentialityLevelId',
-                    fieldLabel: '',
-                    emptyText: 'Confidentiality Level',
+                    fieldLabel: 'Confidentiality Level',
+                    labelWidth: 125,
+                    emptyText: 'Select One',
                     store: me.confidentialityLevelsStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -76,8 +77,9 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     typeAhead: true,
                     queryMode: 'local',
                     allowBlank: true,
-                    width: 180,
-                    forceSelection: true
+                    width: 300,
+                    forceSelection: true,
+                    hidden: true
                 }]
             }, {
                 xtype: 'fieldcontainer',
@@ -98,7 +100,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     fieldLabel: 'text'
                 }, {
                     xtype: 'tbspacer',
-                    width: 178
+                    width: 45
                 }, {
                     xtype: 'displayfield',
                     fieldLabel: '',

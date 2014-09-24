@@ -1996,8 +1996,9 @@ Ext.onReady(function(){
 				Ext.application({
 				    name: 'Ssp',
 				    appFolder: Ext.Loader.getPath('Ssp'),
-				    launch: function( app ) {
+				    launch: function( ) {
 				    	var me=this;
+
 				    	Deft.Injector.resolve("appEventsController").setApp(me);
 				    	
 				    	// Date patterns for formatting by a description
@@ -2056,26 +2057,14 @@ Ext.onReady(function(){
 				    	 * Provide global asterisks next to required fields
 				    	 */
 				    	Ext.Function.interceptAfter(Ext.form.Field.prototype,'initComponent', function(){
-				    		var fl=this.fieldLabel, ab=this.allowBlank;
-				    		if (fl){
-				    			this.labelStyle=Ssp.util.Constants.SSP_LABEL_STYLE;
-				    		}
-				    		if (ab===false && fl){
-				    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
-				    		}
+				    		Ssp.util.Util.decorateFormField(this);
 				    	});		
 
 				    	/*
 				    	 * Provide global asterisks next to required field containers
 				    	 */
 				    	Ext.Function.interceptAfter(Ext.form.FieldContainer.prototype,'initComponent', function(){
-				    		var fl=this.fieldLabel, ab=this.allowBlank;
-				    		if (fl){
-				    			this.labelStyle=Ssp.util.Constants.SSP_LABEL_STYLE;
-				    		}
-				    		if (ab===false && fl){
-				    			this.fieldLabel += Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY;
-				    		}
+				    		Ssp.util.Util.decorateFormField(this);
 				    	});				    	
 				    	
 				    	/*
