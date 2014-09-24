@@ -820,6 +820,10 @@
                     "path": "/app/service/"
                 }, 
                 {
+                    "clsName": "Ssp.service.CaseloadFilterProgramStatusService",
+                    "name": "CaseloadFilterProgramStatusService.js",
+                    "path": "/app/service/"
+                },                {
                     "clsName": "Ssp.service.CaseloadProgramStatusService",
                     "name": "CaseloadProgramStatusService.js",
                     "path": "/app/service/"
@@ -2763,11 +2767,16 @@
                     "name": "MaritalStatuses.js",
                     "path": "/app/store/reference/"
                 },
-                                {
+                {
                     "clsName": "Ssp.store.reference.CaseloadProgramStatuses",
                     "name": "CaseloadProgramStatuses.js",
                     "path": "/app/store/reference/"
                 },
+                {
+                    "clsName": "Ssp.store.reference.CaseloadFilterProgramStatuses",
+                    "name": "CaseloadFilterProgramStatuses.js",
+                    "path": "/app/store/reference/"
+                },                
                 {
                     "clsName": "Ssp.store.reference.ProgramStatuses",
                     "name": "ProgramStatuses.js",

@@ -51,8 +51,8 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	 */
 	assignEvent: function( args ){
 			this.getApplication().addListener(args.eventName, args.callBackFunc, args.scope);
-			if(sspInDevelopMode)
-				this.addObjectEvent(args);
+//			if(sspInDevelopMode)
+//				this.addObjectEvent(args);
 	},
 	
 	addObjectEvent: function(args){
@@ -78,8 +78,8 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	removeEvent: function( args ){
 		if ( this.getApplication().hasListener( args.eventName ))
 		{
-			if(sspInDevelopMode)
-				this.removeObjectEvent(args);
+//			if(sspInDevelopMode)
+//				this.removeObjectEvent(args);
 			
 			this.getApplication().removeListener( args.eventName, args.callBackFunc, args.scope);
 		}

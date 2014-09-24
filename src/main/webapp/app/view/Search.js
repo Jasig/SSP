@@ -26,7 +26,7 @@ Ext.define('Ssp.view.Search', {
         apiProperties: 'apiProperties',
         caseloadActionsStore: 'caseloadActionsStore',
         columnRendererUtils: 'columnRendererUtils',
-        programStatusesStore: 'caseloadProgramStatusesStore'
+        programStatusesStore: 'caseloadFilterProgramStatusesStore'
     },
     initComponent: function(){
         var me = this;
@@ -84,11 +84,7 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'editPersonButton'
                 },{
                     xtype: 'tbspacer',
-                    flex: 1
-                },{
-                    xtype: 'label',
-                    text: 'Action:',
-                    style: 'font-weight:bold;'
+                    flex: .5
                 },{
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
@@ -108,10 +104,9 @@ Ext.define('Ssp.view.Search', {
                     height: 25,
                     labelWidth: 75
                 },{
-                    xtype: 'label',
-                    text: 'Change Status:',
-                    style: 'font-weight:bold;'
-                }, {
+                    xtype: 'tbspacer',
+                    flex: .5
+                },{
                     tooltip: 'Set Student to Active status',
                     text: '',
                     width: 25,
@@ -151,9 +146,19 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     action: 'no-show',
                     itemId: 'setNoShowStatusButton'
-                }, {
+                },  {
+                    tooltip: 'Set Student to Inactive',
+                    text: '',
+                    width: 25,
+                    height: 25,
+                    hidden: !me.authenticatedPerson.hasAccess('SET_INACTIVE_BUTTON'),
+                    cls: 'setTransitionStatusIcon',
+                    xtype: 'button',
+                    action: 'inactive',
+                    itemId: 'setInactiveButton'
+                },{
                     xtype: 'tbspacer',
-                    flex: 1
+                    flex: .5
                 } ,{
                     xtype: 'combobox',
                     itemId: 'caseloadStatusCombo',
@@ -166,7 +171,6 @@ Ext.define('Ssp.view.Search', {
                     mode: 'local',
                     align: 'center',
                     typeAhead: false,
-                    editable: true,
                     queryMode: 'local',
                     allowBlank: false,
                     hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',

@@ -37,8 +37,8 @@ Ext.define('Ssp.controller.SearchViewController', {
         personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
         preferences: 'preferences',
-        programStatusesStore: 'caseloadProgramStatusesStore',
-        programStatusService: 'caseloadProgramStatusService',
+        programStatusesStore: 'caseloadFilterProgramStatusesStore',
+        programStatusService: 'caseloadFilterProgramStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
         searchStoreOld: 'studentsSearchStore',
@@ -102,8 +102,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 		'setNoShowStatusButton': {
 			click: 'onSetProgramStatusClick'
 		},
-		
 		'setActiveStatusButton': {
+			click: 'onSetProgramStatusClick'
+		},
+		'setInactiveButton': {
 			click: 'onSetProgramStatusClick'
 		}
     },
@@ -626,7 +628,9 @@ Ext.define('Ssp.controller.SearchViewController', {
         	case 'active':
         		me.setProgramStatus( action );
         		break;
-        		
+        	case 'inactive':
+        		me.setProgramStatus( action );
+        		break;        		
         	case 'no-show':
         		me.setProgramStatus( action );
         		break;
@@ -672,11 +676,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   			programStatusId = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
 				person.set("currentProgramStatusName", "Active");
 	   		}
-	   		
 	   		if (action=='no-show')
 	   		{
 	   			programStatusId = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
 				person.set("currentProgramStatusName", "No-Show");
+	   		}	   		
+	   		if (action=='inactive')
+	   		{
+	   			programStatusId = Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID;
+				person.set("currentProgramStatusName", "Inactive");
 	   		}
 			
 	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
@@ -698,7 +706,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   			msg = 'Non-Participating';
 	   		if (action=='active')
 	   			msg = 'Active';
-	   		
+	   		if (action=='inactive')
+	   			msg = 'Inactive';	   		
 	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to ' + msg + ' status.');
 	   	}
     },

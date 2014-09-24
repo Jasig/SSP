@@ -459,6 +459,7 @@ Ext.require([
     'Ssp.service.PlacementService',
 	'Ssp.service.PersonNoteService',
     'Ssp.service.CaseloadProgramStatusService',
+    'Ssp.service.CaseloadFilterProgramStatusService',
     'Ssp.service.ProgramStatusService',
     'Ssp.service.ReferralSourceService',
     'Ssp.service.SearchService',
@@ -1751,6 +1752,7 @@ Ext.onReady(function(){
 			    	planStore: 'Ssp.store.Plan',			    	
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 					caseloadProgramStatusesStore: 'Ssp.store.reference.CaseloadProgramStatuses',
+					caseloadFilterProgramStatusesStore: 'Ssp.store.reference.CaseloadFilterProgramStatuses',
 			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
 					programStatusChangeReasonsAllStore: {
 						fn: function(){
@@ -1966,6 +1968,7 @@ Ext.onReady(function(){
 			        personProgramStatusService: 'Ssp.service.PersonProgramStatusService',
 			        programStatusService: 'Ssp.service.ProgramStatusService',
 			        caseloadProgramStatusService: 'Ssp.service.CaseloadProgramStatusService',
+			        caseloadFilterProgramStatusService: 'Ssp.service.CaseloadFilterProgramStatusService',
 			        referralSourceService: 'Ssp.service.ReferralSourceService',
 			        searchService: 'Ssp.service.SearchService',
 			        exportService: 'Ssp.service.ExportService',
