@@ -198,6 +198,9 @@ background: url('/ssp/images/set-no-show-status-icon.png') no-repeat !important;
 background: url('/ssp/images/set-active-status-icon.png') no-repeat !important;
 }
 
+.setInactiveStatusIcon {
+background: url('/ssp/images/set-inactive-status-icon.png') no-repeat !important;
+}
 .setTransitionStatusIcon {
 background: url('/ssp/images/set-transition-status-icon.png') no-repeat !important;
 }

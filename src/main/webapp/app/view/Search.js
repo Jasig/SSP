@@ -131,7 +131,7 @@ Ext.define('Ssp.view.Search', {
                     width: 25,
                     height: 25,
                     hidden: !me.authenticatedPerson.hasAccess('SET_INACTIVE_BUTTON'),
-                    cls: 'setTransitionStatusIcon',
+                    cls: 'setInactiveStatusIcon',
                     xtype: 'button',
                     action: 'inactive',
                     itemId: 'setInactiveButton'
