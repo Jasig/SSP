@@ -127,7 +127,6 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
         var failure = function()
         {
             Ext.Msg.alert('SSP Error','There was an issue sending your student email.  Please contact your administrator');
-        	me.getView().up('.window').close();
         }
         
         me.apiProperties.makeRequest({
