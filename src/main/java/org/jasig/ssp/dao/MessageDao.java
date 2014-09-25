@@ -26,11 +26,13 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.service.impl.MessageServiceImpl;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -40,6 +42,8 @@ import org.springframework.stereotype.Repository;
 public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 		AuditableCrudDao<Message> {
 
+	@Autowired
+	private transient ConfigService configService;
 	/**
 	 * Constructor that initializes the instance with the specific class types
 	 * for super class method use.
@@ -67,6 +71,7 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 	}
 
 	public PagingWrapper<Message> queued(SortingAndPaging sAndP) {
+		int retryConfig = configService.getByNameExceptionOrDefaultAsInt("mail_delivery_retry_limit");
 		// will let the caller decide on object status filtering, but since
 		// this method is supposed to act like a queue, at least make sure
 		// it acts that way by default.
@@ -80,6 +85,7 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 		// below.
 		Criteria criteria = this.createCriteria();
 		criteria.add(Restrictions.isNull("sentDate"));
+		criteria.add(Restrictions.or(Restrictions.isNull("retryCount"), Restrictions.lt("retryCount", retryConfig))  );
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 

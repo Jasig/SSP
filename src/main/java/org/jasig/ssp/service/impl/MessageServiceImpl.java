@@ -405,7 +405,7 @@ public class MessageServiceImpl implements MessageService {
 			final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
- 
+			
 			InternetAddress from;
 			String appName = configService.getByName("app_title").getValue();
 			
@@ -474,7 +474,6 @@ public class MessageServiceImpl implements MessageService {
 					message.setSentBccAddresses(StringUtils.join(bccs,","));
 				}
 			}catch(Exception exp){
-				handleSendMessageError(message);
 				LOGGER.warn("Unrecoverable errors were generated adding carbon copy to message: " + message.getId() + "Attempt to send message still initiated.", exp);
 			}
 			
@@ -485,7 +484,6 @@ public class MessageServiceImpl implements MessageService {
 					message.setSentCcAddresses(StringUtils.join(carbonCopies,","));
 				}
 			}catch(Exception exp){
-				handleSendMessageError(message);
 				LOGGER.warn("Unrecoverable errors were generated adding bcc to message: " + message.getId() + "Attempt to send message still initiated.", exp);
 			}
 			
@@ -509,23 +507,10 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	private void handleSendMessageError(Message message) {
-		String retryCountString = configService.getByNameEmpty("mail_delivery_retry_limit").trim();
-		Integer retryCount;
-		try {
-			retryCount = Integer.parseInt(retryCountString);
-		} catch (Exception e)
-		{
-			LOGGER.error("ERROR in config named 'mail_delivery_retry_limit'.  Value not parsable as integer");
-			retryCount = 3;
-		}
+		int retryCount = configService.getByNameExceptionOrDefaultAsInt("mail_delivery_retry_limit");
 		if(message.getRetryCount() == null || message.getRetryCount() < retryCount)
 		{
 			message.setRetryCount(message.getRetryCount() == null ? 1 : message.getRetryCount() + 1);
-		}
-		else
-		{
-			LOGGER.error("ERROR: deleting message with id " + message.getId() + " because it has exceeded the retry count");
-			messageDao.delete(message);
 		}
 		
 	}
