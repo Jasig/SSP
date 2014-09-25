@@ -86,27 +86,6 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'tbspacer',
                     flex: .5
                 },{
-                    xtype: 'combobox',
-                    itemId: 'caseloadActionCombo',
-                    fieldLabel: '',
-                    emptyText: 'Select Action',
-                    store: me.caseloadActionsStore,
-                    valueField: 'id',
-                    displayField: 'name',
-                    //mode: 'local',
-                    align: 'center',
-                    typeAhead: false,
-                    editable: false,
-                    queryMode: 'local',
-                    allowBlank: true,
-                    forceSelection: false,
-                    width: 100,
-                    height: 25,
-                    labelWidth: 75
-                },{
-                    xtype: 'tbspacer',
-                    flex: .5
-                },{
                     tooltip: 'Set Student to Active status',
                     text: '',
                     width: 25,
@@ -146,7 +125,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     action: 'no-show',
                     itemId: 'setNoShowStatusButton'
-                },  {
+                },{
                     tooltip: 'Set Student to Inactive',
                     text: '',
                     width: 25,
@@ -156,6 +135,26 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     action: 'inactive',
                     itemId: 'setInactiveButton'
+                },{
+                    xtype: 'tbspacer',
+                    flex: .5
+                },{
+                    xtype: 'combobox',
+                    itemId: 'caseloadActionCombo',
+                    fieldLabel: '',
+                    emptyText: 'Select Action',
+                    store: me.caseloadActionsStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    align: 'center',
+                    typeAhead: false,
+                    editable: false,
+                    queryMode: 'local',
+                    allowBlank: true,
+                    forceSelection: false,
+                    width: 100,
+                    height: 25,
+                    labelWidth: 75
                 },{
                     xtype: 'tbspacer',
                     flex: .5
