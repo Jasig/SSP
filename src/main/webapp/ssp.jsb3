@@ -39,6 +39,11 @@
                     "path": "/app/view/admin/"
                 },
                 {
+                    "clsName": "Ssp.view.component.SspHtmlEditor",
+                    "name": "SspHtmlEditor.js",
+                    "path": "/app/view/component/"
+                },
+                {
                     "clsName": "Ssp.view.component.MappedTextField",
                     "name": "MappedTextField.js",
                     "path": "/app/view/component/"

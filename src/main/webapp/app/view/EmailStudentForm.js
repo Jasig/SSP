@@ -166,21 +166,17 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 name: 'emailSubject',
                 itemId: 'emailSubject',
                 allowBlank: false,
-                width: '100%'
+                width: '100%',
+                labelWidth: 60
             }, {
-                xtype: 'fieldset',
-                title: 'Email Message',
-                border: 1,
-                items: [{
-                    xtype: 'htmleditor',
-                    name: 'emailBody',
-                    allowBlank: false,
-                    fieldLabel: '',
-                    itemId: 'emailBody',
-                    labelSeparator: '',
-                    width: '100%',
-                    height: 200
-                }]
+                xtype: 'ssphtmleditor',
+                name: 'emailBody',
+                allowBlank: false,
+                fieldLabel: 'Body',
+                itemId: 'emailBody',
+                width: '100%',
+                labelWidth: 60,
+                height: 200
             }],
             dockedItems: [{
                 xtype: 'toolbar',

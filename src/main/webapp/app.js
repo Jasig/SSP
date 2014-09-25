@@ -52,6 +52,7 @@ Ext.require([
     'Ssp.view.person.ReferralSources',
     'Ssp.view.person.ServiceReasons',
     'Ssp.view.person.AnticipatedStartDate',    
+    'Ssp.view.component.SspHtmlEditor',
     'Ssp.view.component.MappedTextField',
     'Ssp.view.component.MappedTextArea',
     'Ssp.view.component.MappedCheckBox',
@@ -2110,20 +2111,20 @@ Ext.onReady(function(){
 				    	});
 
 						// http://www.sencha.com/forum/showthread.php?73293-FIXED-87-3.0RC3-HTMLEditor-prepends-to-message&p=572631&viewfull=1#post572631
-						Ext.override(Ext.form.HtmlEditor, {
-							defaultValue: '<!-- Will be removed by the editor -->',
-							cleanDefaultValue: true,
-							cleanHtml: function(html) {
-								html = String(html);
-								if(Ext.isWebKit){
-									html = html.replace(/\sclass="(?:Apple-style-span|khtml-block-placeholder)"/gi, '');
-								}
-								if(this.cleanDefaultValue){
-									html = html.replace(new RegExp(this.defaultValue), '');
-								}
-								return html;
-							}
-						});
+//						Ext.override(Ext.form.HtmlEditor, {
+//							defaultValue: '<!-- Will be removed by the editor -->',
+//							cleanDefaultValue: true,
+//							cleanHtml: function(html) {
+//								html = String(html);
+//								if(Ext.isWebKit){
+//									html = html.replace(/\sclass="(?:Apple-style-span|khtml-block-placeholder)"/gi, '');
+//								}
+//								if(this.cleanDefaultValue){
+//									html = html.replace(new RegExp(this.defaultValue), '');
+//								}
+//								return html;
+//							}
+//						});
 
 				    	//http://stackoverflow.com/questions/9704913/confirm-password-validator-extjs-4
 				    	Ext.apply(Ext.form.field.VTypes,{

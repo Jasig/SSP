@@ -58,7 +58,7 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 					        name: 'description',
 					        anchor: '95%'
 					    },{
-		    		          xtype: 'htmleditor',
+		    		          xtype: 'ssphtmleditor',
 		    		          fieldLabel: 'Disclosure Agreement',
 		    		          enableColors: false,
 		    		          allowBlank: false,

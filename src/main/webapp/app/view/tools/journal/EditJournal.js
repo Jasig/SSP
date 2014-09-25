@@ -116,7 +116,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 						margin: '0 0 0 0',
 						padding: '0 0 0 0',
 						items: [{
-						        xtype: 'htmleditor',
+						        xtype: 'ssphtmleditor',
 						        itemId: 'commentTxt',
 		                        name: 'comment',
 		                        allowBlank: false,

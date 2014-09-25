@@ -102,7 +102,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                },
 							   
                               {
-                            	   xtype: 'htmleditor',
+                            	   xtype: 'ssphtmleditor',
                             	   name: 'notes',
                             	   fieldLabel: 'Notes',
                             	   labelWidth: 48,
