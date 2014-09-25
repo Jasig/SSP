@@ -107,8 +107,8 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                             	   fieldLabel: 'Notes',
                             	   labelWidth: 48,
 								   inputWidth:400,
-                            	   rows: 6,
-                            	   grow: true
+                            	   rows: 15,
+                            	   height: 200
                                }]
                     	},
 						{
