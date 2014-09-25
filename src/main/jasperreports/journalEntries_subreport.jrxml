@@ -115,7 +115,8 @@
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="5d7b5979-80ad-4adb-8790-ba8092b5b0b6" stretchType="RelativeToTallestObject" x="100" y="2" width="455" height="38" isPrintWhenDetailOverflows="true"/>
 				<textElement markup="html">
-				
+						<!-- This didn't work w/r/t trying to get bold text to style -->
+						<!--<font fontName="Arial" />-->
 				</textElement>
 				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
 			</textField>
