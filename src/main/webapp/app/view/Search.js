@@ -149,6 +149,7 @@ Ext.define('Ssp.view.Search', {
                     align: 'center',
                     typeAhead: false,
                     editable: false,
+                    hidden: !me.authenticatedPerson.hasAnyBulkPermissions(),
                     queryMode: 'local',
                     allowBlank: true,
                     forceSelection: false,

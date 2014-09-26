@@ -322,6 +322,10 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	
         return access.length > 0 ? true : false; 
     },
+    hasAnyBulkPermissions: function( arrRequiredPermissions ){
+    	var me=this;
+        return me.hasAccess('EXPORT_TO_CSV') || me.hasAccess('BULK_EMAIL'); 
+    },
     
     /**
      * Determines if a user has access to the provided permission.
