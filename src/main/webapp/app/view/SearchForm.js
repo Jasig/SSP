@@ -92,26 +92,7 @@ Ext.define('Ssp.view.SearchForm',{
                         itemId: 'resetStudentSearchButton',
 	                    height: 25,
                         align: 'left'
-        			}  ,{
-                        xtype: 'tbspacer'
-                    }, {
-		                xtype: 'combobox',
-		                itemId: 'searchActionCombo',
-		                fieldLabel: '',
-		                emptyText: 'Select Action',
-		                store: me.caseloadActionsStore,
-		                valueField: 'id',
-		                displayField: 'name',
-		                align: 'center',
-		                typeAhead: false,
-		                editable: false,
-		                queryMode: 'local',
-		                allowBlank: true,
-		                forceSelection: false,
-		                width: 100,
-	                    height: 25,
-		                labelWidth: 75
-		            }
+        			} 
                     ], 
             items: [
 			{  layout:'column',

@@ -35,9 +35,6 @@ Ext.define('Ssp.service.SearchService', {
 	searchCountWithParams: function(params, callbacks) {
 		var me=this;
 
-		me.store.removeAll();
-		me.store.currentPage = 1;
-
 		// Set params in the url for Search Store
 		// because the params need to be applied prior to load and not in a params
 		// definition from the load method or the paging
