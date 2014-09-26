@@ -52,15 +52,12 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     'searchStudentButton': {
 		click: 'onSearchClick'
 		},
-//    'exportSearchButton': {
-//		click: 'onExportSearchClick'
-//		},	
-    	searchActionCombo: {
-    		selector: '#searchActionCombo',
-    		listeners: {
-    			select: 'onSearchActionComboSelect'
-    		} 
-    	},		
+//    	searchActionCombo: {
+//    		selector: '#searchActionCombo',
+//    		listeners: {
+//    			select: 'onSearchActionComboSelect'
+//    		} 
+//    	},		
    	'resetStudentSearchButton': {
     		click: 'onResetClick'
     	},
@@ -146,8 +143,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 	onAfterLayout: function(comp, eobj){
 		var me=this;
+		
 		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
 		me.appEventsController.assignEvent({eventName: 'exportSearch', callBackFunc: me.onExportSearch, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
 	   	// load program statuses
 		me.getProgramStatuses();	
@@ -156,6 +155,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	var me=this;
     	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
     	me.appEventsController.removeEvent({eventName: 'exportSearch', callBackFunc: me.onExportSearch, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
 	   	return me.callParent( arguments );
     },
@@ -302,7 +302,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
 		
 	}, 
-	onSearchActionComboSelect: function( comp, records, eOpts ){
+	onSearchActionComboSelect: function(records){
 		var me=this;
 			if(!me.getView().getForm().isDirty())
 			{
@@ -376,7 +376,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 					me.bulkEmail();
 				}
 			}
-			comp.setValue(null);
 		},  
 		bulkEmail: function(){
 			var me=this;

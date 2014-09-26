@@ -939,6 +939,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	onCaseloadActionComboSelect: function( comp, records, eOpts ){
 		var me=this;
+		if(me.getIsSearch())
+		{
+			me.appEventsController.getApplication().fireEvent('onSearchActionComboSelect', records);
+			comp.setValue(null);
+			return;
+		}
 		if(records.length > 0)
 		{
 			if(records[0].get('id') === 'EXPORT')
