@@ -28,9 +28,10 @@ Ext.define('Ssp.view.BulkEmailStudentView', {
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
     },
     title:'Email Students',
-    height: 500,
+    height: 650,
     width: 750,
     resizable: true,
+    modal : true,
     initComponent: function(){
 		Ext.apply(this,{
 	          items: [

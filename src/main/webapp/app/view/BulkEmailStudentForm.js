@@ -35,9 +35,17 @@ Ext.define('Ssp.view.BulkEmailStudentForm', {
                 type: 'vbox',
                 align: 'stretch'
             },
-            bodyStyle : 'background:none',            
+            bodyStyle : 'background:none',    
             bodyPadding: 10,
-            items: [{
+            items: [
+			{
+			    xtype: 'label',
+			    text: 'Fill-in the address(es), subject and message information below to send an email to the selected student. Optionally, a Journal Entry can be created to record the email content. Only the subject and message entered will be sent to the student. To email Action Plans and MAP plans, use those tools to email the content.'
+			}, {
+			    xtype: 'tbspacer',
+			    height: 10
+			},    
+                {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
                 height:30,
@@ -150,7 +158,7 @@ Ext.define('Ssp.view.BulkEmailStudentForm', {
                 title: 'Email Message',
                 border: 1,
 				items: [{
-				        xtype: 'textareafield',
+				        xtype: 'htmleditor',
 				        name: 'emailBody',
                         allowBlank: false,
 				        fieldLabel: '',
