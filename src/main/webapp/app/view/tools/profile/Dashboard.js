@@ -117,7 +117,33 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                 flex: 0.25,
                 defaults: {
                     anchor: '100%'
-                },items:[                
+                },items:[
+                        {
+                            xtype: 'fieldset',
+                            border: 1,
+                            title: '',
+                            defaultType: 'displayfield',
+                            margin: '0 0 33 2',
+                            defaults: {
+                                anchor: '100%'
+                            },
+                            flex: 0.25,
+                            height: '370',
+                            items: [{
+                                    fieldLabel: 'GPA2',
+                                    name: 'cumGPA2',
+                                    itemId: 'cumGPA2'
+                                },{
+                                xtype: 'component',
+                                id: 'customComponent',
+                                // http://blog.fontawesome.io/2014/05/19/stacking-text-and-icons/
+                                tpl: '<span class="fa-stack fa-3x">' +
+                                    '<i class="fa fa-comment fa-stack-2x" style="color: {color}"></i>' +
+                                    '<strong class="fa-stack-1x fa-stack-text fa-inverse" style="font-size: 24px">{gpa}</strong>' +
+                                '</span>',
+                                //data: {color: 'green', gpa: 0}
+                            }]
+                        },
                 {
                     xtype: 'fieldset',
                     border: 1,

@@ -24,8 +24,6 @@
 
 <c:set var="version" scope="request" value="${model.cachebust}"/>
 
- 
-    
 <!-- ExtJS Styles -->
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/resources/css/ext-all.css" />">
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/libs/ext-4.1/src/ux/css/CheckHeader.css" />">
@@ -36,6 +34,8 @@
 <!-- SSP Theme -->
 <link href="<c:url value="${version}/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
 <link href="<c:url value="${version}/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
 
 <!-- ExtJS Lib -->
 <c:choose>

@@ -55,7 +55,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         f1StatusField: '#f1Status',
 
         gpaField: '#cumGPA',
-        
+        gpaField2: '#customComponent',
+
         academicStandingField: '#academicStanding',
         currentRestrictionsField: '#currentRestrictions',
         creditCompletionRateField: '#creditCompletionRate',
@@ -303,6 +304,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 				gpaFormatted += "  " + gpa.gpaTrendIndicator;
 			me.getGpaField().setFieldLabel('');
             me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
+            me.getGpaField2().update({'color': 'red', 'gpa': gpaFormatted});
 			me.getAcademicStandingField().setFieldLabel('');
             me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
 			me.getCreditCompletionRateField().setFieldLabel('');
