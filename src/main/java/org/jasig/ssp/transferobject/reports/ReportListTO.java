@@ -40,6 +40,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>(null,"- Early Alert Reports -"));
 		reports.add(new Pair<String,String>("earlyAlertCaseCounts","Early Alert Case Counts Report"));
         reports.add(new Pair<String,String>("earlyAlertCourseCounts","Early Alert Course Counts Report"));
+        reports.add(new Pair<String,String>("earlyAlertReasonCounts","Early Alert Reason Counts Report"));
 		reports.add(new Pair<String,String>("earlyAlertStudent","Early Alert Student Report"));
 		reports.add(new Pair<String,String>("earlyAlertStudentReferral","Early Alert Student Referral Report"));
 		reports.add(new Pair<String,String>("earlyAlertStudentProgress","Early Alert Student Progress Report"));

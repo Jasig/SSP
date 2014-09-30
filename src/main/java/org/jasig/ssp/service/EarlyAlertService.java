@@ -34,6 +34,7 @@ import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
 import org.jasig.ssp.transferobject.reports.*;
+import org.jasig.ssp.util.collections.Triple;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -163,6 +164,10 @@ public interface EarlyAlertService
 	Long getStudentCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
     PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+
+    List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(Campus campus, Date createdDateFrom, Date createdDateTo, ObjectStatus status);
+
+    PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
 	Long getEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm);
 

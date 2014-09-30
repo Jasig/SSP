@@ -883,7 +883,7 @@
                 <div class="ea-time-span">
                         <div class="ea-term">
                                 <div class="ea-input">
-                                        <select id="earlyAlertStudentTermCode" name="termCode" class="input-term-group">
+                                        <select id="earlyAlertCourseCountsTermCode" name="termCode" class="input-term-group">
                                                 <option value="">${not_applicable}</option>
                                         </select>
                                 </div>
@@ -895,14 +895,14 @@
                         <div class="ea-date-range">
                                 <!-- Date From -->
                                 <div class="ea-input">
-                                        <input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentCreateDateFrom">
+                                        <input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertCourseCountsCreateDateFrom">
                                 </div>
                                 <div class="ea-label">
                                         <span>Start Date (inclusive)::</span>
                                 </div>
                                 <div class="ea-clear"></div><!-- Date To -->
                                 <div class="ea-input">
-                                        <input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentCreateDateTo">
+                                        <input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertCourseCountsCreateDateTo">
                                 </div>
                                 <div class="ea-label">
                                         <span>End Date (exclusive)::</span>
@@ -932,6 +932,99 @@
 			<div class="buttons">
 				<input class="button primary button-send" type="submit"
 					value="submit" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<div class="hideable-form early-alert-reason-counts-report" style="display:none">
+	<h1>Early Alert Reason Counts</h1>
+	<form action="/ssp/api/1/report/earlyalertreasoncounts" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertReasonCountsCampusName" name="campusId" class="input-campus-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Roster Status
+		<div class="ea-input">
+			<select id="earlyAlertReasonCountsRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Roster Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		-->
+
+	        <!-- Date Range Description -->
+                <div class="ea-input"></div>
+                <div class="ea-label">
+                        <span>${date_range_early_alert}</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Semester Date Range Selection -->
+                <div class="ea-time-span">
+                        <div class="ea-term">
+                                <div class="ea-input">
+                                        <select id="earlyAlertReasonCountsTermCode" name="termCode" class="input-term-group">
+                                                <option value="">${not_applicable}</option>
+                                        </select>
+                                </div>
+                                <div class="ea-label">
+                                        <span>Term:</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                        </div>
+                        <div class="ea-date-range">
+                                <!-- Date From -->
+                                <div class="ea-input">
+                                        <input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertReasonCountsCreateDateFrom">
+                                </div>
+                                <div class="ea-label">
+                                        <span>Start Date (inclusive)::</span>
+                                </div>
+                                <div class="ea-clear"></div><!-- Date To -->
+                                <div class="ea-input">
+                                        <input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertReasonCountsCreateDateTo">
+                                </div>
+                                <div class="ea-label">
+                                        <span>End Date (exclusive)::</span>
+                                </div>
+                                <div class="ea-clear"></div>
+                        </div>
+                        <div class="ea-buttons">
+                                <div>
+                                        <button class="switch-date-range-type button" value="setbyrange"></button>
+                                </div>
+                        </div>
+                </div>
+
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
+		</div>
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"	value="submit" />
 			</div>
 		</div>
 	</form>

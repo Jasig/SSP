@@ -25,15 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
-
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -47,10 +44,9 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.impl.PersonSearchServiceImpl;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
 import org.jasig.ssp.transferobject.reports.*;
-import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.collections.Triple;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -59,8 +55,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.google.common.collect.Maps;
+
 
 /**
  * EarlyAlert data access methods
@@ -625,6 +621,7 @@ public class EarlyAlertDao extends
 
 	}
 
+
     public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
             Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
@@ -647,16 +644,13 @@ public class EarlyAlertDao extends
         }
 
         query.setProjection(null);
-
-        List<UUID> ids = query.setProjection(
-                Projections.distinct(Projections.property("id"))).list();
+        List<UUID> ids = query.setProjection(Projections.distinct(Projections.property("id"))).list();
 
         if (ids.size() <= 0) {
             return null;
         }
 
-        BatchProcessor<UUID, EarlyAlertCourseCountsTO> processor = new BatchProcessor<UUID, EarlyAlertCourseCountsTO>(
-                ids);
+        BatchProcessor<UUID, EarlyAlertCourseCountsTO> processor = new BatchProcessor<>(ids);
         do {
             final Criteria criteria = createCriteria();
             ProjectionList projections = Projections
@@ -676,6 +670,112 @@ public class EarlyAlertDao extends
         } while (processor.moreToProcess());
 
         return processor.getSortedAndPagedResults();
+    }
+
+
+    public PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
+            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+
+        final Criteria criteria = createCriteria();
+
+        if (createdDateFrom != null) {
+            criteria.add(Restrictions.ge("createdDate", createdDateFrom));
+        }
+
+        if (createdDateTo != null) {
+            criteria.add(Restrictions.le("createdDate", createdDateTo));
+        }
+
+        if (campus != null) {
+            criteria.add(Restrictions.eq("campus", campus));
+        }
+
+        if (objectStatus != null) {
+            criteria.add(Restrictions.eq("objectStatus", objectStatus));
+        }
+
+        criteria.setProjection(null);
+        List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
+
+        if (ids.size() <= 0) {
+            return null;
+        }
+
+        final String hql = "select "
+                +   "p.schoolId as earlyalertstudentreasoncount_schoolId, "
+                +   "p.firstName as earlyalertstudentreasoncount_firstName, "
+                +   "p.lastName as earlyalertstudentreasoncount_lastName, "
+                +   "ea.courseName as earlyalertstudentreasoncount_courseName, "
+                +   "ea.courseTitle as earlyalertstudentreasoncount_courseTitle, "
+                +   "f.firstName as earlyalertstudentreasoncount_facultyFirstName, "
+                +   "f.lastName as earlyalertstudentreasoncount_facultyLastName, "
+                +   "count(er.id) as earlyalertstudentreasoncount_totalReasonsReported, "
+                +   "ea.courseTermCode as earlyalertstudentreasoncount_termCode "
+                + "from EarlyAlert as ea "
+                + "inner join ea.person as p "
+                + "inner join ea.createdBy as f "
+                + "left join ea.earlyAlertReasonIds as er "
+                + "where ea.id in :ids "
+                + "group by ea.id, p.schoolId, p.lastName, p.firstName, ea.courseName, ea.courseTitle, "
+                +    "f.firstName, f.lastName, ea.courseTermCode "
+                + "order by p.schoolId";
+
+        BatchProcessor<UUID, EarlyAlertReasonCountsTO> processor = new BatchProcessor<>(ids);
+        do {
+            final Query query = createHqlQuery(hql).setParameterList("ids", ids);
+
+            query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+                    EarlyAlertReasonCountsTO.class, "earlyalertstudentreasoncount_"));
+
+            processor.process(query, "ids");
+
+        } while (processor.moreToProcess());
+
+        return processor.getSortedAndPagedResults();
+    }
+
+    public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
+            Campus campus, Date createdDateFrom, Date createdDateTo, ObjectStatus objectStatus) {
+        final Criteria criteria = createCriteria();
+
+        if (createdDateFrom != null) {
+            criteria.add(Restrictions.ge("createdDate", createdDateFrom));
+        }
+
+        if (createdDateTo != null) {
+            criteria.add(Restrictions.le("createdDate", createdDateTo));
+        }
+
+        if (campus != null) {
+            criteria.add(Restrictions.eq("campus", campus));
+        }
+
+        if (objectStatus != null) {
+            criteria.add(Restrictions.eq("objectStatus", objectStatus));
+        }
+
+        criteria.createAlias("earlyAlertReasonIds", "eareasons");
+
+        ProjectionList projections = Projections
+                .projectionList()
+                .add(Projections.property("eareasons.name"))
+                .add(Projections.countDistinct("person"))
+                .add(Projections.count("id"));
+        projections.add(Projections.groupProperty("eareasons.name"));
+
+        criteria.setProjection(projections);
+
+        criteria.addOrder(Order.asc("eareasons.name"));
+
+        final  List<Triple<String, Long, Long>> reasonCounts = new ArrayList<>();
+
+        for (final Object result : criteria.list()) {
+            Object[] resultReasonCounts = (Object[]) result;
+            reasonCounts.add(
+                    new Triple((String) resultReasonCounts[0], (Long) resultReasonCounts[1], (Long) resultReasonCounts[2]));
+        }
+
+        return reasonCounts;
     }
 
 	public List<EarlyAlert> getResponseDueEarlyAlerts(Date lastResponseDate) {

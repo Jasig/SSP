@@ -449,6 +449,7 @@ var ssp = ssp || {};
 							caseloadActivityReport : '.caseload-activity-report',
 							earlyAlertCaseCounts : '.early-alert-case-counts-report',
                                                         earlyAlertCourseCounts : '.early-alert-course-counts-report',
+                                                        earlyAlertReasonCounts : '.early-alert-reason-counts-report',
 							earlyAlertStudent : '.early-alert-student-report',
 							earlyAlertStudentReferral : '.early-alert-student-referral-report',
 							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',

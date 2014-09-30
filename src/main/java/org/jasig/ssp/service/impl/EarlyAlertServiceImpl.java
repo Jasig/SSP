@@ -77,6 +77,7 @@ import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.util.collections.Triple;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -791,8 +792,21 @@ public class EarlyAlertServiceImpl extends // NOPMD
             Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus ) {
         return dao.getStudentEarlyAlertCountSetPerCourses(createdDateFrom, createdDateTo, campus, objectStatus);
     }
-	
-	@Override
+
+    @Override
+    public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
+            Campus campus, Date createdDateFrom, Date createdDateTo, ObjectStatus status) {
+        return dao.getEarlyAlertReasonTypeCountByCriteria(campus, createdDateFrom, createdDateTo, status);
+    }
+
+    @Override
+    public PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
+            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+        return dao.getStudentEarlyAlertReasonCountByCriteria(createdDateFrom, createdDateTo, campus, objectStatus);
+    }
+
+
+    @Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form) {
 		return dao.getStudentEarlyAlertCountByCoaches(form);
 	}
