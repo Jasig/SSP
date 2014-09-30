@@ -91,9 +91,16 @@ public enum ServicePermissions {
 	STUDENT_INTAKE_WRITE,
 
 	API_KEY_READ,
-	API_KEY_WRITE;
+	API_KEY_WRITE,
 
-	public String asPermissionString() {
+
+    BULK_EMAIL_STUDENT,
+    BULK_PROGRAM_STATUS,
+    BULK_SEARCH_EXPORT,
+    BULK_WATCHLIST_WRITE;
+
+
+    public String asPermissionString() {
 		return "ROLE_" + this;
 	}
 
