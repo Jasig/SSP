@@ -28,8 +28,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.x" value="1020"/>
+	<property name="ireport.y" value="223"/>
 	<parameter name="termCode" class="java.lang.String"/>
 	<parameter name="campusName" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
@@ -38,8 +38,10 @@
 	<parameter name="termName" class="java.lang.String"/>
 	<field name="totalStudentsReported" class="java.lang.Long"/>
 	<field name="totalAlerts" class="java.lang.Long"/>
-	<field name="courseTitle" class="java.lang.String"/>
 	<field name="courseName" class="java.lang.String"/>
+	<field name="courseTitle" class="java.lang.String"/>
+	<field name="termCode" class="java.lang.String"/>
+	<field name="campusName" class="java.lang.String"/>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
@@ -116,7 +118,7 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="1" width="750" height="26" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="282" y="7" width="194" height="20"/>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="310" y="7" width="181" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -127,30 +129,44 @@
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="77" y="0" width="172" height="15"/>
+				<reportElement uuid="db3177cf-53a3-403d-a6e6-57a3a027363c" x="15" y="0" width="116" height="15"/>
 				<textElement textAlignment="Left">
-					<font size="8" isBold="true"/>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Campus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4a0c6f39-c89f-448c-8dd9-331963d7ed07" x="152" y="0" width="90" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Term]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="252" y="0" width="172" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Course Title]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8f46dd95-889f-42c4-9c0c-b41c89f7da7c" x="260" y="0" width="100" height="15"/>
+				<reportElement uuid="8f46dd95-889f-42c4-9c0c-b41c89f7da7c" x="441" y="0" width="90" height="15"/>
 				<textElement textAlignment="Left">
-					<font size="8" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Course Code]]></text>
+				<text><![CDATA[Course]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="380" y="0" width="174" height="15"/>
+				<reportElement uuid="64786995-51bb-4371-825c-8bcda2736520" x="539" y="0" width="111" height="15"/>
 				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Students Reported]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c264d092-e7c2-4b5f-ac23-6c6156d107a1" x="567" y="0" width="142" height="15"/>
+				<reportElement uuid="c264d092-e7c2-4b5f-ac23-6c6156d107a1" x="650" y="0" width="91" height="15"/>
 				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Alerts on Course]]></text>
 			</staticText>
@@ -159,7 +175,7 @@
 	<detail>
 		<band height="24" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="35" y="3" width="674" height="20" backcolor="#E4E4E4">
+				<reportElement uuid="2eecc840-e159-457d-817b-71dbb2771e16" stretchType="RelativeToBandHeight" x="1" y="3" width="751" height="20" backcolor="#E4E4E4">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -167,62 +183,80 @@
 				</graphicElement>
 			</rectangle>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="294ddbce-601e-4d1f-b57a-c56521042369" x="57" y="3" width="192" height="16"/>
-				<textElement textAlignment="Left">
-					<font size="10"/>
+				<reportElement uuid="9580f064-c46f-4e74-b845-25f33c427ed6" x="11" y="3" width="136" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{campusName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4cc73f34-e9a7-4b28-b4dd-c5c5ccca66b9" x="147" y="3" width="100" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{termCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="294ddbce-601e-4d1f-b57a-c56521042369" x="247" y="3" width="192" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{courseTitle}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="2f6fc5da-c066-4fd0-accb-8259ea7f96d6" x="260" y="3" width="100" height="16"/>
-				<textElement textAlignment="Left"/>
+				<reportElement uuid="2f6fc5da-c066-4fd0-accb-8259ea7f96d6" x="439" y="3" width="100" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{courseName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="862d9bad-4a09-4795-8539-b7789f997222" x="380" y="3" width="174" height="16"/>
-				<textElement textAlignment="Center">
-					<font size="10"/>
+				<reportElement uuid="862d9bad-4a09-4795-8539-b7789f997222" x="539" y="3" width="111" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalStudentsReported}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="2c1f9a52-8b05-4b6b-aac4-ed89c066f072" x="567" y="3" width="142" height="15"/>
-				<textElement textAlignment="Center"/>
+				<reportElement uuid="2c1f9a52-8b05-4b6b-aac4-ed89c066f072" x="650" y="3" width="91" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{totalAlerts}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<summary>
-		<band height="24" splitType="Stretch">
+		<band height="28" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="57" y="8" width="60" height="16"/>
+				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="57" y="9" width="60" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTALS:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement uuid="9604292f-da12-4c41-9956-2bb4daf6e69a" stretchType="RelativeToBandHeight" mode="Opaque" x="35" y="4" width="677" height="2" backcolor="#000000"/>
+				<reportElement uuid="9604292f-da12-4c41-9956-2bb4daf6e69a" stretchType="RelativeToBandHeight" mode="Opaque" x="1" y="4" width="750" height="4" backcolor="#000000"/>
 				<graphicElement>
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
 			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
-				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="279" y="8" width="81" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="61d3d9d4-6881-40e3-9dbd-060abbe0e0ac" mode="Opaque" x="450" y="9" width="74" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalCourses}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
-				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="380" y="8" width="174" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="80895736-bd0c-4e11-8cc5-cb9db0c12dee" mode="Opaque" x="539" y="9" width="111" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalStudents}  == null ? "0" : $V{totalStudents}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
-				<reportElement uuid="22d791ee-fe06-4256-ae9c-a874db47f606" mode="Opaque" x="567" y="8" width="142" height="16" isRemoveLineWhenBlank="true"/>
+				<reportElement uuid="22d791ee-fe06-4256-ae9c-a874db47f606" mode="Opaque" x="649" y="9" width="102" height="16" isRemoveLineWhenBlank="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>

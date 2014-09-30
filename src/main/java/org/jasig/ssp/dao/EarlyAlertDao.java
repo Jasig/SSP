@@ -653,6 +653,8 @@ public class EarlyAlertDao extends
         BatchProcessor<UUID, EarlyAlertCourseCountsTO> processor = new BatchProcessor<>(ids);
         do {
             final Criteria criteria = createCriteria();
+            criteria.createAlias("campus", "campus");
+
             ProjectionList projections = Projections
                     .projectionList()
                     .add(Projections.countDistinct("person").as("earlyalertcoursecount_totalStudentsReported"))
@@ -661,8 +663,13 @@ public class EarlyAlertDao extends
             projections.add(Projections.groupProperty("courseName").as("earlyalertcoursecount_courseName"));
             projections.add(Projections.groupProperty("courseTitle").as("earlyalertcoursecount_courseTitle"));
             projections.add(Projections.groupProperty("courseTermCode").as("earlyalertcoursecount_termCode"));
+            projections.add(Projections.groupProperty("campus.name").as("earlyalertcoursecount_campusName"));
 
             criteria.setProjection(projections);
+            criteria.addOrder(Order.asc("campus.name"));
+            criteria.addOrder(Order.asc("courseName"));
+            criteria.addOrder(Order.asc("courseTermCode"));
+
             criteria.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
                     EarlyAlertCourseCountsTO.class, "earlyalertcoursecount_"));
 

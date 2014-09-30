@@ -127,8 +127,10 @@ public class EarlyAlertCourseCountsReportController extends ReportBaseController
                                  String reportViewUrl, String reportType, String reportName,
                                  AbstractCsvWriterHelper csvHelper) {
         return new String[] {
+                "CAMPUS",
+                "TERM",
                 "COURSE TITLE",
-                "COURSE CODE",
+                "COURSE",
                 "TOTAL STUDENTS REPORTED",
                 "TOTAL ALERTS ON COURSE"
         };
@@ -139,6 +141,8 @@ public class EarlyAlertCourseCountsReportController extends ReportBaseController
                                       Collection<EarlyAlertCourseCountsTO> reportResults, String reportViewUrl, String reportType, String reportName,
                                       AbstractCsvWriterHelper csvHelper) {
         return csvHelper.wrapCsvRowInList(new String[] {
+                reportResultElement.getCampusName(),
+                reportResultElement.getTermCode(),
                 reportResultElement.getCourseTitle(),
                 reportResultElement.getCourseName(),
                 csvHelper.formatLong(reportResultElement.getTotalStudentsReported()),

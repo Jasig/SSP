@@ -31,6 +31,7 @@ public class EarlyAlertCourseCountsTO implements Serializable {
     private String courseName;
     private String courseTitle;
     private String termCode;
+    private String campusName;
 
 
 	public EarlyAlertCourseCountsTO () {
@@ -52,6 +53,10 @@ public class EarlyAlertCourseCountsTO implements Serializable {
     public void setCourseName (final String courseName) {
         this.courseName = courseName;
     }
+
+    public String getCampusName () { return campusName; }
+
+    public void setCampusName (final String campusName) { this.campusName = campusName; }
 
     public String getCourseTitle () {
         return courseTitle;
