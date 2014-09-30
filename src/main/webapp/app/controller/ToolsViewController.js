@@ -93,6 +93,10 @@ Ext.define('Ssp.controller.ToolsViewController', {
         
         me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
 
+        if ( me.emailStudentPopup ) {
+            me.emailStudentPopup.destroy();
+        }
+
         return me.callParent(arguments);
     },
     
@@ -166,6 +170,9 @@ Ext.define('Ssp.controller.ToolsViewController', {
 			if (record.get('name') === 'Email Student'){
 				me.getView().getSelectionModel().deselectAll();
 					if (me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON')) {
+						if ( me.emailStudentPopup ) {
+							me.emailStudentPopup.destroy();
+						}
 						me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
 						me.emailStudentPopup.show();
 					}

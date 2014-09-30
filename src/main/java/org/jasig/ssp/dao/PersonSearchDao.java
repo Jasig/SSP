@@ -759,7 +759,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 
 	private boolean hasWatchStudent(PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getMyPlans() != null;
+		return personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList();
 	}
 
 

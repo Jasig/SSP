@@ -938,12 +938,7 @@
                     "clsName": "Ssp.controller.SearchFormViewController",
                     "name": "SearchFormViewController.js",
                     "path": "/app/controller/"
-                }, 
-                {
-                    "clsName": "Ssp.controller.BulkEmailStudentViewController",
-                    "name": "BulkEmailStudentViewController.js",
-                    "path": "/app/controller/"
-                },                
+                },
                 {
                     "clsName": "Ssp.controller.EmailStudentViewController",
                     "name": "EmailStudentViewController.js",
@@ -1253,7 +1248,7 @@
                     "clsName": "Ssp.model.BulkEmailStudentRequest",
                     "name": "BulkEmailStudentRequest.js",
                     "path": "/app/model/"
-                },                               
+                },
                 {
                     "clsName": "Ssp.model.external.CourseRequisite",
                     "name": "CourseRequisite.js",
@@ -1635,17 +1630,7 @@
                     "clsName": "Ssp.view.EmailStudentView",
                     "name": "EmailStudentView.js",
                     "path": "/app/view/"
-                },  
-                {
-                    "clsName": "Ssp.view.BulkEmailStudentForm",
-                    "name": "BulkEmailStudentForm.js",
-                    "path": "/app/view/"
-                },                                
-                {
-                    "clsName": "Ssp.view.BulkEmailStudentView",
-                    "name": "BulkEmailStudentView.js",
-                    "path": "/app/view/"
-                },                              
+                },
                 {
                     "clsName": "Ssp.view.ProgramStatusChangeReasonWindow",
                     "name": "ProgramStatusChangeReasonWindow.js",

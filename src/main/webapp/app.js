@@ -37,8 +37,6 @@ Ext.require([
     'Ssp.view.StudentRecord',
     'Ssp.view.EmailStudentForm',
     'Ssp.view.EmailStudentView',
-    'Ssp.view.BulkEmailStudentForm',
-    'Ssp.view.BulkEmailStudentView',
     'Ssp.view.ProgramStatusChangeReasonWindow',
 	'Ssp.view.person.Student',
 	'Ssp.view.person.InstantStudent',

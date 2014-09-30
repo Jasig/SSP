@@ -19,26 +19,30 @@
 Ext.define('Ssp.view.EmailStudentView', {
     extend: 'Ext.window.Window',
     alias: 'widget.emailstudentview',
-    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    inject: {
-    	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController',
-		columnRendererUtils : 'columnRendererUtils',
-    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
-    },
-    title:'Email Student',
     height: 550,
     width: 750,
     resizable: true,
 	modal: true,
+    config: {
+        isBulk: false,
+        bulkCriteria: null
+    },
     initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-	                  	xtype: 'emailstudentform', 
-	                  	flex: 1
-	                  }
-	                 ]});
-    	return this.callParent(arguments);
+        var me = this;
+
+        if ( !(me.initialConfig.title) ) {
+            me.title = me.getIsBulk() ? 'Email Students' : 'Email Student';
+        }
+        Ext.apply(me,{
+            items: [
+                {
+                    xtype: 'emailstudentform',
+                    flex: 1,
+                    isBulk: me.getIsBulk(),
+                    bulkCriteria: me.getBulkCriteria()
+                }
+            ]});
+
+    	me.callParent(arguments);
     }
 });

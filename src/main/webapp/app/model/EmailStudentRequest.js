@@ -28,7 +28,8 @@ Ext.define('Ssp.model.EmailStudentRequest', {
         {name: 'sendToAdditionalEmail', type: 'boolean'},
         {name: 'additionalEmail', type: 'string'},
         {name: 'emailSubject', type: 'string'},
-        {name: 'emailBody', type: 'string'}
+        {name: 'emailBody', type: 'string'},
+        {name: 'criteria', type: 'string'}
         ],
         constructor: function(){
         	this.callParent(arguments);

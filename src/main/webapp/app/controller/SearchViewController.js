@@ -303,6 +303,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	me.appEventsController.removeEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'exportCaseload', callBackFunc: me.onExportCaseload, scope: me});
 
+	   	if ( me.emailStudentPopup ) {
+	   	    me.emailStudentPopup.destroy();
+	   	}
 	   	
 		if(me.instantCaseload != null && !me.instantCaseload.isDestroyed)
 			me.instantCaseload.close();
@@ -995,10 +998,16 @@ Ext.define('Ssp.controller.SearchViewController', {
 		} else
 		{
 			store = me.searchStore;
-		}		
-   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: store, criteria: criteria});
-   		me.emailStudentPopup.show();
-	},	
+		}
+		if ( me.emailStudentPopup ) {
+			me.emailStudentPopup.destroy();
+		}
+		me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView',{
+			isBulk: true,
+			bulkCriteria: criteria
+		});
+		me.emailStudentPopup.show();
+	},
 	getProgramStatuses: function(){
 		var me=this;
 		me.programStatusService.getAll({

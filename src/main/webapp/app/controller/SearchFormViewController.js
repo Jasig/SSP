@@ -157,6 +157,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	me.appEventsController.removeEvent({eventName: 'exportSearch', callBackFunc: me.onExportSearch, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
+        if ( me.emailStudentPopup ) {
+            me.emailStudentPopup.destroy();
+        }
+
 	   	return me.callParent( arguments );
     },
     onExportSearch: function(action, count) {
@@ -404,8 +408,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			 actualStartTerm: me.getView().query('combobox[name=actualStartTerm]')[0].value,
 			 personTableType: me.getView().query('combobox[name=personTableType]')[0].value
 			}
-	   		me.emailStudentPopup = Ext.create('Ssp.view.BulkEmailStudentView',{store: me.searchStore, criteria: criteria});
-	   		me.emailStudentPopup.show();
+			if ( me.emailStudentPopup ) {
+				me.emailStudentPopup.destroy();
+			}
+			me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView', {
+				isBulk: true,
+				bulkCriteria: criteria
+			});
+			me.emailStudentPopup.show();
 		},		
 	onSearchClick: function(button){
 		var me = this;

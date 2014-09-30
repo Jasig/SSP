@@ -17,8 +17,8 @@
  * under the License.
  */
 Ext.define('Ssp.model.BulkEmailStudentRequest', {
-	extend: 'Ext.data.Model',
-    fields: [{name: 'studentIds', type: 'string'},
+    extend: 'Ext.data.Model',
+    fields: [
         {name: 'confidentialityLevelId', type: 'string'},
         {name: 'createJournalEntry', type: 'boolean'},
         {name: 'sendToPrimaryEmail', type: 'boolean'},
@@ -26,9 +26,10 @@ Ext.define('Ssp.model.BulkEmailStudentRequest', {
         {name: 'sendToAdditionalEmail', type: 'boolean'},
         {name: 'additionalEmail', type: 'string'},
         {name: 'emailSubject', type: 'string'},
-        {name: 'emailBody', type: 'string'}
-        ],
-        constructor: function(){
-        	this.callParent(arguments);
-        }
+        {name: 'emailBody', type: 'string'},
+        {name: 'criteria', type: 'auto'}
+    ],
+    constructor: function(){
+        this.callParent(arguments);
+    }
 });

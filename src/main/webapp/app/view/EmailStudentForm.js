@@ -21,14 +21,15 @@ Ext.define('Ssp.view.EmailStudentForm', {
     alias: 'widget.emailstudentform',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
-        apiProperties: 'apiProperties',
-        appEventsController: 'appEventsController',
-        columnRendererUtils: 'columnRendererUtils',
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
         person: 'currentPerson',
         textStore: 'sspTextStore'
     },
     controller: 'Ssp.controller.EmailStudentViewController',
+    config: {
+        isBulk: false,
+        bulkCriteria: null
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -79,7 +80,8 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     allowBlank: true,
                     width: 300,
                     forceSelection: true,
-                    hidden: true
+                    hidden: true,
+                    disabled: true
                 }]
             }, {
                 xtype: 'fieldcontainer',
@@ -88,6 +90,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 layout: {
                     type: 'hbox'
                 },
+                hidden: !(me.getIsBulk()) && !me.person.get('primaryEmailAddress'),
                 items: [{
                     xtype: 'checkbox',
                     name: 'sendToPrimaryEmail',
@@ -95,7 +98,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     itemId: 'sendToPrimaryEmail',
                     labelSeparator: '',
                     hideLabel: true,
-                    disabled: !me.person.get('primaryEmailAddress'),
+                    disabled: !(me.getIsBulk()) && !me.person.get('primaryEmailAddress'),
                     boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.school-email') + ' Address',
                     fieldLabel: 'text'
                 }, {
@@ -107,7 +110,8 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     name: 'primaryEmail',
                     itemId: 'primaryEmail',
                     labelSeparator: '',
-                    fieldStyle: 'color:blue'
+                    fieldStyle: 'color:blue',
+                    hidden: me.getIsBulk() || !me.person.get('primaryEmailAddress')
                 }]
             }, {
                 xtype: 'fieldcontainer',
@@ -116,27 +120,28 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 layout: {
                     type: 'hbox'
                 },
+                hidden: !(me.getIsBulk()) && !me.person.get('secondaryEmailAddress'),
                 items: [{
                     xtype: 'checkbox',
                     name: 'sendToSecondaryEmail',
                     fieldLabel: '',
                     itemId: 'sendToSecondaryEmail',
                     labelSeparator: '',
-                    disabled: !me.person.get('secondaryEmailAddress'),
                     hideLabel: true,
+                    disabled: !(me.getIsBulk()) && !me.person.get('secondaryEmailAddress'),
                     boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.alternate-email') + ' Address',
                     fieldLabel: 'text'
                 }, {
                     xtype: 'tbspacer',
-                    width: 162
+                    width: 45
                 }, {
                     xtype: 'displayfield',
                     fieldLabel: '',
                     name: 'secondaryEmail',
                     itemId: 'secondaryEmail',
                     labelSeparator: '',
-                    fieldStyle: 'color:blue'
-                
+                    fieldStyle: 'color:blue',
+                    hidden: me.getIsBulk() || !me.person.get('secondaryEmailAddress')
                 }]
             }, {
                 xtype: 'fieldcontainer',
@@ -157,8 +162,11 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     fieldLabel: '',
                     name: 'additionalEmail',
                     itemId: 'additionalEmail',
-                    width: 180,
-                    labelSeparator: ''
+                    width: 300,
+                    labelSeparator: '',
+                    maxLength: 400 // somewhat smaller than underlying db field b/c spaces
+                                   // will be inserted before storage, plus secondaryEmailAddress is potentially
+                                   // added to this list
                 }]
             }, {
                 xtype: 'textfield',
