@@ -405,7 +405,7 @@ public class EarlyAlertDaoTest {
 
 
 		try {
-			final PagingWrapper<EarlyAlertStudentReportTO> result = dao.getStudentsEarlyAlertCountSetForCritera(searchForm, null);
+			final PagingWrapper<EarlyAlertStudentReportTO> result = dao.getStudentsEarlyAlertCountSetForCriteria(searchForm, null);
 			List<EarlyAlertStudentReportTO> compressedReports = new ArrayList<EarlyAlertStudentReportTO>();
 			for(EarlyAlertStudentReportTO reportTO: result.getRows())
 			{
