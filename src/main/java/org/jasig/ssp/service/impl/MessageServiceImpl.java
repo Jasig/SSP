@@ -451,7 +451,7 @@ public class MessageServiceImpl implements MessageService {
 			
 			if(tos.length > 0){
 				mimeMessageHelper.setTo(tos);
-				message.setSentToAddresses(StringUtils.join(tos,","));
+				message.setSentToAddresses(StringUtils.join(tos,",").trim());
 			}else {
 				StringBuilder errorMsg = new StringBuilder();
 				
@@ -471,7 +471,7 @@ public class MessageServiceImpl implements MessageService {
 				InternetAddress[] bccs = getEmailAddresses(getBcc(), "bcc:", message.getId());
 				if(bccs.length > 0){
 					mimeMessageHelper.setBcc(bccs);
-					message.setSentBccAddresses(StringUtils.join(bccs,","));
+					message.setSentBccAddresses(StringUtils.join(bccs,",").trim());
 				}
 			}catch(Exception exp){
 				LOGGER.warn("Unrecoverable errors were generated adding carbon copy to message: " + message.getId() + "Attempt to send message still initiated.", exp);
@@ -481,7 +481,7 @@ public class MessageServiceImpl implements MessageService {
 				InternetAddress[] carbonCopies = getEmailAddresses(message.getCarbonCopy(), "cc:", message.getId());
 				if(carbonCopies.length > 0){
 					mimeMessageHelper.setCc(carbonCopies);
-					message.setSentCcAddresses(StringUtils.join(carbonCopies,","));
+					message.setSentCcAddresses(StringUtils.join(carbonCopies,",").trim());
 				}
 			}catch(Exception exp){
 				LOGGER.warn("Unrecoverable errors were generated adding bcc to message: " + message.getId() + "Attempt to send message still initiated.", exp);
@@ -615,8 +615,14 @@ public class MessageServiceImpl implements MessageService {
 				personal = components[0].trim();
 				emailAddress = components[1].split(">")[0].trim();
 			}
-			return new InternetAddress(emailAddress, personal);
+			if ( StringUtils.isBlank(personal) ) {
+				return new InternetAddress(emailAddress);
+			} else {
+				return new InternetAddress(emailAddress, personal);
+			}
 		} catch (UnsupportedEncodingException e) {
+			LOGGER.warn("Invalid email address found: " + address + " for " + type +  "of message " + messageId, e);
+		} catch (AddressException e) {
 			LOGGER.warn("Invalid email address found: " + address + " for " + type +  "of message " + messageId, e);
 		}
 		return null;

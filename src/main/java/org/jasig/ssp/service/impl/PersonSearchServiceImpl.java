@@ -380,10 +380,4 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 
-	@Override
-	public List<UUID> idSearch(PersonSearchRequest criteria) {
-		return dao.idSearch(criteria);
-	}
-
-
 }

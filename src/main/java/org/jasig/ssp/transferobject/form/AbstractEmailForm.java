@@ -105,20 +105,15 @@ public abstract class AbstractEmailForm {
 		this.emailBody = emailBody;
 	}
 
-	protected Logger getLogger(){
-		return LOGGER;
-	}
-	
-	public Boolean hasEmailSubject()
-	{
+	public boolean hasEmailSubject() {
 		return StringUtils.isNotBlank(emailSubject);
 	}
-	public Boolean hasEmailBody()
-	{
+
+	public boolean hasEmailBody() {
 		return StringUtils.isNotBlank(emailBody);
 	}
 	
-	public Boolean  hasValidPrimaryAddress(){
+	public boolean hasAtLeastOneValidDeliveryAddress(){
 		if(getAddressesFromString(getPrimaryEmail()).size() > 0)
 				return true;
 		if(getRecipientEmailAddresses() != null && getRecipientEmailAddresses().size() > 0)
@@ -222,6 +217,10 @@ public abstract class AbstractEmailForm {
 
 	public void setUseStrictValidation(Boolean useStrictValidation) {
 		this.useStrictValidation = useStrictValidation;
+	}
+
+	protected Logger getLogger(){
+		return LOGGER;
 	}
 
 }

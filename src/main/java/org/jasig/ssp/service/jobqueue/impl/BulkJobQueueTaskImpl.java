@@ -31,16 +31,12 @@ import org.jasig.ssp.service.jobqueue.BulkJobQueueTask;
 import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
-import org.jasig.ssp.transferobject.jobqueue.BulkEmailStudentRequestForm;
 import org.jasig.ssp.util.CallableExecutor;
-import org.jasig.ssp.util.collections.Pair;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +46,7 @@ public class BulkJobQueueTaskImpl implements BulkJobQueueTask {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(BulkJobQueueTaskImpl.class);
 
-	private Date startupTime = Calendar.getInstance().getTime();
+	private final long startupTime = new Date().getTime();
 	
 	@Autowired
 	private transient ConfigService configService;
@@ -83,33 +79,49 @@ public class BulkJobQueueTaskImpl implements BulkJobQueueTask {
 	public void exec(CallableExecutor<Void> batchExecutor) {
 		
 		if ( Thread.currentThread().isInterrupted() ) {
-			LOGGER.info("Bulk job processing because of thread interruption");
+			LOGGER.info("Abandoning bulk job processing because of thread interruption");
 			return;
 		}
 		
 		List<Job> jobs = jobService.getNextQueuedJobsForExecution(10,getProcessIdentifier());
 		for (Job job : jobs) {
 			if ( Thread.currentThread().isInterrupted() ) {
-				LOGGER.info("Bulk job processing because of thread interruption");
+				LOGGER.info("Abandoning bulk job processing because of thread interruption");
 				return;
 			}
 			if(job.getExecutionComponentName().equals("bulk-email-executor") )
 			{
-				BulkEmailRunnable bulkEmailRunnable = new BulkEmailRunnable(job, withTransaction, jobService,personService,configService);
-				taskExecutor.execute(bulkEmailRunnable);
 				try {
+					BulkEmailRunnable bulkEmailRunnable;
+					try {
+						bulkEmailRunnable = new BulkEmailRunnable(job, withTransaction, jobService,personService,configService);
+					} catch ( Exception e ) {
+						markAsErrored(job, e);
+						continue;
+					}
+					taskExecutor.execute(bulkEmailRunnable);
 					markAsScheduled(job);
-				} catch (Exception e) {
-					LOGGER.error("Error scheduling job with id {}",job.getId());
+				} catch ( Exception e ) {
+					// this would be some sort of catastrophic persistence failure updating the job's state
+					// or an exception escaping taskExecutor.execute(), which shouldn't happen. Panic.
+					LOGGER.error("System failure scheduling or executing job with id {}", job.getId(), e);
 				}
 			}
 		}
 		
 	}
+
+	protected Job markAsErrored(Job job, Exception e) throws Exception {
+		job.setWorkflowStatus(WorkflowStatus.ERROR);
+		job.setWorkflowStoppedDate(new Date());
+		job.setWorkflowStatusDesc(e.getMessage());
+		LOGGER.error("Job with id {} errored out during scheduling", job.getId(), e);
+		return saveInTransaction(job);
+	}
 	
 	protected Job markAsScheduled(Job job) throws Exception {
 		job.setWorkflowStatus(WorkflowStatus.SCHEDULING);
-		job.setSchedulingStartedDate(Calendar.getInstance().getTime());
+		job.setSchedulingStartedDate(new Date());
 		job.setScheduledByProcess(getProcessIdentifier());
 		return saveInTransaction(job);
 	}

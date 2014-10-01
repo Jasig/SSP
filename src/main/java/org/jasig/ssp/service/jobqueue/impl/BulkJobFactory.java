@@ -24,7 +24,7 @@ import org.jasig.ssp.model.jobqueue.WorkflowStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.transferobject.jobqueue.BulkEmailStudentRequestForm;
+import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

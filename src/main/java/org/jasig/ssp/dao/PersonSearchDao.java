@@ -218,38 +218,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				PersonSearchResult2.class, "person_"));
 		return query.list();
 	}
-	@SuppressWarnings("unchecked")
-	public List<UUID> idSearch(PersonSearchRequest personSearchRequest)
-	{
-		Term currentTerm;
-		FilterTracker filterTracker = new FilterTracker();
-		try
-		{
-			currentTerm = termService.getCurrentTerm();
-		}
-		//If there is no current term, lets degrade silently
-		catch(ObjectNotFoundException e)
-		{
-			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.idSearch(PersonSearchRequest) is being called but will not function properly");
-			currentTerm = new Term();
-			currentTerm.setName("CURRENT TERM NOT SET");
-			currentTerm.setStartDate(Calendar.getInstance().getTime());
-			currentTerm.setEndDate(Calendar.getInstance().getTime());
-			
-		}
-		StringBuilder stringBuilder = buildIdSelect();
-		
-		buildFrom(personSearchRequest,stringBuilder);
-		
-		buildJoins(personSearchRequest,stringBuilder);
-		
-		buildWhere(personSearchRequest, filterTracker, stringBuilder);
-		
-		Query query = createHqlQuery(stringBuilder.toString());
-		
-		addBindParams(personSearchRequest,query,currentTerm);
-		return query.list();
-	}
 	private StringBuilder buildSelect(){
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(" select distinct p.id as person_id, p.firstName as person_firstName, " +
@@ -264,11 +232,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				"p.birthDate as person_birthDate, " +
 				"p.studentType.name as person_studentTypeName, " +
 				"p.photoUrl as person_photoUrl");
-		return stringBuilder;
-	}
-	private StringBuilder buildIdSelect(){
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(" select distinct p.id as person_id");
 		return stringBuilder;
 	}
 	private void buildWhere(PersonSearchRequest personSearchRequest,

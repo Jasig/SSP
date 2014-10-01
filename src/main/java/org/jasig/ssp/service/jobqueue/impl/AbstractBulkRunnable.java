@@ -106,7 +106,7 @@ public abstract class AbstractBulkRunnable<T extends Serializable> implements Ru
 		try {
 			saveInTransaction(job);
 		}catch(Exception ee ){
-			LOGGER.error("Error in bulk processing: {}", ee);
+			LOGGER.error("Error in bulk processing", ee);
 		}
 
 	 

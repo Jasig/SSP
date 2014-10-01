@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
@@ -34,16 +35,21 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.mail.SendFailedException;
 import javax.portlet.PortletRequest;
 
+import com.google.common.collect.Maps;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.PersonExistsException;
+import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.model.jobqueue.Job;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.security.PersonAttributesResult;
@@ -53,17 +59,25 @@ import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
+import org.jasig.ssp.service.jobqueue.JobService;
+import org.jasig.ssp.service.jobqueue.impl.AbstractBulkRunnable;
+import org.jasig.ssp.service.jobqueue.impl.BulkJobFactory;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
 import org.jasig.ssp.transferobject.PersonTO;
+import org.jasig.ssp.transferobject.form.BulkEmailJobSpec;
 import org.jasig.ssp.transferobject.form.EmailAddress;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
+import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
+import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -116,6 +130,12 @@ public class PersonServiceImpl implements PersonService {
 	private transient ExternalPersonService externalPersonService;
 
 	@Autowired
+	private transient PersonSearchService personSearchService;
+
+	@Autowired
+	private transient PersonSearchRequestTOFactory personSearchRequestFactory;
+
+	@Autowired
 	private transient WithTransaction withTransaction;
 
 	@Autowired
@@ -126,8 +146,7 @@ public class PersonServiceImpl implements PersonService {
 	
 	@Autowired
 	private transient JournalEntryService journalEntryService;
-	
-	
+
 	@Autowired
 	private transient JournalSourceService journalSourceService;
 	
@@ -136,6 +155,12 @@ public class PersonServiceImpl implements PersonService {
 	
 	@Autowired
 	private transient ConfigService configService;
+
+	@Autowired
+	private transient JobService jobService;
+
+	@Autowired
+	private transient BulkJobFactory bulkJobFactory;
 
 
 	/**
@@ -873,22 +898,61 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public boolean emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
-		
+	public Map<String,UUID> emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
 		validateInput(emailRequest);
-		
-		Message message = buildAndSendStudentEmail(emailRequest);
-		
-		buildJournalEntryIfNecessary(emailRequest, message);
-		
-		return true;
-		
+		final Message message = buildAndSendStudentEmail(emailRequest);
+		final JournalEntry journalEntry = buildJournalEntry(emailRequest, message);
+		final Map<String,UUID> rslt = Maps.newLinkedHashMap();
+		rslt.put("messageId", message.getId());
+		if ( journalEntry != null ) {
+			rslt.put("journalEntryId", journalEntry.getId());
+		}
+		return rslt;
 	}
 
-	private void buildJournalEntryIfNecessary(
+	@Override
+	public JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException, ValidationException {
+		validateInput(emailRequest);
+		PersonSearchRequest criteria = personSearchRequestFactory.from(emailRequest.getCriteria());
+		final SortingAndPaging origSortAndPage = criteria.getSortAndPage();
+		final SortingAndPaging unlimitedSortAndPage;
+		if ( origSortAndPage != null && origSortAndPage.isPaged() ) {
+			unlimitedSortAndPage = new SortingAndPaging(origSortAndPage.getStatus(), 0, -1,
+					origSortAndPage.getSortFields(), origSortAndPage.getDefaultSortProperty(),
+					origSortAndPage.getDefaultSortDirection());
+		} else if ( origSortAndPage == null ) {
+			// ObjectStatus.ALL matches PersonSearchController.buildSortAndPage()
+			unlimitedSortAndPage = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ALL, 0, -1, null, null, null);
+		} else {
+			unlimitedSortAndPage = origSortAndPage;
+		}
+		criteria.setSortAndPage(unlimitedSortAndPage);
+		final PagingWrapper<PersonSearchResult2> searchResults = personSearchService.searchPersonDirectory(criteria);
+		if ( searchResults == null || searchResults.getResults() == 0 ) {
+			// TODO would be nice to have a better way of representing a no-op job, b/c an exception is really
+			// overly unfriendly, but a null return is so non-descriptive as to be useless. So we opt for a
+			// ValidationException so the client *knows* nothing really happened.
+			throw new ValidationException("Person search parameters matched no records. Can't send message.");
+		}
+		if ( searchResults.getResults() > (long)Integer.MAX_VALUE ) {
+			throw new ValidationException("Too many person search results (" + searchResults.getResults() +
+					"). Can't send message.");
+		}
+		final List<ImmutablePersonIdentifiersTO> deliveryTargetIdentifiers = Lists.newArrayListWithCapacity((int) searchResults.getResults());
+		for ( PersonSearchResult2 searchResult : searchResults ) {
+			deliveryTargetIdentifiers.add(new ImmutablePersonIdentifiersTO(searchResult.getId(), searchResult.getSchoolId()));
+		}
+		final BulkEmailJobSpec jobSpec = new BulkEmailJobSpec(emailRequest, deliveryTargetIdentifiers);
+		final String serializedJobRequest = AbstractBulkRunnable.serialize(jobSpec);
+		final Job job = bulkJobFactory.getNewJob(emailRequest,serializedJobRequest);
+		jobService.create(job);
+		return new JobTO(job);
+	}
+
+	private JournalEntry buildJournalEntry(
 			EmailStudentRequestForm emailRequest, Message message)
 			throws ObjectNotFoundException, ValidationException {
-		if(emailRequest.getCreateJournalEntry())
+		if(emailRequest.getCreateJournalEntry() && emailRequest.getStudentId() != null)
 		{
 			Person student = get(emailRequest.getStudentId());
 			
@@ -910,8 +974,10 @@ public class PersonServiceImpl implements PersonService {
 			journalEntry.setComment(commentFromEmail);
 			journalEntry.setEntryDate(new Date());
 			journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
-			journalEntryService.save(journalEntry);
+			journalEntry = journalEntryService.save(journalEntry);
+			return journalEntry;
 		}
+		return null;
 	}
 
 	private String buildJournalEntryCommentFromEmail(
@@ -942,29 +1008,50 @@ public class PersonServiceImpl implements PersonService {
 		return messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody);
 	}
 	
-	private void validateInput(EmailStudentRequestForm emailRequest) {
+	private void validateInput(EmailStudentRequestForm emailRequest) throws ValidationException {
 		StringBuilder validationMsg = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
-		if(!emailRequest.hasStudentId())
-		{
-			validationMsg.append("Must provide a student Id"+EOL);
-		}
+
+		// Removed a historical validation that required a studentId (UUID) on emailRequest. We don't actually need that
+		// and we can't require it since we now reuse EmailStudentRequestForm when sending bulk email, which may
+		// target external-only students, i.e. persons without UUIDs.
+
 		if(!emailRequest.hasEmailSubject())
 		{
-			validationMsg.append("Email subject must be provided"+EOL);
+			validationMsg.append("Email subject must be provided").append(EOL);
 		}
 		if(!emailRequest.hasEmailBody())
 		{
-			validationMsg.append("Email body must be provided"+EOL);
+			validationMsg.append("Email body must be provided").append(EOL);
 		}
 		
-		if(!emailRequest.hasValidPrimaryAddress()){
-			validationMsg.append("At least one valid email address must be included."+EOL);
+		if(!emailRequest.hasAtLeastOneValidDeliveryAddress()){
+			validationMsg.append("At least one valid email address must be included.").append(EOL);
 		}
 		
 		String validation = validationMsg.toString();
 		if(org.apache.commons.lang.StringUtils.isNotBlank(validation)){
-			throw new IllegalArgumentException(validation);
+			throw new ValidationException(validation);
+		}
+	}
+
+	private void validateInput(BulkEmailStudentRequestForm emailRequest) throws ValidationException {
+		StringBuilder validationMsg = new StringBuilder();
+		String EOL = System.getProperty("line.separator");
+		if(!emailRequest.hasEmailSubject())
+		{
+			validationMsg.append("Email subject must be provided").append(EOL);
+		}
+		if(!emailRequest.hasEmailBody())
+		{
+			validationMsg.append("Email body must be provided").append(EOL);
+		}
+		if(!emailRequest.hasNonCcDeliveryAddress()) {
+			validationMsg.append("Non-cc email delivery addresses must be provided").append(EOL);
+		}
+		String validation = validationMsg.toString();
+		if(org.apache.commons.lang.StringUtils.isNotBlank(validation)){
+			throw new ValidationException(validation);
 		}
 	}
 

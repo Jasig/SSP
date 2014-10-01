@@ -49,7 +49,9 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 public interface PersonSearchService {
 	/**
 	 * Returns all Persons found for the specified filters
-	 * 
+	 *
+     * @deprecated Likely overly restrictive for most use cases. Consider using
+     *   {@link #searchPersonDirectory(org.jasig.ssp.model.PersonSearchRequest)} instead.
 	 * @param programStatus
 	 *            the program status
 	 * @param requireProgramStatus
@@ -69,12 +71,20 @@ public interface PersonSearchService {
 	 *             if program status or other reference data passed does not
 	 *             exist in the database.
 	 */
+	@Deprecated
 	PagingWrapper<PersonSearchResult> searchBy(ProgramStatus programStatus,
 			Boolean requireProgramStatus,
 			Boolean outsideCaseload, String searchTerm, Person advisor,
 			SortingAndPaging sAndP)
 			throws ObjectNotFoundException, ValidationException;
 
+	/**
+	 * @deprecated Likely overly restrictive for most use cases. Consider using
+	 *   {@link #searchPersonDirectory(org.jasig.ssp.model.PersonSearchRequest)} instead.
+	 * @param from
+	 * @return
+	 */
+	@Deprecated
 	PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from);
 	
 	PagingWrapper<PersonSearchResult2> searchPersonDirectory(PersonSearchRequest from);
@@ -188,5 +198,4 @@ public interface PersonSearchService {
 
 	Long searchPersonDirectoryCount(PersonSearchRequest from);
 
-	List<UUID> idSearch(PersonSearchRequest criteria);
 }

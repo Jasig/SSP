@@ -316,7 +316,7 @@ public class TaskServiceImpl
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final EmailPersonTasksForm form)
 			throws ObjectNotFoundException {
-		if(!form.hasValidPrimaryAddress()){
+		if(!form.hasAtLeastOneValidDeliveryAddress()){
 			throw new IllegalArgumentException("Must enter at least one email address");
 		}
 

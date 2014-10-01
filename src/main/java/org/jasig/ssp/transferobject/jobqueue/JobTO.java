@@ -22,6 +22,8 @@ import org.jasig.ssp.model.jobqueue.Job;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 
+import java.util.UUID;
+
 public class JobTO extends AbstractAuditableTO<Job> {
 
 	public JobTO(Job job) {

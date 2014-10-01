@@ -16,19 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.transferobject.jobqueue;
+package org.jasig.ssp.transferobject.form;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +38,6 @@ public class BulkEmailStudentRequestForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String studentIds;
-	
 	private UUID confidentialityLevelId;
 	
 	private Boolean createJournalEntry;
@@ -82,14 +80,6 @@ public class BulkEmailStudentRequestForm implements Serializable {
 
 	public void setCreateJournalEntry(Boolean createJournalEntry) {
 		this.createJournalEntry = createJournalEntry;
-	}
-
-	public String getStudentIds() {
-		return studentIds;
-	}
-
-	public void setStudentIds(String studentIds) {
-		this.studentIds = studentIds;
 	}
 
 	public Boolean getSendToPrimaryEmail() {
@@ -155,23 +145,21 @@ public class BulkEmailStudentRequestForm implements Serializable {
 	public void setSendToAdditionalEmail(Boolean sendToAdditionalEmail) {
 		this.sendToAdditionalEmail = sendToAdditionalEmail;
 	}
-	
-	@JsonCreator
-	public static BulkEmailStudentRequestForm create(String jsonString)
-	{
 
-		ObjectMapper mapper = new ObjectMapper();
-		BulkEmailStudentRequestForm pc = null;
-	    try {
-	        pc = mapper.readValue(jsonString, BulkEmailStudentRequestForm.class);
-	    } catch (JsonParseException e) {
-	        e.printStackTrace();
-	    } catch (JsonMappingException e) {
-	        e.printStackTrace();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	    return pc;
+	public boolean hasEmailSubject() {
+		return StringUtils.isNotBlank(emailSubject);
+	}
+	public boolean hasEmailBody() {
+		return StringUtils.isNotBlank(emailBody);
+	}
+	public boolean hasSendToPrimaryEmail() {
+		return getSendToPrimaryEmail() != null && getSendToPrimaryEmail();
+	}
+	public boolean hasSendToSecondaryEmail() {
+		return getSendToSecondaryEmail() != null && getSendToSecondaryEmail();
+	}
+	public boolean hasNonCcDeliveryAddress() {
+		return hasSendToPrimaryEmail() || hasSendToSecondaryEmail();
 	}
 
 	public PersonSearchRequestTO getCriteria() {

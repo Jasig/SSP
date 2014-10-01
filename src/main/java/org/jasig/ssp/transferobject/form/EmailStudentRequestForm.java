@@ -23,7 +23,6 @@ import java.util.UUID;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.transferobject.jobqueue.BulkEmailStudentRequestForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

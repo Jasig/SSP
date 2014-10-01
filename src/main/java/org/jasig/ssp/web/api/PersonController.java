@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api;
 
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.UUID;
 
@@ -159,10 +160,10 @@ public class PersonController extends AbstractBaseController {
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ROLE_PERSON_WRITE') or hasRole('ROLE_PERSON_FILTERED_WRITE')")
 	public @ResponseBody
-	boolean emailStudent(
+	Map<String, UUID> emailStudent(
 			final @RequestBody EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
-		service.emailStudent(emailRequest);
-		return true;
+		final Map<String,UUID> rslt = service.emailStudent(emailRequest);
+		return rslt;
 	}
 	
 	@RequestMapping(value = "/currentCoachesLite", method = RequestMethod.GET)

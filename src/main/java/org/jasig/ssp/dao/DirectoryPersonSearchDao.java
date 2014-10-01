@@ -175,19 +175,11 @@ public class DirectoryPersonSearchDao  {
 	 * @return List of people that match the specified filters
 	 */
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
-	{
-		
-//        final StringBuilder hqlWithoutSelect = new StringBuilder();
-//        
-//		if(!buildFrom(personSearchRequest,hqlWithoutSelect))
-//			return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
+	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
 		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);
-		
-		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
-		 return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
+		return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
 	}
 
 	private Pair<Long, Query> prepSearchQuery(Object session,
@@ -853,7 +845,7 @@ public class DirectoryPersonSearchDao  {
 	}
 
 	private boolean hasWatchStudent(PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getMyWatchList() != null;
+		return personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList();
 	}
 
 	private boolean hasGpaCriteria(PersonSearchRequest personSearchRequest) 

@@ -18,9 +18,11 @@
  */
 package org.jasig.ssp.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.UUID;
 
@@ -29,12 +31,13 @@ import javax.portlet.PortletRequest;
 
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
+import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
+import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -285,7 +288,25 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	void evict(Person model);
 
-	boolean emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
+	/**
+	 * Send an email message to a single student, returning a MAP of descriptors enumerating the entities created
+	 * as a result.
+	 *
+	 * @param emailRequest
+	 * @return
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
+	 */
+	Map<String,UUID> emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
+
+	/**
+	 * Send an email message to potentially n-many students. This operation is expected to be implemented asynchronously
+	 * so the return is a pointer to a work queue job.
+	 *
+	 * @param emailRequest
+	 * @return
+	 */
+	JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException, ValidationException;
 
 	void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId)
 			throws ObjectNotFoundException, SendFailedException,
