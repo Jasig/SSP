@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.security.permissions.Permission;
@@ -135,10 +136,16 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
 				
-		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
+		DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
+
+        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+            dateTerm.setTerm(null);
+        } else if (termCode != null && createDateFrom == null) {
+            dateTerm.setStartEndDates(null, null);
+        }
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
@@ -170,11 +177,11 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
 				personSearchForm, 
 				programStatusService, 
 				null);
-		
-		
-		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
-				termDate.getStartDate(), 
-				termDate.getEndDate());
+
+		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm,
+                dateTerm.getTermCodeNullPossible(),
+                dateTerm.getStartDate(),
+                dateTerm.getEndDate());
 
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query

@@ -155,19 +155,19 @@ public interface EarlyAlertService
 
 	Long getCountOfEarlyAlertsForSchoolIds(Collection<String> schoolIds, Campus campus);
 	
-	Long getEarlyAlertCountForCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
+	Long getEarlyAlertCountForCreatedDateRange(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
 	Long getClosedEarlyAlertCountForClosedDateRange(Date closedDateFrom, Date closedDateTo, Campus campus, String rosterStatus);
 
-	Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
+	Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-	Long getStudentCountForEarlyAlertCreatedDateRange(Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
+	Long getStudentCountForEarlyAlertCreatedDateRange(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-    PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+    PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
-    List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(Campus campus, Date createdDateFrom, Date createdDateTo, ObjectStatus status);
+    List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(Campus campus, String termCode, Date createdDateFrom, Date createdDateTo, ObjectStatus status);
 
-    PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+    PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
 	Long getEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm);
 

@@ -28,7 +28,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="6"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -128,7 +128,7 @@
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="230" y="36" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Watcher:]]></text>
-			</staticText>			
+			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" positionType="Float" x="119" y="21" width="119" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
@@ -182,12 +182,12 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="121" y="135" width="100" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="289" y="135" width="100" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="2" y="153" width="100" height="15"/>
@@ -197,7 +197,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="121" y="153" width="100" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{term}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{term} == null) ? "Not Used" : $P{term}]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement uuid="f68164f7-fe5e-4f34-9db6-757cd9d5ca38" key="table" style="table" x="515" y="11" width="199" height="117"/>

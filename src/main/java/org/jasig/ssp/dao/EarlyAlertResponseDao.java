@@ -197,11 +197,15 @@ public class EarlyAlertResponseDao extends
 		return totalRows;
 	}
 
-	public Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(Date createDateFrom, Date createDateTo, Campus campus, String rosterStatus) {
+	public Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(String termCode, Date createDateFrom, Date createDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
 
-		if(campus != null || createDateFrom != null || createDateTo != null){
+		if(campus != null || termCode != null){
 			final Criteria alias = query.createAlias("earlyAlert", "earlyAlert");
+
+            if (termCode != null) {
+                alias.add(Restrictions.eq("earlyAlert.courseTermCode", termCode));
+            }
 
 			if (createDateFrom != null) {
 				alias.add(Restrictions.ge("earlyAlert.createdDate",
@@ -226,73 +230,73 @@ public class EarlyAlertResponseDao extends
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(String termCode, Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, String homeDepartment, Person coach) {
-		final Criteria query = createCriteria();
+
+        final Criteria query = createCriteria();
+        query.createAlias("earlyAlert", "earlyAlert");
+
+        if (termCode != null) {
+            query.add(Restrictions.eq("earlyAlert.courseTermCode", termCode));
+        }
 		
 		if (createDateFrom != null) {
-			query.add(Restrictions.ge("createdDate",
-					createDateFrom));
+			query.add(Restrictions.ge("createdDate", createDateFrom));
 		}
 
 		if (createDateTo != null) {
-			query.add(Restrictions.le("createdDate",
-					createDateTo));
+			query.add(Restrictions.le("createdDate", createDateTo));
 		}
 		
 		if (outcomes != null && outcomes.size() > 0) {
 			query.add(Restrictions.in("earlyAlertOutcome.id", outcomes));
 		}
-		
-		query.createAlias("earlyAlert", "earlyAlert");
+
 		query.createAlias("earlyAlert.person", "student");
 		Criteria coachCriteria = query.createAlias("student.coach","coach");
-		if(coach != null){
-			coachCriteria.add(
-					Restrictions.eq("coach.id", coach.getId()));
+
+        if (coach != null) {
+			coachCriteria.add(Restrictions.eq("coach.id", coach.getId()));
 		}
 		
-		if(homeDepartment != null && homeDepartment.length() > 0)
-		{
-			 query.createAlias("coach.staffDetails","personStaffDetails");
+		if ( homeDepartment != null && homeDepartment.length() > 0 ) {
+			 query.createAlias("coach.staffDetails", "personStaffDetails");
 			 query.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
-		}else{
+		} else {
 			query.createAlias("coach.staffDetails","personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 		}
-
 		
-		ProjectionList projections = Projections.projectionList().
-				add(Projections.groupProperty("earlyAlert.id").as("ea_outcome_earlyAlertId"));
+		ProjectionList projections = Projections.projectionList()
+                .add(Projections.groupProperty("earlyAlert.id").as("ea_outcome_earlyAlertId"));
 		projections.add(Projections.groupProperty("coach.firstName").as("ea_outcome_coachFirstName"));
 		projections.add(Projections.groupProperty("coach.middleName").as("ea_outcome_coachMiddleName"));
 		projections.add(Projections.groupProperty("coach.lastName").as("ea_outcome_coachLastName"));
 		projections.add(Projections.groupProperty("coach.id").as("ea_outcome_coachId"));
 		projections.add(Projections.groupProperty("coach.schoolId").as("ea_outcome_coachSchoolId"));
 		projections.add(Projections.groupProperty("personStaffDetails.departmentName").as("ea_outcome_coachDepartmentName"));
-		query.createAlias("earlyAlertOutreachIds", "earlyAlertOutreachIds");
-		projections.add(Projections.groupProperty("earlyAlertOutreachIds.name").as("ea_outcome_earlyAlertOutreachName"));
-		
 
-		query.setProjection(projections)
-				.setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
+        query.createAlias("earlyAlertOutreachIds", "earlyAlertOutreachIds");
+		projections.add(Projections.groupProperty("earlyAlertOutreachIds.name").as("ea_outcome_earlyAlertOutreachName"));
+
+		query.setProjection(projections).setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 								EarlyAlertStudentOutreachReportTO.class,"ea_outcome_"));
 
-		
 		// item count
 		List<EarlyAlertStudentOutreachReportTO> values = query.list();
-		if(values.size() == 0)
-			return null;
+		if(values.size() == 0) {
+            return null;
+        }
 		
 		Iterator<EarlyAlertStudentOutreachReportTO> valueIterator = values.iterator();
 		ArrayList<EarlyAlertStudentOutreachReportTO> responses = new ArrayList<EarlyAlertStudentOutreachReportTO>();
-		while(valueIterator.hasNext()){
+		while (valueIterator.hasNext()) {
 			EarlyAlertStudentOutreachReportTO value = valueIterator.next();
 			Integer index = responses.indexOf(value);
-			if(index != null && index >= 0){
+			if ( index != null && index >= 0 ) {
 				responses.get(index).processDuplicate(value);
-			}else
-				responses.add(value);
+			} else {
+                responses.add(value);
+            }
 		}
 		return responses;
 	}
@@ -310,13 +314,12 @@ public class EarlyAlertResponseDao extends
 	}
 	
 	@SuppressWarnings(UNCHECKED)
-	public Long getEarlyAlertCountByOutcomeCriteria(
-			EarlyAlertStudentSearchTO searchForm)
-			throws ObjectNotFoundException {
+	public Long getEarlyAlertCountByOutcomeCriteria(EarlyAlertStudentSearchTO searchForm)
+            throws ObjectNotFoundException {
 
 		final Criteria criteria = getCriteriaForOutcomeType(searchForm, null);
 		
-		if(searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0){
+		if (searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0) {
 			criteria.createAlias("earlyAlertOutcome", "earlyAlertOutcome");
 			criteria.add(Restrictions.in("earlyAlertOutcome.id", searchForm.getOutcomeIds()));
 		}
@@ -364,24 +367,34 @@ public class EarlyAlertResponseDao extends
 	}
 	
 	
-	private Criteria getCriteriaForOutcomeType(EarlyAlertStudentSearchTO searchForm,
-			SortingAndPaging sAndP){
-		final Criteria criteria = createCriteria();
-		
-		if(searchForm.getStartDate() != null)
-			criteria.add(Restrictions.ge("createdDate", searchForm.getStartDate()));
-		if(searchForm.getEndDate() != null)
-			criteria.add(Restrictions.le("createdDate", searchForm.getEndDate() ));
-		
-		criteria.createAlias("earlyAlert", "earlyAlert");
+	private Criteria getCriteriaForOutcomeType(EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP) {
+
+        final Criteria criteria = createCriteria();
+        criteria.createAlias("earlyAlert", "earlyAlert");
+
+        if (searchForm.getTermCode() != null) {
+            criteria.add(Restrictions.eq("earlyAlert.courseTermCode", searchForm.getTermCode()));
+        }
+
+		if (searchForm.getStartDate() != null) {
+            criteria.add(Restrictions.ge("createdDate", searchForm.getStartDate()));
+        }
+
+		if (searchForm.getEndDate() != null) {
+            criteria.add(Restrictions.le("createdDate", searchForm.getEndDate()));
+        }
+
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
 
 		setPersonCriteria(personCriteria, searchForm.getAddressLabelSearchTO());
 		
-		if(searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0)
-			criteria.add(Restrictions.in("earlyAlertOutcome.id", searchForm.getOutcomeIds()));
-		if(sAndP != null)
-			sAndP.addAll(criteria);
+		if (searchForm.getOutcomeIds() != null && searchForm.getOutcomeIds().size() > 0) {
+            criteria.add(Restrictions.in("earlyAlertOutcome.id", searchForm.getOutcomeIds()));
+        }
+
+		if (sAndP != null) {
+            sAndP.addAll(criteria);
+        }
 		
 		return criteria;
 	}
@@ -389,20 +402,29 @@ public class EarlyAlertResponseDao extends
 	@SuppressWarnings(UNCHECKED)
 	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
 			final List<UUID> earlyAlertReferralIds, 
-			final Date createDateFrom, 
+			final String termCode,
+            final Date createDateFrom,
 			final Date createDateTo,
 			final PersonSearchFormTO personSearchForm,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria();
+        criteria.createAlias("earlyAlertReferralIds", "earlyAlertReferral");
+        criteria.createAlias("earlyAlert", "earlyAlert");
+
+        if (termCode != null) {
+            criteria.add(Restrictions.eq("earlyAlert.courseTermCode", termCode));
+        }
 		
-		if(createDateFrom != null)
-			criteria.add(Restrictions.ge("createdDate", createDateFrom));
-		if(createDateTo != null)
-			criteria.add(Restrictions.le("createdDate", createDateTo));
-		
-		criteria.createAlias("earlyAlertReferralIds", "earlyAlertReferral");
+		if(createDateFrom != null) {
+            criteria.add(Restrictions.ge("createdDate", createDateFrom));
+        }
+
+		if(createDateTo != null) {
+            criteria.add(Restrictions.le("createdDate", createDateTo));
+        }
+
 		if (earlyAlertReferralIds != null) {
 			// EarlyAlertResponse->EarlyAlertReferral not modeled as an operational
 			// join type, so no filtering on object status since for a direct
@@ -411,20 +433,20 @@ public class EarlyAlertResponseDao extends
 			criteria 
 				.add(Restrictions.in("earlyAlertReferral.id",earlyAlertReferralIds));
 		}
-		
-		criteria.createAlias("earlyAlert", "earlyAlert");
+
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
 
 		setPersonCriteria(personCriteria, personSearchForm);
 		
 		List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
 		
-		if(ids.size() == 0)
-			return new ArrayList<EarlyAlertStudentReportTO>();
+		if (ids.size() == 0) {
+            return new ArrayList<>();
+        }
 		
 		BatchProcessor<UUID, EarlyAlertStudentReportTO> processor =  new BatchProcessor<UUID,EarlyAlertStudentReportTO>(ids);
 		
-		do{
+		do {
 			final Criteria collectionCriteria = createCriteria();
 			collectionCriteria.createAlias("earlyAlert", "earlyAlert");
 			collectionCriteria.createAlias("earlyAlert.person", "person");
@@ -442,7 +464,7 @@ public class EarlyAlertResponseDao extends
 							new NamespacedAliasToBeanResultTransformer(
 									EarlyAlertStudentReportTO.class, "early_alert_response_"));
 			processor.process(collectionCriteria, "id");
-		}while(processor.moreToProcess());
+		} while(processor.moreToProcess());
 		
 		return processor.getSortedAndPagedResultsAsList();
 	}

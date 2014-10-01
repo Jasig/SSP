@@ -22,6 +22,7 @@ package org.jasig.ssp.web.api.reports;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.security.permissions.Permission;
@@ -108,12 +109,18 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
         final Map<String, Object> parameters = Maps.newHashMap();
         final Campus campus = SearchParameters.getCampus(campusId, campusService);
 
+        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+            dateTerm.setTerm(null);
+        } else if (termCode != null && createDateFrom == null) {
+            dateTerm.setStartEndDates(null, null);
+        }
+
         SearchParameters.addCampusToParameters(campus, parameters);
         SearchParameters.addDateTermToMap(dateTerm, parameters);
 
-        List<Triple<String, Long, Long>> reasonTotals = earlyAlertService.getEarlyAlertReasonTypeCountByCriteria(campus, dateTerm.getStartDate(), dateTerm.getEndDate(), objectStatus);
+        List<Triple<String, Long, Long>> reasonTotals = earlyAlertService.getEarlyAlertReasonTypeCountByCriteria(campus, dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), objectStatus);
 
-        final PagingWrapper<EarlyAlertReasonCountsTO> results = earlyAlertService.getStudentEarlyAlertReasonCountByCriteria(dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
+        final PagingWrapper<EarlyAlertReasonCountsTO> results = earlyAlertService.getStudentEarlyAlertReasonCountByCriteria(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
         final Collection<EarlyAlertReasonCountsTO> reportTOs;
 
         if ( results != null) {

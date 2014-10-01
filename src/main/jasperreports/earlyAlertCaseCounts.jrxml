@@ -73,7 +73,7 @@
 			<textField isBlankWhenNull="false">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="21" width="311" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{termNames}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{termNames} == null) ? "Not Used" : $P{termNames}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450" x="100" y="41" width="100" height="20"/>

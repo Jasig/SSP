@@ -27,8 +27,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="772"/>
-	<property name="ireport.y" value="232"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -207,7 +207,7 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 			<textField isBlankWhenNull="false">
 				<reportElement uuid="c815587a-983d-45dc-b132-72958caaae11" x="100" y="30" width="265" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{termName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{termName} == null) ? "Not Used" : $P{termName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="a8a58697-5d79-4c86-9be6-3407ca25c47e" x="0" y="60" width="100" height="20"/>
@@ -227,7 +227,7 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 			<textField>
 				<reportElement uuid="8f6abfb7-45d4-4083-b11c-edf26d567702" x="100" y="90" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="3803a8c1-5f19-41ad-ba56-3985e37598b1" x="0" y="121" width="100" height="20"/>
@@ -237,7 +237,7 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 			<textField>
 				<reportElement uuid="b49a96fd-2fd0-4e65-b3ae-0441be73e346" x="100" y="121" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -20,6 +20,7 @@
 package org.jasig.ssp.web.api.reports;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
@@ -102,10 +103,16 @@ public class EarlyAlertCourseCountsReportController extends ReportBaseController
         final Map<String, Object> parameters = Maps.newHashMap();
         final Campus campus = SearchParameters.getCampus(campusId, campusService);
 
+        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+            dateTerm.setTerm(null);
+        } else if (termCode != null && createDateFrom == null) {
+            dateTerm.setStartEndDates(null, null);
+        }
+
         SearchParameters.addCampusToParameters(campus, parameters);
         SearchParameters.addDateTermToMap(dateTerm, parameters);
 
-        final PagingWrapper<EarlyAlertCourseCountsTO> results = earlyAlertService.getStudentEarlyAlertCountSetPerCourses(dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
+        final PagingWrapper<EarlyAlertCourseCountsTO> results = earlyAlertService.getStudentEarlyAlertCountSetPerCourses(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
         final Collection<EarlyAlertCourseCountsTO> reportTOs;
 
         if ( results != null) {

@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="71"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="Table Dataset" uuid="be43ce74-c7e5-48bb-9e55-2f61365d6e2f">
 		<field name="first" class="java.lang.String"/>
@@ -75,7 +75,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="130" y="102" width="100" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="230" y="102" width="65" height="15"/>
@@ -100,7 +100,7 @@
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="295" y="102" width="100" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="295" y="40" width="119" height="15" isPrintWhenDetailOverflows="true"/>
@@ -142,7 +142,6 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
-			
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="72" width="116" height="15"/>
 				<textElement/>
@@ -161,7 +160,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="130" y="117" width="100" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{term}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{term} == null) ? "Not Used" : $P{term}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="cd7eafd4-390c-4ded-8a23-c33648371bb4" x="149" y="87" width="388" height="20"/>

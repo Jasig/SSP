@@ -110,7 +110,7 @@
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="225" y="36" width="100" height="16"/>
 				<textElement/>
 				<text><![CDATA[Watcher:]]></text>
-			</staticText>			
+			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="125" y="53" width="117" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
@@ -134,7 +134,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="125" y="101" width="100" height="16"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="101" width="100" height="16"/>
@@ -149,12 +149,12 @@
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="290" y="101" width="100" height="16"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="d574f3da-59c5-4167-8e87-ca5fc5f4c0c2" x="125" y="85" width="100" height="16"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{termName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{termName} == null) ? "Not Used" : $P{termName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="85" width="100" height="16"/>

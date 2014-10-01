@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -131,8 +132,13 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 
 		PersonTO watcherTO = SearchParameters.getPerson(watcherId, personService, personTOFactory);
 
-		
-		DateTerm termDate =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);	
+        DateTerm termDate = new DateTerm(createDateFrom, createDateTo, termCode, termService);
+
+        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+            termDate.setTerm(null);
+        } else if (termCode != null && createDateFrom == null) {
+            termDate.setStartEndDates(null, null);
+        }
 
 		final PersonSearchFormTO searchForm = new PersonSearchFormTO(
 				coachTO,
@@ -147,7 +153,8 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		// work... end up with empty results need to dig into actual query
 		// building
 		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
-				Arrays.asList(earlyAlertReferralId), 
+				Arrays.asList(earlyAlertReferralId),
+                termDate.getTermCodeNullPossible(),
 				termDate.getStartDate(), 
 				termDate.getEndDate(), 
 				searchForm, 

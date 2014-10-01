@@ -58,7 +58,6 @@
 	<field name="earlyAlertsInitialTerm" class="java.lang.Long"/>
 	<field name="earlyAlertsComparisonTerm" class="java.lang.Long"/>
 	<field name="coachName" class="java.lang.String"/>
-	
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
@@ -113,7 +112,7 @@
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="313" y="32" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Watcher:]]></text>
-			</staticText>			
+			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="115" y="47" width="100" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
@@ -147,7 +146,7 @@
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
 				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="113" y="124" width="117" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{comparisonTerm}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{comparisonTerm} == null) ? "Not Used" : $P{comparisonTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="0" y="124" width="100" height="15"/>
@@ -162,7 +161,7 @@
 			<textField>
 				<reportElement uuid="612141fa-92d2-42fe-b83d-aefa001ac035" x="113" y="109" width="117" height="15"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{initialTerm}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{initialTerm} == null) ? "Not Used" : $P{initialTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="2" y="93" width="98" height="16"/>

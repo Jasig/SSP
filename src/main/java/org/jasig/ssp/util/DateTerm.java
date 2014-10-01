@@ -36,37 +36,49 @@ public class DateTerm {
 	
 	
 	public DateTerm(Date createDateFrom, Date createDateTo, String termCode, TermService termService) 
-			throws ObjectNotFoundException{
+			throws ObjectNotFoundException {
 		startDate = createDateFrom;
 		endDate = createDateTo;		
-		if(termCode != null && termCode.length()> 0) {
+		if (termCode != null && termCode.length() > 0) {
 			term = termService.getByCode(termCode);
 			startDate = term.getStartDate();
 			endDate = term.getEndDate();
 		}
 	}
 
-	public String getTermName(){
-		if(term != null)
-			return term.getName();
+	public String getTermName() {
+		if(term != null) {
+            return term.getName();
+        }
 		return "";
 	}
 	
-	public String getTermCode(){
-		if(term != null)
-			return term.getCode();
+	public String getTermCode() {
+		if(term != null) {
+            return term.getCode();
+        }
 		return "";
 	}
+
+    public String getTermCodeNullPossible() {
+        if (term != null) {
+            return term.getCode();
+        }
+        return null;
+    }
 
 	public Term getTerm() {
 		return term;
 	}
 
-
 	public void setTerm(Term term) {
 		this.term = term;
 	}
 
+    public void setStartEndDates(Date startDate, Date endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
 	public Date getStartDate() {
 		return startDate;
@@ -76,15 +88,17 @@ public class DateTerm {
 		return endDate;
 	}
 	
-	public String startDateString(){
-		if(startDate != null)
-			return sdf.format(startDate);
+	public String startDateString() {
+		if (startDate != null) {
+            return sdf.format(startDate);
+        }
 		return "";
 	}
 
-	public String endDateString(){
-		if(endDate != null)
-			return sdf.format(endDate);
+	public String endDateString() {
+		if (endDate != null) {
+            return sdf.format(endDate);
+        }
 		return "";
 	}
 	

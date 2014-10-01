@@ -78,10 +78,10 @@ public interface EarlyAlertResponseService
 	Long getRespondedToEarlyAlertCountForResponseCreatedDateRange(Date createDateFrom,
 																  Date createDateTo, Campus campus, String rosterStatus);
 
-	Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(Date startDate,
+	Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(String termCode, Date startDate,
 																	Date endDate, Campus campus, String rosterStatus);
 
-	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(String termCode, Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach);
 	
 	
@@ -116,7 +116,8 @@ public interface EarlyAlertResponseService
 	 */
 	List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
 			final List<UUID> earlyAlertReferralIds,
-			final Date createDateFrom,
+			final String termCode,
+            final Date createDateFrom,
 			final Date createDateTo, 
 			final PersonSearchFormTO addressLabelSearchTO,
 			final SortingAndPaging sAndP)throws ObjectNotFoundException;

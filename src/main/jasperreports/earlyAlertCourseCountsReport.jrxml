@@ -27,9 +27,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="1020"/>
-	<property name="ireport.y" value="223"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="295"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="termCode" class="java.lang.String"/>
 	<parameter name="campusName" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
@@ -46,7 +46,7 @@
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
 	</variable>
-	<variable name="totalCourses" class="java.lang.Integer" calculation="DistinctCount">
+	<variable name="totalCourses" class="java.lang.Integer" calculation="Count">
 		<variableExpression><![CDATA[$F{courseName}]]></variableExpression>
 	</variable>
 	<variable name="totalStudents" class="java.lang.Integer" calculation="Sum">
@@ -78,7 +78,7 @@
 			<textField isBlankWhenNull="false">
 				<reportElement uuid="03790184-2d0c-4374-bcfe-541fd45962df" x="100" y="20" width="265" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{termName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{termName} == null) ? "Not Used" : $P{termName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e" x="0" y="40" width="100" height="20"/>
@@ -98,7 +98,7 @@
 			<textField>
 				<reportElement uuid="2b2d94b6-f0b8-4ded-b828-640c7df406a7" x="539" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="3a2a08fe-a1a6-4857-8b87-ff440ba41dcf" x="439" y="20" width="100" height="20"/>
@@ -108,7 +108,7 @@
 			<textField>
 				<reportElement uuid="de2c3b0f-7d20-4c4f-abcc-78ce1fb55e2b" x="539" y="20" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -33,6 +33,8 @@ public class EarlyAlertStudentSearchTO
 
 	private static final long serialVersionUID = 3118831549819428989L;
 
+    private String termCode;
+
 	private Date startDate;
 
 	private Date endDate;
@@ -42,13 +44,18 @@ public class EarlyAlertStudentSearchTO
 	private List<UUID> outcomeIds;
 
 	public EarlyAlertStudentSearchTO(final PersonSearchFormTO addressLabelSearchTO,
-								final Date startDate, final Date endDate) {
+								final String termCode, final Date startDate, final Date endDate) {
 		super();
 		
 		this.addressLabelSearchTO = addressLabelSearchTO;
+        this.termCode = termCode;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+
+    public String getTermCode() {
+        return termCode;
+    }
 
 
 	public Date getStartDate() {

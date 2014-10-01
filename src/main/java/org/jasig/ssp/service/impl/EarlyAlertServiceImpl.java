@@ -760,8 +760,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 	
 	@Override
-	public Long getEarlyAlertCountForCreatedDateRange(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getEarlyAlertCountForCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
+	public Long getEarlyAlertCountForCreatedDateRange(String termCode, Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getEarlyAlertCountForCreatedDateRange(termCode, createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
@@ -770,14 +770,14 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 
 	@Override
-	public Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
+	public Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(String termCode, Date createDatedFrom, Date createdDateTo, Campus campus, String rosterStatus) {
+		return dao.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(termCode, createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
-	public Long getStudentCountForEarlyAlertCreatedDateRange(Date createDatedFrom,
+	public Long getStudentCountForEarlyAlertCreatedDateRange(String termCode, Date createDatedFrom,
 															 Date createdDateTo, Campus campus, String rosterStatus) {
-		return dao.getStudentCountForEarlyAlertCreatedDateRange(createDatedFrom, createdDateTo, campus, rosterStatus);
+		return dao.getStudentCountForEarlyAlertCreatedDateRange(termCode, createDatedFrom, createdDateTo, campus, rosterStatus);
 	}
 
 	@Override
@@ -789,20 +789,20 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
     @Override
     public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
-            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus ) {
-        return dao.getStudentEarlyAlertCountSetPerCourses(createdDateFrom, createdDateTo, campus, objectStatus);
+            String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus ) {
+        return dao.getStudentEarlyAlertCountSetPerCourses(termCode, createdDateFrom, createdDateTo, campus, objectStatus);
     }
 
     @Override
     public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
-            Campus campus, Date createdDateFrom, Date createdDateTo, ObjectStatus status) {
-        return dao.getEarlyAlertReasonTypeCountByCriteria(campus, createdDateFrom, createdDateTo, status);
+            Campus campus, String termCode, Date createdDateFrom, Date createdDateTo, ObjectStatus status) {
+        return dao.getEarlyAlertReasonTypeCountByCriteria(campus, termCode, createdDateFrom, createdDateTo, status);
     }
 
     @Override
     public PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
-            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
-        return dao.getStudentEarlyAlertReasonCountByCriteria(createdDateFrom, createdDateTo, campus, objectStatus);
+            String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+        return dao.getStudentEarlyAlertReasonCountByCriteria(termCode, createdDateFrom, createdDateTo, campus, objectStatus);
     }
 
 

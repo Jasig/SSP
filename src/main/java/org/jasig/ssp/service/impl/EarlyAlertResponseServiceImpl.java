@@ -511,23 +511,23 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 
 	@Override
-	public Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(Date createDateFrom,
+	public Long getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(String termCode, Date createDateFrom,
 																		   Date createDateTo, Campus campus, String rosterStatus) {
-		return dao.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(createDateFrom, createDateTo, campus, rosterStatus);
+		return dao.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(termCode, createDateFrom, createDateTo, campus, rosterStatus);
 	}
 	
-	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(Date createDateFrom,
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(String termCode, Date createDateFrom,
 			Date createDateTo, List<UUID> outcomes, String rosterStatus, Person coach){
-		return dao.getEarlyAlertOutreachCountByOutcome(createDateFrom, createDateTo, outcomes, rosterStatus, coach);
+		return dao.getEarlyAlertOutreachCountByOutcome(termCode, createDateFrom, createDateTo, outcomes, rosterStatus, coach);
 	}
 	
 	@Override
 	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
-			List<UUID> earlyAlertReferralIds,final Date createDateFrom,final Date createDateTo,
+			List<UUID> earlyAlertReferralIds, final String termCode, final Date createDateFrom,final Date createDateTo,
 			PersonSearchFormTO addressLabelSearchTO, SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 		
-		return dao.getPeopleByEarlyAlertReferralIds(earlyAlertReferralIds, createDateFrom,  createDateTo, addressLabelSearchTO, sAndP);
+		return dao.getPeopleByEarlyAlertReferralIds(earlyAlertReferralIds, termCode, createDateFrom,  createDateTo, addressLabelSearchTO, sAndP);
 	}
 	
 	@Override

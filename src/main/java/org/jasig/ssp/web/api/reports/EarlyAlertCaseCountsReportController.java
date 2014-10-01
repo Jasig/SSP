@@ -126,14 +126,11 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController<E
 			{			
 				EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO(term.getCode(),
 						term.getName(),
-						earlyAlertService.getStudentCountForEarlyAlertCreatedDateRange(term.getStartDate(),
-								term.getEndDate(), campus, rosterStatus),
-						earlyAlertService.getEarlyAlertCountForCreatedDateRange(term.getStartDate(),
-								term.getEndDate(), campus, rosterStatus),
-						earlyAlertResponseService.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(term.getStartDate(),
-								term.getEndDate(), campus, rosterStatus),
-						earlyAlertService.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(term.getStartDate(),
-								term.getEndDate(), campus, rosterStatus)
+						earlyAlertService.getStudentCountForEarlyAlertCreatedDateRange(term.getCode(), null, null, campus, rosterStatus),
+						earlyAlertService.getEarlyAlertCountForCreatedDateRange(term.getCode(), null, null, campus, rosterStatus),
+						earlyAlertResponseService.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(
+                                term.getCode(), null, null, campus, rosterStatus),
+						earlyAlertService.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(term.getCode(), null, null, campus, rosterStatus)
 										);
 			
 				caseLoads.add(caseCounts);
@@ -144,10 +141,10 @@ public class EarlyAlertCaseCountsReportController extends ReportBaseController<E
 			
 			EarlyAlertTermCaseCountsTO caseCounts = new EarlyAlertTermCaseCountsTO("All",
 					"All",
-					earlyAlertService.getStudentCountForEarlyAlertCreatedDateRange(null, null, campus, rosterStatus),
-					earlyAlertService.getEarlyAlertCountForCreatedDateRange(null, null, campus, rosterStatus),
-					earlyAlertResponseService.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(null, null, campus, rosterStatus),
-					earlyAlertService.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(null, null, campus, rosterStatus)
+					earlyAlertService.getStudentCountForEarlyAlertCreatedDateRange(null, null, null, campus, rosterStatus),
+					earlyAlertService.getEarlyAlertCountForCreatedDateRange(null, null, null, campus, rosterStatus),
+					earlyAlertResponseService.getRespondedToEarlyAlertCountForEarlyAlertCreatedDateRange(null, null, null, campus, rosterStatus),
+					earlyAlertService.getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(null, null, null, campus, rosterStatus)
 									);
 			caseLoads.add(caseCounts);
 		}

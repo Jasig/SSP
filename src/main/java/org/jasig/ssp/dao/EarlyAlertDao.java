@@ -262,6 +262,10 @@ public class EarlyAlertDao extends
 		setPersonCriteria(query.createAlias("person", "person"),
 				criteriaTO.getAddressLabelSearchTO());
 
+        if (criteriaTO.getTermCode() != null) {
+            query.add(Restrictions.eq("courseTermCode", criteriaTO.getTermCode()));
+        }
+
 		if (criteriaTO.getStartDate() != null) {
 			query.add(Restrictions.ge("createdDate", criteriaTO.getStartDate()));
 		}
@@ -275,10 +279,11 @@ public class EarlyAlertDao extends
 		List<UUID> ids = query.setProjection(
 				Projections.distinct(Projections.property("id"))).list();
 
-		if (ids.size() <= 0)
-			return null;
-		BatchProcessor<UUID, EarlyAlertStudentReportTO> processor = new BatchProcessor<UUID, EarlyAlertStudentReportTO>(
-				ids, sAndP);
+		if (ids.size() <= 0) {
+            return null;
+        }
+
+		BatchProcessor<UUID, EarlyAlertStudentReportTO> processor = new BatchProcessor<UUID, EarlyAlertStudentReportTO>(ids, sAndP);
 		do {
 			final Criteria criteria = createCriteria();
 			ProjectionList projections = Projections
@@ -448,9 +453,13 @@ public class EarlyAlertDao extends
 				.uniqueResult();
 	}
 
-	public Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(Date createDatedFrom,
+	public Long getClosedEarlyAlertsCountForEarlyAlertCreatedDateRange(String termCode, Date createDatedFrom,
 																	   Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
+
+        if (termCode != null) {
+            query.add(Restrictions.eq("courseTermCode", termCode));
+        }
 
 		if (createDatedFrom != null) {
 			query.add(Restrictions.ge("createdDate", createDatedFrom));
@@ -470,9 +479,13 @@ public class EarlyAlertDao extends
 				.uniqueResult();
 	}
 
-	public Long getEarlyAlertCountForCreatedDateRange(Date createdDateFrom,
+	public Long getEarlyAlertCountForCreatedDateRange(String termCode, Date createdDateFrom,
 													  Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
+
+        if (termCode != null) {
+            query.add(Restrictions.eq("courseTermCode", termCode));
+        }
 
 		if (createdDateFrom != null) {
 			query.add(Restrictions.ge("createdDate", createdDateFrom));
@@ -493,9 +506,13 @@ public class EarlyAlertDao extends
 		return totalRows;
 	}
 
-	public Long getStudentCountForEarlyAlertCreatedDateRange(Date createdDateFrom,
+	public Long getStudentCountForEarlyAlertCreatedDateRange(String termCode, Date createdDateFrom,
 															 Date createdDateTo, Campus campus, String rosterStatus) {
 		final Criteria query = createCriteria();
+
+        if (termCode != null) {
+            query.add(Restrictions.eq("courseTermCode", termCode));
+        }
 
 		if (createdDateFrom != null) {
 			query.add(Restrictions.ge("createdDate", createdDateFrom));
@@ -623,15 +640,19 @@ public class EarlyAlertDao extends
 
 
     public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
-            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+            String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
         final Criteria query = createCriteria();
 
-        if (createdDateFrom != null) {
+        if (termCode != null) {
+            query.add(Restrictions.eq("courseTermCode", termCode));
+        }
+
+        if ( createdDateFrom != null ) {
             query.add(Restrictions.ge("createdDate", createdDateFrom));
         }
 
-        if (createdDateTo != null) {
+        if ( createdDateTo != null ) {
             query.add(Restrictions.le("createdDate", createdDateTo));
         }
 
@@ -681,9 +702,13 @@ public class EarlyAlertDao extends
 
 
     public PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
-            Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+            String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
         final Criteria criteria = createCriteria();
+
+        if (termCode != null) {
+            criteria.add(Restrictions.eq("courseTermCode", termCode));
+        }
 
         if (createdDateFrom != null) {
             criteria.add(Restrictions.ge("createdDate", createdDateFrom));
@@ -742,8 +767,12 @@ public class EarlyAlertDao extends
     }
 
     public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
-            Campus campus, Date createdDateFrom, Date createdDateTo, ObjectStatus objectStatus) {
+            Campus campus, String termCode, Date createdDateFrom, Date createdDateTo, ObjectStatus objectStatus) {
         final Criteria criteria = createCriteria();
+
+        if (termCode != null) {
+            criteria.add(Restrictions.eq("courseTermCode", termCode));
+        }
 
         if (createdDateFrom != null) {
             criteria.add(Restrictions.ge("createdDate", createdDateFrom));

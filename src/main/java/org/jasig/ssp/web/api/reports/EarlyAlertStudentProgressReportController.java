@@ -26,11 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
-
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
@@ -46,13 +42,11 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentProgressReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +59,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
 
 /**
@@ -88,13 +81,13 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 
 	@Autowired
 	private transient PersonService personService;
-	
+
 	@Autowired
 	private transient TermService termService;
-	
+
 	@Autowired
 	private transient PersonTOFactory personTOFactory;
-	
+
 	@Autowired
 	private transient StudentTypeService studentTypeService;
 	
@@ -179,14 +172,14 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 		Term comparisonTerm = termService.getByCode(termCodeComparitor);
 
 		
-		final EarlyAlertStudentSearchTO initialSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
-				initialTerm.getStartDate(), initialTerm.getEndDate());
+		final EarlyAlertStudentSearchTO initialSearchForm = new EarlyAlertStudentSearchTO(personSearchForm,
+				initialTerm.getCode(), null, null);
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCriteria(
 				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
 		
 		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
-				comparisonTerm.getStartDate(), comparisonTerm.getEndDate());
+				comparisonTerm.getCode(), null, null);
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCriteria(
 				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));

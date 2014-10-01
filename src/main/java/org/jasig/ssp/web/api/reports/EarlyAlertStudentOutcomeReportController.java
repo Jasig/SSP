@@ -28,11 +28,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
-
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
@@ -54,7 +51,6 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.collections.Pair;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -69,7 +65,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -170,6 +165,12 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
+
+        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+            dateTerm.setTerm(null);
+        } else if (termCode != null && createDateFrom == null) {
+            dateTerm.setStartEndDates(null, null);
+        }
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		
@@ -217,7 +218,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		SearchParameters.addUUIDSToMap(SELECTED_OUTCOME_NAMES, "Not Used", cleanOutcomeIds, parameters, earlyAlertOutcomeService);
 
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm,
-				dateTerm.getStartDate(), dateTerm.getEndDate());
+				dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate());
 		
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		
@@ -265,22 +266,22 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	private List<Pair<String,Long>> getOutcomes(final List<UUID> cleanOutcomeIds, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{
 		List<Pair<String,Long>> outcomeTotals = new ArrayList<Pair<String,Long>>();
 		Collection<EarlyAlertOutcome> earlyAlertOutcomes;	
-		if(cleanOutcomeIds != null && cleanOutcomeIds.size() > 0){
+
+        if (cleanOutcomeIds != null && cleanOutcomeIds.size() > 0) {
 			earlyAlertOutcomes = new ArrayList<EarlyAlertOutcome>();
-			for(UUID outcomeId:cleanOutcomeIds){
+			for (UUID outcomeId:cleanOutcomeIds) {
 				earlyAlertOutcomes.add(earlyAlertOutcomeService.get(outcomeId));
 			}
-		}else{
+		} else {
 			earlyAlertOutcomes = earlyAlertOutcomeService.getAll(sAndP).getRows();
 		}
-		
 	
-			for(EarlyAlertOutcome earlyAlertOutcome:earlyAlertOutcomes){
-				searchForm.setOutcomeIds(null);
-				outcomeTotals.add(
-					new Pair<String,Long>(earlyAlertOutcome.getName(),earlyAlertResponseService.
-							getEarlyAlertOutcomeTypeCountByCriteria(EARLY_ALERT_OUTCOME, earlyAlertOutcome.getId(), searchForm)));
-			}
+        for (EarlyAlertOutcome earlyAlertOutcome:earlyAlertOutcomes) {
+            searchForm.setOutcomeIds(null);
+            outcomeTotals.add(
+                new Pair<String,Long>(earlyAlertOutcome.getName(),earlyAlertResponseService.
+                        getEarlyAlertOutcomeTypeCountByCriteria(EARLY_ALERT_OUTCOME, earlyAlertOutcome.getId(), searchForm)));
+        }
 		return outcomeTotals;
 	}
 	
@@ -291,7 +292,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		
-		for(EarlyAlertOutreach earlyAlertOutreach:earlyAlertOutreaches){
+		for (EarlyAlertOutreach earlyAlertOutreach:earlyAlertOutreaches) {
 			outcomeTotals.add(
 					new Pair<String,Long>(earlyAlertOutreach.getName(),earlyAlertResponseService.
 							getEarlyAlertOutcomeTypeCountByCriteria(EARLY_ALERT_OUTREACH, earlyAlertOutreach.getId(), searchForm)));

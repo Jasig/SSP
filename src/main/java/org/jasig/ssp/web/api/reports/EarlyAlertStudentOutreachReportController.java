@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.security.permissions.Permission;
@@ -115,13 +116,20 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 			final @RequestParam(required = false) Date createDateTo,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
-		
 				
-		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
+		final DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);
+
+        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+            dateTerm.setTerm(null);
+        } else if (termCode != null && createDateFrom == null) {
+            dateTerm.setStartEndDates(null, null);
+        }
 
 		final List<UUID> earlyAlertOutcomesClean = SearchParameters.cleanUUIDListOfNulls(earlyAlertOutcomes);
 		
-		final Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(dateTerm.getStartDate(), 
+		final Collection<EarlyAlertStudentOutreachReportTO> outreachOutcomes = earlyAlertResponseService.getEarlyAlertOutreachCountByOutcome(
+                dateTerm.getTermCodeNullPossible(),
+                dateTerm.getStartDate(),
 				dateTerm.getEndDate(),
 				earlyAlertOutcomesClean,
 				rosterStatus,
