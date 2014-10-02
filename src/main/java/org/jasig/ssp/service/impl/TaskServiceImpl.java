@@ -30,7 +30,7 @@ import java.util.UUID;
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TaskDao;
 import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.model.Goal;
@@ -316,11 +316,19 @@ public class TaskServiceImpl
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final EmailPersonTasksForm form)
 			throws ObjectNotFoundException {
-		if(!form.hasAtLeastOneValidDeliveryAddress()){
+		if(!form.hasValidDeliveryAddresses()){
 			throw new IllegalArgumentException("Must enter at least one email address");
 		}
 
-		EmailAddress addresses = form.getValidEmailAddresses();
+		EmailAddress addresses;
+		try {
+			addresses = form.getValidDeliveryAddressesOrFail();
+		} catch ( ValidationException e ) {
+			// Historically this method has always thrown unchecked exceptions for this sort
+			// of validation failure, and switching to a checked exception is likely to
+			// disrupt transaction management, so converted checked to unchecked here
+			throw new IllegalArgumentException("Must enter at least one email address", e);
+		}
 		final List<TaskTO> taskTOs = TaskTO.toTOList(tasks);
 		final List<GoalTO> goalTOs = GoalTO.toTOList(goals);
 		final List<StrengthTO> strengthTOs = StrengthTO.toTOList(strengths);
@@ -329,11 +337,11 @@ public class TaskServiceImpl
 				.createActionPlanMessage(student, taskTOs, goalTOs, strengthTOs);
 		Set<String> ccAddresses = new HashSet<String>();
 
-		if(form.getCoachEmail() != null && !form.getCoachEmail().isEmpty())
+		if(form.getCoachEmail() != null && !StringUtils.isBlank(form.getCoachEmail()))
 		{
 			ccAddresses.addAll(student.getWatcherEmailAddresses());
 		}
-		if(!addresses.getCc().isEmpty())
+		if(!StringUtils.isBlank(addresses.getCc()))
 		{
 			ccAddresses.addAll(org.springframework.util.StringUtils.commaDelimitedListToSet(addresses.getCc()));
 		}

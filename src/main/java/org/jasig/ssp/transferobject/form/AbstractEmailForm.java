@@ -20,8 +20,13 @@ package org.jasig.ssp.transferobject.form;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.util.collections.Pair;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,62 +118,87 @@ public abstract class AbstractEmailForm {
 		return StringUtils.isNotBlank(emailBody);
 	}
 	
-	public boolean hasAtLeastOneValidDeliveryAddress(){
-		if(getAddressesFromString(getPrimaryEmail()).size() > 0)
-				return true;
-		if(getRecipientEmailAddresses() != null && getRecipientEmailAddresses().size() > 0)
+	public boolean hasValidDeliveryAddresses(){
+		try {
+			getValidDeliveryAddressesOrFail();
 			return true;
-		
-		if(getAddressesFromString(getSecondaryEmail()).size() > 0)
-			return true;
-		
-		if(getAddressesFromString(getCoachEmail()).size() > 0)
-			return true;
-		
-		if(getAddressesFromString(getAdditionalEmail()).size() > 0)
-			return true;
+		} catch ( ValidationException e ) {
+			return false;
+		}
+	}
 
-		return false;
-	}
-	
-	//TODO Current how to, cc and bcc are set is not very determinate, always only one to set throught this form
-	public  EmailAddress getValidEmailAddresses()
-			throws IllegalArgumentException {
+	public EmailAddress getValidDeliveryAddressesOrFail()
+			throws ValidationException {
 		
-		String toAddress = null;
-		
-		StringBuilder ccBuilder = new StringBuilder("");
-		
-		List<String> addressSet = new ArrayList<String>();		
-	    
-		addressSet.addAll(getAddressesFromString(getPrimaryEmail()));
-		addressSet.addAll(getAddressesFromString(getSecondaryEmail()));
-		if(getRecipientEmailAddresses() != null)
-			addressSet.addAll(getRecipientEmailAddresses());
-		addressSet.addAll(getAddressesFromString(getCoachEmail()));
-		addressSet.addAll(getAddressesFromString(getAdditionalEmail()));
-		
-		if(addressSet.size() == 0){
-			throw new IllegalArgumentException("Must enter at least one email address");
+		String toAddr = null;
+		Set<String> ccAddrs = Sets.newLinkedHashSet();
+		final List<String> primaryAddrs = getValidAddressesFromString(getPrimaryEmail());
+		toAddr = collectValidDeliveryAddresses(primaryAddrs, toAddr, ccAddrs);
+
+		final List<String> secondaryAddrs = getValidAddressesFromString(getSecondaryEmail());
+		toAddr = collectValidDeliveryAddresses(secondaryAddrs, toAddr, ccAddrs);
+
+		final List<String> recipientAddrs = getValidAddressesFromList(getRecipientEmailAddresses());
+		toAddr = collectValidDeliveryAddresses(recipientAddrs, toAddr, ccAddrs);
+
+		// 'coachEmail' *does* makes sense as a 'to' addr when invoked from the Action Plan UI tool. That's
+		// also why it's checked ahead of 'additional email'
+		final List<String> coachAddrs = getValidAddressesFromString(getCoachEmail());
+		toAddr = collectValidDeliveryAddresses(coachAddrs, toAddr, ccAddrs);
+
+		final List<String> additionalAddrs = getValidAddressesFromString(getAdditionalEmail());
+		toAddr = collectValidDeliveryAddresses(additionalAddrs, toAddr, ccAddrs);
+
+		if ( StringUtils.isBlank(toAddr) ) {
+			throw new ValidationException("Need at least one valid address to use as the 'to' delivery address.");
 		}
-		String prefix = "";
-		for (String address : addressSet) {
-			if(org.apache.commons.lang.StringUtils.isBlank(toAddress)){
-				toAddress = address.trim();
-				continue;
+
+		if ( ccAddrs.isEmpty() ) {
+			return new EmailAddress(toAddr, null, null);
+		}
+
+		final StringBuilder ccBuilder = new StringBuilder();
+		for ( String ccAddr : ccAddrs ) {
+			ccBuilder.append(ccAddr.trim()).append(", ");
+		}
+		ccBuilder.setLength(ccBuilder.length() - 2);
+
+		return new EmailAddress(toAddr, ccBuilder.toString(), null);
+	}
+
+	/**
+	 * A little weird, but prevents a lot of code duplication in getValidDeliveryAddressesOrFail(). The return
+	 * type is the 'to' address to use in {@code EmailAddress} typically being built by the caller. Will always
+	 * return {@code currentTo} unless that arg is null, in which case it returns the firt valid address in
+	 * {@code candidateAddrs}, if any.
+	 * @param candidateAddrs
+	 * @param currentTo
+	 * @param currentCcAddrs
+	 * @return
+	 */
+	private String collectValidDeliveryAddresses(List<String> candidateAddrs, String currentTo, Set<String> currentCcAddrs) {
+		if ( candidateAddrs != null && !(candidateAddrs.isEmpty()) ) {
+			if ( StringUtils.isBlank(currentTo) ) {
+				final Pair<String,List<String>> popped = pop(candidateAddrs);
+				if ( popped != null ) {
+					currentTo = popped.getFirst().trim();
+					currentCcAddrs.addAll(popped.getSecond());
+				}
+			} else {
+				currentCcAddrs.addAll(candidateAddrs);
 			}
-			ccBuilder.append(prefix);
-			ccBuilder.append(address.trim());
-			prefix = ", ";			
 		}
-		if(org.apache.commons.lang.StringUtils.isBlank(toAddress)){
-			throw new IllegalArgumentException("No valid email address found please enter at least one valid email address");
+		return currentTo;
+	}
+
+	private Pair<String,List<String>> pop(List<String> strs) {
+		if ( strs == null || strs.isEmpty() ) {
+			return null;
 		}
-		
-		return new EmailAddress(toAddress, ccBuilder.toString().trim(), null);
+		return new Pair(strs.get(0), strs.size() == 1 ? Lists.newArrayListWithCapacity(0) : strs.subList(1,strs.size()));
 	}
 	
-	private List<String> getAddressesFromString(String str){
+	private List<String> getValidAddressesFromString(String str){
 		List<String> validatedAddresses = new ArrayList<String>();
 		if(StringUtils.isBlank(str))
 			return validatedAddresses;
@@ -179,12 +209,31 @@ public abstract class AbstractEmailForm {
 				validatedAddresses.add(address.trim());
 				continue;
 			}
-			getLogger().error("Sending task email, address not valid: " + address);
+			getLogger().debug("Invalid address {} in address list {}", address, str);
+		}
+		return validatedAddresses;
+	}
+
+	private List<String> getValidAddressesFromList(List<String> strs) {
+		if ( strs == null || strs.isEmpty() ) {
+			return Lists.newArrayListWithCapacity(0);
+		}
+		final List<String> validatedAddresses = Lists.newArrayListWithExpectedSize(strs.size());
+		for ( String str : strs ) {
+			if ( str == null ) {
+				continue;
+			}
+			str = str.trim();
+			if ( isValidEmailAddress(str, useStrictValidation) ) {
+				validatedAddresses.add(str);
+			} else {
+				getLogger().debug("Invalid address {} in address list {}", str, str);
+			}
 		}
 		return validatedAddresses;
 	}
 	
-	private static Boolean isValidEmailAddress(String address, Boolean strict){
+	private static boolean isValidEmailAddress(String address, Boolean strict){
 		if(StringUtils.isBlank(address))
 			return false;
 		if(address.length() > 254)
@@ -192,13 +241,13 @@ public abstract class AbstractEmailForm {
 		address = address.trim();
 	    String stricterFilterString = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
 	    String laxString = ".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
-	    String emailRegex = strict ? stricterFilterString : laxString;
+	    String emailRegex = strict != null && strict ? stricterFilterString : laxString;
 	    java.util.regex.Pattern p = java.util.regex.Pattern.compile(emailRegex);
 	    java.util.regex.Matcher m = p.matcher(address);
 	    return m.matches();
 	}
 	
-	public static Boolean hasValidEmailAddress(String str, Boolean useStrictValidation){
+	public static boolean hasValidEmailAddress(String str, Boolean useStrictValidation){
 		if(StringUtils.isBlank(str))
 			return false;
 		String[] addresses = str.split(",");
@@ -206,7 +255,6 @@ public abstract class AbstractEmailForm {
 			if(isValidEmailAddress(address, useStrictValidation)){
 				return true;
 			}
-			
 		}
 		return false;
 	}

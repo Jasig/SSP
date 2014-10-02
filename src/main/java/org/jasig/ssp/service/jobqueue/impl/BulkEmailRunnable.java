@@ -143,7 +143,7 @@ public class BulkEmailRunnable extends AbstractBulkRunnable<BulkEmailStudentRequ
 							student = personService.getBySchoolId(studentIds.getSchoolId(), false);
 						}
 						Person runAs = getJob().getRunAs();
-						EmailStudentRequestForm emailStudentRequestForm = new EmailStudentRequestForm(jobSpec.getCoreSpec(),student,runAs);
+						EmailStudentRequestForm emailStudentRequestForm = new EmailStudentRequestForm(jobSpec.getCoreSpec(),student);
 						personService.emailStudent(emailStudentRequestForm);
 						i++;
 					} catch(Exception e) {

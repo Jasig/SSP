@@ -45,10 +45,11 @@ public class EmailStudentRequestForm extends AbstractEmailForm implements Serial
 	}
 
 	public EmailStudentRequestForm(BulkEmailStudentRequestForm form,
-			Person student, Person runAs) {
+			Person student) {
 		super();
 		this.setStudentId(student.getId());
-		this.setCoachEmail(runAs.getPrimaryEmailAddress());
+		this.setCoachEmail(form.getCoachEmail());
+		this.setAdditionalEmail(form.getAdditionalEmail());
 		this.setConfidentialityLevelId(form.getConfidentialityLevelId());
 		this.setCreateJournalEntry(form.getCreateJournalEntry());
 		this.setUseStrictValidation(form.getUseStrictValidation());

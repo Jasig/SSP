@@ -999,15 +999,13 @@ public class PersonServiceImpl implements PersonService {
 		return journalEntryCommentBuilder.toString();
 	}
 
-	
-
 	private Message buildAndSendStudentEmail(EmailStudentRequestForm emailRequest)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
+		EmailAddress addresses = emailRequest.getValidDeliveryAddressesOrFail();
 		SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
-		EmailAddress addresses = emailRequest.getValidEmailAddresses();
 		return messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody);
 	}
-	
+
 	private void validateInput(EmailStudentRequestForm emailRequest) throws ValidationException {
 		StringBuilder validationMsg = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
@@ -1025,7 +1023,7 @@ public class PersonServiceImpl implements PersonService {
 			validationMsg.append("Email body must be provided").append(EOL);
 		}
 		
-		if(!emailRequest.hasAtLeastOneValidDeliveryAddress()){
+		if(!emailRequest.hasValidDeliveryAddresses()){
 			validationMsg.append("At least one valid email address must be included.").append(EOL);
 		}
 		
