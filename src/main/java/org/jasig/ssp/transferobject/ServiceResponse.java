@@ -30,6 +30,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.transferobject.jsonserializer.BooleanPrimitiveToStringSerializer;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -169,6 +170,11 @@ public class ServiceResponse implements Serializable {
 		}});
 		this.detail = detail;
 	}
+
+	public ServiceResponse(final boolean success, final ValidationException e) {
+		this(success,e.getMessage());
+	}
+
 	private Map<String,String> toStringMap(Map<String, ? extends Serializable> from) {
 		if ( from == null ) {
 			return null;

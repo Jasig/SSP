@@ -23,6 +23,7 @@ import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -69,8 +70,26 @@ public abstract class AbstractBaseController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public @ResponseBody
-	ServiceResponse handleValidationError(
+	ServiceResponse handleSpringValidationError(
 			final MethodArgumentNotValidException e) {
+		getLogger().error(ERROR_PREFIX, e);
+		return new ServiceResponse(false, e);
+	}
+
+	/**
+	 * Log and return an appropriate message for a bad request error (
+	 * {@link HttpStatus#BAD_REQUEST}).
+	 *
+	 * @param e
+	 *            Original exception
+	 * @return An appropriate service response message to send to the client.
+	 */
+	@PreAuthorize(Permission.PERMIT_ALL)
+	@ExceptionHandler(ValidationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public @ResponseBody
+	ServiceResponse handleAppValidationError(
+			final ValidationException e) {
 		getLogger().error(ERROR_PREFIX, e);
 		return new ServiceResponse(false, e);
 	}
