@@ -63,8 +63,7 @@ public class Job extends AbstractAuditable {
 	private String executionComponentName;
 
 	private String executionSpec;
-	
-	@NotNull
+
 	private String executionState;
 	
 	

@@ -18,6 +18,10 @@
  */
 package org.jasig.ssp.service;
 
+import org.jasig.ssp.service.external.BatchedTask;
+
+import java.util.UUID;
+
 /**
  * Exists just to give us a non-transactional location in which to launch
  * a relatively static set of scheduled jobs and clean up after them
@@ -47,7 +51,11 @@ public interface ScheduledTaskWrapperService {
 
     public void cullOAuth1Nonces();
 
-	void bulkJobQueue();
-
 	void pruneMessageQueue();
+
+	void scheduledQueuedJobs();
+
+	void execBatchedTaskWithName(String taskName, BatchedTask batchedTask, boolean isStatusedTask, UUID runAs);
+
+	void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId);
 }

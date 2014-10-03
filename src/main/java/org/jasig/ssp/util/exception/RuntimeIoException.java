@@ -16,11 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.jobqueue;
+package org.jasig.ssp.util.exception;
 
-import org.jasig.ssp.service.external.BatchedTask;
+/**
+ * Unchecked variation on {@link IOException}.
+ *
+ * <p>Copied nearly verbatim from the Apache Mina project v2.0.0-M6.</p>
+ */
+public class RuntimeIoException extends RuntimeException {
+	public RuntimeIoException() {
+		super();
+	}
 
+	public RuntimeIoException(String message) {
+		super(message);
+	}
 
-public interface BulkJobQueueTask extends BatchedTask<Void> {
+	public RuntimeIoException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
+	public RuntimeIoException(Throwable cause) {
+		super(cause);
+	}
 }

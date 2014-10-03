@@ -48,12 +48,17 @@ public class JobDao extends AbstractAuditableCrudDao<Job> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Job> getNextQueuedJobsForExecution(int i, String processId) {
+	public List<Job> getNextQueuedJobsForExecution(int maxResults, String processId) {
 		 return sessionFactory
 			.getCurrentSession()
+			// This really only happens to work b/c we only support single-node deployments.
 			.createQuery(
-					"from Job where workflowStoppedDate is null and (workflowStatus in (:queued,:scheduling,:executing) and scheduledByProcess != :processId) or (scheduledByProcess = :processId and retryCount > 0 and workflowStatus in (:executing))  order by createdDate")
-			.setMaxResults(i).setString("queued", WorkflowStatus.QUEUED.toString()).setString("scheduling", WorkflowStatus.SCHEDULING.toString()).setString("executing", WorkflowStatus.EXECUTING.toString())
+					"from Job where workflowStoppedDate is null" +
+						" and ((workflowStatus = :queued)" +
+							" or ((workflowStatus = :scheduling or workflowStatus = :executing) and scheduledByProcess != :processId)" +
+						")" +
+						" order by createdDate")
+			.setMaxResults(maxResults).setString("queued", WorkflowStatus.QUEUED.toString()).setString("scheduling", WorkflowStatus.SCHEDULING.toString()).setString("executing", WorkflowStatus.EXECUTING.toString())
 			.setString("processId", processId)
 			.list();
 	}

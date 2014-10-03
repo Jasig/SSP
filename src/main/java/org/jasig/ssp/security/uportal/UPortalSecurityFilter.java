@@ -50,7 +50,7 @@ public final class UPortalSecurityFilter implements RenderFilter {
 
 	public static final String AUTHENTICATION_TOKEN_KEY =
 			UPortalSecurityFilter.class.getName() + ".GRANTED_AUTHORITIES_KEY";
-	private static final Object SSP_OWNER = "SSP";
+	public static final Object SSP_OWNER = "SSP";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UPortalSecurityFilter.class);

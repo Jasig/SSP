@@ -18,24 +18,11 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.mail.SendFailedException;
-import javax.portlet.PortletRequest;
-
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
@@ -53,6 +40,7 @@ import org.jasig.ssp.model.jobqueue.Job;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.security.PersonAttributesResult;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.JournalEntryService;
@@ -61,11 +49,13 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
+import org.jasig.ssp.service.jobqueue.JobExecutionResult;
+import org.jasig.ssp.service.jobqueue.JobExecutionStatus;
 import org.jasig.ssp.service.jobqueue.JobService;
-import org.jasig.ssp.service.jobqueue.impl.AbstractBulkRunnable;
-import org.jasig.ssp.service.jobqueue.impl.BulkJobFactory;
+import org.jasig.ssp.service.jobqueue.impl.AbstractJobExecutor;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.JournalSourceService;
@@ -74,9 +64,9 @@ import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.form.BulkEmailJobSpec;
+import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.jasig.ssp.transferobject.form.EmailAddress;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
-import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
@@ -87,16 +77,32 @@ import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import javax.mail.SendFailedException;
+import javax.portlet.PortletRequest;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Person service implementation
@@ -105,11 +111,13 @@ import com.google.common.collect.Sets;
  */ 
 @Service
 @Transactional
-public class PersonServiceImpl implements PersonService {
+public class PersonServiceImpl implements PersonService, InitializingBean, BeanNameAware {
 
 	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
 
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
+
+	public static final String BULK_EMAIL_JOB_EXECUTOR_NAME = "bulk-email-executor";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonServiceImpl.class);
@@ -160,8 +168,10 @@ public class PersonServiceImpl implements PersonService {
 	private transient JobService jobService;
 
 	@Autowired
-	private transient BulkJobFactory bulkJobFactory;
+	private transient PlatformTransactionManager transactionManager;
 
+	@Autowired
+	private transient SecurityService securityService;
 
 	/**
 	 * If <code>true</code>, each individual coach synchronized by
@@ -173,6 +183,20 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Value("#{configProperties.per_coach_sync_transactions}")
 	private boolean perCoachSyncTransactions = true;
+
+	private String beanName;
+
+	private AbstractJobExecutor<BulkEmailJobSpec, Map<String, Object>> bulkEmailJobExecutor;
+
+	@Override
+	public void setBeanName(String name) {
+		this.beanName = name;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		registerBulkEmailJobExecutor();
+	}
 
 	private static interface PersonAttributesLookup {
 		public PersonAttributesResult lookupPersonAttributes(String username)
@@ -710,8 +734,6 @@ public class PersonServiceImpl implements PersonService {
 		currentCoachesSet.addAll(assignedCoaches);
 		return currentCoachesSet;
 	}
-	
-	
 
 	@Override
 	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy) {
@@ -911,7 +933,12 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException, ValidationException {
+	public JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException, ValidationException, SecurityException {
+		final SspUser currentSspUser = securityService.currentlyAuthenticatedUser();
+		if ( currentSspUser == null ) {
+			throw new SecurityException("Anonymous user cannot generate bulk email");
+		}
+		final Person currentSspPerson = currentSspUser.getPerson();
 		validateInput(emailRequest);
 		PersonSearchRequest criteria = personSearchRequestFactory.from(emailRequest.getCriteria());
 		final SortingAndPaging origSortAndPage = criteria.getSortAndPage();
@@ -943,10 +970,66 @@ public class PersonServiceImpl implements PersonService {
 			deliveryTargetIdentifiers.add(new ImmutablePersonIdentifiersTO(searchResult.getId(), searchResult.getSchoolId()));
 		}
 		final BulkEmailJobSpec jobSpec = new BulkEmailJobSpec(emailRequest, deliveryTargetIdentifiers);
-		final String serializedJobRequest = AbstractBulkRunnable.serialize(jobSpec);
-		final Job job = bulkJobFactory.getNewJob(emailRequest,serializedJobRequest);
-		jobService.create(job);
+		final Job job = this.bulkEmailJobExecutor.queueNewJob(currentSspPerson.getId(), currentSspPerson.getId(), jobSpec);
 		return new JobTO(job);
+	}
+
+	/**
+	 * Intentionally private b/c we do not want this to participate in this service's "transactional-by-default"
+	 * public interface. Its transaction is managed by the {@code JobExecutor} assumed to be invoking it.
+	 *
+	 * @param executionSpec
+	 * @param executionState
+	 * @return
+	 */
+	// TODO STILL NEEDS MAJOR REFACTOR. JUST A stripped down COPY PASTE FROM BULKEMAILRUNNABLE
+	private JobExecutionResult<Map<String, Object>> executeBulkEmailJob(BulkEmailJobSpec executionSpec, Map<String, Object> executionState) {
+		try {
+			final List<ImmutablePersonIdentifiersTO> studentIdsToEmail = executionSpec.getPersonIdentifiersFromCoreSpecCriteria();
+			for (ImmutablePersonIdentifiersTO studentIds : studentIdsToEmail) {
+				final Person student;
+				if (studentIds.getId() != null) {
+					student = get(studentIds.getId());
+				} else {
+					student = getBySchoolId(studentIds.getSchoolId(), false);
+				}
+				EmailStudentRequestForm emailStudentRequestForm = new EmailStudentRequestForm(executionSpec.getCoreSpec(),student);
+				emailStudent(emailStudentRequestForm);
+			}
+			return new JobExecutionResult<Map<String, Object>>(JobExecutionStatus.DONE, null);
+		} catch ( Exception e ) {
+			return new JobExecutionResult<Map<String, Object>>(JobExecutionStatus.FAILED, null, e);
+		}
+	}
+
+	private void registerBulkEmailJobExecutor() {
+		this.bulkEmailJobExecutor = new AbstractJobExecutor<BulkEmailJobSpec, Map<String,Object>>(BULK_EMAIL_JOB_EXECUTOR_NAME, jobService, transactionManager) {
+
+			@Override
+			protected BulkEmailJobSpec deserializeJobSpecWithCheckedExceptions(String jobSpecStr) throws Exception {
+				return getObjectMapper().readValue(jobSpecStr, BulkEmailJobSpec.class);
+			}
+
+			@Override
+			protected Map<String, Object> deserializeJobStateWithCheckedExceptions(String jobSpecStr) throws Exception {
+				return getObjectMapper().readValue(jobSpecStr, jobStateType(getObjectMapper()));
+			}
+
+			@Override
+			protected JobExecutionResult<Map<String, Object>> executeJobDeserialized(BulkEmailJobSpec executionSpec, Map<String, Object> executionState) {
+				return executeBulkEmailJob(executionSpec, executionState);
+			}
+
+			private JavaType jobStateType(ObjectMapper objectMapper) {
+				return objectMapper.getTypeFactory().constructParametricType(Map.class, String.class, Object.class);
+			}
+
+			protected Logger getLogger() {
+				return LoggerFactory.getLogger(super.getClass());
+			}
+
+		};
+		this.jobService.registerJobExecutor(this.bulkEmailJobExecutor);
 	}
 
 	private JournalEntry buildJournalEntry(

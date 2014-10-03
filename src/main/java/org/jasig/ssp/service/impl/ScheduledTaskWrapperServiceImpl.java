@@ -18,13 +18,18 @@
  */
 package org.jasig.ssp.service.impl;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.jasig.portal.api.permissions.Assignment;
+import org.jasig.portal.api.permissions.PermissionsService;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.security.uportal.UPortalSecurityFilter;
 import org.jasig.ssp.service.EarlyAlertService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PruneMessageQueueTask;
 import org.jasig.ssp.service.RefreshDirectoryPersonBlueTask;
@@ -37,7 +42,7 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
-import org.jasig.ssp.service.jobqueue.BulkJobQueueTask;
+import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.security.oauth.OAuth1NonceServiceMaintenance;
 import org.jasig.ssp.util.CallableExecutor;
@@ -64,15 +69,22 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -167,9 +179,6 @@ public class ScheduledTaskWrapperServiceImpl
 	private transient MapStatusReportCalcTask mapStatusReportCalcTask;
 	
 	@Autowired
-	private transient BulkJobQueueTask bulkJobQueueTask;
-	
-	@Autowired
 	private transient PruneMessageQueueTask pruneMessageQueueTask;
 
 	@Autowired
@@ -186,6 +195,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient TaskService taskService;
+
+	@Autowired
+	private transient JobService jobService;
 	
 	@Autowired
 	private transient EarlyAlertService earlyAlertService;
@@ -271,7 +283,7 @@ public class ScheduledTaskWrapperServiceImpl
 				new Runnable() {
 					@Override
 					public void run() {
-						bulkJobQueue();
+						scheduledQueuedJobs();
 					}
 				},
 				BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER,
@@ -617,13 +629,13 @@ public class ScheduledTaskWrapperServiceImpl
 	 * @param work
 	 * @throws AuthenticationException
 	 */
-	protected Runnable withMaybeSudo(final Runnable work) throws AuthenticationException {
+	protected Runnable withMaybeSudo(final Runnable work, final UUID runAsId) throws AuthenticationException {
 		return new Runnable() {
 			@Override
 			public void run() {
 				if ( !(isCurrentAuthenticationAuditable()) ) {
 					LOGGER.debug("Insufficient Authentication in SecurityContext. Executing task via sudo.");
-					withSudo(work).run();
+					withSudo(work, runAsId).run();
 				} else {
 					LOGGER.debug("Sufficient Authentication already present in SecurityContext. Skipping sudo and executing task in that context.");
 					work.run();
@@ -686,11 +698,43 @@ public class ScheduledTaskWrapperServiceImpl
 	 * @return
 	 * @throws AuthenticationException
 	 */
-	protected Runnable withSudo(final Runnable work) throws AuthenticationException {
+	protected Runnable withSudo(final Runnable work, final UUID runAsId) throws AuthenticationException {
 		return new Runnable() {
 			@Override
 			public void run() {
-				final SspUser runAs = securityService.noAuthAdminUser();
+				final SspUser runAs;
+				if ( runAsId == null ) {
+					runAs = securityService.noAuthAdminUser();
+				} else {
+					try {
+						final Person person = personService.get(runAsId);
+						if ( person == null ) {
+							throw new ObjectNotFoundException(runAsId, Person.class.getName());
+						}
+
+						// mostly copy/paste from UPortalSecurityFilter
+						final Set<Assignment> assignments = PermissionsService.IMPL.get().getAssignmentsForPerson(person.getUsername(), true);
+
+						// Find SSP-related permissions in the assignments collection
+						final Set<GrantedAuthority> authorities = Sets.newHashSet();
+						for (Assignment a : assignments) {
+							if (a.getOwner().getKey().equals(UPortalSecurityFilter.SSP_OWNER)) {
+								// This one pertains to us...
+								String activity = a.getActivity().getKey();
+								authorities.add(new GrantedAuthorityImpl("ROLE_" + activity));
+							}
+						}
+
+						final SspUser user = new SspUser(person.getUsername(), "", true,
+								true, true, true, authorities);
+
+						user.setPerson(person);
+						runAs = user;
+					} catch (ObjectNotFoundException e) {
+						throw new UsernameNotFoundException("Could not find Person by ID [" + runAsId + "]", e);
+					}
+
+				}
 				Authentication auth = new RunAsUserToken(runAsKey, runAs, null, runAs.getAuthorities(), null);
 				auth = authenticationManager.authenticate(auth);
 
@@ -710,6 +754,10 @@ public class ScheduledTaskWrapperServiceImpl
 				}
 			}
 		};
+	}
+
+	protected Runnable withSudo(Runnable work) throws AuthenticationException {
+		return withSudo(work, null);
 	}
 
 	/**
@@ -771,7 +819,7 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
-	protected Runnable withTaskName(final String taskName, final Runnable work) {
+	protected Runnable withTaskName(final String taskName, final Runnable work, final boolean isStatusedTask) {
 		return new Runnable() {
 			@Override
 			public void run() {
@@ -781,7 +829,9 @@ public class ScheduledTaskWrapperServiceImpl
 				}
 				final String currentThreadName = Thread.currentThread().getName();
 				final String currentMdcEntry = MDC.get(TASK_NAME_MDC_KEY);
-				taskStatusService.beginTask(taskName);
+				if ( isStatusedTask ) {
+					taskStatusService.beginTask(taskName);
+				}
 				try {
 					final String newThreadName = currentThreadName == null ? taskName : currentThreadName + ":" + taskName;
 					Thread.currentThread().setName(newThreadName);
@@ -795,7 +845,9 @@ public class ScheduledTaskWrapperServiceImpl
 						MDC.put(TASK_NAME_MDC_KEY, currentMdcEntry);
 					}
 					Thread.currentThread().setName(currentThreadName);
-					taskStatusService.completeTask(taskName);
+					if ( isStatusedTask ) {
+						taskStatusService.completeTask(taskName);
+					}
 				}
 			}
 		};
@@ -808,8 +860,8 @@ public class ScheduledTaskWrapperServiceImpl
 	 *
 	 * @param work
 	 */
-	protected Runnable withTaskContext(String taskName, Runnable work) {
-		return withTaskName(taskName, withHibernateSession(withTaskCleanup(withMaybeSudo(work))));
+	protected Runnable withTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId) {
+		return withTaskName(taskName, withHibernateSession(withTaskCleanup(withMaybeSudo(work, runAsId))), isStatusedTask);
 	}
 
 	/**
@@ -821,8 +873,13 @@ public class ScheduledTaskWrapperServiceImpl
 	 *
 	 * @param work
 	 */
-	protected void execWithTaskContext(String taskName, Runnable work) {
-		withTaskContext(taskName, work).run();
+	@Override
+	public void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId) {
+		withTaskContext(taskName, work, isStatusedTask, runAsId).run();
+	}
+
+	public void execWithTaskContext(String taskName, Runnable work) {
+		execWithTaskContext(taskName, work, true, null);
 	}
 
 	/**
@@ -848,7 +905,7 @@ public class ScheduledTaskWrapperServiceImpl
 	 * @param <T>
 	 * @return
 	 */
-	protected <T> CallableExecutor<T> newTaskBatchExecutor(final Class<T> batchReturnType) {
+	protected <T> CallableExecutor<T> newTaskBatchExecutor(final Class<T> batchReturnType, final boolean isStatusedTask, final UUID runAsId) {
 		return new CallableExecutor<T>() {
 			@Override
 			public T exec(final Callable<T> work) throws Exception {
@@ -863,7 +920,7 @@ public class ScheduledTaskWrapperServiceImpl
 							exceptionHolder.set(e);
 						}
 					}
-				});
+				}, isStatusedTask, runAsId);
 				if ( exceptionHolder.get() != null ) {
 					throw exceptionHolder.get();
 				}
@@ -872,13 +929,18 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
-	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
+	@Override
+	public void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask, final boolean isStatusedTask, final UUID runAsId) {
 		withTaskName(taskName, new Runnable() {
 			@Override
 			public void run() {
-				batchedTask.exec(newTaskBatchExecutor(batchedTask.getBatchExecReturnType()));
+				batchedTask.exec(newTaskBatchExecutor(batchedTask.getBatchExecReturnType(), isStatusedTask, runAsId));
 			}
-		}).run();
+		}, isStatusedTask).run();
+	}
+
+	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
+		execBatchedTaskWithName(taskName, batchedTask, true, null);
 	}
 
 	@Override
@@ -927,9 +989,7 @@ public class ScheduledTaskWrapperServiceImpl
 	public void syncExternalPersons() {
 		execBatchedTaskWithName(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask);
 	}
-	
-	
-	
+
 	@Override 
 	public void refreshDirectoryPerson(){
 		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_TASK_NAME, directoryPersonRefreshTask);
@@ -951,8 +1011,12 @@ public class ScheduledTaskWrapperServiceImpl
 		execBatchedTaskWithName(CALC_MAP_STATUS_REPORTS_TASK_NAME, mapStatusReportCalcTask);
 	}
 	@Override
-	public void bulkJobQueue() {
-		execBatchedTaskWithName(BULK_JOB_QUEUE_TASK_NAME,bulkJobQueueTask );
+	public void scheduledQueuedJobs() {
+		execWithTaskContext(BULK_JOB_QUEUE_TASK_NAME, new Runnable() {
+			public void run() {
+				jobService.scheduleQueuedJobs();
+			}
+		});
 	}	
 	
 	@Override

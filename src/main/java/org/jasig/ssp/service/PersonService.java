@@ -306,7 +306,8 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param emailRequest
 	 * @return
 	 */
-	JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException, ValidationException;
+	JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException,
+			ValidationException, SecurityException;
 
 	void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId)
 			throws ObjectNotFoundException, SendFailedException,

@@ -239,17 +239,13 @@ public class SecurityServiceImpl implements SecurityService {
 		final SspUser sspUser = currentUser();
 
 		if (sspUser == null) {
-			LOGGER.error("User is not authenticated");
-
+			// nothing to do
 		} else if (SspUser.ANONYMOUS_PERSON_USERNAME.equals(sspUser
 				.getUsername())) {
-			LOGGER.error("Is anonymous user");
 			return null;
-
 		} else if (sspUser.getPerson() == null) {
-			LOGGER.error("User is not in the person table");
+			LOGGER.error("User {} is set as the current user, but is not in the person table", sspUser.getUsername());
 			return null;
-
 		}
 
 		return sspUser;
@@ -263,18 +259,7 @@ public class SecurityServiceImpl implements SecurityService {
 						.isAuthenticated();
 
 		final SspUser currentUser = currentUser();
-
-		if (authenticated) {
-			if ((currentUser == null)) {
-				LOGGER.error("User is authenticated, but not in the person table");
-				return false;
-			} else {
-				LOGGER.error("User is authenticated");
-				return true;
-			}
-		} else {
-			return false;
-		}
+		return authenticated && currentUser != null;
 	}
 
 	@Override
