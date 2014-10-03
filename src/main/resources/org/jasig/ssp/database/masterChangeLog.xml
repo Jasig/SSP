@@ -248,4 +248,5 @@
 	<include file="org/jasig/ssp/database/changesets/000131.xml" />
 	<!-- 000132.xml thru 000159.xml intentionally skipped for 2.4.x -->
 	<include file="org/jasig/ssp/database/changesets/000160.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000061.xml" />	
 </databaseChangeLog>
