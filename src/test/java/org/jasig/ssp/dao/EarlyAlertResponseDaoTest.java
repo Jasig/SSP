@@ -264,7 +264,7 @@ public class EarlyAlertResponseDaoTest {
 
 		try {
 			final Collection<EarlyAlertStudentOutreachReportTO> result = dao.getEarlyAlertOutreachCountByOutcome(
-					startDate, endDate, null, null, null);
+					null, startDate, endDate, null, null, null);
 			assertEquals("Count of Responses was not expected.", 1,
 					result.size());
 		} finally {
@@ -276,7 +276,7 @@ public class EarlyAlertResponseDaoTest {
 	public void getByEarlyAlertReferralIdTest() throws ObjectNotFoundException {
 		// TODO
 		PersonSearchFormTO addressLabelSearchTO = new PersonSearchFormTO(null, null, null, null, null, null, null, null, null);
-		dao.getPeopleByEarlyAlertReferralIds(EARLY_ALERT_REFERRAL_IDS, null, null, addressLabelSearchTO, new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
+		dao.getPeopleByEarlyAlertReferralIds(EARLY_ALERT_REFERRAL_IDS, null, null, null, addressLabelSearchTO, new SortingAndPaging(ObjectStatus.ALL, 1, 2, null, "lastName",
 				SortDirection.ASC));
 		assertEquals("Should be equal to 1.", 1,1);
 	}
