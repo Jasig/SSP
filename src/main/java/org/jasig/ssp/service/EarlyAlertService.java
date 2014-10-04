@@ -163,11 +163,11 @@ public interface EarlyAlertService
 
 	Long getStudentCountForEarlyAlertCreatedDateRange(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
-    PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+    List<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
     List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(Campus campus, String termCode, Date createdDateFrom, Date createdDateTo, ObjectStatus status);
 
-    PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+    List<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
 	Long getEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm);
 

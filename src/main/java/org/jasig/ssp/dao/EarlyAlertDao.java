@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -260,7 +259,7 @@ public class EarlyAlertDao extends
 		final Criteria query = createCriteria();
 
 		setPersonCriteria(query.createAlias("person", "person"),
-				criteriaTO.getAddressLabelSearchTO());
+                criteriaTO.getAddressLabelSearchTO());
 
         if (criteriaTO.getTermCode() != null) {
             query.add(Restrictions.eq("courseTermCode", criteriaTO.getTermCode()));
@@ -639,131 +638,64 @@ public class EarlyAlertDao extends
 	}
 
 
-    public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
+    public List<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
             String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
-        final Criteria query = createCriteria();
+        final StringBuilder courseCountHQLQuery = new StringBuilder("select "
+                +    "ea.courseName as earlyalertcoursecount_courseName, "
+                +    "ea.courseTitle as earlyalertcoursecount_courseTitle, "
+                +    "ea.courseTermCode as earlyalertcoursecount_termCode, "
+                +    "c.name as earlyalertcoursecount_campusName, "
+                +    "count(distinct ea.person) as earlyalertcoursecount_totalStudentsReported, "
+                +    "count(ea.id) as earlyalertcoursecount_totalAlerts "
+                + "from EarlyAlert as ea, Term as t "
+                + "inner join ea.campus as c "
+                + "where ea.courseTermCode=t.code "
+                +   createEarlyAlertReportHQLWhereClause(termCode, createdDateFrom, createdDateTo, campus, objectStatus).replace("where", "and")
+                +" group by ea.courseName, c.id, c.name, t.startDate, ea.courseTermCode, ea.courseTitle "
+                +  "order by c.name, t.startDate, ea.courseName asc"
+        );
 
-        if (termCode != null) {
-            query.add(Restrictions.eq("courseTermCode", termCode));
-        }
+        final Query query = createHqlQuery(courseCountHQLQuery.toString()).setResultTransformer(
+                new NamespacedAliasToBeanResultTransformer(EarlyAlertCourseCountsTO.class, "earlyalertcoursecount_"));
 
-        if ( createdDateFrom != null ) {
-            query.add(Restrictions.ge("createdDate", createdDateFrom));
-        }
+        bindEarlyAlertReportHQLParams(query, termCode, createdDateFrom, createdDateTo, campus, objectStatus);
 
-        if ( createdDateTo != null ) {
-            query.add(Restrictions.le("createdDate", createdDateTo));
-        }
-
-        if (campus != null) {
-            query.add(Restrictions.eq("campus", campus));
-        }
-
-        if (objectStatus != null) {
-            query.add(Restrictions.eq("objectStatus", objectStatus));
-        }
-
-        query.setProjection(null);
-        List<UUID> ids = query.setProjection(Projections.distinct(Projections.property("id"))).list();
-
-        if (ids.size() <= 0) {
-            return null;
-        }
-
-        BatchProcessor<UUID, EarlyAlertCourseCountsTO> processor = new BatchProcessor<>(ids);
-        do {
-            final Criteria criteria = createCriteria();
-            criteria.createAlias("campus", "campus");
-
-            ProjectionList projections = Projections
-                    .projectionList()
-                    .add(Projections.countDistinct("person").as("earlyalertcoursecount_totalStudentsReported"))
-                    .add(Projections.count("id").as("earlyalertcoursecount_totalAlerts"));
-
-            projections.add(Projections.groupProperty("courseName").as("earlyalertcoursecount_courseName"));
-            projections.add(Projections.groupProperty("courseTitle").as("earlyalertcoursecount_courseTitle"));
-            projections.add(Projections.groupProperty("courseTermCode").as("earlyalertcoursecount_termCode"));
-            projections.add(Projections.groupProperty("campus.name").as("earlyalertcoursecount_campusName"));
-
-            criteria.setProjection(projections);
-            criteria.addOrder(Order.asc("campus.name"));
-            criteria.addOrder(Order.asc("courseName"));
-            criteria.addOrder(Order.asc("courseTermCode"));
-
-            criteria.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-                    EarlyAlertCourseCountsTO.class, "earlyalertcoursecount_"));
-
-            processor.process(criteria, "id");
-        } while (processor.moreToProcess());
-
-        return processor.getSortedAndPagedResults();
+        return (List<EarlyAlertCourseCountsTO>) query.list();
     }
 
 
-    public PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
+    public List<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
             String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
-        final Criteria criteria = createCriteria();
-
-        if (termCode != null) {
-            criteria.add(Restrictions.eq("courseTermCode", termCode));
-        }
-
-        if (createdDateFrom != null) {
-            criteria.add(Restrictions.ge("createdDate", createdDateFrom));
-        }
-
-        if (createdDateTo != null) {
-            criteria.add(Restrictions.le("createdDate", createdDateTo));
-        }
-
-        if (campus != null) {
-            criteria.add(Restrictions.eq("campus", campus));
-        }
-
-        if (objectStatus != null) {
-            criteria.add(Restrictions.eq("objectStatus", objectStatus));
-        }
-
-        criteria.setProjection(null);
-        List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
-
-        if (ids.size() <= 0) {
-            return null;
-        }
-
-        final String hql = "select "
+        final String reasonCountHQLQuery = "select "
                 +   "p.schoolId as earlyalertstudentreasoncount_schoolId, "
                 +   "p.firstName as earlyalertstudentreasoncount_firstName, "
                 +   "p.lastName as earlyalertstudentreasoncount_lastName, "
                 +   "ea.courseName as earlyalertstudentreasoncount_courseName, "
                 +   "ea.courseTitle as earlyalertstudentreasoncount_courseTitle, "
+                +   "c.name as earlyalertstudentreasoncount_campusName, "
                 +   "f.firstName as earlyalertstudentreasoncount_facultyFirstName, "
                 +   "f.lastName as earlyalertstudentreasoncount_facultyLastName, "
                 +   "count(er.id) as earlyalertstudentreasoncount_totalReasonsReported, "
                 +   "ea.courseTermCode as earlyalertstudentreasoncount_termCode "
-                + "from EarlyAlert as ea "
+                + "from EarlyAlert as ea, Term as t "
                 + "inner join ea.person as p "
                 + "inner join ea.createdBy as f "
+                + "inner join ea.campus as c "
                 + "left join ea.earlyAlertReasonIds as er "
-                + "where ea.id in :ids "
-                + "group by ea.id, p.schoolId, p.lastName, p.firstName, ea.courseName, ea.courseTitle, "
-                +    "f.firstName, f.lastName, ea.courseTermCode "
-                + "order by p.schoolId";
+                + "where ea.courseTermCode=t.code "
+                +   createEarlyAlertReportHQLWhereClause(termCode, createdDateFrom, createdDateTo, campus, objectStatus).replace("where", "and")
+                +" group by ea.id, p.schoolId, p.lastName, p.firstName, ea.courseName, ea.courseTitle, "
+                +    "f.firstName, f.lastName, ea.courseTermCode, c.id, c.name, t.startDate "
+                + "order by c.name, t.startDate, ea.courseName, p.lastName, p.firstName asc";
 
-        BatchProcessor<UUID, EarlyAlertReasonCountsTO> processor = new BatchProcessor<>(ids);
-        do {
-            final Query query = createHqlQuery(hql).setParameterList("ids", ids);
+        final Query query = createHqlQuery(reasonCountHQLQuery).setResultTransformer(
+                new NamespacedAliasToBeanResultTransformer(EarlyAlertReasonCountsTO.class, "earlyalertstudentreasoncount_"));
 
-            query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-                    EarlyAlertReasonCountsTO.class, "earlyalertstudentreasoncount_"));
+        bindEarlyAlertReportHQLParams(query, termCode, createdDateFrom, createdDateTo, campus, objectStatus);
 
-            processor.process(query, "ids");
-
-        } while (processor.moreToProcess());
-
-        return processor.getSortedAndPagedResults();
+        return (List<EarlyAlertReasonCountsTO>) query.list();
     }
 
     public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
@@ -1045,4 +977,75 @@ public class EarlyAlertDao extends
 		}
 		return new PagingWrapper<EarlyAlertSearchResult>(size, sortedAndPaged);
 	}
+
+    /**
+     * Returns string where clause of the HQL query based on parameters inputted
+     *  NOTE: Includes the word where, so if already specified, replace with and!
+     *    REQUIRES EarlyAlert with alias of ea and Campus with alias c elsewhere in HQL Query!
+     * @param termCode
+     * @param createdDateFrom
+     * @param createdDateTo
+     * @param campus
+     * @param status
+     * @return
+     */
+    private String createEarlyAlertReportHQLWhereClause(String termCode, Date createdDateFrom, Date createdDateTo,
+                                                        Campus campus, ObjectStatus status) {
+        final StringBuilder whereClause = new StringBuilder("where ");
+        String whereClauseToReturn = "";
+
+        if (termCode != null) {
+            whereClause.append("ea.courseTermCode = :courseTermCode and ");
+        }
+
+        if ( createdDateFrom != null ) {
+            whereClause.append("ea.createdDate >= :createdDateFrom and ");
+        }
+
+        if ( createdDateTo != null ) {
+            whereClause.append("ea.createdDate <= :createdDateTo and ");
+        }
+
+        if (campus != null) {
+            whereClause.append("c.id = :campusId and ");
+        }
+
+        if (status != null) {
+            whereClause.append("objectStatus = :objectStatus ");
+        }
+
+        if ( StringUtils.countMatches(whereClause.toString(), "and") > 0) {
+            final int endingAnd = whereClause.indexOf("and", whereClause.length()-5);
+
+            if (  endingAnd < 0 ) {
+                whereClauseToReturn = whereClause.toString();
+            } else {
+                whereClauseToReturn = whereClause.toString().substring(0, endingAnd-1);
+            }
+        }
+            return whereClauseToReturn;
+    }
+
+    private void bindEarlyAlertReportHQLParams(Query hqlQuery, String termCode, Date createdDateFrom, Date createdDateTo,
+                                               Campus campus, ObjectStatus status) {
+        if (termCode != null) {
+            hqlQuery.setParameter("courseTermCode", termCode);
+        }
+
+        if ( createdDateFrom != null ) {
+            hqlQuery.setParameter("createdDateFrom", createdDateFrom);
+        }
+
+        if ( createdDateTo != null ) {
+            hqlQuery.setParameter("createdDateTo", createdDateTo);
+        }
+
+        if (campus != null) {
+            hqlQuery.setParameter("campusId", campus.getId());
+        }
+
+        if (status != null) {
+            hqlQuery.setParameter("objectStatus", status);
+        }
+    }
 }

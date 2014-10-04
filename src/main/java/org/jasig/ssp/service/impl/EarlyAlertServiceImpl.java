@@ -788,7 +788,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 
     @Override
-    public PagingWrapper<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
+    public  List<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
             String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus ) {
         return dao.getStudentEarlyAlertCountSetPerCourses(termCode, createdDateFrom, createdDateTo, campus, objectStatus);
     }
@@ -800,7 +800,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
     }
 
     @Override
-    public PagingWrapper<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
+    public List<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
             String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
         return dao.getStudentEarlyAlertReasonCountByCriteria(termCode, createdDateFrom, createdDateTo, campus, objectStatus);
     }

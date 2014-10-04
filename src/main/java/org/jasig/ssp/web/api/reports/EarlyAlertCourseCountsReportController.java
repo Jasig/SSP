@@ -112,16 +112,13 @@ public class EarlyAlertCourseCountsReportController extends ReportBaseController
         SearchParameters.addCampusToParameters(campus, parameters);
         SearchParameters.addDateTermToMap(dateTerm, parameters);
 
-        final PagingWrapper<EarlyAlertCourseCountsTO> results = earlyAlertService.getStudentEarlyAlertCountSetPerCourses(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
-        final Collection<EarlyAlertCourseCountsTO> reportTOs;
+        List<EarlyAlertCourseCountsTO> results = earlyAlertService.getStudentEarlyAlertCountSetPerCourses(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
 
-        if ( results != null) {
-            reportTOs = results.getRows();
-        } else {
-            reportTOs = new ArrayList<EarlyAlertCourseCountsTO>();
+        if ( results == null) {
+             results = new ArrayList<EarlyAlertCourseCountsTO>();
         }
 
-        renderReport( response,  parameters, reportTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
+        renderReport( response,  parameters, results, REPORT_URL, reportType, REPORT_FILE_TITLE);
     }
 
     @Override

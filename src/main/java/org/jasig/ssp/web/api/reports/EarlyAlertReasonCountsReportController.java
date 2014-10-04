@@ -120,19 +120,16 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
 
         List<Triple<String, Long, Long>> reasonTotals = earlyAlertService.getEarlyAlertReasonTypeCountByCriteria(campus, dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), objectStatus);
 
-        final PagingWrapper<EarlyAlertReasonCountsTO> results = earlyAlertService.getStudentEarlyAlertReasonCountByCriteria(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
-        final Collection<EarlyAlertReasonCountsTO> reportTOs;
+        List<EarlyAlertReasonCountsTO> results = earlyAlertService.getStudentEarlyAlertReasonCountByCriteria(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
 
-        if ( results != null) {
-            reportTOs = results.getRows();
-        } else {
-            reportTOs = new ArrayList<>();
+        if ( results == null) {
+            results = new ArrayList<>();
         }
 
         SearchParameters.addDateTermToMap(dateTerm, parameters);
         parameters.put(REASON_TOTALS, reasonTotals);
 
-        renderReport( response,  parameters, reportTOs, REPORT_URL, reportType, REPORT_FILE_TITLE);
+        renderReport( response,  parameters, results, REPORT_URL, reportType, REPORT_FILE_TITLE);
     }
 
     @Override

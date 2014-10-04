@@ -35,6 +35,7 @@ public class EarlyAlertReasonCountsTO implements Serializable {
     private String facultyLastName;
     private String facultyName;
     private Long totalReasonsReported;
+    private String campusName;
     private String termCode;
 
 
@@ -132,4 +133,8 @@ public class EarlyAlertReasonCountsTO implements Serializable {
     public void setFacultyName (final String facultyFirstName, final String facultyLastName) {
         this.facultyName = facultyFirstName + " " + facultyLastName;
     }
+
+    public void setCampusName (final String campusName) { this.campusName = campusName; }
+
+    public String getCampusName () { return campusName; }
 }
