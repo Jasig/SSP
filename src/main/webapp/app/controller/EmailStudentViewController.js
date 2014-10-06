@@ -158,7 +158,14 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
         var jsonData = formModel.data;
 
         var success;
-        var failure = function() {
+        var failure = function(resp) {
+            if ( resp && resp.responseText ) {
+                var rspTextStruct = Ext.decode(resp.responseText);
+                if ( rspTextStruct.message && rspTextStruct.message.indexOf("Person search parameters matched no records") > -1 ) {
+                    Ext.Msg.alert('SSP Error','No user records matched your current search criteria. Try pasting your message into another document to save it for later, canceling out of this form, and retrying with different search criteria.');
+                    return;
+                }
+            }
             Ext.Msg.alert('SSP Error','There was an issue sending your email. Please contact your administrator');
         }
         if ( isBulk ) {
