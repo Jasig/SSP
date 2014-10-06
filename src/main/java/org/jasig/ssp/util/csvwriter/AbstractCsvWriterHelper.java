@@ -118,7 +118,12 @@ public abstract class AbstractCsvWriterHelper<T> {
 		int i = 0;
 
 		while ( model.hasNext() && ( maxCount < 0 || i < maxCount ) ) {
-			Object result = model.next();
+			Object result = null;
+			try {
+				result = model.next();
+			} catch ( NoSuchElementException e ) {
+				return;
+			}
 			final List<String[]> bodyRows = csvBodyRows((T)result);
 			if ( bodyRows != null && !(bodyRows.isEmpty()) ) {
 				for ( String[] bodyRow : bodyRows ) {
