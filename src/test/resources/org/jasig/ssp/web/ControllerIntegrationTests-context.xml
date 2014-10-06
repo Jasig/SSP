@@ -83,8 +83,8 @@
         <property name="corePoolSize" value="#{configProperties.bulk_job_queue_pool_size}" />
         <property name="maxPoolSize" value="#{configProperties.bulk_job_queue_pool_size_max}" />    
 -->
-        <property name="corePoolSize" value="5" />
-        <property name="maxPoolSize" value="10" />    
+        <property name="corePoolSize" value="#{configProperties.bulk_job_queue_pool_size}" />
+        <property name="maxPoolSize" value="#{configProperties.bulk_job_queue_pool_size_max}" />
     </bean>
 
 
