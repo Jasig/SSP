@@ -43,6 +43,10 @@ public class BulkEmailJobSpec implements Serializable {
 		super();
 	}
 
+	public BulkEmailJobSpec(BulkEmailStudentRequestForm coreSpec) {
+		this(coreSpec, null);
+	}
+
 	public BulkEmailJobSpec(BulkEmailStudentRequestForm coreSpec, List<ImmutablePersonIdentifiersTO> personIdentifiersFromCoreSpecCriteria) {
 		this.coreSpec = coreSpec;
 		this.personIdentifiersFromCoreSpecCriteria = personIdentifiersFromCoreSpecCriteria;

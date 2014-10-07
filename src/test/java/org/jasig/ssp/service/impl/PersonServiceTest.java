@@ -71,9 +71,7 @@ public class PersonServiceTest {
 		dao = createMock(PersonDao.class);
 		service.setDao(dao);
 		registrationStatusByTermService = createMock(RegistrationStatusByTermService.class);
-		service.setRegistrationStatusByTermService(registrationStatusByTermService);
 		earlyAlertService =  createMock(EarlyAlertService.class);
-		service.setEarlyAlertService(earlyAlertService);
 	}
 
 	@Test

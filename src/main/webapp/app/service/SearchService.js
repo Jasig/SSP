@@ -58,11 +58,22 @@ Ext.define('Ssp.service.SearchService', {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 				success: function(response, view) {
-					count = response.responseText;
-			        var skipCallBack = me.appEventsController.getApplication().fireEvent('exportSearch','search', count);
+					if (callbacks != null && callbacks.success ) {
+						if ( response && response.responseText ) {
+							callbacks.success.call(callbacks.scope, Ext.decode(response.responseText));
+						} else {
+							callbacks.success.call(callbacks.scope, null);
+						}
+					}
 				},
-				failure: this.apiProperties.handleError
-			}, this);		
+				failure: function(response) {
+					if (callbacks != null && callbacks.failure) {
+						callbacks.failure.call(callbacks.scope, response);
+					} else {
+						this.apiProperties.handleError(response);
+					}
+				}
+			}, this);
 	},
 
 	searchWithParams: function(params, callbacks) {
@@ -185,57 +196,5 @@ Ext.define('Ssp.service.SearchService', {
 		 actualStartTerm: actualStartTerm,
 		 personTableType: personTableType
 		}, callbacks);
-    },
-    search2Count: function( 
-   		 schoolId,
-		 firstName,
-		 lastName,
-		 programStatus,
-		 specialServiceGroup,
-		 coachId,
-		 declaredMajor,
-		 hoursEarnedMin,
-		 hoursEarnedMax,
-		 gpaEarnedMin,
-		 gpaEarnedMax,
-		 currentlyRegistered,
-		 earlyAlertResponseLate,
-		 sapStatusCode,
-		 mapStatus,
-		 planStatus,
-		 myCaseload,
-		 myPlans,
-		 myWatchList,
-		 birthDate,
-		 actualStartTerm,
-		 personTableType,
-		callbacks ){
-	var me = this;
-	
-	me.searchCountWithParams({
-     schoolId: schoolId,
-     firstName: firstName,
-     lastName: lastName,
-	 programStatus: programStatus,
-	 specialServiceGroup: specialServiceGroup,
-	 coachId: coachId,
-	 declaredMajor: declaredMajor,
-	 hoursEarnedMin: hoursEarnedMin,
-	 hoursEarnedMax: hoursEarnedMax,
-	 gpaEarnedMin: gpaEarnedMin,
-	 gpaEarnedMax: gpaEarnedMax,
-	 // required because false is not sent as a parameter we are depending on null to indicate no search
-	 currentlyRegistered: currentlyRegistered == null ? null : new Boolean(currentlyRegistered).toString(),
-	 earlyAlertResponseLate: earlyAlertResponseLate,
-	 sapStatusCode: sapStatusCode,
-	 mapStatus: mapStatus,
-	 planStatus: planStatus,
-	 myCaseload: myCaseload,
-	 myPlans: myPlans,
-	 myWatchList: myWatchList,
-	 birthDate: birthDate,
-	 actualStartTerm: actualStartTerm,
-	 personTableType: personTableType
-	}, callbacks);
-}
+	}
 });

@@ -898,14 +898,13 @@ public class DirectoryPersonSearchDao  {
 		try {
 			openStatelessSession = sessionFactory.openStatelessSession();
 			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession,personSearchRequest);
-			Long maxCount = getMaxExportCount();
 
 			querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 					PersonSearchResult2.class, "person_"));
 			Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
 			ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
 
-			csvWriterHelper.write(results,maxCount);
+			csvWriterHelper.write(results,-1L);
 		} finally {
 			if ( openStatelessSession != null ) {
 				try {
@@ -918,18 +917,6 @@ public class DirectoryPersonSearchDao  {
 		}
 		
 	 }
-
-	private Long getMaxExportCount() {
-		Long maxCount;
-		try {
-    		maxCount = Long.parseLong(configService.getByNameEmpty("ssp_max_export_row_count").trim());
-    	}
-    	catch (Exception e)
-    	{
-    		maxCount = 500L;
-    	}
-		return maxCount;
-	}
 
 	public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
 		

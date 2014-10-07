@@ -290,8 +290,8 @@ public class PersonSearchController extends AbstractBaseController {
 		assertSearchApiAuthorization(request);
 		SortingAndPaging sortAndPage = buildSortAndPage( limit,  start,  sort,  sortDirection);
 		return  service.searchPersonDirectoryCount(personSearchRequestFactory.from(schoolId,
-				firstName, lastName, 
-				programStatus,specialServiceGroup, 
+				firstName, lastName,
+				programStatus,specialServiceGroup,
 				coachId,declaredMajor,
 				hoursEarnedMin,hoursEarnedMax,
 				gpaEarnedMin,gpaEarnedMax,

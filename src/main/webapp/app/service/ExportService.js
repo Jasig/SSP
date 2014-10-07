@@ -29,95 +29,40 @@ Ext.define('Ssp.service.ExportService', {
 		return this.callParent( arguments );
     },
     
-    getBaseUrl: function(action){
+    getBaseUrl: function(searchType){
     	var me = this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('exportableCaseload') );
-		baseUrl = baseUrl + '/' + action;
+		baseUrl = baseUrl + '/' + searchType;
     	return baseUrl;
     },
-	searchWithParams: function(params, callbacks) {
-		var me=this;
+    buildExportSearchUrl: function(params) {
+        var me=this;
 
-		var activeParams = {};
-		
-		for (key in params) {
-		    if(params[key] && params[key] != null){
-				activeParams[key] = params[key];
-			}
-		}
+        var activeParams = {};
 
-		
-		var url = me.getBaseUrl('search');
-		var encodedUrl = Ext.urlEncode(activeParams);
-    	window.open(url+'?'+encodedUrl,'_self');
-		
-	},
+        for (key in params) {
+            if(params[key] && params[key] != null){
+                activeParams[key] = params[key];
+            }
+        }
 
-    exportCaseload: function( programStatusId, action,callbacks ){
-    	var me=this;
-		var url = me.getBaseUrl(action);
-		var activeParams = {};
-
-		if(programStatusId)
-		{
-			activeParams['programStatusId'] = programStatusId;
-		}
-		activeParams['status'] = 'ACTIVE';
-		
-		var encodedUrl = Ext.urlEncode(activeParams);
-    	window.open(url+'?'+encodedUrl,'_self');
-
+        var url = me.getBaseUrl('search');
+        var encodedUrl = Ext.urlEncode(activeParams);
+        return url+'?'+encodedUrl;
     },
-    search2: function( 
-   		 schoolId,
-   		 firstName,
-   		 lastName,
-   		 programStatus,
-   		 specialServiceGroup,
-   		 coachId,
-   		 declaredMajor,
-   		 hoursEarnedMin,
-   		 hoursEarnedMax,
-   		 gpaEarnedMin,
-   		 gpaEarnedMax,
-   		 currentlyRegistered,
-   		 earlyAlertResponseLate,
-   		 sapStatusCode,
-   		 mapStatus,
-   		 planStatus,
-   		 myCaseload,
-   		 myPlans,
-   		 myWatchList,
-   		 birthDate,
-   		 actualStartTerm,
-   		 personTableType,
-   		callbacks ){
-   	var me = this;
-   	
-		me.searchWithParams({
-	     schoolId: schoolId,
-	     firstName: firstName,
-	     lastName: lastName,
-		 programStatus: programStatus,
-		 specialServiceGroup: specialServiceGroup,
-		 coachId: coachId,
-		 declaredMajor: declaredMajor,
-		 hoursEarnedMin: hoursEarnedMin,
-		 hoursEarnedMax: hoursEarnedMax,
-		 gpaEarnedMin: gpaEarnedMin,
-		 gpaEarnedMax: gpaEarnedMax,
-		 // required because false is not sent as a parameter we are depending on null to indicate no search
-		 currentlyRegistered: currentlyRegistered == null ? null : new Boolean(currentlyRegistered).toString(),
-		 earlyAlertResponseLate: earlyAlertResponseLate,
-		 sapStatusCode: sapStatusCode,
-		 mapStatus: mapStatus,
-		 planStatus: planStatus,
-		 myCaseload: myCaseload,
-		 myPlans: myPlans,
-		 myWatchList: myWatchList,
-		 birthDate: birthDate,
-		 actualStartTerm: actualStartTerm,
-		 personTableType: personTableType
-		}, callbacks);
-   }
+
+    buildExportCaseloadUrl: function( programStatusId, searchType){
+        var me=this;
+        var url = me.getBaseUrl(searchType);
+        var activeParams = {};
+
+        if(programStatusId)
+        {
+            activeParams['programStatusId'] = programStatusId;
+        }
+        activeParams['status'] = 'ACTIVE';
+
+        var encodedUrl = Ext.urlEncode(activeParams);
+        return url+'?'+encodedUrl;
+    }
 });

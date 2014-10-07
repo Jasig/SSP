@@ -288,31 +288,6 @@ public interface PersonService extends AuditableCrudService<Person> {
 
 	void evict(Person model);
 
-	/**
-	 * Send an email message to a single student, returning a MAP of descriptors enumerating the entities created
-	 * as a result.
-	 *
-	 * @param emailRequest
-	 * @return
-	 * @throws ObjectNotFoundException
-	 * @throws ValidationException
-	 */
-	Map<String,UUID> emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
-
-	/**
-	 * Send an email message to potentially n-many students. This operation is expected to be implemented asynchronously
-	 * so the return is a pointer to a work queue job.
-	 *
-	 * @param emailRequest
-	 * @return
-	 */
-	JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException,
-			ValidationException, SecurityException;
-
-	void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId)
-			throws ObjectNotFoundException, SendFailedException,
-			ValidationException;
-
 	UUID getCoachIdForStudent(PersonTO obj);
 
 }

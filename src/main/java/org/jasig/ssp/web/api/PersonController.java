@@ -32,6 +32,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonEmailService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonService;
@@ -72,7 +73,10 @@ public class PersonController extends AbstractBaseController {
 
 	@Autowired
 	private transient PersonService service;
-	
+
+	@Autowired
+	private transient PersonEmailService personEmailService;
+
 	@Autowired
 	private transient ExternalPersonService externalPersonService;
 
@@ -162,7 +166,7 @@ public class PersonController extends AbstractBaseController {
 	public @ResponseBody
 	Map<String, UUID> emailStudent(
 			final @RequestBody EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
-		final Map<String,UUID> rslt = service.emailStudent(emailRequest);
+		final Map<String,UUID> rslt = personEmailService.emailStudent(emailRequest);
 		return rslt;
 	}
 	
@@ -328,7 +332,7 @@ public class PersonController extends AbstractBaseController {
 		
 		if(!model.getCoach().getId().equals(oldCoachId))
 		{
-			service.sendCoachingAssignmentChangeEmail(model,oldCoachId);
+			personEmailService.sendCoachingAssignmentChangeEmail(model,oldCoachId);
 		}
 		final Person savedPerson = service.save(model);
 		if (null != savedPerson) {

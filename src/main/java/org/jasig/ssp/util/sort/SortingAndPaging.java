@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.util.sort;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,11 @@ import java.util.List;
 import java.util.Map;
  
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -65,12 +71,16 @@ public final class SortingAndPaging { // NOPMD
 
 	final private transient Integer firstResult;
 
+	@JsonProperty
 	final private transient Integer maxResults;
 
+	@JsonProperty
 	final private transient String defaultSortProperty;
 
+	@JsonProperty
 	final private transient SortDirection defaultSortDirection;
 
+	@JsonProperty
 	private transient List<Pair<String, SortDirection>> sortFields;
 
 	/**
@@ -114,11 +124,13 @@ public final class SortingAndPaging { // NOPMD
 	 * @param defaultSortDirection
 	 *            A default sort direction if the sort parameter is null.
 	 */
+	//@JsonCreator
 	public SortingAndPaging(final ObjectStatus status,
-			final Integer firstResult, final Integer maxResults,
-			final List<Pair<String, SortDirection>> sortFields,
-			final String defaultSortProperty,
-			final SortDirection defaultSortDirection) {
+							final Integer firstResult,
+							final Integer maxResults,
+							final List<Pair<String, SortDirection>> sortFields,
+							final String defaultSortProperty,
+							final SortDirection defaultSortDirection) {
 		this.status = status == null ? ObjectStatus.ACTIVE : status;
 		this.firstResult = (firstResult == null)
 				|| (firstResult < Integer.valueOf(0)) ? Integer.valueOf(0)
@@ -161,10 +173,43 @@ public final class SortingAndPaging { // NOPMD
 	}
 
 	/**
+	 * Special {@code private} constructor for full-fidelity deserialization from JSON. Can't use existing
+	 * constructors because they either don't have enough fields or coerce values such that we lose fidelity, e.g.
+	 * a null {@code firstResult} is coerced to a default.
+	 *
+	 * <p>The extra 'foo' argument exists to avoid collisions with the other historical constructor which would
+	 * otherwise have exactly the same argument list.</p>
+	 *
+	 * @param status
+	 * @param firstResult
+	 * @param maxResults
+	 * @param sortFields
+	 * @param defaultSortProperty
+	 * @param defaultSortDirection
+	 * @param foo
+	 */
+	@JsonCreator
+	private SortingAndPaging(@JsonProperty("status") final ObjectStatus status,
+							 @JsonProperty("firstResult") final Integer firstResult,
+							 @JsonProperty("maxResults") final Integer maxResults,
+							 @JsonProperty("sortFields") final List<Pair<String, SortDirection>> sortFields,
+							 @JsonProperty("defaultSortProperty") final String defaultSortProperty,
+							 @JsonProperty("defaultSortDirection") final SortDirection defaultSortDirection,
+							 @JsonProperty("foo") final SortDirection foo) {
+		this.status = status;
+		this.firstResult = firstResult;
+		this.maxResults = maxResults;
+		this.sortFields = sortFields;
+		this.defaultSortProperty = defaultSortProperty;
+		this.defaultSortDirection = defaultSortDirection;
+	}
+
+	/**
 	 * Gets the object status
 	 * 
 	 * @return the object status
 	 */
+	@JsonProperty
 	public ObjectStatus getStatus() {
 		return status;
 	}
@@ -174,6 +219,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return the first result filter setting
 	 */
+	@JsonProperty
 	public Integer getFirstResult() {
 		return firstResult;
 	}
@@ -183,6 +229,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return the maximum results filter setting
 	 */
+	@JsonProperty
 	public Integer getMaxResults() {
 		return maxResults;
 	}
@@ -192,6 +239,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return the default sort property
 	 */
+	@JsonProperty
 	public String getDefaultSortProperty() {
 		return defaultSortProperty;
 	}
@@ -201,6 +249,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return the default sort direction
 	 */
+	@JsonProperty
 	public SortDirection getDefaultSortDirection() {
 		return defaultSortDirection;
 	}
@@ -211,6 +260,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return the ordered list of sort fields
 	 */
+	@JsonProperty
 	public List<Pair<String, SortDirection>> getSortFields() {
 		return sortFields;
 	}
@@ -221,6 +271,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return true if filtering by object status
 	 */
+	@JsonIgnore
 	public boolean isFilteredByStatus() {
 		return (status != null && status != ObjectStatus.ALL);
 	}
@@ -231,6 +282,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return true if these filters include paging
 	 */
+	@JsonIgnore
 	public boolean isPaged() {
 		return ((null != maxResults)
 				&& (maxResults > 0)
@@ -244,6 +296,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return true if these filters include sorting fields
 	 */
+	@JsonIgnore
 	public boolean isSorted() {
 		if ((sortFields == null) || sortFields.isEmpty()) {
 			return false;
@@ -260,6 +313,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @return true if a default sort property is available
 	 */
+	@JsonIgnore
 	public boolean isDefaultSorted() {
 		return (null != defaultSortProperty)
 				&& !StringUtils.isEmpty(defaultSortProperty);
@@ -729,4 +783,5 @@ public final class SortingAndPaging { // NOPMD
 		
 		return sAndP;
 	}
+
 }

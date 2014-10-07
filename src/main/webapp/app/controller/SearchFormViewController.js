@@ -145,7 +145,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var me=this;
 		
 		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
-		me.appEventsController.assignEvent({eventName: 'exportSearch', callBackFunc: me.onExportSearch, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
 	   	// load program statuses
@@ -154,7 +153,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     destroy: function() {
     	var me=this;
     	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
-    	me.appEventsController.removeEvent({eventName: 'exportSearch', callBackFunc: me.onExportSearch, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
         if ( me.emailStudentPopup ) {
@@ -163,29 +161,6 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 	   	return me.callParent( arguments );
     },
-    onExportSearch: function(action, count) {
-		var me = this;
-		count = parseInt(count);
-		var maxExport =  parseInt(me.configStore.getConfigByName('ssp_max_export_row_count').trim());
-		var message;
-		if(count > maxExport)
-		{
-			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum' +
-			' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
-		}
-		else {
-			message = count + " students will be exported.  Continue? ";
-		}
-
-			Ext.Msg.confirm({
-   		     	title:'Confirm',
-   		     	msg: message,
-   		     	buttons: Ext.Msg.OKCANCEL,
-   		     	fn: me.exportSearch,
-   		     	scope: me
-   			});
-
-		},	    
     searchSuccess: function( r, scope){
     	var me=scope;
     	me.searchStore.pageSize = me.searchStore.data.length;
@@ -227,41 +202,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				scope: me
 		});	
 		
-	},     
-	exportSearch: function(btnId){
-	    if (btnId=="ok")
-	    {
-			var me=this;		
-			me.exportService.search2( 
-					me.textFieldValueFromName('schoolId'),
-					me.textFieldValueFromName('firstName'),
-					me.textFieldValueFromName('lastName'),
-					me.getView().query('combobox[name=programStatus]')[0].value,
-					me.getView().query('combobox[name=specialServiceGroup]')[0].value,
-					me.getView().query('combobox[name=coachId]')[0].value,				
-					me.getView().query('combobox[name=declaredMajor]')[0].value,
-					me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,
-					me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,			
-					me.getView().query('numberfield[name=gpaMin]')[0].value,
-					me.getView().query('numberfield[name=gpaMax]')[0].value,				
-					me.getView().query('combobox[name=currentlyRegistered]')[0].value,
-					me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
-					me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
-					me.getView().query('combobox[name=mapStatus]')[0].value,
-					me.getView().query('combobox[name=planStatus]')[0].value,
-					me.getView().query('checkbox[name=myCaseload]')[0].value,
-					me.getView().query('checkbox[name=myPlans]')[0].value,
-					me.getView().query('checkbox[name=myWatchList]')[0].value,
-					me.dateFieldValueFromName('birthDate'),
-					me.getView().query('combobox[name=actualStartTerm]')[0].value,
-					me.getView().query('combobox[name=personTableType]')[0].value,
-					{
-					success: me.exportSearchSuccess,
-					failure: me.searchFailure,
-					scope: me
-			});	
-	    }
-	}, 
+	},
 	dateFieldValueFromName: function(name){
 		var me =  this;
 		var value = me.getView().query('datefield[name=' + name + ']')[0].value;
@@ -305,118 +246,196 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		me.searchStore.removeAll();
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
 		
-	}, 
+	},
+	bulkEmail: function(criteria){
+		var me=this;
+		var store = null;
+		if ( me.emailStudentPopup ) {
+			me.emailStudentPopup.destroy();
+		}
+		me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView', {
+			isBulk: true,
+			bulkCriteria: criteria
+		});
+		me.emailStudentPopup.show();
+	},
+	exportSearch: function(criteria) {
+		var me = this;
+		window.open(me.exportService.buildExportSearchUrl(criteria),'_blank');
+	},
+	onExportConfirm: function(btnId, criteria){
+		var me=this;
+		if (btnId=="ok") {
+			me.exportSearch(criteria);
+		}
+	},
+	onBulkEmailConfirm: function(btnId, criteria) {
+		var me = this;
+		if (btnId=="ok") {
+			me.bulkEmail(criteria);
+		}
+	},
+	newOnExportConfirm: function (criteria) {
+		var me = this;
+		return function(btnId) {
+			me.onExportConfirm(btnId, criteria);
+		}
+	},
+	newOnBulkEmailConfirm: function (criteria) {
+		var me = this;
+		return function(btnId) {
+			me.onBulkEmailConfirm(btnId, criteria);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria' and slightly different search/export invocation.
+	// also don't need the 'searchRsltType' handling in the SearchViewController flavor
+	promptWithExportCount: function(count, criteria) {
+		var me = this;
+		var message;
+		count = parseInt(count);
+		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+		me.appEventsController.loadMaskOff();
+
+		Ext.Msg.confirm({
+			title:'Confirm',
+			msg: count + " student/s will be exported. Continue?",
+			buttons: Ext.Msg.OKCANCEL,
+			fn: me.newOnExportConfirm(criteria),
+			scope: me
+		});
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	promptWithEmailCount: function(count, criteria) {
+		var me = this;
+		count = parseInt(count);
+		var maxEmail =  parseInt(me.configStore.getConfigByName('mail_bulk_message_limit').trim());
+		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+		me.appEventsController.loadMaskOff();
+		if(maxEmail > 0 && count > maxEmail) {
+			Ext.Msg.alert('Too Many Search Results','The number of students in your request ('+count+') exceed the ' +
+				'bulk email limit ('+maxEmail+'). <br/><br/>Consider exporting results to a CSV file and using that ' +
+				'file as input to a third party bulk email application.');
+			return;
+		} else if ( count === 0 ) {
+			Ext.Msg.alert('Too Few Search Results','Cannot send bulk email to an empty search result.');
+			return;
+		} else {
+			Ext.Msg.confirm({
+				title:'Confirm',
+				msg: count + " student/s will be emailed. Continue?",
+				buttons: Ext.Msg.OKCANCEL,
+				fn: me.newOnBulkEmailConfirm(criteria),
+				scope: me
+			});
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	newBulkActionCountResultFailureCallback: function(actionType, criteria) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountFailure(cnt, actionType, criteria);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	newBulkActionCountResultSuccessCallback: function(actionType, criteria) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountSuccess(cnt, actionType, criteria);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	onBulkActionCountFailure: function(cnt, actionType, criteria) {
+		var me = this;
+		me.appEventsController.loadMaskOff();
+		Ext.Msg.alert('SSP Error', 'Failed to look up the number of records which would be affected by the ' +
+			'requested action. Retry or contact your system administrator');
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	onBulkActionCountSuccess: function(cnt, actionType, criteria) {
+		var me = this;
+		if ( actionType === 'EXPORT' ) {
+			me.promptWithExportCount(cnt, criteria);
+		} else if ( actionType === 'EMAIL' ) {
+			me.promptWithEmailCount(cnt, criteria);
+		}
+	},
 	onSearchActionComboSelect: function(records){
 		var me=this;
-			if(!me.getView().getForm().isDirty())
-			{
-		     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
-		     	return;
-			}
-			if(!me.getView().getForm().isValid()){
-				Ext.Msg.alert('SSP Error', 'One or more search filters are invalid. Problems have been highlighted.');
-				return;
-			}
-			var message = "";
-			var valuesInvalid = false;
-			if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-				valuesInvalid = true;
-				message += "GPA Min is greater than GPA Maximum. ";
-			}
-			
-			if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-				me.getGpaMin().setValue(0);
-			}
-			
-			if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
-					valuesInvalid = true;
-					message += "Hours Earned Min is greater than Hours Earned Maximum. ";
-			}
-	
-			if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-					me.getGpaMin().setValue(0);
-			}
-			
-			if(valuesInvalid == true){
-		     	Ext.Msg.alert('SSP Error', message + "Search will return no values."); 
-		     	return;
-			}
-			
-			if(records.length > 0)
-			{
-				if(records[0].get('id') === 'EXPORT')
-				{
-					me.searchService.search2Count( 
-							me.textFieldValueFromName('schoolId'),
-							me.textFieldValueFromName('firstName'),
-							me.textFieldValueFromName('lastName'),
-							me.getView().query('combobox[name=programStatus]')[0].value,
-							me.getView().query('combobox[name=specialServiceGroup]')[0].value,
-							me.getView().query('combobox[name=coachId]')[0].value,				
-							me.getView().query('combobox[name=declaredMajor]')[0].value,
-							me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,
-							me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,			
-							me.getView().query('numberfield[name=gpaMin]')[0].value,
-							me.getView().query('numberfield[name=gpaMax]')[0].value,				
-							me.getView().query('combobox[name=currentlyRegistered]')[0].value,
-							me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
-							me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
-							me.getView().query('combobox[name=mapStatus]')[0].value,
-							me.getView().query('combobox[name=planStatus]')[0].value,
-							me.getView().query('checkbox[name=myCaseload]')[0].value,
-							me.getView().query('checkbox[name=myPlans]')[0].value,
-							me.getView().query('checkbox[name=myWatchList]')[0].value,
-							me.dateFieldValueFromName('birthDate'),
-							me.getView().query('combobox[name=actualStartTerm]')[0].value,
-							me.getView().query('combobox[name=personTableType]')[0].value,
-							{
-							success: me.searchSuccess,
-							failure: me.searchFailure,
-							scope: me
-					});	
-				}
-				if(records[0].get('id') === 'EMAIL')
-				{
-					me.bulkEmail();
-				}
-			}
-		},  
-		bulkEmail: function(){
-			var me=this;
-			var store = null;
+		if(!me.getView().getForm().isDirty())
+		{
+			Ext.Msg.alert('SSP Error', 'Please enter some filter values.');
+			return;
+		}
+		if(!me.getView().getForm().isValid()){
+			Ext.Msg.alert('SSP Error', 'One or more search filters are invalid. Problems have been highlighted.');
+			return;
+		}
+		var message = "";
+		var valuesInvalid = false;
+		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+			valuesInvalid = true;
+			message += "GPA Min is greater than GPA Maximum. ";
+		}
+
+		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
+			me.getGpaMin().setValue(0);
+		}
+
+		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+			valuesInvalid = true;
+			message += "Hours Earned Min is greater than Hours Earned Maximum. ";
+		}
+
+		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
+			me.getGpaMin().setValue(0);
+		}
+
+		if(valuesInvalid == true){
+			Ext.Msg.alert('SSP Error', message + "Search will return no values.");
+			return;
+		}
+
+		if(records.length > 0) {
+			// TODO this really needs to be moved into a modal dialog, else these counts could come back and be
+			// completely irrelevant w/r/t whatever the user is looking at currently. The loading mask is not
+			// modal, but it's the short-term stopgap measure to try to discourage people from interacting with
+			// the UI while we look up the count.
+			me.appEventsController.loadMaskOn();
 			var criteria = {
-		     schoolId: me.textFieldValueFromName('schoolId'),
-		     firstName: me.textFieldValueFromName('firstName'),
-		     lastName: me.textFieldValueFromName('lastName'),
-			 programStatus: me.getView().query('combobox[name=programStatus]')[0].value,
-			 specialServiceGroup: me.getView().query('combobox[name=specialServiceGroup]')[0].value,
-			 coachId: me.getView().query('combobox[name=coachId]')[0].value,
-			 declaredMajor: me.getView().query('combobox[name=declaredMajor]')[0].value,
-			 hoursEarnedMin: me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,
-			 hoursEarnedMax: me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,
-			 gpaEarnedMin: me.getView().query('numberfield[name=gpaMin]')[0].value,
-			 gpaEarnedMax: me.getView().query('numberfield[name=gpaMax]')[0].value,
-			 currentlyRegistered: me.getView().query('combobox[name=currentlyRegistered]')[0].value == null ? null : new Boolean(me.getView().query('combobox[name=currentlyRegistered]')[0].value).toString(),
-			 earlyAlertResponseLate: me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
-			 sapStatusCode: me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
-			 mapStatus: me.getView().query('combobox[name=mapStatus]')[0].value,
-			 planStatus: me.getView().query('combobox[name=planStatus]')[0].value,
-			 myCaseload: me.getView().query('checkbox[name=myCaseload]')[0].value,
-			 myPlans: me.getView().query('checkbox[name=myPlans]')[0].value,
-			 myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,
-			 birthDate: me.dateFieldValueFromName('birthDate'),
-			 actualStartTerm: me.getView().query('combobox[name=actualStartTerm]')[0].value,
-			 personTableType: me.getView().query('combobox[name=personTableType]')[0].value
+				schoolId: me.textFieldValueFromName('schoolId'),
+				firstName: me.textFieldValueFromName('firstName'),
+				lastName: me.textFieldValueFromName('lastName'),
+				programStatus: me.getView().query('combobox[name=programStatus]')[0].value,
+				specialServiceGroup: me.getView().query('combobox[name=specialServiceGroup]')[0].value,
+				coachId: me.getView().query('combobox[name=coachId]')[0].value,
+				declaredMajor: me.getView().query('combobox[name=declaredMajor]')[0].value,
+				hoursEarnedMin: me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,
+				hoursEarnedMax: me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,
+				gpaEarnedMin: me.getView().query('numberfield[name=gpaMin]')[0].value,
+				gpaEarnedMax: me.getView().query('numberfield[name=gpaMax]')[0].value,
+				currentlyRegistered: me.getView().query('combobox[name=currentlyRegistered]')[0].value == null ? null : new Boolean(me.getView().query('combobox[name=currentlyRegistered]')[0].value).toString(),
+				earlyAlertResponseLate: me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
+				sapStatusCode: me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
+				mapStatus: me.getView().query('combobox[name=mapStatus]')[0].value,
+				planStatus: me.getView().query('combobox[name=planStatus]')[0].value,
+				myCaseload: me.getView().query('checkbox[name=myCaseload]')[0].value,
+				myPlans: me.getView().query('checkbox[name=myPlans]')[0].value,
+				myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,
+				birthDate: me.dateFieldValueFromName('birthDate'),
+				actualStartTerm: me.getView().query('combobox[name=actualStartTerm]')[0].value,
+				personTableType: me.getView().query('combobox[name=personTableType]')[0].value
 			}
-			if ( me.emailStudentPopup ) {
-				me.emailStudentPopup.destroy();
-			}
-			me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView', {
-				isBulk: true,
-				bulkCriteria: criteria
-			});
-			me.emailStudentPopup.show();
-		},		
+			me.searchService.searchCountWithParams(criteria,
+				{
+					success: me.newBulkActionCountResultSuccessCallback(records[0].get('id'), criteria),
+					failure: me.newBulkActionCountResultFailureCallback(records[0].get('id'), criteria),
+					scope: me
+				}
+			);
+		}
+	},
 	onSearchClick: function(button){
 		var me = this;
 		if(!me.getView().getForm().isDirty())

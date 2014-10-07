@@ -233,8 +233,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
 		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'exportCaseload', callBackFunc: me.onExportCaseload, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});
 		
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
@@ -301,7 +300,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.removeEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
-	   	me.appEventsController.removeEvent({eventName: 'exportCaseload', callBackFunc: me.onExportCaseload, scope: me});
 
 	   	if ( me.emailStudentPopup ) {
 	   	    me.emailStudentPopup.destroy();
@@ -844,148 +842,13 @@ Ext.define('Ssp.controller.SearchViewController', {
         	}
         }
 	},
-	onExportWatchlistConfirm: function(btnId) {
-	   var me = this;
-       if (btnId=="ok")
-       {	   
-		   if(!me.getCaseloadStatusCombo().getValue())
-		   {
-			   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'watchlist',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});		
-		   } else
-		   if(me.getCaseloadStatusCombo().getValue() != 'All' )
-		   {
-			   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'watchlist',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});		
-		   } else
-		   {
-			   me.exportService.exportCaseload( null,'watchlist',
-					   me.caseloadStore,
-					   {success:me.getCaseloadSuccess, 
-				   failure:me.getCaseloadFailure, 
-				   scope: me});
-		   }	
-       }
-	},
-	onExportCaseloadConfirm: function(btnId) {
-		   var me = this;
-	       if (btnId=="ok")
-	       {
-		 	   if(!me.getCaseloadStatusCombo().getValue())
-			   {
-				   me.exportService.exportCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,'caseload',
-						   me.caseloadStore,
-						   {success:me.getCaseloadSuccess, 
-					   failure:me.getCaseloadFailure, 
-					   scope: me});		
-			   } else
-			   if(me.getCaseloadStatusCombo().getValue() != 'All' )
-			   {
-				   me.exportService.exportCaseload(  me.getCaseloadStatusCombo().getValue(),'caseload',
-						   me.caseloadStore,
-						   {success:me.getCaseloadSuccess, 
-					   failure:me.getCaseloadFailure, 
-					   scope: me});		
-			   } else
-			   {
-				   me.exportService.exportCaseload( null,'caseload',
-						   me.caseloadStore,
-						   {success:me.getCaseloadSuccess, 
-					   failure:me.getCaseloadFailure, 
-					   scope: me});
-			   }		
-	       }
-		},
-			
-	onExportCaseload: function(action, count) {
-		var me = this;
-		var message;
-		count = parseInt(count);
-		var maxExport =  parseInt(me.configStore.getConfigByName('ssp_max_export_row_count').trim());
-		if(count > maxExport)
-		{
-			message = 'The number of students in your request ('+count+') exceed the export limit ('+maxExport+').  Click Ok to download the maximum' +
-			' numbert of records.  Click Cancel to reduce the results by filtering the Program Status or changing the Student Search critieria.  If you cannot reduce the results contact the SSP Administrator';
-		}
-		else {
-			message = count + " students will be exported.  Continue? ";
-		}
-		if(action === 'caseload' && me.getIsCaseload())
-		{
-			Ext.Msg.confirm({
-   		     	title:'Confirm',
-   		     	msg: message,
-   		     	buttons: Ext.Msg.OKCANCEL,
-   		     	fn: me.onExportCaseloadConfirm,
-   		     	scope: me
-   			});
-
-		}
-		if(action === 'watchlist' && me.getIsWatchList())
-		{
-			Ext.Msg.confirm({
-   		     	title:'Confirm',
-   		     	msg: message,
-   		     	buttons: Ext.Msg.OKCANCEL,
-   		     	fn: me.onExportWatchlistConfirm,
-   		     	scope: me
-   			});
-
-		}	
-	
-	},
-	onCaseloadActionComboSelect: function( comp, records, eOpts ){
-		var me=this;
-		if(me.getIsSearch())
-		{
-			me.appEventsController.getApplication().fireEvent('onSearchActionComboSelect', records);
-			comp.setValue(null);
-			return;
-		}
-		if(records.length > 0)
-		{
-			if(records[0].get('id') === 'EXPORT')
-			{
-		       if(me.getIsCaseload())
-		       {
-					var count = me.caseloadService.getCaseloadCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);	
-		    	   
-		       } else
-		       if(me.getIsWatchList())
-		       {
-					var count = me.watchListService.getWatchlistCount(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);		    	   
-		       }
-			}
-			if(records[0].get('id') === 'EMAIL')
-			{
-				me.bulkEmail();
-			}
-			comp.setValue(null);
-		}
-	},    
 	bulkEmail: function(){
 		var me=this;
 		var store = null;
 		var criteria = {};
-		if(!me.getCaseloadStatusCombo().getValue())
-		{
-			criteria.programStatus = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
-		} else
-		if(me.getCaseloadStatusCombo().getValue() != 'All' )
-		{
-			criteria.programStatus = me.getCaseloadStatusCombo().getValue();
-		} else
-		{
-		   criteria.programStatus = null;
-		}
-		
-		
+
+		criteria.programStatus = me.translateSelectedStatustoSearchableStatus();
+
 		if ( me.getIsCaseload() )
 		{
 			store = me.caseloadStore;
@@ -1008,6 +871,142 @@ Ext.define('Ssp.controller.SearchViewController', {
 		});
 		me.emailStudentPopup.show();
 	},
+	exportSearch: function(searchType) {
+		var me = this;
+		window.open(me.exportService.buildExportCaseloadUrl(me.translateSelectedStatustoSearchableStatus(), searchType),
+			'_blank');
+	},
+	onExportConfirm: function(btnId, searchType) {
+		var me = this;
+		if (btnId=="ok") {
+			me.exportSearch(searchType);
+		}
+	},
+	newOnExportConfirm: function (searchType) {
+		var me = this;
+		return function(btnId) {
+			me.onExportConfirm(btnId, searchType);
+		}
+	},
+	onBulkEmailConfirm: function(btnId) {
+		var me = this;
+		if (btnId=="ok") {
+			me.bulkEmail();
+		}
+	},
+	promptWithExportCount: function(count) {
+		var me = this;
+		var message;
+		count = parseInt(count);
+		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+		me.appEventsController.loadMaskOff();
+		var searchRsltType = null;
+		if ( me.getIsCaseload() ) {
+			searchRsltType = 'caseload';
+		}
+		if ( me.getIsWatchList() ) {
+			searchRsltType = 'watchlist';
+		}
+		Ext.Msg.confirm({
+			title:'Confirm',
+			msg: count + " student/s will be exported. Continue?",
+			buttons: Ext.Msg.OKCANCEL,
+			fn: me.newOnExportConfirm(searchRsltType),
+			scope: me
+		});
+	},
+	promptWithEmailCount: function(count) {
+		var me = this;
+		count = parseInt(count);
+		var maxEmail =  parseInt(me.configStore.getConfigByName('mail_bulk_message_limit').trim());
+		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+		me.appEventsController.loadMaskOff();
+		if(maxEmail > 0 && count > maxEmail) {
+			Ext.Msg.alert('Too Many Search Results','The number of students in your request ('+count+') exceed the ' +
+				'bulk email limit ('+maxEmail+'). <br/><br/>Consider exporting results to a CSV file and using that ' +
+				'file as input to a third party bulk email application.');
+			return;
+		} else if ( count === 0 ) {
+			Ext.Msg.alert('Too Few Search Results','Cannot send bulk email to an empty caseload/watchlist/search result.');
+			return;
+		} else {
+			Ext.Msg.confirm({
+				title:'Confirm',
+				msg: count + " student/s will be emailed. Continue?",
+				buttons: Ext.Msg.OKCANCEL,
+				fn: me.onBulkEmailConfirm,
+				scope: me
+			});
+		}
+	},
+	newBulkActionCountResultFailureCallback: function(actionType) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountFailure(cnt, actionType);
+		}
+	},
+	newBulkActionCountResultSuccessCallback: function(actionType) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountSuccess(cnt, actionType);
+		}
+	},
+	onBulkActionCountFailure: function(cnt, actionType) {
+		var me = this;
+		me.appEventsController.loadMaskOff();
+		Ext.Msg.alert('SSP Error', 'Failed to look up the number of records which would be affected by the ' +
+			'requested action. Retry or contact your system administrator');
+	},
+	onBulkActionCountSuccess: function(cnt, actionType) {
+		var me = this;
+		if ( actionType === 'EXPORT' ) {
+			me.promptWithExportCount(cnt);
+		} else if ( actionType === 'EMAIL' ) {
+			me.promptWithEmailCount(cnt);
+		}
+	},
+	translateSelectedStatustoSearchableStatus: function() {
+		var me = this;
+		if ( !(me.getCaseloadStatusCombo().getValue()) ) {
+			return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+		} else if ( me.getCaseloadStatusCombo().getValue() === 'All' ) {
+			return null;
+		} else {
+			return me.getCaseloadStatusCombo().getValue()
+		}
+	},
+	onCaseloadActionComboSelect: function( comp, records, eOpts ){
+		var me=this;
+		if(me.getIsSearch()) {
+			me.appEventsController.getApplication().fireEvent('onSearchActionComboSelect', records);
+			comp.setValue(null);
+			return;
+		}
+		if(records.length > 0) {
+			// TODO this really needs to be moved into a modal dialog, else these counts could come back and be
+			// completely irrelevant w/r/t whatever the user is looking at currently. The loading mask is not
+			// modal, but it's the short-term stopgap measure to try to discourage people from interacting with
+			// the UI while we look up the count.
+			me.appEventsController.loadMaskOn();
+			if(me.getIsCaseload()) {
+				me.caseloadService.getCaseloadCount(me.translateSelectedStatustoSearchableStatus(), {
+					success: me.newBulkActionCountResultSuccessCallback(records[0].get('id')),
+					failure: me.newBulkActionCountResultFailureCallback(records[0].get('id')),
+					scope: me
+				});
+			} else if(me.getIsWatchList()) {
+				me.watchListService.getWatchlistCount(me.translateSelectedStatustoSearchableStatus(), {
+					success: me.newBulkActionCountResultSuccessCallback(records[0].get('id')),
+					failure: me.newBulkActionCountResultFailureCallback(records[0].get('id')),
+					scope: me
+				});
+			}
+			comp.setValue(null);
+		}
+	},
+
 	getProgramStatuses: function(){
 		var me=this;
 		me.programStatusService.getAll({
@@ -1030,63 +1029,32 @@ Ext.define('Ssp.controller.SearchViewController', {
     getProgramStatusesFailure: function( r, scope){
     	var me=scope;
     },     
-	getWatchList: function(defaultToActive){
+	getWatchList: function(){
     	var me=this;
 		me.setGridView();
 		me.getView().setLoading( true );
-		if(!me.getCaseloadStatusCombo().getValue())
-		{
-			me.watchListService.getWatchList( Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
-					me.watchListStore,
-					{success:me.getCaseloadSuccess, 
-				failure:me.getCaseloadFailure, 
-				scope: me});		
-		}
-		else
-		if(me.getCaseloadStatusCombo().getValue() != 'All' )
-		{
-			me.watchListService.getWatchList( me.getCaseloadStatusCombo().getValue(),
-					me.watchListStore,
-					{success:me.getCaseloadSuccess, 
-				failure:me.getCaseloadFailure, 
-				scope: me});		
-		} else
-		{
-			me.watchListService.getWatchList(null,
-					me.watchListStore,
-					{success:me.getCaseloadSuccess, 
-				failure:me.getCaseloadFailure, 
-				scope: me});
-		}
+		me.watchListService.getWatchList(
+			me.translateSelectedStatustoSearchableStatus(),
+			me.watchListStore,
+			{
+				success:me.getCaseloadSuccess,
+				failure:me.getCaseloadFailure,
+				scope: me
+			});
 	},
-	getCaseload: function(defaultToActive){
+	getCaseload: function(){
     	var me=this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
 		me.getView().setLoading( true );
-		if(!me.getCaseloadStatusCombo().getValue())
-		{
-			me.caseloadService.getCaseload(  Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID,
-					me.caseloadStore,
-					{success:me.getCaseloadSuccess, 
-				failure:me.getCaseloadFailure, 
-				scope: me});		
-		} else
-		if(me.getCaseloadStatusCombo().getValue() != 'All' )
-		{
-			me.caseloadService.getCaseload( me.getCaseloadStatusCombo().getValue(),
-					me.caseloadStore,
-					{success:me.getCaseloadSuccess, 
-				failure:me.getCaseloadFailure, 
-				scope: me});		
-		} else
-		{
-			me.caseloadService.getCaseload(null,
-					me.caseloadStore,
-					{success:me.getCaseloadSuccess, 
-				failure:me.getCaseloadFailure, 
-				scope: me});
-		}
+		me.caseloadService.getCaseload(
+			me.translateSelectedStatustoSearchableStatus(),
+			me.caseloadStore,
+			{
+				success:me.getCaseloadSuccess,
+				failure:me.getCaseloadFailure,
+				scope: me
+			});
 	},  
     getCaseloadSuccess: function( r, scope){
     	var me=scope;

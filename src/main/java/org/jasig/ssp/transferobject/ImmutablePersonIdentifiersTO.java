@@ -77,4 +77,12 @@ public class ImmutablePersonIdentifiersTO {
 		result = 31 * result + (schoolId != null ? schoolId.hashCode() : 0);
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "ImmutablePersonIdentifiersTO{" +
+				"id=" + id +
+				", schoolId='" + schoolId + '\'' +
+				'}';
+	}
 }

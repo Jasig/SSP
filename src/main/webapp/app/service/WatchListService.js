@@ -155,10 +155,21 @@ Ext.define('Ssp.service.WatchListService', {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 				success: function(response, view) {
-					count = response.responseText;
-			        var skipCallBack = me.appEventsController.getApplication().fireEvent('exportCaseload','watchlist', count);
+					if (callbacks != null && callbacks.success ) {
+						if ( response && response.responseText ) {
+							callbacks.success.call(callbacks.scope, Ext.decode(response.responseText));
+						} else {
+							callbacks.success.call(callbacks.scope, null);
+						}
+					}
 				},
-				failure: this.apiProperties.handleError
+				failure: function(response) {
+					if (callbacks != null && callbacks.failure) {
+						callbacks.failure.call(callbacks.scope, response);
+					 } else {
+						this.apiProperties.handleError(response);
+					}
+			 	}
 			}, this);
     }
 });

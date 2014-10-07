@@ -19,55 +19,23 @@
 package org.jasig.ssp.service.impl;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.PersonExistsException;
-import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
-import org.jasig.ssp.model.JournalEntry;
-import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.model.PersonSearchResult2;
-import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.ExternalPerson;
-import org.jasig.ssp.model.jobqueue.Job;
-import org.jasig.ssp.model.reference.ConfidentialityLevel;
-import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.security.PersonAttributesResult;
-import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.JournalEntryService;
-import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
-import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonService;
-import org.jasig.ssp.service.external.RegistrationStatusByTermService;
-import org.jasig.ssp.service.jobqueue.JobExecutionResult;
-import org.jasig.ssp.service.jobqueue.JobExecutionStatus;
-import org.jasig.ssp.service.jobqueue.JobService;
-import org.jasig.ssp.service.jobqueue.impl.AbstractJobExecutor;
-import org.jasig.ssp.service.reference.ConfidentialityLevelService;
-import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.form.BulkEmailJobSpec;
-import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
-import org.jasig.ssp.transferobject.form.EmailAddress;
-import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
-import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -77,27 +45,20 @@ import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.mail.SendFailedException;
 import javax.portlet.PortletRequest;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -111,13 +72,11 @@ import java.util.concurrent.atomic.AtomicReference;
  */ 
 @Service
 @Transactional
-public class PersonServiceImpl implements PersonService, InitializingBean, BeanNameAware {
+public class PersonServiceImpl implements PersonService {
 
 	public static final boolean ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT = true;
 
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
-
-	public static final String BULK_EMAIL_JOB_EXECUTOR_NAME = "bulk-email-executor";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonServiceImpl.class);
@@ -132,46 +91,10 @@ public class PersonServiceImpl implements PersonService, InitializingBean, BeanN
 	private transient PersonAttributesService personAttributesService;
 
 	@Autowired
-	private transient RegistrationStatusByTermService registrationStatusByTermService;
-
-	@Autowired
 	private transient ExternalPersonService externalPersonService;
 
 	@Autowired
-	private transient PersonSearchService personSearchService;
-
-	@Autowired
-	private transient PersonSearchRequestTOFactory personSearchRequestFactory;
-
-	@Autowired
 	private transient WithTransaction withTransaction;
-
-	@Autowired
-	private transient EarlyAlertService earlyAlertService;
-	
-	@Autowired
-	private transient MessageService messageService;
-	
-	@Autowired
-	private transient JournalEntryService journalEntryService;
-
-	@Autowired
-	private transient JournalSourceService journalSourceService;
-	
-	@Autowired
-	private transient ConfidentialityLevelService confidentialityLevelService;
-	
-	@Autowired
-	private transient ConfigService configService;
-
-	@Autowired
-	private transient JobService jobService;
-
-	@Autowired
-	private transient PlatformTransactionManager transactionManager;
-
-	@Autowired
-	private transient SecurityService securityService;
 
 	/**
 	 * If <code>true</code>, each individual coach synchronized by
@@ -184,19 +107,6 @@ public class PersonServiceImpl implements PersonService, InitializingBean, BeanN
 	@Value("#{configProperties.per_coach_sync_transactions}")
 	private boolean perCoachSyncTransactions = true;
 
-	private String beanName;
-
-	private AbstractJobExecutor<BulkEmailJobSpec, Map<String, Object>> bulkEmailJobExecutor;
-
-	@Override
-	public void setBeanName(String name) {
-		this.beanName = name;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		registerBulkEmailJobExecutor();
-	}
 
 	private static interface PersonAttributesLookup {
 		public PersonAttributesResult lookupPersonAttributes(String username)
@@ -619,16 +529,6 @@ public class PersonServiceImpl implements PersonService, InitializingBean, BeanN
 		this.dao = dao;
 	}
 
-	protected void setRegistrationStatusByTermService(
-			final RegistrationStatusByTermService registrationStatusByTermService) {
-		this.registrationStatusByTermService = registrationStatusByTermService;
-	}
-
-	protected void setEarlyAlertService(
-			final EarlyAlertService earlyAlertService) {
-		this.earlyAlertService = earlyAlertService;
-	}
-
 	@Override
 	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
 			final SortingAndPaging sAndP) {
@@ -919,256 +819,4 @@ public class PersonServiceImpl implements PersonService, InitializingBean, BeanN
 		dao.removeFromSession(model);	
 	}
 
-	@Override
-	public Map<String,UUID> emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
-		validateInput(emailRequest);
-		final Message message = buildAndSendStudentEmail(emailRequest);
-		final JournalEntry journalEntry = buildJournalEntry(emailRequest, message);
-		final Map<String,UUID> rslt = Maps.newLinkedHashMap();
-		rslt.put("messageId", message.getId());
-		if ( journalEntry != null ) {
-			rslt.put("journalEntryId", journalEntry.getId());
-		}
-		return rslt;
-	}
-
-	@Override
-	public JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException, ValidationException, SecurityException {
-		final SspUser currentSspUser = securityService.currentlyAuthenticatedUser();
-		if ( currentSspUser == null ) {
-			throw new SecurityException("Anonymous user cannot generate bulk email");
-		}
-		final Person currentSspPerson = currentSspUser.getPerson();
-		validateInput(emailRequest);
-		PersonSearchRequest criteria = personSearchRequestFactory.from(emailRequest.getCriteria());
-		final SortingAndPaging origSortAndPage = criteria.getSortAndPage();
-		final SortingAndPaging unlimitedSortAndPage;
-		if ( origSortAndPage != null && origSortAndPage.isPaged() ) {
-			unlimitedSortAndPage = new SortingAndPaging(origSortAndPage.getStatus(), 0, -1,
-					origSortAndPage.getSortFields(), origSortAndPage.getDefaultSortProperty(),
-					origSortAndPage.getDefaultSortDirection());
-		} else if ( origSortAndPage == null ) {
-			// ObjectStatus.ALL matches PersonSearchController.buildSortAndPage()
-			unlimitedSortAndPage = SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ALL, 0, -1, null, null, null);
-		} else {
-			unlimitedSortAndPage = origSortAndPage;
-		}
-		criteria.setSortAndPage(unlimitedSortAndPage);
-		final PagingWrapper<PersonSearchResult2> searchResults = personSearchService.searchPersonDirectory(criteria);
-		if ( searchResults == null || searchResults.getResults() == 0 ) {
-			// TODO would be nice to have a better way of representing a no-op job, b/c an exception is really
-			// overly unfriendly, but a null return is so non-descriptive as to be useless. So we opt for a
-			// ValidationException so the client *knows* nothing really happened.
-			throw new ValidationException("Person search parameters matched no records. Can't send message.");
-		}
-		if ( searchResults.getResults() > (long)Integer.MAX_VALUE ) {
-			throw new ValidationException("Too many person search results (" + searchResults.getResults() +
-					"). Can't send message.");
-		}
-		final List<ImmutablePersonIdentifiersTO> deliveryTargetIdentifiers = Lists.newArrayListWithCapacity((int) searchResults.getResults());
-		for ( PersonSearchResult2 searchResult : searchResults ) {
-			deliveryTargetIdentifiers.add(new ImmutablePersonIdentifiersTO(searchResult.getId(), searchResult.getSchoolId()));
-		}
-		final BulkEmailJobSpec jobSpec = new BulkEmailJobSpec(emailRequest, deliveryTargetIdentifiers);
-		final Job job = this.bulkEmailJobExecutor.queueNewJob(currentSspPerson.getId(), currentSspPerson.getId(), jobSpec);
-		return new JobTO(job);
-	}
-
-	/**
-	 * Intentionally private b/c we do not want this to participate in this service's "transactional-by-default"
-	 * public interface. Its transaction is managed by the {@code JobExecutor} assumed to be invoking it.
-	 *
-	 * @param executionSpec
-	 * @param executionState
-	 * @return
-	 */
-	// TODO STILL NEEDS MAJOR REFACTOR. JUST A stripped down COPY PASTE FROM BULKEMAILRUNNABLE
-	private JobExecutionResult<Map<String, Object>> executeBulkEmailJob(BulkEmailJobSpec executionSpec, Map<String, Object> executionState) {
-		try {
-			final List<ImmutablePersonIdentifiersTO> studentIdsToEmail = executionSpec.getPersonIdentifiersFromCoreSpecCriteria();
-			for (ImmutablePersonIdentifiersTO studentIds : studentIdsToEmail) {
-				final Person student;
-				if (studentIds.getId() != null) {
-					student = get(studentIds.getId());
-				} else {
-					student = getBySchoolId(studentIds.getSchoolId(), false);
-				}
-				EmailStudentRequestForm emailStudentRequestForm = new EmailStudentRequestForm(executionSpec.getCoreSpec(),student);
-				emailStudent(emailStudentRequestForm);
-			}
-			return new JobExecutionResult<Map<String, Object>>(JobExecutionStatus.DONE, null);
-		} catch ( Exception e ) {
-			return new JobExecutionResult<Map<String, Object>>(JobExecutionStatus.FAILED, null, e);
-		}
-	}
-
-	private void registerBulkEmailJobExecutor() {
-		this.bulkEmailJobExecutor = new AbstractJobExecutor<BulkEmailJobSpec, Map<String,Object>>(BULK_EMAIL_JOB_EXECUTOR_NAME, jobService, transactionManager) {
-
-			@Override
-			protected BulkEmailJobSpec deserializeJobSpecWithCheckedExceptions(String jobSpecStr) throws Exception {
-				return getObjectMapper().readValue(jobSpecStr, BulkEmailJobSpec.class);
-			}
-
-			@Override
-			protected Map<String, Object> deserializeJobStateWithCheckedExceptions(String jobSpecStr) throws Exception {
-				return getObjectMapper().readValue(jobSpecStr, jobStateType(getObjectMapper()));
-			}
-
-			@Override
-			protected JobExecutionResult<Map<String, Object>> executeJobDeserialized(BulkEmailJobSpec executionSpec, Map<String, Object> executionState) {
-				return executeBulkEmailJob(executionSpec, executionState);
-			}
-
-			private JavaType jobStateType(ObjectMapper objectMapper) {
-				return objectMapper.getTypeFactory().constructParametricType(Map.class, String.class, Object.class);
-			}
-
-			protected Logger getLogger() {
-				return LoggerFactory.getLogger(super.getClass());
-			}
-
-		};
-		this.jobService.registerJobExecutor(this.bulkEmailJobExecutor);
-	}
-
-	private JournalEntry buildJournalEntry(
-			EmailStudentRequestForm emailRequest, Message message)
-			throws ObjectNotFoundException, ValidationException {
-		if(emailRequest.getCreateJournalEntry() && emailRequest.getStudentId() != null)
-		{
-			Person student = get(emailRequest.getStudentId());
-			
-			JournalEntry journalEntry = new JournalEntry();
-			journalEntry.setPerson(student);
-			
-			String commentFromEmail = buildJournalEntryCommentFromEmail(emailRequest, message);
-			
-			ConfidentialityLevel confidentialityLevel;
-			if(emailRequest.getConfidentialityLevelId() == null)
-			{
-				confidentialityLevel = confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE);
-			}
-			else
-			{
-				confidentialityLevel = confidentialityLevelService.get(emailRequest.getConfidentialityLevelId());
-			}
-			journalEntry.setConfidentialityLevel(confidentialityLevel);
-			journalEntry.setComment(commentFromEmail);
-			journalEntry.setEntryDate(new Date());
-			journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
-			journalEntry = journalEntryService.save(journalEntry);
-			return journalEntry;
-		}
-		return null;
-	}
-
-	private String buildJournalEntryCommentFromEmail(
-			EmailStudentRequestForm emailRequest, Message message) {
-		StringBuilder journalEntryCommentBuilder = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
-		journalEntryCommentBuilder.append("FROM: " + message.getSender().getFullName() + EOL);
-		journalEntryCommentBuilder.append("TO: " + message.getRecipientEmailAddress() + EOL);
-		if(message.getCarbonCopy() != null)
-		{
-			journalEntryCommentBuilder.append("CC: " + message.getCarbonCopy() + EOL);
-		}
-		journalEntryCommentBuilder.append(EOL);
-		journalEntryCommentBuilder.append("Subject: "+emailRequest.getEmailSubject() + EOL);
-		journalEntryCommentBuilder.append(EOL);
-		journalEntryCommentBuilder.append("Email Message: "+emailRequest.getEmailBody() + EOL);
-		journalEntryCommentBuilder.append(EOL);
-		
-		return journalEntryCommentBuilder.toString();
-	}
-
-	private Message buildAndSendStudentEmail(EmailStudentRequestForm emailRequest)
-			throws ObjectNotFoundException, ValidationException {
-		EmailAddress addresses = emailRequest.getValidDeliveryAddressesOrFail();
-		SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
-		return messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody);
-	}
-
-	private void validateInput(EmailStudentRequestForm emailRequest) throws ValidationException {
-		StringBuilder validationMsg = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
-
-		// Removed a historical validation that required a studentId (UUID) on emailRequest. We don't actually need that
-		// and we can't require it since we now reuse EmailStudentRequestForm when sending bulk email, which may
-		// target external-only students, i.e. persons without UUIDs.
-
-		if(!emailRequest.hasEmailSubject())
-		{
-			validationMsg.append("Email subject must be provided").append(EOL);
-		}
-		if(!emailRequest.hasEmailBody())
-		{
-			validationMsg.append("Email body must be provided").append(EOL);
-		}
-		
-		if(!emailRequest.hasValidDeliveryAddresses()){
-			validationMsg.append("At least one valid email address must be included.").append(EOL);
-		}
-		
-		String validation = validationMsg.toString();
-		if(org.apache.commons.lang.StringUtils.isNotBlank(validation)){
-			throw new ValidationException(validation);
-		}
-	}
-
-	private void validateInput(BulkEmailStudentRequestForm emailRequest) throws ValidationException {
-		StringBuilder validationMsg = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
-		if(!emailRequest.hasEmailSubject())
-		{
-			validationMsg.append("Email subject must be provided").append(EOL);
-		}
-		if(!emailRequest.hasEmailBody())
-		{
-			validationMsg.append("Email body must be provided").append(EOL);
-		}
-		if(!emailRequest.hasNonCcDeliveryAddress()) {
-			validationMsg.append("Non-cc email delivery addresses must be provided").append(EOL);
-		}
-		String validation = validationMsg.toString();
-		if(org.apache.commons.lang.StringUtils.isNotBlank(validation)){
-			throw new ValidationException(validation);
-		}
-	}
-
-	@Override
-	public void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId) throws ObjectNotFoundException, SendFailedException, ValidationException {
-		
-		if(oldCoachId == null || model.getCoach() == null || !model.getCoach().hasEmailAddresses())
-			return;
-		Person oldCoach = get(oldCoachId);
-		String appTitle = configService.getByNameEmpty("app_title");
-		String serverExternalPath = configService.getByNameEmpty("serverExternalPath");
-
-		String message = oldCoach.getFullName()+" has assigned "+model.getFullName()+" to your caseload in "+appTitle+". Please visit "+serverExternalPath+" to view the student's information in "+appTitle+".";
-		String subject = "A coaching assignment has changed in "+appTitle;
-
-		SubjectAndBody subjectAndBody = new SubjectAndBody(subject, message);
-		if(oldCoach.hasEmailAddresses() && model.getWatcherEmailAddresses().isEmpty()){
-			messageService.createMessage(model.getCoach(), 
-				StringUtils.arrayToCommaDelimitedString(oldCoach.getEmailAddresses()
-						.toArray(new String[oldCoach.getEmailAddresses().size()])), subjectAndBody);
-		} else
-		if(oldCoach.hasEmailAddresses() && !model.getWatcherEmailAddresses().isEmpty()){
-			Set<String> emails = new HashSet<String>();
-			emails.addAll(oldCoach.getEmailAddresses());
-			emails.addAll(model.getWatcherEmailAddresses());
-			messageService.createMessage(model.getCoach(), 
-					StringUtils.arrayToCommaDelimitedString(emails
-							.toArray(new String[emails.size()])), subjectAndBody);
-		} else
-		if(!oldCoach.hasEmailAddresses() && model.getWatcherEmailAddresses().isEmpty()){
-			messageService.createMessage(model.getCoach(), 
-					StringUtils.arrayToCommaDelimitedString(model.getWatcherEmailAddresses()
-							.toArray(new String[model.getWatcherEmailAddresses().size()])), subjectAndBody);			
-		}
-		else{
-			messageService.createMessage(model.getCoach(),"", subjectAndBody);
-		}
-	}
 }

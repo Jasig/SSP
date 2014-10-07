@@ -22,6 +22,8 @@
 package org.jasig.ssp.util.collections;
 
 import com.google.common.collect.Maps;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.Map;
 
@@ -56,7 +58,8 @@ public class Pair<T, U>
 	 * @param s
 	 *            second argument
 	 */
-	public Pair(final T f, final U s)
+	@JsonCreator
+	public Pair(@JsonProperty("first") final T f, @JsonProperty("second") final U s)
 	{
 		this.first = f;
 		this.second = s;

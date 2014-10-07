@@ -134,8 +134,6 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 
 		} catch ( JobExecutionException e ) {
 
-			getLogger().warn("Job {} execution did not complete entirely successfully", jobId, e);
-
 			final JobExecutionResult<T> exResult =  e.getJobExecutionResult();
 			if ( exResult == null ) {
 				// really isn't supposed to happen, hence relatively high log level
@@ -146,8 +144,21 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 			if ( exResult.getStatus() == JobExecutionStatus.ERROR ||
 					exResult.getStatus() == JobExecutionStatus.FAILED ||
 					exResult.getStatus() == JobExecutionStatus.INTERRUPTED ) {
+				getLogger().warn("Job {} execution did not complete successfully", jobId, e);
+				try {
+					txnTemplate.execute(new TransactionCallbackWithoutResult() {
+						@Override
+						protected void doInTransactionWithoutResult(TransactionStatus status) {
+							saveJobState(jobId, exResult);
+						}
+					});
+				} catch ( Exception ee ) {
+					getLogger().error("Job {} could not store final execution state.", jobId, e);
+				}
 				return toExceptionalWorkflowResult(exResult, e, jobId);
 			} else if ( exResult.getStatus() == JobExecutionStatus.FAILED_PARTIAL ) {
+				getLogger().warn("Job {} execution encountered a failure, but requested a retry after storing"
+						+ " execution state in a separate transaction", jobId, e);
 				// 'main' execution transaction had to be rolled back, but still want to
 				// update job state
 				try {
@@ -159,7 +170,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 					});
 					return toExceptionalWorkflowResult(exResult, e, jobId);
 				} catch ( Exception ee ) {
-					getLogger().error("Job {} could not store retry state", jobId, ee);
+					getLogger().error("Job {} could not store retry state so retry will be skipped and Job will error out", jobId, ee);
 					return newWorkflowResultWithErrorMessage(JobExecutionStatus.ERROR, ee.getMessage());
 				}
 			} else {
@@ -230,7 +241,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 		} catch ( RuntimeIoException e ) {
 			throw new JobExecutionBookkeepingException(MessageFormat.format(JOB_DESERIALIZATION_ERROR_MSG, "state", job.getId()), e);
 		}
-		return executeJobDeserialized(executionSpec, executionState);
+		return executeJobDeserialized(executionSpec, executionState, job.getId());
 	}
 
 	/**
@@ -247,7 +258,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 			case FAILED:
 			case FAILED_PARTIAL:
 			case INTERRUPTED:
-				throw new JobExecutionException(result);
+				throw new JobExecutionException(result); // this takes care of unpacking a cause, if possible
 			case PARTIAL:
 			case DONE:
 				saveJobState(job, result);
@@ -259,6 +270,10 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 
 	protected void prepareRetryInTransaction(UUID jobId, JobExecutionResult<T> exResult) throws JobExecutionException {
 		saveJobState(findJobOrFail(jobId), exResult);
+	}
+
+	protected void saveJobState(UUID jobId, JobExecutionResult<T> resultWithState) {
+		saveJobState(findJobOrFail(jobId), resultWithState);
 	}
 
 	protected void saveJobState(Job job, JobExecutionResult<T> resultWithState) {
@@ -280,7 +295,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	 * @param executionState
 	 * @return
 	 */
-	protected abstract JobExecutionResult<T> executeJobDeserialized(P executionSpec, T executionState);
+	protected abstract JobExecutionResult<T> executeJobDeserialized(P executionSpec, T executionState, UUID jobId);
 
 	protected String serializeInitialJobState(P spec) {
 		return null;

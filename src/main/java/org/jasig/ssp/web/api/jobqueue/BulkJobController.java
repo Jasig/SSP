@@ -18,10 +18,8 @@
  */
 package org.jasig.ssp.web.api.jobqueue;
 
-import java.io.IOException;
-
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.PersonEmailService;
 import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.web.api.AbstractBaseController;
@@ -36,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
+
 @Controller
 @RequestMapping("/1/bulk")
 public class BulkJobController  extends AbstractBaseController {
@@ -49,14 +49,14 @@ public class BulkJobController  extends AbstractBaseController {
 	}
 
 	@Autowired
-	private PersonService personService;
+	private PersonEmailService personEmailService;
 
 	@PreAuthorize("hasRole('ROLE_PERSON_WRITE') and hasRole('ROLE_BULK_EMAIL_STUDENT')")
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public @ResponseBody
 	JobTO bulkEmail(@RequestBody BulkEmailStudentRequestForm form)
 			throws ObjectNotFoundException, ValidationException, IOException {
-		return personService.emailStudentsInBulk(form);
+		return personEmailService.emailStudentsInBulk(form);
 	}
 
 }
