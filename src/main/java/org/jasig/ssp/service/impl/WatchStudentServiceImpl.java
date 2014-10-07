@@ -43,7 +43,6 @@ import java.util.UUID;
  * WatchStudent service implementation
  */
 @Service
-@Transactional
 public class WatchStudentServiceImpl
 		extends AbstractPersonAssocAuditableService<WatchStudent>
 		implements WatchStudentService {
@@ -59,11 +58,13 @@ public class WatchStudentServiceImpl
 	}
 
 	@Override
+	@Transactional
 	public WatchStudent get(UUID watcherId, UUID studentId) {
 		return dao.getStudentWatcherRelationShip(watcherId,studentId);
 	}
 
 	@Override
+	@Transactional
 	public PagingWrapper<PersonSearchResult2> watchListFor(ProgramStatus programStatus, Person person,
 			SortingAndPaging sAndP) {
 		PersonSearchRequest form = new PersonSearchRequest();
@@ -74,6 +75,7 @@ public class WatchStudentServiceImpl
 		return directoryPersonDao.search(form);
 	}
 	@Override
+	@Transactional
 	public void delete(final UUID id) throws ObjectNotFoundException {
 		final WatchStudent current = getDao().get(id);
 
@@ -81,6 +83,10 @@ public class WatchStudentServiceImpl
 	}
 
 	@Override
+	// explicitly leaving out @Transactional. We really shouldn't need it on most of the
+	// methods in this class (or at most readOnly), but it's been there historically
+	// on it and most of its peers. This export scenario is a special case, though, where
+	// we really don't want to be holding open a transaction if we can help it.
 	public void exportWatchListFor(PrintWriter writer,
 			ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) throws IOException {
@@ -93,6 +99,7 @@ public class WatchStudentServiceImpl
 	}
 
 	@Override
+	@Transactional
 	public Long watchListCountFor(ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) {
 		PersonSearchRequest form = new PersonSearchRequest();

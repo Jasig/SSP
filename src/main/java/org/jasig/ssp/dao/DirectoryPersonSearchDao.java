@@ -892,21 +892,30 @@ public class DirectoryPersonSearchDao  {
 
 	public void exportableSearch(
 			CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest) throws IOException {
-        
-		//if(!buildFrom(personSearchRequest,hqlWithoutSelect)) {}
-		//	return new PagingWrapper<PersonSearchResult2>(0, new ArrayList<PersonSearchResult2>());
-		
-		StatelessSession openStatelessSession = sessionFactory.openStatelessSession();
-		openStatelessSession.beginTransaction();
-		Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession,personSearchRequest);
-    	Long maxCount = getMaxExportCount();	
-    		
-		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-				PersonSearchResult2.class, "person_"));
-		Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
-		ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
-		
-		csvWriterHelper.write(results,maxCount);
+
+		StatelessSession openStatelessSession = null;
+
+		try {
+			openStatelessSession = sessionFactory.openStatelessSession();
+			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession,personSearchRequest);
+			Long maxCount = getMaxExportCount();
+
+			querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+					PersonSearchResult2.class, "person_"));
+			Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+			ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+
+			csvWriterHelper.write(results,maxCount);
+		} finally {
+			if ( openStatelessSession != null ) {
+				try {
+					openStatelessSession.close();
+				} catch (Exception e) {
+					// nothing to do and likely harmless
+					LOGGER.info("Failed to close Hibernate StatelessSession", e);
+				}
+			}
+		}
 		
 	 }
 

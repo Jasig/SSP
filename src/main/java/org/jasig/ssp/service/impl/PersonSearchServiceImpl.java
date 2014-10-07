@@ -66,7 +66,6 @@ import java.util.UUID;
  * PersonSearch service implementation
  */
 @Service
-@Transactional
 public class PersonSearchServiceImpl implements PersonSearchService {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -97,6 +96,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	private transient PersonService personService;
 
 	@Override
+	@Transactional
 	public PagingWrapper<PersonSearchResult> searchBy(
 			final ProgramStatus programStatus,
 			final Boolean requireProgramStatus,
@@ -123,6 +123,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	
 
 	@Override
+	@Transactional
 	public PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest form) {
 		
 		List<PersonSearchResult2> results = dao.search(form);
@@ -201,6 +202,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	
 
 	@Override
+	@Transactional
 	public PagingWrapper<PersonSearchResult2> caseLoadFor(
 			final ProgramStatus programStatus, @NotNull final Person coach,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
@@ -214,6 +216,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 	@Override
+	@Transactional
 	public Collection<CoachCaseloadRecordCountForProgramStatus>
 		currentCaseloadCountsByStatus(CaseLoadSearchTO searchForm) {
 
@@ -225,6 +228,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 	@Override
+	@Transactional
 	public Collection<CoachCaseloadRecordCountForProgramStatus>
 		caseLoadCountsByStatus(
 			List<UUID> studentTypeIds,
@@ -317,6 +321,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 	@Override
+	@Transactional
 	public void reassignStudents(CaseloadReassignmentRequestTO obj) throws ObjectNotFoundException {
 		Person coach = personService.get(obj.getCoachId());
 		daoCaseload.reassignStudents(obj,coach);
@@ -324,23 +329,30 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 
 	@Override
+	@Transactional
 	public PagingWrapper<PersonSearchResult2> searchPersonDirectory(
 			PersonSearchRequest form) {
 		return directoryPersonDao.search(form);
 	}
 	
 	@Override
+	@Transactional
 	public void refreshDirectoryPerson(){
 		directoryPersonDao.refreshDirectoryPerson();
 	}
 	
 	@Override
+	@Transactional
 	public void refreshDirectoryPersonBlue(){
 		directoryPersonDao.refreshDirectoryPersonBlue();
 	}
 
 
 	@Override
+	// explicitly leaving out @Transactional. We really shouldn't need it on most of the
+	// methods in this class (or at most readOnly), but it's been there historically
+	// on it and most of its peers. This export scenario is a special case, though, where
+	// we really don't want to be holding open a transaction if we can help it.
 	public void exportableCaseLoadFor(CaseloadCsvWriterHelper csvWriterHelper,
 			ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) throws IOException 
@@ -354,6 +366,10 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 
 	@Override
+	// explicitly leaving out @Transactional. We really shouldn't need it on most of the
+	// methods in this class (or at most readOnly), but it's been there historically
+	// on it and most of its peers. This export scenario is a special case, though, where
+	// we really don't want to be holding open a transaction if we can help it.
 	public void exportDirectoryPersonSearch(
 			PrintWriter writer, PersonSearchRequest form) throws IOException {
 				
@@ -363,6 +379,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 
 	@Override
+	@Transactional
 	public Long caseLoadCountFor(ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage) {
 		PersonSearchRequest form = new PersonSearchRequest();
@@ -375,6 +392,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 
 	@Override
+	@Transactional
 	public Long searchPersonDirectoryCount(PersonSearchRequest form) {
 		return directoryPersonDao.getCaseloadCountFor( form , form.getSortAndPage());
 	}
