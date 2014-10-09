@@ -27,7 +27,8 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
     height: 500,
     width: 700,
     resizable: true,
-    fromMapLoad:false,   
+    fromMapLoad:false,
+    modal: true,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
