@@ -32,6 +32,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
     height: 580,
     width: 850,
     resizable: true,
+    modal: true,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {

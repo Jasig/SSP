@@ -32,6 +32,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
     width: 684,
     saveAs: null,
     resizable: true,
+    modal: true,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {

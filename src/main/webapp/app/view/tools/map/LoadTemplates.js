@@ -31,6 +31,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
     height: 500,
     width: 900,
     resizable: true,
+    modal: true,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
