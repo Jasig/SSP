@@ -32,6 +32,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
     width: 600,
 	itemId:'emailAPWindow',
     resizable: true,
+    modal: true,
     initComponent: function(){
         var me = this;
 
