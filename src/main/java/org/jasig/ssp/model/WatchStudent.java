@@ -36,8 +36,6 @@ import org.hibernate.annotations.Immutable;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class WatchStudent extends AbstractAuditable implements PersonAssocAuditable {
 
-
-
 	/**
 	 * 
 	 */

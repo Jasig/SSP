@@ -281,8 +281,9 @@
 	<include file="org/jasig/ssp/database/changesets/000159.xml" />
 	<include file="org/jasig/ssp/database/changesets/000160.xml" />
 	<include file="org/jasig/ssp/database/changesets/000161.xml" />
-	<include file="org/jasig/ssp/database/integrationchangesets/i000061.xml" />	
+	<include file="org/jasig/ssp/database/integrationchangesets/i000061.xml" />
 	<include file="org/jasig/ssp/database/integrationchangesets/i000062.xml" />
 	<include file="org/jasig/ssp/database/changesets/000162.xml" />
 	<include file="org/jasig/ssp/database/changesets/000163.xml" />
+	<include file="org/jasig/ssp/database/integrationchangesets/i000063.xml" />
 </databaseChangeLog>

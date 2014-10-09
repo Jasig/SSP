@@ -1,0 +1,81 @@
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext 
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<property name="schema" value="${database.schema}" />
+	<property name="nvarchar.type" value="character varying" dbms="postgresql" />
+	<property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+	<property name="check_for_manage_integration_database_config_sql"
+			  value="select count(id) from config where name='manage_integration_database'" />
+	<property name="should_manage_integration_database_sql"
+			  value="select case lower(value) when 'true' then 'true' else 'false' end as value from config where name='manage_integration_database'" />
+
+	
+	<changeSet id="create external_student_risk_indicator" author="dan.mccallum">
+		<preConditions onFail="CONTINUE"
+			onFailMessage="Skip adding external_student_risk_indicator">
+			<sqlCheck expectedResult="1">${check_for_manage_integration_database_config_sql}
+			</sqlCheck>
+			<sqlCheck expectedResult="true">${should_manage_integration_database_sql}
+			</sqlCheck>
+		</preConditions>
+
+		<createTable tableName="external_student_risk_indicator">
+			<column name="school_id" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="model_code" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="model_name" type="${nvarchar.type}(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="indicator_code" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="indicator_name" type="${nvarchar.type}(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="indicator_value" type="${nvarchar.type}(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="indicator_value_description" type="${nvarchar.type}(2500)" />
+		</createTable>
+
+		<addPrimaryKey constraintName="external_student_risk_indicator_pkey" tableName="external_student_risk_indicator"
+					   columnNames="school_id,model_code,indicator_code"/>
+
+		<sql>grant all on external_student_risk_indicator to ${database.app.username}</sql>
+
+		<!-- Completely giving up on supporting non-PK'd external tables at this point. -->
+		<createView viewName="v_external_student_risk_indicator">
+			select school_id${concat.operator}model_code${concat.operator}indicator_code as id,* from external_student_risk_indicator
+		</createView>
+
+		<sql>grant all on v_external_student_risk_indicator to ${database.app.username}</sql>
+	</changeSet>
+</databaseChangeLog>
