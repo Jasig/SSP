@@ -414,7 +414,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				&& personSearchTO.getWatcher().getId() != null) {
 			criteria.createCriteria("watchers")
 					.add(Restrictions.eq("person.id", personSearchTO.getWatcher().getId()))
-					.add(Restrictions.eq("watchers.objectStatus", ObjectStatus.ACTIVE));
+					.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 		}		
 		if (personSearchTO.getHomeDepartment() != null
 				&& personSearchTO.getHomeDepartment().length() > 0) {
