@@ -181,17 +181,19 @@ Ext.define('Ssp.controller.SearchViewController', {
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personNav', record, me);
 
 		if( skipCallBack ) {
-			var person = new Ssp.model.Person();
-			// clear the person record
-			me.person.data = person.data;
-
 			if ( record ) {
 				if( record.get("id") ) {
 					if( me.personLite.get('id') != record.get("id") ) {
+						var person = new Ssp.model.Person();
+						// clear the person record
+						me.person.data = person.data;
 						me.updatePerson(record);
 						me.appEventsController.getApplication().fireEvent('loadPerson');
 					}
 				} else if(me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON')){
+					var person = new Ssp.model.Person();
+					// clear the person record
+					me.person.data = person.data;
 					me.instantCaseloadAssignment(record);
 				}
 			}
