@@ -40,6 +40,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
@@ -60,6 +61,7 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReportBaseController.class);
+	private static final String DEFAULT_REPORT_NAME = "report"; // no 'ssp' prefix b/c that's branding
 
 	@Override
 	protected Logger getLogger() {
@@ -70,6 +72,7 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 								  Collection<R> reportResults, String reportViewUrl, String reportType,
 								  String reportName)
 			throws IOException {
+		reportName = normalizeReportName(reportName);
 		// TODO this should really all be shunted off to Spring's View mechanism
 		if (REPORT_TYPE_PDF.equals(reportType)) {
 			renderPdfReport(response, reportParameters, reportResults, reportViewUrl, reportType, reportName);
@@ -78,6 +81,13 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 		} else {
 			throw new IllegalArgumentException("Unrecognized report type");
 		}
+	}
+
+	protected String normalizeReportName(String reportName) {
+		if (StringUtils.isBlank(reportName)) {
+			return DEFAULT_REPORT_NAME;
+		}
+		return reportName.replaceAll("\\s", "_");
 	}
 
 	protected void renderPdfReport(HttpServletResponse response, Map<String, Object> reportParameters,

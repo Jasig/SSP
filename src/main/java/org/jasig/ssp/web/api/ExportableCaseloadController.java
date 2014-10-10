@@ -27,6 +27,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -66,6 +67,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExportableCaseloadController.class);
+	private static final String DEFAULT_APP_TITLE = "export"; //SSP is branding, so go very generic
 
 	@Override
 	protected Logger getLogger() {
@@ -154,6 +156,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		StringBuilder fileName = new StringBuilder();
 		Calendar now = Calendar.getInstance();
 		String appTitle = configService.getByNameNullOrDefaultValue("app_title");
+		appTitle = normalizeAppTitle(appTitle);
 		fileName.append(appTitle+"_");
 		fileName.append(string);
 		fileName.append(now.get(Calendar.MONTH));
@@ -164,6 +167,14 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 
 		return fileName.toString();
 	}
+
+	protected String normalizeAppTitle(String appTitle) {
+		if (StringUtils.isBlank(appTitle)) {
+			return DEFAULT_APP_TITLE;
+		}
+		return appTitle.replaceAll("\\s", "_");
+	}
+
 	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
 	@RequestMapping(value="/search", method = RequestMethod.GET)
 	public @ResponseBody void  search2(	
