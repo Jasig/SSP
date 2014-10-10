@@ -124,6 +124,11 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
             callBackFunc: me.onPrintActionPlan,
             scope: me
         });
+
+        if ( me.emailActionPlanPopUp ) {
+            me.emailActionPlanPopUp.destroy();
+        }
+
         return me.callParent(arguments);
     },
     
