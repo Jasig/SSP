@@ -52,13 +52,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     control: {
     	view: {
     		itemclick: 'onSelectionChange',
-			viewready: 'onViewReady',
-			render:  function() {
-	            alert('render'); //this is work
-	        },
-	        show:function() {
-	            alert('show'); //this is work
-	        }
+			viewready: 'onViewReady'
     	},    	
     	caseloadStatusCombo: {
     		selector: '#caseloadStatusCombo',
@@ -234,13 +228,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.assignEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.onDoPersonStatusChange, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});
 		
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
-	   	me.appEventsController.assignEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
+	   	me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.assignEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
@@ -292,7 +286,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
-		me.appEventsController.removeEvent({eventName: 'doPersonStatusChange', callBackFunc: me.setProgramStatus, scope: me});	
+		me.appEventsController.removeEvent({eventName: 'doPersonStatusChange', callBackFunc: me.onDoPersonStatusChange, scope: me});
         me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});	
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
@@ -301,7 +295,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.removeEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
 		me.appEventsController.removeEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
-	   	me.appEventsController.removeEvent({eventName: 'setNonParticipatingProgramStatusComplete', callBackFunc: me.onSetNonParticipatingProgramStatusComplete, scope: me});
+	   	me.appEventsController.removeEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 
 	   	if ( me.emailStudentPopup ) {
 	   	    me.emailStudentPopup.destroy();
@@ -629,118 +623,161 @@ Ext.define('Ssp.controller.SearchViewController', {
 	loadStudentToolsView: function(){
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     },
-  
-    onSetProgramStatusClick: function( button ){
-    	var me=this;
-    	var me=this;
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('personStatusChange',me,button);  
-        if(skipCallBack)
-        {
-        	var action = button.action;
-        	switch ( action )
-        	{
-        	case 'active':
-        		me.setProgramStatus( action );
-        		break;
-        	case 'inactive':
-        		me.setProgramStatus( action );
-        		break;        		
-        	case 'no-show':
-        		me.setProgramStatus( action );
-        		break;
-        		
-        	case 'transition':
-        		/* 
-        		 * Temp fix for SSP-434
-        		 * 
-        		 * Temporarily removing Transition Action from this button.
-        		 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
-        		 * Journal Entry.
-        		 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
-        		 */
-        		break;
-        		
-        	case 'non-participating':
-        		me.setProgramStatus(action);
-        		break;
-        	}
-        }
-    },
-    
-    setProgramStatus: function( action ){
-	   	var me=this;
-	   	var personId = me.personLite.get('id');
-	   	var programStatusId = "";
-	   	if (personId != "")
-	   	{
-			var person = me.caseloadStore.findRecord("personId", personId, 0, false, false, true);
-			if(!person)
-			  	person = me.searchStore.findRecord("id", personId, 0, false, false, true);
-			
-			if(action == 'non-participating'){
-				Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
-    			    height: 150,
-    			    width: 500
-    			}).show();
-				person.set("currentProgramStatusName", "Non-participating");
+
+	onSetProgramStatusClick: function( button ){
+		var me=this;
+		var action = button.action;
+		me.setProgramStatus(action);
+	},
+
+	findResultPerson: function(personId) {
+		var me=this;
+		if ( me.getIsCaseload() ) {
+			return me.caseloadStore.findRecord("personId", personId, 0, false, false, true);
+		} else if ( me.getIsWatchList() ) {
+			return me.watchListStore.findRecord("personId", personId, 0, false, false, true);
+		} else {
+			return me.searchStore.findRecord("id", personId, 0, false, false, true);
+		}
+	},
+
+	isProgramStatusChanging: function(action, person) {
+		var currentStatus = person.get('currentProgramStatusName');
+		switch ( action ) {
+			case 'transition':
+				return Ssp.util.Constants.TRANSITIONED_PROGRAM_STATUS_NAME !== currentStatus;
+			case 'active':
+				return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_NAME !== currentStatus;
+			case 'inactive':
+				return Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_NAME !== currentStatus;
+			case 'no-show':
+				return Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_NAME !== currentStatus;
+			// always let you specify non-participating as a *change* b/c you can further qualify it with a 'reason'
+		}
+		return true;
+	},
+
+	setProgramStatus: function( action ){
+		var me=this;
+		var personId = me.personLite.get('id');
+		var programStatusId = "";
+		if (personId != "")
+		{
+			var person = me.findResultPerson(personId);
+			if ( !(person) ) {
+				Ext.Msg.alert('SSP Error','Please select a student for which to change status');
 				return;
 			}
-	   		if (action=='active')
-	   		{
-	   			programStatusId = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
-				person.set("currentProgramStatusName", "Active");
-	   		}
-	   		if (action=='no-show')
-	   		{
-	   			programStatusId = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
-				person.set("currentProgramStatusName", "No-Show");
-	   		}	   		
-	   		if (action=='inactive')
-	   		{
-	   			programStatusId = Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID;
-				person.set("currentProgramStatusName", "Inactive");
-	   		}
-			
-	   		personProgramStatus = new Ssp.model.PersonProgramStatus();
-	   		personProgramStatus.set('programStatusId', programStatusId );
-	   		personProgramStatus.set('effectiveDate', Ext.Date.now() );
-	   		me.personProgramStatusService.save( 
-	   				personId, 
-	   				personProgramStatus.data, 
-	   				{
-	   			success: me.saveProgramStatusSuccess,
-	               failure: me.saveProgramStatusFailure,
-	               scope: me 
-	           });    		
-	   	}else{
-	   		var msg = "";
-	   		if (action=='no-show')
-	   			msg = 'No-Show';
-	   		if (action=='non-participating')
-	   			msg = 'Non-Participating';
-	   		if (action=='active')
-	   			msg = 'Active';
-	   		if (action=='inactive')
-	   			msg = 'Inactive';	   		
-	   		Ext.Msg.alert('SSP Error','Unable to determine student to set to ' + msg + ' status.');
-	   	}
-    },
-    
-    saveProgramStatusSuccess: function( r, scope){
-    	var me=scope;
-    	me.getView().setLoading( false );
-		//me.getCaseload();
-    	me.initSearchGrid();
-    },
 
-    saveProgramStatusFailure: function( r, scope){
-    	var me=scope;
-    	me.getView().setLoading( false );
-    },
-    
-    onSetNonParticipatingProgramStatusComplete: function(){
-    	this.initSearchGrid();
-    },
+			if ( !(me.isProgramStatusChanging(action, person)) ) {
+				Ext.Msg.alert('SSP Error','Selected person already has the requested status');
+				return;
+			}
+
+			if ( action === 'transition' ) {
+				/*
+				 * Temp fix for SSP-434
+				 *
+				 * Temporarily removing Transition Action from this button.
+				 * TODO: Ensure that this button takes the user to the Journal Tool and initiates a
+				 * Journal Entry.
+				 * // me.appEventsController.getApplication().fireEvent('transitionStudent');
+				 */
+				Ext.Msg.alert('SSP Error','Manual selection of the \'Transition\' status is not supported');
+			}
+
+			var keepGoing = this.appEventsController.getApplication().fireEvent('personStatusChange',action,personId);
+			if ( keepGoing ) {
+				// has to be factored into a separate method b/c the personStatusChange() may need to trigger
+				// an async action which need to complete before allowing this event to proceed.
+				me.onDoPersonStatusChange(action, personId);
+			}
+		}else{
+			Ext.Msg.alert('SSP Error','Please select a student for which to change status');
+		}
+	},
+
+	onDoPersonStatusChange: function(action, personId) {
+		var me = this;
+		if ( !(me.getView().isActiveTab) ) {
+			return true; // otherwise you'll get the same event processed once for every tab you've visited
+		}
+		if(action == 'non-participating'){
+			Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+				height: 150,
+				width: 500
+			}).show();
+			return true;
+		}
+		var successEvent = {}
+		if (action==='active') {
+			programStatusId = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+			successEvent.programStatusName = Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_NAME;
+		}
+		if (action==='no-show') {
+			programStatusId = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
+			successEvent.programStatusName = Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_NAME;
+		}
+		if (action==='inactive') {
+			programStatusId = Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID;
+			successEvent.programStatusName = Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_NAME;
+		}
+		successEvent.programStatusId = programStatusId;
+		successEvent.personId = personId;
+
+		personProgramStatus = new Ssp.model.PersonProgramStatus();
+		personProgramStatus.set('programStatusId', programStatusId );
+		personProgramStatus.set('effectiveDate', Ext.Date.now() );
+		me.getView().setLoading( true );
+		me.personProgramStatusService.save(
+			personId,
+			personProgramStatus.data,
+			{
+				success: me.newSaveProgramStatusSuccess(successEvent),
+				failure: me.saveProgramStatusFailure,
+				scope: me
+			});
+		return true;
+	},
+
+	newSaveProgramStatusSuccess: function(successEvent) {
+		var me = this;
+		return function(r,scope) {
+			me.saveProgramStatusSuccess(successEvent, r, scope);
+		}
+	},
+
+	saveProgramStatusSuccess: function(successEvent, r, scope){
+		var me=scope;
+		me.getView().setLoading( false );
+		me.appEventsController.getApplication().fireEvent('afterPersonProgramStatusChange', successEvent);
+	},
+
+	saveProgramStatusFailure: function( r, scope){
+		var me=scope;
+		Ext.Msg.alert('SSP Error','Failed to process program status change. Please contact your system administrator.');
+		me.getView().setLoading( false );
+	},
+
+	onAfterPersonProgramStatusChange: function(event){
+		var me = this;
+		var resultPerson = me.findResultPerson(event.personId);
+		if ( resultPerson ) {
+			resultPerson.set("currentProgramStatusName", event.programStatusName);
+			this.initSearchGrid();
+		}
+
+		// No great, centralized place to act as a bus for these sort of change events... maybe the tool
+		// nav component, which is currently responsible for loading that singleton person in the first place.
+		// But it doesn't really handle any other state changes. So we opt instead for syncing up the models
+		// here, close to where the "core" program status changing code is located. Maybe the 'correct' mechanism
+		// is for the singleton person model to watch for change events on search result models?
+		if ( me.person.get("id") === event.personId ) {
+			me.person.set("currentProgramStatusName", event.programStatusName);
+		}
+
+		return true; // make sure event propagates
+	},
     
     /*********** SEARCH BAR ***************/
     
@@ -1140,7 +1177,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			record.set("coachFirstName",  coach.firstName);
 			record.set("coachId",   coach.id);
 		}
-    	record.set("currentProgramStatusName", "Active");
+    	record.set("currentProgramStatusName",params.person.get("currentProgramStatusName"));
     	me.updatePerson(record);
     }
 });

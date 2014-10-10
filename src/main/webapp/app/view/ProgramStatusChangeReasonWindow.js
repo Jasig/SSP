@@ -24,7 +24,7 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
     controller: 'Ssp.controller.ProgramStatusChangeReasonWindowViewController',
     inject: {
     	personLite: 'personLite',
-    	store: 'programStatusChangeReasonsStore'
+    	store: 'programStatusChangeReasonsActiveUnpagedStore'
     },
 	width: '100%',
 	height: '100%',
@@ -44,14 +44,12 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
     			        xtype: 'combobox',
     			        itemId: 'programStatusChangeReasonCombo',
     			        name: 'programStatusChangeReasonId',
-    			        fieldLabel: 'Reason',
+    			        fieldLabel: 'Reason 2',
     			        emptyText: 'Select One',
     			        store: me.store,
     			        valueField: 'id',
     			        displayField: 'name',
-    			        mode: 'local',
-    			        typeAhead: true,
-    			        queryMode: 'local',
+    			        editable: false,
     			        allowBlank: false,
     			        forceSelection: true,
     			        anchor: '95%'

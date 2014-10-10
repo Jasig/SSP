@@ -38,6 +38,8 @@ Ext.define('Ssp.view.SearchTab', {
                     activeTab: 0,
                     listeners: {
                     	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
+                    		newTab.items.items[0].isActiveTab = true;
+                    		oldTab.items.items[0].isActiveTab = false;
                     		if(newTab.items.items[0].tabContext === 'search')
                     			return;
                     		else
@@ -50,21 +52,21 @@ Ext.define('Ssp.view.SearchTab', {
                         autoScroll: true,
                         border: 0,
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload'}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0}]
                     },{
                         title: 'My Watch List',
                         autoScroll: true,
                         border: 0,
                         hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: 'watchList'}]
+                        items: [{xtype: 'search', tabContext: 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1}]
                     },{
                         title: 'Search',
                         autoScroll: true,
                         hidden: me.hasOnlySearch(),
                         border: 0,
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: 'search'}]
+                        items: [{xtype: 'search', tabContext: 'search', isActiveTab: me.defaultActiveTabIndex() === 2}]
                     }]
                 })
             ]
@@ -76,5 +78,15 @@ Ext.define('Ssp.view.SearchTab', {
     hasOnlySearch : function() {
     	var me = this;
     	return !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') && !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL');
-    }
+    },
+	defaultActiveTabIndex: function() {
+		var me = this;
+		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
+			return 0;
+		}
+		if ( me.authenticatedPerson.hasAccess('WATCHLIST_TOOL') ) {
+			return 1;
+		}
+		return 2;
+	}
 });

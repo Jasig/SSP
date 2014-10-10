@@ -22,14 +22,9 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
     inject: {
     	appEventsController: 'appEventsController',
     	personLite: 'personLite',
-    	programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
     	personProgramStatusService: 'personProgramStatusService'
     },
     control: {
-		view: {
-			show: 'onShow'
-		},
-		
 		'saveButton': {
 			click: 'onSaveClick'
 		},
@@ -40,61 +35,68 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 		
 		programStatusChangeReasonCombo: '#programStatusChangeReasonCombo'
 	},
-	
-	init: function() {	
-    	var me=this;
-		return me.callParent(arguments);
-    },
-    
-    onShow: function(){
-    	var me=this;
-		me.getProgramStatusChangeReasonCombo().reset();
-    	me.programStatusChangeReasonsStore.load({params:{start:0, limit:50}});
-    },
-    
-    onSaveClick: function( button ){
-	   	var me=this;
-	   	var personId = me.personLite.get('id');
-	   	var valid = me.getProgramStatusChangeReasonCombo().isValid();
-	   	var reasonId = me.getProgramStatusChangeReasonCombo().value;
-	   	if (valid && reasonId != "")
-	   	{
-		   	if (personId != "")
-		   	{
-		   		personProgramStatus = new Ssp.model.PersonProgramStatus();
-		   		personProgramStatus.set('programStatusId',Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID);
-		   		personProgramStatus.set('effectiveDate', new Date());
-		   		personProgramStatus.set('programStatusChangeReasonId', reasonId );
-			   	me.getView().setLoading( true );
-		   		me.personProgramStatusService.save( 
-		   				personId, 
-		   				personProgramStatus.data, 
-		   				{
-	   					success: me.saveProgramStatusSuccess,
-		               failure: me.saveProgramStatusFailure,
-		               scope: me 
-		        });
-		   	}else{
-		   		Ext.Msg.alert('SSP Error','Unable to determine student to set to No-Show status');
-		   	}	   		
-	   	}else{
-	   		Ext.Msg.alert('SSP Error','Please correct the hilited errors in the form');
-	   	}
-    },
 
-    saveProgramStatusSuccess: function( r, scope){
-    	var me=scope;
-    	me.getView().setLoading( false );
-		me.appEventsController.getApplication().fireEvent('setNonParticipatingProgramStatusComplete');
+	onSaveClick: function( button ){
+		var me=this;
+		var personId = me.personLite.get('id');
+		var valid = me.getProgramStatusChangeReasonCombo().isValid();
+		var reasonId = me.getProgramStatusChangeReasonCombo().getValue();
+		var selectedRecord = me.getProgramStatusChangeReasonCombo().findRecordByValue(reasonId);
+		var reasonName = selectedRecord.get('name');
+		if (valid && reasonId != "")
+		{
+			if (personId != "")
+			{
+				personProgramStatus = new Ssp.model.PersonProgramStatus();
+				personProgramStatus.set('programStatusId', Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID);
+				personProgramStatus.set('effectiveDate', new Date());
+				personProgramStatus.set('programStatusChangeReasonId', reasonId );
+				me.getView().setLoading( true );
+				me.personProgramStatusService.save(
+					personId,
+					personProgramStatus.data,
+					{
+						success: me.newSaveProgramStatusSuccess(personId, reasonId, reasonName),
+						failure: me.saveProgramStatusFailure,
+						scope: me
+					});
+			}else{
+				Ext.Msg.alert('SSP Error','Please select a student for which to change status');
+			}
+		}else{
+			Ext.Msg.alert('SSP Error','Please correct the highlighted errors in the form');
+		}
+	},
+
+	newSaveProgramStatusSuccess: function(personId, reasonId, reasonName) {
+		var me = this;
+		return function(r, scope) {
+			me.saveProgramStatusSuccess(personId, reasonId, reasonName, r, scope);
+		}
+	},
+
+	saveProgramStatusSuccess: function(personId, reasonId, reasonName, r, scope){
+		var me=scope;
+		try {
+			me.appEventsController.getApplication().fireEvent('afterPersonProgramStatusChange', {
+				personId: personId,
+				programStatusId: Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID,
+				programStatusName: Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_NAME,
+				programStatusChangeReasonId: reasonId,
+				programStatusChangeReasonName: reasonName
+			});
+		} finally {
+			me.getView().setLoading( false );
+			me.close();
+		}
+	},
+
+	saveProgramStatusFailure: function( r, scope){
+		var me=scope;
+		Ext.Msg.alert('SSP Error','Failed to process program status change. Please contact your system administrator.');
+		me.getView().setLoading( false );
 		me.close();
     },
-
-    saveProgramStatusFailure: function( r, scope){
-    	var me=scope;
-    	me.getView().setLoading( false );
-        me.appEventsController.getApplication().fireEvent('setNonParticipatingProgramStatusComplete');
-        me.close();
-    },    
     
     onCancelClick: function( button ){
     	this.close();

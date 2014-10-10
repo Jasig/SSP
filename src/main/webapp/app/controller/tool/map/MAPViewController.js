@@ -439,7 +439,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		}
 		return true;
 	},	
-	onPersonStatusChange: function(searchViewController,button){
+	onPersonStatusChange: function(action,actionOnPersonId){
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
@@ -454,18 +454,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 						if ( me.saveTemplatePopUp ) {
 							me.saveTemplatePopUp.destroy();
 						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange', status:button.action});
+						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange', status:action, actionOnPersonId: actionOnPersonId});
 						me.saveTemplatePopUp.show();
 					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange',status: button.action });
+						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange',status: action, actionOnPersonId: actionOnPersonId });
 						me.savePlanPopUp.show();
 					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
-				    searchViewController.setProgramStatus(button.action);
+					// A little bit different than the pattern in the rest of this class, but wanted to start
+					// decoupling this thing from calls to specific controller methods. So we do the same thing
+					// here that would normally happen inside SaveTemplate or SavePlan.
+					me.appEventsController.getApplication().fireEvent('doPersonStatusChange',action,actionOnPersonId);
 				}
-			});	
+			});
 			return false;
 		}
 		return true;

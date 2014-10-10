@@ -1752,7 +1752,24 @@ Ext.onReady(function(){
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
 					caseloadProgramStatusesStore: 'Ssp.store.reference.CaseloadProgramStatuses',
 					caseloadFilterProgramStatusesStore: 'Ssp.store.reference.CaseloadFilterProgramStatuses',
-			    	programStatusChangeReasonsStore: 'Ssp.store.reference.ProgramStatusChangeReasons',
+					programStatusChangeReasonsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.ProgramStatusChangeReasons', {
+								storeId: 'programStatusChangeReasonsAllUnpagedStore',
+								extraParams: {status: "ALL", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
+			    	programStatusChangeReasonsActiveUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.ProgramStatusChangeReasons', {
+								storeId: 'programStatusChangeReasonsActiveUnpagedStore',
+								extraParams: {status: "ACTIVE", limit: -1, start: null}
+							});
+						},
+						singleton: true
+					},
 					programStatusChangeReasonsAllStore: {
 						fn: function(){
 							return Ext.create('Ssp.store.reference.ProgramStatusChangeReasons', {

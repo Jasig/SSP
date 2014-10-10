@@ -103,7 +103,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			}
 			else
 			{
-				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
+				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status,me.getView().actionOnPersonId);
 			}
 		}
     },    

@@ -30,7 +30,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
 		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
-		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
+		programStatusChangeReasonsStore: 'programStatusChangeReasonsAllUnpagedStore',
         configStore: 'configStore',
 		formUtils: 'formRendererUtils',
     	textStore:'sspTextStore',
@@ -52,6 +52,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
+        programStatusReasonField: '#programStatusReason',
         f1StatusField: '#f1Status',
 
         gpaField: '#cumGPA',
@@ -107,15 +108,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         }
         
         if (!me.programStatusChangeReasonsStore.getTotalCount()) {
-			me.programStatusChangeReasonsStore.load({
-				params: {
-					start: 0,
-					limit: 50
-				}
-			});
-			
+			me.programStatusChangeReasonsStore.load();
 		}
-        
+
+		me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
+
         return me.callParent(arguments);
     },
     
@@ -225,7 +222,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
-        var programStatusField = me.getProgramStatusField();
         var earlyAlertField = me.getEarlyAlertField();
         var actionPlanField = me.getActionPlanField();
 		var studentIdField = me.getStudentIdField();
@@ -269,8 +265,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());
-		programStatusField.setFieldLabel('');
-        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
+		me.updateProgramStatusField(me.person.getProgramStatusName()); // reason field set async
 		earlyAlertField.setFieldLabel('');
         earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.handleNull(me.person.getEarlyAlertRatio()));
 		actionPlanField.setFieldLabel('');
@@ -278,6 +273,32 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
         studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
     },
+
+	onAfterPersonProgramStatusChange: function(event) {
+		var me = this;
+		me.updateProgramStatusField(event.programStatusName);
+		me.updateProgramStatusReasonField(event.programStatusChangeReasonName);
+		return true;
+	},
+
+	updateProgramStatusField: function(programStatusName) {
+		var me = this;
+		var programStatusField = me.getProgramStatusField();
+		programStatusField.setFieldLabel('');
+		programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(programStatusName));
+	},
+
+	updateProgramStatusReasonField: function(programStatusChangeReasonName) {
+		var me = this;
+		var programStatusReasonField = me.getProgramStatusReasonField();
+		if (programStatusChangeReasonName) {
+			programStatusReasonField.show();
+			programStatusReasonField.setFieldLabel('');
+			programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusChangeReasonName);
+		} else {
+			programStatusReasonField.hide();
+		}
+	},
 
     getPersonFailure: function() {
         // nothing to do
@@ -357,29 +378,19 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     },
 	
 	getCurrentProgramStatusSuccess: function(serviceResponses) {
-        var me = this;
-		var programStatusReason;
-		var studentStatus;
-		
+		var me = this;
 		var programStatusResponse = serviceResponses.successes.programstatus;
-		studentStatus = programStatusResponse['programStatusChangeReasonId'];
-		
-		
-		var programStatusReasonField = Ext.ComponentQuery.query('#programStatusReason')[0];
+		var studentStatus = programStatusResponse['programStatusChangeReasonId'];
 		if (studentStatus) {
-                    programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus , 0, false, false, true);
-					
-                    if (programStatusReason) {
-							programStatusReasonField.show();
-							programStatusReasonField.setFieldLabel('');
-							programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusReason.get('name'));
-					}
+			programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus , 0, false, false, true);
+			if (programStatusReason) {
+				me.updateProgramStatusReasonField(programStatusReason.get('name'));
+			} else {
+				me.updateProgramStatusReasonField(null);
+			}
+		} else {
+			me.updateProgramStatusReasonField(null);
 		}
-		else
-		{
-			programStatusReasonField.hide();
-		}
-		
 	},
 	
 	getCurrentProgramStatusFailure: function() {
@@ -397,6 +408,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	destroy: function() {
         var me=this;
 	    me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
+		me.appEventsController.removeEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 		var view = Ext.ComponentQuery.query("#profileDetails");
     	if(view && view.length > 0)
     		view[0].getController().closePopups();

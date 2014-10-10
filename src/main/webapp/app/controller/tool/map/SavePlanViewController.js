@@ -107,7 +107,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			}
 			else
 			{
-				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status);
+				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status,me.getView().actionOnPersonId);
 			}
 		}
     },

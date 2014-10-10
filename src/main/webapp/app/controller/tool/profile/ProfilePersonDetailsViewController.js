@@ -27,7 +27,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         personService: 'personService',
         transcriptService: 'transcriptService',
 		personProgramStatusService: 'personProgramStatusService',
-		programStatusChangeReasonsStore: 'programStatusChangeReasonsStore',
+		programStatusChangeReasonsStore: 'programStatusChangeReasonsAllUnpagedStore',
         configStore: 'configStore',
         formUtils: 'formRendererUtils',
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
@@ -129,16 +129,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         }
 		
 		if (!me.programStatusChangeReasonsStore.getTotalCount()) {
-			me.programStatusChangeReasonsStore.load({
-				params: {
-					start: 0,
-					limit: 50
-				}
-			});
-			
+			me.programStatusChangeReasonsStore.load();
 		}
-        
-		
+
+		me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
         return me.callParent(arguments);
     },
     onRegStoreLoaded: function() {
@@ -205,7 +199,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		var photoUrlField = me.getPhotoUrlField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
-        var programStatusField = me.getProgramStatusField();
         var studentIdField = me.getStudentIdField();
         
         var fullName = me.person.getFullName();
@@ -239,8 +232,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         studentTypeField.setFieldLabel('');
         studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
         photoUrlField.setSrc(me.person.getPhotoUrl());
-        programStatusField.setFieldLabel('');
-        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
+        me.updateProgramStatusField();
 		
 		anticipatedStartYearTermField.setFieldLabel('');
 		anticipatedStartYearTermField.setValue('<span style="color:#15428B">Anticipated Start Year/Term:  </span>' + me.person.get('anticipatedStartYear') + '/' + me.person.get('anticipatedStartTerm'));
@@ -255,6 +247,18 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             callBackFunc: me.onEmailCoach,
             scope: me
         });
+    },
+
+    onAfterPersonProgramStatusChange: function(event) {
+        var me = this;
+        me.updateProgramStatusField();
+    },
+
+    updateProgramStatusField: function() {
+        var me = this;
+        var programStatusField = me.getProgramStatusField();
+        programStatusField.setFieldLabel('');
+        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
     },
     
     getPersonFailure: function(){
@@ -450,6 +454,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     destroy: function(){
         var me = this;
     	me.closePopups();
+    	me.appEventsController.removeEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
     	 me.appEventsController.removeEvent({
              eventName: 'emailCoach',
              callBackFunc: me.onEmailCoach,
