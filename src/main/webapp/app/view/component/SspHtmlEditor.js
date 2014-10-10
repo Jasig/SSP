@@ -34,6 +34,7 @@ Ext.define('Ssp.view.component.SspHtmlEditor', {
     blankText: 'This field is required',
     defaultValue: '<!-- Will be removed by the editor -->',
     cleanDefaultValue: true,
+    enableFont: false,
 
     constructor: function () {
         var me = this;

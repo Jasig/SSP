@@ -28,10 +28,12 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -118,6 +120,11 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 			beanDS = new JREmptyDataSource();
 		} else {
 			beanDS = new JRBeanCollectionDataSource(reportResults);
+		}
+
+		if (REPORT_TYPE_PDF.equals(reportType)) {
+			DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
+			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
 		}
 		
 		JasperFillManager.fillReportToStream(is, os, reportParameters, beanDS);
