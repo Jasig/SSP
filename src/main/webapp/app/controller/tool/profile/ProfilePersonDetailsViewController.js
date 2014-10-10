@@ -287,7 +287,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             me.getAcademicStandingField().setFieldLabel('');
             me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
 			me.getCreditCompletionRateField().setFieldLabel('');
-            me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + me.handleNull(gpa.creditCompletionRate) + '%');
+			if(me.handleNull(gpa.creditCompletionRate) != '')
+            	me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + me.handleNull(gpa.creditCompletionRate) + '%');
+			else
+				me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>');
             me.getCurrentRestrictionsField().setFieldLabel('');
             me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions));
             me.getCreditHoursEarnedField().setFieldLabel('');
