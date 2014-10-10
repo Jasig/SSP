@@ -41,7 +41,7 @@ Ext.define('Ssp.service.CaseloadFilterProgramStatusService', {
 	    	{
     		    me.store.removeAll();
     		    var all = Ext.create('Ssp.model.reference.ProgramStatus', {
-    		    	name: 'Show All',
+    		    	name: 'All',
     		    	description: 'All',
     		    	id: 'All'
     		    });
