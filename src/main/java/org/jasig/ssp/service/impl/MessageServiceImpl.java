@@ -214,6 +214,20 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
+	public Message createMessageNoSave(@NotNull final String to,
+								 final String emailCC,
+								 @NotNull final SubjectAndBody subjAndBody)
+			throws ObjectNotFoundException {
+
+		final Message message = createMessage(subjAndBody);
+
+		message.setRecipientEmailAddress(to);
+		message.setCarbonCopy(emailCC);
+
+		return message;
+	}
+
+	@Override
 	public Pair<PagingWrapper<Message>, Collection<Throwable>> getSendQueuedMessagesBatchExecReturnType() {
 		return new Pair<PagingWrapper<Message>, Collection<Throwable>>(null,null);
 	}

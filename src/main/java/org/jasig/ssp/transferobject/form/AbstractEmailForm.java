@@ -120,16 +120,23 @@ public abstract class AbstractEmailForm {
 	
 	public boolean hasValidDeliveryAddresses(){
 		try {
-			getValidDeliveryAddressesOrFail();
+			getValidDeliveryAddressesOrFail(true);
 			return true;
 		} catch ( ValidationException e ) {
 			return false;
 		}
 	}
 
-	public EmailAddress getValidDeliveryAddressesOrFail()
-			throws ValidationException {
-		
+	public boolean hasValidNonCcDeliveryAddress() {
+		try {
+			getValidDeliveryAddressesOrFail(false);
+			return true;
+		} catch ( ValidationException e ) {
+			return false;
+		}
+	}
+
+	public EmailAddress getValidDeliveryAddresses(boolean includeAdditionalAddrs) {
 		String toAddr = null;
 		Set<String> ccAddrs = Sets.newLinkedHashSet();
 		final List<String> primaryAddrs = getValidAddressesFromString(getPrimaryEmail());
@@ -146,11 +153,9 @@ public abstract class AbstractEmailForm {
 		final List<String> coachAddrs = getValidAddressesFromString(getCoachEmail());
 		toAddr = collectValidDeliveryAddresses(coachAddrs, toAddr, ccAddrs);
 
-		final List<String> additionalAddrs = getValidAddressesFromString(getAdditionalEmail());
-		toAddr = collectValidDeliveryAddresses(additionalAddrs, toAddr, ccAddrs);
-
-		if ( StringUtils.isBlank(toAddr) ) {
-			throw new ValidationException("Need at least one valid address to use as the 'to' delivery address.");
+		if ( includeAdditionalAddrs ) {
+			final List<String> additionalAddrs = getValidAddressesFromString(getAdditionalEmail());
+			toAddr = collectValidDeliveryAddresses(additionalAddrs, toAddr, ccAddrs);
 		}
 
 		if ( ccAddrs.isEmpty() ) {
@@ -164,6 +169,16 @@ public abstract class AbstractEmailForm {
 		ccBuilder.setLength(ccBuilder.length() - 2);
 
 		return new EmailAddress(toAddr, ccBuilder.toString(), null);
+	}
+
+	public EmailAddress getValidDeliveryAddressesOrFail(boolean includeAdditionalAddrs)
+			throws ValidationException {
+
+		final EmailAddress validDeliveryAddresses = getValidDeliveryAddresses(includeAdditionalAddrs);
+		if ( StringUtils.isBlank(validDeliveryAddresses.getTo()) ) {
+			throw new ValidationException("Need at least one valid address to use as the 'to' delivery address.");
+		}
+		return validDeliveryAddresses;
 	}
 
 	/**

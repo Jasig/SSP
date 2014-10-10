@@ -20,8 +20,6 @@ package org.jasig.ssp.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Message;
@@ -79,11 +77,23 @@ import java.util.UUID;
 @Service
 public class PersonEmailServiceImpl implements PersonEmailService {
 
+	private static final Logger OUTER_CLASS_LOGGER = LoggerFactory
+			.getLogger(PersonEmailServiceImpl.class);
+
+	private static final ThreadLocal<Logger> CURRENT_LOGGER = new ThreadLocal<Logger>();
+
 	public static final String BULK_EMAIL_JOB_EXECUTOR_NAME = "bulk-email-executor";
 	private static final String BULK_MESSAGES_MAX_MESSAGES_CONFIG_NAME = "mail_bulk_message_limit";
 	private static final String BULK_MESSAGES_BATCH_SIZE_CONFIG_NAME = "mail_bulk_message_batch_size";
 	private static final String BULK_MESSAGES_MAX_DLQ_SIZE_CONFIG_NAME = "mail_bulk_message_max_dlq_size";
 	private static final String BULK_MESSAGES_FAIL_ON_DLQ_OVERFLOW_CONFIG_NAME = "mail_bulk_message_fail_on_dlq_overflow";
+
+	// Careful when changing these messages; might be code looking at them to figure out what happened when
+	// a ValidationException occurs
+	private static final String MISSING_ANY_VALID_DELIVERY_ADDR_ERROR_MSG = "At least one valid email address must be provided.";
+	private static final String MISSING_NON_CC_DELIVERY_ADDR_ERROR_MSG = "At least one valid non-CC email address must be provided.";
+	private static final String MISSING_SUBJECT_ERROR_MSG =  "Email subject must be provided";
+	private static final String MISSING_BODY_ERROR_MSG = "Email body must be provided";
 
 	@Autowired
 	private transient MessageService messageService;
@@ -118,7 +128,6 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 	@Autowired
 	private transient PersonService personService;
 
-
 	private AbstractJobExecutor<BulkEmailJobSpec, BulkEmailJobExecutionState> bulkEmailJobExecutor;
 
 	@Override
@@ -126,17 +135,54 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		registerBulkEmailJobExecutor();
 	}
 
+	private Logger getCurrentLogger() {
+		return CURRENT_LOGGER.get() == null ? OUTER_CLASS_LOGGER : CURRENT_LOGGER.get();
+	}
+
+	private void setCurrentLogger(Logger logger) {
+		CURRENT_LOGGER.set(logger);
+	}
+
+	private static enum EmailVolume {
+		SINGLE,BULK
+	}
+
 	@Override
 	@Transactional
 	public Map<String,UUID> emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException {
-		validateInput(emailRequest);
-		final Message message = buildAndSendStudentEmail(emailRequest);
-		final JournalEntry journalEntry = buildJournalEntry(emailRequest, message);
-		final Map<String,UUID> rslt = Maps.newLinkedHashMap();
-		rslt.put("messageId", message.getId());
-		if ( journalEntry != null ) {
-			rslt.put("journalEntryId", journalEntry.getId());
+		return doEmailStudent(emailRequest, EmailVolume.SINGLE, null);
+	}
+
+	private Map<String,UUID> doEmailStudent(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume,
+											ImmutablePersonIdentifiersTO studentIds) throws ObjectNotFoundException, ValidationException {
+		boolean sendMessage = true;
+		try {
+			validateSingleEmailInput(emailRequest, originalRequestVolume);
+		} catch ( ValidationException e ) {
+			// fatal unless you're in bulk mode and we're just missing non-cc delivery addrs; in that case we
+			// still want to try to generate a journal entry
+			if ( originalRequestVolume != EmailVolume.BULK || !(MISSING_NON_CC_DELIVERY_ADDR_ERROR_MSG.equals(e.getMessage())) ) {
+				throw e;
+			} else {
+				getCurrentLogger().info("Skipping bulk email message creation for person {} because their record" +
+						" lacks the necessary email type. This will not necessarily prevent Journal Entry creation.",
+						(emailRequest.getStudentId() == null ? studentIds : emailRequest.getStudentId()));
+				sendMessage = false;
+			}
 		}
+
+		final Map<String,UUID> rslt = Maps.newLinkedHashMap();
+		final boolean createJournalEntry = shouldCreateJournalEntryFor(emailRequest, originalRequestVolume);
+		final boolean buildMessage = createJournalEntry || sendMessage;
+
+		final Message message = buildMessage ? buildStudentEmail(emailRequest, originalRequestVolume, sendMessage) : null;
+		rslt.put("messageId", message == null ? null : message.getId());
+
+		if ( createJournalEntry ) {
+			final JournalEntry journalEntry = buildJournalEntry(emailRequest, message, originalRequestVolume);
+			rslt.put("journalEntryId", journalEntry == null ? null : journalEntry.getId());
+		}
+
 		return rslt;
 	}
 
@@ -148,7 +194,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			throw new SecurityException("Anonymous user cannot generate bulk email");
 		}
 		final Person currentSspPerson = currentSspUser.getPerson();
-		validateInput(emailRequest);
+		validateBulkEmailInput(emailRequest);
 		PersonSearchRequest criteria = personSearchRequestFactory.from(emailRequest.getCriteria());
 		final SortingAndPaging origSortAndPage = criteria.getSortAndPage();
 		SortingAndPaging validatedSortAndPage = origSortAndPage;
@@ -211,14 +257,10 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 	 * Intentionally private b/c we do not want this to participate in this service's "transactional-by-default"
 	 * public interface. Its transaction is managed by the {@code JobExecutor} assumed to be invoking it.
 	 *
-	 * @param executionSpec
-	 * @param executionState
-	 * @return
 	 */
 	private JobExecutionResult<BulkEmailJobExecutionState> executeBulkEmailJob(BulkEmailJobSpec executionSpec,
 																			   BulkEmailJobExecutionState executionState,
-																			   UUID jobId,
-																			   Logger logger) {
+																			   UUID jobId) {
 
 		// TODO note that all of this could probably be templatized for reuse in other batched functions
 		try {
@@ -228,7 +270,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			}
 
 			if ( executionState.allPagesProcessed && executionState.retryQueue.isEmpty() ) {
-				logger.debug("Processing complete for Job {}.", jobId, executionState.retryQueue.size());
+				getCurrentLogger().debug("Processing complete for Job {}.", jobId, executionState.retryQueue.size());
 				return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.DONE, executionState, null);
 			}
 
@@ -236,15 +278,15 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			// as possible
 			if ( !(executionState.retryQueue.isEmpty()) ) {
 
-				logger.debug("Processing retry queue for Job {}. Size: {}", jobId, executionState.retryQueue.size());
+				getCurrentLogger().debug("Processing retry queue for Job {}. Size: {}", jobId, executionState.retryQueue.size());
 				// retry queue gets processed one element per transaction to try to weed out bad apples that failed
 				// larger batches
 				final ImmutablePersonIdentifiersTO personIds = executionState.retryQueue.remove(0);
 				try {
-					logger.debug("Retry for person IDs {} in Job {}.", personIds, jobId);
-					doSendEmail(personIds, executionSpec.getCoreSpec());
+					getCurrentLogger().debug("Retry for person IDs {} in Job {}.", personIds, jobId);
+					sendSingleBulkEmail(personIds, executionSpec.getCoreSpec());
 					executionState.emailSentCount++;
-					logger.debug("Successful retry for person IDs {} in Job {}. Total sent so far: {}",
+					getCurrentLogger().debug("Successful retry for person IDs {} in Job {}. Total sent so far: {}",
 							new Object[] { personIds, jobId, executionState.emailSentCount });
 					return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.PARTIAL, executionState, null);
 				} catch ( Exception e ) {
@@ -261,12 +303,12 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 						} else {
 							// no room in the dlq. exception will be logged, but otherwise silently drop this
 							// delivery target
-							logger.debug("Processing error in retry queue for person IDs {} but no room in DLQ in Job {}.", personIds, jobId);
+							getCurrentLogger().debug("Processing error in retry queue for person IDs {} but no room in DLQ in Job {}.", personIds, jobId);
 							return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.FAILED_PARTIAL, executionState, e);
 						}
 					} else {
 						executionState.dlq.add(personIds);
-						logger.debug("Processing error in retry queue. Added person IDs {} to DLQ (size: {}) in Job {}. Failure count: {}",
+						getCurrentLogger().debug("Processing error in retry queue. Added person IDs {} to DLQ (size: {}) in Job {}. Failure count: {}",
 								new Object[] { personIds, executionState.dlq.size(), jobId, executionState.emailFailedCount });
 						return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.FAILED_PARTIAL, executionState, e);
 					}
@@ -282,7 +324,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 					page = executionState.prevPage + 1;
 				}
 
-				logger.debug("Processing result page {} for Job {}. Page size: {}.",
+				getCurrentLogger().debug("Processing result page {} for Job {}. Page size: {}.",
 						new Object[] { page, jobId, executionState.pageSize });
 
 				nextSortAndPage = new SortingAndPaging(origSortAndPage.getStatus(), (page - 1) * executionState.pageSize,
@@ -292,7 +334,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 
 				final PagingWrapper<PersonSearchResult2> searchResults = personSearchService.searchPersonDirectory(criteria);
 				if ( searchResults == null || searchResults.getResults() == 0L ) {
-					logger.debug("No results on page {} for Job {}. Page size: {}",
+					getCurrentLogger().debug("No results on page {} for Job {}. Page size: {}",
 							new Object[] { page, jobId, executionState.pageSize });
 					executionState.prevPage = page;
 					executionState.allPagesProcessed = true;
@@ -301,7 +343,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 					return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.PARTIAL, executionState, null);
 				} else {
 
-					logger.debug("Processing {} results on page {} for Job {}. Page size: {}. Total results: {}",
+					getCurrentLogger().debug("Processing {} results on page {} for Job {}. Page size: {}. Total results: {}",
 							new Object[] { searchResults.getRows().size(), page, jobId, executionState.pageSize, searchResults.getResults() });
 
 					final List<ImmutablePersonIdentifiersTO> deliveryTargetIdentifiers =
@@ -320,12 +362,12 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 						Iterator<ImmutablePersonIdentifiersTO> i = deliveryTargetIdentifiers.iterator();
 						while ( i.hasNext() ) {
 							deliveryTargetIdentifier = i.next();
-							logger.debug("Batched message creation attempt for person IDs {} in Job {}.", deliveryTargetIdentifier, jobId);
-							doSendEmail(deliveryTargetIdentifier, executionSpec.getCoreSpec());
+							getCurrentLogger().debug("Batched message creation attempt for person IDs {} in Job {}.", deliveryTargetIdentifier, jobId);
+							sendSingleBulkEmail(deliveryTargetIdentifier, executionSpec.getCoreSpec());
 						}
 					} catch ( Exception e ) {
 						executionState.retryQueue.addAll(deliveryTargetIdentifiers);
-						logger.debug("Processing error for person IDs {} on page {} for Job {}. Page size: {}. Added this page to the retry queue (size: {})",
+						getCurrentLogger().debug("Processing error for person IDs {} on page {} for Job {}. Page size: {}. Added this page to the retry queue (size: {})",
 								new Object[] { deliveryTargetIdentifier, page, jobId, executionState.pageSize, executionState.retryQueue.size() }); // exception itself logged elsewhere
 						return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.FAILED_PARTIAL, executionState, e);
 					} finally {
@@ -335,7 +377,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 					}
 
 					executionState.emailSentCount += deliveryTargetIdentifiers.size();
-					logger.debug("Processed {} results on page {} for Job {}. Page size: {}. Sent count: {}. ",
+					getCurrentLogger().debug("Processed {} results on page {} for Job {}. Page size: {}. Sent count: {}. ",
 							new Object[] { deliveryTargetIdentifiers.size(), page, jobId, executionState.pageSize, executionState.emailSentCount });
 					return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.PARTIAL, executionState, null);
 
@@ -349,16 +391,22 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 
 	}
 
-	private void doSendEmail(ImmutablePersonIdentifiersTO deliveryTargetIds, BulkEmailStudentRequestForm spec)
+	private void sendSingleBulkEmail(ImmutablePersonIdentifiersTO deliveryTargetIds, BulkEmailStudentRequestForm spec)
 			throws ObjectNotFoundException, ValidationException {
 		final Person student;
 		if (deliveryTargetIds.getId() != null) {
 			student = personService.get(deliveryTargetIds.getId());
+			if ( student == null ) {
+				throw new ObjectNotFoundException(deliveryTargetIds.getId(), Person.class.getName());
+			}
 		} else {
 			student = personService.getBySchoolId(deliveryTargetIds.getSchoolId(), false);
+			if ( student == null ) {
+				throw new ObjectNotFoundException(deliveryTargetIds.getSchoolId(), Person.class.getName());
+			}
 		}
 		EmailStudentRequestForm emailStudentRequestForm = new EmailStudentRequestForm(spec,student);
-		emailStudent(emailStudentRequestForm);
+		doEmailStudent(emailStudentRequestForm, EmailVolume.BULK, deliveryTargetIds);
 	}
 
 	private void registerBulkEmailJobExecutor() {
@@ -378,7 +426,12 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 
 			@Override
 			protected JobExecutionResult<BulkEmailJobExecutionState> executeJobDeserialized(BulkEmailJobSpec executionSpec, BulkEmailJobExecutionState executionState, UUID jobId) {
-				return executeBulkEmailJob(executionSpec, executionState, jobId, getLogger());
+				try {
+					PersonEmailServiceImpl.this.setCurrentLogger(logger);
+					return executeBulkEmailJob(executionSpec, executionState, jobId);
+				} finally {
+					PersonEmailServiceImpl.this.setCurrentLogger(null);
+				}
 			}
 
 			protected Logger getLogger() {
@@ -389,35 +442,35 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		this.jobService.registerJobExecutor(this.bulkEmailJobExecutor);
 	}
 
+	private boolean shouldCreateJournalEntryFor(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume) {
+		return emailRequest.getCreateJournalEntry() && emailRequest.getStudentId() != null;
+	}
+
 	private JournalEntry buildJournalEntry(
-			EmailStudentRequestForm emailRequest, Message message)
+			EmailStudentRequestForm emailRequest, Message message, EmailVolume originalRequestVolume)
 			throws ObjectNotFoundException, ValidationException {
-		if(emailRequest.getCreateJournalEntry() && emailRequest.getStudentId() != null)
+		Person student = personService.get(emailRequest.getStudentId());
+
+		JournalEntry journalEntry = new JournalEntry();
+		journalEntry.setPerson(student);
+
+		String commentFromEmail = buildJournalEntryCommentFromEmail(emailRequest, message);
+
+		ConfidentialityLevel confidentialityLevel;
+		if(emailRequest.getConfidentialityLevelId() == null)
 		{
-			Person student = personService.get(emailRequest.getStudentId());
-
-			JournalEntry journalEntry = new JournalEntry();
-			journalEntry.setPerson(student);
-
-			String commentFromEmail = buildJournalEntryCommentFromEmail(emailRequest, message);
-
-			ConfidentialityLevel confidentialityLevel;
-			if(emailRequest.getConfidentialityLevelId() == null)
-			{
-				confidentialityLevel = confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE);
-			}
-			else
-			{
-				confidentialityLevel = confidentialityLevelService.get(emailRequest.getConfidentialityLevelId());
-			}
-			journalEntry.setConfidentialityLevel(confidentialityLevel);
-			journalEntry.setComment(commentFromEmail);
-			journalEntry.setEntryDate(new Date());
-			journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
-			journalEntry = journalEntryService.save(journalEntry);
-			return journalEntry;
+			confidentialityLevel = confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE);
 		}
-		return null;
+		else
+		{
+			confidentialityLevel = confidentialityLevelService.get(emailRequest.getConfidentialityLevelId());
+		}
+		journalEntry.setConfidentialityLevel(confidentialityLevel);
+		journalEntry.setComment(commentFromEmail);
+		journalEntry.setEntryDate(new Date());
+		journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
+		journalEntry = journalEntryService.save(journalEntry);
+		return journalEntry;
 	}
 
 	private String buildJournalEntryCommentFromEmail(
@@ -439,32 +492,56 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		return journalEntryCommentBuilder.toString();
 	}
 
-	private Message buildAndSendStudentEmail(EmailStudentRequestForm emailRequest)
-			throws ObjectNotFoundException, ValidationException {
-		EmailAddress addresses = emailRequest.getValidDeliveryAddressesOrFail();
-		SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
-		return messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody);
+	private Message buildStudentEmail(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume, boolean andSend)
+			throws ObjectNotFoundException {
+		final EmailAddress addresses = emailRequest.getValidDeliveryAddresses(true);
+		final SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
+		return andSend ?
+				messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody) :
+				messageService.createMessageNoSave(addresses.getTo(), addresses.getCc(), subjectAndBody);
 	}
 
-	private void validateInput(EmailStudentRequestForm emailRequest) throws ValidationException {
+	/**
+	 * When a message in a bulk email batch is sent, the spec is first translated from a
+	 * {@link BulkEmailStudentRequestForm} into a {@link EmailStudentRequestForm}, which
+	 * then passes through this validation mechanism. But the rules are different when considering a single-
+	 * vs bulk message spec. For bulk messages we never want to send a message to the CC *only*, but this
+	 * is not necessarily a fatal problem for the entire bulk messaging unit of work for that specific delivery
+	 * target, e.g. might still want to create a Journal Entry.
+	 *
+	 * @param emailRequest
+	 * @param originalRequestVolume
+	 * @throws ValidationException
+	 */
+	private void validateSingleEmailInput(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume) throws ValidationException {
 		StringBuilder validationMsg = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
 
 		// Removed a historical validation that required a studentId (UUID) on emailRequest. We don't actually need that
 		// and we can't require it since we now reuse EmailStudentRequestForm when sending bulk email, which may
 		// target external-only students, i.e. persons without UUIDs.
+		//
+		// Also, as hinted at in class comments and a comment attached to these MSG constants... be careful when
+		// changing how error messages are emitted... there might be code looking at them to try to figure out
+		// what failed to validate.
 
 		if(!emailRequest.hasEmailSubject())
 		{
-			validationMsg.append("Email subject must be provided").append(EOL);
+			validationMsg.append(MISSING_SUBJECT_ERROR_MSG).append(EOL);
 		}
 		if(!emailRequest.hasEmailBody())
 		{
-			validationMsg.append("Email body must be provided").append(EOL);
+			validationMsg.append(MISSING_BODY_ERROR_MSG).append(EOL);
 		}
 
-		if(!emailRequest.hasValidDeliveryAddresses()){
-			validationMsg.append("At least one valid email address must be included.").append(EOL);
+		if ( originalRequestVolume == null ) {
+			throw new IllegalArgumentException("Must specify an EmailVolume"); // programmer error
+		}
+
+		if(originalRequestVolume == EmailVolume.SINGLE && !emailRequest.hasValidDeliveryAddresses()){
+			validationMsg.append(MISSING_ANY_VALID_DELIVERY_ADDR_ERROR_MSG).append(EOL);
+		} else if ( originalRequestVolume == EmailVolume.BULK && !emailRequest.hasValidNonCcDeliveryAddress() ) {
+			validationMsg.append(MISSING_NON_CC_DELIVERY_ADDR_ERROR_MSG);
 		}
 
 		String validation = validationMsg.toString();
@@ -473,7 +550,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		}
 	}
 
-	private void validateInput(BulkEmailStudentRequestForm emailRequest) throws ValidationException {
+	private void validateBulkEmailInput(BulkEmailStudentRequestForm emailRequest) throws ValidationException {
 		StringBuilder validationMsg = new StringBuilder();
 		String EOL = System.getProperty("line.separator");
 		if(!emailRequest.hasEmailSubject())
