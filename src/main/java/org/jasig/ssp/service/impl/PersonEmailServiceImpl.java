@@ -94,6 +94,8 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 	private static final String MISSING_NON_CC_DELIVERY_ADDR_ERROR_MSG = "At least one valid non-CC email address must be provided.";
 	private static final String MISSING_SUBJECT_ERROR_MSG =  "Email subject must be provided";
 	private static final String MISSING_BODY_ERROR_MSG = "Email body must be provided";
+	private static final String MESSAGE_ID_CREATED_FIELD_NAME = "messageId";
+	private static final String JOURNAL_ENTRY_ID_CREATED_FIELD_NAME = "journalEntryId";
 
 	@Autowired
 	private transient MessageService messageService;
@@ -176,11 +178,11 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		final boolean buildMessage = createJournalEntry || sendMessage;
 
 		final Message message = buildMessage ? buildStudentEmail(emailRequest, originalRequestVolume, sendMessage) : null;
-		rslt.put("messageId", message == null ? null : message.getId());
+		rslt.put(MESSAGE_ID_CREATED_FIELD_NAME, message == null ? null : message.getId());
 
 		if ( createJournalEntry ) {
 			final JournalEntry journalEntry = buildJournalEntry(emailRequest, message, originalRequestVolume);
-			rslt.put("journalEntryId", journalEntry == null ? null : journalEntry.getId());
+			rslt.put(JOURNAL_ENTRY_ID_CREATED_FIELD_NAME, journalEntry == null ? null : journalEntry.getId());
 		}
 
 		return rslt;
@@ -241,7 +243,9 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		public boolean failOnDlqOverflow;
 		public boolean dlqOverflowed;
 		public int emailSentCount;
-		public int emailFailedCount;
+		public int journalEntriesCreatedCount;
+		public int personsFailedCount;
+		public int personsSucceededCount;
 	}
 
 	private BulkEmailJobExecutionState newBulkEmailJobExecutionState() {
@@ -270,7 +274,13 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			}
 
 			if ( executionState.allPagesProcessed && executionState.retryQueue.isEmpty() ) {
-				getCurrentLogger().debug("Processing complete for Job {}.", jobId, executionState.retryQueue.size());
+				getCurrentLogger().debug("Processing complete for Job {}. Records processed successfully: {}. " +
+						"Emails sent: {}. Journal entries created: {}. Records processed unsuccessfully: {}",
+						new Object [] { jobId,
+								executionState.personsSucceededCount,
+								executionState.emailSentCount,
+								executionState.journalEntriesCreatedCount,
+								executionState.personsFailedCount});
 				return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.DONE, executionState, null);
 			}
 
@@ -284,13 +294,13 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 				final ImmutablePersonIdentifiersTO personIds = executionState.retryQueue.remove(0);
 				try {
 					getCurrentLogger().debug("Retry for person IDs {} in Job {}.", personIds, jobId);
-					sendSingleBulkEmail(personIds, executionSpec.getCoreSpec());
-					executionState.emailSentCount++;
-					getCurrentLogger().debug("Successful retry for person IDs {} in Job {}. Total sent so far: {}",
-							new Object[] { personIds, jobId, executionState.emailSentCount });
+					final Map<String, UUID> createdRecords = sendSingleBulkEmail(personIds, executionSpec.getCoreSpec());
+					updateSuccessfulRecordCounts(createdRecords, executionState);
+					getCurrentLogger().debug("Successful retry for person IDs {} in Job {}.",
+							new Object[] { personIds, jobId });
 					return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.PARTIAL, executionState, null);
 				} catch ( Exception e ) {
-					executionState.emailFailedCount++;
+					executionState.personsFailedCount++;
 					if ( executionState.dlq.size() >= executionState.maxDlqLength ) {
 						executionState.dlqOverflowed = true;
 						if ( executionState.failOnDlqOverflow ) {
@@ -303,13 +313,15 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 						} else {
 							// no room in the dlq. exception will be logged, but otherwise silently drop this
 							// delivery target
-							getCurrentLogger().debug("Processing error in retry queue for person IDs {} but no room in DLQ in Job {}.", personIds, jobId);
+							getCurrentLogger().debug("Processing error in retry queue for person IDs {} but no " +
+									"room in DLQ in Job {}.", personIds, jobId);
 							return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.FAILED_PARTIAL, executionState, e);
 						}
 					} else {
 						executionState.dlq.add(personIds);
-						getCurrentLogger().debug("Processing error in retry queue. Added person IDs {} to DLQ (size: {}) in Job {}. Failure count: {}",
-								new Object[] { personIds, executionState.dlq.size(), jobId, executionState.emailFailedCount });
+						getCurrentLogger().debug("Processing error in retry queue. Added person IDs {} to DLQ " +
+								"(size: {}) in Job {}. Failure count: {}",
+								new Object[] { personIds, executionState.dlq.size(), jobId, executionState.personsFailedCount });
 						return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.FAILED_PARTIAL, executionState, e);
 					}
 				}
@@ -358,16 +370,18 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 					}
 
 					ImmutablePersonIdentifiersTO deliveryTargetIdentifier = null;
+					final List<Map<String, UUID>> batchCreatedRecords = Lists.newArrayListWithExpectedSize(deliveryTargetIdentifiers.size());
 					try {
 						Iterator<ImmutablePersonIdentifiersTO> i = deliveryTargetIdentifiers.iterator();
 						while ( i.hasNext() ) {
 							deliveryTargetIdentifier = i.next();
 							getCurrentLogger().debug("Batched message creation attempt for person IDs {} in Job {}.", deliveryTargetIdentifier, jobId);
-							sendSingleBulkEmail(deliveryTargetIdentifier, executionSpec.getCoreSpec());
+							batchCreatedRecords.add(sendSingleBulkEmail(deliveryTargetIdentifier, executionSpec.getCoreSpec()));
 						}
 					} catch ( Exception e ) {
 						executionState.retryQueue.addAll(deliveryTargetIdentifiers);
-						getCurrentLogger().debug("Processing error for person IDs {} on page {} for Job {}. Page size: {}. Added this page to the retry queue (size: {})",
+						getCurrentLogger().debug("Processing error for person IDs {} on page {} for Job {}. Page " +
+								"size: {}. Added this page to the retry queue (size: {})",
 								new Object[] { deliveryTargetIdentifier, page, jobId, executionState.pageSize, executionState.retryQueue.size() }); // exception itself logged elsewhere
 						return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.FAILED_PARTIAL, executionState, e);
 					} finally {
@@ -376,9 +390,11 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 						executionState.allPagesProcessed = (page * executionState.pageSize) >= totalResults;
 					}
 
-					executionState.emailSentCount += deliveryTargetIdentifiers.size();
-					getCurrentLogger().debug("Processed {} results on page {} for Job {}. Page size: {}. Sent count: {}. ",
-							new Object[] { deliveryTargetIdentifiers.size(), page, jobId, executionState.pageSize, executionState.emailSentCount });
+					for ( Map<String, UUID> createdRecords : batchCreatedRecords ) {
+						updateSuccessfulRecordCounts(createdRecords, executionState);
+					}
+					getCurrentLogger().debug("Processed {} results on page {} for Job {}. Page size: {}. Total results: {}",
+							new Object[] { deliveryTargetIdentifiers.size(), page, jobId, executionState.pageSize, searchResults.getResults()});
 					return new JobExecutionResult<BulkEmailJobExecutionState>(JobExecutionStatus.PARTIAL, executionState, null);
 
 				}
@@ -391,7 +407,17 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 
 	}
 
-	private void sendSingleBulkEmail(ImmutablePersonIdentifiersTO deliveryTargetIds, BulkEmailStudentRequestForm spec)
+	private void updateSuccessfulRecordCounts(Map<String, UUID> createdRecords, BulkEmailJobExecutionState executionState) {
+		executionState.personsSucceededCount++;
+		if ( createdRecords.get(MESSAGE_ID_CREATED_FIELD_NAME) != null ) {
+			executionState.emailSentCount++;
+		}
+		if ( createdRecords.get(JOURNAL_ENTRY_ID_CREATED_FIELD_NAME) != null ) {
+			executionState.journalEntriesCreatedCount++;
+		}
+	}
+
+	private Map<String, UUID> sendSingleBulkEmail(ImmutablePersonIdentifiersTO deliveryTargetIds, BulkEmailStudentRequestForm spec)
 			throws ObjectNotFoundException, ValidationException {
 		final Person student;
 		if (deliveryTargetIds.getId() != null) {
@@ -406,7 +432,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			}
 		}
 		EmailStudentRequestForm emailStudentRequestForm = new EmailStudentRequestForm(spec,student);
-		doEmailStudent(emailStudentRequestForm, EmailVolume.BULK, deliveryTargetIds);
+		return doEmailStudent(emailStudentRequestForm, EmailVolume.BULK, deliveryTargetIds);
 	}
 
 	private void registerBulkEmailJobExecutor() {
