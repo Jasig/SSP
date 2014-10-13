@@ -406,49 +406,40 @@ public class MessageServiceImpl implements MessageService {
 			final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(
 					mimeMessage);
 			
+			// process FROM addresses
 			InternetAddress from;
 			String appName = configService.getByName("app_title").getValue();
 			
 			//We used the configured outbound email address for every outgoing message
 			//If a message was initiated by an end user, their name will be attached to the 'from' while
 			//the configured outbound address will be the actual address used for example "Amy Aministrator (SSP) <myconfiguredaddress@foobar.com>"
-			
-			
-			if( (message.getSender()!= null && message.getSender().getId().equals(Person.SYSTEM_ADMINISTRATOR_ID)) || message.getSender() == null || message.getSender().getEmailAddresses().isEmpty()  )
-				{
-				try {
-					 from = new InternetAddress(configService.getByName("outbound_email_address").getValue(),appName+" Administrator");
-					 mimeMessageHelper.setFrom(from);
-					 message.setSentFromAddress(from.toString());
-					 mimeMessageHelper.setReplyTo(from);
-					 message.setSentReplyToAddress(from.toString());
-				} catch(AddressException e)
-				{
-					handleSendMessageError(message);
-					LOGGER.error("The config outbound_email_address has been configured with an invalid email address!!");
-					throw e;
-				}
-			} else
-			{
-				// WILL FIND FIRST VALID EMAIL 
+			String name = appName + " Administrator";
+			if (message.getSender() != null && 
+					!message.getSender().getEmailAddresses().isEmpty() && 
+					!message.getSender().getId().equals(Person.SYSTEM_ADMINISTRATOR_ID)) {
 				InternetAddress[] froms = getEmailAddresses( message.getSender(), "from:",message.getId());
 				if(froms.length > 0){
-					from = new InternetAddress(configService.getByName("outbound_email_address").getValue(),message.getSender().getFullName() + " ("+appName+")");
-				     mimeMessageHelper.setFrom(from);
-					message.setSentFromAddress(from.toString());
-					mimeMessageHelper.setReplyTo(froms[0]);
-					message.setSentReplyToAddress(froms[0].toString());
+					name = message.getSender().getFullName() + " ("+appName+")";
 				}
 			}
 
+			from = new InternetAddress(configService.getByName("outbound_email_address").getValue(), name);
+			if (!this.validateEmail(from.getAddress())) {
+				throw new AddressException("Invalid from: email address [" + from.getAddress() + "]");
+			}
 			
+			 mimeMessageHelper.setFrom(from);
+			 message.setSentFromAddress(from.toString());
+			 mimeMessageHelper.setReplyTo(from);
+			 message.setSentReplyToAddress(from.toString());
+			
+			// process TO addresses
 			InternetAddress[] tos = null;
-			if ( message.getRecipient() != null && message.getRecipient().hasEmailAddresses()) { // NOPMD by jon.adams			{
+			if ( message.getRecipient() != null && message.getRecipient().hasEmailAddresses()) { // NOPMD by jon.adams			
 				tos = getEmailAddresses(message.getRecipient(), "to:",message.getId());
 			} else { 
 				tos = getEmailAddresses(message.getRecipientEmailAddress(), "to:", message.getId());
 			}
-			
 			if(tos.length > 0){
 				mimeMessageHelper.setTo(tos);
 				message.setSentToAddresses(StringUtils.join(tos,",").trim());
@@ -464,9 +455,10 @@ public class MessageServiceImpl implements MessageService {
 					errorMsg.append(message.getRecipientEmailAddress());
 				}
 				LOGGER.error(errorMsg.toString());
-				
-				return false;
+				throw new MessagingException(errorMsg.toString());
 			}
+			
+			// process BCC addresses
 			try{
 				InternetAddress[] bccs = getEmailAddresses(getBcc(), "bcc:", message.getId());
 				if(bccs.length > 0){
@@ -477,6 +469,7 @@ public class MessageServiceImpl implements MessageService {
 				LOGGER.warn("Unrecoverable errors were generated adding carbon copy to message: " + message.getId() + "Attempt to send message still initiated.", exp);
 			}
 			
+			// process CC addresses
 			try{	
 				InternetAddress[] carbonCopies = getEmailAddresses(message.getCarbonCopy(), "cc:", message.getId());
 				if(carbonCopies.length > 0){
@@ -507,11 +500,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	private void handleSendMessageError(Message message) {
-		int retryCount = configService.getByNameExceptionOrDefaultAsInt("mail_delivery_retry_limit");
-		if(message.getRetryCount() == null || message.getRetryCount() < retryCount)
-		{
-			message.setRetryCount(message.getRetryCount() == null ? 1 : message.getRetryCount() + 1);
-		}
+		message.setRetryCount(message.getRetryCount() == null ? 1 : message.getRetryCount() + 1);
 		
 	}
 
