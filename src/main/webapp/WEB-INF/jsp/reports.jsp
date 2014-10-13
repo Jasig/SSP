@@ -1267,7 +1267,7 @@
 		</div>
 		<div class="ea-clear"></div>
 		
-		<!-- Date Range Description -->
+		<!-- Date Range Description For Response Dates-->
 		<div class="ea-input">
 		</div>
 		<div class="ea-label">
@@ -1275,28 +1275,18 @@
 		</div>
 		<div class="ea-clear"></div>
 		
-		<!-- Semester -->
+		<!-- Date Range Select for Responses -->
 		<div class="ea-time-span">
-			<div class="ea-term">
-				<div class="ea-input">
-					<select id="earlyAlertStudentReferralTermCode" name="termCode" class="input-term-group">
-						<option value="">${not_applicable}</option>
-						</select>
-				</div>
-				<div class="ea-label">
-					<span>Term:</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
 			<div class="ea-date-range">
-				<!-- Date From -->
+				<!-- Response Date From -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentReferralCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
-				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-clear"></div>
+				<!-- Response Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentReferralCreateDateTo">
 				</div>
@@ -1304,13 +1294,6 @@
 					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
-			</div>
-			<div class="ea-buttons">
-				<div>
-									<button class="switch-date-range-type button" value="setbyrange">
-									</button>
-									
-				</div>
 			</div>
 		</div>
 
@@ -1575,7 +1558,7 @@
 		</div>
 		<div class="ea-clear"></div>
 
-		<!-- Date Range Description -->
+		<!-- Date Range Description for Responses -->
 		<div class="ea-input">
 		</div>
 		<div class="ea-label">
@@ -1583,28 +1566,18 @@
 		</div>
 		<div class="ea-clear"></div>
 		
-		<!-- Semester -->
+		<!-- Date Range Select for Responses -->
 		<div class="ea-time-span">
-			<div class="ea-term">
-				<div class="ea-input">
-					<select id="earlyAlertStudentOutreachTermCode" name="termCode" class="input-term-group">
-						<option value="">${not_applicable}</option>
-						</select>
-				</div>
-				<div class="ea-label">
-					<span>Term:</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
 			<div class="ea-date-range">
-				<!-- Date From -->
+				<!-- Date From Response -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutreachCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
-				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-clear"></div>
+				<!-- Date To Response-->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutreachCreateDateTo">
 				</div>
@@ -1612,14 +1585,6 @@
 					<span>End Date (exclusive)::</span>
 				</div>
 				<div class="ea-clear"></div>
-			</div>
-			<div class="ea-buttons">
-				<div>
-					
-									<button class="switch-date-range-type button" value="setbyrange">
-									</button>
-									
-				</div>
 			</div>
 		</div>
 		<!-- output type -->
@@ -1747,35 +1712,26 @@
 		</div>
 		<div class="ea-clear"></div>
 
-		<!-- Date Range Description -->
+		<!-- Date Range Description for Responses -->
 		<div class="ea-input">
 		</div>
 		<div class="ea-label">
 			<span>${date_range_early_response}</span>
 		</div>
 		<div class="ea-clear"></div>
-		<!-- Semester -->
+
+		<!-- Date Range Select for Responses -->
 		<div class="ea-time-span">
-			<div class="ea-term">
-				<div class="ea-input">
-					<select id="earlyAlertStudentOutcomeTermCode" name="termCode" class="input-term-group">
-						<option value="">${not_applicable}</option>
-						</select>
-				</div>
-				<div class="ea-label">
-					<span>Term:</span>
-				</div>
-				<div class="ea-clear"></div>
-			</div>
 			<div class="ea-date-range">
-				<!-- Date From -->
+				<!-- Date From Response-->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="earlyAlertStudentOutcomeCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
-				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-clear"></div>
+				<!-- Date To Response -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="earlyAlertStudentOutcomeCreateDateTo">
 				</div>
@@ -1784,14 +1740,8 @@
 				</div>
 				<div class="ea-clear"></div>
 			</div>
-			<div class="ea-buttons">
-				<div>
-									<button class="switch-date-range-type button" value="setbyrange">
-									</button>
-								
-				</div>
-			</div>
 		</div>
+
 		<!-- output type -->
 		<div class="ea-input">
 			<label><span>pdf</span></label><input type="radio" name="reportType"
