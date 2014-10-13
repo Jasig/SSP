@@ -91,6 +91,16 @@ public interface MessageService {
 			throws ObjectNotFoundException;
 
 	/**
+	 * Create a new {@link Message} entity but do not persist it.
+	 *
+	 * @param to
+	 * @param cc
+	 * @param subjectAndBody
+	 * @return
+	 */
+	Message createMessageNoSave(String to, String cc, SubjectAndBody subjectAndBody) throws ObjectNotFoundException;
+
+	/**
 	 * Send any queued messages. Should be set to run regularly via some kind of
 	 * scheduling system.
 	 */

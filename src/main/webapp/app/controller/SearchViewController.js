@@ -436,7 +436,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	displaySearch: function() {
 	    var me = this;
 		me.getSearchBar().show();
-
+		
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
 		    Ext.ComponentQuery.query('searchForm')[2].show(); //user has two, second is search
         } else {
@@ -448,11 +448,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	displayCaseload: function(){
 		var me=this;
+		
 		me.getSearchBar().hide();
 		me.setGridView();
 	},
 	displayWatchList: function(){
 		var me=this;
+		
 		me.getSearchBar().hide();
 		me.setGridView();
 		
@@ -464,18 +466,27 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var sortableColumns = true;
 		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		var coachIdAlias = me.configStore.getConfigByName('coachFieldLabel');
-
 		if ( me.getIsCaseload() )
-		{
-			store = me.caseloadStore;
-		}else
+			{
+				store = me.caseloadStore;
+			}
+		else
 		if( me.getIsWatchList() )
 		{
 			store = me.watchListStore;
+			
 		} else
 		{
 			store = me.searchStore;
 			store.pageSize = store.data.length;
+			if (me.searchStore.data.length < 1) {
+				me.getCaseloadActionCombo().hide();
+			}
+			else {
+				if (me.authenticatedPerson.hasAnyBulkPermissions()) {
+					me.getCaseloadActionCombo().show();
+				}
+			}
 		}
 		
 		columns = [
@@ -1065,6 +1076,39 @@ Ext.define('Ssp.controller.SearchViewController', {
     		me.getSearchGridPager().onLoad();
     	}
 		me.harmonizePersonLite();
+		if ( me.getIsCaseload() )
+			{
+				
+				if(me.caseloadStore.data.length < 1)
+				{
+					me.getCaseloadActionCombo().hide();
+				}
+				else
+				{
+					if (me.authenticatedPerson.hasAnyBulkPermissions()) {
+						me.getCaseloadActionCombo().show();
+						
+					}
+				}
+				
+			}
+		else
+		if( me.getIsWatchList() )
+		{
+			
+			if(me.watchListStore.getTotalCount() < 1)
+			{
+				
+				me.getCaseloadActionCombo().hide();
+			}
+			else
+			{
+				if (me.authenticatedPerson.hasAnyBulkPermissions()) {
+					me.getCaseloadActionCombo().show();
+					
+				}
+			}
+		} 
 		me.getView().setLoading( false );
     },
 

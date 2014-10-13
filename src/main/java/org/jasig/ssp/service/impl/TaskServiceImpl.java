@@ -316,13 +316,9 @@ public class TaskServiceImpl
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final EmailPersonTasksForm form)
 			throws ObjectNotFoundException {
-		if(!form.hasValidDeliveryAddresses()){
-			throw new IllegalArgumentException("Must enter at least one email address");
-		}
-
 		EmailAddress addresses;
 		try {
-			addresses = form.getValidDeliveryAddressesOrFail();
+			addresses = form.getValidDeliveryAddressesOrFail(true);
 		} catch ( ValidationException e ) {
 			// Historically this method has always thrown unchecked exceptions for this sort
 			// of validation failure, and switching to a checked exception is likely to
