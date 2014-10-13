@@ -26,8 +26,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.5" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="13"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
@@ -43,6 +43,8 @@
 	<parameter name="studentCount" class="java.lang.Integer">
 		<parameterDescription><![CDATA[studentCount]]></parameterDescription>
 	</parameter>
+	<parameter name="responseStartDate" class="java.lang.String"/>
+	<parameter name="responseEndDate" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -70,107 +72,127 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="118" splitType="Stretch">
+		<band height="137" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="3" width="100" height="16"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="3" width="113" height="16"/>
 				<textElement/>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="125" y="3" width="142" height="16"/>
+				<reportElement uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7" positionType="Float" x="140" y="3" width="142" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="20" width="100" height="16"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="19" width="113" height="16"/>
 				<textElement/>
 				<text><![CDATA[Home Department:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" positionType="Float" x="123" y="20" width="119" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec" positionType="Float" x="140" y="19" width="119" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="123" y="36" width="100" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="140" y="35" width="100" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="36" width="100" height="16"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="35" width="113" height="16"/>
 				<textElement/>
 				<text><![CDATA[Coach:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="290" y="36" width="100" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="352" y="35" width="100" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{watcherName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="225" y="36" width="100" height="16"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="252" y="35" width="100" height="16"/>
 				<textElement/>
 				<text><![CDATA[Watcher:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="125" y="53" width="117" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d" positionType="Float" x="140" y="51" width="117" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{earlyAlertReferralName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="53" width="100" height="16"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="10" y="51" width="113" height="16"/>
 				<textElement/>
 				<text><![CDATA[Referral:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="125" y="69" width="462" height="16" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="140" y="67" width="462" height="16" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="69" width="100" height="16"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="67" width="113" height="16"/>
 				<textElement/>
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="125" y="101" width="100" height="16"/>
+				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="140" y="99" width="100" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="101" width="100" height="16"/>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="99" width="113" height="16"/>
 				<textElement/>
-				<text><![CDATA[Start Date:]]></text>
+				<text><![CDATA[Alert Start Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="225" y="101" width="65" height="16"/>
+				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="252" y="99" width="90" height="16"/>
 				<textElement/>
-				<text><![CDATA[End Date:]]></text>
+				<text><![CDATA[Alert End Date:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="290" y="101" width="100" height="16"/>
+				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="342" y="99" width="100" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d574f3da-59c5-4167-8e87-ca5fc5f4c0c2" x="125" y="85" width="100" height="16"/>
+				<reportElement uuid="d574f3da-59c5-4167-8e87-ca5fc5f4c0c2" x="140" y="115" width="100" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[($P{termName} == null) ? "Not Used" : $P{termName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="85" width="100" height="16"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="10" y="115" width="113" height="16"/>
 				<textElement/>
-				<text><![CDATA[Term:]]></text>
+				<text><![CDATA[Alert Term:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="7a9a1418-de33-4369-bd16-cf6914c216b2" x="628" y="101" width="100" height="16"/>
+				<reportElement uuid="7a9a1418-de33-4369-bd16-cf6914c216b2" x="628" y="115" width="100" height="16"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="553" y="101" width="75" height="16"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="553" y="115" width="75" height="16"/>
 				<textElement/>
 				<text><![CDATA[Student Count:]]></text>
 			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="e44206bf-22f3-40ba-8156-38aedcc4782e" isPrintRepeatedValues="false" x="140" y="83" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{responseStartDate} == null) ? "Not Used" : $P{responseStartDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5f291413-e56a-40d2-b133-e46654006e96" x="10" y="83" width="113" height="16"/>
+				<textElement/>
+				<text><![CDATA[Response Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d0710087-5f77-462d-a3df-48e900e0d31f" x="252" y="83" width="108" height="16"/>
+				<textElement/>
+				<text><![CDATA[Response End Date:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="adf4aaa9-02f1-4f98-a453-01d3cecab9e9" x="360" y="83" width="100" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{responseEndDate} == null) ? "Not Used" : $P{responseEndDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

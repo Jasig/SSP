@@ -26,9 +26,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="44"/>
 	<subDataset name="Table Dataset" uuid="be43ce74-c7e5-48bb-9e55-2f61365d6e2f">
 		<field name="first" class="java.lang.String"/>
 		<field name="second" class="java.lang.Long"/>
@@ -44,6 +44,8 @@
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="outcomeTotals" class="java.util.List"/>
 	<parameter name="term" class="java.lang.String"/>
+	<parameter name="responseStartDate" class="java.lang.String"/>
+	<parameter name="responseEndDate" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -71,24 +73,14 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="142" splitType="Stretch">
-			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="130" y="102" width="100" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="230" y="102" width="65" height="15"/>
-				<textElement/>
-				<text><![CDATA[End Date:]]></text>
-			</staticText>
+		<band height="152" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="11" y="10" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="57" width="100" height="15"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="55" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
@@ -97,18 +89,13 @@
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e" x="295" y="102" width="100" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="295" y="40" width="119" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="343" y="40" width="119" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{watcherName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="230" y="40" width="100" height="15"/>
+				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="243" y="40" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Watcher:]]></text>
 			</staticText>
@@ -123,52 +110,37 @@
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="102" width="100" height="15"/>
-				<textElement/>
-				<text><![CDATA[Start Date:]]></text>
-			</staticText>
-			<staticText>
 				<reportElement uuid="3186051d-0470-481e-9851-5c18a295e964" x="11" y="25" width="100" height="15"/>
 				<textElement/>
 				<text><![CDATA[Home Department:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="130" y="57" width="265" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="85310786-589b-44e8-944a-2f6361cc98ef" positionType="Float" x="130" y="55" width="265" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="130" y="42" width="100" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="7addf57b-228e-402f-84d4-d875bcb42603" positionType="Float" x="130" y="40" width="100" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="72" width="116" height="15"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="70" width="116" height="15"/>
 				<textElement/>
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" positionType="Float" x="130" y="72" width="407" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72" positionType="Float" x="130" y="70" width="407" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b" x="10" y="117" width="100" height="15"/>
-				<textElement/>
-				<text><![CDATA[Term:]]></text>
-			</staticText>
-			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3" isPrintRepeatedValues="false" x="130" y="117" width="100" height="15"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[($P{term} == null) ? "Not Used" : $P{term}]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement uuid="cd7eafd4-390c-4ded-8a23-c33648371bb4" x="149" y="87" width="388" height="20"/>
+				<reportElement uuid="cd7eafd4-390c-4ded-8a23-c33648371bb4" x="130" y="85" width="388" height="15"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="15" y="87" width="116" height="15"/>
+				<reportElement uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b" x="11" y="85" width="116" height="15"/>
 				<textElement/>
 				<text><![CDATA[Student Type:]]></text>
 			</staticText>
@@ -213,6 +185,56 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<staticText>
+				<reportElement uuid="f57ee783-9554-4b3b-8626-77209d8e0cf0" x="11" y="130" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Alert Term:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bd2599a6-c961-4559-8d9f-96fcb4b01038" x="234" y="115" width="91" height="15"/>
+				<textElement/>
+				<text><![CDATA[Alert End Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5995444b-1f52-47cb-9c11-d9121a068179" x="11" y="100" width="110" height="15"/>
+				<textElement/>
+				<text><![CDATA[Response Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5440559e-6f94-4cf5-bddb-410da8704847" x="11" y="115" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Alert Start Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3106206f-5233-4e78-baf2-42694abf1f2f" x="234" y="100" width="97" height="15"/>
+				<textElement/>
+				<text><![CDATA[Reponse End Date:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="7d4b182e-9a99-45e8-9b4a-e39052e525de" isPrintRepeatedValues="false" x="130" y="115" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="ecfa877f-e19d-4ee7-a96f-83dde329d088" isPrintRepeatedValues="false" x="130" y="130" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{term} == null) ? "Not Used" : $P{term}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="415016c4-ba49-494a-8556-b36fdff8e218" x="325" y="115" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="468eb2f3-664d-409d-ab4d-7541a90eb832" x="331" y="100" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{responseEndDate} == null) ? "Not Used" : $P{responseEndDate}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+				<reportElement uuid="b4e15189-6246-432f-b8b4-8938b7594d88" isPrintRepeatedValues="false" x="130" y="100" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($P{responseStartDate} == null) ? "Not Used" : $P{responseStartDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

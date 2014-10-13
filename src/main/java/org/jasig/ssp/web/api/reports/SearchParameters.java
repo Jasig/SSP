@@ -70,6 +70,8 @@ public class SearchParameters {
 	private static final String TERM = "term";
 	private static final String START_DATE = "startDate";
 	private static final String END_DATE = "endDate";
+    private static final String RESPONSE_START_DATE = "responseStartDate";
+    private static final String RESPONSE_END_DATE = "responseEndDate";
 	private static final String CAMPUS_NAME = "campusName";
 	private static final String SEPCIAL_SERVICE_GROUP_NAMES = "specialServiceGroupNames";
 	private static final String SERVICE_REASON_NAMES = "serviceReasonGroupNames";
@@ -259,6 +261,14 @@ public class SearchParameters {
 		parameters.put(TERM_CODE, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermCode());
 		return parameters;
 	}
+
+    static final Map<String, Object> addResponseDateRangeToMap(final Date responseCreateDateFrom,
+                                   final Date responseCreateDateTo, final Map<String, Object> parameters) {
+        final SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy");
+        parameters.put(RESPONSE_START_DATE,  responseCreateDateFrom == null ? NOT_USED :sdf.format(responseCreateDateFrom));
+        parameters.put(RESPONSE_END_DATE, responseCreateDateTo == null ? NOT_USED :sdf.format(responseCreateDateTo));
+        return parameters;
+    }
 
 	@SuppressWarnings("rawtypes")
 	static final void addEarlyAlertOutcomesToMap(final List<UUID> outcomeIds,

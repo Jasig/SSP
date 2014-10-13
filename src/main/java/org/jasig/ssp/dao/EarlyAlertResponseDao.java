@@ -230,22 +230,31 @@ public class EarlyAlertResponseDao extends
 	}
 	
 	@SuppressWarnings({ "unchecked" })
-	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(String termCode, Date createDateFrom,
-			Date createDateTo, List<UUID> outcomes, String homeDepartment, Person coach) {
+	public Collection<EarlyAlertStudentOutreachReportTO> getEarlyAlertOutreachCountByOutcome(String alertTermCode, Date alertCreateDateFrom,
+            Date alertCreateDateTo, Date responseCreateDateFrom, Date responseCreateDateTo,
+            List<UUID> outcomes, String homeDepartment, Person coach) {
 
         final Criteria query = createCriteria();
         query.createAlias("earlyAlert", "earlyAlert");
 
-        if (termCode != null) {
-            query.add(Restrictions.eq("earlyAlert.courseTermCode", termCode));
+        if (alertTermCode != null) {
+            query.add(Restrictions.eq("earlyAlert.courseTermCode", alertTermCode));
+        }
+
+        if (alertCreateDateFrom != null) {
+            query.add(Restrictions.ge("earlyAlert.createdDate", alertCreateDateFrom));
+        }
+
+        if (alertCreateDateTo != null) {
+            query.add(Restrictions.le("earlyAlert.createdDate", alertCreateDateTo));
         }
 		
-		if (createDateFrom != null) {
-			query.add(Restrictions.ge("createdDate", createDateFrom));
+		if (responseCreateDateFrom != null) {
+			query.add(Restrictions.ge("createdDate", responseCreateDateFrom));
 		}
 
-		if (createDateTo != null) {
-			query.add(Restrictions.le("createdDate", createDateTo));
+		if (responseCreateDateTo != null) {
+			query.add(Restrictions.le("createdDate", responseCreateDateTo));
 		}
 		
 		if (outcomes != null && outcomes.size() > 0) {
@@ -377,11 +386,19 @@ public class EarlyAlertResponseDao extends
         }
 
 		if (searchForm.getStartDate() != null) {
-            criteria.add(Restrictions.ge("createdDate", searchForm.getStartDate()));
+            criteria.add(Restrictions.ge("earlyAlert.createdDate", searchForm.getStartDate()));
         }
 
 		if (searchForm.getEndDate() != null) {
-            criteria.add(Restrictions.le("createdDate", searchForm.getEndDate()));
+            criteria.add(Restrictions.le("earlyAlert.createdDate", searchForm.getEndDate()));
+        }
+
+        if (searchForm.getResponseDateFrom() != null) {
+            criteria.add(Restrictions.ge("createdDate", searchForm.getResponseDateFrom()));
+        }
+
+        if (searchForm.getResponseDateTo() != null) {
+            criteria.add(Restrictions.le("createdDate", searchForm.getResponseDateTo()));
         }
 
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
@@ -402,9 +419,11 @@ public class EarlyAlertResponseDao extends
 	@SuppressWarnings(UNCHECKED)
 	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
 			final List<UUID> earlyAlertReferralIds, 
-			final String termCode,
-            final Date createDateFrom,
-			final Date createDateTo,
+			final String alertTermCode,
+            final Date alertCreateDateFrom,
+			final Date alertCreateDateTo,
+            final Date responseCreateDateFrom,
+            final Date responseCreateDateTo,
 			final PersonSearchFormTO personSearchForm,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
@@ -413,16 +432,24 @@ public class EarlyAlertResponseDao extends
         criteria.createAlias("earlyAlertReferralIds", "earlyAlertReferral");
         criteria.createAlias("earlyAlert", "earlyAlert");
 
-        if (termCode != null) {
-            criteria.add(Restrictions.eq("earlyAlert.courseTermCode", termCode));
-        }
-		
-		if(createDateFrom != null) {
-            criteria.add(Restrictions.ge("createdDate", createDateFrom));
+        if (alertTermCode != null) {
+            criteria.add(Restrictions.eq("earlyAlert.courseTermCode", alertTermCode));
         }
 
-		if(createDateTo != null) {
-            criteria.add(Restrictions.le("createdDate", createDateTo));
+        if(alertCreateDateFrom != null) {
+            criteria.add(Restrictions.ge("earlyAlert.createdDate", alertCreateDateFrom));
+        }
+
+        if(alertCreateDateTo != null) {
+            criteria.add(Restrictions.le("earlyAlert.createdDate", alertCreateDateTo));
+        }
+		
+		if(responseCreateDateFrom != null) {
+            criteria.add(Restrictions.ge("createdDate", responseCreateDateFrom));
+        }
+
+		if(responseCreateDateTo != null) {
+            criteria.add(Restrictions.le("createdDate", responseCreateDateTo));
         }
 
 		if (earlyAlertReferralIds != null) {

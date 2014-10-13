@@ -121,9 +121,11 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 			final @RequestParam(required = false) UUID watcherId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) UUID earlyAlertReferralId,
-			final @RequestParam(required = false) Date createDateFrom,
-			final @RequestParam(required = false) Date createDateTo,
-			final @RequestParam(required = false) String termCode,
+			final @RequestParam(required = false) Date responseCreateDateFrom,
+			final @RequestParam(required = false) Date responseCreateDateTo,
+			final @RequestParam(required = false) String alertTermCode,
+            final @RequestParam(required = false) Date alertCreateDateFrom,
+            final @RequestParam(required = false) Date alertCreateDateTo,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
 		
@@ -132,11 +134,11 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 
 		PersonTO watcherTO = SearchParameters.getPerson(watcherId, personService, personTOFactory);
 
-        DateTerm termDate = new DateTerm(createDateFrom, createDateTo, termCode, termService);
+        DateTerm termDate = new DateTerm(alertCreateDateFrom, alertCreateDateTo, alertTermCode, termService);
 
-        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+        if ( StringUtils.isBlank(alertTermCode) || alertTermCode.trim().toLowerCase().equals("not used") && alertCreateDateFrom != null ) {
             termDate.setTerm(null);
-        } else if (termCode != null && createDateFrom == null) {
+        } else if (alertTermCode != null && alertCreateDateFrom == null) {
             termDate.setStartEndDates(null, null);
         }
 
@@ -156,7 +158,9 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 				Arrays.asList(earlyAlertReferralId),
                 termDate.getTermCodeNullPossible(),
 				termDate.getStartDate(), 
-				termDate.getEndDate(), 
+				termDate.getEndDate(),
+                responseCreateDateFrom,
+                responseCreateDateTo,
 				searchForm, 
 				SearchParameters.getReportPersonSortingAndPagingAll(status));
 
@@ -167,6 +171,7 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		SearchParameters.addRosterStatusToMap(rosterStatus, parameters);
 		SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 		SearchParameters.addDateTermToMap(termDate, parameters);
+        SearchParameters.addResponseDateRangeToMap(responseCreateDateFrom, responseCreateDateTo, parameters);
 		SearchParameters.addProgramStatusToMap(programStatus, parameters, programStatusService);
 		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
 		List<EarlyAlertStudentReportTO> processedPeople = processReports(peopleInfo);

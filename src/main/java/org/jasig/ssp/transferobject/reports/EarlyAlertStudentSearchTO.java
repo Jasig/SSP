@@ -38,6 +38,10 @@ public class EarlyAlertStudentSearchTO
 	private Date startDate;
 
 	private Date endDate;
+
+    private Date responseDateTo;
+
+    private Date responseDateFrom;
 	
 	private PersonSearchFormTO addressLabelSearchTO;
 	
@@ -52,6 +56,19 @@ public class EarlyAlertStudentSearchTO
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+
+    public EarlyAlertStudentSearchTO(final PersonSearchFormTO addressLabelSearchTO,
+                                     final String termCode, final Date startDate, final Date endDate,
+                                     final Date responseDateFrom, final Date responseDateTo) {
+        super();
+
+        this.addressLabelSearchTO = addressLabelSearchTO;
+        this.termCode = termCode;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.responseDateFrom = responseDateFrom;
+        this.responseDateTo = responseDateTo;
+    }
 
     public String getTermCode() {
         return termCode;
@@ -71,8 +88,32 @@ public class EarlyAlertStudentSearchTO
 	public Date getEndDate() {
 		return endDate == null ? null : new Date(endDate.getTime());
 	}
-	
-	public PersonSearchFormTO getAddressLabelSearchTO() {
+
+    public void setEndDate(final Date endDate) {
+        this.endDate = endDate == null ? null : new Date(
+                endDate.getTime());
+    }
+
+    public Date getResponseDateFrom() {
+        return responseDateFrom == null ? null : new Date(responseDateFrom.getTime());
+    }
+
+    public void setResponseDateFrom(final Date responseDateFrom) {
+        this.responseDateFrom = responseDateFrom == null ? null : new Date(
+                responseDateFrom.getTime());
+    }
+
+    public Date getResponseDateTo() {
+        return responseDateTo == null ? null : new Date(responseDateTo.getTime());
+    }
+
+    public void setResponseDateTo(final Date responseDateTo) {
+        this.responseDateTo = responseDateTo == null ? null : new Date(
+                responseDateTo.getTime());
+    }
+
+
+    public PersonSearchFormTO getAddressLabelSearchTO() {
 		return addressLabelSearchTO;
 	}
 

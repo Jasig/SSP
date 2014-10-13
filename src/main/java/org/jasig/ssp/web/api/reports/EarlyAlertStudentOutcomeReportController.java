@@ -156,19 +156,22 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> outcomeIds,
-			final @RequestParam(required = false) String termCode,
-			final @RequestParam(required = false) Date createDateFrom,
-			final @RequestParam(required = false) Date createDateTo,
+            final @RequestParam(required = false) Date responseCreateDateFrom,
+            final @RequestParam(required = false) Date responseCreateDateTo,
+            final @RequestParam(required = false) String alertTermCode,
+            final @RequestParam(required = false) Date alertCreateDateFrom,
+            final @RequestParam(required = false) Date alertCreateDateTo,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
 		
-		final DateTerm dateTerm =  new DateTerm(createDateFrom,  createDateTo, termCode, termService);
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 
-        if ( StringUtils.isBlank(termCode) || termCode.trim().toLowerCase().equals("not used") && createDateFrom != null ) {
+        DateTerm dateTerm = new DateTerm(alertCreateDateFrom, alertCreateDateTo, alertTermCode, termService);
+
+        if ( StringUtils.isBlank(alertTermCode) || alertTermCode.trim().toLowerCase().equals("not used") && alertCreateDateFrom != null ) {
             dateTerm.setTerm(null);
-        } else if (termCode != null && createDateFrom == null) {
+        } else if (alertTermCode != null && alertCreateDateFrom == null) {
             dateTerm.setStartEndDates(null, null);
         }
 		
@@ -187,9 +190,9 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 				null,
 				serviceReasonService);
 		
-		SearchParameters.addDateRange(createDateFrom, 
-				createDateTo, 
-				termCode, 
+		SearchParameters.addDateRange(alertCreateDateFrom,
+                alertCreateDateTo,
+                alertTermCode,
 				parameters, 
 				personSearchForm, 
 				termService);
@@ -218,7 +221,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		SearchParameters.addUUIDSToMap(SELECTED_OUTCOME_NAMES, "Not Used", cleanOutcomeIds, parameters, earlyAlertOutcomeService);
 
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(personSearchForm,
-				dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate());
+                dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(),
+                responseCreateDateFrom, responseCreateDateTo);
 		
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		
@@ -250,6 +254,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 						getEarlyAlertCountByOutcomeCriteria(searchForm)));
 		
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
+        SearchParameters.addResponseDateRangeToMap(responseCreateDateFrom, responseCreateDateTo, parameters);
 		
 		parameters.put(OUTCOME_TOTALS, outcomeTotals);
 		
