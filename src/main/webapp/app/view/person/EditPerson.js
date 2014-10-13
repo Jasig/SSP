@@ -78,8 +78,8 @@ Ext.define('Ssp.view.person.EditPerson', {
 				}, {
                     fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + 'Username',
                     name: 'username',
-                    minLength: 4,
-                    maxLength: 25,
+                    minLength: 1,
+                    maxLength: 50,
                     itemId: 'username',
                     allowBlank: false,
                     width: 250,
