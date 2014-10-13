@@ -142,12 +142,14 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
                                  String reportViewUrl, String reportType, String reportName,
                                  AbstractCsvWriterHelper csvHelper) {
         return new String[] {
+                "CAMPUS",
+                "TERM",
                 "STUDENT ID",
                 "LAST",
                 "FIRST",
-                "COURSE REPORTED",
+                "COURSE",
                 "INSTRUCTOR",
-                "TOTAL REFERRAL REASONS"
+                "REASONS"
         };
     }
 
@@ -156,6 +158,8 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
                                       Collection<EarlyAlertReasonCountsTO> reportResults, String reportViewUrl, String reportType, String reportName,
                                       AbstractCsvWriterHelper csvHelper) {
         return csvHelper.wrapCsvRowInList(new String[] {
+                reportResultElement.getCampusName(),
+                reportResultElement.getTermCode(),
                 reportResultElement.getSchoolId(),
                 reportResultElement.getLastName(),
                 reportResultElement.getFirstName(),
