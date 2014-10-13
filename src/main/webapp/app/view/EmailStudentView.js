@@ -23,6 +23,7 @@ Ext.define('Ssp.view.EmailStudentView', {
     width: 750,
     resizable: true,
 	modal: true,
+	layout: 'fit',
     config: {
         isBulk: false,
         bulkCriteria: null
@@ -37,7 +38,6 @@ Ext.define('Ssp.view.EmailStudentView', {
             items: [
                 {
                     xtype: 'emailstudentform',
-                    flex: 1,
                     isBulk: me.getIsBulk(),
                     bulkCriteria: me.getBulkCriteria()
                 }

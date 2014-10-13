@@ -34,13 +34,13 @@ Ext.define('Ssp.view.EmailStudentForm', {
         var me = this;
         Ext.apply(me, {
             layout: {
-                type: 'vbox',
-                align: 'stretch'
+                anchor: '100%'
             },
             bodyStyle: 'background:none',
             bodyPadding: 8,
             items: [{
                 xtype: 'label',
+				anchor: '100%',
                 text: 'Fill-in the address(es), subject and message information below to send an email to the selected student. Optionally, a Journal Entry can be created to record the email content. Only the subject and message entered will be sent to the student. To email Action Plans and MAP plans, use those tools to email the content.'
             }, {
                 xtype: 'tbspacer',
@@ -49,6 +49,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
                 height: 30,
+				anchor: '100%',
                 layout: {
                     type: 'hbox'
                 },
@@ -78,7 +79,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     typeAhead: true,
                     queryMode: 'local',
                     allowBlank: true,
-                    width: 300,
+					flex: 1,
                     forceSelection: true,
                     hidden: true,
                     disabled: true
@@ -86,6 +87,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
             }, {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
+				anchor: '100%',
                 height: 30,
                 layout: {
                     type: 'hbox'
@@ -117,6 +119,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
                 height: 30,
+				anchor: '100%',
                 layout: {
                     type: 'hbox'
                 },
@@ -147,6 +150,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 xtype: 'fieldcontainer',
                 fieldLabel: '',
                 height: 30,
+				anchor: '100%',
                 layout: {
                     type: 'hbox'
                 },
@@ -162,7 +166,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     fieldLabel: '',
                     name: 'additionalEmail',
                     itemId: 'additionalEmail',
-                    width: 300,
+                    flex: 1,
                     labelSeparator: '',
                     maxLength: 400 // somewhat smaller than underlying db field b/c spaces
                                    // will be inserted before storage, plus secondaryEmailAddress is potentially
@@ -174,7 +178,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 name: 'emailSubject',
                 itemId: 'emailSubject',
                 allowBlank: false,
-                width: '100%',
+                anchor: '100%',
                 labelWidth: 60
             }, {
                 xtype: 'ssphtmleditor',
