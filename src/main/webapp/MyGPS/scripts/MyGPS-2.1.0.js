@@ -560,7 +560,7 @@
       }
 
       Task.createFromTransferObject = function(taskTO) {
-        var parseDate, parseLink;
+        var parseDate;
         parseDate = function(msSinceEpoch) {
           var d;
           if (msSinceEpoch != null) {
@@ -571,23 +571,7 @@
             return null;
           }
         };
-        parseLink = function(taskLink) {
-          if (taskLink !== null && taskLink.replace(/^\s+|\s+$/g, "") !== "") {
-            if (taskLink.match(/<(.|\n)*?>/igm)) {
-              taskLink = (taskLink.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
-            }
-            if (taskLink.indexOf("//") < 0) {
-              taskLink = "http://" + taskLink;
-            }
-            if (taskLink.search(/<(.|\n)*?>/igm) < 0) {
-              taskLink = "<a href=\"" + taskLink + "\" target=\"_blank\"> " + taskLink.replace('/^.+\/\//', '') + " </a>";
-            }
-            return taskLink;
-          } else {
-            return taskLink;
-          }
-        };
-        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, parseLink(taskTO.link), taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
+        return new Task(taskTO.id, taskTO.type, taskTO.name, taskTO.description, taskTO.htmlLink, taskTO.details, parseDate(taskTO.dueDate), taskTO.completed, taskTO.deletable, taskTO.challengeId, taskTO.challengeReferralId);
       };
 
       return Task;
@@ -1134,14 +1118,19 @@
   namespace('mygps.viewmodel', {
     AbstractSessionViewModel: AbstractSessionViewModel = (function() {
 
+      AbstractSessionViewModel.APP_NAME_API_URL = "/ssp/api/1/mygps/home/appname";
+
       function AbstractSessionViewModel(session) {
         this.session = session;
         this.authenticated = ko.dependentObservable(this.evaluateAuthenticated, this);
         this.authenticatedPersonName = ko.dependentObservable(this.authenticatedPersonName, this);
         this.isnonstudent = ko.dependentObservable(this.evaluateNonStudentPermission, this);
+        this.appName = ko.observable(null);
       }
 
-      AbstractSessionViewModel.prototype.load = function() {};
+      AbstractSessionViewModel.prototype.load = function() {
+        this.loadAppName(this.appName);
+      };
 
       AbstractSessionViewModel.prototype.evaluateAuthenticated = function() {
         var _ref;
@@ -1167,6 +1156,25 @@
           return "" + (person.firstName()) + " " + (person.lastName());
         }
         return null;
+      };
+
+      AbstractSessionViewModel.prototype.loadAppName = function(callback) {
+        var defaultAppName;
+        defaultAppName = "Back to SSP";
+        return $.ajax({
+          type: "GET",
+          url: this.constructor.APP_NAME_API_URL,
+          success: function(result) {
+            if (result !== null && result.replace(/^\s+|\s+$/g, "") !== "") {
+              return callback("Back to " + result);
+            } else {
+              return callback(defaultAppName);
+            }
+          },
+          error: function(fault) {
+            return callback(defaultAppName);
+          }
+        });
       };
 
       return AbstractSessionViewModel;
@@ -1558,8 +1566,6 @@
 
       HomeViewModel.MAP_CURRENT_API_URL = "/ssp/api/1/mygps/plan/current";
 
-      HomeViewModel.APP_NAME_API_URL = "/ssp/api/1/mygps/home/appname";
-
       HomeViewModel.WELCOME_MESSAGE_API_URL = "/ssp/api/1/mygps/home/welcome";
 
       HomeViewModel.TOOLS_LIST_API_URL = "/ssp/api/1/mygps/home/tools";
@@ -1567,7 +1573,6 @@
       function HomeViewModel(session, taskService) {
         HomeViewModel.__super__.constructor.call(this, session, taskService);
         this.personId = ko.dependentObservable(this.evaluatePersonId, this);
-        this.appName = ko.observable(null);
         this.welcomeMessage = ko.observable(null);
         this.toolsList = ko.observableArray([]);
         this.showSelfHelpGuides = ko.dependentObservable(this.evaluateShowSelfHelpGuides, this);
@@ -1645,24 +1650,9 @@
         }
       };
 
-      HomeViewModel.prototype.loadAppName = function(callback) {
-        return $.ajax({
-          type: "GET",
-          url: this.constructor.APP_NAME_API_URL,
-          success: function(result) {
-            if (result !== null && result.replace(/^\s+|\s+$/g, "") !== "") {
-              return callback(result);
-            } else {
-              return callback(null);
-            }
-          },
-          error: function(fault) {
-            return callback(null);
-          }
-        });
-      };
-
       HomeViewModel.prototype.loadWelcomeMessage = function(callback) {
+        var defaultWelcomeMessage;
+        defaultWelcomeMessage = "<h2>Welcome</h2> \n<p>This self help tool will assist you in identifying and overcoming challenges " + "or barriers to your success at this college. Please use the Self Help Guides to begin the process of identifying " + "the challenges you might face, and discovering the solutions available to meet those challenges. " + "The tool will assist you in building a Personal Road Map that will guide you on your journey to success. " + "Good luck on that journey!</p> \n";
         return $.ajax({
           type: "GET",
           url: this.constructor.WELCOME_MESSAGE_API_URL,
@@ -1672,11 +1662,11 @@
               trimmed = result.replace(/^\s+|\s+$/g, "");
               return callback(trimmed === "" ? null : trimmed);
             } else {
-              return callback(null);
+              return callback(defaultWelcomeMessage);
             }
           },
           error: function(fault) {
-            return callback(null);
+            return callback(defaultWelcomeMessage);
           }
         });
       };
@@ -1716,7 +1706,6 @@
 
       HomeViewModel.prototype.resetContent = function() {
         this.toolsList([]);
-        this.appName(null);
         this.welcomeMessage(null);
         this.welcomeMessage(null);
         this.mapLoadAttempted(false);
@@ -1725,7 +1714,6 @@
 
       HomeViewModel.prototype.loadContent = function() {
         this.resetContent();
-        this.loadAppName(this.appName);
         this.loadWelcomeMessage(this.welcomeMessage);
         this.loadToolsList(this.toolsList);
       };
