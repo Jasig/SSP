@@ -66,30 +66,26 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
     renderLink: function(){
         return function(value, metadata){
             var returnValueFormatted = "";
-            var valueHref = value;
-            
+            var valueHref = value.trim();
+
             if (value && value.trim()) {
-                if (valueHref.match(/href="([^"]*)/igm)) {
-                    valueHref = (value.match(/href="([^"]*)/igm)[0]).replace("href=\"", "");
-                }
-                if (valueHref.indexOf("//") < 0) {
-                    valueHref = "http://" + valueHref;
-                }
-                
                 if (valueHref.search(/<(.|\n)*?>/igm) < 0) {
-                    metadata.tdAttr = 'data-qtip="' + valueHref + '"';
+                    if (valueHref.indexOf("//") < 0) {
+                        valueHref = "http://" + valueHref;
+                    }
                     returnValueFormatted = "<a href=\"" + valueHref + "\" target=\"blank\"> " + valueHref.replace('/^.+\/\//', '') + "</a>";
+                    metadata.tdAttr = 'data-qtip="' + Ext.String.htmlEncode(returnValueFormatted) + '"';
                 }
                 else {
                     valueHref = Ext.String.htmlEncode(value);
-                    metadata.tdAttr = 'data-qtip="' + Ext.String.htmlEncode(valueHref) + '"';
-                    returnValueFormatted = value.replace(/<(.|\n)*?>/igm, "");
+                    metadata.tdAttr = 'data-qtip="' + valueHref + '"';
+                    returnValueFormatted = value;
                 }
             }
             return returnValueFormatted;
         }
     },
-    
+
     initComponent: function(){
         var me = this;
         

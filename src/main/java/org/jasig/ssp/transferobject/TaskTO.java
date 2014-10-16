@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.Task;
@@ -46,6 +47,8 @@ public class TaskTO
 	private String type;
 
 	private String name, description, link;
+
+    private String htmlLink;
 
 	private boolean deletable;
 
@@ -88,6 +91,19 @@ public class TaskTO
 		completedDate = task.getCompletedDate();
 		reminderSentDate = task.getReminderSentDate();
 		link = task.getLink();
+
+        if ( StringUtils.isNotBlank(task.getLink()) ) {
+            if (task.getLink().matches(".*<(.|\\n)*?>.*")) {
+                htmlLink = task.getLink();
+            } else {
+                htmlLink = "";
+                if ( task.getLink().indexOf("//") < 0) {
+                    htmlLink = "http://";
+                }
+                htmlLink = "<a href=\"" + htmlLink + task.getLink() + "\" target=\"blank\"> " + task.getLink().replaceAll("^.+//", "") + " </a>";
+            }
+        }
+
 		name = task.getName();
 		description = task.getDescription() == null ? null : task
 				.getDescription().replaceAll("\\<.*?>", "");
@@ -271,6 +287,10 @@ public class TaskTO
 	public String getLink() {
 		return link;
 	}
+
+    public String getHtmlLink() {
+        return htmlLink;
+    }
 
 	public void setLink(String link) {
 		this.link = link;

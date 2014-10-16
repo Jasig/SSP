@@ -21,13 +21,14 @@
 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tasks_subreport" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="51dbb813-035f-483a-9532-ecd7ac9cfc86">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="328"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="dueDate" class="java.util.Date"/>
 	<field name="completedDate" class="java.util.Date"/>
 	<field name="link" class="java.lang.String"/>
+	<field name="htmlLink" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -53,8 +54,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="808e5a0f-9d17-4450-b534-e79deefd4e16" stretchType="RelativeToBandHeight" x="104" y="0" width="321" height="22" isPrintWhenDetailOverflows="true"/>
 				<textElement markup="html"/>
-				<textFieldExpression><![CDATA[(($F{link}.trim().length() < 1 || $F{link} == null) ? null : ("Link: " + (($F{link}.matches(".*<(.|\\n)*?>.*") == false ) ? (($F{link}.indexOf("//") < 0 ) ? "<a href=\"http://" + $F{link} + "\" target=\"blank\">" + $F{link}.replaceAll("^.+//", "") + "</a>" : "<a href=\"" + $F{link} + "\" target=\"blank\">" + $F{link}.replaceAll("^.+//", "") + "</a>") : $F{link})))
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($F{htmlLink}.trim().length() < 1 || $F{htmlLink} == null) ? null : ("Link: " + $F{htmlLink}))]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="8b92d5ba-6e97-4684-ac32-26fd3eba2a48" positionType="Float" x="77" y="27" width="400" height="1"/>

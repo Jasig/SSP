@@ -31,17 +31,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.jasig.ssp.factory.TaskTOFactory;
@@ -73,7 +70,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
 
 /**
@@ -249,7 +245,9 @@ public class PersonTaskController extends
 		final Iterator<ArrayList<Task>> tasklistIter = taskList.iterator();
 		while (tasklistIter.hasNext()) {
 			final ArrayList<Task> currentTaskList = tasklistIter.next();
-			studentActionPlanTOs.add(new StudentActionPlanTO(currentTaskList, // NOPMD
+            final List<TaskTO> taskTOList = TaskTO.toTOList(currentTaskList);
+
+			studentActionPlanTOs.add(new StudentActionPlanTO(taskTOList, // NOPMD
 					(currentTaskList.get(0).getChallenge() == null ? ""
 							: currentTaskList.get(0).getChallenge().getName()),
 					(currentTaskList.get(0).getChallenge() == null ? ""
@@ -348,7 +346,7 @@ public class PersonTaskController extends
 						ObjectStatus.ACTIVE));
 		
 		// strengths
-		final List<Strength> strenghts = strengthService.getStrengthsForPersonIfNoneSelected(
+		final List<Strength> strengths = strengthService.getStrengthsForPersonIfNoneSelected(
 				emailForm.getStrengthIds(), student, securityService.currentUser(),
 				securityService.getSessionId(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
@@ -359,7 +357,7 @@ public class PersonTaskController extends
 				securityService.getSessionId(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 
-		service.sendTasksForPersonToEmail(tasks, goals, strenghts, student,
+		service.sendTasksForPersonToEmail(tasks, goals, strengths, student,
 				emailForm);
 
 		return true;
