@@ -30,7 +30,6 @@ namespace 'mygps.viewmodel'
 			@TOOLS = [@CONTACT_COACH_TOOL,@SELF_HELP_GUIDE_TOOL,@RESOURCES_TOOL,@MAP_TOOL]
 			@MAP_PRINT_CURRENT_API_URL = "/ssp/api/1/mygps/plan/print"
 			@MAP_CURRENT_API_URL = "/ssp/api/1/mygps/plan/current"
-			@APP_NAME_API_URL = "/ssp/api/1/mygps/home/appname"
 			@WELCOME_MESSAGE_API_URL = "/ssp/api/1/mygps/home/welcome"
 			@TOOLS_LIST_API_URL = "/ssp/api/1/mygps/home/tools"
 
@@ -38,7 +37,6 @@ namespace 'mygps.viewmodel'
 			constructor: ( session, taskService ) ->
 				super( session, taskService )
 				@personId = ko.dependentObservable(@evaluatePersonId, this)
-				@appName = ko.observable( null )
 				@welcomeMessage = ko.observable( null )
 				@toolsList = ko.observableArray( [] )
 				@showSelfHelpGuides = ko.dependentObservable( @evaluateShowSelfHelpGuides, this )
@@ -99,19 +97,6 @@ namespace 'mygps.viewmodel'
 					})
 
 
-			loadAppName: (callback) ->
-				defaultAppName = "Back to SSP"
-				$.ajax({
-					type: "GET"
-					url: @constructor.APP_NAME_API_URL
-					success: (result) ->
-						if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
-							callback(result)
-						else
-							callback(defaultAppName)
-					error: (fault) ->
-						callback(defaultAppName)
-				})
 
 			loadWelcomeMessage: (callback) ->
 				defaultWelcomeMessage = "<h2>Welcome</h2> \n<p>This self help tool will assist you in identifying and overcoming challenges " +
@@ -159,7 +144,6 @@ namespace 'mygps.viewmodel'
 				# On a more mechanical note, would be nice if we didn't have to know what the default should
 				# be to reset to: http://anasnakawa.com/posts/resetting-knockout-observables/
 				@toolsList( [] )
-				@appName( null )
 				@welcomeMessage( null )
 				@welcomeMessage( null )
 				@mapLoadAttempted(false)
@@ -167,7 +151,6 @@ namespace 'mygps.viewmodel'
 
 			loadContent: () ->
 				@resetContent()
-				@loadAppName(@appName)
 				@loadWelcomeMessage(@welcomeMessage)
 				@loadToolsList(@toolsList)
 				return

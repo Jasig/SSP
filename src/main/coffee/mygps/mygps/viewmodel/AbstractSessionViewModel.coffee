@@ -22,14 +22,18 @@ namespace 'mygps.viewmodel'
 	AbstractSessionViewModel:
 		
 		class AbstractSessionViewModel
-			
+
+			@APP_NAME_API_URL = "/ssp/api/1/mygps/home/appname"
+
 			constructor: ( session ) ->
 				@session = session
 				@authenticated = ko.dependentObservable( @evaluateAuthenticated, this )
 				@authenticatedPersonName = ko.dependentObservable( @authenticatedPersonName, this )
 				@isnonstudent = ko.dependentObservable( @evaluateNonStudentPermission, this )
-				
+				@appName = ko.observable( null )
+
 			load: () ->
+				@loadAppName(@appName)
 				return
 				
 			evaluateAuthenticated: () ->
@@ -48,3 +52,17 @@ namespace 'mygps.viewmodel'
 				if person?
 					return "#{ person.firstName() } #{ person.lastName() }"
 				return null
+
+			loadAppName: (callback) ->
+				defaultAppName = "Back to SSP"
+				$.ajax({
+					type: "GET"
+					url: @constructor.APP_NAME_API_URL
+					success: (result) ->
+						if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
+							callback("Back to " + result)
+						else
+							callback(defaultAppName)
+					error: (fault) ->
+						callback(defaultAppName)
+				})
