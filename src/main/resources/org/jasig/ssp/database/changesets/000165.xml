@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="dan.mccallum" id="create bulk program status change batch size config" >
+        <insert tableName="config">
+            <column name="id" value="83d95d70-5664-11e4-bd09-406c8f22c3ce" />
+            <column name="name" value="program_staus_bulk_change_batch_size" />
+            <column name="description"
+                    value="Bulk Program Status Change Job Config: Controls how many Program Status changes will be
+                    created at once. Keep relatively small to avoid holding transactions open for a very long time and
+                    to limit the impact of 'bad apples'." />
+            <column name="value" value="25" />
+            <column name="default_value" value="25" />
+            <column name="created_date" valueDate="2014-10-17T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-17T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="10040" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='83d95d70-5664-11e4-bd09-406c8f22c3ce'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create config for max bulk program status change dlq length" author="dan.mccallum">
+        <insert tableName="config">
+            <column name="id" value="0fe4ceae-5666-11e4-86e7-406c8f22c3ce" />
+            <column name="name" value="program_staus_bulk_change_max_dlq_size" />
+            <column name="description"
+                    value="Bulk Program Status Change Job Config: Sets a limit on the total number of completely failed
+                    changes that will be tracked by the dead letter queue for post-job execution analysis. Very large
+                    values run the risk of requiring large memory and data storage footprints." />
+            <column name="value" value="100" />
+            <column name="default_value" value="100" />
+            <column name="created_date" valueDate="2014-10-17T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-17T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="10050" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='0fe4ceae-5666-11e4-86e7-406c8f22c3ce'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create config for bulk p.s. change job on dlq overflow" author="dan.mccallum">
+        <insert tableName="config">
+            <column name="id" value="20875051-5665-11e4-8ae8-406c8f22c3ce" />
+            <column name="name" value="program_staus_bulk_change_fail_on_dlq_overflow" />
+            <column name="description"
+                    value="Bulk Program Status Change Config: Controls whether exceeding
+                    program_staus_bulk_change_max_dlq_size will fail a bulk program status change job at whatever time
+                    that occurs. Default is 'false' which allows the job to proceed, silently skipping any changes that
+                    fail and cannot be added to the dead letter queue." />
+            <column name="value" value="false" />
+            <column name="default_value" value="false" />
+            <column name="created_date" valueDate="2014-10-17T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-17T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="10060" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='20875051-5665-11e4-8ae8-406c8f22c3ce'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

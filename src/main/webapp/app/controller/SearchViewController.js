@@ -148,7 +148,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 		return me.callParent(arguments);
     },
-    
+
    personChanged: function(){
 	   var record = this.getView().getStore().findRecord("id", this.personLite.get("id"));
 	   if(record != null){
@@ -703,7 +703,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			return true; // otherwise you'll get the same event processed once for every tab you've visited
 		}
 		if(action == 'non-participating'){
-			Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+			var dialog = Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
 				height: 150,
 				width: 500
 			}).show();
@@ -892,50 +892,127 @@ Ext.define('Ssp.controller.SearchViewController', {
         	}
         }
 	},
-	bulkEmail: function(){
-		var me=this;
-		var store = null;
+	buildBulkActionSearchCriteria: function() {
+		var me = this;
 		var criteria = {};
-
 		criteria.programStatus = me.translateSelectedStatustoSearchableStatus();
 
-		if ( me.getIsCaseload() )
-		{
-			store = me.caseloadStore;
+		if ( me.getIsCaseload() ) {
 			criteria.myCaseload = true;
-		}else
-		if( me.getIsWatchList() )
-		{
-			store = me.watchListStore;
+		} else if( me.getIsWatchList() ) {
 			criteria.myWatchList = true;
-		} else
-		{
-			store = me.searchStore;
+		} else {
+			// programmer error
+			throw "Unrecognized search panel state";
 		}
+		return criteria;
+	},
+	onBulkProgramStatusChangeFailure: function(resp) {
+		var me = this;
+		me.appEventsController.loadMaskOff();
+		if ( resp && resp.responseText ) {
+			// Big chunk of this messaging copy/pasted from EmailStudentForm
+			var rspTextStruct = Ext.decode(resp.responseText);
+			if ( rspTextStruct.message && rspTextStruct.message.indexOf("Person search parameters matched no records") > -1 ) {
+				Ext.Msg.alert('SSP Error','No user records matched your current search criteria. <br/><br/>' +
+					'Retry with different search criteria.');
+			} else {
+				Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your administrator');
+			}
+		} else {
+			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your administrator');
+		}
+	},
+	onBulkProgramStatusChangeSuccess: function() {
+		var me = this;
+		me.appEventsController.loadMaskOff();
+		Ext.Msg.alert('Bulk Program Status Change Request Queued','Your bulk Program Status change request has ' +
+			'been queued successfully. Bulk changes are processed gradually and may not be reflected immediately on-screen.');
+	},
+	doBulkProgramStatusChange: function(action, programStatusChangeReasonId, programStatusChangeReasonName) {
+		var me = this;
+
+		var model = Ext.create('Ssp.model.BulkProgramStatusChangeRequest', {
+			programStatusSpec: Ext.create('Ssp.model.PersonProgramStatus', {
+				programStatusId: me.translateProgramStatusActionToDomainId(action),
+				programStatusChangeReasonId: programStatusChangeReasonId === undefined ? null : programStatusChangeReasonId
+			}).data, // if you just attach the model itself, the way we do JSON serialization will result in a whole bunch
+					 // of Ext.js infrastructure fields being sent
+			criteria: me.buildBulkActionSearchCriteria()
+		});
+
+		var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('bulk') )+'/programStatus';
+		var jsonData = model.data;
+
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'POST',
+			jsonData: jsonData,
+			successFunc: me.onBulkProgramStatusChangeSuccess,
+			failureFunc: me.onBulkProgramStatusChangeFailure,
+			scope: me
+		});
+	},
+	newDoBulkProgramStatusChange: function(action) {
+		var me = this;
+		return function(programStatusChangeReasonId, programStatusChangeReasonName) {
+			me.doBulkProgramStatusChange(action, programStatusChangeReasonId, programStatusChangeReasonName);
+		}
+	},
+	cancelBulkProgramStatusChange: function(action) {
+		var me = this;
+		me.appEventsController.loadMaskOff();
+	},
+	newCancelBulkProgramStatusChange: function(action) {
+		var me = this;
+		return function() {
+			me.cancelBulkProgramStatusChange(action);
+		}
+	},
+	bulkProgramStatusChange: function(action) {
+		var me = this;
+		me.appEventsController.loadMaskOn();
+		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
+			var dialog = Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
+				height: 150,
+				width: 500,
+				isBulk: true,
+				actionCallbacks: {
+					ok: me.newDoBulkProgramStatusChange(action),
+					cancel: me.newCancelBulkProgramStatusChange(action),
+					scope: me
+				}
+			}).show();
+			if ( !(dialog) || !(dialog.isVisible()) ) {
+				if ( dialog && Ext.isFunction(dialog.destroy) ) {
+					dialog.destroy();
+				}
+				me.cancelBulkProgramStatusChange(action);
+			} // otherwise dialog takes care of destroying itself.
+		} else {
+			me.doBulkProgramStatusChange(action);
+		}
+	},
+	bulkEmail: function(){
+		var me=this;
 		if ( me.emailStudentPopup ) {
 			me.emailStudentPopup.destroy();
 		}
 		me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView',{
 			isBulk: true,
-			bulkCriteria: criteria
+			bulkCriteria: me.buildBulkActionSearchCriteria()
 		});
 		me.emailStudentPopup.show();
 	},
 	exportSearch: function(searchType) {
 		var me = this;
-		window.open(me.exportService.buildExportCaseloadUrl(me.translateSelectedStatustoSearchableStatus(), searchType),
-			'_blank');
+		var url = me.exportService.buildExportCaseloadUrl(me.translateSelectedStatustoSearchableStatus(), me.translateCurrentTabToApiPath());
+		window.open(url,'_blank');
 	},
-	onExportConfirm: function(btnId, searchType) {
+	onExportConfirm: function(btnId) {
 		var me = this;
 		if (btnId=="ok") {
-			me.exportSearch(searchType);
-		}
-	},
-	newOnExportConfirm: function (searchType) {
-		var me = this;
-		return function(btnId) {
-			me.onExportConfirm(btnId, searchType);
+			me.exportSearch();
 		}
 	},
 	onBulkEmailConfirm: function(btnId) {
@@ -944,29 +1021,35 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.bulkEmail();
 		}
 	},
+	onBulkProgramStatusChangeConfirm: function(btnId, action) {
+		var me = this;
+		if (btnId=="ok") {
+			me.bulkProgramStatusChange(action);
+		}
+	},
+	newOnBulkProgramStatusChangeConfirm: function(action) {
+		var me = this;
+		return function(btnId) {
+			me.onBulkProgramStatusChangeConfirm(btnId, action);
+		}
+	},
 	promptWithExportCount: function(count) {
 		var me = this;
 		var message;
 		count = parseInt(count);
-		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// loadMaskOff() copy/pasted in both prompt*() functions to try to delay that dismissal as long
 		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
 		me.appEventsController.loadMaskOff();
-		var searchRsltType = null;
-		if ( me.getIsCaseload() ) {
-			searchRsltType = 'caseload';
-		}
-		if ( me.getIsWatchList() ) {
-			searchRsltType = 'watchlist';
-		}
+
 		Ext.Msg.confirm({
 			title:'Confirm',
-			msg: count + " student/s will be exported. Continue?",
+			msg: count + " user/s will be exported. Continue?",
 			buttons: Ext.Msg.OKCANCEL,
-			fn: me.newOnExportConfirm(searchRsltType),
+			fn: me.onExportConfirm,
 			scope: me
 		});
 	},
-	promptWithEmailCount: function(count) {
+	promptWithBulkEmailCount: function(count) {
 		var me = this;
 		count = parseInt(count);
 		var maxEmail =  parseInt(me.configStore.getConfigByName('mail_bulk_message_limit').trim());
@@ -984,38 +1067,84 @@ Ext.define('Ssp.controller.SearchViewController', {
 		} else {
 			Ext.Msg.confirm({
 				title:'Confirm',
-				msg: count + " student/s will be emailed. Continue?",
+				msg: count + " user/s will be emailed. Continue?",
 				buttons: Ext.Msg.OKCANCEL,
 				fn: me.onBulkEmailConfirm,
 				scope: me
 			});
 		}
 	},
-	newBulkActionCountResultFailureCallback: function(actionType) {
+	promptWithBulkProgramStatusChangeCount: function(count, action) {
+		var me = this;
+		var message;
+		count = parseInt(count);
+		var programStatusName = me.translateProgramStatusActionToDisplayName(action);
+		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+
+		me.appEventsController.loadMaskOff();
+		if ( programStatusName === null ) {
+			Ext.Msg.alert('SSP Error', 'Unrecognized target Program Status.');
+			return;
+		}
+		if ( count === 0 ) {
+			Ext.Msg.alert('Too Few Search Results','Cannot change Program Status on an empty caseload/watchlist/search result.');
+			return;
+		}
+		var msg = count + " user/s will be considered for transition to the '" + programStatusName + "' status. Users " +
+			"already having that status and users who haven't already been created will be unaffected. Continue?";
+		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
+			msg = count + " user/s will be considered for transition to the '" + programStatusName + "' status. Users " +
+				"already having that status and the Reason selected in the next dialog will be unaffected, as will users " +
+				"who haven't already been created. Continue?";
+		}
+		Ext.Msg.confirm({
+			title:'Confirm',
+			msg: msg,
+			buttons: Ext.Msg.OKCANCEL,
+			fn: me.newOnBulkProgramStatusChangeConfirm(action),
+			scope: me
+		});
+	},
+	newBulkActionCountResultFailureCallback: function(action) {
 		var me = this;
 		return function(cnt) {
-			return me.onBulkActionCountFailure(cnt, actionType);
+			return me.onBulkActionCountFailure(cnt, action);
 		}
 	},
-	newBulkActionCountResultSuccessCallback: function(actionType) {
+	newBulkActionCountResultSuccessCallback: function(action) {
 		var me = this;
 		return function(cnt) {
-			return me.onBulkActionCountSuccess(cnt, actionType);
+			return me.onBulkActionCountSuccess(cnt, action);
 		}
 	},
-	onBulkActionCountFailure: function(cnt, actionType) {
+	onBulkActionCountFailure: function(cnt, action) {
 		var me = this;
 		me.appEventsController.loadMaskOff();
 		Ext.Msg.alert('SSP Error', 'Failed to look up the number of records which would be affected by the ' +
 			'requested action. Retry or contact your system administrator');
 	},
-	onBulkActionCountSuccess: function(cnt, actionType) {
+	onBulkActionCountSuccess: function(cnt, action) {
 		var me = this;
-		if ( actionType === 'EXPORT' ) {
+		if ( action === 'EXPORT' ) {
 			me.promptWithExportCount(cnt);
-		} else if ( actionType === 'EMAIL' ) {
-			me.promptWithEmailCount(cnt);
+		} else if ( action === 'EMAIL' ) {
+			me.promptWithBulkEmailCount(cnt);
+		} else if ( action.indexOf('PROGRAM_STATUS_') === 0 ) {
+			me.promptWithBulkProgramStatusChangeCount(cnt, action);
+		} else {
+			Ext.Msg.alert('SSP Error', 'Unrecognized bulk action request');
 		}
+	},
+	translateCurrentTabToApiPath: function() {
+		var me = this;
+		if ( me.getIsCaseload() ) {
+			return 'caseload';
+		}
+		if ( me.getIsWatchList() ) {
+			return 'watchlist';
+		}
+		return 'search';
 	},
 	translateSelectedStatustoSearchableStatus: function() {
 		var me = this;
@@ -1026,6 +1155,32 @@ Ext.define('Ssp.controller.SearchViewController', {
 		} else {
 			return me.getCaseloadStatusCombo().getValue()
 		}
+	},
+	translateProgramStatusActionToDisplayName: function(action) {
+		switch (action) {
+			case 'PROGRAM_STATUS_ACTIVE':
+				return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_NAME;
+			case 'PROGRAM_STATUS_INACTIVE':
+				return Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_NAME;
+			case 'PROGRAM_STATUS_NON_PARTICIPATING':
+				return Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_NAME;
+			case 'PROGRAM_STATUS_NO_SHOW':
+				return Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_NAME;
+		}
+		return null;
+	},
+	translateProgramStatusActionToDomainId: function(action) {
+		switch (action) {
+			case 'PROGRAM_STATUS_ACTIVE':
+				return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+			case 'PROGRAM_STATUS_INACTIVE':
+				return Ssp.util.Constants.INACTIVE_PROGRAM_STATUS_ID;
+			case 'PROGRAM_STATUS_NON_PARTICIPATING':
+				return Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID;
+			case 'PROGRAM_STATUS_NO_SHOW':
+				return Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
+		}
+		return null;
 	},
 	onCaseloadActionComboSelect: function( comp, records, eOpts ){
 		var me=this;

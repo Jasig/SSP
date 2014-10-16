@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BulkEmailStudentRequestForm implements Serializable {
+public class BulkEmailStudentRequestForm implements Serializable, HasPersonSearchRequest {
 
 	private static final long serialVersionUID = 1L;
 
@@ -162,6 +162,7 @@ public class BulkEmailStudentRequestForm implements Serializable {
 		return hasSendToPrimaryEmail() || hasSendToSecondaryEmail();
 	}
 
+	@Override
 	public PersonSearchRequestTO getCriteria() {
 		return criteria;
 	}

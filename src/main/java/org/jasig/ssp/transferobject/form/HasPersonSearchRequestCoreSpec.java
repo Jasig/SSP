@@ -16,31 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.jobqueue.impl;
+package org.jasig.ssp.transferobject.form;
 
-import org.jasig.ssp.service.jobqueue.JobExecutionResult;
-import org.jasig.ssp.service.jobqueue.JobExecutor;
+public interface HasPersonSearchRequestCoreSpec<T extends HasPersonSearchRequest> {
 
-public class JobExecutionBookkeepingException extends JobExecutionException {
-
-	public JobExecutionBookkeepingException() {
-		super();
-	}
-
-	public JobExecutionBookkeepingException(String message) {
-		super(message);
-	}
-
-	public JobExecutionBookkeepingException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public JobExecutionBookkeepingException(Throwable cause) {
-		super(cause);
-	}
-
-	public JobExecutionBookkeepingException(JobExecutionResult jobExecutionResult) {
-		super(jobExecutionResult);
-	}
+	T getCoreSpec();
 
 }

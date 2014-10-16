@@ -1248,7 +1248,12 @@
                     "clsName": "Ssp.model.EmailStudentRequest",
                     "name": "EmailStudentRequest.js",
                     "path": "/app/model/"
-                }, 
+                },
+                {
+                    "clsName": "Ssp.model.BulkProgramStatusChangeRequest",
+                    "name": "BulkProgramStatusChangeRequest.js",
+                    "path": "/app/model/"
+                },
                 {
                     "clsName": "Ssp.model.BulkEmailStudentRequest",
                     "name": "BulkEmailStudentRequest.js",

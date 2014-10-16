@@ -29,22 +29,36 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
 	width: '100%',
 	height: '100%',
 	title: 'Please provide a reason the student will no longer be participating:',
+	config: {
+		actionCallbacks: null,
+		isBulk: false,
+	},
     initComponent: function(){
     	var me=this;
     	Ext.applyIf(me,
     			   {
 				    modal: true, 
 		    		layout: 'anchor',
-    				items: [{
+    				items: [
+					// tbspacer ensures a little bit of breathing room at the top of the form.
+					// not sure why exactly, but if the student name displayfield is hidden
+					// the rest of the form gets crammed right up to the top of the dialog
+					// with no padding.
+					{
+						xtype: 'tbspacer',
+						height: 5
+					},{
                     	xtype: 'displayfield',
                     	fieldLabel: 'Student',
                     	value: me.personLite.get('displayFullName'),
-                    	anchor: '95%'
+                    	anchor: '95%',
+                    	hidden: me.getIsBulk(),
+                    	disabled: me.getIsBulk()
                     },{
     			        xtype: 'combobox',
     			        itemId: 'programStatusChangeReasonCombo',
     			        name: 'programStatusChangeReasonId',
-    			        fieldLabel: 'Reason 2',
+    			        fieldLabel: 'Reason',
     			        emptyText: 'Select One',
     			        store: me.store,
     			        valueField: 'id',
@@ -72,5 +86,13 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
 		    	    });
     	
     	return me.callParent(arguments);
-    }
+    },
+
+	show: function() {
+		var me = this;
+		if ( me.getController().beforeShow(me) ) {
+			return me.callParent(arguments);
+		}
+		return me;
+	},
 });

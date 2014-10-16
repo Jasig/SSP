@@ -16,37 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.jobqueue.impl;
+package org.jasig.ssp.transferobject.form;
 
-import org.jasig.ssp.service.jobqueue.JobExecutionResult;
-import org.jasig.ssp.service.jobqueue.JobExecutor;
 
-public class JobExecutionException extends RuntimeException {
+import java.io.Serializable;
 
-	private JobExecutionResult jobExecutionResult;
+public class BulkProgramStatusChangeJobSpec implements Serializable, HasPersonSearchRequestCoreSpec<BulkProgramStatusChangeRequestForm> {
 
-	public JobExecutionException() {
-		super();
+	private BulkProgramStatusChangeRequestForm coreSpec;
+
+	public BulkProgramStatusChangeJobSpec() {
+		this(null);
 	}
 
-	public JobExecutionException(String message) {
-		super(message);
+	public BulkProgramStatusChangeJobSpec(BulkProgramStatusChangeRequestForm coreSpec) {
+		this.coreSpec = coreSpec;
 	}
 
-	public JobExecutionException(String message, Throwable cause) {
-		super(message, cause);
+	public BulkProgramStatusChangeRequestForm getCoreSpec() {
+		return coreSpec;
 	}
 
-	public JobExecutionException(Throwable cause) {
-		super(cause);
-	}
-
-	public JobExecutionException(JobExecutionResult jobExecutionResult) {
-		this(jobExecutionResult.getCause());
-		this.jobExecutionResult = jobExecutionResult;
-	}
-
-	public JobExecutionResult getJobExecutionResult() {
-		return jobExecutionResult;
+	public void setCoreSpec(BulkProgramStatusChangeRequestForm coreSpec) {
+		this.coreSpec = coreSpec;
 	}
 }

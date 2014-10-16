@@ -64,6 +64,10 @@ Ext.define('Ssp.view.Search', {
             }, {
                 xtype: 'toolbar',
                 dock: 'top',
+                // enableOverlow is really what we want, but just doesn't work in our current Ext.js version:
+                // http://www.sencha.com/forum/showthread.php?269044-Combo-Selection-Event-and-Button-Click-Event-not-firing-inside-overflow-toolbar
+                // enableOverflow: true,
+                overflowX: 'auto',
                 items: [{
                     tooltip: 'Add Student',
                     text: '',
@@ -142,7 +146,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
                     fieldLabel: '',
-                    emptyText: 'Select Action',
+                    emptyText: 'Bulk Action',
                     store: me.caseloadActionsStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -152,8 +156,9 @@ Ext.define('Ssp.view.Search', {
                     hidden: !me.authenticatedPerson.hasAnyBulkPermissions(),
                     queryMode: 'local',
                     allowBlank: true,
-                    forceSelection: false,
+                    forceSelection: true,
                     width: 100,
+                    matchFieldWidth: false,
                     height: 25,
                     labelWidth: 75
                 },{
@@ -164,18 +169,20 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'caseloadStatusCombo',
                     name: 'programStatusId',
                     fieldLabel: '',
-                    emptyText: 'Select One',
+                    emptyText: 'Filter',
                     store: me.programStatusesStore,
                     valueField: 'id',
                     displayField: 'name',
                     mode: 'local',
                     align: 'center',
                     typeAhead: false,
+                    editable: false,
                     queryMode: 'local',
                     allowBlank: false,
                     hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
-                    forceSelection: false,
+                    forceSelection: true,
                     width: 100,
+                    matchFieldWidth: false,
                     height: 25,
                     labelWidth: 75
                 }    ]

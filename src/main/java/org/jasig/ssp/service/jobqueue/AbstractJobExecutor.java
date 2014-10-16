@@ -16,18 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.jobqueue.impl;
+package org.jasig.ssp.service.jobqueue;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.model.jobqueue.Job;
+import org.jasig.ssp.service.jobqueue.JobExecutionBookkeepingException;
+import org.jasig.ssp.service.jobqueue.JobExecutionException;
 import org.jasig.ssp.service.jobqueue.JobExecutionResult;
 import org.jasig.ssp.service.jobqueue.JobExecutionStatus;
 import org.jasig.ssp.service.jobqueue.JobExecutor;
 import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.jobqueue.JobWorkflowStatusDescription;
-import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.util.exception.RuntimeIoException;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -64,11 +65,11 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	private JobService jobService;
 	private String name;
 
-	public AbstractJobExecutor(String name) {
+	protected AbstractJobExecutor(String name) {
 		this(name,null,null,null);
 	}
 
-	public AbstractJobExecutor(String name, JobService jobService, PlatformTransactionManager transactionManager) {
+	protected AbstractJobExecutor(String name, JobService jobService, PlatformTransactionManager transactionManager) {
 		this(name,jobService,transactionManager,null);
 	}
 
@@ -98,11 +99,11 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	/**
 	 * Finds and executes the given {@link Job} transactionally in {@link #executeInTransaction(java.util.UUID)}.
 	 * Expects that method to raise exceptions if the transaction should be rolled back. In the case of a
-	 * {@link JobExecutionException}, the {@link JobExecutionResult} is unpacked. If that object's and
+	 * {@link org.jasig.ssp.service.jobqueue.JobExecutionException}, the {@link JobExecutionResult} is unpacked. If that object's and
 	 * {@link JobExecutionStatus} indicates the job should be retried, {@link executionState} is written in
 	 * a separate transaction {@link #prepareRetryInTransaction(java.util.UUID, org.jasig.ssp.service.jobqueue.JobExecutionResult)}.
 	 * {@link #toNonExceptionalWorkflowResult(org.jasig.ssp.service.jobqueue.JobExecutionResult, java.util.UUID)}
-	 * and {@link #toExceptionalWorkflowResult(org.jasig.ssp.service.jobqueue.JobExecutionResult, JobExecutionException, java.util.UUID)}
+	 * and {@link #toExceptionalWorkflowResult(org.jasig.ssp.service.jobqueue.JobExecutionResult, org.jasig.ssp.service.jobqueue.JobExecutionException, java.util.UUID)}
 	 * can be overriden to control how execution results are translated to workflow results.
 	 *
 	 *
@@ -137,14 +138,14 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 			final JobExecutionResult<T> exResult =  e.getJobExecutionResult();
 			if ( exResult == null ) {
 				// really isn't supposed to happen, hence relatively high log level
-				getLogger().error("Job {} execution exited unexpectedly", jobId, e);
+				getCurrentLogger().error("Job {} execution exited unexpectedly", jobId, e);
 				return newWorkflowResultWithErrorMessage(JobExecutionStatus.ERROR, e.getMessage());
 			}
 
 			if ( exResult.getStatus() == JobExecutionStatus.ERROR ||
 					exResult.getStatus() == JobExecutionStatus.FAILED ||
 					exResult.getStatus() == JobExecutionStatus.INTERRUPTED ) {
-				getLogger().warn("Job {} execution did not complete successfully", jobId, e);
+				getCurrentLogger().warn("Job {} execution did not complete successfully", jobId, e);
 				try {
 					txnTemplate.execute(new TransactionCallbackWithoutResult() {
 						@Override
@@ -153,11 +154,11 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 						}
 					});
 				} catch ( Exception ee ) {
-					getLogger().error("Job {} could not store final execution state.", jobId, e);
+					getCurrentLogger().error("Job {} could not store final execution state.", jobId, e);
 				}
 				return toExceptionalWorkflowResult(exResult, e, jobId);
 			} else if ( exResult.getStatus() == JobExecutionStatus.FAILED_PARTIAL ) {
-				getLogger().warn("Job {} execution encountered a failure, but requested a retry after storing"
+				getCurrentLogger().warn("Job {} execution encountered a failure, but requested a retry after storing"
 						+ " execution state in a separate transaction", jobId, e);
 				// 'main' execution transaction had to be rolled back, but still want to
 				// update job state
@@ -170,7 +171,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 					});
 					return toExceptionalWorkflowResult(exResult, e, jobId);
 				} catch ( Exception ee ) {
-					getLogger().error("Job {} could not store retry state so retry will be skipped and Job will error out", jobId, ee);
+					getCurrentLogger().error("Job {} could not store retry state so retry will be skipped and Job will error out", jobId, ee);
 					return newWorkflowResultWithErrorMessage(JobExecutionStatus.ERROR, ee.getMessage());
 				}
 			} else {
@@ -180,7 +181,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 
 		} catch ( Exception e ) {
 			// really isn't supposed to happen, hence higher log level
-			getLogger().error("Job {} execution exited unexpectedly", jobId, e);
+			getCurrentLogger().error("Job {} execution exited unexpectedly", jobId, e);
 			return newWorkflowResultWithErrorMessage(JobExecutionStatus.ERROR, UNHANDLED_EXECUTION_EXCEPTION_STATUS_MSG, jobId);
 		}
 	}
@@ -385,20 +386,20 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	protected JobExecutionResult<JobWorkflowStatusDescription> newWorkflowResultWithSuccessMessage(JobExecutionStatus status,
 																								 String successMessage) {
 		return new JobExecutionResult<JobWorkflowStatusDescription>(status,
-				new JobWorkflowStatusDescription(successMessage,null,null));
+				new JobWorkflowStatusDescription(successMessage,null));
 	}
 
 	protected JobExecutionResult<JobWorkflowStatusDescription> newWorkflowResultWithErrorMessage(JobExecutionStatus status,
 																								 String errorMessage) {
 		return new JobExecutionResult<JobWorkflowStatusDescription>(status,
-				new JobWorkflowStatusDescription(null, Lists.newArrayList(errorMessage),null));
+				new JobWorkflowStatusDescription(null, Lists.newArrayList(errorMessage)));
 	}
 
 	protected JobExecutionResult<JobWorkflowStatusDescription> newWorkflowResultWithErrorMessage(JobExecutionStatus status,
 																								  String errorMessage,
 																								  Object msgArg1) {
 		return new JobExecutionResult<JobWorkflowStatusDescription>(status,
-				new JobWorkflowStatusDescription(null, Lists.newArrayList(MessageFormat.format(errorMessage, msgArg1)),null));
+				new JobWorkflowStatusDescription(null, Lists.newArrayList(MessageFormat.format(errorMessage, msgArg1))));
 	}
 
 	protected JobExecutionResult<JobWorkflowStatusDescription> newWorkflowResultWithErrorMessage(JobExecutionStatus status,
@@ -406,7 +407,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 																								 Object msgArg1,
 																								 Object msgArg2) {
 		return new JobExecutionResult<JobWorkflowStatusDescription>(status,
-				new JobWorkflowStatusDescription(null, Lists.newArrayList(MessageFormat.format(errorMessage, msgArg1, msgArg2)),null));
+				new JobWorkflowStatusDescription(null, Lists.newArrayList(MessageFormat.format(errorMessage, msgArg1, msgArg2))));
 	}
 
 	protected Job findJob(UUID jobId) {
@@ -455,6 +456,6 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 		return name;
 	}
 
-	protected abstract Logger getLogger();
+	protected abstract Logger getCurrentLogger();
 
 }

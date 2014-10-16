@@ -21,29 +21,37 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
     model: 'Ssp.model.reference.AbstractReference',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson'
     },
     constructor: function(){
         var me=this;
         me.callParent( arguments );
-		Ext.apply(this, { proxy: '' ,
-			  autoLoad: false });
+        Ext.apply(this, { proxy: '',
+            autoLoad: false });
         return me;
     },
     load: function() {
-    	var me = this;
-    	if(me.getCount() < 1)
-    	{
-    		if(me.authenticatedPerson.hasAccess('EXPORT_TO_CSV'))
-    		{
-    			me.add({id: "EXPORT", name: "Export to CSV"});
-    		}
-    		if(me.authenticatedPerson.hasAccess('BULK_EMAIL'))
-    		{
-    			me.add({id: "EMAIL", name: "Email Students"});
-    		}
-    	}
-        return me;   	
-    	
+        var me = this;
+        if(me.getCount() < 1) {
+            if(me.authenticatedPerson.hasAccess('EXPORT_TO_CSV_ACTION')) {
+                me.add({id: "EXPORT", name: "Export to CSV"});
+            }
+            if(me.authenticatedPerson.hasAccess('BULK_EMAIL_ACTION')) {
+                me.add({id: "EMAIL", name: "Send Email"});
+            }
+            if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
+                me.add({id: "PROGRAM_STATUS_ACTIVE", name: "Set 'Active' Status"});
+            }
+            if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
+                me.add({id: "PROGRAM_STATUS_INACTIVE", name: "Set 'Inactive' Status"});
+            }
+            if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
+                me.add({id: "PROGRAM_STATUS_NON_PARTICIPATING", name: "Set 'Non-Participating' Status"});
+            }
+            if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
+                me.add({id: "PROGRAM_STATUS_NO_SHOW", name: "Set 'No-Show' Status"});
+            }
+        }
+        return me;
     }
 });

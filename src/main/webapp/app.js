@@ -259,6 +259,7 @@ Ext.require([
 	'Ssp.model.Appointment',
 	'Ssp.model.CaseloadPerson',
 	'Ssp.model.BulkEmailStudentRequest',
+	'Ssp.model.BulkProgramStatusChangeRequest',
 	'Ssp.model.EmailStudentRequest',
 	'Ssp.model.SearchPerson',
 	'Ssp.model.SearchCriteria',

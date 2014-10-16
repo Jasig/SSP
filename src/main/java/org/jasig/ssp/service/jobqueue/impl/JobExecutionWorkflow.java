@@ -38,7 +38,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Adapts between the overal {@link Job} workflow and the actual performing of its work while the workflow is in the
+ * Adapts between the overall {@link Job} workflow and the actual performing of its work while the workflow is in the
  * {@code EXECUTING} state.
  */
 public class JobExecutionWorkflow implements Runnable {
@@ -83,7 +83,7 @@ public class JobExecutionWorkflow implements Runnable {
 			LOGGER.error("Exception escaped scheduled job {} 'doWork' loop. This is a programmer error.", jobId, e);
 			final String msg = MessageFormat.format(JOB_EXECUTION_SYSTEM_ERROR_MSG, jobId);
 			workResult = new JobExecutionResult<JobWorkflowStatusDescription>(JobExecutionStatus.ERROR,
-					new JobWorkflowStatusDescription(null, Lists.newArrayList(msg),null));
+					new JobWorkflowStatusDescription(null, Lists.newArrayList(msg)));
 		}
 
 		markTerminated(workResult);
@@ -95,7 +95,7 @@ public class JobExecutionWorkflow implements Runnable {
 		if ( jobExecutor == null ) {
 			final String msg = MessageFormat.format(NO_SUCH_EXECUTION_COMPONENT_MSG, executionComponentName);
 			return new JobExecutionResult<JobWorkflowStatusDescription>(JobExecutionStatus.ERROR,
-					new JobWorkflowStatusDescription(null, Lists.newArrayList(msg),null));
+					new JobWorkflowStatusDescription(null, Lists.newArrayList(msg)));
 		}
 
 		final AtomicReference<JobExecutionResult<JobWorkflowStatusDescription>> resultHolder =

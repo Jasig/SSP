@@ -232,7 +232,7 @@ public class JobServiceImpl implements JobService, ApplicationContextAware, Bean
 	}
 
 	private Job markErrored(Job job, Exception e) {
-		return markErrored(job, new JobWorkflowStatusDescription(null, Lists.newArrayList(e.getMessage()), null));
+		return markErrored(job, new JobWorkflowStatusDescription(null, Lists.newArrayList(e.getMessage())));
 	}
 
 	private Job markErrored(Job job, JobWorkflowStatusDescription d) {
@@ -293,13 +293,12 @@ public class JobServiceImpl implements JobService, ApplicationContextAware, Bean
 				throw new IllegalStateException("Job execution result indicates job should not be terminated");
 			case DONE:
 				return markCompleted(job, result.getDetail());
-			case ERROR:
-				return markErrored(job, result.getDetail());
+			case ERROR: // an error in *execution* is a failure from the workflow perspective
 			case FAILED:
 				return markFailed(job, result.getDetail());
 			case INTERRUPTED:
 				return markQueued(job);
-			default:
+			default: // have no idea what went on so some sort of infrastructure failure, let's assume with workflow rather than execution
 				return markErrored(job, result.getDetail());
 		}
 	}

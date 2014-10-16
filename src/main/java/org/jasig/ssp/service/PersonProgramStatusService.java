@@ -18,13 +18,15 @@
  */
 package org.jasig.ssp.service;
 
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.transferobject.form.BulkProgramStatusChangeRequestForm;
+import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
+
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * PersonProgramStatus service
@@ -64,4 +66,7 @@ public interface PersonProgramStatusService
 
 	void expireActive(Person person, PersonProgramStatus savingStatus)
 			throws ValidationException;
+
+	JobTO changeInBulk(BulkProgramStatusChangeRequestForm form) throws IOException, ObjectNotFoundException,
+			ValidationException, SecurityException;
 }

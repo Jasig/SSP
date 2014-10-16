@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class BulkEmailJobSpec implements Serializable {
+public class BulkEmailJobSpec implements Serializable, HasPersonSearchRequestCoreSpec<BulkEmailStudentRequestForm> {
 
 	private BulkEmailStudentRequestForm coreSpec;
 
@@ -40,7 +40,7 @@ public class BulkEmailJobSpec implements Serializable {
 	private List<ImmutablePersonIdentifiersTO> personIdentifiersFromCoreSpecCriteria;
 
 	public BulkEmailJobSpec() {
-		super();
+		this(null,null);
 	}
 
 	public BulkEmailJobSpec(BulkEmailStudentRequestForm coreSpec) {

@@ -32,17 +32,15 @@ import java.util.List;
  */
 public class JobWorkflowStatusDescription {
 	private String completionMessage;
-	private List<String> errorMessages;
-	private List<String> failureMessages;
+	private List<String> problemMessages;
 
 	public JobWorkflowStatusDescription() {
-		this(null,null,null);
+		this(null,null);
 	}
 
-	public JobWorkflowStatusDescription(String completionMessage, List<String> errorMessages, List<String> failureMessages) {
+	public JobWorkflowStatusDescription(String completionMessage, List<String> problemMessages) {
 		this.completionMessage = completionMessage;
-		this.errorMessages = errorMessages;
-		this.failureMessages = failureMessages;
+		this.problemMessages = problemMessages;
 	}
 
 	public String getCompletionMessage() {
@@ -53,20 +51,12 @@ public class JobWorkflowStatusDescription {
 		this.completionMessage = completionMessage;
 	}
 
-	public List<String> getErrorMessages() {
-		return errorMessages;
+	public List<String> getProblemMessages() {
+		return problemMessages;
 	}
 
-	public void setErrorMessages(List<String> errorMessages) {
-		this.errorMessages = errorMessages;
-	}
-
-	public List<String> getFailureMessages() {
-		return failureMessages;
-	}
-
-	public void setFailureMessages(List<String> failureMessages) {
-		this.failureMessages = failureMessages;
+	public void setProblemMessages(List<String> problemMessages) {
+		this.problemMessages = problemMessages;
 	}
 
 	@Override
@@ -78,9 +68,7 @@ public class JobWorkflowStatusDescription {
 
 		if (completionMessage != null ? !completionMessage.equals(that.completionMessage) : that.completionMessage != null)
 			return false;
-		if (errorMessages != null ? !errorMessages.equals(that.errorMessages) : that.errorMessages != null)
-			return false;
-		if (failureMessages != null ? !failureMessages.equals(that.failureMessages) : that.failureMessages != null)
+		if (problemMessages != null ? !problemMessages.equals(that.problemMessages) : that.problemMessages != null)
 			return false;
 
 		return true;
@@ -89,8 +77,7 @@ public class JobWorkflowStatusDescription {
 	@Override
 	public int hashCode() {
 		int result = completionMessage != null ? completionMessage.hashCode() : 0;
-		result = 31 * result + (errorMessages != null ? errorMessages.hashCode() : 0);
-		result = 31 * result + (failureMessages != null ? failureMessages.hashCode() : 0);
+		result = 31 * result + (problemMessages != null ? problemMessages.hashCode() : 0);
 		return result;
 	}
 
@@ -98,8 +85,7 @@ public class JobWorkflowStatusDescription {
 	public String toString() {
 		return "JobWorkflowStatusDescription{" +
 				"completionMessage='" + completionMessage + '\'' +
-				", errorMessages=" + errorMessages +
-				", failureMessages=" + failureMessages +
+				", problemMessages=" + problemMessages +
 				'}';
 	}
 }
