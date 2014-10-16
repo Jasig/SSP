@@ -65,7 +65,7 @@
 					<a href="login.jsp" rel="external" class="ui-btn-right" data-bind="visible: !viewModel.authenticated()" data-role="button" data-icon="custom">Login</a>
 					<p class="person-name" data-bind="text: authenticatedPersonName"></p>
                     <a href="/ssp-platform/Logout" rel="external" class="ui-btn-right" data-bind="visible: viewModel.authenticated() && !viewModel.isnonstudent()" data-role="button" data-icon="custom">Logout</a>
-                    <a href="/ssp-platform/" id="backButton" rel="external" class="ui-btn-right" data-bind="visible: viewModel.authenticated() && viewModel.isnonstudent()" data-role="button" data-icon="custom">Back To SSP</a>
+                    <a href="/ssp-platform/" id="backButton" rel="external" class="ui-btn-right" data-bind="visible: viewModel.authenticated() && viewModel.isnonstudent()" data-role="button" data-icon="custom"><span data-bind="text: appName">Back To SSP</span></a>
 				</div>
 			</div>
 		

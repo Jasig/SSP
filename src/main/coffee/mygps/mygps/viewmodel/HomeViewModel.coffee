@@ -100,6 +100,7 @@ namespace 'mygps.viewmodel'
 
 
 			loadAppName: (callback) ->
+				defaultAppName = "Back to SSP"
 				$.ajax({
 					type: "GET"
 					url: @constructor.APP_NAME_API_URL
@@ -107,12 +108,17 @@ namespace 'mygps.viewmodel'
 						if result isnt null and result.replace(/^\s+|\s+$/g, "") isnt ""
 							callback(result)
 						else
-							callback(null)
+							callback(defaultAppName)
 					error: (fault) ->
-						callback(null)
+						callback(defaultAppName)
 				})
 
 			loadWelcomeMessage: (callback) ->
+				defaultWelcomeMessage = "<h2>Welcome</h2> \n<p>This self help tool will assist you in identifying and overcoming challenges " +
+				"or barriers to your success at this college. Please use the Self Help Guides to begin the process of identifying " +
+ 				"the challenges you might face, and discovering the solutions available to meet those challenges. " +
+				"The tool will assist you in building a Personal Road Map that will guide you on your journey to success. " +
+				"Good luck on that journey!</p> \n";
 				$.ajax({
 					type: "GET"
 					url: @constructor.WELCOME_MESSAGE_API_URL
@@ -121,9 +127,9 @@ namespace 'mygps.viewmodel'
 							trimmed = result.replace(/^\s+|\s+$/g, "")
 							callback(if trimmed is "" then null else trimmed)
 						else
-							callback(null)
+							callback(defaultWelcomeMessage)
 					error: (fault) ->
-						callback(null)
+						callback(defaultWelcomeMessage)
 				})
 
 			loadToolsList: (callback) ->
