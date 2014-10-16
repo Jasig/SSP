@@ -409,7 +409,8 @@ public class MessageTemplateServiceImpl extends
 
     @Override
     public SubjectAndBody createMyGPSWelcomeMessage () {
-        return populateFromTemplate(MessageTemplate.MYGPS_WELCOME_MESSAGE_ID,
-                new HashMap<String, Object>());
+        final Map<String, Object> messageParams = new HashMap<String, Object>();
+        setInstitutionValues(messageParams);
+        return populateFromTemplate(MessageTemplate.MYGPS_WELCOME_MESSAGE_ID, messageParams);
     }
 }
