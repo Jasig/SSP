@@ -338,5 +338,51 @@ display: none;
  }
  
  
+.fa-stack-3x,
+.fa-stack-4x,
+.fa-stack-5x {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.fa-stack-3x {
+	font-size: 3em !important;
+}
+
+.fa-stack-4x {
+	font-size: 4em !important;
+}
+
+.fa-stack-5x {
+	font-size: 5em !important;
+}
+
+.indicator-column .x-panel-body-default {
+	border-color: black;
+}
+
+.indicator-wrap {
+	width: 50%;
+	display: inline-block;
+}
+.indicator-label {
+	clear: both;
+	min-height: 18px;
+	display: block;
+}
+.indicator-value {
+	min-height: 18px;
+	padding-left: 10px;
+	float: left;
+}
+.indicator-glyph {
+	height: 36px !important;
+	text-align: right;
+	float: right;
+	margin-right: 24px;
+	margin-bottom: 8px;
+}
 
 

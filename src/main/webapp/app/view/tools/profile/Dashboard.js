@@ -22,218 +22,87 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils',
-        person: 'currentPerson',
-        textStore:'sspTextStore'
+		authenticatedPerson: 'authenticatedPerson',
+		textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
     
     initComponent: function(){
         var me = this;
+		
         Ext.apply(me, {
             border: 0,
-            bodyPadding: 0,
+            bodyPadding: 10,
             layout: 'anchor',
             defaults: {
-                anchor: '100%'
-            },
-            items: [{
-                xtype: 'fieldcontainer',
-                fieldLabel: '',
-                layout: 'hbox',
-                margin: '0 0 0 0',
-                padding: '0 0 0 0',
-                defaultType: 'displayfield',
-                flex: '.90',
-                fieldDefaults: {
-                    msgTarget: 'side'
+                anchor: '100%',
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
                 },
+                flex: 1,
+                padding: 0,
+                border: 0
+            },
+            
+            items: [{
+                xtype: 'container',
+                margin: 0,
+                items: [{
+                    xtype: 'profileperson',
+                    flex: 3
+                }, {
+                    xtype: 'tbspacer',
+                    width: 10
+                }, {
+                    xtype: 'profileservicereasons',
+					flex: 1
+                }, {
+                    xtype: 'tbspacer',
+                    width: 10
+                }, {
+                    xtype: 'profilespecialservicegroups',
+					flex: 1
+                }, {
+                    xtype: 'tbspacer',
+                    width: 10
+                }, {
+                    xtype: 'profilereferralsources',
+					flex: 1
+                }]
+            }, {
+                xtype: 'container',
+                margin: '20 0 0 0',
                 items: [{
                     xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    margin: '0 0 0 0',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: 0.45,
-                    items: [                  
-                    {
-                        xtype: 'profileperson'
-                    
-                    },
-                    {
-                        xtype: 'fieldset',
-                        border: 1,
-                        defaultType: 'displayfield',
-                        margin: '0 0 2 2',
-                        height: '370',
-                        items: [{
-                            fieldLabel: 'Early Alerts',
-                            itemId: 'earlyAlert',
-                            name: 'earlyAlert'
-                        
-                        }, {
-                            fieldLabel: 'Action Plan',
-                            itemId: 'actionPlan',
-                            name: 'actionPlan'
-                        },{
-                            fieldLabel: 'Student Intake',
-                            name: 'studentintakeLabel',
-                            itemId: 'studentintakeLabel'
-                        },{
-                                fieldLabel: 'Assigned',
-                                name: 'studentIntakeAssigned',
-                                itemId: 'studentIntakeAssigned',
-								margin:'0 0 0 10',
-                                renderer: Ext.util.Format.dateRenderer('m/d/Y')
-                            }, {
-                                fieldLabel: 'Completed',
-                                name: 'studentIntakeCompleted',
-                                itemId: 'studentIntakeCompleted',
-                                cls: 'dashboardIntakeDates',
-								margin:'0 0 0 10',
-                                renderer: Ext.util.Format.dateRenderer('m/d/Y')
-                        
-                        }]
-                    }
-					, {
-		                  xtype: 'tbspacer',
-		                   height: 10
-		               },
-                    {
-                        xtype: 'profileacademicprogram'
-                    
+                    title: 'Student Indicators',
+                    flex: 1,
+                    items: [{
+                        xtype: 'profilestudentindicators',
+                        flex: 1
                     }]
-                
-                },{
-                xtype: 'fieldset',
-                border: 0,
-                title: '',
-                defaultType: 'displayfield',
-                margin: '0 0 0 2',
-                flex: 0.25,
-                defaults: {
-                    anchor: '100%'
-                },items:[                
-                {
-                    xtype: 'fieldset',
-                    border: 1,
-                    title: '',
-                    defaultType: 'displayfield',
-                    margin: '0 0 33 2',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: 0.25,
-                    height: '370',
-                    
-                    items: [{
-                        fieldLabel: 'GPA',
-                        name: 'cumGPA',
-                        itemId: 'cumGPA'
-                    }, {
-                        fieldLabel: 'Comp Rate',
-                        name: 'creditCompletionRate',
-                        itemId: 'creditCompletionRate'
-                    }, {
-                        fieldLabel: 'Standing',
-                        name: 'academicStanding',
-                        itemId: 'academicStanding'
-                    }, {
-                        fieldLabel: 'Restrictions',
-                        name: 'currentRestrictions',
-                        itemId: 'currentRestrictions'
-                    },{
-                        fieldLabel: 'Reg',
-                        name: 'registeredTerms',
-                        itemId: 'registeredTerms',
-                        labelWidth: 30
-                    }, {
-                        fieldLabel: 'Payment',
-                        name: 'paymentStatus',
-                        itemId: 'paymentStatus',
-                        labelWidth: 50
-                    }, {
-                        fieldLabel: 'Balance',
-                        name: 'balanceOwed',
-                        itemId: 'balanceOwed',
-						labelWidth: 50
-                    },{
-                        fieldLabel: 'F1',
-                        name: 'f1Status',
-                        itemId: 'f1Status',
-                        labelWidth: 60
-                    }	,{
-	                        xtype: 'tbspacer',
-	                        height: 8
-	                    },{
-                    name: 'financialAidFileStatus',
-                    itemId: 'financialAidFileStatus',
-                    xtype:'label',
-                    listeners: { element: 'el', click: function () { 
-                    	var view = Ext.ComponentQuery.query("#profileDetails");
-						if(view && view.length > 0)
-                    		view[0].getController().onShowFinancialAidFileStatuses();
-                    } } 
-                }	,{
-                        xtype: 'tbspacer',
-                        height: 8
-                    },
-                {
-                name: 'sapStatusCode',
-                itemId: 'sapStatusCode',
-                xtype: 'label',
-                listeners: { element: 'el', click: function (me) { 
-                	var view = Ext.ComponentQuery.query("#profileDetails");
-                	if(view && view.length > 0)
-                		view[0].getController().onShowSAPCodeInfo();
-                } } 
-            }	,{
+                }, {
                     xtype: 'tbspacer',
-                    height: 8
-                }, 	{
-                	text: 'FA Awarded:',
-                    name: 'financialAidAcceptedTerms',
-                    itemId: 'financialAidAcceptedTerms',
-                    xtype:'label',
-                    listeners: { element: 'el', click: function () { 
-                    	var view = Ext.ComponentQuery.query("#profileDetails");
-						if(view && view.length > 0)
-                    		view[0].getController().onShowFinancialAidAwards();
-                    } } 
-                },{
-                        xtype: 'tbspacer',
-                        height: 8
-                    }
-                    ]
-
-                }]
-                },{
+                    width: 10
+                }, {
                     xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    padding: '0 0 0 5',
-                    margin: '0 0 0 0',
-                    flex: 0.30,
+                    title: 'Intervention Indicators',
+                    flex: 1,
                     items: [{
-                        xtype: 'profileservicereasons'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: 10
-                    }, {
-                        xtype: 'profilespecialservicegroups'
-                    },{
-                        xtype: 'tbspacer',
-                        height: 10
-                    },{
-                    	 xtype: 'profilereferralsources'
+                        xtype: 'profileinterventionindicators',
+                        flex: 1
+                    }]
+                }, {
+                    xtype: 'tbspacer',
+                    width: 10
+                }, {
+                    xtype: 'fieldset',
+                    title: 'Risk Indicators',
+                    flex: 1,
+                    items: [{
+                        xtype: 'profileriskindicators',
+                        flex: 1
                     }]
                 }]
             }]

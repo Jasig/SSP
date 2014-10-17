@@ -26,91 +26,104 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         personLite: 'personLite',
         personService: 'personService',
         transcriptService: 'transcriptService',
-		personProgramStatusService: 'personProgramStatusService',
-		programStatusChangeReasonsStore: 'programStatusChangeReasonsAllUnpagedStore',
+        personProgramStatusService: 'personProgramStatusService',
+        programStatusChangeReasonsStore: 'programStatusChangeReasonsAllUnpagedStore',
         configStore: 'configStore',
         formUtils: 'formRendererUtils',
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
         personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
         configStore: 'configStore',
-        textStore:'sspTextStore'
+        textStore: 'sspTextStore',
+        mapPlanService: 'mapPlanService',
+		currentMapPlan: 'currentMapPlan',
+        courseTranscriptsStore: 'courseTranscriptsStore',
+        termsStore: 'termsStore',
+        termTranscriptsStore: 'termTranscriptsStore'
     },
     
     control: {
-        nameField: '#studentName',
-        photoUrlField: '#studentPhoto',
-        
-        
-        studentIdField: '#studentId',
-        birthDateField: '#birthDate',
-        studentTypeField: '#studentType',
-        programStatusField: '#programStatus',
-		programStatusReasonField: '#programStatusReason',
-        paymentStatusField: '#paymentStatus',
-        f1StatusField: '#f1Status',
-        residencyCountyField: '#residencyCounty',
-        maritalStatusField: '#maritalStatus',
         genderField: '#gender',
+        maritalStatusField: '#maritalStatus',
         ethnicityField: '#ethnicity',
-		raceField: '#race',
-		primaryEmailAddressLabel: '#primaryEmailAddressLabel',
-		primaryEmailAddressField: '#primaryEmailAddressField',
-		registeredTermsField: '#registeredTerms',
-        
-        gpaField: '#cumGPA',
-        transferHrsField: '#transferHrs',
-        
+        raceField: '#race',
+        residencyCountyField: '#residencyCounty',
+        f1StatusField: '#f1Status',
         academicStandingField: '#academicStanding',
         currentRestrictionsField: '#currentRestrictions',
-        creditCompletionRateField: '#creditCompletionRate',
         academicProgramsField: '#academicPrograms',
         intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
-
-        fafsaDateField: '#fafsaDate',
+        startYearTermField: '#startYearTerm',
+        anticipatedStartYearTermField: '#anticipatedStartYearTerm',
+        transferHrsField: '#transferHrs',
         
-        financialAidGpaField: '#financialAidGpa',
-        creditHoursEarnedField: '#creditHoursEarned',
-        creditHoursAttemptedField: '#creditHoursAttempted',
-        creditCompletionRateField: '#creditCompletionRate',
-        balanceOwedField: '#balanceOwed',
-        financialAidRemainingField: '#financialAidRemaining',
-        originalLoanAmountField: '#originalLoanAmount',
-        sapStatusCodeField: '#sapStatusCode',
-        eligibleFederalAidField: '#eligibleFederalAid',
-        termsLeftField: '#termsLeft',
-        institutionalLoanAmountField: '#institutionalLoanAmount',
-        financialAidFileStatusField: '#financialAidFileStatusDetails',
-		financialAidAcceptedTermsField: '#financialAidAcceptedTerms'
-
+        planProgramField: '#planProgram',
+        planCatalogYearField: '#planCatalogYear',
+        onPlanField: '#onPlan',
+        mapNameField: '#mapName',
+        advisorField: '#advisor',
+        mapLastUpdatedField: '#mapLastUpdated',
+        mapProjectedField: '#mapProjected',
+        
+        cumTermGrid: '#cumTermGrid',
+        
+        'printPlanButton': {
+            selector: '#printPlanButton',
+            listeners: {
+                click: 'onPrintPlanButtonClick'
+            }
+        },
+        'emailPlanButton': {
+            selector: '#emailPlanButton',
+            listeners: {
+                click: 'onEmailPlanButtonClick'
+            }
+        },
+        
+        view: {
+            afterlayout: {
+                fn: 'onAfterLayout',
+                single: true
+            }
+        }
     },
     init: function(){
         var me = this;
+        
+        if (me.sapStatusesStore.getTotalCount() <= 0) {
+            me.sapStatusesStore.load();
+        }
+        
+        if (me.financialAidFilesStore.getTotalCount() <= 0) {
+            me.financialAidFilesStore.load();
+        }
+        
+        if (!me.programStatusChangeReasonsStore.getTotalCount()) {
+            me.programStatusChangeReasonsStore.load();
+        }
+        
+        return me.callParent(arguments);
+    },
+    
+    onAfterLayout: function(){
+        var me = this;
         var id = me.personLite.get('id');
-        me.resetForm();
+        
+        me.getView().getForm().reset();
         me.sapStatusCode = null;
-        if(me.sapStatusesStore.getTotalCount() <= 0){
-			me.sapStatusesStore.load();
-        }
-        if(me.financialAidFilesStore.getTotalCount() <= 0){
-			me.financialAidFilesStore.load();
-        }
+        
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
-            me.onRegStoreLoaded();
+            
             var serviceResponses = {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 4
             }
+            me.getView().loadRecord(me.person);
             
-            me.personService.get(id, {
-                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
-                scope: me
-            });
             me.transcriptService.getSummary(id, {
                 success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
@@ -121,44 +134,17 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 failure: me.newServiceFailureHandler('transcriptFull', me.getTranscriptFullFailure, serviceResponses),
                 scope: me
             });
-			me.personProgramStatusService.getCurrentProgramStatus(id, {
-                success: me.newServiceSuccessHandler('programstatus', me.getCurrentProgramStatusSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
+            me.transcriptService.getTerm(id, {
+                success: me.newServiceSuccessHandler('transcriptTerm', me.getTranscriptTermSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('transcriptTerm', me.getTranscriptTermFailure, serviceResponses),
+                scope: me
+            });
+            me.mapPlanService.getCurrent(id, {
+                success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
                 scope: me
             });
         }
-		
-		if (!me.programStatusChangeReasonsStore.getTotalCount()) {
-			me.programStatusChangeReasonsStore.load();
-		}
-
-		me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
-        return me.callParent(arguments);
-    },
-    onRegStoreLoaded: function() {
-    	var me=this;
-        var redTerms = '';
-        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
-        {
-        	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
-        }
-        
-        me.getRegisteredTermsField().setValue(redTerms);
-        var regStatus = '';
-        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
-        {
-          regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
-        }
-        me.getPaymentStatusField().setValue(regStatus);		
-
-    },    
-    resetForm: function(){
-        var me = this;
-        me.getView().getForm().reset();
-        // Set defined configured label for the studentId field
-        var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
-        me.getStudentIdField().setFieldLabel(studentIdAlias);
-        me.setFinancialLabels();
     },
     
     newServiceSuccessHandler: function(name, callback, serviceResponses){
@@ -189,119 +175,31 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         };
     },
     
-    getPersonSuccess: function(serviceResponses){
-        var me = this;
-        var personResponse = serviceResponses.successes.person;
-        me.person.populateFromGenericObject(personResponse);
-        var nameField = me.getNameField();
-		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
-		var primaryEmailAddressLabel = me.getPrimaryEmailAddressLabel();
-		var photoUrlField = me.getPhotoUrlField();
-        var birthDateField = me.getBirthDateField();
-        var studentTypeField = me.getStudentTypeField();
-        var studentIdField = me.getStudentIdField();
-        
-        var fullName = me.person.getFullName();
-		var firstLastName = me.person.getFirstLastName();
-        var coachName = me.person.getCoachFullName();
-		
-		var anticipatedStartYearTermField = Ext.ComponentQuery.query('#anticipatedStartYearTerm', me.getView())[0];
-		
-        if(me.person.get('homePhone') != '')
-				var homePhone = '    ' + me.person.get('homePhone') + ' (H)' ;
-			else
-				var homePhone = '';
-			if(me.person.get('cellPhone') != '')
-				var cellPhone = '    ' + me.person.get('cellPhone') + ' (C)';
-			else
-				var cellPhone = '';
-        // load general student record
-        me.getView().loadRecord(me.person);
-        
-        // load additional values
-        nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
-        studentIdField.setFieldLabel('');
-        studentIdField.setValue('<span style="color:#15428B">' + me.configStore.getConfigByName('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
-        primaryEmailAddressLabel.setFieldLabel('');
-		primaryEmailAddressLabel.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' );
-		primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<a href="mailto:'+me.handleNull(me.person.get('primaryEmailAddress'))+'" target="_top">'+me.handleNull(me.person.get('primaryEmailAddress'))+'</a>');        
-        birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.person.getFormattedBirthDate());
-        studentTypeField.setFieldLabel('');
-        studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
-        photoUrlField.setSrc(me.person.getPhotoUrl());
-        me.updateProgramStatusField();
-		
-		anticipatedStartYearTermField.setFieldLabel('');
-		anticipatedStartYearTermField.setValue('<span style="color:#15428B">Anticipated Start Year/Term:  </span>' + me.person.get('anticipatedStartYear') + '/' + me.person.get('anticipatedStartTerm'));
-        
-        var studentRecordComp = Ext.ComponentQuery.query('.studentrecord')[0];
-        var studentCoachButton = Ext.ComponentQuery.query('#emailCoachButton')[0];
-        studentRecordComp.setTitle(fullName + '          ' + '  -   ID#: ' + me.person.get('schoolId') + homePhone + cellPhone);
-        studentCoachButton.setText('<u>Coach: ' + coachName + '</u>');
-        
-        me.appEventsController.assignEvent({
-            eventName: 'emailCoach',
-            callBackFunc: me.onEmailCoach,
-            scope: me
-        });
-    },
-
-    onAfterPersonProgramStatusChange: function(event) {
-        var me = this;
-        me.updateProgramStatusField();
-    },
-
-    updateProgramStatusField: function() {
-        var me = this;
-        var programStatusField = me.getProgramStatusField();
-        programStatusField.setFieldLabel('');
-        programStatusField.setValue('<span style="color:#15428B">SSP Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
-    },
-    
-    getPersonFailure: function(){
-        // nothing to do
-    },
-    
     handleNull: function(value){
-		if(value == null || value == undefined || value == 'null')
-			return "";
-		return value;
-	},
-	
-	setFinancialLabels: function(){
-		var me=this;
-		me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
-        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
-        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
-	},
+        if (value == null || value == undefined || value == 'null') 
+            return "";
+        return value;
+    },
     
     getTranscriptSuccess: function(serviceResponses){
         var me = this;
         var transcriptResponse = serviceResponses.successes.transcript;
-        
         var transcript = new Ssp.model.Transcript(transcriptResponse);
         var gpa = transcript.get('gpa');
+        
         if (gpa) {
             var gpaFormatted = Ext.util.Format.number(me.handleNull(gpa.gradePointAverage), '0.00');
-            me.getGpaField().setFieldLabel('');
-            me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
-            me.getAcademicStandingField().setFieldLabel('');
-            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
-			me.getCreditCompletionRateField().setFieldLabel('');
-			if(me.handleNull(gpa.creditCompletionRate) != '')
-            	me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + me.handleNull(gpa.creditCompletionRate) + '%');
-			else
-				me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>');
-            me.getCurrentRestrictionsField().setFieldLabel('');
-            me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions));
-            me.getCreditHoursEarnedField().setFieldLabel('');
-            me.getCreditHoursEarnedField().setValue('<span style="color:#15428B">Hrs Earned:  </span>' + me.handleNull(gpa.creditHoursEarned));
-            me.getCreditHoursAttemptedField().setFieldLabel('');
-            me.getCreditHoursAttemptedField().setValue('<span style="color:#15428B">Hrs Attempted:  </span>' + me.handleNull(gpa.creditHoursAttempted));
+            var grid = me.getCumTermGrid();
+            var data = {
+                totalCreditCompletionRate: me.handleNull(gpa.creditCompletionRate),
+                totalCreditHoursAttempted: me.handleNull(gpa.creditHoursAttempted),
+                totalCreditHoursEarned: me.handleNull(gpa.creditHoursEarned),
+                totalGradePointAverage: gpaFormatted
+            };
+            
+            grid.getStore().add(data);
         }
+        
         var programs = transcript.get('programs');
         if (programs) {
             var programNames = [];
@@ -312,49 +210,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 if (program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0) 
                     intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
             });
-            me.getAcademicProgramsField().setFieldLabel('');
-            me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
+             me.getAcademicProgramsField().setValue(programNames.join(', '));
             me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
         }
-        
-        var financialAid = transcript.get('financialAid');
-        
-        if (financialAid) {
-        	me.getFafsaDateField().setFieldLabel('');
-			me.getFafsaDateField().setValue('<span style="color:#15428B">FAFSA:  </span>' + Ext.util.Format.date(Ext.Date.parse(financialAid.fafsaDate, 'c'),'m/d/Y'));
-        	me.getBalanceOwedField().setFieldLabel('');
-			me.getBalanceOwedField().setValue('<span style="color:#15428B">Balance:  </span>' + Ext.util.Format.usMoney(financialAid.balanceOwed));
-        	me.getFinancialAidRemainingField().setFieldLabel('');
-			if(financialAid.financialAidRemaining != null)
-				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' + Ext.util.Format.usMoney(financialAid.financialAidRemaining));
-			else
-				me.getFinancialAidRemainingField().setValue('<span style="color:#15428B">FA Amount:  </span>' );
-        	me.getOriginalLoanAmountField().setFieldLabel('');
-			if(financialAid.originalLoanAmount != null)
-				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>' + Ext.util.Format.usMoney(financialAid.originalLoanAmount));
-			else
-				me.getOriginalLoanAmountField().setValue('<span style="color:#15428B">Loan Amount:  </span>');
-        	me.getFinancialAidGpaField().setFieldLabel('');
-        	if(financialAid.financialAidGpa != null)
-				me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>' + Ext.util.Format.number(me.handleNull(financialAid.financialAidGpa), '0.00'));
-			else
-				me.getFinancialAidGpaField().setValue('<span style="color:#15428B">FA GPA:  </span>');
-
-			
-			me.sapStatusCode = financialAid.sapStatusCode;
-			me.getEligibleFederalAidField().setValue(me.handleNull(financialAid.eligibleFederalAid));
-			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
-			me.getInstitutionalLoanAmountField().setValue(me.handleNull(Ext.util.Format.usMoney(financialAid.institutionalLoanAmount)));
-			
-			me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
-			me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
-        }
-        financialAidAwards = transcript.get('financialAidAcceptedTerms');
-        if ( financialAidAwards  && financialAidAwards.length > 0) {
-        	var model = Ext.create("Ssp.model.external.FinancialAidAward");
-           	model.populateFromExternalData(financialAidAwards[0]);
-        	me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span><u>' + model.get("termCode") + " (" +  model.get("acceptedLong") + ")</u>", false);
-        }		
     },
     
     getTranscriptFailure: function(){
@@ -363,73 +221,213 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     
     getTranscriptFullSuccess: function(serviceResponses){
         var me = this;
+        var courseTranscripts = [];
         var transcriptFullResponse = serviceResponses.successes.transcriptFull;
         var transferHours = 0;
         var transcript = new Ssp.model.Transcript(transcriptFullResponse);
         var terms = transcript.get('terms');
-
-        	
+        
         if (terms) {
             Ext.Array.each(terms, function(term){
                 var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
+                var termIndex = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseTranscript.get("termCode"));
                 var creditType = courseTranscript.get('creditType');
-				var creditTypeUpper = creditType.toUpperCase();
+                var creditTypeUpper = creditType.toUpperCase();
+                
                 if (creditTypeUpper == 'TRANSFER') {
                     var credit = courseTranscript.get('creditEarned');
-					if (!isNaN(credit)) 
-                    	transferHours += parseInt((credit * 100).toFixed(0));
+                    if (!isNaN(credit)) 
+                        transferHours += parseInt((credit * 100).toFixed(0));
+                }
+                
+                if (termIndex < 0) {
+                    var tIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
+                    var term = me.termsStore.getAt(tIndex);
+                    courseTranscript.set("termStartDate", term.get("startDate"));
+                    courseTranscripts.push(courseTranscript);
+                }
+                
+                if (courseTranscripts.length > 0) {
+                    me.courseTranscriptsStore.loadData(courseTranscripts);
+                    me.courseTranscriptsStore.sort([{
+                        property: 'termStartDate',
+                        direction: 'DESC'
+                    }, {
+                        property: 'formattedCourse',
+                        direction: 'ASC'
+                    }]);
                 }
             });
         }
-        if (transferHours > 0) {
-            me.getTransferHrsField().setFieldLabel('');
-            me.getTransferHrsField().setValue('<span style="color:#15428B">Transfer Hrs:  </span>' + (transferHours / 100).toFixed(2));
-        }
         
+        if (transferHours > 0) {
+            me.getTransferHrsField().setValue((transferHours / 100).toFixed(2));
+        }
+        // is this needed now??
+        me.appEventsController.assignEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
     },
     
     getTranscriptFullFailure: function(){
         // nothing to do
     },
-	
-	getCurrentProgramStatusSuccess: function(serviceResponses) {
+    
+    getTranscriptTermSuccess: function(serviceResponses){
         var me = this;
-		var programStatusReason;
-		var studentStatus;
-		
-		var programStatusResponse = serviceResponses.successes.programstatus;
-		studentStatus = programStatusResponse['programStatusChangeReasonId'];
-		
-		var programStatusReasonField = me.getProgramStatusReasonField();
-		
-		
-		if (studentStatus) {
-                    programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus, 0, false, false, true);
-					
-                    if (programStatusReason) {
-							programStatusReasonField.show();
-							programStatusReasonField.setFieldLabel('');
-							programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusReason.get('name'));
-					}
-		}
-		else
-		{
-			programStatusReasonField.hide();
-		}
-		
-	},
-	
-	getCurrentProgramStatusFailure: function() {
-		
-        // nothing to do
+        var termTranscripts = [];
+        var termItems = serviceResponses.successes.transcriptTerm;
+        
+        Ext.Array.each(termItems, function(rawDatum){
+            var termTranscript = Ext.create('Ssp.model.TermTranscript', rawDatum);
+            var termIndex = me.termsStore.findExact("code", termTranscript.get("termCode"));
+            
+            if (termIndex >= 0) {
+                var term = me.termsStore.getAt(termIndex);
+                termTranscript.set("termStartDate", term.get("startDate"));
+            }
+            
+            termTranscripts.push(termTranscript);
+        });
+        
+        me.termTranscriptsStore.loadData(termTranscripts);
+        
+        me.termTranscriptsStore.sort([{
+            property: 'termStartDate',
+            direction: 'DESC'
+        }, {
+            property: 'formattedCourse',
+            direction: 'ASC'
+        }]);
     },
     
-    getStudentIntakeSuccess: function(serviceResponses){
+    getTranscriptTermFailure: function(response, scope){
+        // nothing to do  	
+    },
+    
+    
+    getMapPlanServiceSuccess: function(serviceResponses){
         var me = this;
-        
-        me.getRemainingLoanAmountField().setFieldLabel('');
-        me.getRemainingLoanAmountField().setValue('<span style="color:#15428B">Balance:  </span>');
-        
+        var mapResponse = serviceResponses.successes.map;
+        if (!mapResponse || !mapResponse.responseText || Ext.String.trim(mapResponse.toString()).length == 0) {
+            me.getOnPlanField().setValue("Plan Does Not Exist.");
+            me.getPrintPlanButton().hide();
+            me.getEmailPlanButton().hide();
+        }
+        else {
+            me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
+            var lastTerm = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(me.currentMapPlan))[0];
+            if (me.getOnPlanField()) {
+                me.getOnPlanField().setValue("Plan Exists.")
+                me.getMapNameField().setValue(me.currentMapPlan.get("name"));
+                me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
+            }
+            if (lastTerm) 
+                me.getMapProjectedField().setValue(lastTerm.get("code"));
+            me.getPlanCatalogYearField().setValue(me.currentMapPlan.get('catalogYearCode'));
+            me.getPlanProgramField().setValue(me.currentMapPlan.get('programCode'));
+            
+            me.getPrintPlanButton().show();
+            me.getEmailPlanButton().show();
+            
+            me.updatePlanStatus();
+        }
+    },
+    
+    getMapPlanServiceFailure: function(){
+        var me = this;
+        me.getPrintPlanButton().hide();
+        me.getEmailPlanButton().hide();
+    },
+    
+    updatePlanStatus: function(){
+        var me = this;
+        if (me.currentMapPlan.get('isTemplate') == true || me.currentMapPlan.get('personId') == "") {
+            me.getOnPlanField().setValue("");
+            return;
+        }
+        me.getView().setLoading(true);
+        var callbacks = new Object();
+        var serviceResponses = {
+            failures: {},
+            successes: {},
+            responseCnt: 0,
+            expectedResponseCnt: 1
+        }
+        callbacks.success = me.newServiceSuccessHandler('planStatus', me.onPlanStatusSuccess, serviceResponses);
+        callbacks.failure = me.newServiceFailureHandler('planStatus', me.onPlanStatusFailure, serviceResponses);
+        callbacks.scope = me;
+        me.mapPlanService.planStatus(me.currentMapPlan, callbacks);
+    },
+    
+    onPlanStatusSuccess: function(serviceResponses){
+        var me = this;
+        me.getView().setLoading(false);
+        var planStatus = serviceResponses.successes.planStatus;
+        if (planStatus.responseText && planStatus.responseText.length > 1) 
+            planStatus = Ext.decode(planStatus.responseText);
+        else 
+            planStatus = null;
+        if (planStatus && planStatus.status == "ON") 
+            me.getOnPlanField().setValue("On Plan");
+        else 
+            if (planStatus && planStatus.status == "OFF") 
+                me.getOnPlanField().setValue("Off Plan");
+            else 
+                if (planStatus && planStatus.status == "ON_TRACK_SUBSTITUTIO") 
+                    me.getOnPlanField().setValue("On Track Substitution");
+                else 
+                    if (planStatus && planStatus.status == "ON_TRACK_SEQUENCE") 
+                        me.getOnPlanField().setValue("On Track Sequence");
+                    else 
+                        me.getOnPlanField().setValue("No Status");
+        var serviceResponses = {
+            failures: {},
+            successes: {},
+            responseCnt: 0,
+            expectedResponseCnt: 1
+        };
+        me.personService.get(me.currentMapPlan.get('ownerId'), {
+            success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+            scope: me
+        });
+    },
+    
+    onPlanStatusFailure: function(){
+        var me = this;
+        me.getView().setLoading(false);
+        me.getOnPlanField().setValue("No Status");
+        var serviceResponses = {
+            failures: {},
+            successes: {},
+            responseCnt: 0,
+            expectedResponseCnt: 1
+        };
+        me.personService.get(me.currentMapPlan.get('ownerId'), {
+            success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+            scope: me
+        });
+    },
+    
+    getPersonSuccess: function(serviceResponses) {
+        var me = this;
+        var person = serviceResponses.successes.person;
+		if(!person) {
+			return;
+       	} else {
+       		var personResponse = serviceResponses.successes.person;
+       		var advisor = new Ssp.model.Person();
+       		advisor.populateFromGenericObject(personResponse);
+	        me.getAdvisorField().setValue(advisor.getFullName());
+		}
+    },
+
+    getPersonFailure: function() {
+
     },
     
     afterServiceHandler: function(serviceResponses){
@@ -439,30 +437,25 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         }
     },
     
-	closePopups:function(){
-		var me=this;
-		if(me.sapCodeInfoPopup != null && !me.sapCodeInfoPopup.isDestroyed)
-	    	me.sapCodeInfoPopup.close();
-        
-        if(me.financialAidFilePopup != null && !me.financialAidFilePopup.isDestroyed)
-	    	me.financialAidFilePopup.close();
-        
-        if(me.financialAidAwardPopup != null && !me.financialAidAwardPopup.isDestroyed)
-	    	me.financialAidAwardPopup.close();
-	},
-	
-    destroy: function(){
+    onEmailPlanButtonClick: function(button){
         var me = this;
-    	me.closePopups();
-    	me.appEventsController.removeEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
-    	 me.appEventsController.removeEvent({
-             eventName: 'emailCoach',
-             callBackFunc: me.onEmailCoach,
-             scope: me
-         });
-        return me.callParent(arguments);
+        if (me.emailPlanPopUp == null || me.emailPlanPopUp.isDestroyed) 
+            me.emailPlanPopUp = Ext.create('Ssp.view.tools.map.EmailPlan', {
+                hidden: true
+            });
+        me.emailPlanPopUp.emailEvent = 'onEmailCurrentMapPlan';
+        me.emailPlanPopUp.show();
     },
     
+    onPrintPlanButtonClick: function(button){
+        var me = this;
+        if (me.printPlanPopUp == null || me.printPlanPopUp.isDestroyed) 
+            me.printPlanPopUp = Ext.create('Ssp.view.tools.map.PrintPlan', {
+                hidden: true
+            });
+        me.printPlanPopUp.printEvent = 'onPrintCurrentMapPlan';
+        me.printPlanPopUp.show();
+    },
     
     onEmailCoach: function(){
         var me = this;
@@ -470,26 +463,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     },
-   
     
-    onShowSAPCodeInfo: function(){
-    	var me=this;
-		if(me.sapCodeInfoPopup == null || me.sapCodeInfoPopup.isDestroyed)
-       		me.sapCodeInfoPopup = Ext.create('Ssp.view.tools.profile.SapStatus',{hidden:true,code:me.sapStatusCode});
-		me.sapCodeInfoPopup.show();
-    },
-    
-    onShowFinancialAidFileStatuses: function(){
-    	var me=this;
-		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
-       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidFileViewer',{hidden:true});
-		me.financialAidFilePopup.show();
-    },
-    
-    onShowFinancialAidAwards: function(){
-    	var me=this;
-		if(me.financialAidFilePopup == null || me.financialAidFilePopup.isDestroyed)
-       		me.financialAidFilePopup = Ext.create('Ssp.view.tools.profile.FinancialAidAwardViewer',{hidden:true});
-		me.financialAidFilePopup.show();
+    destroy: function(){
+        var me = this;
+        
+        me.appEventsController.removeEvent({
+            eventName: 'emailCoach',
+            callBackFunc: me.onEmailCoach,
+            scope: me
+        });
+        return me.callParent(arguments);
     }
 });

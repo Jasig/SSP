@@ -1098,6 +1098,11 @@
                     "name": "ProfilePersonDetailsViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
+                {
+	                 "clsName": "Ssp.controller.tool.profile.ProfilePersonFinancialViewController",
+                    "name": "ProfilePersonFinancialViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
 				{
 	                 "clsName": "Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController",
                     "name": "ProfileRecentStudentActivityViewController.js",
@@ -1719,6 +1724,31 @@
                 {
                     "clsName": "Ssp.view.tools.profile.Person",
                     "name": "Person.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Financial",
+                    "name": "Financial.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.RiskIndicators",
+                    "name": "RiskIndicators.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Indicator",
+                    "name": "Indicator.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.InterventionIndicators",
+                    "name": "InterventionIndicators.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.StudentIndicators",
+                    "name": "StudentIndicators.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {

@@ -36,45 +36,25 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     	textStore:'sspTextStore',
         sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
-        personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore'
-		
+        personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
+		mapPlanService: 'mapPlanService',
+		currentMapPlan: 'currentMapPlan',
+		termsStore: 'termsStore'
     },
     
     control: {
-        nameField: '#studentName',
         photoUrlField: '#studentPhoto',
-		primaryEmailAddressLabel: '#primaryEmailAddressLabel',
-		primaryEmailAddressField: '#primaryEmailAddressField',
-
-		
         
-        studentIdField: '#studentId',
+        primaryEmailAddressField: '#primaryEmailAddressField',
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
         programStatusField: '#programStatus',
         programStatusReasonField: '#programStatusReason',
-        f1StatusField: '#f1Status',
-
-        gpaField: '#cumGPA',
-        
-        academicStandingField: '#academicStanding',
-        currentRestrictionsField: '#currentRestrictions',
-        creditCompletionRateField: '#creditCompletionRate',
         academicProgramsField: '#academicPrograms',
-        registeredTermsField: '#registeredTerms',
-        paymentStatusField: '#paymentStatus',
-     
-
-        earlyAlertField: '#earlyAlert',
-        actionPlanField: '#actionPlan',
-        
-        studentIntakeAssignedField: '#studentIntakeAssigned',
-        studentIntakeCompletedField: '#studentIntakeCompleted',
-        
-        balanceOwedField: '#balanceOwed',
-        sapStatusCodeField: '#sapStatusCode',
-        financialAidFileStatusField: '#financialAidFileStatus',
-		financialAidAcceptedTermsField: '#financialAidAcceptedTerms',
+        mapNameField: '#mapName',
+        advisorField: '#advisor',
+		
+		gpaGlyph: '#gpaIndicator',
         
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
@@ -118,72 +98,30 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     onAfterLayout:function(){
 		var me = this;
-    	var id = me.personLite.get('id');
-    	if (id != "") {
+        var id = me.personLite.get('id');
+        
+        if (id != "") {
             // display loader
             me.getView().setLoading(true);
-
-    	    me.personRegistrationStatusByTermStore.addListener("load", me.onRegStoreLoaded, me);
-            me.personRegistrationStatusByTermStore.load(id);
             
-            var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 2
-            };
-
-            me.transcriptService.getSummary(id, {
-                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
-                scope: me
-            });
-			me.personProgramStatusService.getCurrentProgramStatus(id, {
-                success: me.newServiceSuccessHandler('programstatus', me.getCurrentProgramStatusSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
-                scope: me
-            });
-			me.getPersonSuccess();
+            if (me.termsStore.getTotalCount() <= 0) {
+                me.termsStore.addListener('load', me.termsLoaded, me);
+                me.termsStore.load();
+            }
+            else {
+                me.fireOnTermsLoad();
+            }
         }
-    },
-    
-    onRegStoreLoaded: function() {
-    	var me=this;
-        var redTerms = '';
-        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
-        {
-        	redTerms = redTerms + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode');
-        }
-        
-        me.getRegisteredTermsField().setValue(redTerms);
-        var regStatus = '';
-        for (var i = 0; i < me.personRegistrationStatusByTermStore.getCount(); i++)
-        {
-          regStatus = regStatus + ' ' + me.personRegistrationStatusByTermStore.getAt(i).get('termCode') + '=' + me.personRegistrationStatusByTermStore.getAt(i).get('tuitionPaid');
-        }
-        me.getPaymentStatusField().setValue(regStatus);		
     },
     
     resetForm: function() {
         var me = this;
         me.getView().getForm().reset();
-
-        // Set defined configured label for the studentId field
-        var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
-        me.getStudentIdField().setFieldLabel(studentIdAlias);
-        me.setFinancialLabels();
         // load and render person data
        	me.profileReferralSourcesStore.removeAll();
        	me.profileServiceReasonsStore.removeAll();
        	me.profileSpecialServiceGroupsStore.removeAll();
     },
-    
-	setFinancialLabels: function(){
-		var me=this;
-		me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
-        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
-        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
-	},
 
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;
@@ -212,66 +150,139 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             me.afterServiceHandler(serviceResponses);
         };
     },
+    
+    termsLoaded: function(){
+        var me = this;
+        
+        me.termsStore.removeListener('load', me.termsLoaded, me);
+        me.fireOnTermsLoad();
+    },
+    
+    fireOnTermsLoad: function(){
+        var me = this;
+        var id = me.personLite.get('id');
+        
+        if (id != "") {
+            var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 4
+            }
+            
+            me.mapPlanService.getCurrent(id, {
+                success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
+                scope: me
+            });
+            me.personService.get(id, {
+                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+                scope: me
+            });
+            me.transcriptService.getSummary(id, {
+                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
+                scope: me
+            });
+            me.personProgramStatusService.getCurrentProgramStatus(id, {
+                success: me.newServiceSuccessHandler('programstatus', me.getCurrentProgramStatusSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
+                scope: me
+            });
+        }
+    },
+    
+	handleNull: function(value, defaultValue){
+		if(defaultValue == null || defaultValue == undefined)
+			defaultValue = "";
+		if(value == null || value == undefined || value == 'null')
+			return defaultValue;
+		return value;
+	},
+    
+    getMapPlanServiceSuccess: function(serviceResponses){
+        var me = this;
+        var mapResponse = serviceResponses.successes.map;
+        var mapNameField = me.getMapNameField();
+		
+        if (mapResponse && mapResponse.responseText && Ext.String.trim(mapResponse.toString()).length) {
+            me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
+			
+			// mapNameField.setFieldLabel('');
+        	// mapNameField.setValue('<span style="color:#15428B">Plan Name:  </span>' + me.currentMapPlan.get("name"));
+        	mapNameField.setValue(me.currentMapPlan.get("name"));
+			
+            var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            };
+            me.personService.get(me.currentMapPlan.get('ownerId'), {
+                success: me.newServiceSuccessHandler('person', me.getMapPersonSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('person', me.getMapPersonFailure, serviceResponses),
+                scope: me
+            });
+        }
+    },
+    
+    getMapPlanServiceFailure: function(){
+        // nothing to do
+    },
+    
+    getMapPersonSuccess: function(serviceResponses){
+        var me = this;
+        var person = serviceResponses.successes.person;
+		var advisorField = me.getAdvisorField();
+		
+        if (!person) {
+            return;
+        }
+        else {
+            var personResponse = serviceResponses.successes.person;
+            var advisor = new Ssp.model.Person();
+            advisor.populateFromGenericObject(personResponse);
+            // advisorField.setFieldLabel('');
+        	// advisorField.setValue('<span style="color:#15428B">Plan Name:  </span>' + advisor.getFullName());
+        	advisorField.setValue(advisor.getFullName());
+        }
+    },
+    
+    getMapPersonFailure: function(){
+    	// nothing to do
+    },
 
     getPersonSuccess: function(serviceResponses) {
         var me = this;
-        var nameField = me.getNameField();	
-		var primaryEmailAddressField = me.getPrimaryEmailAddressField();
-		var primaryEmailAddressLabel = me.getPrimaryEmailAddressLabel();
-		
+        var personResponse = serviceResponses.successes.person;
+        me.person.populateFromGenericObject(personResponse);
+        
         var photoUrlField = me.getPhotoUrlField();
+        var primaryEmailAddressField = me.getPrimaryEmailAddressField();
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
-        var earlyAlertField = me.getEarlyAlertField();
-        var actionPlanField = me.getActionPlanField();
-		var studentIdField = me.getStudentIdField();
-		
-        var studentIntakeAssignedField = me.getStudentIntakeAssignedField();
-		var studentIntakeCompletedField = me.getStudentIntakeCompletedField();
-
-        var fullName = me.person.getFullName();
-		var firstLastName = me.person.getFirstLastName();
-        var coachName = me.person.getCoachFullName();
-       	
-        // load referral sources
-        if (me.person.get('referralSources') != null) {
-            me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
-        }
-
-        // load service reasonssd
-        if (me.person.get('serviceReasons') != null) {
-            me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
-        }
-
-		// load special service groups
-        if (me.person.get('specialServiceGroups') != null) {
-            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-        }
-
+        var programStatusField = me.getProgramStatusField();
+        
         // load general student record
         me.getView().loadRecord(me.person);
-
-        // load additional values
-		nameField.setFieldLabel('');
-        nameField.setValue('<span style="color:#15428B">'+'Name'+':  </span>' + firstLastName);
-		studentIdField.setFieldLabel('');
-        studentIdField.setValue('<span style="color:#15428B">' + me.configStore.getConfigByName('studentIdAlias') + ':  </span>' + me.person.get('schoolId'));
-        primaryEmailAddressLabel.setFieldLabel('');
-		primaryEmailAddressLabel.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.school-email')+':  </span>' );
-		primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<a href="mailto:'+me.handleNull(me.person.get('primaryEmailAddress'))+'" target="_top">'+me.handleNull(me.person.get('primaryEmailAddress'))+'</a>');        
-		birthDateField.setFieldLabel('');
-        birthDateField.setValue('<span style="color:#15428B">'+me.textStore.getValueByCode('ssp.label.dob')+':  </span>' + me.handleNull(me.person.getFormattedBirthDate()));
-		studentTypeField.setFieldLabel('');
-        studentTypeField.setValue('<span style="color:#15428B">Student Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
+        
         photoUrlField.setSrc(me.person.getPhotoUrl());
-		me.updateProgramStatusField(me.person.getProgramStatusName()); // reason field set async
-		earlyAlertField.setFieldLabel('');
-        earlyAlertField.setValue('<span style="color:#15428B">Early Alerts:  </span>' + me.handleNull(me.person.getEarlyAlertRatio()));
-		actionPlanField.setFieldLabel('');
-        actionPlanField.setValue('<span style="color:#15428B">Action Plan:  </span>' + me.handleNull(me.person.getActionPlanSummary()));
-        studentIntakeAssignedField.setValue(me.handleNull(me.person.get('studentIntakeRequestDate')));
-        studentIntakeCompletedField.setValue(me.handleNull(me.person.get('studentIntakeCompleteDate')));
+        
+        // primaryEmailAddressField.setFieldLabel('');
+        primaryEmailAddressField.setValue('<a href="mailto:' + me.handleNull(me.person.get('primaryEmailAddress')) + '" target="_top">' + me.handleNull(me.person.get('primaryEmailAddress')) + '</a>');
+        
+        // birthDateField.setFieldLabel('');
+        // birthDateField.setValue('<span style="color:#15428B">' + me.textStore.getValueByCode('ssp.label.dob') + ':  </span>' + me.person.getFormattedBirthDate());
+        birthDateField.setValue(me.person.getFormattedBirthDate());
+        
+        // studentTypeField.setFieldLabel('');
+        // studentTypeField.setValue('<span style="color:#15428B">Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
+        studentTypeField.setValue(me.handleNull(me.person.getStudentTypeName()));
+        
+        // programStatusField.setFieldLabel('');
+        // programStatusField.setValue('<span style="color:#15428B">Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
+        programStatusField.setValue(me.handleNull(me.person.getProgramStatusName()));
     },
 
 	onAfterPersonProgramStatusChange: function(event) {
@@ -303,72 +314,26 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     getPersonFailure: function() {
         // nothing to do
     },
-    
-	handleNull: function(value, defaultValue){
-		if(defaultValue == null || defaultValue == undefined)
-			defaultValue = "";
-		if(value == null || value == undefined || value == 'null')
-			return defaultValue;
-		return value;
-	},
 
     getTranscriptSuccess: function(serviceResponses) {
         var me = this;
         var transcriptResponse = serviceResponses.successes.transcript;
-
         var transcript = new Ssp.model.Transcript(transcriptResponse);
-        var gpa = transcript.get('gpa');
-        if ( gpa ) {
-			var gpaFormatted = Ext.util.Format.number(gpa.gradePointAverage, '0.00');
-			if(gpa.gpaTrendIndicator && gpa.gpaTrendIndicator.length > 0)
-				gpaFormatted += "  " + gpa.gpaTrendIndicator;
-			me.getGpaField().setFieldLabel('');
-            me.getGpaField().setValue('<span style="color:#15428B">GPA:  </span>' + gpaFormatted);
-			me.getAcademicStandingField().setFieldLabel('');
-            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
-			me.getCreditCompletionRateField().setFieldLabel('');
-			if(me.handleNull(gpa.creditCompletionRate) != '')
-            	me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>' + me.handleNull(gpa.creditCompletionRate) + '%');
-			else
-				me.getCreditCompletionRateField().setValue('<span style="color:#15428B">Comp Rate:  </span>');
-            me.getCurrentRestrictionsField().setFieldLabel('');
-			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions))
-
-        }
         var programs = transcript.get('programs');
-        if ( programs ) {
+        
+		if (programs) {
             var programNames = [];
-            Ext.Array.each(programs, function(program) {
-                programNames.push(program.programName);
+            // var intendedProgramsAtAdmit = [];
+            Ext.Array.each(programs, function(program){
+                if (program.programName && program.programName.length > 0) 
+                    programNames.push(program.programName);
+                // if (program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0) 
+                //     intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
             });
-			me.getAcademicProgramsField().setFieldLabel('');
-            me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
+            // me.getAcademicProgramsField().setFieldLabel('');
+            // me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
+            me.getAcademicProgramsField().setValue(programNames.join(', '));
         }
-        
-        me.getFinancialAidFileStatusField().setText('<span style="color:#15428B">FA File:   </span>', false);
-        me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP Code:   </span>', false);
-        me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span>', false);
-
-        var financialAid = transcript.get('financialAid');
-        if ( financialAid ) {
-        	me.getSapStatusCodeField().setText('<span style="color:#15428B">SAP:  </span><u>' + me.handleNull(financialAid.sapStatusCode) + '</u>', false);
-			var view = Ext.ComponentQuery.query("#profileDetails")[0];
-			view.getController().sapStatusCode = me.handleNull(financialAid.sapStatusCode);
-			me.sapStatusCode = financialAid.sapStatusCode;
-			me.getView().sapStatusCode = financialAid.sapStatusCode;
-			me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
-			me.getFinancialAidFileStatusField().setText( '<span style="color:#15428B">FA File:  </span><u>' + me.handleNull(financialAid.financialAidFileStatus) + '</u>', false);
-
-        }
-        me.financialAidAwards = transcript.get('financialAidAcceptedTerms');
-        if ( me.financialAidAwards  && me.financialAidAwards.length > 0) { 
-        	var model = Ext.create("Ssp.model.external.FinancialAidAward");
-        	model.populateFromExternalData(me.financialAidAwards[0]);
-        	me.getFinancialAidAcceptedTermsField().setText('<span style="color:#15428B">FA Awarded:   </span><u>' + model.get("termCode") + " (" +  model.get("acceptedLong") + ")</u>", false);
-        }
-        
-
-		me.financialAidFilesStatuses = transcript.get('financialAidFiles');
     },
     
     
@@ -379,18 +344,26 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	
 	getCurrentProgramStatusSuccess: function(serviceResponses) {
 		var me = this;
-		var programStatusResponse = serviceResponses.successes.programstatus;
-		var studentStatus = programStatusResponse['programStatusChangeReasonId'];
-		if (studentStatus) {
-			programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus , 0, false, false, true);
-			if (programStatusReason) {
-				me.updateProgramStatusReasonField(programStatusReason.get('name'));
-			} else {
-				me.updateProgramStatusReasonField(null);
-			}
-		} else {
-			me.updateProgramStatusReasonField(null);
-		}
+        var programStatusReason;
+        var studentStatus;
+        var programStatusReasonField = me.getProgramStatusReasonField();
+        var programStatusResponse = serviceResponses.successes.programstatus;
+		
+        studentStatus = programStatusResponse['programStatusChangeReasonId'];
+        
+        if (studentStatus) {
+            programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus, 0, false, false, true);
+            
+            if (programStatusReason) {
+                programStatusReasonField.show();
+                // programStatusReasonField.setFieldLabel('');
+                // programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusReason.get('name'));
+                programStatusReasonField.setValue(programStatusReason.get('name'));
+            }
+        }
+        else {
+            programStatusReasonField.hide();
+        }
 	},
 	
 	getCurrentProgramStatusFailure: function() {
@@ -410,8 +383,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 	    me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
 		me.appEventsController.removeEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 		var view = Ext.ComponentQuery.query("#profileDetails");
-    	if(view && view.length > 0)
-    		view[0].getController().closePopups();
+    	
         return me.callParent( arguments );
     },
 

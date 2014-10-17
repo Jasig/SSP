@@ -50,6 +50,12 @@ Ext.define('Ssp.view.tools.profile.Profile', {
                         xtype: 'profiledetails'
                     }]
                 }, {
+                    title: 'Financial',
+                    autoScroll: true,
+                    items: [{
+                        xtype: 'profilefinancial'
+                    }]
+                }, {
                     title: 'Transcript',
                     autoScroll: true,
                     items: [{

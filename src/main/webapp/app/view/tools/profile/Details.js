@@ -22,303 +22,263 @@ Ext.define('Ssp.view.tools.profile.Details', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfilePersonDetailsViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils',
-        textStore:'sspTextStore'
+		authenticatedPerson: 'authenticatedPerson',
+		termTranscriptsStore: 'termTranscriptsStore',
+		textStore:'sspTextStore'
     },
     width: '100%',
     height: '100%',
     initComponent: function(){
         var me = this;
+		
+		var termsTotalStore = Ext.create('Ext.data.Store', {
+	    	fields: [{name: 'totalCreditCompletionRate', type: 'string'},
+	                 {name: 'totalCreditHoursAttempted', type: 'string'},
+	                 {name: 'totalCreditHoursEarned', type: 'string'},
+	                 {name: 'totalGradePointAverage', type: 'string'}]
+		});
+        
         Ext.apply(me, {
             border: 0,
-            bodyPadding: 0,
-            layout: 'anchor',
+            bodyPadding: 10,
+            layout: 'hbox',
             name: 'profileDetails',
             itemId: 'profileDetails',
-            defaults: {
-                anchor: '100%'
-            },
             items: [{
-                xtype: 'fieldcontainer',
-                fieldLabel: '',
-                layout: 'hbox',
-                margin: '0 0 0 0',
-                padding: '0 0 0 0',
-                defaultType: 'displayfield',
-                fieldDefaults: {
-                    msgTarget: 'side'
-                },
+                xtype: 'container',
+                layout: 'anchor',
+                width: '100%',
+                flex: 4,
+                padding: 0,
+                margin: '0 20 0 0',
                 items: [{
                     xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
+                    title: 'Demographic and Academic',
+                    anchor: '100%',
+                    flex: 1,
+                    layout: 'anchor',
+            		padding: '4 10 10 10',
                     defaults: {
-                        anchor: '100%'
+                        anchor: '100%',
+                        height: 18,
+                        margin: 0
                     },
-                    flex: 0.45,
+                    defaultType: 'displayfield',
                     items: [{
-                        xtype: 'profileperson'
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.gender'),
+                        name: 'gender',
+                        itemId: 'gender',
+                        labelWidth: 50
                     }, {
-                        xtype: 'fieldset',
-                        border: 0,
-                        title: '',
-                        layout: 'hbox',
-                        padding: ' 0 0 0 0',
-                        margin: '0 0 0 0',
-                        defaultType: 'displayfield',
-                        defaults: {
-                            anchor: '100%'
-                        },
-                        
-                        items: [                        /*{
-                         xtype: 'fieldset',
-                         border: 0,
-                         title: '',
-                         layout: 'vbox',
-                         defaultType: 'displayfield',
-                         padding: ' 0 0 0 0',
-                         margin: '0 0 0 0',
-                         defaults: {
-                         anchor: '100%'
-                         },
-                         width: '120',
-                         //flex: .40,
-                         items: [{
-                         
-                         xtype: 'button',
-                         text: 'SSN',
-                         autowidth: 'false',
-                         padding: '0 33 5 33'
-                         },
-                         {
-                         xtype: 'tbspacer',
-                         height: '10'
-                         },
-                         
-                         {
-                         xtype: 'textfield',
-                         itemId: 'ssn',
-                         fieldLabel: '',
-                         disabled: true,
-                         width: '100'
-                         }]
-                         },*/
-                        {
-                            xtype: 'fieldset',
-                            border: 0,
-                            title: '',
-                            layout: 'vbox',
-                            padding: ' 0 0 0 0',
-                            margin: '0 0 0 5',
-                            defaultType: 'displayfield',
-                            defaults: {
-                                anchor: '100%'
-                            },
-                            
-                            items: [{
-                                fieldLabel: me.textStore.getValueByCode('ssp.label.gender'),
-                                name: 'gender',
-                                itemId: 'gender',
-                                labelWidth: 50
-                            }, {
-                                fieldLabel: me.textStore.getValueByCode('ssp.label.marital-status'),
-                                name: 'maritalStatus',
-                                itemId: 'maritalStatus',
-                                labelWidth: 80
-                            }, {
-                                fieldLabel: me.textStore.getValueByCode('ssp.label.ethnicity'),
-                                name: 'ethnicity',
-                                itemId: 'ethnicity',
-                                labelWidth: 55
-                            }, {
-								fieldLabel: me.textStore.getValueByCode('ssp.label.race'),
-								name: 'race',
-								itemId: 'race',
-								labelWidth: 55
-								}
-							]
-                        }]
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.marital-status'),
+                        name: 'maritalStatus',
+                        itemId: 'maritalStatus',
+                        labelWidth: 84
                     }, {
-                        xtype: 'profileacademicprogram'
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.ethnicity'),
+                        name: 'ethnicity',
+                        itemId: 'ethnicity',
+                        labelWidth: 55
                     }, {
-                        fieldLabel: 'Intended Program at Admit',
-                        itemId: 'intendedProgramAtAdmit',
-                        name: 'intendedProgramAtAdmit',
-                        labelAlign: 'top',
-                        labelPad: 0,
-                        margin: '0 0 10 0'
-                    }]
-                
-                }, {
-                    xtype: 'fieldset',
-                    border: 1,
-                    title: '',
-                    defaultType: 'displayfield',
-                    defaults: {
-                        anchor: '100%'
-                    },
-                    flex: 0.25,
-                    height: '470',
-                    margin: '0 0 10 0',
-                    items: [
-					{
-                        fieldLabel: 'Anticipated Start Year/Term',
-                        name: 'anticipatedStartYearTerm',
-                        itemId: 'anticipatedStartYearTerm'
-                    },
-					{
-                        fieldLabel: 'GPA',
-                        name: 'cumGPA',
-                        itemId: 'cumGPA'
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.race'),
+                        name: 'race',
+                        itemId: 'race',
+                        labelWidth: 35
                     }, {
-                        fieldLabel: 'FA GPA',
-                        name: 'financialAidGpa',
-                        itemId: 'financialAidGpa'
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.residency'),
+                        name: 'residencyCounty',
+                        itemId: 'residencyCounty',
+                        labelWidth: 64
+                    }, {
+                        fieldLabel: 'F1',
+                        name: 'f1Status',
+                        itemId: 'f1Status',
+                        labelWidth: 24
                     }, {
                         fieldLabel: 'Standing',
                         name: 'academicStanding',
-                        itemId: 'academicStanding'
+                        itemId: 'academicStanding',
+                        labelWidth: 57
                     }, {
                         fieldLabel: 'Restrictions',
                         name: 'currentRestrictions',
-                        itemId: 'currentRestrictions'
+                        itemId: 'currentRestrictions',
+                        labelWidth: 72
                     }, {
-                        fieldLabel: 'Hrs Earned',
-                        name: 'creditHoursEarned',
-                        itemId: 'creditHoursEarned'
+                        fieldLabel: 'Academic Program',
+                        name: 'academicPrograms',
+                        itemId: 'academicPrograms',
+                        labelAlign: 'top'
                     }, {
-                        fieldLabel: 'Hrs Attempted',
-                        name: 'creditHoursAttempted',
-                        itemId: 'creditHoursAttempted'
+                        fieldLabel: 'Intended Program',
+                        itemId: 'intendedProgramAtAdmit',
+                        name: 'intendedProgramAtAdmit',
+                        labelAlign: 'top'
                     }, {
-                        fieldLabel: 'Comp Rate',
-                        name: 'creditCompletionRate',
-                        itemId: 'creditCompletionRate'
+                        fieldLabel: 'Start Term',
+                        name: 'startYearTerm',
+                        itemId: 'startYearTerm',
+                        labelWidth: 65
                     }, {
-                        fieldLabel: 'Transfer Hrs',
+                        fieldLabel: 'Anticipated Start Term',
+                        name: 'anticipatedStartYearTerm',
+                        itemId: 'anticipatedStartYearTerm',
+                        labelWidth: 130
+                    }, {
+                        fieldLabel: 'Transfer Hours',
                         name: 'transferHrs',
                         itemId: 'transferHrs',
-                        labelWidth: 80
-                    }, {
-                        fieldLabel: 'Reg',
-                        name: 'registeredTerms',
-                        itemId: 'registeredTerms',
-                        labelWidth: 30
-                    }, {
-                        fieldLabel: 'Payment',
-                        name: 'paymentStatus',
-                        itemId: 'paymentStatus',
-                        labelWidth: 50
-                    }, {
-                        fieldLabel: 'Balance',
-                        name: 'balanceOwed',
-                        itemId: 'balanceOwed'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: '10'
-                    }, {
-                        fieldLabel: 'FAFSA',
-                        name: 'fafsaDate',
-                        itemId: 'fafsaDate'
-                    }, {
-                        xtype: 'tbspacer',
-                        height: 8
-                    },{
-                        fieldLabel: 'Eligible Fed Aid',
-                        name: 'eligibleFederalAid',
-                        itemId: 'eligibleFederalAid',
-						hidden:true,
-                        labelWidth: 60
-                    },{
-	                        name: 'financialAidFileStatusDetails',
-	                        itemId: 'financialAidFileStatusDetails',
-	                        xtype:'label',
-	                        listeners: { element: 'el', click: function () { 
-	                        	var view = Ext.ComponentQuery.query("#profileDetails");
-	                        	if(view && view.length > 0)
-			                		view[0].getController().onShowFinancialAidFileStatuses();
-	                        } } 
-	                    },{
-	                        xtype: 'tbspacer',
-	                        height: 8
-	                    },
-                    {
-	                    	xtype:'label',
-	                        name: 'financialAidAcceptedTerms',
-	                        itemId: 'financialAidAcceptedTerms',
-	                        listeners: { element: 'el', click: function () { 
-	                        	var view = Ext.ComponentQuery.query("#profileDetails");
-	                        	if(view && view.length > 0)
-			                		view[0].getController().onShowFinancialAidAwards();
-	                        } }
-	                        
-                    },		{
-                        xtype: 'tbspacer',
-                        height: 8
-                    },{
-	                        fieldLabel: 'FA Amount',
-	                        name: 'financialAidRemaining',
-	                        itemId: 'financialAidRemaining'
-
-	                    },
-                    {
-                        fieldLabel: 'Institutional Loan Amount',
-                        name: 'institutionalLoanAmount',
-                        itemId: 'institutionalLoanAmount',
-                        labelWidth: 150
-                    },	{
-		                        fieldLabel: 'Loan Amount',
-		                        name: 'originalLoanAmount',
-		                        itemId: 'originalLoanAmount'
-
-		                    },
-                    {
-                        fieldLabel: 'Remaining FA Terms',
-                        name: 'termsLeft',
-                        itemId: 'termsLeft',
-                        labelWidth: 120
-                    },{
-                        xtype: 'tbspacer',
-                        height: 5
-                    }, {
-                        name: 'sapStatusCode',
-                        itemId: 'sapStatusCode',
-                        xtype: 'label',
-                        listeners: { element: 'el', click: function (me) { 
-                        	var view = Ext.ComponentQuery.query("#profileDetails");
-                        	if(view && view.length > 0)
-		                		view[0].getController().onShowSAPCodeInfo();
-                        } } 
-                    },{
-	                        fieldLabel: 'F1',
-	                        name: 'f1Status',
-	                        itemId: 'f1Status',
-	                        labelWidth: 15
-	                    }]
-                
+                        labelWidth: 87
+                    }]
                 }, {
                     xtype: 'fieldset',
-                    border: 0,
-                    title: '',
-                    defaultType: 'displayfield',
+                    title: 'MAP',
+                    anchor: '100%',
+            		padding: '0 10 10 10',
+                    flex: 1,
+                    layout: 'anchor',
                     defaults: {
-                        anchor: '100%'
+                        anchor: '100%',
+                        height: 18,
+                        margin: 0
                     },
-                    padding: 2,
-                    margin: '0 0 0 5',
-                    flex: 0.30,
+                    defaultType: 'displayfield',
                     items: [{
-                        fieldLabel: 'Residency',
-                        name: 'residencyCounty',
-                        itemId: 'residencyCounty',
-                        labelWidth: 60
+                        xtype: 'container',
+                        width: '100%',
+                        layout: 'hbox',
+                        margin: 0,
+                        padding: 0,
+                        height: 32,
+                        items: [{
+                            xtype: 'tbspacer',
+                            flex: 1
+                        }, {
+                            tooltip: 'Email MAP',
+                            text: '',
+                            width: 30,
+                            height: 30,
+                            cls: 'mapEmailIcon',
+                            xtype: 'button',
+                            itemId: 'emailPlanButton',
+                            hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON')
+                        }, {
+                            tooltip: 'Print MAP',
+                            text: '',
+                            width: 30,
+                            height: 30,
+                            cls: 'mapPrintIcon',
+                            xtype: 'button',
+                            itemId: 'printPlanButton',
+                            hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON')
+                        }]
                     }, {
-                        xtype: 'tbspacer',
-                        height: '20'
+                        fieldLabel: 'Plan Program',
+                        name: 'planProgram',
+                        itemId: 'planProgram',
+                        labelWidth: 85
                     }, {
-                        xtype: 'recenttermactivity'
+                        fieldLabel: 'Plan Catalog Year',
+                        name: 'planCatalogYear',
+                        itemId: 'planCatalogYear',
+                        labelWidth: 105
+                    }, {
+                        fieldLabel: 'Plan Status',
+                        itemId: 'onPlan',
+                        name: 'onPlan',
+                        labelWidth: 75
+                    }, {
+                        fieldLabel: 'Plan Name',
+                        name: 'mapName',
+                        itemId: 'mapName',
+                        labelWidth: 75
+                    }, {
+                        fieldLabel: 'Plan Owner',
+                        name: 'advisor',
+                        itemId: 'advisor',
+                        labelWidth: 75
+                    }, {
+                        fieldLabel: 'Plan Updated',
+                        name: 'mapLastUpdated',
+                        itemId: 'mapLastUpdated',
+                        labelWidth: 85
+                    }, {
+                        fieldLabel: 'Plan Ends',
+                        name: 'mapProjected',
+                        itemId: 'mapProjected',
+                        labelWidth: 65
                     }]
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: 'Cumulative and Term Activity',
+                flex: 5,
+                width: '100%',
+            	padding: '6 10 10 10',
+                items: [{
+                    xtype: 'grid',
+					itemId: 'cumTermGrid',
+                    minHeight: 1,
+                    store: termsTotalStore,
+                    columns: {
+                        defaults: {
+                            flex: 1,
+                            menuDisabled: true,
+                            sortable: false,
+                            draggable: false
+                        
+                        },
+                        items: [{
+                            text: 'Completion',
+                            dataIndex: 'totalCreditCompletionRate'
+                        }, {
+                            text: 'Attempted',
+                            dataIndex: 'totalCreditHoursAttempted'
+                        }, {
+                            text: 'Earned',
+                            dataIndex: 'totalCreditHoursEarned'
+                        }, {
+                            text: 'GPA',
+                            dataIndex: 'totalGradePointAverage'
+                        }]
+                    }
+                }, {
+                    xtype: 'tbspacer',
+                    height: 20
+                }, {
+                    xtype: 'grid',
+                    flex: 1,
+                    minHeight: 1,
+					height: '100%',
+                    store: me.termTranscriptsStore,
+                    columns: {
+                        defaults: {
+                            flex: 1,
+                            menuDisabled: true,
+                            sortable: false,
+                            draggable: false
+                        },
+                        items: [{
+                            text: 'Term',
+                            dataIndex: 'termCode'
+                        }, {
+                            text: 'Attempted',
+                            dataIndex: 'creditHoursAttempted'
+                        }, {
+                            text: 'Earned',
+                            dataIndex: 'creditHoursEarned'
+                        }, {
+                            text: 'GPA',
+                            dataIndex: 'gradePointAverage'
+                        }, {
+                            text: 'Paid',
+                            dataIndex: 'termCode',
+                            renderer: function(val, meta, rec, rowIdx, colIdx, store, view){
+                                // check against the financial data by termCode??
+                                return '';
+                            }
+                        }]
+                    }
                 }]
             }]
         });

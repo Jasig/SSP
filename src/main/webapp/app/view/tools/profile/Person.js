@@ -20,20 +20,23 @@ Ext.define('Ssp.view.tools.profile.Person', {
     extend: 'Ext.form.FieldContainer',
     alias: 'widget.profileperson',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.tool.profile.ProfilePersonViewController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        textStore:'sspTextStore'
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
+    minHeight: 200,
+    minWidth: 360,
+    maxWidth: 400,
+    
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
             fieldLabel: '',
             layout: 'hbox',
             margin: '0 0 0 0',
-			height: '150',
+            height: '150',
             defaultType: 'displayfield',
             fieldDefaults: {
                 msgTarget: 'side'
@@ -44,7 +47,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 fieldLabel: '',
                 src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
                 itemId: 'studentPhoto',
-                width:150
+                width: 160
             }, {
                 xtype: 'fieldset',
                 border: 0,
@@ -52,51 +55,51 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 title: '',
                 defaultType: 'displayfield',
                 defaults: {
-                    anchor: '100%'
+                    anchor: '100%',
+                    height: 16,
+                    margin: 0
                 },
-                //flex: .40,
                 items: [{
-                    fieldLabel: 'Name',
-                    name: 'studentName',
-                    itemId: 'studentName'
-                
-                }, {
-                    fieldLabel: 'ID',
-                    itemId: 'studentId',
-                    name: 'schoolId'
-                }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
-                    name: 'birthDate',
-                    itemId: 'birthDate'
-                }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone'),
-                    name: 'homePhone',
-                    labelWidth: 38
-                }, {
-                    name: 'primaryEmailAddressLabel',
-					itemId: 'primaryEmailAddressLabel'
-                }, {
                     fieldLabel: '',
                     hideLabel: true,
                     name: 'primaryEmailAddressField',
-					itemId: 'primaryEmailAddressField'
+                    itemId: 'primaryEmailAddressField'
                 }, {
-                    fieldLabel: 'Student Type',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
+                    name: 'birthDate',
+                    itemId: 'birthDate',
+                    labelWidth: 30
+                }, {
+                    fieldLabel: 'Type',
                     name: 'studentType',
-                    itemId: 'studentType'
-                }, {
-                    fieldLabel: 'SSP Status',
+                    itemId: 'studentType',
+                    labelWidth: 32
+                }, , {
+                    fieldLabel: 'Status',
                     name: 'programStatus',
-                    itemId: 'programStatus'
-                },
-				{
-					fieldLabel: 'Status Reason',
+                    itemId: 'programStatus',
+                    labelWidth: 45
+                }, {
+                    fieldLabel: 'Status Reason',
                     name: 'programStatusReason',
                     itemId: 'programStatusReason',
-					hidden: true
-					
-					
-				}]
+                    hidden: true
+                }, {
+                    fieldLabel: 'Academic Program:',
+                    name: 'academicPrograms',
+                    itemId: 'academicPrograms',
+                    labelAlign: 'top'
+                }, {
+                    fieldLabel: 'Plan Name',
+                    name: 'mapName',
+                    itemId: 'mapName',
+                    labelAlign: 'top'
+                }, {
+                    fieldLabel: 'Plan Owner',
+                    name: 'advisor',
+                    itemId: 'advisor',
+                    labelWidth: 70
+                }]
             
             }]
         

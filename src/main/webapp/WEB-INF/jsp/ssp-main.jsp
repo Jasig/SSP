@@ -36,6 +36,7 @@
 <!-- SSP Theme -->
 <link href="<c:url value="${version}/resources/css/tabs.css" />" rel="stylesheet" type="text/css" />
 <link href="<c:url value="${version}/resources/css/ssp-ext-theme.css" />" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"> 
 
 <!-- ExtJS Lib -->
 <c:choose>
