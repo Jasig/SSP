@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="Create Email Journal Entry message template" author="michael.gillian">
+        <insert tableName="message_template">
+            <column name="id" value="65bb389e-8c4f-4a7e-adc2-0938b1e66abe" />
+            <column name="name" value="Email Journal Entry" />
+            <column name="description"
+                value="Journal Entry comment created as a side-effect of authoring in-application email." />
+            <column name="subject"><![CDATA[Journal Entry Email Subject]]></column>
+            <column name="body"><![CDATA[From: $message.sender
+#if( $message.recipientEmailAddress != "")
+<br>To: $!message.recipientEmailAddress 
+#end
+#if( $message.carbonCopy != "")
+<br>CC: $!message.carbonCopy 
+#end 
+<br>Subject: $!emailRequest.emailSubject 
+<br>Email Message: $!emailRequest.emailBody]]>
+            </column>
+            <column name="created_date" valueDate="2014-10-16T16:00:00" />
+            <column name="modified_date" valueDate="2014-10-16T16:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+            <param name="messageTemplateId" value="65bb389e-8c4f-4a7e-adc2-0938b1e66abe" />
+            <param name="columnName" value="body"/>
+            <param name="resetChecksum" value="true"/>
+        </customChange>
+        <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+            <param name="messageTemplateId" value="65bb389e-8c4f-4a7e-adc2-0938b1e66abe" />
+            <param name="columnName" value="subject"/>
+            <param name="resetChecksum" value="true"/>
+        </customChange>
+        <rollback>
+            <delete tableName="message_template">
+                <where>id = '65bb389e-8c4f-4a7e-adc2-0938b1e66abe'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="update Early Alert Journal Entry template formatting" author="michael.gillian">
+    	<preConditions onFail="MARK_RAN" onFailMessage="Skipping update Early Alert Journal Entry template including HTML line formatting ">
+             <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                   <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f7ee2f9"/>
+                  <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>
+          <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+              <param name="messageTemplateId" value="b528c1ac-6104-435b-ae62-08eb4f7ee2f9"/>
+              <param name="columnName" value="body"/>
+              <param name="columnValue"><![CDATA[Summary:
+<br>Early Alert Course: $!earlyAlert.courseName
+<br>Early Alert Created Date: $!earlyAlert.createdDate
+<br>Response Created by: $!earlyAlertResponse.creator.firstName $!earlyAlertResponse.creator.lastName
+<br>Response Details:
+<br>Outcome: $!earlyAlertResponse.earlyAlertOutcome.name
+#foreach( $earlyAlertOutreach in $earlyAlertResponse.earlyAlertOutreach )
+<br>Outreach: $!earlyAlertOutreach.name
+#end
+#foreach( $earlyAlertReferral in $earlyAlertResponse.earlyAlertReferrals )
+<br>Referral: $!earlyAlertReferral.name
+#end
+<br>Comment: $!earlyAlertResponse.comment]]></param>
+          </customChange>
+    </changeSet>
+</databaseChangeLog>

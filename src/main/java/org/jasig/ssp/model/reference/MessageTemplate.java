@@ -88,6 +88,9 @@ public class MessageTemplate
 
     public static final UUID MYGPS_WELCOME_MESSAGE_ID = UUID.
             fromString("bfae38f8-53b0-486f-8bc5-a9d99beb514e");
+    
+    public static final UUID EMAIL_JOURNAL_ENTRY_ID = UUID.
+    		fromString("65bb389e-8c4f-4a7e-adc2-0938b1e66abe");
 
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)

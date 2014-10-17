@@ -27,6 +27,7 @@ import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.JournalSource;
+import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -34,6 +35,7 @@ import org.jasig.ssp.service.PersonEmailService;
 import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.jobqueue.AbstractPersonSearchBasedJobExecutor;
 import org.jasig.ssp.service.jobqueue.AbstractPersonSearchBasedJobQueuer;
 import org.jasig.ssp.service.jobqueue.BasePersonSearchBasedJobExecutionState;
@@ -42,7 +44,10 @@ import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.JournalSourceService;
+import org.jasig.ssp.service.reference.MessageTemplateService;
+import org.jasig.ssp.transferobject.EmailRequestTO;
 import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
+import org.jasig.ssp.transferobject.MessageTO;
 import org.jasig.ssp.transferobject.form.BulkEmailJobSpec;
 import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.jasig.ssp.transferobject.form.EmailAddress;
@@ -60,6 +65,7 @@ import org.springframework.util.StringUtils;
 import javax.mail.SendFailedException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -120,6 +126,12 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 
 	@Autowired
 	private transient PersonService personService;
+	
+	@Autowired
+	private transient MessageTemplateService messageTemplateService;
+
+	@Autowired
+	private transient VelocityTemplateService velocityTemplateService;
 
 	private static class BulkEmailJobExecutionState extends BasePersonSearchBasedJobExecutionState {
 		public int emailSentCount;
@@ -207,14 +219,34 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		return emailRequest.getCreateJournalEntry() && emailRequest.getStudentId() != null;
 	}
 
+	private String buildJournalEntryCommentFromEmail(
+			EmailStudentRequestForm emailRequest, Message message) throws ObjectNotFoundException {
+		MessageTO mTO = new MessageTO(message);
+		
+		EmailRequestTO erTO = new EmailRequestTO();
+		erTO.setEmailSubject(emailRequest.getEmailSubject());
+		erTO.setEmailBody(emailRequest.getEmailBody());
+		
+		final MessageTemplate messageTemplate = messageTemplateService
+				.get(MessageTemplate.EMAIL_JOURNAL_ENTRY_ID);
+
+		Map<String, Object> templateParameters = new HashMap<String, Object>();
+		templateParameters.put("message", mTO);
+		templateParameters.put("emailRequest", erTO);
+		return velocityTemplateService
+				.generateContentFromTemplate(
+						messageTemplate.getBody(),
+						messageTemplate.bodyTemplateId(), templateParameters);
+	}
+	
 	private JournalEntry buildJournalEntry(
 			EmailStudentRequestForm emailRequest, Message message, EmailVolume originalRequestVolume)
 			throws ObjectNotFoundException, ValidationException {
 		Person student = personService.get(emailRequest.getStudentId());
-
+		
 		JournalEntry journalEntry = new JournalEntry();
 		journalEntry.setPerson(student);
-
+		
 		String commentFromEmail = buildJournalEntryCommentFromEmail(emailRequest, message);
 
 		ConfidentialityLevel confidentialityLevel;
@@ -228,29 +260,11 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 		}
 		journalEntry.setConfidentialityLevel(confidentialityLevel);
 		journalEntry.setComment(commentFromEmail);
+
 		journalEntry.setEntryDate(new Date());
 		journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
 		journalEntry = journalEntryService.save(journalEntry);
 		return journalEntry;
-	}
-
-	private String buildJournalEntryCommentFromEmail(
-			EmailStudentRequestForm emailRequest, Message message) {
-		StringBuilder journalEntryCommentBuilder = new StringBuilder();
-		String EOL = System.getProperty("line.separator");
-		journalEntryCommentBuilder.append("FROM: " + message.getSender().getFullName() + EOL);
-		journalEntryCommentBuilder.append("TO: " + message.getRecipientEmailAddress() + EOL);
-		if(message.getCarbonCopy() != null)
-		{
-			journalEntryCommentBuilder.append("CC: " + message.getCarbonCopy() + EOL);
-		}
-		journalEntryCommentBuilder.append(EOL);
-		journalEntryCommentBuilder.append("Subject: "+emailRequest.getEmailSubject() + EOL);
-		journalEntryCommentBuilder.append(EOL);
-		journalEntryCommentBuilder.append("Email Message: "+emailRequest.getEmailBody() + EOL);
-		journalEntryCommentBuilder.append(EOL);
-
-		return journalEntryCommentBuilder.toString();
 	}
 
 	private Message buildStudentEmail(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume, boolean andSend)
