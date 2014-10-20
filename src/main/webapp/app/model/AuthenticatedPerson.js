@@ -326,16 +326,20 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
         return access.length > 0 ? true : false; 
     },
 
-    // TODO this is wrong! or is used wrong! b/c it doesn't take into account which tab you're on
-    hasAnyBulkPermissions: function( arrRequiredPermissions ){
+    hasAnyBulkExportPermissions: function(){
+        var me=this;
+        var yn = me.hasAccess('EXPORT_CASELOAD_TO_CSV_ACTION')
+            || me.hasAccess('EXPORT_WATCHLIST_TO_CSV_ACTION')
+            || me.hasAccess('EXPORT_SEARCH_TO_CSV_ACTION');
+    },
+
+    hasAnyBulkPermissions: function(){
     	var me=this;
-        return me.hasAccess('EXPORT_CASELOAD_TO_CSV_ACTION')
-                || me.hasAccess('EXPORT_WATCHLIST_TO_CSV_ACTION')
-                || me.hasAccess('EXPORT_SEARCH_TO_CSV_ACTION')
+        return me.hasAnyBulkExportPermissions()
                 || me.hasAccess('BULK_EMAIL_ACTION')
                 || me.hasAccess('BULK_PROGRAM_STATUS_ACTION');
     },
-    
+
     /**
      * Determines if a user has access to the provided permission.
      * Tests against the granted permissions for this user.

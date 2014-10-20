@@ -33,7 +33,7 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
     load: function() {
         var me = this;
         if(me.getCount() < 1) {
-            if(me.authenticatedPerson.hasAccess('EXPORT_TO_CSV_ACTION')) {
+            if(me.authenticatedPerson.hasAnyBulkExportPermissions()) {
                 me.add({id: "EXPORT", name: "Export to CSV"});
             }
             if(me.authenticatedPerson.hasAccess('BULK_EMAIL_ACTION')) {
