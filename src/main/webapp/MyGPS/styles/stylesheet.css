@@ -78,8 +78,9 @@
   margin-left: 10px;
   margin-right: 10px;
   width: 940px;
+  height: 40px;
   margin: 0px;
-  padding: 0px 10px;
+  padding: 5px 10px;
 }
 .page .header .banner {
   background: #222222 url("../images/background/heading.png") repeat;
@@ -100,10 +101,10 @@
   color: #fff;
 }
 .page .header .person-name {
-  position: absolute;
-  top: 12px;
-  right: 140px;
-  margin-top: 0px;
+  position: relative;
+  top: -45px;
+  padding-right: 2%;
+  float: right;
 }
 .page .header .ui-header {
   border: 1px solid #125687;
@@ -116,6 +117,12 @@
   background-image: -moz-linear-gradient(top, #5988af, #125687);
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #5988af), color-stop(1, #125687));
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#5988af', EndColorStr='#125687)')";
+}
+.page .header .ui-header .ui-btn-right {
+  position: relative;
+  margin-right: -15px;
+  top: -35px;
+  float: right;
 }
 .page .header .ui-header .ui-btn-right .ui-icon {
   background-image: url("../images/icons/lock.png");
