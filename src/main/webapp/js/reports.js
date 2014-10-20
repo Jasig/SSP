@@ -326,6 +326,7 @@ var ssp = ssp || {};
 				var dateRange = section.find('.ea-date-range');
 				if(value == 'setbyrange'){
 					term.find('[name="termCode"]').val("");
+					term.find('[name="alertTermCode"]').val("");
 					term.hide();
 					dateRange.show();
 					button.val('setbyterm');
@@ -334,6 +335,8 @@ var ssp = ssp || {};
 					term.show();
 					dateRange.find('[name="createDateFrom"]').val("");
 					dateRange.find('[name="createDateTo"]').val("");
+					dateRange.find('[name="alertCreateDateFrom"]').val("");
+					dateRange.find('[name="alertCreateDateTo"]').val("");
 					dateRange.hide();
 					button.val('setbyrange');
 					button.text('use date range');
