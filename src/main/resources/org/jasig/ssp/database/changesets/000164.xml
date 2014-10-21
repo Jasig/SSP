@@ -36,16 +36,13 @@
             <column name="name" value="Email Journal Entry" />
             <column name="description"
                 value="Journal Entry comment created as a side-effect of authoring in-application email." />
-            <column name="subject"><![CDATA[Journal Entry Email Subject]]></column>
-            <column name="body"><![CDATA[From: $message.sender
-#if( $message.recipientEmailAddress != "")
-<br>To: $!message.recipientEmailAddress 
-#end
-#if( $message.carbonCopy != "")
-<br>CC: $!message.carbonCopy 
-#end 
-<br>Subject: $!emailRequest.emailSubject 
-<br>Email Message: $!emailRequest.emailBody]]>
+            <column name="subject"><![CDATA[Email Journal Entry Subject]]></column>
+            <column name="body"><![CDATA[From:#if( "$!message.sender.fullName" != "" ) $!message.sender.fullName<br>#else [unknown]<br>#end
+#if( "$!message.recipientEmailAddress" != "")To: $!message.recipientEmailAddress<br>#end
+#if( "$!message.carbonCopy" != "")CC: $!message.carbonCopy<br>#end
+#if( "$!message.subject" != "")Subject: $!message.subject<br>#end
+<br>Email Message:<br>
+#if( "$!messageContext.originalBody" != "")$!messageContext.originalBody #else [empty] #end]]>
             </column>
             <column name="created_date" valueDate="2014-10-16T16:00:00" />
             <column name="modified_date" valueDate="2014-10-16T16:00:00" />

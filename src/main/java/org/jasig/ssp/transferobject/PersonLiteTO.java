@@ -190,4 +190,12 @@ public class PersonLiteTO implements Serializable {
 		this.lastName = lastName;
 	}
 
+	/**
+	 * Copy paste from {@link org.jasig.ssp.model.Person#getFullName()}
+	 * @return
+	 */
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
+
 }

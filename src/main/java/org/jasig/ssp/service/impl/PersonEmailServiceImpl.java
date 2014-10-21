@@ -45,7 +45,6 @@ import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
-import org.jasig.ssp.transferobject.EmailRequestTO;
 import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
 import org.jasig.ssp.transferobject.MessageTO;
 import org.jasig.ssp.transferobject.form.BulkEmailJobSpec;
@@ -67,6 +66,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -221,18 +221,28 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 
 	private String buildJournalEntryCommentFromEmail(
 			EmailStudentRequestForm emailRequest, Message message) throws ObjectNotFoundException {
-		MessageTO mTO = new MessageTO(message);
-		
-		EmailRequestTO erTO = new EmailRequestTO();
-		erTO.setEmailSubject(emailRequest.getEmailSubject());
-		erTO.setEmailBody(emailRequest.getEmailBody());
-		
+
+		// Not going to use this for a while, but might as well look it up first to make sure it exists
+		// before doing any other work
 		final MessageTemplate messageTemplate = messageTemplateService
 				.get(MessageTemplate.EMAIL_JOURNAL_ENTRY_ID);
 
+		final MessageTO messageTO = new MessageTO(message);
+
+		// "originalBody" is definitely a hack. see notes in formatEmailBody. Basically trying to make sure
+		// the template here has access to the originally requested, i.e. 'raw', email body, which should be
+		// an HTML fragment rather than a full HTML doc. We can't actually guarantee that, though. This is
+		// just a best effort for the common case where our UI gives us HTML fragments. We're not putting the
+		// entire emailRequest in the render params b/c we don't want to tightly couple that API to the
+		// UI API that object currently supports. And there is just one additional field we need at the moment,
+		// in addition to the MessageTO, so just using a simple MAP. Really struggled coming up with a good name
+		// for it, though. Thus the very generic 'messageContext'.
+		final LinkedHashMap<Object,Object> messageContextTO = Maps.newLinkedHashMap();
+		messageContextTO.put("originalBody", emailRequest.getEmailBody());
+
 		Map<String, Object> templateParameters = new HashMap<String, Object>();
-		templateParameters.put("message", mTO);
-		templateParameters.put("emailRequest", erTO);
+		templateParameters.put("message", messageTO);
+		templateParameters.put("messageContext", messageContextTO);
 		return velocityTemplateService
 				.generateContentFromTemplate(
 						messageTemplate.getBody(),
@@ -270,10 +280,22 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 	private Message buildStudentEmail(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume, boolean andSend)
 			throws ObjectNotFoundException {
 		final EmailAddress addresses = emailRequest.getValidDeliveryAddresses(true);
-		final SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), emailRequest.getEmailBody());
+		final String body = formatEmailBody(emailRequest);
+		final SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), body);
 		return andSend ?
 				messageService.createMessage(addresses.getTo(), addresses.getCc(), subjectAndBody) :
 				messageService.createMessageNoSave(addresses.getTo(), addresses.getCc(), subjectAndBody);
+	}
+
+	private String formatEmailBody(EmailStudentRequestForm emailRequest) {
+		// Yes, a hack. Normally email body requests won't be fully formed HTML docs, so we focus on trying to fix up
+		// that case. If someone does send a fully formed HTML doc, we leave it alone, but this *will* cause
+		// downstream problems in journal, which does expects HTML fragments not docs.
+		final String firstFewChars = emailRequest.getEmailBody().substring(0, Math.min(25, emailRequest.getEmailBody().length())).toLowerCase();
+		if ( !(firstFewChars.startsWith("<html")) && !(firstFewChars.startsWith("<!doctype")) ) {
+			return new StringBuilder("<html><body>").append(emailRequest.getEmailBody()).append("</body></html>").toString();
+		}
+		return emailRequest.getEmailBody();
 	}
 
 	/**
