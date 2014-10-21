@@ -348,15 +348,15 @@ display: none;
 }
 
 .fa-stack-3x {
-	font-size: 3em !important;
+	font-size: 3em;
 }
 
 .fa-stack-4x {
-	font-size: 4em !important;
+	font-size: 4em;
 }
 
 .fa-stack-5x {
-	font-size: 5em !important;
+	font-size: 5em;
 }
 
 .indicator-column .x-panel-body-default {
@@ -370,17 +370,15 @@ display: none;
 .indicator-label {
 	clear: both;
 	min-height: 18px;
-	display: block;
 }
 .indicator-value {
-	min-height: 18px;
 	padding-left: 10px;
-	float: left;
+	padding-bottom: 4px;
+	font-style: italic;
 }
 .indicator-glyph {
-	height: 36px !important;
+	height: 36px;
 	text-align: right;
-	float: right;
 	margin-right: 24px;
 	margin-bottom: 8px;
 }

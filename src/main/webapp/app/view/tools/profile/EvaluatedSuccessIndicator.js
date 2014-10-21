@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.profile.Indicator', {
+Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicator', {
     extend: 'Ext.Container',
-    alias: 'widget.dashboardindicator',
+    alias: 'widget.evaluatedsuccessindicator',
     width: '100%',
     height: '100%',
     
@@ -26,16 +26,16 @@ Ext.define('Ssp.view.tools.profile.Indicator', {
         var me = this;
         
         var tpl = new Ext.XTemplate('<tpl for=".">' +
-        '<div class="indicator-wrap" style="width:100%;">' +
-        '<div class="indicator-label">{indicatorName}:</div>' +
-        '<div class="indicator-glyph">' +
-        '<span class="fa-stack">' +
-        '<i class="fa fa-circle fa-stack-3x" style="color:{[this.getIconColor(values.indicatorStatus)]};"></i>' +
-        '<i class="fa {[this.getGlyph(values.indicatorStatus)]} fa-stack-3x fa-inverse" style="color:{[this.getGlyphColor(values.indicatorStatus)]};"></i>' +
-        '</span>' +
-        '</div>' +
-        '<div class="indicator-value">{indicatorValue}</div>' +
-        '</div>' +
+            '<div class="indicator-wrap" style="width:100%;">' +
+                '<div class="indicator-label" data-qtip="{indicatorDescription}">{indicatorName}:</div>' +
+                '<div class="indicator-value">{indicatorValue}</div>' +
+                '<div class="indicator-glyph">' +
+                    '<span class="fa-stack">' +
+                        '<i class="fa fa-circle fa-stack-3x" style="color:{[this.getIconColor(values.indicatorStatus)]};"></i>' +
+                        '<i class="fa {[this.getGlyph(values.indicatorStatus)]} fa-stack-3x fa-inverse" style="color:{[this.getGlyphColor(values.indicatorStatus)]};"></i>' +
+                    '</span>' +
+                '</div>' +
+            '</div>' +
         '</tpl>', {
             getGlyph: function(iStatus){
                 var glyph = 'fa-ban';

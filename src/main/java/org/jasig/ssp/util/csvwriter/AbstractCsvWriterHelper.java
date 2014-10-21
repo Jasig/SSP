@@ -22,6 +22,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.collect.Lists;
 import org.hibernate.ScrollableResults;
 import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.util.SspStringUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -179,10 +180,7 @@ public abstract class AbstractCsvWriterHelper<T> {
 	}
 
 	public String formatFriendlyBoolean(Boolean booleanVal) {
-		if ( booleanVal == null ) {
-			return null;
-		}
-		return booleanVal ? "Y" : "N";
+		return SspStringUtils.shortYesNoFromBoolean(booleanVal);
 	}
 
 	public String formatIntegerAsFriendlyBoolean(Integer integer, int threshold, Boolean whenNull) {

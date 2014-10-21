@@ -415,7 +415,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			}
 			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getMapStatus()))
 			{
-				param = PlanStatus.ON_TRACK_SUBSTITUTIO;
+				param = PlanStatus.ON_TRACK_SUBSTITUTION;
 			}			
 			query.setString("mapStatus",param.name());
 		}

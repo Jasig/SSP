@@ -80,4 +80,6 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 
 	List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person person);
 
+
+
 }

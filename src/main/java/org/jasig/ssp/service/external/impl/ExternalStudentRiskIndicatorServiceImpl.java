@@ -31,18 +31,18 @@ import java.util.List;
 @Service
 @Transactional(readOnly=true)
 public class ExternalStudentRiskIndicatorServiceImpl extends
-		AbstractExternalDataService<ExternalStudentRiskIndicator> implements ExternalStudentRiskIndicatorService {
+        AbstractExternalDataService<ExternalStudentRiskIndicator> implements ExternalStudentRiskIndicatorService {
 
-	@Autowired
-	private transient ExternalStudentRiskIndicatorDao dao;
+    @Autowired
+    private transient ExternalStudentRiskIndicatorDao dao;
 
-	@Override
-	protected ExternalDataDao<ExternalStudentRiskIndicator> getDao() {
-		return dao;
-	}
+    @Override
+    protected ExternalDataDao<ExternalStudentRiskIndicator> getDao() {
+        return dao;
+    }
 
-	@Override
-	public List<ExternalStudentRiskIndicator> getStudentTestResults(String schoolId) {
-		return dao.getStudentRiskIndicators(schoolId);
-	}
+    @Override
+    public List<ExternalStudentRiskIndicator> getBySchoolId(String schoolId) {
+        return dao.getStudentRiskIndicators(schoolId);
+    }
 }

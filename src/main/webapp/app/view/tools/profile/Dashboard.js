@@ -34,9 +34,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
         Ext.apply(me, {
             border: 0,
             bodyPadding: 10,
-            layout: 'anchor',
             defaults: {
-                anchor: '100%',
                 layout: {
                     type: 'hbox',
                     align: 'stretch'
@@ -72,39 +70,7 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
 					flex: 1
                 }]
             }, {
-                xtype: 'container',
-                margin: '20 0 0 0',
-                items: [{
-                    xtype: 'fieldset',
-                    title: 'Student Indicators',
-                    flex: 1,
-                    items: [{
-                        xtype: 'profilestudentindicators',
-                        flex: 1
-                    }]
-                }, {
-                    xtype: 'tbspacer',
-                    width: 10
-                }, {
-                    xtype: 'fieldset',
-                    title: 'Intervention Indicators',
-                    flex: 1,
-                    items: [{
-                        xtype: 'profileinterventionindicators',
-                        flex: 1
-                    }]
-                }, {
-                    xtype: 'tbspacer',
-                    width: 10
-                }, {
-                    xtype: 'fieldset',
-                    title: 'Risk Indicators',
-                    flex: 1,
-                    items: [{
-                        xtype: 'profileriskindicators',
-                        flex: 1
-                    }]
-                }]
+                xtype: 'evaluatedsuccessindicatorgroups'
             }]
         });
         

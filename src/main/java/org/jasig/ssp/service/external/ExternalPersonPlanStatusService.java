@@ -25,5 +25,5 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 public interface ExternalPersonPlanStatusService extends
 		ExternalDataService<ExternalPersonPlanStatus> {
 
-	ExternalPersonPlanStatus getBySchoolId(String schoolId) throws ObjectNotFoundException;
+	ExternalPersonPlanStatus getBySchoolId(String schoolId);
 }

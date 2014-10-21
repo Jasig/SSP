@@ -39,6 +39,7 @@ import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.MapStatusReportService;
+import org.jasig.ssp.service.MapStatusService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -111,12 +112,16 @@ public class PlanController  extends AbstractBaseController {
 	
 	@Autowired
 	private transient MessageService messageService;
-	
+
+	@Autowired
+	private transient MapStatusService mapStatusService;
+
 	@Autowired
 	private transient MapStatusReportService mapStatusReportService;
 	
 	@Autowired
-	private transient ExternalPersonPlanStatusService planStatusService;
+	private transient ExternalPersonPlanStatusService externalPlanStatusService;
+
 	
 	@Autowired
 	private ExternalPersonPlanStatusTOFactory planStatusFactory;
@@ -505,7 +510,7 @@ public class PlanController  extends AbstractBaseController {
 		//TODO not the cleanest way to handle but clientside generates 500 error in console
 		// Currently plan status is not required.
 		try{
-			return planStatusFactory.from(planStatusService.getBySchoolId(schoolId));
+			return planStatusFactory.from(externalPlanStatusService.getBySchoolId(schoolId));
 		}catch(Exception exp)
 		{
 			return null;
@@ -524,32 +529,8 @@ public class PlanController  extends AbstractBaseController {
 		if(personId == null){
 			return null;
 		}
-		String schoolId = null;
-		Person student = personService.get(personId);
-		schoolId = student.getSchoolId();
 		
-		Boolean calcPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim().toLowerCase());
-		
-		if(calcPlanStatus)
-		{
-			PagingWrapper<MapStatusReport> allForPerson = mapStatusReportService.getAllForPerson(student, null);
-			if(allForPerson.getRows().size() > 0)
-			{
-				MapStatusReport report = allForPerson.getRows().iterator().next();
-				return mapStatusReportTOFactory.from(report);
-			}
-			else 
-			return new MapStatusReportLiteTO();
-		}
-		else
-		{
-			try{
-				return planStatusFactory.from(planStatusService.getBySchoolId(schoolId));
-			}catch(Exception exp)
-			{
-				return null;
-			}
-		}
+		return mapStatusService.getByPersonId(personId);
 	}
 	
 	private PlanTO validatePlan(PlanTO plan) throws ObjectNotFoundException{

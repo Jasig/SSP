@@ -81,6 +81,8 @@ public interface SecurityService {
 	 */
 	SspUser noAuthAdminUser();
 
+	SspUser allConfidentialityLevelsAdminUser();
+
 	/**
 	 * Return the current user, or if null, the admin
 	 * 

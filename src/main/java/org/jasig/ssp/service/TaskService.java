@@ -36,6 +36,7 @@ import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.form.EmailPersonTasksForm;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -268,6 +269,8 @@ public interface TaskService
 	
 	Long getStudentTaskCountForCoach(Person coach, Date createDateFrom,
 			Date createDateTo, List<UUID> studentTypeIds);
+
+	Pair<Long, Long> getOpenVsClosedTaskCountsForPerson(Person person);
 	
 	PagingWrapper<EntityStudentCountByCoachTO> getStudentTaskCountForCoaches(EntityCountByCoachSearchForm form);
 	

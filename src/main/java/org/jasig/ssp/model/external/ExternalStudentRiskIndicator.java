@@ -32,101 +32,101 @@ import java.io.Serializable;
 @Immutable
 @Table(name = "v_external_student_risk_indicator")
 public class ExternalStudentRiskIndicator extends AbstractExternalData implements
-		Serializable, ExternalData {
+        Serializable, ExternalData {
 
-	@Column(nullable = false, length = 50)
-	@NotNull
-	@NotEmpty
-	@Size(max = 50)
-	private String schoolId;
+    @Column(nullable = false, length = 50)
+    @NotNull
+    @NotEmpty
+    @Size(max = 50)
+    private String schoolId;
 
-	@Column(nullable = false, length = 50)
-	@NotNull
-	@NotEmpty
-	@Size(max = 50)
-	private String modelCode;
+    @Column(nullable = false, length = 50)
+    @NotNull
+    @NotEmpty
+    @Size(max = 50)
+    private String modelCode;
 
-	@Column(nullable = false, length = 100)
-	@NotNull
-	@NotEmpty
-	@Size(max = 100)
-	private String modelName;
+    @Column(nullable = false, length = 100)
+    @NotNull
+    @NotEmpty
+    @Size(max = 100)
+    private String modelName;
 
-	@Column(nullable = false, length = 50)
-	@NotNull
-	@NotEmpty
-	@Size(max = 50)
-	private String indicatorCode;
+    @Column(nullable = false, length = 50)
+    @NotNull
+    @NotEmpty
+    @Size(max = 50)
+    private String indicatorCode;
 
-	@Column(nullable = false, length = 100)
-	@NotNull
-	@NotEmpty
-	@Size(max = 100)
-	private String indicatorName;
+    @Column(nullable = false, length = 100)
+    @NotNull
+    @NotEmpty
+    @Size(max = 100)
+    private String indicatorName;
 
-	@Column(nullable = true, length = 2500)
-	@Size(max = 2500)
-	private String indicatorValueDescription;
+    @Column(nullable = true, length = 2500)
+    @Size(max = 2500)
+    private String indicatorValueDescription;
 
-	@Column(nullable = false, length = 50)
-	@NotNull
-	@NotEmpty
-	@Size(max = 50)
-	private String indicatorValue;
+    @Column(nullable = false, length = 50)
+    @NotNull
+    @NotEmpty
+    @Size(max = 50)
+    private String indicatorValue;
 
-	public String getSchoolId() {
-		return schoolId;
-	}
+    public String getSchoolId() {
+        return schoolId;
+    }
 
-	public void setSchoolId(String schoolId) {
-		this.schoolId = schoolId;
-	}
+    public void setSchoolId(String schoolId) {
+        this.schoolId = schoolId;
+    }
 
-	public String getModelCode() {
-		return modelCode;
-	}
+    public String getModelCode() {
+        return modelCode;
+    }
 
-	public void setModelCode(String modelCode) {
-		this.modelCode = modelCode;
-	}
+    public void setModelCode(String modelCode) {
+        this.modelCode = modelCode;
+    }
 
-	public String getModelName() {
-		return modelName;
-	}
+    public String getModelName() {
+        return modelName;
+    }
 
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
 
-	public String getIndicatorCode() {
-		return indicatorCode;
-	}
+    public String getIndicatorCode() {
+        return indicatorCode;
+    }
 
-	public void setIndicatorCode(String indicatorCode) {
-		this.indicatorCode = indicatorCode;
-	}
+    public void setIndicatorCode(String indicatorCode) {
+        this.indicatorCode = indicatorCode;
+    }
 
-	public String getIndicatorName() {
-		return indicatorName;
-	}
+    public String getIndicatorName() {
+        return indicatorName;
+    }
 
-	public void setIndicatorName(String indicatorName) {
-		this.indicatorName = indicatorName;
-	}
+    public void setIndicatorName(String indicatorName) {
+        this.indicatorName = indicatorName;
+    }
 
-	public String getIndicatorValueDescription() {
-		return indicatorValueDescription;
-	}
+    public String getIndicatorValueDescription() {
+        return indicatorValueDescription;
+    }
 
-	public void setIndicatorValueDescription(String indicatorValueDescription) {
-		this.indicatorValueDescription = indicatorValueDescription;
-	}
+    public void setIndicatorValueDescription(String indicatorValueDescription) {
+        this.indicatorValueDescription = indicatorValueDescription;
+    }
 
-	public String getIndicatorValue() {
-		return indicatorValue;
-	}
+    public String getIndicatorValue() {
+        return indicatorValue;
+    }
 
-	public void setIndicatorValue(String indicatorValue) {
-		this.indicatorValue = indicatorValue;
-	}
+    public void setIndicatorValue(String indicatorValue) {
+        this.indicatorValue = indicatorValue;
+    }
 }

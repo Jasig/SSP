@@ -25,6 +25,7 @@ import org.jasig.ssp.security.SspUserDetailsService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,9 @@ public class SecurityServiceImpl implements SecurityService {
 	@Autowired
 	private transient SspUserDetailsService sspUserDetailsService;
 
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
+
 	@Override
 	public SspUser anonymousUser() {
 
@@ -86,6 +90,19 @@ public class SecurityServiceImpl implements SecurityService {
 
 		final SspUser user = new SspUser("no auth admin user", "", false,
 				false, false, false, new ArrayList<GrantedAuthority>(0));
+
+		user.setPerson(personService.load(Person.SYSTEM_ADMINISTRATOR_ID));
+
+		return user;
+	}
+
+	@Override
+	public SspUser allConfidentialityLevelsAdminUser() {
+
+		LOGGER.debug("Using the All Confidentiality Levels Admin User");
+
+		final SspUser user = new SspUser("all cls admin user", "", false,
+				false, false, false, confidentialityLevelService.confidentialityLevelsAsGrantedAuthorities());
 
 		user.setPerson(personService.load(Person.SYSTEM_ADMINISTRATOR_ID));
 

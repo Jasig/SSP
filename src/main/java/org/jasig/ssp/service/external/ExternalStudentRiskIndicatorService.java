@@ -24,6 +24,6 @@ import java.util.List;
 
 public interface ExternalStudentRiskIndicatorService extends ExternalDataService<ExternalStudentRiskIndicator> {
 
-	List<ExternalStudentRiskIndicator> getStudentTestResults(String schoolId);
+    List<ExternalStudentRiskIndicator> getBySchoolId(String schoolId);
 
 }

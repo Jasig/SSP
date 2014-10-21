@@ -22,6 +22,6 @@ import org.jasig.ssp.model.external.ExternalStudentRiskIndicator;
 import org.jasig.ssp.transferobject.external.ExternalStudentRiskIndicatorTO;
 
 public interface ExternalStudentRiskIndicatorTOFactory extends
-		ExternalTOFactory<ExternalStudentRiskIndicatorTO, ExternalStudentRiskIndicator> {
+        ExternalTOFactory<ExternalStudentRiskIndicatorTO, ExternalStudentRiskIndicator> {
 
 }

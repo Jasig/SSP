@@ -23,89 +23,89 @@ import org.jasig.ssp.model.external.ExternalStudentRiskIndicator;
 import java.io.Serializable;
 
 public class ExternalStudentRiskIndicatorTO implements Serializable,
-		ExternalDataTO<ExternalStudentRiskIndicator>  {
+        ExternalDataTO<ExternalStudentRiskIndicator>  {
 
-	private String schoolId;
-	private String modelCode;
-	private String modelName;
-	private String indicatorCode;
-	private String indicatorName;
-	private String indicatorValueDescription;
-	private String indicatorValue;
+    private String schoolId;
+    private String modelCode;
+    private String modelName;
+    private String indicatorCode;
+    private String indicatorName;
+    private String indicatorValueDescription;
+    private String indicatorValue;
 
-	public ExternalStudentRiskIndicatorTO() {
-		super();
-	}
+    public ExternalStudentRiskIndicatorTO() {
+        super();
+    }
 
-	public ExternalStudentRiskIndicatorTO(ExternalStudentRiskIndicator model){
-		super();
-		from(model);
-	}
+    public ExternalStudentRiskIndicatorTO(ExternalStudentRiskIndicator model){
+        super();
+        from(model);
+    }
 
-	public String getSchoolId() {
-		return schoolId;
-	}
+    public String getSchoolId() {
+        return schoolId;
+    }
 
-	public void setSchoolId(String schoolId) {
-		this.schoolId = schoolId;
-	}
+    public void setSchoolId(String schoolId) {
+        this.schoolId = schoolId;
+    }
 
-	public String getModelCode() {
-		return modelCode;
-	}
+    public String getModelCode() {
+        return modelCode;
+    }
 
-	public void setModelCode(String modelCode) {
-		this.modelCode = modelCode;
-	}
+    public void setModelCode(String modelCode) {
+        this.modelCode = modelCode;
+    }
 
-	public String getModelName() {
-		return modelName;
-	}
+    public String getModelName() {
+        return modelName;
+    }
 
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
 
-	public String getIndicatorCode() {
-		return indicatorCode;
-	}
+    public String getIndicatorCode() {
+        return indicatorCode;
+    }
 
-	public void setIndicatorCode(String indicatorCode) {
-		this.indicatorCode = indicatorCode;
-	}
+    public void setIndicatorCode(String indicatorCode) {
+        this.indicatorCode = indicatorCode;
+    }
 
-	public String getIndicatorName() {
-		return indicatorName;
-	}
+    public String getIndicatorName() {
+        return indicatorName;
+    }
 
-	public void setIndicatorName(String indicatorName) {
-		this.indicatorName = indicatorName;
-	}
+    public void setIndicatorName(String indicatorName) {
+        this.indicatorName = indicatorName;
+    }
 
-	public String getIndicatorValueDescription() {
-		return indicatorValueDescription;
-	}
+    public String getIndicatorValueDescription() {
+        return indicatorValueDescription;
+    }
 
-	public void setIndicatorValueDescription(String indicatorValueDescription) {
-		this.indicatorValueDescription = indicatorValueDescription;
-	}
+    public void setIndicatorValueDescription(String indicatorValueDescription) {
+        this.indicatorValueDescription = indicatorValueDescription;
+    }
 
-	public String getIndicatorValue() {
-		return indicatorValue;
-	}
+    public String getIndicatorValue() {
+        return indicatorValue;
+    }
 
-	public void setIndicatorValue(String indicatorValue) {
-		this.indicatorValue = indicatorValue;
-	}
+    public void setIndicatorValue(String indicatorValue) {
+        this.indicatorValue = indicatorValue;
+    }
 
-	@Override
-	public void from(ExternalStudentRiskIndicator model) {
-		schoolId = model.getSchoolId();
-		modelCode = model.getModelCode();
-		modelName = model.getModelName();
-		indicatorCode = model.getIndicatorCode();
-		indicatorName = model.getIndicatorName();
-		indicatorValueDescription = model.getIndicatorValueDescription();
-		indicatorValue = model.getIndicatorValue();
-	}
+    @Override
+    public void from(ExternalStudentRiskIndicator model) {
+        schoolId = model.getSchoolId();
+        modelCode = model.getModelCode();
+        modelName = model.getModelName();
+        indicatorCode = model.getIndicatorCode();
+        indicatorName = model.getIndicatorName();
+        indicatorValueDescription = model.getIndicatorValueDescription();
+        indicatorValue = model.getIndicatorValue();
+    }
 }

@@ -30,15 +30,15 @@ import java.util.List;
 @Repository
 public class ExternalStudentRiskIndicatorDao extends AbstractExternalDataDao<ExternalStudentRiskIndicator> {
 
-	protected ExternalStudentRiskIndicatorDao() {
-		super(ExternalStudentRiskIndicator.class);
-	}
+    protected ExternalStudentRiskIndicatorDao() {
+        super(ExternalStudentRiskIndicator.class);
+    }
 
-	public List<ExternalStudentRiskIndicator> getStudentRiskIndicators(String schoolId){
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("schoolId", schoolId));
-		criteria.addOrder(Order.asc("modelName"));
-		criteria.addOrder(Order.asc("indicatorName"));
-		return (List<ExternalStudentRiskIndicator>)criteria.list();
-	}
+    public List<ExternalStudentRiskIndicator> getStudentRiskIndicators(String schoolId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("schoolId", schoolId));
+        criteria.addOrder(Order.asc("modelName"));
+        criteria.addOrder(Order.asc("indicatorName"));
+        return (List<ExternalStudentRiskIndicator>)criteria.list();
+    }
 }

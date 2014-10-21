@@ -42,8 +42,8 @@ public class ExternalPersonPlanStatusServiceImpl extends
 	}
 	
 	@Override
-	public ExternalPersonPlanStatus getBySchoolId(String schoolId)
-			throws ObjectNotFoundException {
+    @Transactional(readOnly = true)
+	public ExternalPersonPlanStatus getBySchoolId(String schoolId) {
 		return getDao().getBySchoolId(schoolId);
 	}
 

@@ -80,7 +80,11 @@ public final class SspStringUtils {
 		return false;
 	}
 	
-	public static String YesNoFromBoolean(final Boolean value) {
-			return value == null ? null : value ?"YES" : "NO";
+	public static String yesNoFromBoolean(final Boolean value) {
+		return value == null ? null : (value ? "YES" : "NO");
+	}
+
+	public static String shortYesNoFromBoolean(final Boolean value) {
+		return value == null ? null : (value ? "Y" : "N");
 	}
 }

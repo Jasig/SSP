@@ -30,30 +30,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class ExternalStudentRiskIndicatorTOFactoryImpl extends
-		AbstractExternalDataTOFactory<ExternalStudentRiskIndicatorTO, ExternalStudentRiskIndicator> implements
-		ExternalStudentRiskIndicatorTOFactory {
+        AbstractExternalDataTOFactory<ExternalStudentRiskIndicatorTO, ExternalStudentRiskIndicator> implements
+        ExternalStudentRiskIndicatorTOFactory {
 
-	public ExternalStudentRiskIndicatorTOFactoryImpl() {
-		super(ExternalStudentRiskIndicatorTO.class, ExternalStudentRiskIndicator.class);
-	}
+    public ExternalStudentRiskIndicatorTOFactoryImpl() {
+        super(ExternalStudentRiskIndicatorTO.class, ExternalStudentRiskIndicator.class);
+    }
 
-	@Override
-	public ExternalStudentRiskIndicator from(ExternalStudentRiskIndicatorTO tObject)
-			throws ObjectNotFoundException {
-		final ExternalStudentRiskIndicator model = super.from(tObject);
+    @Override
+    public ExternalStudentRiskIndicator from(ExternalStudentRiskIndicatorTO tObject)
+            throws ObjectNotFoundException {
+        final ExternalStudentRiskIndicator model = super.from(tObject);
 
-		model.setSchoolId(tObject.getSchoolId());
-		model.setModelCode(tObject.getModelCode());
-		model.setModelName(tObject.getModelName());
-		model.setIndicatorCode(tObject.getIndicatorCode());
-		model.setIndicatorName(tObject.getIndicatorName());
-		model.setIndicatorValueDescription(tObject.getIndicatorValueDescription());
-		model.setIndicatorValue(tObject.getIndicatorValue());
-		return model;
-	}
+        model.setSchoolId(tObject.getSchoolId());
+        model.setModelCode(tObject.getModelCode());
+        model.setModelName(tObject.getModelName());
+        model.setIndicatorCode(tObject.getIndicatorCode());
+        model.setIndicatorName(tObject.getIndicatorName());
+        model.setIndicatorValueDescription(tObject.getIndicatorValueDescription());
+        model.setIndicatorValue(tObject.getIndicatorValue());
+        return model;
+    }
 
-	@Override
-	protected ExternalDataDao<ExternalStudentRiskIndicator> getDao() {
-		return null;
-	}
+    @Override
+    protected ExternalDataDao<ExternalStudentRiskIndicator> getDao() {
+        return null;
+    }
 }

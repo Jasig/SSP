@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.AuditPerson;
@@ -34,6 +35,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.DateTimeUtils;
+import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -259,5 +261,24 @@ public class TaskDao
 		return query;
 	}
 
-	
+
+	public Pair<Long,Long> getOpenVsClosedTaskCountsForPerson(Person person) {
+
+		//Probably this could be done in one query, but so much simpler to get working with two
+		final Criteria openCriteria = createCriteria()
+				.add(Restrictions.eq("person.id", person.getId()))
+				.add(Restrictions.isNull("completedDate"))
+				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE))
+				.setProjection(Projections.rowCount());
+		final Long openCnt = (Long)openCriteria.list().get(0);
+
+		final Criteria closedCriteria = createCriteria()
+				.add(Restrictions.eq("person.id", person.getId()))
+				.add(Restrictions.isNotNull("completedDate"))
+				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE))
+				.setProjection(Projections.rowCount());
+		final Long closedCnt = (Long)closedCriteria.list().get(0);
+
+		return new Pair<Long,Long>(openCnt, closedCnt);
+	}
 }

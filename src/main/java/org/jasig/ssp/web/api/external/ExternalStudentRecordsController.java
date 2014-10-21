@@ -531,7 +531,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			throw new ObjectNotFoundException(id, Person.class.getName());
 		}
 		final List<ExternalStudentRiskIndicatorTO> externalStudentRiskIndicatorTOs =
-				externalStudentRiskIndicatorTOFactory.asTOList(externalStudentRiskIndicatorService.getStudentTestResults(schoolId));
+				externalStudentRiskIndicatorTOFactory.asTOList(externalStudentRiskIndicatorService.getBySchoolId(schoolId));
 		return externalStudentRiskIndicatorTOs;
 	}
 	

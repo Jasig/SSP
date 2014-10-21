@@ -53,8 +53,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         academicProgramsField: '#academicPrograms',
         mapNameField: '#mapName',
         advisorField: '#advisor',
-		
-		gpaGlyph: '#gpaIndicator',
         
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'

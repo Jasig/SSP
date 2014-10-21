@@ -144,10 +144,14 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		final PagingWrapper<T> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						status == null ? ObjectStatus.ACTIVE : status, start,
-						limit, sort, sortDirection, "name"));
+						limit, sort, sortDirection, getDefaultSortColumn()));
 
 		return new PagedResponse<TO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
+	}
+
+	protected String getDefaultSortColumn() {
+		return "name";
 	}
 
 	/**
@@ -261,7 +265,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 		return new ServiceResponse(true);
 	}
 
-	private TO instantiateTO(final T model) throws ValidationException {
+	protected TO instantiateTO(final T model) throws ValidationException {
 		TO out;
 		try {
 			out = this.transferObjectClass.newInstance();

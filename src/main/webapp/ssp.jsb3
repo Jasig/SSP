@@ -1722,6 +1722,31 @@
                     "path": "/app/view/tools/profile/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.profile.EvaluatedSuccessIndicator",
+                    "name": "EvaluatedSuccessIndicator.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.EvaluatedSuccessIndicator",
+                    "name": "EvaluatedSuccessIndicator.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroup",
+                    "name": "EvaluatedSuccessIndicatorGroup.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroupsController",
+                    "name": "EvaluatedSuccessIndicatorGroupsController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups",
+                    "name": "EvaluatedSuccessIndicatorGroups.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
                     "clsName": "Ssp.view.tools.profile.Dashboard",
                     "name": "Dashboard.js",
                     "path": "/app/view/tools/profile/"
@@ -1734,26 +1759,6 @@
                 {
                     "clsName": "Ssp.view.tools.profile.Financial",
                     "name": "Financial.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.RiskIndicators",
-                    "name": "RiskIndicators.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.Indicator",
-                    "name": "Indicator.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.InterventionIndicators",
-                    "name": "InterventionIndicators.js",
-                    "path": "/app/view/tools/profile/"
-                },
-                {
-                    "clsName": "Ssp.view.tools.profile.StudentIndicators",
-                    "name": "StudentIndicators.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {

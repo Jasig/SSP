@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="dan.mccallum" id="create success indicator table" >
+        <createTable tableName="success_indicator">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="model_code" type="${nvarchar.type}(50)" />
+            <column name="model_name" type="${nvarchar.type}(100)" />
+            <column name="indicator_group" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="${nvarchar.type}(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="success_indicator_code_unq" />
+            </column>
+            <column name="name" type="${nvarchar.type}(80)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="instruction" type="${nvarchar.type}(1024)">
+                <constraints nullable="true" />
+            </column>
+            <column name="evaluation_type" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="scale_evaluation_high_from" type="decimal(9,2)" />
+            <column name="scale_evaluation_high_to" type="decimal(9,2)" />
+            <column name="scale_evaluation_medium_from" type="decimal(9,2)" />
+            <column name="scale_evaluation_medium_to" type="decimal(9,2)" />
+            <column name="scale_evaluation_low_from" type="decimal(9,2)" />
+            <column name="scale_evaluation_low_to" type="decimal(9,2)" />
+            <column name="string_evaluation_high" type="${nvarchar.type}(1024)" />
+            <column name="string_evaluation_medium" type="${nvarchar.type}(1024)" />
+            <column name="string_evaluation_low" type="${nvarchar.type}(1024)" />
+            <column name="no_data_exists_evaluation" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="no_data_matches_evaluation" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="sort_order" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false" foreignKeyName="success_i_created_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true" foreignKeyName="success_i_modified_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <sql>grant all on success_indicator to ${database.app.username}</sql>
+    </changeSet>
+
+    <changeSet author="dan.mccallum" id="create baseline student success indicators" >
+        <insert tableName="success_indicator">
+            <column name="id" value="c12b49f8-594b-11e4-bdb3-406c8f22c3ce" />
+            <column name="model_code" value="system.student" />
+            <column name="model_name" value="Student Indicators" />
+            <column name="indicator_group" value="STUDENT" />
+            <column name="code" value="system.student.gpa" />
+            <column name="name" value="GPA" />
+            <column name="description" value="Cumulative grade point average" />
+            <column name="instruction" value="Typically evaluated with a SCALE rule" />
+            <column name="evaluation_type" value="SCALE" />
+            <column name="scale_evaluation_high_from" value="3.00" />
+            <column name="scale_evaluation_high_to" value="4.00" />
+            <column name="scale_evaluation_medium_from" value="2.50" />
+            <column name="scale_evaluation_medium_to" value="2.99" />
+            <column name="scale_evaluation_low_from" value="0.00" />
+            <column name="scale_evaluation_low_to" value="2.49" />
+            <!-- leave these null -->
+            <!--<column name="string_evaluation_high" value="" />-->
+            <!--<column name="string_evaluation_medium" value="" />-->
+            <!--<column name="string_evaluation_low" value="" />-->
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <column name="no_data_matches_evaluation" value="DEFAULT" />
+            <column name="sort_order" value="10" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="707fe4d1-594d-11e4-90be-406c8f22c3ce" />
+            <column name="model_code" value="system.student" />
+            <column name="model_name" value="Student Indicators" />
+            <column name="indicator_group" value="STUDENT" />
+            <column name="code" value="system.student.registration" />
+            <column name="name" value="Registered" />
+            <column name="description" value="Current and future term registration status" />
+            <column name="instruction" value="Possible values: 'NONE', 'CURRENT', 'FUTURE', 'CURRENT_AND_FUTURE'.
+            Typically evaluated with a STRING rule matching on those values. If the system is unaware of any current
+            and/or future terms, this indicator has no value. If those terms do exist, but user has zero registrations
+            in them, this indicator's value is 'NONE'." />
+            <column name="evaluation_type" value="STRING" />
+            <column name="string_evaluation_high" value="CURRENT,FUTURE,CURRENT_AND_FUTURE" />
+            <!--<column name="string_evaluation_medium" value="" />--> <!-- leave this null -->
+            <column name="string_evaluation_low" value="NONE" />
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <!-- redundant -->
+            <column name="no_data_matches_evaluation" value="LOW" />
+            <column name="sort_order" value="20" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="d69410b0-594e-11e4-b991-406c8f22c3ce" />
+            <column name="model_code" value="system.student" />
+            <column name="model_name" value="Student Indicators" />
+            <column name="indicator_group" value="STUDENT" />
+            <column name="code" value="system.student.creditcompletion" />
+            <column name="name" value="Comp Rate" />
+            <column name="description" value="Credit completion ratio" />
+            <column name="instruction" value="Typically evaluated with a SCALE rule corresponding to values
+            sourced from external_student_transcript.credit_completion_rate. Those values are expected to be
+            percentages ranges with up to two fractional digits. E.g. 100.00 is 100%." />
+            <column name="evaluation_type" value="SCALE" />
+            <column name="scale_evaluation_high_from" value="75.00" />
+            <column name="scale_evaluation_high_to" value="100.00" />
+            <column name="scale_evaluation_medium_from" value="50.00" />
+            <column name="scale_evaluation_medium_to" value="74.99" />
+            <column name="scale_evaluation_low_from" value="0.00" />
+            <column name="scale_evaluation_low_to" value="49.99" />
+            <!-- leave these null -->
+            <!--<column name="string_evaluation_high" value="" />-->
+            <!--<column name="string_evaluation_medium" value="" />-->
+            <!--<column name="string_evaluation_low" value="" />-->
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <column name="no_data_matches_evaluation" value="DEFAULT" />
+            <column name="sort_order" value="30" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="dac0eda1-594e-11e4-9586-406c8f22c3ce" />
+            <column name="model_code" value="system.student" />
+            <column name="model_name" value="Student Indicators" />
+            <column name="indicator_group" value="STUDENT" />
+            <column name="code" value="system.student.standing" />
+            <column name="name" value="Standing" />
+            <column name="description" value="Standing" />
+            <column name="instruction" value="Typically evaluated with a STRING rule with values corresponding
+            external_student_transcript.academic_standing. Often lack of data there indicates good standing, which is
+            configured as the default." />
+            <column name="evaluation_type" value="STRING" />
+            <!-- leave these null and rely on defaults -->
+            <!--<column name="string_evaluation_high" value="" />-->
+            <!--<column name="string_evaluation_medium" value="" />-->
+            <!--<column name="string_evaluation_low" value="" />-->
+            <column name="no_data_exists_evaluation" value="HIGH" />
+            <column name="no_data_matches_evaluation" value="LOW" />
+            <column name="sort_order" value="40" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="9cad6b35-594f-11e4-9178-406c8f22c3ce" />
+            <column name="model_code" value="system.student" />
+            <column name="model_name" value="Student Indicators" />
+            <column name="indicator_group" value="STUDENT" />
+            <column name="code" value="system.student.sap" />
+            <column name="name" value="SAP" />
+            <column name="description" value="SAP status" />
+            <column name="instruction" value="Typically evaluated with a STRING rule with values corresponding
+            to codes found in external_student_financial_aid.sap_status_code." />
+            <column name="evaluation_type" value="STRING" />
+            <!-- leave these null and rely on defaults -->
+            <!--<column name="string_evaluation_high" value="" />-->
+            <!--<column name="string_evaluation_medium" value="" />-->
+            <!--<column name="string_evaluation_low" value="" />-->
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <column name="no_data_matches_evaluation" value="MEDIUM" />
+            <column name="sort_order" value="50" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="72548ac5-5953-11e4-9e1d-406c8f22c3ce" />
+            <column name="model_code" value="system.student" />
+            <column name="model_name" value="Student Indicators" />
+            <column name="indicator_group" value="STUDENT" />
+            <column name="code" value="system.student.restrictions" />
+            <column name="name" value="Restrictions" />
+            <column name="description" value="Restrictions" />
+            <column name="instruction" value="Typically evaluated with a STRING rule with values corresponding
+            to codes found in external_student_transcript.current_restrictions. By default, lack of data is considered
+            good ('HIGH'). Non-matching data is considered possibly problematic ('MEDIUM'). This data field is
+            multivalued. The evaluation will reflect the most riskful, i.e. 'lowest', from among those values." />
+            <column name="evaluation_type" value="STRING" />
+            <!-- leave these null and rely on defaults -->
+            <!--<column name="string_evaluation_high" value="" />-->
+            <!--<column name="string_evaluation_medium" value="" />-->
+            <!--<column name="string_evaluation_low" value="" />-->
+            <column name="no_data_exists_evaluation" value="HIGH" />
+            <column name="no_data_matches_evaluation" value="MEDIUM" />
+            <column name="sort_order" value="60" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="constrain model and indicator code uniqueness" author="dan.mccallum">
+        <addUniqueConstraint columnNames="model_code,code" tableName="success_indicator"/>
+    </changeSet>
+
+    <changeSet id="create baseline intervention success indicators" author="dan.mccallum">
+        <insert tableName="success_indicator">
+            <column name="id" value="23a2bd38-5adb-11e4-a7f9-406c8f22c3ce" />
+            <column name="model_code" value="system.intervention" />
+            <column name="model_name" value="Intervention Indicators" />
+            <column name="indicator_group" value="INTERVENTION" />
+            <column name="code" value="system.intervention.intakesubmitted" />
+            <column name="name" value="Intake" />
+            <column name="description" value="Intake submission exists" />
+            <column name="instruction" value="Evaluated against the presence of an Intake submission for
+            a given person. We have no good way of applying date/time based indicator evaluation rules at this time,
+            so this indicator effectively operates as a boolean test. STRING tests will receive a 'Y' or a 'N'. SCALE
+            tests will receive a '1' or a '0'. For this particular indicator, there is no conceptual difference between
+            'no data' and 'not submitted,' so the 'no data' rule will only be evaluated in situations where data
+            required to look up the intake submission in the first place cannot be found." />
+            <column name="evaluation_type" value="STRING" />
+            <column name="string_evaluation_high" value="Y" />
+            <!--<column name="string_evaluation_medium" value="" />--> <!-- leave null -->
+            <column name="string_evaluation_low" value="N" />
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <column name="no_data_matches_evaluation" value="LOW" />
+            <column name="sort_order" value="70" />
+
+            <column name="created_date" valueDate="2014-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="0b677db0-5e23-11e4-9a8a-7c6d628bb1c6" />
+            <column name="model_code" value="system.intervention" />
+            <column name="model_name" value="Intervention Indicators" />
+            <column name="indicator_group" value="INTERVENTION" />
+            <column name="code" value="system.intervention.openalerts" />
+            <column name="name" value="Open Alerts" />
+            <column name="description" value="Open early alerts" />
+            <column name="instruction" value="Evaluated against the number of open action plan tasks for a given person.
+            This will be an integer value, so the rule is almost always configured as SCALE. There is no concept of
+            'no data' for this indicator. I.e. the complete absence of alerts, open or otherwise, is still treated as
+            as '0' for inidicator evaluation purposes." />
+            <column name="evaluation_type" value="SCALE" />
+            <column name="scale_evaluation_high_from" value="0.00" />
+            <column name="scale_evaluation_high_to" value="1.00" />
+            <column name="scale_evaluation_medium_from" value="2.00" />
+            <column name="scale_evaluation_medium_to" value="3.00" />
+            <column name="scale_evaluation_low_from" value="4.00" />
+            <column name="scale_evaluation_low_to" value="null" />
+
+            <!-- leave these null and rely on defaults -->
+            <!--column name="string_evaluation_high" value="" /--> <!-- leave null -->
+            <!--<column name="string_evaluation_medium" value="" />--> <!-- leave null -->
+            <!--column name="string_evaluation_low" value="" /--> <!-- leave null -->
+
+            <!-- Shouldn't happen -->
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <!-- Redundant since default low_to has no value -->
+            <column name="no_data_matches_evaluation" value="HIGH" />
+            <column name="sort_order" value="80" />
+
+            <column name="created_date" valueDate="2014-10-27T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-27T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="677631eb-5e21-11e4-a1d8-7c6d628bb1c6" />
+            <column name="model_code" value="system.intervention" />
+            <column name="model_name" value="Intervention Indicators" />
+            <column name="indicator_group" value="INTERVENTION" />
+            <column name="code" value="system.intervention.opentasks" />
+            <column name="name" value="Open Tasks" />
+            <column name="description" value="Open action plan tasks (including tasks which might be hidden from you)" />
+            <column name="instruction" value="Evaluated against the number of open action plan tasks for a given person.
+            This will be an integer value, so the rule is almost always configured as SCALE. There is no concept of
+            'no data' for this indicator. I.e. the complete absence of tasks, open or otherwise, is still treated as
+            as '0' for inidicator evaluation purposes." />
+            <column name="evaluation_type" value="SCALE" />
+            <column name="scale_evaluation_high_from" value="0.00" />
+            <column name="scale_evaluation_high_to" value="2.00" />
+            <column name="scale_evaluation_medium_from" value="3.00" />
+            <column name="scale_evaluation_medium_to" value="5.00" />
+            <column name="scale_evaluation_low_from" value="6.00" />
+            <column name="scale_evaluation_low_to" value="null" />
+
+            <!-- leave these null and rely on defaults -->
+            <!--column name="string_evaluation_high" value="" /--> <!-- leave null -->
+            <!--<column name="string_evaluation_medium" value="" />--> <!-- leave null -->
+            <!--column name="string_evaluation_low" value="" /--> <!-- leave null -->
+
+            <!-- Shouldn't happen -->
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <!-- Redundant since default low_to has no value -->
+            <column name="no_data_matches_evaluation" value="HIGH" />
+            <column name="sort_order" value="90" />
+
+            <column name="created_date" valueDate="2014-10-27T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-27T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="success_indicator">
+            <column name="id" value="dfd95f82-5e2a-11e4-8895-7c6d628bb1c6" />
+            <column name="model_code" value="system.intervention" />
+            <column name="model_name" value="Intervention Indicators" />
+            <column name="indicator_group" value="INTERVENTION" />
+            <column name="code" value="system.intervention.mapstatus" />
+            <column name="name" value="MAP" />
+            <column name="description" value="MAP plan on/off track status" />
+            <column name="instruction" value="Evaluated against the presence of a MAP plan on/off status. Possible
+            values: ON, OFF, ON_TRACK_SUBSTITUTION, ON_TRACK_SEQUENCE. Only a STRING evaluation rule will make
+            any real sense. It is not necessary to have a plan in order to have a plan status, so the 'no data' case
+            refers to the status, not necessarily the plan. If the 'calculate_map_plan_status' config is set to 'true',
+            this indicator will use the internally-calculated plan status. Else it falls back to using
+            external_person_planning_status.status" />
+            <column name="evaluation_type" value="STRING" />
+            <column name="string_evaluation_high" value="ON" />
+            <column name="string_evaluation_medium" value="ON_TRACK_SUBSTITUTION,ON_TRACK_SEQUENCE" />
+            <column name="string_evaluation_low" value="OFF" />
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <column name="no_data_matches_evaluation" value="MEDIUM" />
+            <column name="sort_order" value="100" />
+
+            <column name="created_date" valueDate="2014-10-27T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-27T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+    </changeSet>
+
+    <!-- Now that we're taking external status into account when calculating success indicators on the
+    dashboard, it's more important to correctly support all possible values and in the correct spelling
+    b/c people may be setting up rules to match on those enum values -->
+    <changeSet id="fix plan status enum name typo" author="dan.mccallum">
+        <update tableName="map_status_report">
+            <column name="plan_status" value="ON_TRACK_SUBSTITUTION" />
+            <where>plan_status = 'ON_TRACK_SUBSTITUTIO'</where>
+        </update>
+    </changeSet>
+
+
+    
+</databaseChangeLog>

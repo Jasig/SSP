@@ -128,23 +128,5 @@ public class ElectiveController
 
 		return null;
 	}
-	
-	private ElectiveTO instantiateTO(final Elective model) throws ValidationException {
-		ElectiveTO out;
-		try {
-			out = this.transferObjectClass.newInstance();
-			out.from(model);
-			return out;
-		} catch (final InstantiationException e) {
-			LOGGER.error("Unable to instantiate this class", e);
-			throw new ValidationException("Unable to instantiate this class", e);
-		} catch (final IllegalAccessException e) {
-			LOGGER.error(
-					"Unable to instantiate this class because the Constructor is not visible",
-					e);
-			throw new ValidationException(
-					"Unable to instantiate this class because the Constructor is not visible",
-					e);
-		}
-	}
+
 }
