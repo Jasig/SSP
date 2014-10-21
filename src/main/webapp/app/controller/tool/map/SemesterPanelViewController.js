@@ -58,7 +58,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	},
 	config:{
 		minHrs : '0',
-		maxHrs: '0'
+		maxHrs: '0',
+		previousSemesterPanel: ''
 	},	
 	init: function() {
 		var me=this;
@@ -149,8 +150,34 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		else
 		{
 			grid.store.remove(record);
+			me.setOrderInTerm();
+			me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
+			var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            };
+			me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
+            success: me.newServiceSuccessHandler('validatedPlan', me.onValidateAfterDeleteSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateAfterDeleteFailure, serviceResponses),
+            scope: me,
+            isPrivate: true
+        });
+			
 		}
     },
+	
+	onValidateAfterDeleteSuccess: function(serviceResponses){
+		var me = this;
+    },
+	
+	onValidateAfterDeleteFailure: function(validate){
+    	var me = this;
+    	
+    	 me.getView().setLoading(false);
+    },
+	
 	onTermNotesSave: function(button){
 		var me = this;
 		 var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
@@ -226,16 +253,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     onDrop: function(node, data, overModel, dropPosition, eOpts){
 		var me = this;
 		me.getView().setLoading(true);
-		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
-		if(previousSemesterPanel != undefined && previousSemesterPanel != null){
+		if(data.view.findParentByType("semesterpanel") === undefined)
+			me.setPreviousSemesterPanel('');
+		else
+			me.setPreviousSemesterPanel(data.view.findParentByType("semesterpanel"));
+		if(me.getPreviousSemesterPanel().length != 0 ){
     		me.droppedFromStore = data.view.getStore();
 		}
+		
 		me.droppedRecord = data.records[0];
 		
 		me.setMinHrs(me.droppedRecord.data.minCreditHours);
 		me.setMaxHrs(me.droppedRecord.data.maxCreditHours);
-		
-		
+	
 		me.validateCourses();
 		return true;
     },
@@ -243,6 +273,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 
 	validateCourses: function(){
 		var me = this;
+		
 		var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -250,8 +281,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
                 expectedResponseCnt: 1
             };
 		me.setOrderInTerm();
+		
 		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
 		me.planWasDirty = me.currentMapPlan.dirty;
+		
 		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
             success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
@@ -310,6 +343,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
         		// to trip dirty (see SSP-2032), we clear out the 'removed' array.
 				me.getView().getStore().removed = [];
 				me.currentMapPlan.dirty = me.planWasDirty;
+			
 				me.getView().getStore().sort("orderInTerm", "ASC");
 			}
 			me.restoreCourse();
@@ -321,10 +355,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	restoreCourse: function(){
 		var me = this;
 		if(me.droppedFromStore){
-			var rec = me.droppedRecord.copy(); // clone the record
-			Ext.data.Model.id(rec);// generate unique id
-			me.droppedFromStore.add(rec);
-			me.droppedFromStore.sort("orderInTerm", "ASC");
+			if (me.getPreviousSemesterPanel().length != 0) {
+				var rec = me.droppedRecord.copy(); // clone the record
+				Ext.data.Model.id(rec);// generate unique id
+				me.droppedFromStore.add(rec);
+				me.droppedFromStore.sort("orderInTerm", "ASC");
+			}
 		}
 	},
 	
