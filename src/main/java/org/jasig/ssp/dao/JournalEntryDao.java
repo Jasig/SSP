@@ -197,23 +197,28 @@ public class JournalEntryDao
 			criteria.add(Restrictions.le("createdDate",
 					personSearchForm.getCreateDateTo()));
 		}
-		
-		if(personSearchForm.getGetStepDetails()){
+
+		if (personSearchForm.getGetStepDetails()) {
 			JoinType joinType = JoinType.INNER_JOIN;
 			criteria.createAlias("journalEntryDetails", "journalEntryDetails", joinType);
 			criteria.createAlias("journalEntryDetails.journalStepJournalStepDetail", "journalStepJournalStepDetail", joinType);
-			criteria.createAlias("journalStepJournalStepDetail.journalStepDetail", "journalStepDetail", joinType);
-			if(personSearchForm.getJournalStepDetailIds() != null && !personSearchForm.getJournalStepDetailIds().isEmpty())
-				criteria.add(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
-		}else{
+            criteria.createAlias("journalStepJournalStepDetail.journalStepDetail", "journalStepDetail", joinType);
+
+            if (personSearchForm.getJournalStepDetailIds() != null && !personSearchForm.getJournalStepDetailIds().isEmpty()) {
+                criteria.add(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
+                criteria.add(Restrictions.eq("journalEntryDetails.objectStatus", sAndP.getStatus()));
+                criteria.add(Restrictions.eq("journalStepJournalStepDetail.objectStatus", sAndP.getStatus()));
+            }
+        } else {
 			criteria.createAlias("journalEntryDetails", "journalEntryDetails", JoinType.LEFT_OUTER_JOIN);
 			criteria.createAlias("journalEntryDetails.journalStepJournalStepDetail", "journalStepJournalStepDetail", JoinType.LEFT_OUTER_JOIN);
 			criteria.createAlias("journalStepJournalStepDetail.journalStepDetail", "journalStepDetail", JoinType.LEFT_OUTER_JOIN);
-			if(personSearchForm.getJournalStepDetailIds() != null && !personSearchForm.getJournalStepDetailIds().isEmpty()){
+
+            if (personSearchForm.getJournalStepDetailIds() != null && !personSearchForm.getJournalStepDetailIds().isEmpty()) {
 				Criterion isNotIds = Restrictions.not(Restrictions.in("journalStepDetail.id", personSearchForm.getJournalStepDetailIds()));
 				Criterion isNull = Restrictions.isNull("journalStepDetail.id");
 				criteria.add(Restrictions.or(isNotIds, isNull));
-			}else{
+			} else {
 				criteria.add(Restrictions.isNull("journalStepDetail.id"));
 			}
 		}
