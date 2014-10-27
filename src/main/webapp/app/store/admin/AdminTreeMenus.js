@@ -968,8 +968,17 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 							allowBlank: false
                         },
 						flex: 0.25						
-					}]
-	            }]
+					}
+					]
+	            },
+				{
+                
+                    text: 'Status Indicators',
+                    title: 'Status Indicators',
+                    //store: 'selfHelpGuides',
+                    form: 'indicatoradmin',
+                    leaf: true
+                }]
 	        },{
                 text: 'MAP',
                 title: 'MAP',

@@ -206,6 +206,11 @@ Ext.require([
     'Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',
     'Ssp.view.admin.forms.shg.EditSelfHelpGuideAvailableChallengesAdmin',
     'Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',    
+	
+	//MAINTOOL ADMIN VIEWS
+	'Ssp.view.admin.forms.indicator.IndicatorAdmin',
+	'Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin',
+	'Ssp.view.admin.forms.indicator.EditIndicator',
     
   
     // JOURNAL ADMIN VIEWS
@@ -900,6 +905,12 @@ Ext.onReady(function(){
 			        currentSelfHelpGuideQuestions:{
 				        fn: function(){
 				            return new Ssp.model.tool.shg.SelfHelpGuideQuestions({id:""});
+				    	},
+				        singleton: true
+			        },
+					currentStatusIndicator:{
+				        fn: function(){
+				            return new Ssp.model.tool.indicator.SuccessIndicator();
 				    	},
 				        singleton: true
 			        },
@@ -1845,6 +1856,15 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 				    selfHelpGuideQuestionsStore: 'Ssp.store.reference.SelfHelpGuideQuestions',
+					statusIndicatorsStore: 'Ssp.store.reference.SuccessIndicators',
+					statusIndicatorsAllUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.SuccessIndicators', {
+					    		extraParams: {status: "ALL", limit: "-1"}
+					    	});
+					    },
+					    singleton: true
+					},
 				    serviceReasonsStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.ServiceReasons', {
