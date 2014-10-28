@@ -96,7 +96,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -307,7 +307,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -513,7 +513,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -695,7 +695,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 		
@@ -1043,7 +1043,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1209,7 +1209,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1377,7 +1377,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1513,7 +1513,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1715,7 +1715,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -1979,7 +1979,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -2222,7 +2222,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -2457,7 +2457,7 @@
 			</select>
 		</div>
 		<div class="ea-label">
-			<span>Home Department:</span>
+			<span>Assigned Coach Department:</span>
 		</div>
 		<div class="ea-clear"></div>
 
