@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="366"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -121,8 +121,8 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
-							<textField>
-								<reportElement uuid="fa14ca6f-a096-4a31-991e-f09cb91e443f" x="0" y="0" width="120" height="16"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement uuid="fa14ca6f-a096-4a31-991e-f09cb91e443f" x="0" y="0" width="120" height="16" isPrintWhenDetailOverflows="true"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="10"/>
 								</textElement>
@@ -150,8 +150,8 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
-							<textField evaluationTime="Auto" isBlankWhenNull="true">
-								<reportElement uuid="6f86c836-c815-4fed-9063-b43a8955deae" x="0" y="0" width="90" height="16"/>
+							<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+								<reportElement uuid="6f86c836-c815-4fed-9063-b43a8955deae" x="0" y="0" width="90" height="16" isPrintWhenDetailOverflows="true"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<paragraph rightIndent="10"/>
 								</textElement>
@@ -179,8 +179,8 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
-							<textField evaluationTime="Auto" isBlankWhenNull="true">
-								<reportElement uuid="e160005c-c143-4e59-89be-021f13dc2cbd" x="0" y="0" width="90" height="16"/>
+							<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+								<reportElement uuid="e160005c-c143-4e59-89be-021f13dc2cbd" x="0" y="0" width="90" height="16" isPrintWhenDetailOverflows="true"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<paragraph rightIndent="10"/>
 								</textElement>
@@ -215,8 +215,8 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 				<textElement/>
 				<text><![CDATA[Campus]]></text>
 			</staticText>
-			<textField isBlankWhenNull="false">
-				<reportElement uuid="e24c5fa5-a45a-42c5-806f-9c8e08c9e21f" x="100" y="60" width="265" height="20"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement uuid="e24c5fa5-a45a-42c5-806f-9c8e08c9e21f" x="100" y="60" width="265" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$P{campusName}]]></textFieldExpression>
 			</textField>
