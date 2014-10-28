@@ -432,15 +432,17 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			}			
 		}
 		
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest) || hasWatchStudent(personSearchRequest))
+		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
-			if(coach == null && personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList())
-			{
-				coach = securityService.currentlyAuthenticatedUser().getPerson();
-			}
 			query.setEntity("coach", coach);
 		}
+		
+		if(hasWatchStudent(personSearchRequest))
+		{
+			Person watcher = personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getWatcher();
+			query.setEntity("watcher", watcher);
+		}		
 		
 		if(hasDeclaredMajor(personSearchRequest))
 		{
