@@ -139,7 +139,6 @@ public class WatchStudentServiceImpl
 			SortingAndPaging sAndP) {
 		PersonSearchRequest form = new PersonSearchRequest();
 		form.setWatcher(person);
-		form.setMyWatchList(true);
 		form.setProgramStatus(programStatus);
 		form.setSortAndPage(sAndP);
 		return directoryPersonDao.search(form);
@@ -176,7 +175,6 @@ public class WatchStudentServiceImpl
 			SortingAndPaging buildSortAndPage) throws IOException {
 		PersonSearchRequest form = new PersonSearchRequest();
 		form.setWatcher(person);
-		form.setMyWatchList(true);
 		form.setProgramStatus(programStatus);
 		form.setSortAndPage(buildSortAndPage);
 		directoryPersonDao.exportableSearch(new CaseloadCsvWriterHelper(writer), form);
@@ -187,7 +185,6 @@ public class WatchStudentServiceImpl
 			SortingAndPaging buildSortAndPage) {
 		PersonSearchRequest form = new PersonSearchRequest();
 		form.setWatcher(person);
-		form.setMyWatchList(true);
 		form.setProgramStatus(programStatus);
 		form.setSortAndPage(buildSortAndPage);
 		return directoryPersonDao.getCaseloadCountFor(form, buildSortAndPage);

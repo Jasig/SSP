@@ -105,7 +105,7 @@ public class WatchStudentController
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_READ')")
 	public @ResponseBody
-	PagedResponse<PersonSearchResult2TO> myWatchlist(
+	PagedResponse<PersonSearchResult2TO> getWatchList(
 			@PathVariable @NotNull final UUID personId,
 			final @RequestParam(required = false) UUID programStatusId,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -130,7 +130,7 @@ public class WatchStudentController
 	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_READ')")
 	@RequestMapping(value = "/count", method = RequestMethod.GET)
 	public @ResponseBody
-	Long myWatchlistCount(
+	Long getWatchListCount(
 			@PathVariable @NotNull final UUID personId,
 			final @RequestParam(required = false) UUID programStatusId,
 			final @RequestParam(required = false) ObjectStatus status,

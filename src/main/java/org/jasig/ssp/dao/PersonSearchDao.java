@@ -288,11 +288,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private void buildWatchList(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasWatchStudent(personSearchRequest))
+		if(hasAnyWatchCriteria(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" ws.person = :coach ");		
-			stringBuilder.append("and ws.student = p ");			
+			stringBuilder.append(" ws.person.id = :watcherId	 ");
+			stringBuilder.append("and ws.student = p ");
 		}
 	}
 
@@ -434,15 +434,59 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
-			Person coach = personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getCoach();
-			query.setEntity("coach", coach);
+			Person me = null;
+			Person coach = null;
+			if ( hasMyCaseload(personSearchRequest) ) {
+				me = securityService.currentlyAuthenticatedUser().getPerson();
+			}
+			if ( hasCoach(personSearchRequest) ) {
+				coach = personSearchRequest.getCoach();
+			}
+
+			UUID queryPersonId = null;
+			Person compareTo = null;
+			if ( me != null ) {
+				queryPersonId = me.getId();
+				compareTo = coach;
+			} else if ( coach != null ) {
+				queryPersonId = coach.getId();
+				compareTo = me;
+			}
+			// If me and coach aren't the same, the query is non-sensical, so set the 'queryPerson' to null which
+			// will effectively force the query to return no results.
+			if ( queryPersonId != null && compareTo != null ) {
+				queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
+			}
+			query.setParameter("coachId", queryPersonId);
 		}
 		
-		if(hasWatchStudent(personSearchRequest))
+		if(hasAnyWatchCriteria(personSearchRequest))
 		{
-			Person watcher = personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList() ? securityService.currentlyAuthenticatedUser().getPerson() : personSearchRequest.getWatcher();
-			query.setEntity("watcher", watcher);
-		}		
+			Person me = null;
+			Person watcher = null;
+			if ( hasMyWatchList(personSearchRequest) ) {
+				me = securityService.currentlyAuthenticatedUser().getPerson();
+			}
+			if ( hasWatcher(personSearchRequest) ) {
+				watcher = personSearchRequest.getWatcher();
+			}
+
+			UUID queryPersonId = null;
+			Person compareTo = null;
+			if ( me != null ) {
+				queryPersonId = me.getId();
+				compareTo = watcher;
+			} else if ( watcher != null ) {
+				queryPersonId = watcher.getId();
+				compareTo = me;
+			}
+			// If me and watcher aren't the same, the query is non-sensical, so set the 'queryPerson' to null which
+			// will effectively force the query to return no results.
+			if ( queryPersonId != null && compareTo != null ) {
+				queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
+			}
+			query.setParameter("watcherId", queryPersonId);
+		}
 		
 		if(hasDeclaredMajor(personSearchRequest))
 		{
@@ -596,7 +640,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" p.coach = :coach ");
+			stringBuilder.append(" p.coach.id = :coachId ");
 		}
 	}
 
@@ -716,15 +760,23 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			stringBuilder.append(", ExternalStudentFinancialAid esfa ");
 		}	
-		if(hasWatchStudent(personSearchRequest))
+		if(hasAnyWatchCriteria(personSearchRequest))
 		{
 			stringBuilder.append(", WatchStudent ws ");
 		}		
 	}
 
 
-	private boolean hasWatchStudent(PersonSearchRequest personSearchRequest) {
+	private boolean hasMyWatchList(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList();
+	}
+
+	private boolean hasWatcher(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getWatcher() != null;
+	}
+
+	private boolean hasAnyWatchCriteria(PersonSearchRequest personSearchRequest) {
+		return hasMyWatchList(personSearchRequest) || hasWatcher(personSearchRequest);
 	}
 
 
