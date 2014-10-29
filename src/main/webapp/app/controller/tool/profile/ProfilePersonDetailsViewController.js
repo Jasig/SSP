@@ -376,7 +376,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             if (planStatus && planStatus.status == "OFF") 
                 me.getOnPlanField().setValue("Off Plan");
             else 
-                if (planStatus && planStatus.status == "ON_TRACK_SUBSTITUTIO") 
+                if (planStatus && planStatus.status == "ON_TRACK_SUBSTITUTION")
                     me.getOnPlanField().setValue("On Track Substitution");
                 else 
                     if (planStatus && planStatus.status == "ON_TRACK_SEQUENCE") 
