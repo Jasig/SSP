@@ -328,7 +328,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
 
     hasAnyBulkExportPermissions: function(){
         var me=this;
-        return = me.hasAccess('EXPORT_CASELOAD_TO_CSV_ACTION')
+        return me.hasAccess('EXPORT_CASELOAD_TO_CSV_ACTION')
             || me.hasAccess('EXPORT_WATCHLIST_TO_CSV_ACTION')
             || me.hasAccess('EXPORT_SEARCH_TO_CSV_ACTION');
     },
