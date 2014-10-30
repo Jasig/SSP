@@ -46,27 +46,27 @@ Ext.define('Ssp.controller.SearchViewController', {
 		termsStore: 'termsStore',
         configStore: 'configurationOptionsUnpagedStore',
         textStore:'sspTextStore'
-        
+
     },
-    
+
     control: {
     	view: {
     		itemclick: 'onSelectionChange',
 			viewready: 'onViewReady'
-    	},    	
+    	},
     	caseloadStatusCombo: {
     		selector: '#caseloadStatusCombo',
     		listeners: {
     			select: 'onCaseloadStatusComboSelect'
-    		} 
+    		}
     	},
     	caseloadActionCombo: {
     		selector: '#caseloadActionCombo',
     		listeners: {
     			select: 'onCaseloadActionComboSelect'
-    		} 
+    		}
     	},
-    	    	
+
     	searchGridPager: '#searchGridPager',
     	searchBar: '#searchBar',
 
@@ -77,22 +77,22 @@ Ext.define('Ssp.controller.SearchViewController', {
     			click: 'onAddPersonClick'
     		}
     	},
-    	
+
     	editPersonButton: {
     		selector: '#editPersonButton',
     		listeners: {
     			click: 'onEditPersonClick'
     		}
     	},
-    	
+
 		'setTransitionStatusButton': {
 			click: 'onSetProgramStatusClick'
 		},
-		
+
 		'setNonParticipatingStatusButton': {
 			click: 'onSetProgramStatusClick'
 		},
-		
+
 		'setNoShowStatusButton': {
 			click: 'onSetProgramStatusClick'
 		},
@@ -103,39 +103,39 @@ Ext.define('Ssp.controller.SearchViewController', {
 			click: 'onSetProgramStatusClick'
 		}
     },
-    
+
 	init: function() {
 		var me=this;
         var tabSelection = me.getView().tabContext;
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   //	me.personLite.set('id','');
-		
+
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_SEARCH = 0;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD = 1;
 	   	me.SEARCH_GRID_VIEW_TYPE_IS_WATCHLIST = 2;
-	   	
-		if(me.caseloadActionsStore.getTotalCount() == 0){
+
+		if (me.caseloadActionsStore.getTotalCount() == 0) {
 			me.caseloadActionsStore.load();
 		};
-		if(me.termsStore.getTotalCount() == 0){
+		if (me.termsStore.getTotalCount() == 0) {
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
 		};
-		if(me.textStore.getTotalCount() == 0){
+		if (me.textStore.getTotalCount() == 0) {
 			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.textStore.load();
-		}else{
+		} else {
 			me.onTextStoreLoad();
 		};
-		if(me.configStore.getTotalCount() == 0){
+		if (me.configStore.getTotalCount() == 0) {
 			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
 		};
 		me.personLite.on('idchanged', me.personChanged, me);
 	   	// load program statuses
 		me.getProgramStatuses();
-		
+
 		switch(tabSelection) {
 			case 'myCaseload':
 	            me.displayCaseload();
@@ -149,17 +149,18 @@ Ext.define('Ssp.controller.SearchViewController', {
 		return me.callParent(arguments);
     },
 
-   personChanged: function(){
+   personChanged: function() {
 	   var record = this.getView().getStore().findRecord("id", this.personLite.get("id"));
-	   if(record != null){
-			if(!this.getView().getSelectionModel().isSelected(record ))
+	   if (record != null) {
+			if(!this.getView().getSelectionModel().isSelected(record )) {
 				this.getView().getSelectionModel().select(record, false, true);
-		}else{
+			}
+	   } else {
 			this.getView().getSelectionModel().deselectAll(true);
-		}
+	   }
    },
-    
-    onTextStoreLoad:function(){
+
+    onTextStoreLoad:function() {
     	var me = this;
     	var index = !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ? 0 : 2;
     	var birthDateField = Ext.ComponentQuery.query('searchForm')[index].query('datefield[itemId=birthDate]')[0];
@@ -169,7 +170,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     	me.setGridView();
     },
-    
+
 	onSelectionChange: function( view, record, item, index, eventObj ) {
 		var me=this;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personNav', record, me);
@@ -184,7 +185,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 						me.updatePerson(record);
 						me.appEventsController.getApplication().fireEvent('loadPerson');
 					}
-				} else if(me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON')){
+				} else if(me.authenticatedPerson.hasAccess('ADD_STUDENT_BUTTON')) {
 					var person = new Ssp.model.Person();
 					// clear the person record
 					me.person.data = person.data;
@@ -196,7 +197,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     updatePerson: function( persons ) {
         var me=this;
-        
+
         var person = me.getRecordFromArray(persons);
 		if ( person.data.id != null ) {
 			me.personLite.set('id', person.data.id);
@@ -208,29 +209,30 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.personLite.set('lastName', person.data.lastName);
 		me.personLite.set('displayFullName', person.data.firstName + ' ' + person.data.lastName);
 	},
-	
-	getRecordFromArray: function(records){
+
+	getRecordFromArray: function(records) {
 		var record;
-		if(Array.isArray(records)){
-			if(records.length == 1)
+		if (Array.isArray(records)) {
+			if(records.length == 1) {
 				record = record[0];
-			else
-				throw "more than one record found, expect only one" 
-		}
-		else
+            } else {
+				throw "more than one record found, expect only one"
+            }
+		} else {
 			record = records;
+        }
 		return record
 	},
-	
-	onViewReady: function(comp, eobj){
+
+	onViewReady: function(comp, eobj) {
 		var me=this;
 		// 'do' events are added to avoid potential multiple listener issues
 		me.appEventsController.assignEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.onDoPersonStatusChange, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});
-		
+
         me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
 		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
@@ -244,34 +246,32 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 		me.harmonizePersonLite();
 	},
-	
-	harmonizePersonLite:function()
-	{
+
+	harmonizePersonLite:function() {
 		var me = this;
-		if(me.personLite.get('id')){
+		if (me.personLite.get('id')) {
 			var foundIndex = me.getView().getStore().findExact("id", me.personLite.get('id'));
-				if ( foundIndex >= 0)
-			{
+            if ( foundIndex >= 0) {
 				me.getView().getSelectionModel().select(foundIndex);
 			}
 		}
 	},
-	
-	onUpdateEarlyAlertCounts: function(params){
+
+	onUpdateEarlyAlertCounts: function(params) {
 		var me = this;
 		var person = me.caseloadStore.findRecord("id",params.personId, 0, false, false, true);
-		if(person != null){
+		if (person != null) {
 			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
 			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
 		}
-		
+
 		person = me.searchStore.findRecord("id",params.personId, 0, false, false, true);
-		if(person != null){
+		if (person != null) {
 			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
 			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
 		}
 		person = me.watchListStore.findRecord("id",params.personId, 0, false, false, true);
-		if(person != null){
+		if (person != null) {
 			person.set('numberOfEarlyAlerts', params.openEarlyAlerts);
 			person.set('numberEarlyAlertResponsesRequired', params.lateEarlyAlertResponses);
 		}
@@ -279,16 +279,16 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     destroy: function() {
     	var me=this;
-    	
+
 		me.termsStore.removeListener("load", me.onTermsStoreLoad, me);
 		me.textStore.removeListener("load", me.onTextStoreLoad, me, {single: true});
 		me.personLite.un('idchanged', me.personChanged, me);
 		me.appEventsController.removeEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
-		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me}); 
+		me.appEventsController.removeEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doPersonStatusChange', callBackFunc: me.onDoPersonStatusChange, scope: me});
         me.appEventsController.removeEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
-		me.appEventsController.removeEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});	
+		me.appEventsController.removeEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});
     	me.appEventsController.removeEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
 	   	me.appEventsController.removeEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
@@ -300,127 +300,129 @@ Ext.define('Ssp.controller.SearchViewController', {
 	   	if ( me.emailStudentPopup ) {
 	   	    me.emailStudentPopup.destroy();
 	   	}
-	   	
-		if(me.instantCaseload != null && !me.instantCaseload.isDestroyed)
+
+		if(me.instantCaseload != null && !me.instantCaseload.isDestroyed) {
 			me.instantCaseload.close();
-		
+        }
+
 		return me.callParent( arguments );
     },
-    
-    initSearchGrid: function(){
-	   	var me=this;
-	   	
-	   	if( me.getIsSearch() )
-		{
-			me.displaySearch();
-		} else
-		if( me.getIsWatchList() )
-		{
-			me.getWatchList(true);
-			me.displayWatchList();
-		}	   	
-	   	else{
-			if ( me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') )
-			{
-				me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
-				// default caseload to Active students if no program status is defined
 
-				me.getCaseload(true);
-				me.displayCaseload();
-			}else{
-				me.search();
-				me.displaySearch();
-			}
-		}
+    initSearchGrid: function() {
+	   	var me=this;
+
+	   	if(me.getIsSearch()) {
+			me.displaySearch();
+		} else {
+            if (me.getIsWatchList()) {
+                me.getWatchList(true);
+                me.displayWatchList();
+            } else {
+                if ( me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') ) {
+                    me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
+                    // default caseload to Active students if no program status is defined
+                    me.getCaseload(true);
+                    me.displayCaseload();
+                } else {
+                    me.search();
+                    me.displaySearch();
+                }
+            }
+        }
     },
-    
-    selectFirstItem: function(){
+
+    selectFirstItem: function() {
     	var me=this;
-    	if ( me.getView().getStore().getCount() > 0)
-    	{
+    	if ( me.getView().getStore().getCount() > 0) {
         	me.getView().getSelectionModel().select(0);
-    	}else{
+    	} else {
     		// if no record is available, then cast event
     		// to reset the profile tool fields
     		me.personLite.set('id', "");
     		me.appEventsController.getApplication().fireEvent('loadPerson');
     	}
     	me.appEventsController.getApplication().fireEvent('updateStudentRecord');
-    	me.refreshPagingToolBar();    	
+    	me.refreshPagingToolBar();
     },
     onCollapseStudentRecord: function(applyColumns) {
 		var me = this;
 		me.preferences.set('SEARCH_VIEW_SIZE', "COLLAPSED");
-		if(applyColumns === true)
-		{
+		if (applyColumns === true) {
 			me.applyColumns();
 		}
         me.showColumn(false,'birthDate');
 		me.showColumn(false,'primaryEmailAddress');
-		if(me.getIsCaseload() || me.getIsWatchList()){
+		if( me.getIsCaseload() || me.getIsWatchList() ){
 			me.showColumn(false,'coach');
 			me.showColumn(false,'currentProgramStatusName');
 			me.showColumn(true,'studentType')
-		}else{
+		} else {
 			me.showColumn(true,'coach');
 			me.showColumn(true,'currentProgramStatusName');
 			me.showColumn(false,'studentType');
 		}
 	},
-	
+
 	onExpandStudentRecord: function(applyColumns) {
 		var me = this;
 		me.preferences.set('SEARCH_VIEW_SIZE', "EXPANDED");
-		if(applyColumns === true)
-		{
+		if(applyColumns === true) {
 			me.applyColumns();
 		}
 	    me.showColumn(true,'birthDate');
 		me.showColumn(true,'studentType');
 		me.showColumn(true,'primaryEmailAddress');
-		if(me.getIsCaseload() || me.getIsWatchList()){
+		if (me.getIsCaseload() || me.getIsWatchList()) {
 			me.showColumn(false,'coach');
 			me.showColumn(false,'currentProgramStatusName');
-		}else{
-			me.showColumn(true,'coach');	
+		} else {
+			me.showColumn(true,'coach');
 			me.showColumn(true,'currentProgramStatusName');
-			
-		}
-	},  
 
-	setGridView: function( view ){
+		}
+	},
+
+	setGridView: function( view ) {
 		var me=this;
-		if(me.getIsExpanded()){
+		if (me.getIsExpanded()) {
 			me.onExpandStudentRecord(true);
 		}else{
 			me.onCollapseStudentRecord(true);
 		}
 	},
-	
-	getIsExpanded:function(){
+
+	getIsExpanded:function() {
 		var me= this;
-		if(me.preferences.get('SEARCH_VIEW_SIZE') == "EXPANDED")
+		if(me.preferences.get('SEARCH_VIEW_SIZE') == "EXPANDED") {
 			return true;
-		return false;
+        } else {
+		    return false;
+		}
 	},
-	
-	getIsCaseload: function(){
+
+	getIsCaseload: function() {
 		var me= this;
-		if(me.getView().tabContext === 'myCaseload')
+		if(me.getView().tabContext === 'myCaseload') {
 			return true;
-		return false;
+        } else {
+		    return false;
+		}
 	},
-	getIsSearch: function(){
+	getIsSearch: function() {
 		var me= this;
-		if(me.getView().tabContext === 'search')
+		if(me.getView().tabContext === 'search') {
 			return true;
-		return false;
-	},	
-	getIsWatchList: function(){
+        } else {
+		    return false;
+		}
+	},
+	getIsWatchList: function() {
 		var me= this;
-		if(me.getView().tabContext === 'watchList')
+		if(me.getView().tabContext === 'watchList') {
 			return true;
-		return false;
+        } else {
+		    return false;
+		}
 	},
 	onToolsNav: function() {
 		var searchView = Ext.ComponentQuery.query('searchtab')[0];
@@ -430,11 +432,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 	displaySearch: function() {
 	    var me = this;
 		me.getSearchBar().show();
-		
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
 		    Ext.ComponentQuery.query('searchForm')[2].show(); //user has two, second is search
         } else {
-            Ext.ComponentQuery.query('searchForm')[0].show(); //user only has one (no caseload)
+            Ext.ComponentQuery.query('searchForm')[0].show(); //user only has one (no caseload or watchlist)
         }
 
         me.setGridView();
@@ -442,49 +443,42 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	displayCaseload: function(){
 		var me=this;
-		
 		me.getSearchBar().hide();
 		me.setGridView();
 	},
 	displayWatchList: function(){
 		var me=this;
-		
 		me.getSearchBar().hide();
 		me.setGridView();
-		
-	},	
-	applyColumns: function(){
+
+	},
+	applyColumns: function() {
 		var me=this;
 		var grid = me.getView();
 		var store;
 		var sortableColumns = true;
 		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		var coachIdAlias = me.configStore.getConfigByName('coachFieldLabel');
-		if ( me.getIsCaseload() )
-			{
+		if ( me.getIsCaseload() ) {
 				store = me.caseloadStore;
-			}
-		else
-		if( me.getIsWatchList() )
-		{
-			store = me.watchListStore;
-			
-		} else
-		{
-			store = me.searchStore;
-			store.pageSize = store.data.length;
-			if (me.searchStore.data.length < 1) {
-				me.getCaseloadActionCombo().hide();
-			}
-			else {
-				if (me.authenticatedPerson.hasAnyBulkPermissions()) {
-					me.getCaseloadActionCombo().show();
-				}
-			}
-		}
-		
+		} else {
+            if( me.getIsWatchList() ) {
+                store = me.watchListStore;
+            } else {
+                store = me.searchStore;
+                store.pageSize = store.data.length;
+                if (me.searchStore.data.length < 1) {
+                    me.getCaseloadActionCombo().hide();
+                } else {
+                    if (me.authenticatedPerson.hasAnyBulkPermissions()) {
+                        me.getCaseloadActionCombo().show();
+                    }
+                }
+            }
+        }
+
 		columns = [
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },		        
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? 0.4:0.2},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 0.5},
@@ -496,54 +490,45 @@ Ext.define('Ssp.controller.SearchViewController', {
 	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
 	              ];
 
-		grid.getView().getRowClass = function(row, index)
-	    {
+		grid.getView().getRowClass = function(row, index) {
 			var cls = "";
 			var today = Ext.Date.clearTime( new Date() );
 			var tomorrow = Ext.Date.clearTime( new Date() );
 			tomorrow.setDate( today.getDate() + 1 );
 			// set apppointment date color first. early alert will over-ride appointment color.
-			if (row.get('currentAppointmentStartTime') != null)
-			{
-				if ( me.formUtils.dateWithin(today, tomorrow, row.get('currentAppointmentStartTime') ) )
-				{
+			if (row.get('currentAppointmentStartTime') != null)	{
+				if ( me.formUtils.dateWithin(today, tomorrow, row.get('currentAppointmentStartTime') ) ) {
 					cls = 'caseload-appointment-indicator'
 				}
 			}
-			
+
 			// early alert color will over-ride the appointment date
-			if ( row.get('numberOfEarlyAlerts') != null)
-			{
-				if (row.get('numberOfEarlyAlerts') > 0)
-				{
+			if ( row.get('numberOfEarlyAlerts') != null) {
+				if (row.get('numberOfEarlyAlerts') > 0) {
 					cls = 'caseload-early-alert-indicator'
-				}				
+				}
 			}
-			
+
 			// early alert color will over-ride the alert
-			if ( row.get('numberEarlyAlertResponsesRequired') != null)
-			{
-				if (row.get('numberEarlyAlertResponsesRequired') > 0)
-				{
+			if ( row.get('numberEarlyAlertResponsesRequired') != null) {
+				if (row.get('numberEarlyAlertResponsesRequired') > 0) {
 					cls = 'caseload-early-alert-response-required-indicator'
-				}				
+				}
 			}
-			
-			if (row.get('id') == "")
-			{
+
+			if (row.get('id') == "") {
 				cls = "directory-person-is-external-person-only";
 			}
 
 			return cls;
-	    };  		
-		
+	    };
+
 		me.formUtils.reconfigureGridPanel(grid, store, columns);
-		
-		if(me.getSearchGridPager)
-		{
+
+		if(me.getSearchGridPager) {
 			me.getSearchGridPager().bindStore(store);
 		}
-		
+
 		me.refreshPagingToolBar();
 	},
 
@@ -556,75 +541,74 @@ Ext.define('Ssp.controller.SearchViewController', {
 		   column.setVisible(show);
 	    }
 	},
-	
-	getColumn:function(dataIndex){
+
+	getColumn:function(dataIndex) {
 		var me=this;
 		var columns = me.getView().columns;
-		for(var i = 0; i < columns.length; i++){
-			if(columns[i].dataIndex == dataIndex)
+		for(var i = 0; i < columns.length; i++) {
+			if(columns[i].dataIndex == dataIndex) {
 				return columns[i];
+            }
 		}
 		return null;
 	},
 
-    onAddPersonClick: function( button ){
+    onAddPersonClick: function( button ) {
     	var me=this;
-		
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonAdd',me);  
-        if(skipCallBack)
-        {
+
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonAdd',me);
+        if(skipCallBack) {
         	me.onAddPerson();
         }
 	},
-	
-	onTermsStoreLoad:function(){
+
+	onTermsStoreLoad:function() {
 		var me = this;
 		me.termsStore.removeListener( "onTermsStoreLoad", me.onTermsStoreLoad, me );
-		
+
 	},
-	
-	onEditPersonClick: function( button ){
+
+	onEditPersonClick: function( button ) {
     	var me=this;
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonEdit',me);  
-        if(skipCallBack)
-        {
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('personButtonEdit',me);
+        if(skipCallBack) {
         	me.onEditPerson();
         }
 	},
 
-	onAddPerson: function(){
+	onAddPerson: function() {
 		var me=this;
 		var model = new Ssp.model.Person();
     	me.person.data = model.data;
     	me.personLite.set('id','');
 		me.loadCaseloadAssignment();
 	},
-	
-	onEditPerson: function(){
+
+	onEditPerson: function() {
 		var me=this;
 		var records = this.getView().getSelectionModel().getSelection();
-		if (records.length>0)
-		{
+		if (records.length>0) {
 			me.loadCaseloadAssignment();
-		}else{
+		} else {
 			Ext.Msg.alert('Error','Please select a student to edit.');
 		}
 	},
 
-    refreshPagingToolBar: function(){
-		if(this.getSearchGridPager() != null)
+    refreshPagingToolBar: function() {
+		if(this.getSearchGridPager() != null) {
     		this.getSearchGridPager().onLoad();
+    	}
     },
-    
-    loadCaseloadAssignment: function(){
-    	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});    	
+
+    loadCaseloadAssignment: function() {
+    	var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
     },
-	
-	loadStudentToolsView: function(){
+
+	loadStudentToolsView: function() {
     	this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     },
 
-	onSetProgramStatusClick: function( button ){
+	onSetProgramStatusClick: function( button ) {
 		var me=this;
 		var action = button.action;
 		me.setProgramStatus(action);
@@ -657,12 +641,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 		return true;
 	},
 
-	setProgramStatus: function( action ){
+	setProgramStatus: function( action ) {
 		var me=this;
 		var personId = me.personLite.get('id');
 		var programStatusId = "";
-		if (personId != "")
-		{
+		if (personId != "") {
 			var person = me.findResultPerson(personId);
 			if ( !(person) ) {
 				Ext.Msg.alert('SSP Error','Please select a student for which to change status');
@@ -692,7 +675,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 				// an async action which need to complete before allowing this event to proceed.
 				me.onDoPersonStatusChange(action, personId);
 			}
-		}else{
+		} else {
 			Ext.Msg.alert('SSP Error','Please select a student for which to change status');
 		}
 	},
@@ -702,7 +685,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		if ( !(me.getView().isActiveTab) ) {
 			return true; // otherwise you'll get the same event processed once for every tab you've visited
 		}
-		if(action == 'non-participating'){
+		if(action == 'non-participating') {
 			var dialog = Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
 				height: 150,
 				width: 500
@@ -747,19 +730,19 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 
-	saveProgramStatusSuccess: function(successEvent, r, scope){
+	saveProgramStatusSuccess: function(successEvent, r, scope) {
 		var me=scope;
 		me.getView().setLoading( false );
 		me.appEventsController.getApplication().fireEvent('afterPersonProgramStatusChange', successEvent);
 	},
 
-	saveProgramStatusFailure: function( r, scope){
+	saveProgramStatusFailure: function( r, scope) {
 		var me=scope;
 		Ext.Msg.alert('SSP Error','Failed to process program status change. Please contact your system administrator.');
 		me.getView().setLoading( false );
 	},
 
-	onAfterPersonProgramStatusChange: function(event){
+	onAfterPersonProgramStatusChange: function(event) {
 		var me = this;
 		var resultPerson = me.findResultPerson(event.personId);
 		if ( resultPerson ) {
@@ -778,64 +761,61 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 		return true; // make sure event propagates
 	},
-    
+
     /*********** SEARCH BAR ***************/
-    
-	onSearchClick: function(button){
+
+	onSearchClick: function(button) {
 		var me=this;
 		me.setSearchCriteria();
-		if ( me.searchCriteria.get('searchTerm') != "")
-		{
+		if ( me.searchCriteria.get('searchTerm') != "") {
 			me.search();
-		}else{
+		} else {
 			me.clearSearch();
-		}	
+		}
 	},
-	
+
 	setSearchCriteria: function(){
 		var me=this;
 		me.searchCriteria.set('searchTerm', searchTerm);
 		me.searchCriteria.set('outsideCaseload', outsideCaseload);
 	},
-	
-	clearSearch: function(){
+
+	clearSearch: function() {
 		var me=this;
 		me.searchStore.removeAll();
 		me.searchStore.totalCount = 0;
 		me.getSearchGridPager().onLoad();
 	},
-	
+
 	onSearchKeyPress: function(comp,e){
 		var me=this;
-        if(e.getKey()==e.ENTER){  
+        if(e.getKey()==e.ENTER){
     		me.setSearchCriteria();
-        	if ( me.searchCriteria.get('searchTerm') != "")
-    		{
+        	if ( me.searchCriteria.get('searchTerm') != "") {
     			me.search();
-    		}else{
+    		} else {
     			me.clearSearch();
-    		}   
-        }  
+    		}
+        }
     },
-	
+
 	search: function(){
 		var me=this;
 		me.setGridView();
-		if ( me.searchCriteria.get('searchTerm') != "")
-		{
+		if ( me.searchCriteria.get('searchTerm') != "") {
 			me.getView().setLoading( true );
-			me.searchService.search( 
+			me.searchService.search(
 					Ext.String.trim(me.searchCriteria.get('searchTerm')),
 					me.searchCriteria.get('outsideCaseload'),
 					{
 					success: me.searchSuccess,
 					failure: me.searchFailure,
 					scope: me
-			});				
+			});
 		}
 	},
 
-    searchSuccess: function(){
+    searchSuccess: function() {
     	var me=this;
         me.setGridView();
     	me.getView().setLoading( false );
@@ -843,51 +823,42 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getSearchGridPager().onLoad();
     },
 
-    searchFailure: function(){
+    searchFailure: function() {
     	var me=this;
 		me.personLite.set('id', "");
     	me.appEventsController.getApplication().fireEvent('loadPerson');
     	me.getView().setLoading( false );
     },
-    
-    
-    /**************** CASELOAD FILTERS *********************/
-    
-	onRetrieveCaseloadClick: function( button ){
-		var me=this;
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
 
-        if(skipCallBack)
-        {
-        	if(me.getView().tabContext === 'watchList')
-        	{
+
+    /**************** CASELOAD FILTERS *********************/
+
+	onRetrieveCaseloadClick: function( button ) {
+		var me=this;
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);
+
+        if(skipCallBack) {
+        	if(me.getView().tabContext === 'watchList') {
         		me.getWatchList();
-        	}
-        	else
-        	{
+        	} else {
         		me.getCaseload();
         	}
         }
 
 	},
-	
-	onCaseloadStatusComboSelect: function( comp, records, eOpts ){
+
+	onCaseloadStatusComboSelect: function( comp, records, eOpts ) {
 		var me=this;
-		if ( records.length > 0)
-    	{
+		if ( records.length > 0) {
 			me.caseloadFilterCriteria.set('programStatusId', records[0].get('id') );
 			me.caseloadFilterCriteria.set('programStatusName', records[0].get('name') );
      	}
-		
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);  
-        if(skipCallBack)
-        {
-        	if(me.getView().tabContext === 'watchList')
-        	{
+
+        var skipCallBack = this.appEventsController.getApplication().fireEvent('retrieveCaseload',me);
+        if(skipCallBack) {
+        	if(me.getView().tabContext === 'watchList') {
         		me.getWatchList();
-        	}
-        	else
-        	{
+        	} else {
         		me.getCaseload();
         	}
         }
@@ -972,7 +943,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	bulkProgramStatusChange: function(action) {
 		var me = this;
 		me.appEventsController.loadMaskOn();
-		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
+		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING') {
 			var dialog = Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
 				height: 150,
 				width: 500,
@@ -993,7 +964,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.doBulkProgramStatusChange(action);
 		}
 	},
-	bulkEmail: function(){
+	bulkEmail: function() {
 		var me=this;
 		if ( me.emailStudentPopup ) {
 			me.emailStudentPopup.destroy();
@@ -1212,29 +1183,28 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 
-	getProgramStatuses: function(){
+	getProgramStatuses: function() {
 		var me=this;
 		me.programStatusService.getAll({
-			success:me.getProgramStatusesSuccess, 
-			failure:me.getProgramStatusesFailure, 
+			success:me.getProgramStatusesSuccess,
+			failure:me.getProgramStatusesFailure,
 			scope: me
 	    });
 	},
 
-    getProgramStatusesSuccess: function( r, scope){
+    getProgramStatusesSuccess: function( r, scope) {
     	var me=scope;
     	var activeProgramStatusId = "";
     	var programStatus;
-    	if ( me.programStatusesStore.getCount() > 0 && me.getCaseloadStatusCombo() != null)
-    	{
+    	if ( me.programStatusesStore.getCount() > 0 && me.getCaseloadStatusCombo() != null) {
 			me.getCaseloadStatusCombo().setValue(Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
     	}
-    },	
+    },
 
-    getProgramStatusesFailure: function( r, scope){
+    getProgramStatusesFailure: function( r, scope) {
     	var me=scope;
-    },     
-	getWatchList: function(){
+    },
+	getWatchList: function() {
     	var me=this;
 		me.setGridView();
 		me.getView().setLoading( true );
@@ -1247,7 +1217,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 				scope: me
 			});
 	},
-	getCaseload: function(){
+	getCaseload: function() {
     	var me=this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
@@ -1260,66 +1230,53 @@ Ext.define('Ssp.controller.SearchViewController', {
 				failure:me.getCaseloadFailure,
 				scope: me
 			});
-	},  
-    getCaseloadSuccess: function( r, scope){
+	},
+    getCaseloadSuccess: function( r, scope) {
     	var me=scope;
-    	if(me.getSearchGridPager)
-    	{
+    	if(me.getSearchGridPager) {
     		me.getSearchGridPager().onLoad();
     	}
 		me.harmonizePersonLite();
-		if ( me.getIsCaseload() )
-			{
-				
-				if(me.caseloadStore.data.length < 1)
-				{
-					me.getCaseloadActionCombo().hide();
-				}
-				else
-				{
-					if (me.authenticatedPerson.hasAnyBulkPermissions()) {
-						me.getCaseloadActionCombo().show();
-						
-					}
-				}
-				
-			}
-		else
-		if( me.getIsWatchList() )
-		{
-			
-			if(me.watchListStore.getTotalCount() < 1)
-			{
-				
-				me.getCaseloadActionCombo().hide();
-			}
-			else
-			{
-				if (me.authenticatedPerson.hasAnyBulkPermissions()) {
-					me.getCaseloadActionCombo().show();
-					
-				}
-			}
-		} 
+		if ( me.getIsCaseload() ) {
+            if(me.caseloadStore.data.length < 1) {
+                me.getCaseloadActionCombo().hide();
+            } else {
+                if (me.authenticatedPerson.hasAnyBulkPermissions()) {
+                    me.getCaseloadActionCombo().show();
+
+                }
+            }
+        } else {
+            if( me.getIsWatchList() ) {
+                if(me.watchListStore.getTotalCount() < 1) {
+                    me.getCaseloadActionCombo().hide();
+                } else {
+                    if (me.authenticatedPerson.hasAnyBulkPermissions()) {
+                        me.getCaseloadActionCombo().show();
+                    }
+                }
+            }
+		}
 		me.getView().setLoading( false );
     },
 
-    getCaseloadFailure: function( r, scope){
+    getCaseloadFailure: function( r, scope) {
     	var me=scope;
     	me.getView().setLoading( false );
     },
-    
-    instantCaseloadAssignment: function(record){
+
+    instantCaseloadAssignment: function(record) {
     	var me=this;
-		if(me.instantCaseload == null || me.instantCaseload.isDestroyed)
-       		me.instantCaseload = Ext.create('Ssp.view.person.InstantCaseloadAssignment',{hidden:true, 
-       			schoolIdValue:record.get("schoolId"), 
+		if (me.instantCaseload == null || me.instantCaseload.isDestroyed) {
+       		me.instantCaseload = Ext.create('Ssp.view.person.InstantCaseloadAssignment',{hidden:true,
+       			schoolIdValue:record.get("schoolId"),
        			coachIdValue:record.get("coachId"),
        			studentTypeNameValue:record.get("studentTypeName")});
+        }
 		me.instantCaseload.show();
     },
-    
-    onUpdateSearchStoreRecord:function(params){
+
+    onUpdateSearchStoreRecord:function(params) {
     	var me = this;
     	var record = me.searchStore.findRecord("schoolId", params.person.get("schoolId"), 0, false, false, true);
     	record.set("id", params.person.get("id"));
@@ -1327,7 +1284,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     	record.set("middleName", params.person.get("middleName"));
     	record.set("lastName", params.person.get("lastName"));
 		var coach = params.person.get("coach");
-		if(coach){
+		if (coach) {
 			record.set("coachLastName",  coach.lastName);
 			record.set("coachFirstName",  coach.firstName);
 			record.set("coachId",   coach.id);
