@@ -35,16 +35,17 @@ Ext.define('Ssp.view.SearchTab', {
             layout: 'fit',
             items: [
                 Ext.createWidget('tabpanel', {
-                    activeTab: 0,
+                    activeTab: me.defaultActiveTabIndex(),
                     listeners: {
                     	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
                     		newTab.items.items[0].isActiveTab = true;
                     		oldTab.items.items[0].isActiveTab = false;
-                    		if(newTab.items.items[0].tabContext === 'search')
+                    		if (newTab.items.items[0].tabContext === 'search') {
                     			return;
-                    		else
+                    		} else {
                     			newTab.items.items[0].fireEvent('viewready');
-                    	    }
+                            }
+                        }
                     },
                     items: [{
                         title: 'My Caseload',
@@ -59,11 +60,11 @@ Ext.define('Ssp.view.SearchTab', {
                         border: 0,
                         hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1}]
                     },{
                         title: 'Search',
                         autoScroll: true,
-                        hidden: me.hasOnlySearch(),
+                        hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: 'search', isActiveTab: me.defaultActiveTabIndex() === 2}]
@@ -77,16 +78,16 @@ Ext.define('Ssp.view.SearchTab', {
     },
     hasOnlySearch : function() {
     	var me = this;
-    	return !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') && !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL');
+    	return me.authenticatedPerson.hasAccess('STUDENT_SEARCH') && !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') && !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL');
     },
 	defaultActiveTabIndex: function() {
 		var me = this;
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
 			return 0;
-		}
-		if ( me.authenticatedPerson.hasAccess('WATCHLIST_TOOL') ) {
+		} else if ( me.authenticatedPerson.hasAccess('WATCHLIST_TOOL') ) {
 			return 1;
-		}
-		return 2;
+		} else {
+		    return 2;
+        }
 	}
 });

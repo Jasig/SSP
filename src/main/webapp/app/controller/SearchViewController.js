@@ -432,11 +432,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	displaySearch: function() {
 	    var me = this;
 		me.getSearchBar().show();
-		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
-		    Ext.ComponentQuery.query('searchForm')[2].show(); //user has two, second is search
-        } else {
-            Ext.ComponentQuery.query('searchForm')[0].show(); //user only has one (no caseload or watchlist)
-        }
+	    Ext.ComponentQuery.query('searchForm')[2].show(); //component always has three from SearchTab using 3 Search.js, 3rd is the "search" tab
 
         me.setGridView();
     },
