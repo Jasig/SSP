@@ -16,25 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin', {
+Ext.define('Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.indicatordisplayadmin',
-    title: 'Status Indicator Admin',
+    alias: 'widget.successindicatoradmin',
+    title: 'Success Indicator Admin',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.indicator.IndicatorDisplayAdminViewController',
+    controller: 'Ssp.controller.admin.successindicator.SuccessIndicatorAdminViewController',
     inject: {
-		appEventsController: 'appEventsController',
+        appEventsController: 'appEventsController',
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
-        store: 'statusIndicatorsStore'
+        store: 'successIndicatorsAllStore'
     },
     height: '100%',
     width: '100%',
-    
+
     initComponent: function(){
         var me = this;
-		
+
+
         Ext.apply(me, {
             viewConfig: {},
             autoScroll: true,
@@ -44,22 +45,16 @@ Ext.define('Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin', {
             viewConfig: {
                 markDirty: false
             },
-			tools: [{
-					type: 'down'
-				}],
+            tools: [{
+                type: 'down'
+            }],
             columns: [{
                 header: 'Active',
                 dataIndex: 'objectStatus',
                 width: 44,
-                stopSelection: true,
-                renderer: function(value, meta, record){
-                    return '<center><input type="checkbox" name="checkbox"' + (value==="ACTIVE" ? 'checked' : '') + 
-						' onclick="var view = Ext.ComponentQuery.query(\'indicatordisplayadmin\')[0];' +
-						'var store = view.getStore();' +
-						'var rec = store.getAt(store.findExact(\'id\',\'' + record.get('id') + '\'));' +
-						'var args = {rec: rec, value: this.checked};' +
-						'view.appEventsController.getApplication().fireEvent(\'setActiveIndicator\', args);' +
-						'"></center>';
+                renderer: me.columnRendererUtils.renderObjectStatus,
+                field: {
+                    xtype: 'oscheckbox'
                 }
             }, {
                 header: 'Indicator Group',
@@ -80,16 +75,17 @@ Ext.define('Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin', {
                 dataIndex: 'name',
                 width: 160
             }, {
-                header: 'Description',
-                dataIndex: 'description',
-                flex: 1
-            }, {
                 header: 'Indicator Code',
                 dataIndex: 'code',
                 width: 120,
                 renderer: 'htmlEncode'
+            }, {
+                header: 'Sort',
+                dataIndex: 'sortOrder',
+                width: 50,
+                renderer: 'htmlEncode'
             }],
-            
+
             dockedItems: [{
                 xtype: 'pagingtoolbar',
                 dock: 'bottom',
@@ -102,7 +98,6 @@ Ext.define('Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin', {
                     text: 'Add',
                     iconCls: 'icon-add',
                     xtype: 'button',
-                    // hidden: !me.authenticatedPerson.hasAccess('STATUS_INDICATOR_DELETE_BUTTON'),
                     action: 'add',
                     itemId: 'addButton'
                 }]
@@ -115,7 +110,7 @@ Ext.define('Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin', {
                 }]
             }]
         });
-        
+
         return me.callParent(arguments);
     }
 });

@@ -973,10 +973,9 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 	            },
 				{
                 
-                    text: 'Status Indicators',
-                    title: 'Status Indicators',
-                    //store: 'selfHelpGuides',
-                    form: 'indicatoradmin',
+                    text: 'Success Indicators',
+                    title: 'Success Indicators',
+                    form: 'successindicatoradmin',
                     leaf: true
                 }]
 	        },{

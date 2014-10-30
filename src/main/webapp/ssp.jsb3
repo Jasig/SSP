@@ -2928,19 +2928,24 @@
                     "path": "/app/controller/admin/shg/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.indicator.EditIndicatorViewController",
-                    "name": "EditIndicatorViewController.js",
-                    "path": "/app/controller/admin/indicator/"
+                    "clsName": "Ssp.model.reference.SuccessIndicator",
+                    "name": "SuccessIndicator.js",
+                    "path": "/app/model/reference/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.indicator.IndicatorAdminViewController",
-                    "name": "IndicatorAdminViewController.js",
-                    "path": "/app/controller/admin/indicator/"
+                    "clsName": "Ssp.store.reference.SuccessIndicators",
+                    "name": "SuccessIndicators.js",
+                    "path": "/app/store/reference/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.indicator.IndicatorDisplayAdminViewController",
-                    "name": "IndicatorDisplayAdminViewController.js",
-                    "path": "/app/controller/admin/indicator/"
+                    "clsName": "Ssp.controller.admin.successindicator.EditSuccessIndicatorViewController",
+                    "name": "EditSuccessIndicatorViewController.js",
+                    "path": "/app/controller/admin/successindicator/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.successindicator.SuccessIndicatorAdminViewController",
+                    "name": "SuccessIndicatorAdminViewController.js",
+                    "path": "/app/controller/admin/successindicator/"
                 },
                 {
                     "clsName": "Ssp.model.tool.shg.SelfHelpGuideQuestions",
@@ -2998,19 +3003,14 @@
                     "path": "/app/view/admin/forms/shg/"
                 },
                 {
-                    "clsName": "Ssp.view.admin.forms.indicator.EditIndicator",
-                    "name": "EditIndicator.js",
-                    "path": "/app/view/admin/forms/indicator/"
+                    "clsName": "Ssp.view.admin.forms.successindicator.EditSuccessIndicator",
+                    "name": "EditSuccessIndicator.js",
+                    "path": "/app/view/admin/forms/successindicator/"
                 },
                 {
-                    "clsName": "Ssp.view.admin.forms.indicator.IndicatorAdmin",
-                    "name": "IndicatorAdmin.js",
-                    "path": "/app/view/admin/forms/indicator/"
-                },
-                {
-                    "clsName": "Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin",
-                    "name": "IndicatorDisplayAdmin.js",
-                    "path": "/app/view/admin/forms/indicator/"
+                    "clsName": "Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin",
+                    "name": "SuccessIndicatorAdmin.js",
+                    "path": "/app/view/admin/forms/successindicator/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.config.ConfigurationOptionsAdminViewController",

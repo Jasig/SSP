@@ -16,17 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.admin.indicator.IndicatorDisplayAdminViewController', {
+Ext.define('Ssp.controller.admin.successindicator.SuccessIndicatorAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-		appEventsController: 'appEventsController',
+        appEventsController: 'appEventsController',
         apiProperties: 'apiProperties',
-        store: 'statusIndicatorsStore',
-        unpagedStore: 'statusIndicatorsAllUnpagedStore',
+        store: 'successIndicatorsAllStore',
+        unpagedStore: 'successIndicatorsAllUnpagedStore',
         adminSelectedIndex: 'adminSelectedIndex',
         formUtils: 'formRendererUtils',
-        model: 'currentStatusIndicator',
+        model: 'currentSuccessIndicator',
         storeUtils: 'storeUtils'
     },
     config: {
@@ -37,20 +37,13 @@ Ext.define('Ssp.controller.admin.indicator.IndicatorDisplayAdminViewController',
         'addButton': {
             click: 'onAddClick'
         },
-		
-		view: {
-			itemdblclick: 'onItemClicked'
-		}
+
+        view: {
+            itemdblclick: 'onItemClicked'
+        }
     },
     init: function(){
         var me = this;
-		
-		me.appEventsController.assignEvent({
-            eventName: 'setActiveIndicator',
-            callBackFunc: me.onSetActiveIndicator,
-            scope: me
-        });
-        
         var params = {
             store: me.store,
             unpagedStore: me.unpagedStore,
@@ -60,64 +53,32 @@ Ext.define('Ssp.controller.admin.indicator.IndicatorDisplayAdminViewController',
             selectedIndex: me.adminSelectedIndex
         };
         me.storeUtils.onStoreUpdate(params);
-        
         return me.callParent(arguments);
     },
-    
+
     onItemClicked: function(grid, record, item, e, eOpts){
         var me = this;
-		
+
         if (record) {
             me.model.data = record.data;
             me.displayEditor();
         }
     },
-    
+
     onAddClick: function(button){
         var me = this;
-		var model = new Ssp.model.tool.indicator.SuccessIndicator();
-       me.model.data = model.data;
+        var model = new Ssp.model.reference.SuccessIndicator();
+        me.model.data = model.data;
         me.displayEditor();
     },
-	
+
     displayEditor: function(){
-		var me = this;
-		
+        var me = this;
         var comp = me.formUtils.loadDisplay(me.getContainerToLoadInto(), me.getFormToDisplay(), true, {});
     },
-	
-	onSetActiveIndicator: function(args) {
-		var me = this;
-		var rec = args.rec;
-		var status = args.value ? 'ACTIVE' : 'INACTIVE';
-		
-		rec.set('objectStatus', status);
-		// update data
-		/* 
-		var successFunc = function(response, view){
-            // nothing to do?
-        };
-		var url = me.store.getProxy().url;
-		var jsonData = rec.data;
-		this.apiProperties.makeRequest({
-            url: url + "/" + id,
-            method: 'PUT',
-            jsonData: jsonData,
-            successFunc: successFunc
-        }); */
-	},
-	
-	
-	
+
     destroy: function(){
         var me = this;
-    	
-		me.appEventsController.removeEvent({
-            eventName: 'setActiveIndicator',
-            callBackFunc: me.onSetActiveIndicator,
-            scope: me
-        });
-		
-		return me.callParent(arguments);
+        return me.callParent(arguments);
     }
 });

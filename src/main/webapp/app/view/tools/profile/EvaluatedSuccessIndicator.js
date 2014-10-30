@@ -39,56 +39,56 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicator', {
         '</tpl>', {
             getGlyph: function(iStatus){
                 var glyph = 'fa-ban';
-				if (iStatus) {
-					var risk = iStatus.toString().toLowerCase();
-					switch (risk) {
-						case "high":
-							glyph = 'fa-check-circle';
-							break;
-						case "medium":
-							glyph = 'fa-minus-circle';
-							break;
-						case "low":
-							glyph = 'fa-times-circle';
-							break;
-					}
-				}
+                if (iStatus) {
+                    var risk = iStatus.toString().toLowerCase();
+                    switch (risk) {
+                        case "high":
+                            glyph = 'fa-check-circle';
+                            break;
+                        case "medium":
+                            glyph = 'fa-minus-circle';
+                            break;
+                        case "low":
+                            glyph = 'fa-times-circle';
+                            break;
+                    }
+                }
                 return glyph;
             },
             getIconColor: function(iStatus){
                 var color = 'white';
-				if (iStatus) {
-					var risk = iStatus.toString().toLowerCase();
-					switch (risk) {
-						case "high":
-							color = 'white';
-							break;
-						case "medium":
-							color = 'black';
-							break;
-						case "low":
-							color = 'white';
-							break;
-					}
-				}
+                if (iStatus) {
+                    var risk = iStatus.toString().toLowerCase();
+                    switch (risk) {
+                        case "high":
+                            color = 'white';
+                            break;
+                        case "medium":
+                            color = 'black';
+                            break;
+                        case "low":
+                            color = 'white';
+                            break;
+                    }
+                }
                 return color;
             },
             getGlyphColor: function(iStatus){
                 var color = '#e8e8e8';
-				if (iStatus) {
-					var risk = iStatus.toString().toLowerCase();
-					switch (risk) {
-						case "high":
-							color = 'green';
-							break;
-						case "medium":
-							color = 'yellow';
-							break;
-						case "low":
-							color = 'red';
-							break;
-					}
-				}
+                if (iStatus) {
+                    var risk = iStatus.toString().toLowerCase();
+                    switch (risk) {
+                        case "high":
+                            color = 'green';
+                            break;
+                        case "medium":
+                            color = 'yellow';
+                            break;
+                        case "low":
+                            color = 'red';
+                            break;
+                    }
+                }
                 return color;
             }
         });

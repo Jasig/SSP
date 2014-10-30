@@ -208,9 +208,8 @@ Ext.require([
     'Ssp.view.admin.forms.shg.EditSelfHelpGuideEditChallenges',    
 	
 	//MAINTOOL ADMIN VIEWS
-	'Ssp.view.admin.forms.indicator.IndicatorAdmin',
-	'Ssp.view.admin.forms.indicator.IndicatorDisplayAdmin',
-	'Ssp.view.admin.forms.indicator.EditIndicator',
+	'Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin',
+	'Ssp.view.admin.forms.successindicator.EditSuccessIndicator',
     
   
     // JOURNAL ADMIN VIEWS
@@ -619,7 +618,8 @@ var apiUrls = [
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'termsfaceted', url: 'reference/term/facet'},
-  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'}
+  {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
+  {name: 'successIndicator', url: 'reference/successIndicator'}
 ];
 
 Ext.onReady(function(){	
@@ -909,12 +909,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
-					currentStatusIndicator:{
-				        fn: function(){
-				            return new Ssp.model.tool.indicator.SuccessIndicator();
-				    	},
-				        singleton: true
-			        },
+					currentSuccessIndicator:{
+						fn: function(){
+							return new Ssp.model.reference.SuccessIndicator();
+						},
+						singleton: true
+					},
 					courseTranscriptsStore: {
 						fn: function(){
 							return Ext.create('Ext.data.Store',{
@@ -1857,14 +1857,21 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 				    selfHelpGuideQuestionsStore: 'Ssp.store.reference.SelfHelpGuideQuestions',
-					statusIndicatorsStore: 'Ssp.store.reference.SuccessIndicators',
-					statusIndicatorsAllUnpagedStore: {
-			    		fn: function(){
-					    	return Ext.create('Ssp.store.reference.SuccessIndicators', {
-					    		extraParams: {status: "ALL", limit: "-1"}
-					    	});
-					    },
-					    singleton: true
+					successIndicatorsAllStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SuccessIndicators', {
+								extraParams: {status: "ALL"}
+							});
+						},
+						singleton: true
+					},
+					successIndicatorsAllUnpagedStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.reference.SuccessIndicators', {
+								extraParams: {status: "ALL",limit: "-1"}
+							});
+						},
+						singleton: true
 					},
 				    serviceReasonsStore: {
 			    		fn: function(){

@@ -18,20 +18,16 @@
  */
 Ext.define('Ssp.store.reference.SuccessIndicators', {
     extend: 'Ssp.store.reference.AbstractReferences',
-    model: 'Ssp.model.tool.indicator.SuccessIndicator',
+    model: 'Ssp.model.reference.SuccessIndicator',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
          apiProperties: 'apiProperties'
     },
     constructor: function(){
-		this.callParent(arguments);
-		Ext.apply(this.getProxy(),{
-    		url: this.getProxy().url + this.apiProperties.getItemUrl('successIndicator'),
-    		extraParams: this.extraParams,
-			autoLoad: false
-    		
-    	});
-        
-        return this.callParent(arguments);
+        this.callParent(arguments);
+        Ext.apply(this.getProxy(),{
+            url: this.getProxy().url + this.apiProperties.getItemUrl('successIndicator'),
+            extraParams: this.extraParams
+        });
     }
 });

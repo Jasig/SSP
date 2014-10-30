@@ -255,6 +255,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
         String metricDisplay = null;
         SuccessIndicatorEvaluation evaluation = null;
+        Exception failure = null;
         try {
 
             final Pair<Object,String> metricDescriptor = findMetric(successIndicator, person);
@@ -282,6 +283,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                                     new Object[] { metricValue, person.getId(), successIndicatorLoggingId(successIndicator), e });
                             // we have data, we just can't narrow its type for evaluation against a numeric scale, so this is
                             // a non-match, which is handled outside the switch
+                            failure = e;
                             break;
                         } // anything else is a programmer error and we can't really distinguish between 'no data' and 'no match' so raise it
 
@@ -321,16 +323,17 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             // getting the evaluation statuses you expect, enable debug logging and have a look.
             LOGGER.debug("Failed to evaluate success indicator [{}] for person [{}]",
                     new Object[]{successIndicatorLoggingId(successIndicator), person.getId(), e});
-            // TODO would be nice to have an 'error' eval to return, or at least a field
+            // TODO would be nice to have a better 'error' eval to return, or at least a field
             // to set on the evaluated indicator TO to indicate an error occurred so the
             // eval might be misleading
             metricDisplay = null;
+            failure = e;
             evaluation = successIndicator.getNoDataExistsEvaluation();
         }
 
         // wait to set display value to make sure there wasn't an error during eval
         final EvaluatedSuccessIndicatorTO indicatorTO = newBaseEvaluation(successIndicator, person);
-        indicatorTO.setDisplayValue(metricDisplay);
+        indicatorTO.setDisplayValue(StringUtils.isBlank(metricDisplay) ? (failure == null ? "[NO DATA]" : "[ERROR]") : metricDisplay);
         indicatorTO.setEvaluation(evaluation);
         return indicatorTO;
     }

@@ -177,12 +177,12 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
                 throw new ValidationException("Cannot modify the code field on a system-owned indicator");
             }
 
-            if ( !(StringUtils.equals(model.getName(), spec.getName())) ) {
-                throw new ValidationException("Cannot modify the name field on a system-owned indicator");
+            if ( StringUtils.isBlank(spec.getName()) ) {
+                throw new ValidationException("Cannot delete the name field on a system-owned indicator");
             }
 
-            if ( !(StringUtils.equals(model.getDescription(), spec.getDescription())) ) {
-                throw new ValidationException("Cannot modify the description field on a system-owned indicator");
+            if ( StringUtils.isBlank(spec.getDescription()) ) {
+                throw new ValidationException("Cannot delete the description on a system-owned indicator");
             }
 
             if ( !(StringUtils.equals(model.getModelCode(), spec.getModelCode())) ) {
@@ -238,7 +238,7 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
         model.setStringEvaluationMedium(spec.getStringEvaluationMedium());
         model.setStringEvaluationLow(spec.getStringEvaluationLow());
         model.setNoDataMatchesEvaluation(spec.getNoDataMatchesEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataMatchesEvaluation());
-        model.setNoDataExistsEvaluation(spec.getNoDataExistsEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataMatchesEvaluation());
+        model.setNoDataExistsEvaluation(spec.getNoDataExistsEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataExistsEvaluation());
         model.setObjectStatus(spec.getObjectStatus());
         model.setSortOrder(spec.getSortOrder());
 
