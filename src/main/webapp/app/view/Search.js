@@ -57,7 +57,7 @@ Ext.define('Ssp.view.Search', {
                 itemId: 'searchBar',
                 hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
                 items: [{
-  	              	xtype: 'searchForm', 
+  	              	xtype: 'searchForm',
   	              	hidden: true,
                     flex: 1
                 }]
@@ -179,7 +179,7 @@ Ext.define('Ssp.view.Search', {
                     editable: false,
                     queryMode: 'local',
                     allowBlank: false,
-                    hidden: !me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') || me.tabContext === 'search',
+                    hidden: !me.authenticatedPerson.hasAnyProgramStatusFilterPermissions() || me.tabContext === 'search',
                     forceSelection: true,
                     width: 100,
                     matchFieldWidth: false,
@@ -188,7 +188,7 @@ Ext.define('Ssp.view.Search', {
                 }    ]
             }]
         });
-        
+
         return me.callParent(arguments);
     }
 });
