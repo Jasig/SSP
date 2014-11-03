@@ -408,7 +408,7 @@ public class PersonProgramStatusServiceImpl extends
 			}
 
 			@Override
-			protected BulkProgramStatusChangeJobExecutionState newBulkEmailJobExecutionState() {
+			protected BulkProgramStatusChangeJobExecutionState newJobExecutionState() {
 				return new BulkProgramStatusChangeJobExecutionState();
 			}
 

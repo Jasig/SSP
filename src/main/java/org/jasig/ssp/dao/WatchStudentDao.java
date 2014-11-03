@@ -18,13 +18,12 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.WatchStudent;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 

@@ -459,7 +459,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			}
 
 			@Override
-			protected BulkEmailJobExecutionState newBulkEmailJobExecutionState() {
+			protected BulkEmailJobExecutionState newJobExecutionState() {
 				return new BulkEmailJobExecutionState();
 			}
 

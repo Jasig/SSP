@@ -82,7 +82,7 @@ public abstract class AbstractPersonSearchBasedJobExecutor<P extends HasPersonSe
 
 			if ( executionState == null ) {
 				// Nested calls to ensure we don't persist a not-fully-confgured execution state
-				executionState = configureNewExecutionState(newBulkEmailJobExecutionState());
+				executionState = configureNewExecutionState(newJobExecutionState());
 			}
 
 			if ( executionState.allPagesProcessed && executionState.retryQueue.isEmpty() ) {
@@ -276,7 +276,7 @@ public abstract class AbstractPersonSearchBasedJobExecutor<P extends HasPersonSe
 		return baseMsg;
 	}
 
-	protected abstract T newBulkEmailJobExecutionState();
+	protected abstract T newJobExecutionState();
 
 	protected T configureNewExecutionState(T executionState) {
 		executionState.pageSize = configService.getByNameExceptionOrDefaultAsInt(getPageSizeConfigName());

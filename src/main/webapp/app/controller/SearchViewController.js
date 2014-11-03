@@ -859,7 +859,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	buildBulkActionSearchCriteria: function() {
 		var me = this;
 		var criteria = {};
-		criteria.programStatus = me.translateSelectedStatustoSearchableStatus();
+		criteria.programStatus = me.translateSelectedStatusToSearchableStatus();
 
 		if ( me.getIsCaseload() ) {
 			criteria.myCaseload = true;
@@ -881,10 +881,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 				Ext.Msg.alert('SSP Error','No user records matched your current search criteria. <br/><br/>' +
 					'Retry with different search criteria.');
 			} else {
-				Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your administrator');
+				Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your system administrator');
 			}
 		} else {
-			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your administrator');
+			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your system administrator');
 		}
 	},
 	onBulkProgramStatusChangeSuccess: function() {
@@ -957,6 +957,67 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.doBulkProgramStatusChange(action);
 		}
 	},
+	onBulkWatchChangeFailure: function(resp, action) {
+		var me = this;
+		var displayName = me.translateWatchActionToDisplayName(action);
+		me.appEventsController.loadMaskOff();
+		if ( resp && resp.responseText ) {
+			// Big chunk of this messaging copy/pasted from EmailStudentForm
+			var rspTextStruct = Ext.decode(resp.responseText);
+			if ( rspTextStruct.message && rspTextStruct.message.indexOf("Person search parameters matched no records") > -1 ) {
+				Ext.Msg.alert('SSP Error','No user records matched your current search criteria. <br/><br/>' +
+					'Retry with different search criteria.');
+			} else {
+				Ext.Msg.alert('SSP Error','There was an issue procesing your bulk ' + displayName + ' request. Please contact your system administrator');
+			}
+		} else {
+			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk ' + displayName + ' request. Please contact your system administrator');
+		}
+	},
+	onBulkWatchChangeSuccess: function(action) {
+		var me = this;
+		var displayName = me.translateWatchActionToDisplayName(action);
+		me.appEventsController.loadMaskOff();
+
+		Ext.Msg.alert('Bulk ' + displayName + ' Request Queued','Your bulk ' + displayName + ' request has ' +
+			'been queued successfully. Bulk changes are processed gradually and may not be reflected immediately on-screen.');
+	},
+	newOnBulkWatchChangeFailure: function(action) {
+		var me = this;
+		return function(resp) {
+			me.onBulkWatchChangeFailure(resp, action);
+		}
+	},
+	newOnBulkWatchChangeSuccess: function(action) {
+		var me = this;
+		return function() {
+			me.onBulkWatchChangeSuccess(action);
+		}
+	},
+	bulkWatchChange: function(action) {
+		var me = this;
+		me.appEventsController.loadMaskOn();
+
+		var model = {
+			watchSpec: {
+				operation: me.translateWatchActionToDomainOperation(action),
+				watcherId: me.authenticatedPerson.get('id')
+			},
+			criteria: me.buildBulkActionSearchCriteria()
+		};
+
+		var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('bulk') )+'/watch';
+		var jsonData = model;
+
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'POST',
+			jsonData: jsonData,
+			successFunc: me.newOnBulkWatchChangeSuccess(action),
+			failureFunc: me.newOnBulkWatchChangeFailure(action),
+			scope: me
+		});
+	},
 	bulkEmail: function() {
 		var me=this;
 		if ( me.emailStudentPopup ) {
@@ -970,7 +1031,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	exportSearch: function(searchType) {
 		var me = this;
-		var url = me.exportService.buildExportCaseloadUrl(me.translateSelectedStatustoSearchableStatus(), me.translateCurrentTabToApiPath());
+		var url = me.exportService.buildExportCaseloadUrl(me.translateSelectedStatusToSearchableStatus(), me.translateCurrentTabToApiPath());
 		window.open(url,'_blank');
 	},
 	onExportConfirm: function(btnId) {
@@ -991,17 +1052,29 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.bulkProgramStatusChange(action);
 		}
 	},
+	onBulkWatchChangeConfirm: function(btnId, action) {
+		var me = this;
+		if (btnId=="ok") {
+			me.bulkWatchChange(action);
+		}
+	},
 	newOnBulkProgramStatusChangeConfirm: function(action) {
 		var me = this;
 		return function(btnId) {
 			me.onBulkProgramStatusChangeConfirm(btnId, action);
 		}
 	},
+	newOnBulkWatchChangeConfirm: function(action) {
+		var me = this;
+		return function(btnId) {
+			me.onBulkWatchChangeConfirm(btnId, action);
+		}
+	},
 	promptWithExportCount: function(count) {
 		var me = this;
 		var message;
 		count = parseInt(count);
-		// loadMaskOff() copy/pasted in both prompt*() functions to try to delay that dismissal as long
+		// loadMaskOff() copy/pasted in all prompt*() functions to try to delay that dismissal as long
 		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
 		me.appEventsController.loadMaskOff();
 
@@ -1017,7 +1090,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me = this;
 		count = parseInt(count);
 		var maxEmail =  parseInt(me.configStore.getConfigByName('mail_bulk_message_limit').trim());
-		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// loadMaskOff() copy/pasted in all prompt*() functions to try to delay that dismissal as long
 		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
 		me.appEventsController.loadMaskOff();
 		if(maxEmail > 0 && count > maxEmail) {
@@ -1043,7 +1116,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var message;
 		count = parseInt(count);
 		var programStatusName = me.translateProgramStatusActionToDisplayName(action);
-		// loadMaskOff() copy/pasted in both prompy*() functions to try to delay that dismissal as long
+		// loadMaskOff() copy/pasted in all prompt*() functions to try to delay that dismissal as long
 		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
 
 		me.appEventsController.loadMaskOff();
@@ -1070,17 +1143,32 @@ Ext.define('Ssp.controller.SearchViewController', {
 			scope: me
 		});
 	},
-	newBulkActionCountResultFailureCallback: function(action) {
+	promptWithBulkWatchChangeCount: function(count, action) {
 		var me = this;
-		return function(cnt) {
-			return me.onBulkActionCountFailure(cnt, action);
+		var message;
+		count = parseInt(count);
+		var watchActionName = me.translateWatchActionToDisplayName(action);
+		// loadMaskOff() copy/pasted in all prompt*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+
+		me.appEventsController.loadMaskOff();
+		if ( watchActionName === null ) {
+			Ext.Msg.alert('SSP Error', 'Unrecognized Watch action.');
+			return;
 		}
-	},
-	newBulkActionCountResultSuccessCallback: function(action) {
-		var me = this;
-		return function(cnt) {
-			return me.onBulkActionCountSuccess(cnt, action);
+		if ( count === 0 ) {
+			Ext.Msg.alert('Too Few Search Results','Cannot ' + watchActionName + ' an empty caseload/watchlist/search result.');
+			return;
 		}
+		var msg = count + " user/s will be considered for " + watchActionName + ". Users " +
+			"who haven't already been created will be unaffected. Continue?";
+		Ext.Msg.confirm({
+			title:'Confirm',
+			msg: msg,
+			buttons: Ext.Msg.OKCANCEL,
+			fn: me.newOnBulkWatchChangeConfirm(action),
+			scope: me
+		});
 	},
 	onBulkActionCountFailure: function(cnt, action) {
 		var me = this;
@@ -1096,8 +1184,22 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.promptWithBulkEmailCount(cnt);
 		} else if ( action.indexOf('PROGRAM_STATUS_') === 0 ) {
 			me.promptWithBulkProgramStatusChangeCount(cnt, action);
+		} else if ( action.indexOf('WATCH') !== -1 ) {
+			me.promptWithBulkWatchChangeCount(cnt, action);
 		} else {
 			Ext.Msg.alert('SSP Error', 'Unrecognized bulk action request');
+		}
+	},
+	newBulkActionCountResultFailureCallback: function(action) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountFailure(cnt, action);
+		}
+	},
+	newBulkActionCountResultSuccessCallback: function(action) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountSuccess(cnt, action);
 		}
 	},
 	translateCurrentTabToApiPath: function() {
@@ -1110,7 +1212,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 		return 'search';
 	},
-	translateSelectedStatustoSearchableStatus: function() {
+	translateSelectedStatusToSearchableStatus: function() {
 		var me = this;
 		if ( !(me.getCaseloadStatusCombo().getValue()) ) {
 			return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
@@ -1146,6 +1248,18 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 		return null;
 	},
+	translateWatchActionToDomainOperation: function(action) {
+		return action;
+	},
+	translateWatchActionToDisplayName: function(action) {
+		switch (action) {
+			case 'WATCH':
+				return 'Watch';
+			case 'UNWATCH':
+				return 'Unwatch';
+		}
+		return null;
+	},
 	onCaseloadActionComboSelect: function( comp, records, eOpts ){
 		var me=this;
 		if(me.getIsSearch()) {
@@ -1160,13 +1274,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 			// the UI while we look up the count.
 			me.appEventsController.loadMaskOn();
 			if(me.getIsCaseload()) {
-				me.caseloadService.getCaseloadCount(me.translateSelectedStatustoSearchableStatus(), {
+				me.caseloadService.getCaseloadCount(me.translateSelectedStatusToSearchableStatus(), {
 					success: me.newBulkActionCountResultSuccessCallback(records[0].get('id')),
 					failure: me.newBulkActionCountResultFailureCallback(records[0].get('id')),
 					scope: me
 				});
 			} else if(me.getIsWatchList()) {
-				me.watchListService.getWatchlistCount(me.translateSelectedStatustoSearchableStatus(), {
+				me.watchListService.getWatchlistCount(me.translateSelectedStatusToSearchableStatus(), {
 					success: me.newBulkActionCountResultSuccessCallback(records[0].get('id')),
 					failure: me.newBulkActionCountResultFailureCallback(records[0].get('id')),
 					scope: me
@@ -1202,7 +1316,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.setGridView();
 		me.getView().setLoading( true );
 		me.watchListService.getWatchList(
-			me.translateSelectedStatustoSearchableStatus(),
+			me.translateSelectedStatusToSearchableStatus(),
 			me.watchListStore,
 			{
 				success:me.getCaseloadSuccess,
@@ -1216,7 +1330,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.setGridView();
 		me.getView().setLoading( true );
 		me.caseloadService.getCaseload(
-			me.translateSelectedStatustoSearchableStatus(),
+			me.translateSelectedStatusToSearchableStatus(),
 			me.caseloadStore,
 			{
 				success:me.getCaseloadSuccess,

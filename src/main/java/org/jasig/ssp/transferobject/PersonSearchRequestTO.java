@@ -22,12 +22,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * PersonSearchResult transfer object
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonSearchRequestTO  implements	TransferObject<PersonSearchRequest> {
 
 	private String schoolId;

@@ -247,6 +247,10 @@ background:#ffff00 !important;
     filter: none;
 }
 
+.x-btn-link {
+    text-decoration: underline;
+}
+
 .studentpanel .x-tool {
     left: 0 !important;
 	

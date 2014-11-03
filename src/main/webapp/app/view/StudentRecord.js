@@ -40,12 +40,12 @@ Ext.define('Ssp.view.StudentRecord', {
             tools: [
         	{
                 tooltip: 'Watch Student',
-                text: '<u>Watch Student</u>',
+                text: 'Watch/Unwatch',
                 width: 105,
                 height: 20,
-        		hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'),
+        		hidden: true,
                 xtype: 'button',
-                cls: "makeTransparent",
+                cls: "makeTransparent x-btn-link",
                 itemId: 'watchStudentButton'
             },                    
 			
@@ -56,16 +56,16 @@ Ext.define('Ssp.view.StudentRecord', {
                 height: 20,
                 xtype: 'button',
                 itemId: 'emailCoachButton',
-				cls: "makeTransparent"
+				cls: "makeTransparent x-btn-link"
             },
 			
 			{
                 tooltip: 'Coaching History',
-                text: '<u>Coaching History</u>',
+                text: 'Coaching History',
                 width: 105,
                 height: 20,
                 xtype: 'button',
-				cls: "makeTransparent",
+				cls: "makeTransparent x-btn-link",
 				hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
                 itemId: 'viewCoachingHistoryButton'
             }, 

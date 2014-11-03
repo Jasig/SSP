@@ -22,6 +22,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
         exportService: 'exportService',
         formUtils: 'formRendererUtils',
         programStatusesStore: 'programStatusesStore',
@@ -330,6 +331,72 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.doBulkProgramStatusChange(action, criteria);
 		}
 	},
+	// copy/paste from SearchViewController
+	onBulkWatchChangeFailure: function(resp, action) {
+		var me = this;
+		var displayName = me.translateWatchActionToDisplayName(action);
+		me.appEventsController.loadMaskOff();
+		if ( resp && resp.responseText ) {
+			// Big chunk of this messaging copy/pasted from EmailStudentForm
+			var rspTextStruct = Ext.decode(resp.responseText);
+			if ( rspTextStruct.message && rspTextStruct.message.indexOf("Person search parameters matched no records") > -1 ) {
+				Ext.Msg.alert('SSP Error','No user records matched your current search criteria. <br/><br/>' +
+					'Retry with different search criteria.');
+			} else {
+				Ext.Msg.alert('SSP Error','There was an issue procesing your bulk ' + displayName + ' request. Please contact your system administrator');
+			}
+		} else {
+			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk ' + displayName + ' request. Please contact your system administrator');
+		}
+	},
+	// copy/paste from SearchViewController
+	onBulkWatchChangeSuccess: function(action) {
+		var me = this;
+		var displayName = me.translateWatchActionToDisplayName(action);
+		me.appEventsController.loadMaskOff();
+
+		Ext.Msg.alert('Bulk ' + displayName + ' Request Queued','Your bulk ' + displayName + ' request has ' +
+			'been queued successfully. Bulk changes are processed gradually and may not be reflected immediately on-screen.');
+	},
+	// copy/paste from SearchViewController
+	newOnBulkWatchChangeFailure: function(action) {
+		var me = this;
+		return function(resp) {
+			me.onBulkWatchChangeFailure(resp, action);
+		}
+	},
+	// copy/paste from SearchViewController
+	newOnBulkWatchChangeSuccess: function(action) {
+		var me = this;
+		return function() {
+			me.onBulkWatchChangeSuccess(action);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	bulkWatchChange: function(action, criteria) {
+		var me = this;
+		me.appEventsController.loadMaskOn();
+
+		var model = {
+			watchSpec: {
+				operation: me.translateWatchActionToDomainOperation(action),
+				watcherId: me.authenticatedPerson.get('id')
+			},
+			criteria: criteria
+		};
+
+		var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('bulk') )+'/watch';
+		var jsonData = model;
+
+		me.apiProperties.makeRequest({
+			url: url,
+			method: 'POST',
+			jsonData: jsonData,
+			successFunc: me.newOnBulkWatchChangeSuccess(action),
+			failureFunc: me.newOnBulkWatchChangeFailure(action),
+			scope: me
+		});
+	},
 	bulkEmail: function(criteria){
 		var me=this;
 		var store = null;
@@ -382,10 +449,24 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 	},
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying
+	onBulkWatchChangeConfirm: function(btnId, action, criteria) {
+		var me = this;
+		if (btnId=="ok") {
+			me.bulkWatchChange(action, criteria);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria', which requires special currying
 	newOnBulkProgramStatusChangeConfirm: function(action, criteria) {
 		var me = this;
 		return function(btnId) {
 			me.onBulkProgramStatusChangeConfirm(btnId, action, criteria);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria', which requires special currying
+	newOnBulkWatchChangeConfirm: function(action, criteria) {
+		var me = this;
+		return function(btnId) {
+			me.onBulkWatchChangeConfirm(btnId, action, criteria);
 		}
 	},
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying into the
@@ -433,6 +514,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			});
 		}
 	},
+	// copy/paste from SearchViewController except for 'criteria'
 	promptWithBulkProgramStatusChangeCount: function(count, action, criteria) {
 		var me = this;
 		var message;
@@ -466,18 +548,32 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		});
 	},
 	// copy/paste from SearchViewController except for 'criteria'
-	newBulkActionCountResultFailureCallback: function(action, criteria) {
+	promptWithBulkWatchChangeCount: function(count, action, criteria) {
 		var me = this;
-		return function(cnt) {
-			return me.onBulkActionCountFailure(cnt, action, criteria);
+		var message;
+		count = parseInt(count);
+		var watchActionName = me.translateWatchActionToDisplayName(action);
+		// loadMaskOff() copy/pasted in all prompt*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+
+		me.appEventsController.loadMaskOff();
+		if ( watchActionName === null ) {
+			Ext.Msg.alert('SSP Error', 'Unrecognized Watch action.');
+			return;
 		}
-	},
-	// copy/paste from SearchViewController except for 'criteria'
-	newBulkActionCountResultSuccessCallback: function(action, criteria) {
-		var me = this;
-		return function(cnt) {
-			return me.onBulkActionCountSuccess(cnt, action, criteria);
+		if ( count === 0 ) {
+			Ext.Msg.alert('Too Few Search Results','Cannot ' + watchActionName + ' an empty caseload/watchlist/search result.');
+			return;
 		}
+		var msg = count + " user/s will be considered for " + watchActionName + ". Users " +
+			"who haven't already been created will be unaffected. Continue?";
+		Ext.Msg.confirm({
+			title:'Confirm',
+			msg: msg,
+			buttons: Ext.Msg.OKCANCEL,
+			fn: me.newOnBulkWatchChangeConfirm(action, criteria),
+			scope: me
+		});
 	},
 	// copy/paste from SearchViewController except for 'criteria'
 	onBulkActionCountFailure: function(cnt, action, criteria) {
@@ -495,8 +591,24 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.promptWithBulkEmailCount(cnt, criteria);
 		} else if ( action.indexOf('PROGRAM_STATUS_') === 0 ) {
 			me.promptWithBulkProgramStatusChangeCount(cnt, action, criteria);
+		} else if ( action.indexOf('WATCH') !== -1 ) {
+			me.promptWithBulkWatchChangeCount(cnt, action, criteria);
 		} else {
 			Ext.Msg.alert('SSP Error', 'Unrecognized bulk action request');
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	newBulkActionCountResultFailureCallback: function(action, criteria) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountFailure(cnt, action, criteria);
+		}
+	},
+	// copy/paste from SearchViewController except for 'criteria'
+	newBulkActionCountResultSuccessCallback: function(action, criteria) {
+		var me = this;
+		return function(cnt) {
+			return me.onBulkActionCountSuccess(cnt, action, criteria);
 		}
 	},
 	// copy/paste from SearchViewController
@@ -523,6 +635,18 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				return Ssp.util.Constants.NON_PARTICIPATING_PROGRAM_STATUS_ID;
 			case 'PROGRAM_STATUS_NO_SHOW':
 				return Ssp.util.Constants.NO_SHOW_PROGRAM_STATUS_ID;
+		}
+		return null;
+	},
+	translateWatchActionToDomainOperation: function(action) {
+		return action;
+	},
+	translateWatchActionToDisplayName: function(action) {
+		switch (action) {
+			case 'WATCH':
+				return 'Watch';
+			case 'UNWATCH':
+				return 'Unwatch';
 		}
 		return null;
 	},

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="dan.mccallum" id="create bulk watch change batch size config" >
+        <insert tableName="config">
+            <column name="id" value="d25e2d8f-639f-11e4-baf7-70568196cf5b" />
+            <column name="name" value="watch_bulk_change_batch_size" />
+            <column name="description"
+                    value="Bulk Watch Change Job Config: Controls how many Watch changes will be processed at once. Keep relatively small to avoid holding transactions open for a very long time and to limit the impact of 'bad apples'." />
+            <column name="value" value="25" />
+            <column name="default_value" value="25" />
+            <column name="created_date" valueDate="2014-10-17T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-17T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="10070" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='d25e2d8f-639f-11e4-baf7-70568196cf5b'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create config for max bulk watch change dlq length" author="dan.mccallum">
+        <insert tableName="config">
+            <column name="id" value="fc634507-639f-11e4-aa4d-70568196cf5b" />
+            <column name="name" value="watch_bulk_change_max_dlq_size" />
+            <column name="description"
+                    value="Bulk Watch Change Job Config: Sets a limit on the total number of completely failed changes that will be tracked by the dead letter queue for post-job execution analysis. Very large values run the risk of requiring large memory and data storage footprints." />
+            <column name="value" value="100" />
+            <column name="default_value" value="100" />
+            <column name="created_date" valueDate="2014-10-17T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-17T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="10080" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='fc634507-639f-11e4-aa4d-70568196cf5b'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+
+
+    <changeSet id="create config for bulk watch change job on dlq overflow" author="dan.mccallum">
+        <insert tableName="config">
+            <column name="id" value="4757847a-63a0-11e4-928f-70568196cf5b" />
+            <column name="name" value="watch_bulk_change_fail_on_dlq_overflow" />
+            <column name="description"
+                    value="Bulk Watch Change Config: Controls whether exceeding watch_bulk_change_max_dlq_size will fail a bulk watch change job at whatever time that occurs. Default is 'false' which allows the job to proceed, silently skipping any changes that fail and cannot be added to the dead letter queue." />
+            <column name="value" value="false" />
+            <column name="default_value" value="false" />
+            <column name="created_date" valueDate="2014-10-17T12:00:00" />
+            <column name="modified_date" valueDate="2014-10-17T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="10060" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='4757847a-63a0-11e4-928f-70568196cf5b'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <!-- Set the name PSQL will have already generated automatically -->
+    <changeSet id="name watch_student uniqueness constraint (mssql)" author="dan.mccallum" dbms="mssql">
+        <sql>
+            declare @name nvarchar(256)
+
+            select @name = constraints_view.constraint_name
+            from (select distinct o.constraint_name,
+            (select i.COLUMN_NAME + ',' as [text()] FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE i
+            where o.CONSTRAINT_NAME = i.CONSTRAINT_NAME
+            and i.table_name = 'watch_student'
+            and i.table_schema = '${schema}'
+            order by i.ordinal_position for xml path ('') ) constraint_columns
+            from INFORMATION_SCHEMA.KEY_COLUMN_USAGE o
+            where o.table_name = 'watch_student' ) constraints_view
+            where constraints_view.constraint_columns = 'watcher_id,student_id,'
+
+            if @name is not null
+            exec('alter table ${schema}.watch_student drop constraint ' + @name);
+        </sql>
+        <addUniqueConstraint tableName="watch_student" columnNames="watcher_id,student_id" constraintName="watch_student_watcher_id_student_id_key" />
+    </changeSet>
+
+</databaseChangeLog>

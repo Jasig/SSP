@@ -21,8 +21,10 @@ package org.jasig.ssp.web.api.jobqueue;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonEmailService;
 import org.jasig.ssp.service.PersonProgramStatusService;
+import org.jasig.ssp.service.WatchStudentService;
 import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.jasig.ssp.transferobject.form.BulkProgramStatusChangeRequestForm;
+import org.jasig.ssp.transferobject.form.BulkWatchChangeRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -56,6 +58,9 @@ public class BulkJobController  extends AbstractBaseController {
 	@Autowired
 	private PersonProgramStatusService personProgramStatusService;
 
+	@Autowired
+	private WatchStudentService watchStudentService;
+
 	@PreAuthorize("hasRole('ROLE_PERSON_WRITE') and hasRole('ROLE_BULK_EMAIL_STUDENT')")
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public @ResponseBody
@@ -70,6 +75,14 @@ public class BulkJobController  extends AbstractBaseController {
 	JobTO bulkProgramStatusChange(@RequestBody BulkProgramStatusChangeRequestForm form)
 			throws ObjectNotFoundException, ValidationException, IOException {
 		return personProgramStatusService.changeInBulk(form);
+	}
+
+	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_WRITE') and hasRole('ROLE_BULK_WATCHLIST_WRITE')")
+	@RequestMapping(value = "/watch", method = RequestMethod.POST)
+	public @ResponseBody
+	JobTO bulkWatchChange(@RequestBody BulkWatchChangeRequestForm form)
+			throws ObjectNotFoundException, ValidationException, IOException {
+		return watchStudentService.changeInBulk(form);
 	}
 
 }

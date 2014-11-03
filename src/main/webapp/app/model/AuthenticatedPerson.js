@@ -73,6 +73,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	REQUIRED_PERMISSIONS_EXPORT_SEARCH_TO_CSV_ACTION: ['ROLE_PERSON_SEARCH_READ', 'ROLE_BULK_SEARCH_EXPORT'],
     	REQUIRED_PERMISSIONS_BULK_EMAIL_ACTION: ['ROLE_PERSON_WRITE','ROLE_BULK_EMAIL_STUDENT'],
     	REQUIRED_PERMISSIONS_BULK_PROGRAM_STATUS_ACTION: ['ROLE_PERSON_PROGRAM_STATUS_WRITE','ROLE_BULK_PROGRAM_STATUS'],
+    	REQUIRED_PERMISSIONS_BULK_WATCH_ACTION: [ 'ROLE_PERSON_WATCHLIST_WRITE', 'ROLE_BULK_WATCHLIST_WRITE' ],
 
     	/* STUDENTS */  	
     	REQUIRED_ANY_PERMISSIONS_ADD_STUDENT_BUTTON: ['ROLE_PERSON_WRITE','ROLE_PERSON_FILTERED_WRITE'],
@@ -338,7 +339,8 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     	var me=this;
         return me.hasAnyBulkExportPermissions()
                 || me.hasAccess('BULK_EMAIL_ACTION')
-                || me.hasAccess('BULK_PROGRAM_STATUS_ACTION');
+                || me.hasAccess('BULK_PROGRAM_STATUS_ACTION')
+                || me.hasAccess('BULK_WATCH_ACTION');
     },
 
     hasAnyProgramStatusFilterPermissions: function() {

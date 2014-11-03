@@ -164,7 +164,6 @@ public class WatchStudentController
 			@Valid @RequestBody @NotNull final WatchStudentTO obj)
 			throws ValidationException, ObjectNotFoundException {
 
-
 		if (obj == null) {
 			throw new ValidationException("Missing data.");
 		}

@@ -51,6 +51,12 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
             if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
                 me.add({id: "PROGRAM_STATUS_NO_SHOW", name: "Set 'No-Show' Status"});
             }
+            if(me.authenticatedPerson.hasAccess('BULK_WATCH_ACTION')) {
+                me.add({id: "WATCH", name: "Watch"});
+            }
+            if(me.authenticatedPerson.hasAccess('BULK_WATCH_ACTION')) {
+                me.add({id: "UNWATCH", name: "Unwatch"});
+            }
         }
         return me;
     }

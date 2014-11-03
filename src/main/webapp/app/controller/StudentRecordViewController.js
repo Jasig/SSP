@@ -86,7 +86,55 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personWatch') );
 		baseUrl = baseUrl.replace('{id}', id);
 		return baseUrl;
-    },    
+    },
+    updateWatchUiWithId: function(id, isChanged) {
+        var me = this;
+        me.person.watchId = id;
+        if ( id ) {
+            me.getWatchStudentButton().setText('Un-Watch Student');
+        } else {
+            me.getWatchStudentButton().setText('Watch Student');
+        }
+        if ( isChanged ) {
+            me.appEventsController.getApplication().fireEvent('onStudentWatchAction');
+        }
+        me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
+        me.appEventsController.loadMaskOff();
+    },
+    successWatch: function( response ){
+        var me = this;
+        me.updateWatchUiWithId(Ext.decode(response.responseText).id, true);
+    },
+    successUnWatch: function( response ){
+        var me = this;
+        me.updateWatchUiWithId('', true);
+    },
+    fatalWatchUnWatchFailure: function(action) {
+        var me = this;
+        Ext.Msg.alert('SSP Error','There was an issue procesing your ' + action + ' request. Please reload the page and ' +
+            'try again, or contact your system administrator');
+        me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
+        me.appEventsController.loadMaskOff();
+    },
+    failureWatch: function(response, options) {
+        var me = this;
+        if ( response && response.status === 409 && response.responseText &&
+            response.responseText.indexOf('Found existing {org.jasig.ssp.model.WatchStudent}') ) {
+            // already watching. just reload the underlying state and link
+            me.updateWatchLink({ person: me.person });
+        } else {
+            me.fatalWatchUnWatchFailure('Watch');
+        }
+    },
+    failureUnWatch: function(response, options) {
+        var me = this;
+        if ( response && response.status === 404 ) {
+            // already not watching, so might as well be considered a success
+            me.successUnWatch(response);
+        } else {
+            me.fatalWatchUnWatchFailure('Unwatch');
+        }
+    },
     onWatchStudentButtonClick: function(button){
         var me = this;
         
@@ -95,37 +143,18 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
    		watchStudent.set('watcherId',me.authenticatedPerson.get('id'));
 
 		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
-	    var successWatch = function( response ){
-	    	if(response.responseText)
-	    	{
-	    		me.person.watchId = Ext.decode(response.responseText).id;
-	    	}
-	    	me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
-	    	me.appEventsController.getApplication().fireEvent('onStudentWatchAction');
-            Ext.Msg.alert('You are now watching this student');
-	    };
-	    var successUnWatch = function( response ){
-	    	if(response.responseText)
-	    	{
-	    		me.person.watchId = null;
-	    	}
-	    	me.getWatchStudentButton().setText('<u>Watch Student</u>');
-	        me.appEventsController.getApplication().fireEvent('onStudentWatchAction');
-            Ext.Msg.alert('You are no longer watching this student');
-	    };
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	 
-	    };
-	    if(me.getWatchStudentButton().getText() === '<u>Watch Student</u>')
+	    if(!(me.person.watchId))
 	    {
 			Ext.MessageBox.confirm('Watch Student', 'Are you sure you want to watch this student?', function(btn){
 				if(btn === 'yes'){
+		    		me.getWatchStudentButton().hide();
+		    		me.appEventsController.loadMaskOn();
 		    		me.apiProperties.makeRequest({
 		    			url: url, 
 		    			method: 'POST',
 		    			jsonData: watchStudent.data,
-		    			successFunc: successWatch,
-		    			failureFunc: failure,
+		    			successFunc: me.successWatch,
+		    			failureFunc: me.failureWatch,
 		    			scope: me
 		    		});	
 				} else if(btn === 'no') {
@@ -138,13 +167,15 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	    {
 			Ext.MessageBox.confirm('Un-Watch Student', 'Are you sure you want to stop watching this student?', function(btn){
 				if(btn === 'yes'){
+			   	   	me.getWatchStudentButton().hide();
+			   	   	me.appEventsController.loadMaskOn();
 			   	   	watchStudent.set('id',me.person.watchId);
 		    		me.apiProperties.makeRequest({
 		    			url: url+'/'+watchStudent.get('id'), 
 		    			method: 'DELETE',
 		    			jsonData: watchStudent.data,
-		    			successFunc: successUnWatch,
-		    			failureFunc: failure,
+		    			successFunc: me.successUnWatch,
+		    			failureFunc: me.failureUnWatch,
 		    			scope: me
 		    		});	
 				} else if(btn === 'no') {
@@ -179,48 +210,42 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
             params: ""
         });
     },
-    
+	updateWatchLink: function(args) {
+		var me = this;
+		if(me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'))
+		{
+			me.getWatchStudentButton().hide();
+
+			var successFunc = function(response, view){
+				var watcherId = '';
+				if(response && response.responseText) {
+					watcherId = Ext.decode(response.responseText).id;
+				}
+				me.updateWatchUiWithId(watcherId, false);
+			};
+			var failureFunc = function(response, view){
+				me.updateWatchUiWithId('', false);
+			};
+			studentId = args.person.get('id');
+			var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
+
+			url = url + '/' + studentId;
+
+			me.apiProperties.makeRequest({
+				url: url,
+				method: 'GET',
+				successFunc: successFunc,
+				failureFunc: failureFunc
+			});
+		}
+	},
     updateStudentRecord: function(args){
 		var me = this;
 		if(args && args.person && args.person.get("id") && args.person.get("id").length && args.person.get("id").length > 0){
-    		
-    		if(me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'))
-    		{
-    			
-	            var successFunc = function(response, view){
-	            	if(response.responseText === '')
-	            	{
-	                    me.getWatchStudentButton().setText('<u>Watch Student</u>');
-	            	}
-	            	else
-	            	{
-	        	    	if(response.responseText)
-	        	    	{
-	        	    		me.person.watchId = Ext.decode(response.responseText).id;
-	        	    	}
-	            		me.getWatchStudentButton().setText('<u>Un-Watch Student</u>');
-	            	}
-	            };  		
-	            var failureFunc = function(response, view){
-	            	me.getWatchStudentButton().setText('<u>Watch Student</u>');
-	            };             
-	            studentId = args.person.get('id');
-	    		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
-	
-	    		url = url + '/' + studentId;
-	            
-	            me.apiProperties.makeRequest({
-	                url: url,
-	                method: 'GET',
-	                successFunc: successFunc,
-	    			failureFunc: failureFunc
-	            });
-    		}
+    		me.updateWatchLink(args);
 
 			me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
-			//me.showByPermission(me.getEmailStudentButton(), me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON'));
-			me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
-			
+
 			me.showElement(me.getStudentRecordEditButton());
 			me.showElement(me.getEmailCoachButton());
 			var fullName = args.person.getFullName();
@@ -238,7 +263,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 			if(me.getView())
 	        	me.getView().setTitle(fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId') + homePhone + cellPhone);
 			if(me.getEmailCoachButton())
-	        	me.getEmailCoachButton().setText('<u>Coach: ' + coachName + '</u>');
+	        	me.getEmailCoachButton().setText('Coach: ' + coachName);
 			
 		}else{
 			me.hideElement(me.getWatchStudentButton());
