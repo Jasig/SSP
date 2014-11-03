@@ -108,16 +108,11 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
         if ( StringUtils.isBlank(modelName) ) {
             throw new ValidationException("Must specify a model name");
         }
-        final String description = spec.getDescription();
-        if ( StringUtils.isBlank(description) ) {
-            throw new ValidationException("Must specify a description");
-        }
 
         SuccessIndicator model = new SuccessIndicator();
 
         model.setCode(code);
         model.setName(spec.getName());
-        model.setDescription(description);
         model.setInstruction(spec.getInstruction());
         model.setModelCode(modelCode);
         model.setModelName(modelName);
@@ -133,7 +128,7 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
         model.setStringEvaluationMedium(spec.getStringEvaluationMedium());
         model.setStringEvaluationLow(spec.getStringEvaluationLow());
         model.setNoDataMatchesEvaluation(spec.getNoDataMatchesEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataMatchesEvaluation());
-        model.setNoDataExistsEvaluation(spec.getNoDataExistsEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataMatchesEvaluation());
+        model.setNoDataExistsEvaluation(spec.getNoDataExistsEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataExistsEvaluation());
         model.setObjectStatus(spec.getObjectStatus());
         model.setSortOrder(sortOrder);
 
@@ -181,10 +176,6 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
                 throw new ValidationException("Cannot delete the name field on a system-owned indicator");
             }
 
-            if ( StringUtils.isBlank(spec.getDescription()) ) {
-                throw new ValidationException("Cannot delete the description on a system-owned indicator");
-            }
-
             if ( !(StringUtils.equals(model.getModelCode(), spec.getModelCode())) ) {
                 throw new ValidationException("Cannot modify the model code field on a system-owned indicator");
             }
@@ -207,10 +198,7 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
                 throw new ValidationException("Cannot delete the name field");
             }
             model.setName(spec.getName());
-            if ( StringUtils.isBlank(spec.getDescription()) ) {
-                throw new ValidationException("Cannot delete the description field");
-            }
-            model.setDescription(spec.getDescription());
+            model.setDescription(spec.getDescription()); // deletion fine
             model.setInstruction(spec.getInstruction()); // deletion fine
             if ( StringUtils.isBlank(spec.getModelCode()) ) {
                 throw new ValidationException("Cannot delete the model code field");
