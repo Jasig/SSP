@@ -752,8 +752,8 @@
 					<excludes combine.children="append">
 						<exclude>NOTICE.template</exclude>
 						<exclude>src/main/webapp/js/libs/**</exclude>
-                        <exclude>src/main/webapp/resources/fonts/**</exclude>
-                        <exclude>src/main/webapp/resources/css/font-awesome*</exclude>
+						<exclude>src/main/webapp/resources/fonts/**</exclude>
+						<exclude>src/main/webapp/resources/css/font-awesome*</exclude>
 						<exclude>src/main/webapp/resources/sass/**/.sass-cache/**/*.scssc</exclude>
 						<exclude>**/.gitignore</exclude>
 						<exclude>**/.pmd</exclude>
