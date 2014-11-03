@@ -83,9 +83,9 @@ public class PersonProgramStatusServiceImpl extends
 	private static final ThreadLocal<Logger> CURRENT_LOGGER = new ThreadLocal<Logger>();
 
 	public static final String BULK_PROGRAM_STATUS_CHANGE_JOB_EXECUTOR_NAME = "bulk-program-status-executor";
-	private static final String BULK_PROGRAM_STATUS_CHANGE_BATCH_SIZE_CONFIG_NAME = "program_staus_bulk_change_batch_size";
-	private static final String BULK_PROGRAM_STATUS_CHANGE_MAX_DLQ_SIZE_CONFIG_NAME = "program_staus_bulk_change_max_dlq_size";
-	private static final String BULK_PROGRAM_STATUS_CHANGE_FAIL_ON_DLQ_OVERFLOW_CONFIG_NAME = "program_staus_bulk_change_fail_on_dlq_overflow";
+	private static final String BULK_PROGRAM_STATUS_CHANGE_BATCH_SIZE_CONFIG_NAME = "program_status_bulk_change_batch_size";
+	private static final String BULK_PROGRAM_STATUS_CHANGE_MAX_DLQ_SIZE_CONFIG_NAME = "program_status_bulk_change_max_dlq_size";
+	private static final String BULK_PROGRAM_STATUS_CHANGE_FAIL_ON_DLQ_OVERFLOW_CONFIG_NAME = "program_status_bulk_change_fail_on_dlq_overflow";
 	private static final String PERSON_PROGRAM_STATUS_ID_CREATED_FIELD_NAME = "personProgramStatusId";
 
 	@Autowired
