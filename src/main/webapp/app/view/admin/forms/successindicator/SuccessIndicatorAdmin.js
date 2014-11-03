@@ -51,7 +51,7 @@ Ext.define('Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin', {
             columns: [{
                 header: 'Active',
                 dataIndex: 'objectStatus',
-                width: 44,
+                flex: 0.10,
                 renderer: me.columnRendererUtils.renderObjectStatus,
                 field: {
                     xtype: 'oscheckbox'
@@ -59,30 +59,30 @@ Ext.define('Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin', {
             }, {
                 header: 'Indicator Group',
                 dataIndex: 'indicatorGroup',
-                width: 100
+                flex: 0.20
             }, {
                 header: 'Model Code',
                 dataIndex: 'modelCode',
-                width: 100,
+                flex: 0.20,
                 renderer: 'htmlEncode'
             }, {
                 header: 'Model Name',
                 dataIndex: 'modelName',
-                width: 160,
+                flex: 0.30,
                 renderer: 'htmlEncode'
-            }, {
-                header: 'Indicator Name',
-                dataIndex: 'name',
-                width: 160
             }, {
                 header: 'Indicator Code',
                 dataIndex: 'code',
-                width: 120,
+                flex: 0.20
+            }, {
+                header: 'Indicator Name',
+                dataIndex: 'name',
+                flex: 0.30,
                 renderer: 'htmlEncode'
             }, {
                 header: 'Sort',
                 dataIndex: 'sortOrder',
-                width: 50,
+                flex: 0.10,
                 renderer: 'htmlEncode'
             }],
 
