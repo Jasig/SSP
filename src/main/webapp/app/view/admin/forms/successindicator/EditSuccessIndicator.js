@@ -71,6 +71,44 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
         };
         return overrides ? me.withOverrides(base, overrides) : base;
     },
+
+    resolveElementForQTip: function(field, elementResolver, elementResolverScope) {
+        if ( elementResolver ) {
+            if ( elementResolverScope ) {
+                return elementResolver.apply(elementResolverScope, [ field ]);
+            } else {
+                return elementResolver(field);
+            }
+        } else {
+            return field.getEl();
+        }
+    },
+
+    fieldLabelElementResolver: function(field) {
+        return field.getEl().down('label');
+    },
+
+    newQTipOnRender: function(value, elementResolver, elementResolverScope) {
+        var me = this;
+        return {
+            render: function(field){
+                Ext.create('Ext.tip.ToolTip', {
+                    target: me.resolveElementForQTip(field, elementResolver, elementResolverScope),
+                    html: value
+                });
+            }
+        };
+    },
+
+    newFieldQTip: function(value) {
+        var me = this;
+        return me.newQTipOnRender(value);
+    },
+
+    newFieldLabelQTip: function(value) {
+        var me = this;
+        return me.newQTipOnRender(value, me.fieldLabelElementResolver, me);
+    },
     
     initComponent: function(){
         var me = this;
@@ -133,7 +171,8 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                             itemId: 'indicatorCode',
                             allowBlank: false,
                             minLength: 1,
-                            maxLength: 50
+                            maxLength: 50,
+                            listeners: me.newFieldLabelQTip('For Indicators in the RISK group, this field should correspond to a value found in in external_student_risk_indicator.indicator_code. For other groups this field is read-only. The "system" prefix is always reserved.')
                         }, {
                             xtype: 'numberfield',
                             fieldLabel: 'Sort Order',
@@ -142,7 +181,8 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                             minValue: 0,
                             allowBlank: false,
                             step: 10,
-                            maxWidth: 200
+                            maxWidth: 200,
+                            listeners: me.newFieldLabelQTip('Controls display order of evaluated Success Indicators in the Main tool. Model Name and Indicator Name are used as tiebreakers.')
                         }]
                     }, {
                         xtype: 'container',
@@ -166,7 +206,8 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                             itemId: 'modelCode',
                             allowBlank: false,
                             minLength: 1,
-                            maxLength: 50
+                            maxLength: 50,
+                            listeners: me.newFieldLabelQTip('For Indicators in the RISK group, this field should correspond to a value found in in external_student_risk_indicator.model_code. For other groups this field is read-only. The "system" prefix is always reserved.')
                         }, {
                             xtype: 'oscheckbox',
                             fieldLabel: 'Active',
@@ -176,18 +217,20 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                     }]
                 }, {
                     xtype: 'textareafield',
-                    fieldLabel: 'Indicator Description',
+                    fieldLabel: 'Indicator Description (Audience: End Users)',
                     anchor: '100%',
                     name: 'description',
                     itemId: 'indicatorDescription',
-                    labelAlign: 'top'
+                    labelAlign: 'top',
+                    rows: 2
                 }, {
                     xtype: 'textareafield',
-                    fieldLabel: 'Indicator Instructions',
+                    fieldLabel: 'Indicator Instructions (Audience: Admins)',
                     anchor: '100%',
                     name: 'instruction',
                     itemId: 'indicatorInstruction',
                     labelAlign: 'top',
+                    rows: 6,
                     maxLength: 1024
                 }]
             }, {
@@ -241,13 +284,13 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                                     me.newEvalInputHeader('Evaluation'),
                                     me.newEvalInputHeader('From'),
                                     me.newEvalInputHeader('To'),
-                                    { text: 'HIGH' },
+                                    { text: 'HIGH', listeners: me.newFieldQTip('"HIGH" means "On Track" or "Not at Risk". This SCALE rule is evaluated last. <br/> If only one SCALE value in a pair is blank, that blank is treated as a wildcard.') },
                                     me.newScaleEvalInput('scaleEvaluationHighFrom', 'scaleEvaluationHighFrom'),
                                     me.newScaleEvalInput('scaleEvaluationHighTo', 'scaleEvaluationHighTo'),
                                     { text: 'MEDIUM' },
                                     me.newScaleEvalInput('scaleEvaluationMediumFrom', 'scaleEvaluationMediumFrom'),
                                     me.newScaleEvalInput('scaleEvaluationMediumTo', 'scaleEvaluationMediumTo'),
-                                    { text: 'LOW' },
+                                    { text: 'LOW', listeners: me.newFieldQTip('"LOW" means "Not On Track" or "At Risk". This SCALE rule is evaluated first. <br/> If only one SCALE value in a pair is blank, that blank is treated as a wildcard.') },
                                     me.newScaleEvalInput('scaleEvaluationLowFrom', 'scaleEvaluationLowFrom'),
                                     me.newScaleEvalInput('scaleEvaluationLowTo', 'scaleEvaluationLowTo')
                                 ]
@@ -272,11 +315,11 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                                 items: [
                                     me.newEvalInputHeader('Evaluation'),
                                     me.newEvalInputHeader('Text String', { width: 300 }),
-                                    { text: 'HIGH' },
+                                    { text: 'HIGH', listeners: me.newFieldQTip('"HIGH" means "On Track" or "Not at Risk". This STRING rule is evaluated last. <br/> Use commas to separate mulitple values within this rule. Values are case-insensitive and trimmed.') },
                                     me.newStringEvalInput('stringEvaluationHigh', 'stringEvaluationHigh', { width: 300 }),
                                     { text: 'MEDIUM' },
                                     me.newStringEvalInput('stringEvaluationMedium', 'stringEvaluationMedium', { width: 300 }),
-                                    { text: 'LOW' },
+                                    { text: 'LOW', listeners: me.newFieldQTip('"LOW" means "Not On Track" or "At Risk". This STRING rule is evaluated first. <br/> Use commas to separate mulitple values within this rule. Values are case-insensitive and trimmed.') },
                                     me.newStringEvalInput('stringEvaluationLow', 'stringEvaluationLow', { width: 300 })
                                 ]
                             }]
@@ -304,7 +347,8 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                         editable: false,
                         forceSelection: true,
                         allowBlank: false,
-                        width: 200
+                        width: 200,
+                        listeners: me.newFieldLabelQTip('This rule applies when data for the Indicator simply does not exist.')
                     }, {
                         xtype: 'combobox',
                         fieldLabel: 'If Unexpected',
@@ -319,7 +363,8 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                         editable: false,
                         forceSelection: true,
                         allowBlank: false,
-                        width: 200
+                        width: 200,
+                        listeners: me.newFieldLabelQTip('This rule applies when data for the Indicator exists but does not match currently configured evaluation rules.')
                     }]
                 }]
             }],

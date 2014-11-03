@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="fix baseline success indicator descriptors" author="dan.mccallum">
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the value of external_student_transcript.grade_point_average.
+
+Typically evaluated with a SCALE rule.</column>
+            <where>id = 'c12b49f8-594b-11e4-bdb3-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the presence of an Intake submission for a given person. We have no good way of applying date/time based indicator evaluation rules at this time, so this indicator effectively operates as a boolean test.
+
+STRING tests will receive a 'Y' or a 'N'. SCALE tests will receive a '1' or a '0'.
+
+For this particular indicator, there is no conceptual difference between 'no data' and 'not submitted,' so the 'no data' rule will only be evaluated in situations where data required to look up the intake submission in the first place cannot be found.</column>
+            <where>id = '23a2bd38-5adb-11e4-a7f9-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the values found in external_term and external_registration_status_by_term.
+
+Possible values: 'NONE', 'CURRENT', 'FUTURE', 'CURRENT_AND_FUTURE'.
+
+Typically evaluated with a STRING rule matching on those values. If the system is unaware of any current and/or future terms, this indicator has no value. If those terms do exist, but user has zero registrations in them, this indicator's value is 'NONE'.</column>
+            <where>id = '707fe4d1-594d-11e4-90be-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Typically evaluated with a SCALE rule corresponding to values sourced from external_student_transcript.credit_completion_rate.
+
+Those values are expected to be percentages ranges with up to two fractional digits. E.g. 100.00 is 100%.</column>
+            <where>id = 'd69410b0-594e-11e4-b991-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Typically evaluated with a STRING rule with values corresponding external_student_transcript.academic_standing.
+
+Often lack of data there indicates good standing, which is configured as the default.</column>
+            <where>id = 'dac0eda1-594e-11e4-9586-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Typically evaluated with a STRING rule with values corresponding to codes found in external_student_financial_aid.sap_status_code.</column>
+            <where>id = '9cad6b35-594f-11e4-9178-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Typically evaluated with a STRING rule with values corresponding to codes found in external_student_transcript.current_restrictions.
+
+By default, lack of data is considered good ('HIGH'). Non-matching data is considered possibly problematic ('MEDIUM').
+
+This data field is multivalued. The evaluation will reflect the most riskful, i.e. 'lowest', from among those values.</column>
+            <where>id = '72548ac5-5953-11e4-9e1d-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the presence of an Intake submission for a given person.
+
+We have no good way of applying date/time based indicator evaluation rules at this time, so this indicator effectively operates as a boolean test. STRING tests will receive a 'Y' or a 'N'. SCALE tests will receive a '1' or a '0'.
+
+For this particular indicator, there is no conceptual difference between 'no data' and 'not submitted,' so the 'no data' rule will only be evaluated in situations where data required to look up the intake submission in the first place cannot be found.</column>
+            <where>id = '23a2bd38-5adb-11e4-a7f9-406c8f22c3ce'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the number of open alerts for a given person.
+
+This will be an integer value, so the rule is almost always configured as SCALE.
+
+There is no concept of 'no data' for this indicator. I.e. the complete absence of alerts, open or otherwise, is still treated as as '0' for inidicator evaluation purposes.</column>
+            <where>id = '0b677db0-5e23-11e4-9a8a-7c6d628bb1c6'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the number of open action plan tasks for a given person.
+
+This will be an integer value, so the rule is almost always configured as SCALE.
+
+There is no concept of 'no data' for this indicator. I.e. the complete absence of tasks, open or otherwise, is still treated as as '0' for inidicator evaluation purposes.</column>
+            <where>id = '677631eb-5e21-11e4-a1d8-7c6d628bb1c6'</where>
+        </update>
+        <update tableName="success_indicator">
+            <column name="instruction" >
+Evaluated against the presence of a MAP plan on/off status. If the 'calculate_map_plan_status' config is set to 'true', this indicator will use the internally-calculated plan status. Else it falls back to using external_person_planning_status.status.
+
+Possible values: ON, OFF, ON_TRACK_SUBSTITUTION, ON_TRACK_SEQUENCE. Only a STRING evaluation rule will make any real sense.
+
+It is not necessary to have a plan in order to have a plan status, so the 'no data' case refers to the status, not necessarily the plan.
+            </column>
+            <where>id = 'dfd95f82-5e2a-11e4-8895-7c6d628bb1c6'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>
