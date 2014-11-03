@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.Person;
 
@@ -35,6 +36,9 @@ import com.google.common.collect.Lists;
  * 
  * @author jon.adams
  */
+// ignoring unrecognized properties is good as a general rule (be conservative in what you send, liberal in what yoy
+// expect), but exists specifically for fullName, which is a logical property and has no setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonLiteTO implements Serializable {
 
 	private static final long serialVersionUID = 2921442272658399L;
