@@ -76,13 +76,10 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	 *   scope - the scope to run the function under
 	 */
 	removeEvent: function( args ){
-		if ( this.getApplication().hasListener( args.eventName ))
-		{
 //			if(sspInDevelopMode)
 //				this.removeObjectEvent(args);
 			
-			this.getApplication().removeListener( args.eventName, args.callBackFunc, args.scope);
-		}
+			this.getApplication().removeListener(args.eventName, args.callBackFunc, args.scope);
 	},
 	
 	removeObjectEvent: function(args){

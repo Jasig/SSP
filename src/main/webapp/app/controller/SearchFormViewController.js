@@ -22,25 +22,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     inject: {
     	apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
-        authenticatedPerson: 'authenticatedPerson',
-        caseloadFilterCriteria: 'caseloadFilterCriteria',
-        caseloadService: 'caseloadService',
-        columnRendererUtils: 'columnRendererUtils',
         exportService: 'exportService',
         formUtils: 'formRendererUtils',
-        person: 'currentPerson',
-        personLite: 'personLite',
-        personService: 'personService',
-        personProgramStatusService: 'personProgramStatusService',
         programStatusesStore: 'programStatusesStore',
         programStatusService: 'programStatusService',
-        searchCriteria: 'searchCriteria',
         searchService: 'searchService',
         coachesStore: 'coachesStore',
-        searchStoreOld: 'studentsSearchStore',
         configStore: 'configurationOptionsUnpagedStore',
         searchStore: 'directoryPersonSearchStore'
-
     },
     control: {
     	view: {
@@ -135,9 +124,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     
 	init: function() {
 		var me=this;    	
-
 		me.coachesStore.clearFilter(true);
-
 		return me.callParent(arguments);
     },
 
@@ -158,6 +145,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         if ( me.emailStudentPopup ) {
             me.emailStudentPopup.destroy();
         }
+
+        me.clear();
+        me.searchStore.removeAll();
 
 	   	return me.callParent( arguments );
     },
@@ -538,8 +528,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},
 	onSearchActionComboSelect: function(records){
 		var me=this;
-		if(!me.getView().getForm().isDirty())
-		{
+
+		if(!me.getView().getForm().isDirty()) {
 			Ext.Msg.alert('SSP Error', 'Please enter some filter values.');
 			return;
 		}
@@ -549,23 +539,28 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		var message = "";
 		var valuesInvalid = false;
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-			valuesInvalid = true;
-			message += "GPA Min is greater than GPA Maximum. ";
+
+        if(me.checkGpaFields()) {
+		    if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+			    valuesInvalid = true;
+			    message += "GPA Min is greater than GPA Maximum. ";
+            }
+
+			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
+			    me.getGpaMin().setValue(0);
+			}
+
+			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
+			    me.getGpaMin().setValue(0);
+			}
 		}
 
-		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-			me.getGpaMin().setValue(0);
-		}
-
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
-			valuesInvalid = true;
-			message += "Hours Earned Min is greater than Hours Earned Maximum. ";
-		}
-
-		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-			me.getGpaMin().setValue(0);
-		}
+		if (me.checkHoursEarnedFields()) {
+            if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+                valuesInvalid = true;
+                message += "Hours Earned Min is greater than Hours Earned Maximum. ";
+            }
+        }
 
 		if(valuesInvalid == true){
 			Ext.Msg.alert('SSP Error', message + "Search will return no values.");
@@ -624,23 +619,30 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		var message = "";
 		var valuesInvalid = false;
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-			valuesInvalid = true;
-			message += "GPA Min is greater than GPA Maximum. ";
-		}
-		
-		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-			me.getGpaMin().setValue(0);
-		}
-		
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
-				valuesInvalid = true;
-				message += "Hours Earned Min is greater than Hours Earned Maximum. ";
-		}
 
-		if(me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null){
-				me.getGpaMin().setValue(0);
-		}
+		if (me.checkGpaFields()) {
+            if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+                valuesInvalid = true;
+                message += "GPA Min is greater than GPA Maximum. ";
+            }
+		
+			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
+			    me.getGpaMin().setValue(0);
+			}
+
+            if(me.checkGpaFields()){
+                if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
+                    me.getGpaMin().setValue(0);
+                }
+            }
+        }
+
+        if (me.checkHoursEarnedFields()) {
+            if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+                    valuesInvalid = true;
+                    message += "Hours Earned Min is greater than Hours Earned Maximum. ";
+            }
+        }
 		
 		if(valuesInvalid == true){
 	     	Ext.Msg.alert('SSP Error', message + "Search will return no values."); 
@@ -658,57 +660,79 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	
 	hoursEarnedMinChanged: function(){
 		var me=this;
-		
-		if(me.getHoursEarnedMax().getValue() == null){
-				me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
-				return;
-		}
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
-			me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
-		}
+		if (me.checkHoursEarnedFields()) {
+            if(me.getHoursEarnedMax().getValue() == null){
+                    me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
+                    return;
+            }
+            if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+                me.getHoursEarnedMax().setValue(me.getHoursEarnedMin().getValue());
+            }
+        }
 	},
 	
 	hoursEarnedMaxChanged: function(){
 		var me=this;
-		if(me.getHoursEarnedMax().getValue() == null){
-			me.getHoursEarnedMin().setValue(null);
-			return;
-		}
-		if(!me.getHoursEarnedMin().getValue()){
-			me.getHoursEarnedMin().setValue(0);
-			return;
-		}
-		if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
-			me.getHoursEarnedMin().setValue(me.getHoursEarnedMax().getValue());
-		}
+		if (me.checkHoursEarnedFields()) {
+            if(me.getHoursEarnedMax().getValue() == null){
+                me.getHoursEarnedMin().setValue(null);
+                return;
+            }
+            if(!me.getHoursEarnedMin().getValue()){
+                me.getHoursEarnedMin().setValue(0);
+                return;
+            }
+            if(me.getHoursEarnedMin().getValue() > me.getHoursEarnedMax().getValue()){
+                me.getHoursEarnedMin().setValue(me.getHoursEarnedMax().getValue());
+            }
+        }
+	},
+
+	checkHoursEarnedFields: function() {
+	    var me=this;
+        if (me.getHoursEarnedMin && me.getHoursEarnedMax) {
+            return true;
+        }
+        return false;
+	},
+
+	checkGpaFields: function(){
+        var me=this;
+        if (me.getGpaMin && me.getGpaMax) {
+            return true;
+        }
+        return false;
 	},
 	
 	gpaMinChanged: function(){
 		var me=this;
-		if(me.getGpaMin().getValue() === null){
-			me.getGpaMax().setValue(null);
-			return;
-		}	
-		if(me.getGpaMax().getValue() == null){
-			me.getGpaMax().setValue(me.getGpaMin().getValue());
-			return;
-		}
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-			me.getGpaMax().setValue(me.getGpaMin().getValue());
-		}
+		if (me.checkGpaFields()) {
+            if(me.getGpaMin().getValue() === null){
+                me.getGpaMax().setValue(null);
+                return;
+            }
+            if(me.getGpaMax().getValue() == null){
+                me.getGpaMax().setValue(me.getGpaMin().getValue());
+                return;
+            }
+            if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+                me.getGpaMax().setValue(me.getGpaMin().getValue());
+            }
+        }
 	},
 	
 	gpaMaxChanged: function(){
 		var me=this;
+        if (me.checkGpaFields()) {
+            if(!me.getGpaMin().getValue()){
+                me.getGpaMin().setValue(0);
+                return;
+            }
 
-		if(!me.getGpaMin().getValue()){
-			me.getGpaMin().setValue(0);
-			return;
-		}
-			
-		if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-			me.getGpaMin().setValue(me.getGpaMax().getValue());
-		}
+            if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+                me.getGpaMin().setValue(me.getGpaMax().getValue());
+            }
+        }
 	},
 
     searchFailure: function( r, scope){
