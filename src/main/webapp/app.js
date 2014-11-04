@@ -347,6 +347,7 @@ Ext.require([
 	'Ssp.util.Util',
 	'Ssp.store.Coaches',
 	'Ssp.store.Caseload',
+	'Ssp.store.DirectoryPersonSearch',
 	'Ssp.store.WatchList',
     'Ssp.store.Tasks',
     'Ssp.store.StudentActivities',
@@ -444,6 +445,7 @@ Ext.require([
     'Ssp.store.reference.CaseloadActions',
     'Ssp.store.PlanStatus',
     'Ssp.store.MAPStatus',
+    'Ssp.store.StudentsSearch',
     'Ssp.store.PersonTableTypes',
     'Ssp.store.MapStatusReports',
     'Ssp.store.MapStatusReportCourseDetails',
@@ -490,6 +492,8 @@ Ext.require([
 	'Ext.form.field.Text',
 	'Ext.form.field.TextArea',
 	'Ext.form.FieldSet',
+	'Ext.form.field.Date',
+	'Ext.form.Label',
 	'Ext.ux.CheckColumn',
 	'Ext.ux.form.MultiSelect',
 	'Ext.ux.form.ItemSelector',
@@ -499,8 +503,8 @@ Ext.require([
 	'Ext.toolbar.Spacer',
 	'Ext.form.field.ComboBox',
 	'Ext.grid.column.Action',
-	'Ext.grid.feature.Grouping'
-
+	'Ext.grid.feature.Grouping',
+	'Ext.layout.container.Column'
 ]);
 
 var apiUrls = [

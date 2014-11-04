@@ -37,7 +37,6 @@ Ext.define('Ssp.view.SearchForm',{
         configStore: 'configurationOptionsUnpagedStore',
         specialServiceGroupsActiveUnpagedStore: 'specialServiceGroupsActiveUnpagedStore',
         textStore:'sspTextStore',
-        caseloadActionsStore: 'caseloadActionsStore',
         termsStore: 'termsStore'
     },
     collapsible: true,

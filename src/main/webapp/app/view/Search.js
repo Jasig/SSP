@@ -23,7 +23,6 @@ Ext.define('Ssp.view.Search', {
     controller: 'Ssp.controller.SearchViewController',
     inject: {
         authenticatedPerson: 'authenticatedPerson',
-        apiProperties: 'apiProperties',
         caseloadActionsStore: 'caseloadActionsStore',
         columnRendererUtils: 'columnRendererUtils',
         programStatusesStore: 'caseloadFilterProgramStatusesStore'

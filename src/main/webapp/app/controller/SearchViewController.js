@@ -34,19 +34,16 @@ Ext.define('Ssp.controller.SearchViewController', {
         person: 'currentPerson',
         caseloadActionsStore: 'caseloadActionsStore',
         personLite: 'personLite',
-        personService: 'personService',
         personProgramStatusService: 'personProgramStatusService',
         preferences: 'preferences',
         programStatusesStore: 'caseloadFilterProgramStatusesStore',
         programStatusService: 'caseloadFilterProgramStatusService',
         searchCriteria: 'searchCriteria',
         searchService: 'searchService',
-        searchStoreOld: 'studentsSearchStore',
         searchStore: 'directoryPersonSearchStore',
 		termsStore: 'termsStore',
         configStore: 'configurationOptionsUnpagedStore',
         textStore:'sspTextStore'
-
     },
 
     control: {
