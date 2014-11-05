@@ -27,8 +27,6 @@ Ext.define('Ssp.view.tools.profile.Person', {
     width: '100%',
     height: '100%',
     minHeight: 200,
-    minWidth: 360,
-    maxWidth: 400,
     
     initComponent: function(){
         var me = this;
@@ -54,6 +52,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                 padding: '0 0 0 5',
                 title: '',
                 defaultType: 'displayfield',
+				flex: 1,
                 defaults: {
                     anchor: '100%',
                     height: 16,
@@ -85,20 +84,26 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     itemId: 'programStatusReason',
                     hidden: true
                 }, {
-                    fieldLabel: 'Academic Program:',
+                    fieldLabel: 'Academic Program',
                     name: 'academicPrograms',
                     itemId: 'academicPrograms',
-                    labelAlign: 'top'
+                    labelAlign: 'top',
+					fieldCls: 'wrappable-cell',
+					width: '98%'
                 }, {
                     fieldLabel: 'Plan Name',
                     name: 'mapName',
                     itemId: 'mapName',
-                    labelAlign: 'top'
+                    labelAlign: 'top',
+					fieldCls: 'wrappable-cell',
+					width: '98%'
                 }, {
                     fieldLabel: 'Plan Owner',
                     name: 'advisor',
                     itemId: 'advisor',
-                    labelWidth: 70
+                    labelWidth: 70,
+					fieldCls: 'wrappable-cell',
+					width: '98%'
                 }]
             
             }]

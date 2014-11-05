@@ -387,4 +387,12 @@ display: none;
 	margin-bottom: 8px;
 }
 
+.wrappable-cell {
+    display: inline-block;
+    margin-bottom: 2px !important;
+    vertical-align: top !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+}
+
 

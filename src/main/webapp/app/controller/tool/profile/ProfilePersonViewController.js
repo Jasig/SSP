@@ -88,6 +88,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (!me.programStatusChangeReasonsStore.getTotalCount()) {
 			me.programStatusChangeReasonsStore.load();
 		}
+		
+		
 
 		me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 
@@ -109,6 +111,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             else {
                 me.fireOnTermsLoad();
             }
+			
+			if (!me.personRegistrationStatusByTermStore.getTotalCount()) {
+				me.personRegistrationStatusByTermStore.load(id);
+		}
+			
         }
     },
     
@@ -281,6 +288,21 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // programStatusField.setFieldLabel('');
         // programStatusField.setValue('<span style="color:#15428B">Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
         programStatusField.setValue(me.handleNull(me.person.getProgramStatusName()));
+		
+		// load referral sources
+        if (me.person.get('referralSources') != null) {
+            me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
+        }
+
+        // load service reasonssd
+        if (me.person.get('serviceReasons') != null) {
+            me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
+        }
+
+		// load special service groups
+        if (me.person.get('specialServiceGroups') != null) {
+            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
+        }
     },
 
 	onAfterPersonProgramStatusChange: function(event) {

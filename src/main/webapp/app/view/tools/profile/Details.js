@@ -85,7 +85,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         itemId: 'race',
                         labelWidth: 35
                     }, {
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.residency'),
+                        fieldLabel: 'Residency',
                         name: 'residencyCounty',
                         itemId: 'residencyCounty',
                         labelWidth: 64
@@ -116,13 +116,13 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         labelAlign: 'top'
                     }, {
                         fieldLabel: 'Start Term',
-                        name: 'startYearTerm',
-                        itemId: 'startYearTerm',
+                        name: 'actualStartTerm',
+                        itemId: 'actualStartTerm',
                         labelWidth: 65
                     }, {
                         fieldLabel: 'Anticipated Start Term',
-                        name: 'anticipatedStartYearTerm',
-                        itemId: 'anticipatedStartYearTerm',
+                        name: 'anticipatedStartTerm',
+                        itemId: 'anticipatedStartTerm',
                         labelWidth: 130
                     }, {
                         fieldLabel: 'Transfer Hours',
@@ -207,7 +207,10 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'mapProjected',
                         itemId: 'mapProjected',
                         labelWidth: 65
-                    }]
+                    }, {
+						xtype: 'tbspacer',
+						height: 10
+					}]
                 }]
             }, {
                 xtype: 'fieldset',
@@ -251,6 +254,9 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     minHeight: 1,
 					height: '100%',
                     store: me.termTranscriptsStore,
+					viewConfig: {
+						markDirty: false
+					},
                     columns: {
                         defaults: {
                             flex: 1,
@@ -272,11 +278,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             dataIndex: 'gradePointAverage'
                         }, {
                             text: 'Paid',
-                            dataIndex: 'termCode',
-                            renderer: function(val, meta, rec, rowIdx, colIdx, store, view){
-                                // check against the financial data by termCode??
-                                return '';
-                            }
+                            dataIndex: 'tuitionPaid'
                         }]
                     }
                 }]

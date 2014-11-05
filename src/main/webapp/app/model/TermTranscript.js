@@ -26,5 +26,6 @@ Ext.define('Ssp.model.TermTranscript', {
         {name: 'termCode', type: 'string'},
         {name: 'totalQualityPoints', type: 'float'},
         {name: 'gradePointAverage', type: 'float'},
-		{name: 'termStartDate', type: 'date', dateFormat: 'time'}]
+		{name: 'termStartDate', type: 'date', dateFormat: 'time'},
+        {name: 'tuitionPaid', type: 'string'}]
 });

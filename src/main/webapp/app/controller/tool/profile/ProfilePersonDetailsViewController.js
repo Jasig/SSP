@@ -53,8 +53,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         currentRestrictionsField: '#currentRestrictions',
         academicProgramsField: '#academicPrograms',
         intendedProgramAtAdmitField: '#intendedProgramAtAdmit',
-        startYearTermField: '#startYearTerm',
-        anticipatedStartYearTermField: '#anticipatedStartYearTerm',
         transferHrsField: '#transferHrs',
         
         planProgramField: '#planProgram',
@@ -123,6 +121,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 expectedResponseCnt: 4
             }
             me.getView().loadRecord(me.person);
+			
+			
             
             me.transcriptService.getSummary(id, {
                 success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
@@ -188,6 +188,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var gpa = transcript.get('gpa');
         
         if (gpa) {
+			me.getAcademicStandingField().setFieldLabel('');
+            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
+			me.getCurrentRestrictionsField().setFieldLabel('');
+			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions))
+
             var gpaFormatted = Ext.util.Format.number(me.handleNull(gpa.gradePointAverage), '0.00');
             var grid = me.getCumTermGrid();
             var data = {
@@ -283,11 +288,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         Ext.Array.each(termItems, function(rawDatum){
             var termTranscript = Ext.create('Ssp.model.TermTranscript', rawDatum);
             var termIndex = me.termsStore.findExact("code", termTranscript.get("termCode"));
+            var paidIndex = me.personRegistrationStatusByTermStore.findExact("termCode", termTranscript.get("termCode"));
             
             if (termIndex >= 0) {
                 var term = me.termsStore.getAt(termIndex);
                 termTranscript.set("termStartDate", term.get("startDate"));
             }
+			if (paidIndex >= 0) {
+				var paid = me.personRegistrationStatusByTermStore.getAt(paidIndex);
+				termTranscript.set('tuitionPaid', paid.get('tuitionPaid'));
+			}
             
             termTranscripts.push(termTranscript);
         });
