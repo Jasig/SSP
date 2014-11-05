@@ -68,7 +68,11 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     
 	onAfterLayout: function(){
 		var me = this;
-		me.updateStudentRecord();
+		if (me.person.get('id')) {
+		    me.updateStudentRecord({'person':me.person});
+		} else {
+		    me.updateStudentRecord();
+		}
 	},
     
     
