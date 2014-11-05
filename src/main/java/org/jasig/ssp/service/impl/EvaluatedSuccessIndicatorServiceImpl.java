@@ -610,10 +610,6 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             public RegistrationStatusMetric foundFuture() {
                 return FUTURE;
             }
-
-            public String screenDisplayName() {
-                return null; // for consistency w/o other 'no data' scenarios
-            }
         }, CURRENT {
             @Override
             public RegistrationStatusMetric foundFuture() {
@@ -682,7 +678,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
         if ( regStatuses == null || regStatuses.isEmpty() ) {
             // current/future terms exist, but this person has no registration records in any of them.
-            // treat as if they had zeroes in each of those (imaginary) records
+            // or has zeroes in all of them. treat as if they are all zeroes
             return new Pair<Object,String>(RegistrationStatusMetric.NONE.name(),
                     RegistrationStatusMetric.NONE.screenDisplayName());
         }
