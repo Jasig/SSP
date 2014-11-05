@@ -472,9 +472,10 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     }, 
     
     onCancelClick: function(button){
-		this.person.set('id','');
-		this.personLite.set('id','');
-		this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
+		//Commented out for SSP-2720
+		//this.person.set('id','');
+		//this.personLite.set('id','');
+		//this.appEventsController.getApplication().fireEvent('displayStudentRecordView');
     	this.getView().close();
     },
  
