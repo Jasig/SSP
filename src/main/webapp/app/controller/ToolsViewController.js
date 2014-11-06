@@ -167,34 +167,37 @@ Ext.define('Ssp.controller.ToolsViewController', {
         var skipCallBack = this.appEventsController.getApplication().fireEvent('toolsNav', record, me);  
         
         if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
-			if (record.get('name') === 'Email Student'){
-				me.getView().getSelectionModel().deselectAll();
-					if (me.authenticatedPerson.hasAccess('EMAIL_STUDENT_BUTTON')) {
-						if ( me.emailStudentPopup ) {
-							me.emailStudentPopup.destroy();
-						}
-						me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
-						me.emailStudentPopup.show();
+			if (record.get('toolType') === 'emailstudent'){
+				if ( me.isAllowedToLoadTool(record.get('toolType')) ) {
+					if ( me.emailStudentPopup ) {
+						me.emailStudentPopup.destroy();
 					}
-					else{
-						Ext.Msg.alert('You do not have permission to email this student');
-					}
+					me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
+					me.emailStudentPopup.show();
+				} else {
+					me.authenticatedPerson.showUnauthorizedAccessAlert();
+				}
+			} else {
+				this.loadTool(record.get('toolType'));
 			}
-			else
-            	this.loadTool(record.get('toolType'));
         }
         else
         if(record.get('toolType') === 'toolcaseloadreassignment' && skipCallBack) {
             this.loadTool(record.get('toolType'));
         }
     },
-    
+
+    isAllowedToLoadTool: function(toolType) {
+        var me = this;
+        return me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL');
+    },
+
     loadTool: function(toolType){
         var me = this;
         var comp;
 
 		//TAKE OUT LEGACY AND DOCUMENTS GRANT
-        if (me.authenticatedPerson.hasAccess(toolType.toUpperCase() + '_TOOL')) {
+        if (me.isAllowedToLoadTool(toolType)) {
             comp = me.formUtils.loadDisplay('tools', toolType, true, {});
         }
         else {
