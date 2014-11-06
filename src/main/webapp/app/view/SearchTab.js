@@ -26,6 +26,7 @@ Ext.define('Ssp.view.SearchTab', {
     },
   	initComponent: function() {
    		var me = this;
+//        console.log(me.renderTpl[0]);
    		Ext.apply(me, {
             submitEmptyText: false,
             title: 'Students',
@@ -89,5 +90,17 @@ Ext.define('Ssp.view.SearchTab', {
 		} else {
 		    return 2;
         }
-	}
+	},
+    initTools: function() {
+        var me = this;
+        me.callParent(arguments);
+        if ( me.collapseTool ) {
+            me.collapseTool.on({
+                afterrender: function() {
+                    this.toolEl.dom.alt="collapse-search";
+                },
+                scope: me.collapseTool
+            });
+        }
+    }
 });
