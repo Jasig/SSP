@@ -44,12 +44,11 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Client ID',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'clientId',
                     allowBlank: false,
                     minLength: 1,
                     maxLength: 25,
-                    enforceMaxLength: true,
 // This regex only works part of the time even for the exact same string. Not sure why.
 //                    regex: /\S/g,
 //                    regexText: "Client ID cannot contain whitespace",
@@ -65,12 +64,11 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'First Name',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'firstName',
                     allowBlank: false,
                     minLength: 1,
                     maxLength: 50,
-                    enforceMaxLength: true,
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -83,12 +81,11 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Last Name',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'lastName',
                     allowBlank: false,
                     minLength: 1,
                     maxLength: 50,
-                    enforceMaxLength: true,
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -101,25 +98,23 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Email',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'primaryEmailAddress',
                     allowBlank: false,
                     vtype: 'email',
                     minLength: 1,
                     maxLength: 100,
-                    enforceMaxLength: true
 
                 },
                 {
                     xtype: 'textfield',
                     inputType: 'password',
                     fieldLabel: 'Secret',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'secret',
                     id: 'secret',
                     minLength: 1,
                     maxLength: 32,
-                    enforceMaxLength: true,
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -133,7 +128,9 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     xtype: 'textfield',
                     inputType: 'password',
                     fieldLabel: 'Confirm Secret',
-                    anchor: '40%',
+                    anchor: '60%',
+                    minLength: 1,
+                    maxLength: 32,
                     name: 'confirmSecret',
                     id: 'confirmSecret',
                     vtype : 'passwordConfirm',
@@ -142,7 +139,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Delete Secret',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'deleteSecret',
                     id: 'deleteSecret',
                     listeners: {
@@ -157,7 +154,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Token Expiration (seconds)',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'accessTokenValiditySeconds',
                     regex: /^[0-9]*$/,
                     regexText: "Can be blank or contain numbers",
@@ -216,7 +213,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     xtype: 'oscheckbox',
                     fieldLabel: 'Active',
                     checked: true,
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'objectStatus',
                     listeners: {
                         render: function(field){

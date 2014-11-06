@@ -106,8 +106,8 @@ Ext.define('Ssp.controller.admin.apikey.lticonsumer.EditLTIConsumerAdminViewCont
 
         var me = this;
         var form = me.getView().getForm();
-        if ( !(me.getSecretDelete().getValue()) && me.getSecret().getValue().length ) {
-            if ( me.getSecret().getValue() !== me.getSecretConfirm().getValue() ) {
+        if ( !(me.getSecretDelete().getValue()) && me.getSecret().getValue().trim().length ) {
+            if ( me.getSecret().getValue().trim() !== me.getSecretConfirm().getValue().trim() ) {
                 return false;
             }
         }

@@ -50,12 +50,11 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Consumer Name',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'name',
                     allowBlank: false,
                     minLength: 1,
                     maxLength: 50,
-                    enforceMaxLength: true,
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -68,12 +67,11 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Consumer Key',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'consumerKey',
                     allowBlank: false,
                     minLength: 1,
                     maxLength: 50,
-                    enforceMaxLength: true,
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -88,12 +86,11 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                     xtype: 'textfield',
                     inputType: 'password',
                     fieldLabel: 'Secret',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'secret',
                     id: 'secret',
                     minLength: 1,
-                    maxLength: 32,
-                    enforceMaxLength: true,
+                    maxLength: 256,
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
@@ -107,9 +104,11 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                     xtype: 'textfield',
                     inputType: 'password',
                     fieldLabel: 'Confirm Secret',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'confirmSecret',
                     id: 'confirmSecret',
+                    minLength: 1,
+                    maxLength: 256,
                     vtype : 'passwordConfirm',
                     initialPassField : 'secret'
                 },
@@ -117,7 +116,9 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                     xtype: 'textfield',
                     fieldLabel: 'Lti User Id Field',
                     allowBlank: false,
-                    anchor: '40%',
+                    anchor: '60%',
+                    minLength: 1,
+                    maxLength: 35,
                     name: 'ltiUserIdField'
                 },
                 {
@@ -127,20 +128,24 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
 					valueField: 'code',
 					displayField: 'displayValue',
                     allowBlank: false,
-                    anchor: '40%',
+                    minLength: 1,
+                    maxLength: 35,
+                    anchor: '60%',
                     name: 'sspUserIdField'
                 },
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Lti Section Code Field',
                     allowBlank: false,
-                    anchor: '40%',
+                    anchor: '60%',
+                    minLength: 1,
+                    maxLength: 35,
                     name: 'ltiSectionCodeField'
                 },
                 {
                     xtype: 'checkboxfield',
                     fieldLabel: 'Delete Secret',
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'deleteSecret',
                     id: 'deleteSecret',
                     listeners: {
@@ -156,7 +161,7 @@ Ext.define('Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',{
                     xtype: 'oscheckbox',
                     fieldLabel: 'Active',
                     checked: true,
-                    anchor: '40%',
+                    anchor: '60%',
                     name: 'objectStatus',
                     listeners: {
                         render: function(field){
