@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
@@ -50,6 +51,7 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 abstract class ReportBaseController<R> extends AbstractBaseController {
 
@@ -62,6 +64,9 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ReportBaseController.class);
 	private static final String DEFAULT_REPORT_NAME = "report"; // no 'ssp' prefix b/c that's branding
+
+	@Autowired
+	private ServletContext servletContext;
 
 	@Override
 	protected Logger getLogger() {
@@ -138,6 +143,10 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.font.name", "DejaVu Sans");
 			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.pdf.embedded", "true");
 			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.pdf.font.name", "DejaVu Sans");
+
+			if ( !(reportParameters.containsKey("realPath")) ) {
+				reportParameters.put("realPath", servletContext.getRealPath("/"));
+			}
 		}
 		
 		JasperFillManager.fillReportToStream(is, os, reportParameters, beanDS);

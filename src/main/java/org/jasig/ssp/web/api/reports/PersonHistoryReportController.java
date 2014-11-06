@@ -22,8 +22,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.lang.StringUtils;
@@ -83,6 +89,25 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
     private static final String STUDENT_PLAN_TO = "studentPlanTO";
     private static final String STUDENT_MAP_STATUS_TO = "studentMapStatusTO";
     private static final String STUDENT_MAP_PROJECTED_GRADUATION_TERM = "planProjectedGraduationTerm";
+    private static final String STUDENT_EVALUATED_SUCCESS_INDICATORS = "studentEvaluatedSuccessIndicators";
+    private static final String INTERVENTION_EVALUATED_SUCCESS_INDICATORS = "interventionEvaluatedSuccessIndicators";
+    private static final String RISK_EVALUATED_SUCCESS_INDICATORS = "riskEvaluatedSuccessIndicators";
+
+    private static final Ordering<EvaluatedSuccessIndicatorTO> INDICATOR_ORDERING = new Ordering<EvaluatedSuccessIndicatorTO>() {
+        public int compare(EvaluatedSuccessIndicatorTO left, EvaluatedSuccessIndicatorTO right) {
+            return Ints.compare(left.getIndicatorSortOrder(), right.getIndicatorSortOrder());
+        }
+    }.compound(new Ordering<EvaluatedSuccessIndicatorTO>() {
+        public int compare(EvaluatedSuccessIndicatorTO left, EvaluatedSuccessIndicatorTO right) {
+            return Ordering.from(String.CASE_INSENSITIVE_ORDER).nullsFirst().compare(left.getIndicatorModelName(),
+                    right.getIndicatorModelName());
+        }
+    }).compound(new Ordering<EvaluatedSuccessIndicatorTO>() {
+        public int compare(EvaluatedSuccessIndicatorTO left, EvaluatedSuccessIndicatorTO right) {
+            return Ordering.from(String.CASE_INSENSITIVE_ORDER).nullsFirst().compare(left.getIndicatorName(),
+                    right.getIndicatorName());
+        }
+    });
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(PersonHistoryReportController.class);
@@ -123,6 +148,8 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 	protected transient SecurityService securityService;
 	@Autowired
 	protected transient TermService termService;
+	@Autowired
+	private transient EvaluatedSuccessIndicatorService evaluatedSuccessIndicatorService;
 
 	@RequestMapping(value = "/{personId}/history/print", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
@@ -217,6 +244,16 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 		final List<StudentHistoryTO> studentHistoryTOs = sort(earlyAlertTOs,
 				taskTOMap, journalEntryTOs);
 
+        final List<EvaluatedSuccessIndicatorTO> evaluatedSuccessIndicators =
+                evaluatedSuccessIndicatorService.getForPerson(personId, ObjectStatus.ACTIVE);
+
+        final List<EvaluatedSuccessIndicatorTO> studentEvaluatedSuccessIndicators =
+                filteredAndSortedIndicators(evaluatedSuccessIndicators, SuccessIndicatorGroup.STUDENT);
+        final List<EvaluatedSuccessIndicatorTO> interventionEvaluatedSuccessIndicators =
+                filteredAndSortedIndicators(evaluatedSuccessIndicators, SuccessIndicatorGroup.INTERVENTION);
+        final List<EvaluatedSuccessIndicatorTO> riskEvaluatedSuccessIndicators =
+                filteredAndSortedIndicators(evaluatedSuccessIndicators, SuccessIndicatorGroup.RISK);
+
         final Map<String, Object> parameters = Maps.newHashMap();
 		
 		SearchParameters.addReportDateToMap(parameters);
@@ -225,11 +262,20 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
         parameters.put(STUDENT_PLAN_TO, planTO);
         parameters.put(STUDENT_MAP_STATUS_TO, mapStatusTO);
         parameters.put(STUDENT_MAP_PROJECTED_GRADUATION_TERM, planProjectedGraduationTerm);
-		
+        parameters.put(STUDENT_EVALUATED_SUCCESS_INDICATORS, studentEvaluatedSuccessIndicators);
+        parameters.put(INTERVENTION_EVALUATED_SUCCESS_INDICATORS, interventionEvaluatedSuccessIndicators);
+        parameters.put(RISK_EVALUATED_SUCCESS_INDICATORS, riskEvaluatedSuccessIndicators);
+
 		this.renderReport(response, parameters, studentHistoryTOs, REPORT_URL, reportType,
 				REPORT_FILE_TITLE + personTO.getLastName());
 
 	}
+
+    private List<EvaluatedSuccessIndicatorTO> filteredAndSortedIndicators(List<EvaluatedSuccessIndicatorTO> from,
+                                                                          SuccessIndicatorGroup inGroup) {
+        return INDICATOR_ORDERING.sortedCopy(
+                Iterables.filter(from, inGroup.transferObjectPredicate()));
+    }
 
 	@Override
 	protected Logger getLogger() {

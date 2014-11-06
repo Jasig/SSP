@@ -18,6 +18,38 @@
  */
 package org.jasig.ssp.model;
 
+import com.google.common.base.Predicate;
+import org.jasig.ssp.transferobject.EvaluatedSuccessIndicatorTO;
+
+import javax.annotation.Nullable;
+
 public enum SuccessIndicatorGroup {
-    STUDENT,INTERVENTION,RISK
+    STUDENT {
+        private Predicate<EvaluatedSuccessIndicatorTO> DTO_PREDICATE = newTransferObjectPredicate(this);
+        @Override
+        public Predicate<EvaluatedSuccessIndicatorTO> transferObjectPredicate() {
+            return DTO_PREDICATE;
+        }
+    },INTERVENTION {
+        private Predicate<EvaluatedSuccessIndicatorTO> DTO_PREDICATE = newTransferObjectPredicate(this);
+        @Override
+        public Predicate<EvaluatedSuccessIndicatorTO> transferObjectPredicate() {
+            return DTO_PREDICATE;
+        }
+    },RISK {
+        private Predicate<EvaluatedSuccessIndicatorTO> DTO_PREDICATE = newTransferObjectPredicate(this);
+        @Override
+        public Predicate<EvaluatedSuccessIndicatorTO> transferObjectPredicate() {
+            return DTO_PREDICATE;
+        }
+    };
+    private static Predicate<EvaluatedSuccessIndicatorTO> newTransferObjectPredicate(final SuccessIndicatorGroup forValue) {
+        return new Predicate<EvaluatedSuccessIndicatorTO>() {
+            @Override
+            public boolean apply(@Nullable EvaluatedSuccessIndicatorTO input) {
+                return input == null ? forValue == null : input.getIndicatorGroupCode() == forValue;
+            }
+        };
+    }
+    public abstract Predicate<EvaluatedSuccessIndicatorTO> transferObjectPredicate();
 }
