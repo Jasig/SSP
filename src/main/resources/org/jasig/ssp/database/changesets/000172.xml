@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Jasig under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Jasig licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License. You may obtain a
+    copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet id="fix some MAP Plan email formatting issues for Outlook" author="gary.roybal">
+        <preConditions onFail="MARK_RAN" onFailMessage="Skipping update to message template ">
+            <customPrecondition className="org.jasig.ssp.util.liquibase.MessageTemplateCheckSumPrecondition">
+                <param name="messageTemplateId" value="df47a4b0-b666-11e2-9e96-0800200c9a66"/>
+                <param name="columnName" value="body"/>
+            </customPrecondition> 
+        </preConditions>
+        <customChange class="org.jasig.ssp.util.liquibase.UpdateMessageTemplateAndChecksum">
+            <param name="messageTemplateId" value="df47a4b0-b666-11e2-9e96-0800200c9a66"/>
+            <param name="columnName" value="body"/>
+            <param name="columnValue"><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+@media print
+{
+  table { page-break-after:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto; page-break-before:auto }
+  td    { page-break-inside:avoid; page-break-after:auto; page-break-before:auto }
+  thead { display:table-header-group }
+  tfoot { display:table-footer-group }
+}
+img {
+  display:block;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>$title</title>
+</head>
+
+<body style="font-family: Tahoma; font-size: 12px;">
+
+<table style="font-family: Tahoma; font-size: 12px; width: 980px">
+#if("$!emailNotes" != "")
+    <tr><td>$!studentFullName,</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>$!emailNotes</td></tr>
+    <tr><td>&nbsp;</td></tr>
+#end
+    <tr>
+        <td style="width: 980px">
+            <table>
+                <tr>
+                    <td width="118px">
+                        <img src="$!baseUrl/ssp/images/institution.gif" width="113" height="119" alt="$institution" border="0">
+                    </td>
+                    <td width="431px">
+                        <span style="float: left; padding: 6px 0px 0px 12px; font-family: Tahoma; font-size: 22px;">$institution<br>Address<br>City, State 45402<br>1.480.558.2400</span>
+                    </td>
+                    <td width="431px">
+                        <span style="float: right; padding: 6px 12px 0px 0px; font-family: Tahoma; font-size: 18px;">$createdDateFormatted<br><br>$studentFullName<br>$studentEmail<br>School Id: $studentSchoolId<br></span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+ #if($includeHeaderFooter)
+    <tr>
+        <td style="width: 980px; padding-left: 15px; padding-right: 15px">
+            <span style="font-family: Tahoma; font-size: 14px;">
+                Below you will see the Academic Plan (MAP) that you have developed in cooperation with an Academic/Faculty Advisor. Please contact your
+                Academic/Faculty Advisor or Counselor if you have any questions or need to make modifications to MAP.
+            </span>
+         </td>
+     </tr>
+     <tr>
+        <td style="width: 980px; padding-left: 15px; padding-right: 15px">
+            <span style="font-family: Tahoma; font-size: 14px;">
+                <strong>Please Note:</strong> Information from the department(s) regarding planned course offerings was used by the advisor to recommend your courses. Courses
+                recommended on your MAP may not be available as planned or at the times, locations, and/or delivery methods you prefer.
+                Courses recommended on your MAP do not secure an open spot in a course or section that you desire; therefore, you are encouraged to register early.
+            </span>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+#end
+
+#foreach($termCourse in $termCourses) 
+    <tr>
+        <td style="width: 980px">
+            <table cellpadding="0" cellspacing="0" style="table-layout: fixed; background-color:white; width:980px; border:1px solid #ABABAB">
+                <tr>
+                    <td style="font-size:small;text-align:left;padding-left:5px;color:#ABABAB"><strong>$termCourse.term.name</strong></td>
+                    <td style="font-size:small;text-align:right;padding-right:5px;color:#ABABAB"><strong>Term Cr. Hrs: $termCourse.totalCreditHours</strong> </td>
+                </tr>
+
+    #foreach($course in $termCourse.courses)
+                #set ($odd = $foreach.count % 2)
+                #if( $odd > 0 )
+                <tr>
+                #end
+                    <td valign="top" style="width:50%;word-wrap:break-word;text-align:left;padding-bottom:5px; padding-top:5px;padding-left:10px; padding-right:5px">
+                        <strong>$course.formattedCourse - $course.courseTitle $course.creditHours Cr. Hrs.</strong><br>
+                        #if("$!course.planToOffer" != "")PLAN TO OFFER: $course.planToOffer #end #if($includeCourseDescription)$!course.courseDescription #end
+
+                    #if("$!course.contactNotes" != "" || "$!course.studentNotes" != "")
+                        <p style="font-size:10px; margin-top:5px">
+                        #if(!$isPrivate && "$!course.contactNotes" != "")
+                            <span style="color:#ABABAB"><strong>Advisor Notes:</strong></span> $course.contactNotes
+                        #end
+                        #if(!$isPrivate && "$!course.contactNotes" != "" && "$!course.studentNotes" != "")
+                        <br/><br/>
+                        #end
+                        #if("$!course.studentNotes" != "")
+                            <span style="color:#ABABAB"><strong>Student Notes:</strong></span> $course.studentNotes
+                        #end
+                    #end
+
+                    </td>
+                #if( $odd == 0 || $foreach.last)
+                </tr>
+                #end
+    #end
+    #if($includeTotalTimeExpected)
+                <tr>
+                    <td colspan="2" style="height:15px;border-top:1px solid #ABABAB;padding-left:10px">
+                    #set( $timeExpected = $termCourse.totalCreditHours * 2 )
+                    Time expected outside Class: $timeExpected (hours/week)
+                    </td>
+                </tr>
+    #end
+
+    #if(!$isPrivate && "$!termCourse.contactNotes" != "")
+                <tr>
+                    <td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-left:10px; padding-right:10px;border-top:1px solid #ABABAB;">
+                        <span style="color:#ABABAB"><strong>Advisor Notes:</strong></span> $termCourse.contactNotes
+                    </td>
+                </tr>
+    #end
+
+    #if(!$isPrivate && "$!termCourse.contactNotes" != "" && "$!termCourse.studentNotes" != "")
+                <tr><td>&nbsp;</td></tr>
+    #end
+
+    #if("$!termCourse.studentNotes" != "")
+                <tr>
+                    <td colspan="2" style="padding-top: 5px; padding-bottom: 5px; padding-left:10px; padding-right:10px;border-top:1px solid #ABABAB;">
+                        <span style="color:#ABABAB"><strong>Student Notes:</strong></span> $termCourse.studentNotes
+                    </td>
+                </tr>
+    #end
+
+            </table>
+        </td>
+    </tr>
+#end
+
+    <tr>
+        <td align="center" style="width: 980px">
+            <span style="color:#ABABAB;">
+                <strong>Total MAP Credit HRS: TERM:</strong> $totalPlanHours <strong>DEV:</strong> $totalPlanDevHours
+            </span>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+
+#if($includeFinancialAidInformation)
+    <tr>
+        <td style="width: 980px; height: 20px">
+            <span style="text-align:left; color:#000000;">
+                <strong>Attempted Hours - </strong> $!attemptedHours
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px; height: 20px">
+            <span style="text-align:left; color:#000000;">
+                <strong>Completed Hours - </strong> $!completedHours
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px; height: 20px">
+            <span style="text-align:left; color:#000000;">
+                <strong>Current Completion Rate - </strong> $!completionRage
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px; height: 20px; padding-left: 15px">
+            <span style="text-align:left; color:#000000;">
+                <strong>Number of hours needed to earn 67% completion rate - </strong> $!neededFor67PercentCompletion
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px; height: 20px">
+            <span style="text-align:left; color:#000000;">
+                <strong>Financial Aid Cum GPA - </strong> $!financialAidGpa
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px; height: 20px; padding-left: 15px">
+            <span style="text-align:left; color:#000000;">
+                <strong>Number of needed to earn a 2.0 Cum GPA with all B - </strong> $!hoursNeededB
+            </span>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+#end
+
+#if(!$isPrivate && "$!planContactNotes" != "")
+    <tr>
+        <td style="width:980px; padding-left:20px;">
+            <span style="color:#ABABAB"><strong>Advisor Notes:</strong></span>&nbsp;&nbsp;&nbsp;$!planContactNotes
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+#end
+
+#if("$!planStudentNotes" != "")
+    <tr>
+        <td style="width:980px; padding-left:20px;">
+            <span style="color:#ABABAB"><strong>Student notes:</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;$!planStudentNotes
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+#end
+
+    <tr>
+        <td style="width: 980px">
+            <span style="text-align:left; color:#000000;">
+                <strong>If I have questions or concerns about my plan I will contact:</strong>
+            </span>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!contactName</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!contactTitle</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!contactPhone</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!contactEmail</strong>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!ownerFullName</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!ownerPhone</strong>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 980px">
+            <strong>$!ownerEmail</strong>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+
+#if($includeHeaderFooter)
+    <tr>
+        <td style="width: 980px">
+            <span style="font-size:small">
+    I realize that agreeing to this plan and reaching my educational goals is my choice, and I understand that deviation from this plan may have negative academic
+    or financial impacts on me as a student reaching my stated goals. I will contact my Academic Advisor or Counselor if I have any questions or need to make
+    modifications to my Academic Plan.
+            </span>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr>
+        <td style="width: 980px">
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="width:350px;">&nbsp;</td>
+                <td style="width:90px;">&nbsp;</td>
+                <td style="width:350px;">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width:350px; border-top:1px solid; border-color: black;">&nbsp;</td>
+                <td style="width:90px;">&nbsp;</td> 
+                <td style="width:350px; border-top:1px solid; border-color: black;">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width:350px;">Student Signature</td>
+                <td style="width:90px;">&nbsp;</td> 
+                <td style="width:350px;">Advisor/Counselor Signature</td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+#end
+    
+</table>
+
+</body>
+</html>]]></param>
+        </customChange>
+    </changeSet>
+</databaseChangeLog>
