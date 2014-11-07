@@ -375,6 +375,7 @@ display: none;
 	clear: both;
 	min-height: 18px;
 	word-wrap: break-word;
+	color:#04408c
 }
 .indicator-value {
 	padding-left: 10px;
