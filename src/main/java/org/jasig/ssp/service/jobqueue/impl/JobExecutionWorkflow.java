@@ -44,9 +44,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class JobExecutionWorkflow implements Runnable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JobExecutionWorkflow.class);
-	private static final String NO_SUCH_EXECUTION_COMPONENT_MSG = "No job execution component registered under name {0}";
-	private static final String JOB_EXECUTION_SYSTEM_ERROR_MSG = "Job execution exited abnormally {0}";
+	private static final String NO_SUCH_EXECUTION_COMPONENT_MSG = "No job execution component registered under name [{0}]";
+	private static final String JOB_EXECUTION_SYSTEM_ERROR_MSG = "Job execution exited abnormally. Job ID [{0}]";
+	private static final String JOB_EXECUTION_LOOP_INTERRUPTED_MSG = "Job execution loop interrupted. Job ID [{0}]";
 	public static final String JOB_EXECUTION_TASK_NAME = "job-execution";
+	private static final long POLITE_SLEEP_MILLIS = 1000;
 
 	private final UUID jobId;
 	private final ScheduledTaskWrapperService taskHelper;
@@ -115,6 +117,10 @@ public class JobExecutionWorkflow implements Runnable {
 				// and/or accumulate warnings. See similar comments in AbstractJobExecutor.execute()
 				while (true) {
 					try {
+						if ( Thread.currentThread().isInterrupted() ) {
+							LOGGER.debug("Interrupting incremental execution loop for job [{}]", job.getId());
+							throw new InterruptedException();
+						}
 						final JobExecutionResult<JobWorkflowStatusDescription> result = batchExecutor.exec(new Callable<JobExecutionResult<JobWorkflowStatusDescription>>() {
 							@Override
 							public JobExecutionResult<JobWorkflowStatusDescription> call() throws Exception {
@@ -125,15 +131,24 @@ public class JobExecutionWorkflow implements Runnable {
 							resultHolder.set(result);
 							break;
 						} else {
-							LOGGER.info("Continuing incremental execution of job ", job.getId());
+							LOGGER.debug("Continuing incremental execution of job [{}]", job.getId());
+							Thread.sleep(POLITE_SLEEP_MILLIS);
 							continue;
 						}
+					} catch (InterruptedException e) {
+						resultHolder.set(newInterruptedExecLoopResult(job));
+						Thread.currentThread().interrupt(); // reassert
 					} catch ( RuntimeException e ) {
 						throw e;
 					} catch ( Exception e ) {
 						throw new RuntimeException(e);
 					}
 				}
+			}
+
+			private JobExecutionResult<JobWorkflowStatusDescription> newInterruptedExecLoopResult(Job job) {
+				return new JobExecutionResult<>(JobExecutionStatus.INTERRUPTED,
+						new JobWorkflowStatusDescription(null, Lists.newArrayList(MessageFormat.format(JOB_EXECUTION_LOOP_INTERRUPTED_MSG, job.getId()))));
 			}
 
 			@Override
