@@ -374,10 +374,12 @@ display: none;
 .indicator-label {
 	clear: both;
 	min-height: 18px;
+	word-wrap: break-word;
 }
 .indicator-value {
 	padding-left: 10px;
 	padding-bottom: 4px;
+	word-wrap: break-word;
 	font-style: italic;
 }
 .indicator-glyph {
