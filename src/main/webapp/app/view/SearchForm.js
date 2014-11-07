@@ -22,7 +22,6 @@ Ext.define('Ssp.view.SearchForm',{
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.SearchFormViewController',
-	title: 'Search',
     inject: {
      	appEventsController: 'appEventsController',
     	programStatusesStore: 'programStatusesStore',
@@ -40,6 +39,8 @@ Ext.define('Ssp.view.SearchForm',{
         termsStore: 'termsStore'
     },
     collapsible: true,
+	hideCollapseTool: true,
+	header: false,
 	layout: {
         type: 'vbox',
         align: 'stretch'
@@ -72,27 +73,7 @@ Ext.define('Ssp.view.SearchForm',{
 			defaults:{
 			    	 enableKeyEvents:true
 			},
-            tools: [
-                    {
-              
-                        text: 'Search',
-                        tooltip: 'Search for Student',
-                        xtype: 'button',
-                        type: 'search',
-                        itemId: 'searchStudentButton',
-	                    height: 25,
-                        align: 'left'
-            		},
-        			{
-                        tooltip: 'Reset',
-                        text: 'Reset',
-                        type: 'refresh',
-                        xtype: 'button',
-                        itemId: 'resetStudentSearchButton',
-	                    height: 25,
-                        align: 'left'
-        			} 
-                    ], 
+           
             items: [
 			{  layout:'column',
 			   border: false,

@@ -66,7 +66,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     	searchGridPager: '#searchGridPager',
     	searchBar: '#searchBar',
-
+		upTool: '#upTool',
 
     	addPersonButton: {
     		selector: '#addPersonButton',
@@ -98,7 +98,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 		},
 		'setInactiveButton': {
 			click: 'onSetProgramStatusClick'
+		},
+		'searchStudentButton': {
+		click: 'onSearchButtonClick'
+		},
+		'resetStudentSearchButton': {
+		    click: 'onResetClick'
 		}
+
     },
 
 	init: function() {
@@ -429,6 +436,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 	displaySearch: function() {
 	    var me = this;
 		me.getSearchBar().show();
+		me.getSearchStudentButton().show();
+		me.getResetStudentSearchButton().show();
+		me.getUpTool().show();
 	    Ext.ComponentQuery.query('searchForm')[2].show(); //component always has three from SearchTab using 3 Search.js, 3rd is the "search" tab
 
         me.setGridView();
@@ -437,11 +447,17 @@ Ext.define('Ssp.controller.SearchViewController', {
 	displayCaseload: function(){
 		var me=this;
 		me.getSearchBar().hide();
+		me.getSearchStudentButton().hide();
+		me.getResetStudentSearchButton().hide();
+		me.getUpTool().hide();
 		me.setGridView();
 	},
 	displayWatchList: function(){
 		var me=this;
 		me.getSearchBar().hide();
+		me.getSearchStudentButton().hide();
+		me.getResetStudentSearchButton().hide();
+		me.getUpTool().hide();
 		me.setGridView();
 
 	},
@@ -462,9 +478,18 @@ Ext.define('Ssp.controller.SearchViewController', {
                 store.pageSize = store.data.length;
                 if (me.searchStore.data.length < 1) {
                     me.getCaseloadActionCombo().hide();
+					me.getSetNonParticipatingStatusButton().hide();
+					me.getSetNoShowStatusButton().hide();
+					me.getSetActiveStatusButton().hide();
+					me.getSetInactiveButton().hide();
+					
                 } else {
                     if (me.authenticatedPerson.hasAnyBulkPermissions()) {
                         me.getCaseloadActionCombo().show();
+						me.getSetNonParticipatingStatusButton().show();
+						me.getSetNoShowStatusButton().show();
+						me.getSetActiveStatusButton().show();
+						me.getSetInactiveButton().show();
                     }
                 }
             }
@@ -1398,5 +1423,18 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
     	record.set("currentProgramStatusName",params.person.get("currentProgramStatusName"));
     	me.updatePerson(record);
-    }
+    },
+	
+	onSearchButtonClick: function(button){
+			var me = this;
+			me.getAddPersonButton().show();
+			this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+	},
+	
+	onResetClick: function(button){
+		var me=this;
+		Ext.ComponentQuery.query('#searchBar')[2].getForm().reset();
+		me.searchStore.removeAll();
+		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
+	}
 });

@@ -50,23 +50,14 @@ Ext.define('Ssp.view.Search', {
                         }
                     }
                 }
-            }, {
-                xtype: 'toolbar',
-                dock: 'top',
-                itemId: 'searchBar',
-                hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
-                items: [{
-  	              	xtype: 'searchForm',
-  	              	hidden: true,
-                    flex: 1
-                }]
-            }, {
+            },  
+            {
                 xtype: 'toolbar',
                 dock: 'top',
                 // enableOverlow is really what we want, but just doesn't work in our current Ext.js version:
                 // http://www.sencha.com/forum/showthread.php?269044-Combo-Selection-Event-and-Button-Click-Event-not-firing-inside-overflow-toolbar
                 // enableOverflow: true,
-                overflowX: 'auto',
+                overflowX: 'hidden',
                 items: [{
                     tooltip: 'Add Student',
                     text: '',
@@ -85,10 +76,10 @@ Ext.define('Ssp.view.Search', {
                     cls: 'editPersonIcon',
                     xtype: 'button',
                     itemId: 'editPersonButton'
-                },{
+                }, {
                     xtype: 'tbspacer',
                     flex: .5
-                },{
+                }, {
                     tooltip: 'Set Student to Active status',
                     text: '',
                     width: 25,
@@ -128,7 +119,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     action: 'no-show',
                     itemId: 'setNoShowStatusButton'
-                },{
+                }, {
                     tooltip: 'Set Student to Inactive',
                     text: '',
                     width: 25,
@@ -138,10 +129,10 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     action: 'inactive',
                     itemId: 'setInactiveButton'
-                },{
+                }, {
                     xtype: 'tbspacer',
                     flex: .5
-                },{
+                }, {
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
                     fieldLabel: '',
@@ -156,14 +147,14 @@ Ext.define('Ssp.view.Search', {
                     queryMode: 'local',
                     allowBlank: true,
                     forceSelection: true,
-                    width: 100,
+                    width: 90,
                     matchFieldWidth: false,
                     height: 25,
                     labelWidth: 75
-                },{
+                }, {
                     xtype: 'tbspacer',
                     flex: .5
-                } ,{
+                }, {
                     xtype: 'combobox',
                     itemId: 'caseloadStatusCombo',
                     name: 'programStatusId',
@@ -180,14 +171,57 @@ Ext.define('Ssp.view.Search', {
                     allowBlank: false,
                     hidden: !me.authenticatedPerson.hasAnyProgramStatusFilterPermissions() || me.tabContext === 'search',
                     forceSelection: true,
-                    width: 100,
+                    width: 90,
                     matchFieldWidth: false,
                     height: 25,
                     labelWidth: 75
-                }    ]
+                }, {
+                    type: 'up',
+                    xtype: 'tool',
+                    itemId: 'upTool',
+                    handler: function(t){
+                        var idx = 0;
+                        if (me.authenticatedPerson.hasAccess('CASELOAD_SEARCH')) {
+                            idx = 2; //user has two, second is search
+                        }
+                        var panel = Ext.ComponentQuery.query('#searchBar')[idx];
+                        if (panel.isHidden()) {
+                            this.setType('up');
+                            panel.show();
+                        }
+                        else {
+                            this.setType('down');
+                            panel.hide();
+                        }
+                    }
+                }, {
+                
+                    text: 'Search',
+                    tooltip: 'Search for Student',
+                    xtype: 'button',
+                    type: 'search',
+                    itemId: 'searchStudentButton',
+                    height: 25,
+                    align: 'left',
+                    hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH')
+                }, {
+                    tooltip: 'Reset',
+                    text: 'Reset',
+                    type: 'refresh',
+                    xtype: 'button',
+                    itemId: 'resetStudentSearchButton',
+                    height: 25,
+                    align: 'left',
+                    hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH')
+                }]
+            }, {
+                xtype: 'searchForm',
+                itemId: 'searchBar',
+                hidden: true,
+                flex: 1
             }]
         });
-
+        
         return me.callParent(arguments);
     }
 });

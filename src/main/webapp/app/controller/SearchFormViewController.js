@@ -39,18 +39,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				single: true
 			}
     	},
-    'searchStudentButton': {
-		click: 'onSearchClick'
-		},
-//    	searchActionCombo: {
-//    		selector: '#searchActionCombo',
-//    		listeners: {
-//    			select: 'onSearchActionComboSelect'
-//    		} 
-//    	},		
-   	'resetStudentSearchButton': {
-    		click: 'onResetClick'
-    	},
+  
      'myPlans':{
 			specialkey: "specialKeyPressed"
 	 },   
@@ -132,7 +121,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	onAfterLayout: function(comp, eobj){
 		var me=this;
 		
-		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
+		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearch, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
 	   	// load program statuses
@@ -140,7 +129,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},
     destroy: function() {
     	var me=this;
-    	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearchClick, scope: me});
+    	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearch, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
         if ( me.emailStudentPopup ) {
@@ -156,7 +145,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     	var me=scope;
     	me.searchStore.pageSize = me.searchStore.data.length;
     	me.getView().setLoading( false );
-		me.getView().collapse();
+		me.getView().hide();
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
     },  
     exportSearchSuccess: function( r, scope){
@@ -231,13 +220,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
     getProgramStatusesFailure: function( r, scope){
     	var me=scope;
     },
-    onResetClick: function(button){
-		var me=this;
-		me.clear();	
-		me.searchStore.removeAll();
-		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
-		
-	},
+   
 	// copy/paste from SearchViewController
 	onBulkProgramStatusChangeFailure: function(resp) {
 		var me = this;
@@ -730,7 +713,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			);
 		}
 	},
-	onSearchClick: function(button){
+	onSearch: function(){
 		var me = this;
 		if(!me.getView().getForm().isDirty())
 		{
@@ -778,7 +761,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	specialKeyPressed: function(field, el){
 		var me=this;
 		if(el.getKey() == Ext.EventObject.ENTER){
-			me.onSearchClick();
+			me.onSearch();
 		}
 	},
 	
