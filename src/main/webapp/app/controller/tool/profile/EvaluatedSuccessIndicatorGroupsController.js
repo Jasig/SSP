@@ -169,12 +169,12 @@ Ext.define('Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsControlle
         if ( specs.STUDENT[0].items.length ) {
             me.getStudentSuccessIndicatorGroup().add(specs.STUDENT);
         } else {
-            me.getStudentSuccessIndicatorGroup().hide();
+            me.getStudentSuccessIndicatorGroup().up().hide();
         }
         if ( specs.INTERVENTION[0].items.length ) {
             me.getInterventionSuccessIndicatorGroup().add(specs.INTERVENTION);
         } else {
-            me.getInterventionSuccessIndicatorGroup().hide();
+            me.getInterventionSuccessIndicatorGroup().up().hide();
         }
         if ( specs.RISK[0].items.length ) {
             me.getRiskSuccessIndicatorGroup().add(specs.RISK);
