@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author='dan.mccallum' id='success indicator evaluation blurbs'>
+        <insert tableName="blurb">
+            <column name="id" value="5d899e47-6764-11e4-a02c-70568196cf5b" />
+            <column name="name" value="HIGH success indicator evaluation display" />
+            <column name="code" value="ssp.success.indicator.evaluation.high"/>
+            <column name="value" value="Good"/>
+            <column name="description" value="Good" />
+            <column name="created_date" valueDate="2014-11-08T00:00:00" />
+            <column name="modified_date" valueDate="2013-11-08T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="blurb">
+            <column name="id" value="86f5bbab-6764-11e4-afa8-70568196cf5b" />
+            <column name="name" value="MEDIUM success indicator evaluation display" />
+            <column name="code" value="ssp.success.indicator.evaluation.medium"/>
+            <column name="value" value="Okay"/>
+            <column name="description" value="Okay" />
+            <column name="created_date" valueDate="2014-11-08T00:00:00" />
+            <column name="modified_date" valueDate="2013-11-08T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="blurb">
+            <column name="id" value="96eb0e40-6764-11e4-a283-70568196cf5b" />
+            <column name="name" value="LOW success indicator evaluation display" />
+            <column name="code" value="ssp.success.indicator.evaluation.low"/>
+            <column name="value" value="Poor"/>
+            <column name="description" value="Poor" />
+            <column name="created_date" valueDate="2014-11-08T00:00:00" />
+            <column name="modified_date" valueDate="2013-11-08T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="blurb">
+            <column name="id" value="a446438c-6764-11e4-8332-70568196cf5b" />
+            <column name="name" value="DEFAULT success indicator evaluation display" />
+            <column name="code" value="ssp.success.indicator.evaluation.default"/>
+            <column name="value" value="Unsure"/>
+            <column name="description" value="Unsure" />
+            <column name="created_date" valueDate="2014-11-08T00:00:00" />
+            <column name="modified_date" valueDate="2013-11-08T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
