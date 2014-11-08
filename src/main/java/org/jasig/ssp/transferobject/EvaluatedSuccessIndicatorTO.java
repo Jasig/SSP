@@ -38,6 +38,7 @@ public class EvaluatedSuccessIndicatorTO {
     private ObjectStatus objectStatus;
     private String displayValue;
     private SuccessIndicatorEvaluation evaluation;
+    private String evaluationDisplayName;
 
 
     public String getId() {
@@ -142,5 +143,13 @@ public class EvaluatedSuccessIndicatorTO {
 
     public void setIndicatorSortOrder(int indicatorSortOrder) {
         this.indicatorSortOrder = indicatorSortOrder;
+    }
+
+    public String getEvaluationDisplayName() {
+        return evaluationDisplayName;
+    }
+
+    public void setEvaluationDisplayName(String evaluationDisplayName) {
+        this.evaluationDisplayName = evaluationDisplayName;
     }
 }

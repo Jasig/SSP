@@ -31,6 +31,7 @@ Ext.define('Ssp.model.EvaluatedSuccessIndicator', {
         {name: 'indicatorSortOrder', type: 'int'},
         {name: 'objectStatus', type: 'string'},
         {name: 'displayValue', type: 'string'},
-        {name: 'evaluation', type: 'string'}
+        {name: 'evaluation', type: 'string'},
+        {name: 'evaluationDisplayName', type: 'string'}
     ]
 });

@@ -27,26 +27,20 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicator', {
 
         var tpl = new Ext.XTemplate('<tpl for=".">' +
                 '<div class="wrapper">' +
-                    '<div class="success-indicator {[this.statusToCls(values.indicatorStatus)]}">' +
+                    '<div class="success-indicator {[this.indicatorCls(values)]}">' +
                         '<h3 class="title" data-qtip="{indicatorName}: {indicatorDescription}">{indicatorName}</h3>' +
                         '<p class="value" data-qtip="{indicatorValue}">{indicatorValue}</p>' +
-                        '<p class="rating"><i class="fa {[this.statusToIconCls(values.indicatorStatus)]}" ></i>{[this.statusToDisplayName(values.indicatorStatus)]}</p>' +
+                        '<p class="rating"><i class="fa {[this.iconCls(values)]}" ></i>{indicatorEvaluationDisplayName}</p>' +
                     '</div>' +
             '</tpl>', {
-                statusToCls: function(status) {
-                    switch (status ? status.toString().toLowerCase() : null) {
-                        case "high":
-                            return 'positive';
-                        case "medium":
-                            return 'neutral';
-                        case "low":
-                            return 'negative';
-                        default:
-                            return '';
-                    }
+                normalizeEval: function(indicator) {
+                    return indicator.indicatorEvaluation == null ? '' : indicator.indicatorEvaluation.toString().toLowerCase();
                 },
-                statusToIconCls: function(status) {
-                    switch (status ? status.toString().toLowerCase() : null) {
+                indicatorCls: function(indicator) {
+                    return this.normalizeEval(indicator);
+                },
+                iconCls: function(indicator) {
+                    switch (this.normalizeEval(indicator)) {
                         case "high":
                             return 'fa-check-circle';
                         case "medium":
@@ -55,18 +49,6 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicator', {
                             return 'fa-times-circle';
                         default:
                             return 'fa-ban';
-                    }
-                },
-                statusToDisplayName: function(status) {
-                    switch (status ? status.toString().toLowerCase() : null) {
-                        case "high":
-                            return 'Good';
-                        case "medium":
-                            return 'Okay';
-                        case "low":
-                            return 'Poor';
-                        default:
-                            return 'Unsure';
                     }
                 }
         });

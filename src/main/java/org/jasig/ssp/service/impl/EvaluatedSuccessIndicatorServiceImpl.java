@@ -34,6 +34,7 @@ import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.model.reference.SuccessIndicator;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
@@ -47,6 +48,7 @@ import org.jasig.ssp.service.external.ExternalStudentRiskIndicatorService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.service.reference.SuccessIndicatorService;
 import org.jasig.ssp.transferobject.EvaluatedSuccessIndicatorTO;
 import org.jasig.ssp.transferobject.SuccessIndicatorEvaluation;
@@ -71,6 +73,7 @@ import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -119,9 +122,21 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                     return new StringBuilder(input.getModelCode()).append("::").append(input.getCode()).toString();
                 }
             };
+    private static final Function<Blurb, String> BLURB_MAP_KEY_GENERATOR =
+            new Function<Blurb, String>() {
+                @Override
+                public String apply(@Nullable Blurb input) {
+                    return input.getCode();
+                }
+            };
     private static final String TRANSCRIPT_INDICATOR_METRIC_KEY = "TRANSCRIPT";
     private static final String FINANCIAL_AID_INDICATOR_METRIC_KEY = "FINANCIAL_AID";
     private static final String EXTERNAL_RISK_INDICATOR_METRIC_KEY = "EXTERNAL_RISK";
+    private static final String EVALUATION_DISPLAY_NAMES_KEY = "DISPLAY_NAMES";
+    private static final String BLURB_SEPARATOR = ".";
+    private static final String EVALUATION_DISPLAY_NAMES_BLURB_PREFIX = "ssp.success.indicator.evaluation";
+    private static final String EVALUATION_DISPLAY_NAMES_BLURB_QUERY = EVALUATION_DISPLAY_NAMES_BLURB_PREFIX
+            + BLURB_SEPARATOR + "*";
 
 
     @Autowired
@@ -158,9 +173,12 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     private ExternalStudentRiskIndicatorService externalStudentRiskIndicatorService;
 
     @Autowired
+    private BlurbService blurbService;
+
+    @Autowired
     private PlatformTransactionManager platformTransactionManager;
 
-    private ThreadLocal<Map<String,Object>> indicatorMetricSourceCache = new ThreadLocal<>();
+    private ThreadLocal<Map<String,Object>> evaluationResourceCache = new ThreadLocal<>();
 
 
     @Override
@@ -219,7 +237,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
         final ArrayList<EvaluatedSuccessIndicatorTO> evaluations =
                 Lists.newArrayListWithExpectedSize((int) successIndicators.getResults());
-        indicatorMetricSourceCache.set(Maps.<String, Object>newLinkedHashMap());
+        evaluationResourceCache.set(Maps.<String, Object>newLinkedHashMap());
         try {
             for ( SuccessIndicator successIndicator : successIndicators ) {
                 try {
@@ -239,7 +257,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                 }
             }
         } finally {
-            indicatorMetricSourceCache.set(null);
+            evaluationResourceCache.set(null);
         }
         rsltHolder.set(evaluations);
     }
@@ -335,6 +353,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         final EvaluatedSuccessIndicatorTO indicatorTO = newBaseEvaluation(successIndicator, person);
         indicatorTO.setDisplayValue(StringUtils.isBlank(metricDisplay) ? (failure == null ? "[NO DATA]" : "[ERROR]") : metricDisplay);
         indicatorTO.setEvaluation(evaluation);
+        indicatorTO.setEvaluationDisplayName(findEvaluationDisplayName(evaluation));
         return indicatorTO;
     }
 
@@ -861,7 +880,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     }
 
     private ExternalStudentTranscript findTranscriptFor(@Nonnull Person person) {
-        final Map<String, Object> cache = indicatorMetricSourceCache.get();
+        final Map<String, Object> cache = evaluationResourceCache.get();
         if ( cache == null ) {
             return externalStudentTranscriptService.getRecordsBySchoolId(person.getSchoolId());
         } else {
@@ -887,7 +906,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     }
 
     private ExternalStudentFinancialAid findFinancialAidFor(@Nonnull Person person) {
-        final Map<String, Object> cache = indicatorMetricSourceCache.get();
+        final Map<String, Object> cache = evaluationResourceCache.get();
         if ( cache == null ) {
             return externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(person.getSchoolId());
         } else {
@@ -913,7 +932,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     }
 
     private Map<String,ExternalStudentRiskIndicator> findExternalRiskIndicatorsFor(@Nonnull Person person) {
-        final Map<String, Object> cache = indicatorMetricSourceCache.get();
+        final Map<String, Object> cache = evaluationResourceCache.get();
         if ( cache == null ) {
             final List<ExternalStudentRiskIndicator> esriList =
                     externalStudentRiskIndicatorService.getBySchoolId(person.getSchoolId());
@@ -940,6 +959,28 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         }
     }
 
+    private String findEvaluationDisplayName(@Nonnull SuccessIndicatorEvaluation evaluation) {
+        final Map<String, Object> cache = evaluationResourceCache.get();
+        Map<String,Blurb> blurbMap = null;
+        if ( cache == null || !(cache.containsKey(EVALUATION_DISPLAY_NAMES_KEY)) ) {
+            final PagingWrapper<Blurb> blurbs = blurbService.getAll(allActive(), EVALUATION_DISPLAY_NAMES_BLURB_QUERY);
+            blurbMap = mapOfBlurbs(blurbs.getRows());
+            if ( cache != null ) {
+                cache.put(EVALUATION_DISPLAY_NAMES_KEY, blurbMap);
+            }
+        } else {
+            blurbMap = (Map<String,Blurb>) cache.get(EVALUATION_DISPLAY_NAMES_KEY);
+        }
+        return evaluationDisplayNameFor(evaluation, blurbMap);
+    }
+
+    private String evaluationDisplayNameFor(@Nonnull SuccessIndicatorEvaluation evaluation, @Nonnull Map<String, Blurb> blurbMap) {
+        final String blurbCode = new StringBuilder(EVALUATION_DISPLAY_NAMES_BLURB_PREFIX).append(BLURB_SEPARATOR).
+                append(evaluation.name().toLowerCase()).toString();
+        final Blurb blurb = blurbMap.get(blurbCode);
+        return blurb == null ? null : blurb.getValue();
+    }
+
     /**
      * Must generate keys that match those generated by
      * {@link #externalRiskMapKeyFor(org.jasig.ssp.model.reference.SuccessIndicator)}.
@@ -949,6 +990,10 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
      */
     private Map<String, ExternalStudentRiskIndicator> mapOf(@Nullable List<ExternalStudentRiskIndicator> esriList) {
         return esriList == null ? Collections.EMPTY_MAP : Maps.uniqueIndex(esriList, RISK_INDICATOR_MAP_KEY_GENERATOR);
+    }
+
+    private Map<String, Blurb> mapOfBlurbs(@Nullable Collection<Blurb> blurbList) {
+        return blurbList == null ? Collections.EMPTY_MAP : Maps.uniqueIndex(blurbList, BLURB_MAP_KEY_GENERATOR);
     }
 
     /**

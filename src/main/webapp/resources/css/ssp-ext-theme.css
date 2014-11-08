@@ -387,15 +387,15 @@ display: none;
     color: white;
 }
 
-.success-indicator.positive {
+.success-indicator.high {
     background: #009900;
 }
 
-.success-indicator.neutral {
+.success-indicator.medium {
     background: #999900;
 }
 
-.success-indicator.negative {
+.success-indicator.low {
     background: #990000;
 }
 

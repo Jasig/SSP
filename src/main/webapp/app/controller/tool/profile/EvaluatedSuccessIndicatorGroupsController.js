@@ -77,8 +77,9 @@ Ext.define('Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsControlle
                 indicatorName: serverModel.get('indicatorName'),
                 indicatorDescription: serverModel.get('indicatorDescription'),
                 indicatorValue: serverModel.get('displayValue'),
-                indicatorStatus: serverModel.get('evaluation') ? serverModel.get('evaluation').toLowerCase() : null,
-                indicatorModelName: serverModel.get('indicatorModelName') ? serverModel.get('indicatorModelName').toLowerCase() : null,
+                indicatorEvaluation: serverModel.get('evaluation') ? serverModel.get('evaluation') : null,
+                indicatorEvaluationDisplayName: serverModel.get('evaluationDisplayName') ? serverModel.get('evaluationDisplayName') : null,
+                indicatorModelName: serverModel.get('indicatorModelName') ? serverModel.get('indicatorModelName') : null,
                 indicatorSortOrder: serverModel.get('indicatorSortOrder')
             }
         }
