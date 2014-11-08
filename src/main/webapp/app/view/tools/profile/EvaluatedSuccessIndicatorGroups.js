@@ -33,7 +33,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
                     itemId: 'studentSuccessIndicatorGroup',
-                    maxHeight: 300,
+                    maxHeight: 340,
                     overflowY: 'auto',
                     flex: 1,
                 }]
@@ -47,7 +47,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
                     itemId: 'interventionSuccessIndicatorGroup',
-                    maxHeight: 300,
+                    maxHeight: 340,
                     overflowY: 'auto',
                     flex: 1
                 }]
@@ -61,7 +61,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
                     itemId: 'riskSuccessIndicatorGroup',
-                    maxHeight: 300,
+                    maxHeight: 340,
                     overflowY: 'auto',
                     flex: 1
                 }]

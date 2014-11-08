@@ -340,54 +340,63 @@ display: none;
 	
 	
  }
- 
- 
-.fa-stack-3x,
-.fa-stack-4x,
-.fa-stack-5x {
-	position: absolute;
-	left: 0;
-	width: 100%;
-	text-align: center;
+
+.success-indicator {
+    background: #999;
+    color: #FFF;
 }
 
-.fa-stack-3x {
-	font-size: 3em;
+.success-indicator > .title,
+.success-indicator > p {
+    margin: 0;
+    padding: 0.25rem 1rem;
 }
 
-.fa-stack-4x {
-	font-size: 4em;
+.success-indicator > .title {
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 1.3em;
+    font-weight: normal;
+    padding-top: 0.75rem;
 }
 
-.fa-stack-5x {
-	font-size: 5em;
+.success-indicator > .value {
+    font-size: 1.0em;
+    padding: 1.00rem 1rem 0.75rem;
 }
 
-.indicator-column .x-panel-body-default {
-	border-color: black;
+.success-indicator > .value,
+.success-indicator > .rating {
+    text-transform: uppercase;
 }
 
-.indicator-wrap {
-	width: 50%;
-	display: inline-block;
+.success-indicator > .title,
+.success-indicator > .value {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.indicator-label {
-	clear: both;
-	min-height: 18px;
-	word-wrap: break-word;
-	color:#04408c
+
+.success-indicator > .rating {
+    font-size: 0.9em;
+    padding-bottom: 0.75rem;
 }
-.indicator-value {
-	padding-left: 10px;
-	padding-bottom: 4px;
-	word-wrap: break-word;
-	font-style: italic;
+
+.success-indicator > .rating > i {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    color: white;
 }
-.indicator-glyph {
-	height: 36px;
-	text-align: right;
-	margin-right: 24px;
-	margin-bottom: 8px;
+
+.success-indicator.positive {
+    background: #009900;
+}
+
+.success-indicator.neutral {
+    background: #999900;
+}
+
+.success-indicator.negative {
+    background: #990000;
 }
 
 .wrappable-cell {
