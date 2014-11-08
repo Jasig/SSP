@@ -8,12 +8,13 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="362"/>
 	<subDataset name="dataset1" uuid="f5197e6d-0a3f-4ac7-8f4f-7a16b128dbb3">
 		<parameter name="realPath" class="java.lang.String"/>
 		<field name="indicatorName" class="java.lang.String"/>
 		<field name="displayValue" class="java.lang.String"/>
 		<field name="evaluation" class="org.jasig.ssp.transferobject.SuccessIndicatorEvaluation"/>
+		<field name="evaluationDisplayName" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="studentTO" class="org.jasig.ssp.transferobject.reports.PersonReportTO"/>
 	<parameter name="reportDate" class="java.lang.String"/>
@@ -465,16 +466,55 @@
 							<textFieldExpression><![CDATA[$F{indicatorName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement positionType="Float" x="9" y="17" width="83" height="20" uuid="d4535e16-19a7-45d1-ad77-95fe39ab3995"/>
+							<reportElement positionType="Float" x="9" y="17" width="83" height="16" uuid="d4535e16-19a7-45d1-ad77-95fe39ab3995"/>
 							<textElement>
 								<font size="8" isItalic="true"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{displayValue}]]></textFieldExpression>
 						</textField>
-						<image>
-							<reportElement positionType="Float" x="92" y="24" width="24" height="25" uuid="a418098c-22a7-416b-88b8-211eb7a378e9"/>
-							<imageExpression><![CDATA[$P{realPath} + "/images/eval-si-" + $F{evaluation}.name().toLowerCase() + ".jpg"]]></imageExpression>
-						</image>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#990000" uuid="1ff759df-b8a1-498e-a1f6-bff8fccee331">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("LOW")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement positionType="Float" x="9" y="33" width="31" height="16" uuid="0b38f9bb-4644-4095-a694-c189084819b2"/>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<text><![CDATA[Rating:]]></text>
+						</staticText>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#999900" uuid="0bd3c512-9e34-416a-b1fa-a59a520c5369">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("MEDIUM")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#009900" uuid="7f9561d9-7b6f-45de-a4f8-5f75674009f7">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("HIGH")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#999999" uuid="0602a822-9692-47b0-95b1-16ad258c001f">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("DEFAULT")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
@@ -511,16 +551,55 @@
 							<textFieldExpression><![CDATA[$F{indicatorName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement positionType="Float" x="9" y="17" width="83" height="20" uuid="bd0873db-000b-46f0-b033-eb34807948ae"/>
+							<reportElement positionType="Float" x="9" y="17" width="83" height="16" uuid="bd0873db-000b-46f0-b033-eb34807948ae"/>
 							<textElement>
 								<font size="8" isItalic="true"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{displayValue}]]></textFieldExpression>
 						</textField>
-						<image>
-							<reportElement positionType="Float" x="92" y="24" width="24" height="25" uuid="04fac88d-3af7-4f21-aaf1-3f670b0b9bf7"/>
-							<imageExpression><![CDATA[$P{realPath} + "/images/eval-si-" + $F{evaluation}.name().toLowerCase() + ".jpg"]]></imageExpression>
-						</image>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#990000" uuid="f412be6a-93ed-4408-a683-e21d47d7f492">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("LOW")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement positionType="Float" x="9" y="33" width="31" height="16" uuid="0246d5e2-31ed-4611-8d88-a617c0c15c54"/>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<text><![CDATA[Rating:]]></text>
+						</staticText>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#999900" uuid="b3790d55-da23-4ed1-af71-237949af6043">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("MEDIUM")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#009900" uuid="d2f7d9e7-a37a-439b-b913-5f50eb28573d">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("HIGH")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#999999" uuid="8db6fc64-a06c-4098-bb99-947c3d92a212">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("DEFAULT")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
@@ -557,16 +636,55 @@
 							<textFieldExpression><![CDATA[$F{indicatorName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
-							<reportElement positionType="Float" x="9" y="17" width="83" height="20" uuid="d6799b4f-bc62-4218-a16a-2483c4315cab"/>
+							<reportElement positionType="Float" x="9" y="17" width="83" height="16" uuid="d6799b4f-bc62-4218-a16a-2483c4315cab"/>
 							<textElement>
 								<font size="8" isItalic="true"/>
 							</textElement>
 							<textFieldExpression><![CDATA[$F{displayValue}]]></textFieldExpression>
 						</textField>
-						<image>
-							<reportElement positionType="Float" x="92" y="24" width="24" height="25" uuid="0121cd33-e5ee-4af7-960f-f915247ab9cb"/>
-							<imageExpression><![CDATA[$P{realPath} + "/images/eval-si-" + $F{evaluation}.name().toLowerCase() + ".jpg"]]></imageExpression>
-						</image>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#990000" uuid="85763157-f9df-4f01-a1e3-19673e5d831a">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("LOW")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<staticText>
+							<reportElement positionType="Float" x="9" y="33" width="31" height="16" uuid="e7cc8c33-69cd-4775-8f7c-30da38554548"/>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<text><![CDATA[Rating:]]></text>
+						</staticText>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#999900" uuid="b8e3e8e0-732c-41c1-9935-0a458586854b">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("MEDIUM")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#009900" uuid="2702239e-54f6-41ae-8f52-e209543e6b92">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("HIGH")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement positionType="Float" x="39" y="33" width="88" height="16" forecolor="#999999" uuid="41e1066c-bd53-46e0-83d5-e5add2fa024c">
+								<printWhenExpression><![CDATA[$F{evaluation}.name().equals("DEFAULT")]]></printWhenExpression>
+							</reportElement>
+							<textElement>
+								<font size="8" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{evaluationDisplayName}]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
