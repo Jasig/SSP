@@ -58,8 +58,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	},
 	config:{
 		minHrs : '0',
-		maxHrs: '0',
-		previousSemesterPanel: ''
+		maxHrs: '0'
 	},	
 	init: function() {
 		var me=this;
@@ -253,27 +252,26 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     onDrop: function(node, data, overModel, dropPosition, eOpts){
 		var me = this;
 		me.getView().setLoading(true);
-		if(data.view.findParentByType("semesterpanel") === undefined)
-			me.setPreviousSemesterPanel('');
-		else
-			me.setPreviousSemesterPanel(data.view.findParentByType("semesterpanel"));
-		if(me.getPreviousSemesterPanel().length != 0 ){
-    		me.droppedFromStore = data.view.getStore();
+		var courseMoveSpec = {
+			movedFromStore: null,
+			course: null
+		};
+		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
+		if(previousSemesterPanel != undefined && previousSemesterPanel != null){
+			courseMoveSpec.movedFromStore = data.view.getStore();
 		}
-		
-		me.droppedRecord = data.records[0];
-		
-		me.setMinHrs(me.droppedRecord.data.minCreditHours);
-		me.setMaxHrs(me.droppedRecord.data.maxCreditHours);
+		courseMoveSpec.course = data.records[0];
+
+		me.setMinHrs(courseMoveSpec.course.data.minCreditHours);
+		me.setMaxHrs(courseMoveSpec.course.data.maxCreditHours);
 	
-		me.validateCourses();
+		me.validateCourses(courseMoveSpec);
 		return true;
     },
 
 
-	validateCourses: function(){
+	validateCourses: function(courseMoveSpec){
 		var me = this;
-		
 		var serviceResponses = {
                 failures: {},
                 successes: {},
@@ -281,19 +279,24 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
                 expectedResponseCnt: 1
             };
 		me.setOrderInTerm();
-		
 		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
 		me.planWasDirty = me.currentMapPlan.dirty;
-		
 		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
-            success: me.newServiceSuccessHandler('validatedPlan', me.onValidateSuccess, serviceResponses),
+            success: me.newServiceSuccessHandler('validatedPlan', me.newOnValidateSuccess(courseMoveSpec), serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
             scope: me,
             isPrivate: true
         });
 	},
-    
-    onValidateSuccess: function(serviceResponses){
+
+	newOnValidateSuccess: function(courseMoveSpec) {
+		var me = this;
+		return function(serviceResponses) {
+			me.onValidateSuccess(serviceResponses, courseMoveSpec);
+		};
+	},
+
+    onValidateSuccess: function(serviceResponses, courseMoveSpec){
 		var me = this;
 		 me.getView().setLoading(false);
 		var mapResponse = serviceResponses.successes.validatedPlan;
@@ -307,7 +310,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		// Plan.loadFromServer() above lowers the dirty flag
 		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid") ? true : me.planWasDirty);
 		var panel = me.getView();
-		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(me.droppedRecord.get("code"), panel.getItemId());
+		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(courseMoveSpec.course.get("code"), panel.getItemId());
 		
 		var invalidReasons = planCourse.invalidReasons;
     	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
@@ -315,7 +318,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 						planCourse.formattedCourse +
 						" generates the following concerns: " +
 						invalidReasons;
-    		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.handleInvalidCourse, me);
+    		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.newHandleInvalidCourse(courseMoveSpec), me);
     	}else{
 			me.currentMapPlan.dirty = true;
 			me.setOrderInTerm();
@@ -331,11 +334,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		}
 		
 	},
-    
-    handleInvalidCourse: function(buttonId){
+
+	newHandleInvalidCourse: function(courseMoveSpec) {
+		var me = this;
+		return function(buttonId) {
+			me.handleInvalidCourse(buttonId, courseMoveSpec);
+		}
+	},
+
+    handleInvalidCourse: function(buttonId, courseMoveSpec){
 		var me = this;
     	if(buttonId != 'yes'){
-        	var index = me.getView().getStore().findExact('code', me.droppedRecord.get("code"));
+        	var index = me.getView().getStore().findExact('code', courseMoveSpec.course.get("code"));
 			if(index >= 0){
         		me.getView().getStore().removeAt(index);
         		//It would be nice if ExtJs has an option to 'remove silently'.  Removing this from the store triggers the
@@ -346,21 +356,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			
 				me.getView().getStore().sort("orderInTerm", "ASC");
 			}
-			me.restoreCourse();
+			me.restoreCourse(courseMoveSpec);
     	}else{
 			me.currentMapPlan.dirty = true;
 		}
     },
     
-	restoreCourse: function(){
+	restoreCourse: function(courseMoveSpec){
 		var me = this;
-		if(me.droppedFromStore){
-			if (me.getPreviousSemesterPanel().length != 0) {
-				var rec = me.droppedRecord.copy(); // clone the record
-				Ext.data.Model.id(rec);// generate unique id
-				me.droppedFromStore.add(rec);
-				me.droppedFromStore.sort("orderInTerm", "ASC");
-			}
+		if(courseMoveSpec.movedFromStore){
+			var rec = courseMoveSpec.course.copy(); // clone the record
+			Ext.data.Model.id(rec);// generate unique id
+			courseMoveSpec.movedFromStore.add(rec);
+			courseMoveSpec.movedFromStore.sort("orderInTerm", "ASC");
 		}
 	},
 	
