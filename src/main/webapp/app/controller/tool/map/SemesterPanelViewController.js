@@ -149,35 +149,16 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	    }
 		else
 		{
+			me.appEventsController.loadMaskOn();
 			grid.store.remove(record);
-			me.setOrderInTerm();
-			me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
-			var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            };
-			me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
-            success: me.newServiceSuccessHandler('validatedPlan', me.onValidateAfterDeleteSuccess, serviceResponses),
-            failure: me.newServiceFailureHandler('validatedFailed', me.onValidateAfterDeleteFailure, serviceResponses),
-            scope: me,
-            isPrivate: true
-        });
-			
+			me.validateCourses({
+				course: record,
+				fromStore: grid.store,
+				op: 'DELETE'
+			});
 		}
     },
-	
-	onValidateAfterDeleteSuccess: function(serviceResponses){
-		var me = this;
-    },
-	
-	onValidateAfterDeleteFailure: function(validate){
-    	var me = this;
-    	
-    	 me.getView().setLoading(false);
-    },
-	
+
 	onTermNotesSave: function(button){
 		var me = this;
 		 var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
@@ -252,26 +233,27 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     
     onDrop: function(node, data, overModel, dropPosition, eOpts){
 		var me = this;
-		me.getView().setLoading(true);
-		var courseMoveSpec = {
-			movedFromStore: null,
-			course: null
+		me.appEventsController.loadMaskOn();
+		var courseOpSpec = {
+			course: null,
+			fromStore: null,
+			op: 'MOVE'
 		};
 		var previousSemesterPanel = data.view.findParentByType("semesterpanel");
 		if(previousSemesterPanel != undefined && previousSemesterPanel != null){
-			courseMoveSpec.movedFromStore = data.view.getStore();
+			courseOpSpec.fromStore = data.view.getStore();
 		}
-		courseMoveSpec.course = data.records[0];
+		courseOpSpec.course = data.records[0];
 
-		me.setMinHrs(courseMoveSpec.course.data.minCreditHours);
-		me.setMaxHrs(courseMoveSpec.course.data.maxCreditHours);
+		me.setMinHrs(courseOpSpec.course.data.minCreditHours);
+		me.setMaxHrs(courseOpSpec.course.data.maxCreditHours);
 	
-		me.validateCourses(courseMoveSpec);
+		me.validateCourses(courseOpSpec);
 		return true;
     },
 
 
-	validateCourses: function(courseMoveSpec){
+	validateCourses: function(courseOpSpec){
 		var me = this;
 		var serviceResponses = {
                 failures: {},
@@ -283,47 +265,64 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
 		me.planWasDirty = me.currentMapPlan.dirty;
 		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
-            success: me.newServiceSuccessHandler('validatedPlan', me.newOnValidateSuccess(courseMoveSpec), serviceResponses),
+            success: me.newServiceSuccessHandler('validatedPlan', me.newOnValidateSuccess(courseOpSpec), serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.onValidateFailure, serviceResponses),
             scope: me,
             isPrivate: true
         });
 	},
 
-	newOnValidateSuccess: function(courseMoveSpec) {
+	newOnValidateSuccess: function(courseOpSpec) {
 		var me = this;
 		return function(serviceResponses) {
-			me.onValidateSuccess(serviceResponses, courseMoveSpec);
+			me.onValidateSuccess(serviceResponses, courseOpSpec);
 		};
 	},
 
-    onValidateSuccess: function(serviceResponses, courseMoveSpec){
+    onValidateSuccess: function(serviceResponses, courseOpSpec){
 		var me = this;
-		 me.getView().setLoading(false);
 		var mapResponse = serviceResponses.successes.validatedPlan;
 		var planAsJsonObject = Ext.decode(mapResponse.responseText);
 		me.currentMapPlan.loadFromServer(planAsJsonObject);
-		// If the plan came back as valid, then we know a course was added and
-		// thus must be dirty, thus the 2nd arg. If not the user is given the
-		// option to undo the course add. Also, we need to be sure to update
-		// the dirty flag here rather than in onDrop() b/c this
-		// function may fire after onDrop() has already returned and
-		// Plan.loadFromServer() above lowers the dirty flag
-		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.currentMapPlan.get("isValid") ? true : me.planWasDirty);
+		// We need to be sure to update the dirty flag here rather than in the event handlers that initially receive
+		// planning operation requests b/c this method may fire after those handlers have already returned and
+		// Plan.loadFromServer() above lowers the dirty flag. We have to go with the original dirty state, though,
+		// because we won't know for sure whether to mark the plan newly dirty until the user is given the option to
+		// cancel out of the change.
+		me.currentMapPlan.repopulatePlanStores(me.semesterStores, me.planWasDirty);
 		var panel = me.getView();
-		var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(courseMoveSpec.course.get("code"), panel.getItemId());
-		
-		var invalidReasons = planCourse.invalidReasons;
-    	if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1){
-    		var message = " \n Are you sure you want to add the course? " 
-						+ planCourse.formattedCourse
-						+ " generates the following concerns: " 
-						+ invalidReasons;
-    		Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.newHandleInvalidCourse(courseMoveSpec), me);
-    	}else{
-			me.currentMapPlan.dirty = true;
-			me.setOrderInTerm();
+		if ( courseOpSpec ) {
+			var awaitingUser = false;
+			if ( courseOpSpec.op === 'MOVE' ) {
+				var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(courseOpSpec.course.get("code"), panel.getItemId());
+				var invalidReasons = planCourse.invalidReasons;
+				if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1 && courseOpSpec.op === 'MOVE') {
+					var message = " \n Are you sure you want to add the course? " +
+						planCourse.formattedCourse +
+						" generates the following concerns: " +
+						invalidReasons;
+					awaitingUser = true;
+					Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.newOnConfirmInvalidCourseOp(courseOpSpec), me);
+				}
+			} else {
+				// Nothing to do because unlike the branch above, we can't reasonably report on the invalidating effects
+				// of the operation in terms of the specific course being acted on. Here's we're dealing with a DELETE
+				// op, the invalidations caused by whichh are typically felt by *other* courses and we have no good way
+				// of calculating which courses those are. We can list out all the courses that have problems, but we
+				// don't know which of those problems are *new*.
+			}
+			if ( !(awaitingUser) ) {
+				me.currentMapPlan.dirty = true;
+				me.setOrderInTerm();
+				me.appEventsController.loadMaskOff();
+			}
+		} else {
+			// Walidating outside the context of an actual user action, e.g. after a rollback. Nothing to do - no
+			// user feedback to gather, and the response has already been unmarshalled onto the current plan model,
+			// so just fall through clear the spinner.
+			me.appEventsController.loadMaskOff();
 		}
+
     },
 
 	setOrderInTerm: function(){
@@ -336,47 +335,84 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		
 	},
 
-	newHandleInvalidCourse: function(courseMoveSpec) {
+	newOnConfirmInvalidCourseOp: function(courseOpSpec) {
 		var me = this;
 		return function(buttonId) {
-			me.handleInvalidCourse(buttonId, courseMoveSpec);
+			me.onConfirmInvalidCourseOp(buttonId, courseOpSpec);
 		}
 	},
 
-    handleInvalidCourse: function(buttonId, courseMoveSpec){
+	onConfirmInvalidCourseOp: function(buttonId, courseOpSpec){
 		var me = this;
     	if(buttonId != 'yes'){
-        	var index = me.getView().getStore().findExact('code', courseMoveSpec.course.get("code"));
-			if(index >= 0){
-        		me.getView().getStore().removeAt(index);
-        		//It would be nice if ExtJs has an option to 'remove silently'.  Removing this from the store triggers the
-        		// 'isDirty' check done during global navigation.  Since we don't want the cancellation of the drop
-        		// to trip dirty (see SSP-2032), we clear out the 'removed' array.
-				me.getView().getStore().removed = [];
-				me.currentMapPlan.dirty = me.planWasDirty;
-			
+			if ( courseOpSpec.op === 'MOVE' ) {
+				var index = me.getView().getStore().findExact('code', courseOpSpec.course.get("code"));
+				if(index >= 0){
+
+					// Undo the add to this semester's store (the target of the move)
+					me.getView().getStore().removeAt(index);
+
+					// Clean up store internal state after all this thrash. It would be nice if ExtJs has an option to
+					// 'remove silently' from a store, but currently that action triggers the 'isDirty' check during
+					// our global navigation events.  Since we don't want the cancellation of the drop to trip dirty
+					// (see SSP-2032), we delete the store's deletion cache entry created as a side effect of undoing
+					// the 'MOVE' operation.
+					//
+					// Actually, since we have to re-validate the plan after the stores are set back to the right
+					// states (SSP-2638), it's not clear whether we really need all this manipulation of private store
+					// state after all.
+					var rmIdx = null;
+					Ext.each(me.getView().getStore().removed, function(record, index, theArray) {
+						if ( record.get('code') === courseOpSpec.course.get('code') ) {
+							rmIdx = index;
+							return false; // break each() loop
+						}
+						return true; // continue each() loop
+					});
+					if ( rmIdx !== null ) {
+						Ext.Array.erase(me.getView().getStore().removed, rmIdx, 1);
+					}
+
+					// Re-add back to the 'source' store handled below -- same mechanism for both 'MOVE' and 'DELETE'
+					// ops. Of course, we don't actually allow DELETE undo at this time...
+				}
+			}
+
+			if(courseOpSpec.fromStore){
+				var rec = courseOpSpec.course.copy(); // clone the record
+				Ext.data.Model.id(rec);// generate unique id
+				courseOpSpec.fromStore.add(rec);
+				courseOpSpec.fromStore.sort("orderInTerm", "ASC");
+			}
+			if ( courseOpSpec.fromStore !== me.getView().getStore() ) {
 				me.getView().getStore().sort("orderInTerm", "ASC");
 			}
-			me.restoreCourse(courseMoveSpec);
+			me.validateCourses();
     	}else{
 			me.currentMapPlan.dirty = true;
+			me.appEventsController.loadMaskOff();
 		}
     },
-    
-	restoreCourse: function(courseMoveSpec){
+
+	newOnValidateFailure: function(courseOpSpec) {
 		var me = this;
-		if(courseMoveSpec.movedFromStore){
-			var rec = courseMoveSpec.course.copy(); // clone the record
-			Ext.data.Model.id(rec);// generate unique id
-			courseMoveSpec.movedFromStore.add(rec);
-			courseMoveSpec.movedFromStore.sort("orderInTerm", "ASC");
-		}
+		return function(responses) {
+			me.onValidateSuccess(responses, courseOpSpec);
+		};
 	},
-	
-    onValidateFailure: function(validate){
+
+    onValidateFailure: function(responses, courseOpSpec){
     	var me = this;
-    	
-    	 me.getView().setLoading(false);
+		if ( courseOpSpec ) {
+			// there was a course planning change specified, but couldn't process the validation. This should be
+			// a recoverable problem - you'll just be planning w/o a full set of validations. In this case we do
+			// know the client-side models were dirtied in some way, so go ahead and mark the model as such.
+			me.currentMapPlan.dirty = true;
+		} else {
+			// Without a courseOpSpec, it was a validation as a side-effect of a rollback so the dirty state should be
+			// whatever it was set to before the rolled-back op. Leave it alone...
+		}
+		me.appEventsController.loadMaskOff();
     },
     
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
