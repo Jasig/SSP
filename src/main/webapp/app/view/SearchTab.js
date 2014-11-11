@@ -102,5 +102,18 @@ Ext.define('Ssp.view.SearchTab', {
                 scope: me.collapseTool
             });
         }
+    },
+    getReExpander: function(direction) {
+        var me = this;
+        var reExpander = me.callParent(arguments);
+        if ( reExpander ) {
+            reExpander.on({
+                afterrender: function() {
+                    this.items.items[0].toolEl.dom.alt="expand-search";
+                },
+                scope: reExpander
+            })
+        }
+        return reExpander;
     }
 });
