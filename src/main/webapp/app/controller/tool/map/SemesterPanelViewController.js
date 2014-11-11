@@ -396,7 +396,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	newOnValidateFailure: function(courseOpSpec) {
 		var me = this;
 		return function(responses) {
-			me.onValidateSuccess(responses, courseOpSpec);
+			me.onValidateFailure(responses, courseOpSpec);
 		};
 	},
 
