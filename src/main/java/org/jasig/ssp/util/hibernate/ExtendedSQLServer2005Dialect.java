@@ -95,11 +95,11 @@ public class ExtendedSQLServer2005Dialect extends SQLServer2005Dialect {
 		// subselects that might be in the column list, but don't skip *into*
 		// subselects in the table list. We happen to know that subselects in
 		// the column list are named with the substring "formula", so find
-		// the last one of those, then the first occurrance of "from" after that
+		// the last one of those, then the first occurrance of a standalone "from" after that
 		int lastFormulaIndex = Math.max(0, sql.lastIndexOf( "formula" ));
-		int selectEndIndex = sql.indexOf("from ", lastFormulaIndex); // FROM constant is private in SQLServer2005Dialect, alas
+		int selectEndIndex = sql.indexOf(" from ", lastFormulaIndex); // FROM constant is private in SQLServer2005Dialect, alas
 
 		// Insert after the select statement the row_number() function:
-		sql.insert( selectEndIndex - 1, ", ROW_NUMBER() OVER (" + orderby + ") as __hibernate_row_nr__" );
+		sql.insert( selectEndIndex, ", ROW_NUMBER() OVER (" + orderby + ") as __hibernate_row_nr__" );
 	}
 }
