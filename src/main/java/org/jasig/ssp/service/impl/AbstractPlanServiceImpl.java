@@ -158,11 +158,12 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	@Override
 	@Transactional(readOnly=true)
 	public TO validate(TO model) throws ObjectNotFoundException{
-
+		model.setIsValid(true); // SSP-2638. See validatePrerequisites()
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		Map<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>> coursesByTerm = new HashMap<String, List<AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			course.setIsValidInTerm(true);//Set all courses valid in term
+			course.setInvalidReasons(null);
 			if(coursesByTerm.containsKey(course.getTermCode())){
 				coursesByTerm.get(course.getTermCode()).add(course);
 			}else {
@@ -197,11 +198,16 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		return model;
 	}
 	
-	public TO validatePrerequisites(TO model) throws ObjectNotFoundException{
+	private TO validatePrerequisites(TO model) throws ObjectNotFoundException{
 		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
 		List<String> requiringCourseCodes = new ArrayList<String>();
 		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			requiringCourseCodes.add(course.getCourseCode());
+			// Only clear validation fields this method controls exclusively. Fields that might be set by validate(),
+			// e.g. plan.isValid and course.isValidInTerm, need to be cleared in that method.
+			course.setHasCorequisites(true);
+			course.setHasPrerequisites(true);
+			course.setDuplicateOfTranscript(false);
 		}
 		
 		List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
@@ -257,7 +263,6 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				String requireingTermCode = courseCodeTermCode.get(requisiteCourse.getRequiringCourseCode());
 				Term requiredTerm = termCodeTerm.get(requiredTermCode);
 				Term requireingTerm = termCodeTerm.get(requireingTermCode);
-				requiringCourse.setInvalidReasons(null);
 				if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)){
 					if(!requiredTermCode.equals(requireingTermCode)){
 						requiringCourse.setHasCorequisites(false);

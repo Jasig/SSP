@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import javax.persistence.Transient;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
 
@@ -65,7 +66,7 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	
 	private transient boolean hasCorequisites = true;
 	
-	private transient String invalidReasons = new String();
+	private transient String invalidReasons = "";
 
 	/**
 	 * Empty constructor.
@@ -302,11 +303,14 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	 * @param invalidReasons the invalidReasons to set
 	 */
 	public void setInvalidReasons(String invalidReasons) {
-		if(invalidReasons == null)
-			invalidReasons = new String();
-		else
-		if(this.invalidReasons.indexOf(invalidReasons) < 0)
-			this.invalidReasons = this.invalidReasons + " "+ invalidReasons;
+		invalidReasons = StringUtils.trimToEmpty(invalidReasons);
+		if (StringUtils.isBlank(invalidReasons) || StringUtils.isBlank(this.invalidReasons)) {
+			this.invalidReasons = invalidReasons;
+			return;
+		}
+		if(this.invalidReasons.indexOf(invalidReasons) < 0) {
+			this.invalidReasons = this.invalidReasons + " " + invalidReasons;
+		}
 	}
 
 	/**
