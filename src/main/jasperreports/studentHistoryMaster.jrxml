@@ -8,7 +8,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="362"/>
+	<property name="ireport.y" value="541"/>
 	<subDataset name="dataset1" uuid="f5197e6d-0a3f-4ac7-8f4f-7a16b128dbb3">
 		<parameter name="realPath" class="java.lang.String"/>
 		<field name="indicatorName" class="java.lang.String"/>
@@ -407,27 +407,19 @@
 			</textField>
 		</band>
 		<band height="4">
-			<printWhenExpression><![CDATA[($P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty()))
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && (($P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty()))
 || ($P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty()))
-|| ($P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty()))]]></printWhenExpression>
+|| ($P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty())))]]></printWhenExpression>
 			<rectangle>
-				<reportElement x="1" y="0" width="572" height="2" backcolor="#7E7979" uuid="4120bc0b-3800-45a3-91d0-9ec17f9dfc82">
-					<printWhenExpression><![CDATA[($P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty()))
-|| ($P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty()))
-|| ($P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty()))]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="1" y="0" width="572" height="2" backcolor="#7E7979" uuid="4120bc0b-3800-45a3-91d0-9ec17f9dfc82"/>
 			</rectangle>
 		</band>
 		<band height="22" splitType="Stretch">
-			<printWhenExpression><![CDATA[($P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty()))
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && (($P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty()))
 || ($P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty()))
-|| ($P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty()))]]></printWhenExpression>
+|| ($P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty())))]]></printWhenExpression>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#D6D6D6" uuid="a18201de-93b8-4ada-a25a-ebb8901e7d7a">
-					<printWhenExpression><![CDATA[($P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty()))
-|| ($P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty()))
-|| ($P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty()))]]></printWhenExpression>
-				</reportElement>
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#D6D6D6" uuid="a18201de-93b8-4ada-a25a-ebb8901e7d7a"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -435,11 +427,9 @@
 			</staticText>
 		</band>
 		<band height="72" splitType="Prevent">
-			<printWhenExpression><![CDATA[$P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && $P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="572" height="16" backcolor="#DAF1E4" uuid="efd1b68c-8d3f-4d26-9d34-426cdc55865d">
-					<printWhenExpression><![CDATA[$P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
-				</reportElement>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="572" height="16" backcolor="#DAF1E4" uuid="efd1b68c-8d3f-4d26-9d34-426cdc55865d"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 					<paragraph firstLineIndent="8"/>
@@ -447,9 +437,7 @@
 				<text><![CDATA[STUDENT]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="14" y="17" width="557" height="53" uuid="abc199bb-d663-4d9a-800f-86a49a7edcf9">
-					<printWhenExpression><![CDATA[$P{studentEvaluatedSuccessIndicators} != null && !($P{studentEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="14" y="17" width="557" height="53" uuid="abc199bb-d663-4d9a-800f-86a49a7edcf9"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Horizontal" ignoreWidth="false">
 					<datasetRun subDataset="dataset1" uuid="50bf7a76-9674-44fe-9f23-c95284a0ca37">
 						<datasetParameter name="realPath">
@@ -520,7 +508,7 @@
 			</componentElement>
 		</band>
 		<band height="72" splitType="Prevent">
-			<printWhenExpression><![CDATA[$P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && $P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
 			<staticText>
 				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="572" height="16" backcolor="#DAF1E4" uuid="ef3c38c4-e881-4c27-b2af-58642eb415bd">
 					<printWhenExpression><![CDATA[$P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
@@ -532,9 +520,7 @@
 				<text><![CDATA[INTERVENTION]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="14" y="17" width="557" height="53" uuid="9479731d-e3d9-4bae-b4d9-dc28a3daae10">
-					<printWhenExpression><![CDATA[$P{interventionEvaluatedSuccessIndicators} != null && !($P{interventionEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="14" y="17" width="557" height="53" uuid="9479731d-e3d9-4bae-b4d9-dc28a3daae10"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Horizontal" ignoreWidth="false">
 					<datasetRun subDataset="dataset1" uuid="eb1bba69-c779-41f9-9fa9-9640864d3d29">
 						<datasetParameter name="realPath">
@@ -605,11 +591,9 @@
 			</componentElement>
 		</band>
 		<band height="72" splitType="Prevent">
-			<printWhenExpression><![CDATA[$P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && $P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="572" height="16" backcolor="#DAF1E4" uuid="a2f9c0c8-eed9-4636-a873-05172f5fcfbd">
-					<printWhenExpression><![CDATA[$P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
-				</reportElement>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="572" height="16" backcolor="#DAF1E4" uuid="a2f9c0c8-eed9-4636-a873-05172f5fcfbd"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 					<paragraph firstLineIndent="8"/>
@@ -617,9 +601,7 @@
 				<text><![CDATA[RISK]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="14" y="17" width="557" height="53" uuid="6db1ff09-3518-4a2d-8d13-b583a2a774b7">
-					<printWhenExpression><![CDATA[$P{riskEvaluatedSuccessIndicators} != null && !($P{riskEvaluatedSuccessIndicators}.isEmpty())]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="14" y="17" width="557" height="53" uuid="6db1ff09-3518-4a2d-8d13-b583a2a774b7"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Horizontal" ignoreWidth="false">
 					<datasetRun subDataset="dataset1" uuid="5d452d54-cedd-4816-baa1-76ff401faf3b">
 						<datasetParameter name="realPath">
