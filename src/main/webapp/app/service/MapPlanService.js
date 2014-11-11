@@ -357,8 +357,7 @@ Ext.define('Ssp.service.MapPlanService', {
 			plan.setIsTemplate(isTemplate);
 			url = me.getTemplateBaseUrl();
 		}
-		plan.clearValidation();
-	
+
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };
