@@ -59,6 +59,7 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
     		 {name: 'formattedStudentIntakeCompleteDate', type: 'date', dateFormat: 'c'},
     		 {name: 'currentProgramStatusName', type: 'auto'},
+    		 {name: 'programStatusChangeReasonName', type: 'auto'},
     		 {name: 'residencyCounty', type: 'string'},
     		 {name: 'f1Status', type: 'string'},
              {name: 'activeAlertsCount', type: 'int'},
@@ -185,6 +186,10 @@ Ext.define('Ssp.model.Person', {
     
     getProgramStatusName: function(){
     	return this.get('currentProgramStatusName')? this.get('currentProgramStatusName') : "";   	
+    },
+
+    getProgramStatusChangeReasonName: function(){
+        return this.get('programStatusChangeReasonName')? this.get('programStatusChangeReasonName') : "";
     },
 
     getEarlyAlertRatio: function() {

@@ -147,6 +147,8 @@ public class PersonTO // NOPMD
 
 	private String currentProgramStatusName;
 
+    private String programStatusChangeReasonName;
+
 	private boolean registeredForCurrentTerm;
 
 	private Integer activeAlertsCount;
@@ -322,6 +324,10 @@ public class PersonTO // NOPMD
 					}
 
 					currentProgramStatusName = psr.getProgramStatus().getName();
+
+                    if ( psr.getProgramStatusChangeReason() != null ) {
+                        programStatusChangeReasonName = psr.getProgramStatusChangeReason().getName();
+                    }
 				}
 			}
 		}
@@ -760,6 +766,19 @@ public class PersonTO // NOPMD
 			final String currentProgramStatusName) {
 		this.currentProgramStatusName = currentProgramStatusName;
 	}
+
+    public String getProgramStatusChangeReasonName() {
+        return programStatusChangeReasonName;
+    }
+
+    /**
+     * Can be null, changes here are ignored; use Program Status API instead.
+     * @param programStatusChangeReasonName
+     */
+    public void setProgramStatusChangeReasonName(
+            final String programStatusChangeReasonName) {
+        this.programStatusChangeReasonName = programStatusChangeReasonName;
+    }
 
 	public boolean isRegisteredForCurrentTerm() {
 		return registeredForCurrentTerm;

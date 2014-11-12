@@ -20,22 +20,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        apiProperties: 'apiProperties',
         appEventsController: 'appEventsController',
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
         transcriptService: 'transcriptService',
-		personProgramStatusService: 'personProgramStatusService',
         profileReferralSourcesStore: 'profileReferralSourcesStore',
         profileServiceReasonsStore: 'profileServiceReasonsStore',
 		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
-		programStatusChangeReasonsStore: 'programStatusChangeReasonsAllUnpagedStore',
-        configStore: 'configStore',
 		formUtils: 'formRendererUtils',
-    	textStore:'sspTextStore',
-        financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
-        personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
+    //	textStore:'sspTextStore',
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan',
 		termsStore: 'termsStore'
@@ -43,7 +37,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     control: {
         photoUrlField: '#studentPhoto',
-        
         primaryEmailAddressField: '#primaryEmailAddressField',
         birthDateField: '#birthDate',
         studentTypeField: '#studentType',
@@ -74,18 +67,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     },
     init: function(){
         var me = this;
-        
-        me.resetForm();
 
-        if(me.financialAidFilesStore.getTotalCount() <= 0){
-			me.financialAidFilesStore.load();
-        }
-        
-        if (!me.programStatusChangeReasonsStore.getTotalCount()) {
-			me.programStatusChangeReasonsStore.load();
-		}
-		
-		
+        me.resetForm();
 
 		me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 
@@ -95,7 +78,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     onAfterLayout:function(){
 		var me = this;
         var id = me.personLite.get('id');
-        
+
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
@@ -107,11 +90,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             else {
                 me.fireOnTermsLoad();
             }
-			
-			if (!me.personRegistrationStatusByTermStore.getTotalCount()) {
-				me.personRegistrationStatusByTermStore.load(id);
-		}
-			
         }
     },
     
@@ -186,11 +164,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
                 scope: me
             });
-            me.personProgramStatusService.getCurrentProgramStatus(id, {
-                success: me.newServiceSuccessHandler('programstatus', me.getCurrentProgramStatusSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('programstatus', me.getCurrentProgramStatusFailure, serviceResponses),
-                scope: me
-            });
         }
     },
     
@@ -220,9 +193,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             };
-            me.personService.get(me.currentMapPlan.get('ownerId'), {
-                success: me.newServiceSuccessHandler('person', me.getMapPersonSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('person', me.getMapPersonFailure, serviceResponses),
+            me.personService.getLite(me.currentMapPlan.get('ownerId'), {
+                success: me.newServiceSuccessHandler('personLite', me.getMapPersonSuccess, serviceResponses),
+                failure: me.newServiceFailureHandler('personLite', me.getMapPersonFailure, serviceResponses),
                 scope: me
             });
         }
@@ -234,19 +207,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     getMapPersonSuccess: function(serviceResponses){
         var me = this;
-        var person = serviceResponses.successes.person;
+        var person = serviceResponses.successes.personLite;
 		var advisorField = me.getAdvisorField();
-		
+
         if (!person) {
             return;
-        }
-        else {
-            var personResponse = serviceResponses.successes.person;
-            var advisor = new Ssp.model.Person();
-            advisor.populateFromGenericObject(personResponse);
+        } else {
             // advisorField.setFieldLabel('');
-        	// advisorField.setValue('<span style="color:#15428B">Plan Name:  </span>' + advisor.getFullName());
-        	advisorField.setValue(advisor.getFullName());
+        	// advisorField.setValue('<span style="color:#15428B">Plan Name:  </span>' + person.fullName());
+        	advisorField.setValue(person.fullName);
         }
     },
     
@@ -264,6 +233,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var birthDateField = me.getBirthDateField();
         var studentTypeField = me.getStudentTypeField();
         var programStatusField = me.getProgramStatusField();
+        var programStatusReasonField = me.getProgramStatusReasonField();
         
         // load general student record
         me.getView().loadRecord(me.person);
@@ -284,7 +254,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // programStatusField.setFieldLabel('');
         // programStatusField.setValue('<span style="color:#15428B">Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
         programStatusField.setValue(me.handleNull(me.person.getProgramStatusName()));
-		
+
+        if (me.person.getProgramStatusChangeReasonName()) {
+            me.updateProgramStatusReasonField(me.person.getProgramStatusChangeReasonName());
+        }
+
 		// load referral sources
         if (me.person.get('referralSources') != null) {
             me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
@@ -358,34 +332,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         // nothing to do
     },
 	
-	getCurrentProgramStatusSuccess: function(serviceResponses) {
-		var me = this;
-        var programStatusReason;
-        var studentStatus;
-        var programStatusReasonField = me.getProgramStatusReasonField();
-        var programStatusResponse = serviceResponses.successes.programstatus;
-		
-        studentStatus = programStatusResponse['programStatusChangeReasonId'];
-        
-        if (studentStatus) {
-            programStatusReason = me.programStatusChangeReasonsStore.findRecord('id', studentStatus, 0, false, false, true);
-            
-            if (programStatusReason) {
-                programStatusReasonField.show();
-                // programStatusReasonField.setFieldLabel('');
-                // programStatusReasonField.setValue('<span style="color:#15428B">Reason:  </span>' + programStatusReason.get('name'));
-                programStatusReasonField.setValue(programStatusReason.get('name'));
-            }
-        }
-        else {
-            programStatusReasonField.hide();
-        }
-	},
-	
-	getCurrentProgramStatusFailure: function() {
-		
-        // nothing to do
-    },
 
     afterServiceHandler: function(serviceResponses) {
         var me = this;
@@ -396,7 +342,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
 	destroy: function() {
         var me=this;
-	    me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
 		me.appEventsController.removeEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
 		var view = Ext.ComponentQuery.query("#profileDetails");
     	

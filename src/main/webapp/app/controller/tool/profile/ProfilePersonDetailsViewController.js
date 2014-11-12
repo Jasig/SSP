@@ -115,8 +115,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 expectedResponseCnt: 4
             }
             me.getView().loadRecord(me.person);
-			
-			
+
+            if (!me.personRegistrationStatusByTermStore.getTotalCount()) {
+                me.personRegistrationStatusByTermStore.load(id);
+            }
             
             me.transcriptService.getSummary(id, {
                 success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
@@ -470,7 +472,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     
     destroy: function(){
         var me = this;
-        
+
+        me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
         me.appEventsController.removeEvent({
             eventName: 'emailCoach',
             callBackFunc: me.onEmailCoach,
