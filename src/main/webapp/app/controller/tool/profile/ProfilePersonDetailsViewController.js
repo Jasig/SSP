@@ -192,7 +192,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             var gpaFormatted = Ext.util.Format.number(me.handleNull(gpa.gradePointAverage), '0.00');
             var grid = me.getCumTermGrid();
             var data = {
-                totalCreditCompletionRate: me.handleNull(gpa.creditCompletionRate),
+                totalCreditCompletionRate: (me.handleNull(gpa.creditCompletionRate) === '' ? me.handleNull(gpa.creditCompletionRate) : gpa.creditCompletionRate + '%'),
                 totalCreditHoursAttempted: me.handleNull(gpa.creditHoursAttempted),
                 totalCreditHoursEarned: me.handleNull(gpa.creditHoursEarned),
                 totalGradePointAverage: gpaFormatted
