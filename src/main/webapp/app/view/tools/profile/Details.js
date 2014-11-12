@@ -41,12 +41,15 @@ Ext.define('Ssp.view.tools.profile.Details', {
         Ext.apply(me, {
             border: 0,
             bodyPadding: 10,
-            layout: 'hbox',
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
             name: 'profileDetails',
             itemId: 'profileDetails',
             items: [{
                 xtype: 'container',
-                layout: 'anchor',
+//                layout: 'anchor',
                 width: '100%',
                 flex: 4,
                 padding: 0,
@@ -54,12 +57,12 @@ Ext.define('Ssp.view.tools.profile.Details', {
                 items: [{
                     xtype: 'fieldset',
                     title: 'Demographic and Academic',
-                    anchor: '100%',
+//                    anchor: '100%',
                     flex: 1,
-                    layout: 'anchor',
+//                    layout: 'anchor',
             		padding: '4 10 10 10',
                     defaults: {
-                        anchor: '100%',
+//                        anchor: '100%',
                         height: 18,
                         margin: 0
                     },
@@ -108,12 +111,12 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         fieldLabel: 'Academic Program',
                         name: 'academicPrograms',
                         itemId: 'academicPrograms',
-                        labelAlign: 'top'
+                        labelWidth: 110
                     }, {
                         fieldLabel: 'Intended Program',
                         itemId: 'intendedProgramAtAdmit',
                         name: 'intendedProgramAtAdmit',
-                        labelAlign: 'top'
+                        labelWidth: 110
                     }, {
                         fieldLabel: 'Start Term',
                         name: 'actualStartTerm',
@@ -132,13 +135,19 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     }]
                 }, {
                     xtype: 'fieldset',
+                    listeners: {
+                        render: function(obj) {
+                            console.log(me.up().up().setHeight(me.up().up().getHeight() + 100) ); // parentCmp = [your parent component id]
+                        }
+                    },
                     title: 'MAP',
-                    anchor: '100%',
-            		padding: '0 10 10 10',
+//                    anchor: '100%',
+            		padding: '0 10 20 10',
+                    margin: '0 0 0 0',
                     flex: 1,
-                    layout: 'anchor',
+//                    layout: 'anchor',
                     defaults: {
-                        anchor: '100%',
+//                        anchor: '100%',
                         height: 18,
                         margin: 0
                     },
@@ -209,7 +218,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         labelWidth: 65
                     }, {
 						xtype: 'tbspacer',
-						height: 10
+						height: 20
 					}]
                 }]
             }, {
