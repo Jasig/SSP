@@ -200,7 +200,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonFinancialViewController', {
 					}
 				});
 			} else {
-				me.finishSapRendering(financialAid);
+				me.finishRenderSapStatus(financialAid);
 			}
 		}
 	},
