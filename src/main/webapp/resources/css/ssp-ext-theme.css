@@ -407,4 +407,10 @@ display: none;
     word-wrap: break-word !important;
 }
 
+.truncatable {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 

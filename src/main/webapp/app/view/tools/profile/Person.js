@@ -26,15 +26,18 @@ Ext.define('Ssp.view.tools.profile.Person', {
     },
     width: '100%',
     height: '100%',
-    minHeight: 200,
-    
+    renderWithToolTip: function(value, metaData) {
+        if ( metaData.el ) {
+            metaData.el.set({'data-qtip': value});
+        }
+        return value;
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
             fieldLabel: '',
             layout: 'hbox',
             margin: '0 0 0 0',
-            height: '150',
             defaultType: 'displayfield',
             fieldDefaults: {
                 msgTarget: 'side'
@@ -55,8 +58,9 @@ Ext.define('Ssp.view.tools.profile.Person', {
 				flex: 1,
                 defaults: {
                     anchor: '100%',
-                    height: 16,
-                    margin: 0
+                    margin: 0,
+                    fieldCls: 'x-form-display-field truncatable', // default + our extension. not sure how to reference default programmatically
+                    renderer: me.renderWithToolTip
                 },
                 items: [{
                     fieldLabel: '',
@@ -73,7 +77,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     name: 'studentType',
                     itemId: 'studentType',
                     labelWidth: 32
-                }, , {
+                }, {
                     fieldLabel: 'Status',
                     name: 'programStatus',
                     itemId: 'programStatus',
@@ -84,28 +88,22 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     itemId: 'programStatusReason',
                     hidden: true
                 }, {
-                    fieldLabel: 'Academic Program',
+                    fieldLabel: 'Program',
                     name: 'academicPrograms',
                     itemId: 'academicPrograms',
-                    labelAlign: 'top',
-					fieldCls: 'wrappable-cell',
-					width: '98%'
+                    labelWidth: 45,
+                    maxHeight: 32
                 }, {
-                    fieldLabel: 'Plan Name',
+                    fieldLabel: 'Plan',
                     name: 'mapName',
                     itemId: 'mapName',
-                    labelAlign: 'top',
-					fieldCls: 'wrappable-cell',
-					width: '98%'
+                    labelWidth: 32
                 }, {
-                    fieldLabel: 'Plan Owner',
+                    fieldLabel: 'Plan By',
                     name: 'advisor',
                     itemId: 'advisor',
-                    labelWidth: 70,
-					fieldCls: 'wrappable-cell',
-					width: '98%'
+                    labelWidth: 45
                 }]
-            
             }]
         
         });
