@@ -34,7 +34,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         configStore: 'configStore',
 		formUtils: 'formRendererUtils',
     	textStore:'sspTextStore',
-        sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
         personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
 		mapPlanService: 'mapPlanService',
@@ -78,9 +77,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         
         me.resetForm();
 
-        if(me.sapStatusesStore.getTotalCount() <= 0){
-			me.sapStatusesStore.load();
-        }
         if(me.financialAidFilesStore.getTotalCount() <= 0){
 			me.financialAidFilesStore.load();
         }

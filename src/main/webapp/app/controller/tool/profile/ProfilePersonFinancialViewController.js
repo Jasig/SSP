@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonFinancialViewController', {
         personLite: 'personLite',
         personService: 'personService',
         transcriptService: 'transcriptService',
-        financialAidFilesStore: 'financialAidFilesAllUnpagedStore'
+        financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
+        sapStatusesStore: 'sapStatusesAllUnpagedStore',
     },
     
     control: {
@@ -169,8 +170,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonFinancialViewController', {
 		
 		var financialAid = transcript.get('financialAid');
 		
-		
-        
+
         if (financialAid) {
         	me.getBalanceOwedField().setValue(Ext.util.Format.usMoney(financialAid.balanceOwed));
         	if(financialAid.financialAidGpa != null)
@@ -183,11 +183,33 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonFinancialViewController', {
 			me.getInstitutionalLoanAmountField().setValue(me.handleNull(Ext.util.Format.usMoney(financialAid.institutionalLoanAmount)));
 			if(financialAid.originalLoanAmount != null)
 				me.getOriginalLoanAmountField().setValue(Ext.util.Format.usMoney(financialAid.originalLoanAmount));
-			me.sapStatusCode = financialAid.sapStatusCode;
-			me.getSapStatusCodeField().setValue(me.handleNull(financialAid.sapStatusCode));
+			me.renderSapStatus(financialAid);
 			me.getTermsLeftField().setValue(me.handleNull(financialAid.termsLeft));
         }
     },
+
+	renderSapStatus: function(financialAid) {
+		var me = this;
+		// go ahead and show the code quickly since we have it. can wait to show the details
+		me.getSapStatusCodeField().setValue(me.handleNull(financialAid.sapStatusCode));
+		if ( financialAid.sapStatusCode ) {
+			if (me.sapStatusesStore.getTotalCount() <= 0) {
+				me.sapStatusesStore.load({
+					callback: function() {
+						me.finishRenderSapStatus(financialAid);
+					}
+				});
+			} else {
+				me.finishSapRendering(financialAid);
+			}
+		}
+	},
+
+	finishRenderSapStatus: function(financialAid) {
+		var me = this;
+		var sapStatus = me.sapStatusesStore.findRecord('code',financialAid.sapStatusCode, 0, false, false, true);
+		me.getSapStatusDescriptionField().setValue(me.handleNull(sapStatus ? sapStatus.get('description') : null));
+	},
 
     getTranscriptFailure: function() {
     	 // nothing to do

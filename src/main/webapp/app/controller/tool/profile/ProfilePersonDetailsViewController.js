@@ -30,7 +30,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         programStatusChangeReasonsStore: 'programStatusChangeReasonsAllUnpagedStore',
         configStore: 'configStore',
         formUtils: 'formRendererUtils',
-        sapStatusesStore: 'sapStatusesAllUnpagedStore',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
         personRegistrationStatusByTermStore: 'personRegistrationStatusByTermStore',
         configStore: 'configStore',
@@ -87,11 +86,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
     },
     init: function(){
         var me = this;
-        
-        if (me.sapStatusesStore.getTotalCount() <= 0) {
-            me.sapStatusesStore.load();
-        }
-        
+
         if (me.financialAidFilesStore.getTotalCount() <= 0) {
             me.financialAidFilesStore.load();
         }
@@ -108,7 +103,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var id = me.personLite.get('id');
         
         me.getView().getForm().reset();
-        me.sapStatusCode = null;
         
         if (id != "") {
             // display loader
