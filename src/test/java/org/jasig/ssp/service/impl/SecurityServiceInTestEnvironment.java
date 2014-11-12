@@ -198,6 +198,12 @@ public class SecurityServiceInTestEnvironment implements SecurityService, Dispos
 		// be stored as an unmanaged ThreadLocal
 		current.setPerson(null);
 		setCurrent((SspUser)null);
-
 	}
+
+	@Override
+	public SspUser allConfidentialityLevelsAdminUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
