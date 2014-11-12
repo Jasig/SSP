@@ -576,6 +576,12 @@
 			<version>1.3</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- Allow using groovy maven tools in test scope -->
 		<dependency>
@@ -891,6 +897,10 @@
                     <skip>${unitTest.skip}</skip>
 					<forkMode>once</forkMode>
 					<reportFormat>plain</reportFormat>
+					<includes>
+						<include>**/EarlyAlertResponseReminderRecipientsConfigImplTest.java</include>
+						<include>%regex[.*SendAllEarlyAlertReminderNotificationsTo.*Test.*]</include>
+					</includes>
 				</configuration>
 				<dependencies>
 					<dependency>

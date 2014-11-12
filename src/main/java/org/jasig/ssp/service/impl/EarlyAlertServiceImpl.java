@@ -29,10 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
-import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.config.EarlyAlertResponseReminderRecipientsConfig;
 import org.jasig.ssp.dao.EarlyAlertDao;
 import org.jasig.ssp.factory.EarlyAlertSearchResultTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
@@ -74,7 +76,12 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
 import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
-import org.jasig.ssp.transferobject.reports.*;
+import org.jasig.ssp.transferobject.reports.EarlyAlertCourseCountsTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertReasonCountsTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.collections.Triple;
@@ -86,6 +93,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -102,48 +111,36 @@ public class EarlyAlertServiceImpl extends // NOPMD
 
 	@Autowired
 	private transient EarlyAlertDao dao;
-
 	@Autowired
 	private transient ConfigService configService;
-
 	@Autowired
 	private transient EarlyAlertRoutingService earlyAlertRoutingService;
-
 	@Autowired
 	private transient MessageService messageService;
-
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
-
 	@Autowired
 	private transient EarlyAlertReasonService earlyAlertReasonService;
-
 	@Autowired
 	private transient EarlyAlertSuggestionService earlyAlertSuggestionService;
-
 	@Autowired
 	private transient PersonService personService;
-
 	@Autowired
 	private transient FacultyCourseService facultyCourseService;
-
 	@Autowired
 	private transient TermService termService;
-
 	@Autowired
 	private transient PersonProgramStatusService personProgramStatusService;
-
 	@Autowired
 	private transient ProgramStatusService programStatusService;
-
 	@Autowired
 	private transient StudentTypeService studentTypeService;
-
 	@Autowired
 	private transient SecurityService securityService;
-	
 	@Autowired
 	private transient EarlyAlertSearchResultTOFactory searchResultFactory;
+	@Autowired
+	private transient EarlyAlertResponseReminderRecipientsConfig earReminderRecipientConfig;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -820,45 +817,65 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	public void sendAllEarlyAlertReminderNotifications() {
 		Date lastResponseDate = getMinimumResponseComplianceDate();
 		// if no responseDate is given no emails are sent
-		if(lastResponseDate == null)
+		if (lastResponseDate == null) {
 			return;
+		}
 		List<EarlyAlert> eaOutOfCompliance = dao.getResponseDueEarlyAlerts(lastResponseDate);
+		LOGGER.debug("Early Alerts out of compliance: {}", eaOutOfCompliance.size());
 		Map<UUID, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, List<EarlyAlertMessageTemplateTO>>();
 		Map<UUID, Person> coaches = new HashMap<UUID, Person>();
-		for(EarlyAlert earlyAlert: eaOutOfCompliance){
+		for (EarlyAlert earlyAlert: eaOutOfCompliance){
+			LOGGER.info("Config: includeCoachAsRecipient(): {}", this.earReminderRecipientConfig.includeCoachAsRecipient());
+			LOGGER.info("Config: includeEarlyAlertCoordinatorAsRecipient(): {}", this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipient());
+			LOGGER.info("Config: includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach(): {}", this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach());
+			final Set<Person> recipients = new HashSet<Person>();
 			Person coach = earlyAlert.getPerson().getCoach();
-			//Only early alerts response late messages sent to coaches
-			if(coach == null){
-				final Campus campus = earlyAlert.getCampus();
-				if ( campus == null ) {
-					LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA does not have valid campus, so skipping email to coach because no coach can be resolved.", earlyAlert.getId());
-					continue;
-				}
-				final UUID earlyAlertCoordinatorId = campus.getEarlyAlertCoordinatorId();
-				if ( earlyAlertCoordinatorId == null ) {
-					LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA's campus does not have an early alert coordinator, so skipping email to coach because no coach can be resolved.", earlyAlert.getId());
-					continue;
-				}
-				try{
-					coach = personService.get(earlyAlertCoordinatorId);
-					if ( coach == null ) { // guard against change in behavior where ObjectNotFoundException is not thrown (which we've seen)
-						LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA's campus has an early alert coordinator with a bad ID ({}), so skipping email to coach because no coach can be resolved.", earlyAlert.getId(), earlyAlertCoordinatorId);
-						continue;
-					}
-				}catch(ObjectNotFoundException exp){
-					LOGGER.error("Early Alert with id: {} is associated with a person without a coach and the EA's campus has an early alert coordinator with a bad ID ({}), so skipping email to coach because no coach can be resolved.", new Object[] { earlyAlert.getId(), earlyAlertCoordinatorId, exp });
-					continue;
+			if (this.earReminderRecipientConfig.includeCoachAsRecipient()) {
+				if (coach == null) {
+					LOGGER.warn("Early Alert with id: {} is associated with a person without a coach, so skipping email to coach.", earlyAlert.getId());
+				} else {
+					recipients.add(coach);
 				}
 			}
-			// We've definitely got a coach by this point
-			if(easByCoach.containsKey(coach.getId())){
-				final List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(coach.getId());
-				coachEarlyAlerts.add(createEarlyAlertTemplateTO( earlyAlert));
-			}else{
-				coaches.put(coach.getId(), coach);
-				final ArrayList<EarlyAlertMessageTemplateTO> eam = Lists.newArrayList();
-				eam.add(createEarlyAlertTemplateTO(earlyAlert)); // add separately from newArrayList() call else list will be sized to 1
-				easByCoach.put(coach.getId(), eam);
+			if (this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipient() 
+					|| (coach == null && this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach())) {
+				final Campus campus = earlyAlert.getCampus();
+				if (campus == null) {
+					LOGGER.error("Early Alert with id: {} does not have valid a campus, so skipping email to EAC.", earlyAlert.getId());
+				} else {
+					final UUID earlyAlertCoordinatorId = campus.getEarlyAlertCoordinatorId();
+					if ( earlyAlertCoordinatorId == null ) {
+						LOGGER.error("Early Alert with id: {} has campus with no early alert coordinator, so skipping email to EAC.", earlyAlert.getId());
+					} else {
+						try {
+							final Person earlyAlertCoordinator = personService.get(earlyAlertCoordinatorId);
+							if (earlyAlertCoordinator == null) { // guard against change in behavior where ObjectNotFoundException is not thrown (which we've seen)
+								LOGGER.error("Early Alert with id: {} has campus with an early alert coordinator with a bad ID ({}), so skipping email to EAC.", earlyAlert.getId(), earlyAlertCoordinatorId);
+							} else {
+								recipients.add(earlyAlertCoordinator);
+							}
+						} catch(ObjectNotFoundException exp){
+							LOGGER.error("Early Alert with id: {} has campus with an early alert coordinator with a bad ID ({}), so skipping email to coach because no coach can be resolved.", new Object[] { earlyAlert.getId(), earlyAlertCoordinatorId, exp });
+						}
+					}
+				}
+			}
+			if (recipients.isEmpty()) {
+				continue;
+			} else {
+				LOGGER.warn("Recipients: {}", recipients);
+				for (Person person : recipients) {
+					// We've definitely got a coach by this point
+					if (easByCoach.containsKey(person.getId())){
+						final List<EarlyAlertMessageTemplateTO> coachEarlyAlerts = easByCoach.get(person.getId());
+						coachEarlyAlerts.add(createEarlyAlertTemplateTO(earlyAlert));
+					} else {
+						coaches.put(person.getId(), person);
+						final ArrayList<EarlyAlertMessageTemplateTO> eam = Lists.newArrayList();
+						eam.add(createEarlyAlertTemplateTO(earlyAlert)); // add separately from newArrayList() call else list will be sized to 1
+						easByCoach.put(person.getId(), eam);
+					}
+				}
 			}
 			List<WatchStudent> watchers = earlyAlert.getPerson().getWatchers();
 			for (WatchStudent watcher : watchers) {
