@@ -208,7 +208,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonFinancialViewController', {
 	finishRenderSapStatus: function(financialAid) {
 		var me = this;
 		var sapStatus = me.sapStatusesStore.findRecord('code',financialAid.sapStatusCode, 0, false, false, true);
-		me.getSapStatusDescriptionField().setValue(me.handleNull(sapStatus ? sapStatus.get('description') : null));
+		if ( sapStatus ) {
+			me.getSapStatusCodeField().setValue(me.handleNull(financialAid.sapStatusCode) + ' (' + sapStatus.get('name') + ')');
+			me.getSapStatusDescriptionField().setValue(me.handleNull(sapStatus.get('description')));
+		}
 	},
 
     getTranscriptFailure: function() {
