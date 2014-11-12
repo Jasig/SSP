@@ -784,4 +784,12 @@ public final class SortingAndPaging { // NOPMD
 		return sAndP;
 	}
 
+	public static SortingAndPaging allActive() {
+		return SortingAndPaging.allActiveSorted(null);
+	}
+
+	public static SortingAndPaging allActiveSorted(String sortOn) {
+		return SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, -1, sortOn, null, null);
+	}
+
 }

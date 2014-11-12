@@ -94,11 +94,9 @@ public class ExternalPersonRegistrationStatusByTermController extends AbstractBa
 
 		Person person = new Person(id);
 		person.setSchoolId(personService.getSchoolIdForPersonId(id));
-		try {
-			final List<RegistrationStatusByTerm> list = getService().getCurrentAndFutureTerms(person);
-			return factory.asTOList(list);
-		} catch ( ObjectNotFoundException e ) {
-			return Lists.newArrayListWithCapacity(0);
-		}
+		final PagingWrapper<RegistrationStatusByTerm> allForPerson =
+				getService().getAllForPerson(person, SortingAndPaging.allActive());
+		final List<RegistrationStatusByTerm> list = (List<RegistrationStatusByTerm>)allForPerson.getRows();
+		return factory.asTOList(list);
 	}
 }

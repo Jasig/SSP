@@ -81,6 +81,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.jasig.ssp.util.sort.SortingAndPaging.allActive;
+
 @Service
 public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessIndicatorService {
 
@@ -1004,10 +1006,6 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
      */
     private String externalRiskMapKeyFor(SuccessIndicator successIndicator) {
         return RISK_SUCCESS_INDICATOR_MAP_KEY_GENERATOR.apply(successIndicator);
-    }
-
-    private SortingAndPaging allActive() {
-        return SortingAndPaging.createForSingleSortWithPaging(ObjectStatus.ACTIVE, 0, -1, null, null, null);
     }
 
     private String successIndicatorLoggingId(@Nullable SuccessIndicator successIndicator) {
