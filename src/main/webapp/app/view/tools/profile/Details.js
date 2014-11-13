@@ -41,16 +41,17 @@ Ext.define('Ssp.view.tools.profile.Details', {
         Ext.apply(me, {
             border: 0,
             bodyPadding: 10,
-            layout: 'hbox',
+            layout: 'column',
+            minHeight: 610,
             name: 'profileDetails',
             itemId: 'profileDetails',
             items: [{
                 xtype: 'container',
                 layout: 'anchor',
-                width: '100%',
                 flex: 4,
                 padding: 0,
                 margin: '0 20 0 0',
+                columnWidth: 0.6,
                 items: [{
                     xtype: 'fieldset',
                     title: 'Demographic and Academic',
@@ -216,8 +217,8 @@ Ext.define('Ssp.view.tools.profile.Details', {
                 xtype: 'fieldset',
                 title: 'Cumulative and Term Activity',
                 flex: 5,
-                width: '100%',
             	padding: '6 10 10 10',
+                columnWidth: 0.4,
                 items: [{
                     xtype: 'grid',
 					itemId: 'cumTermGrid',
