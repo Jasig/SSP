@@ -146,7 +146,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
-                expectedResponseCnt: 4
+                expectedResponseCnt: 2
             }
             
             me.mapPlanService.getCurrent(id, {
@@ -154,11 +154,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
                 scope: me
             });
-            me.personService.get(id, {
-                success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
-                scope: me
-            });
+
+            if (!me.getPersonSuccess(serviceResponses)) {
+                me.personService.get(id, {
+                    success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
+                    failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
+                    scope: me
+                });
+            }
             me.transcriptService.getSummary(id, {
                 success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
@@ -179,7 +182,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me = this;
         var mapResponse = serviceResponses.successes.map;
         var mapNameField = me.getMapNameField();
-		
+
         if (mapResponse && mapResponse.responseText && Ext.String.trim(mapResponse.toString()).length) {
             me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
 			
@@ -193,6 +196,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
                 responseCnt: 0,
                 expectedResponseCnt: 1
             };
+
             me.personService.getLite(me.currentMapPlan.get('ownerId'), {
                 success: me.newServiceSuccessHandler('personLite', me.getMapPersonSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('personLite', me.getMapPersonFailure, serviceResponses),
@@ -210,7 +214,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var person = serviceResponses.successes.personLite;
 		var advisorField = me.getAdvisorField();
 
-        if (!person) {
+        if (!person || !advisorField) {
+            me.getView().setLoading(false);  //is an invalid state, but removes an infinite loading spinner
             return;
         } else {
             // advisorField.setFieldLabel('');
@@ -226,7 +231,16 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     getPersonSuccess: function(serviceResponses) {
         var me = this;
         var personResponse = serviceResponses.successes.person;
-        me.person.populateFromGenericObject(personResponse);
+
+        if ( (!personResponse && !me.person) || (me.person.get('id') !== me.personLite.get('id') && !personResponse) ) {
+            return false;
+        } else if (me.person.get('id') === me.personLite.get('id') && !personResponse) {
+            personResponse = me.person;
+        } else if (personResponse) {
+            me.person.populateFromGenericObject(personResponse);
+        } else {
+            return false;
+        }
         
         var photoUrlField = me.getPhotoUrlField();
         var primaryEmailAddressField = me.getPrimaryEmailAddressField();
@@ -273,6 +287,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (me.person.get('specialServiceGroups') != null) {
             me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
         }
+
+        return true;
     },
 
 	onAfterPersonProgramStatusChange: function(event) {
