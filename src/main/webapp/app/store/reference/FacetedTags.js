@@ -22,6 +22,7 @@ Ext.define('Ssp.store.reference.FacetedTags', {
     constructor: function(){
     	var me = this;
     	this.callParent(arguments);
+    	me.remoteSort = false;
 		this.addListener('load', this.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('facetedtag')});
     

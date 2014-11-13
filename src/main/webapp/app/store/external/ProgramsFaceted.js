@@ -27,6 +27,7 @@ Ext.define('Ssp.store.external.ProgramsFaceted', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
+		me.remoteSort = false;
 		this.addListener('load', this.sortAfterLoad, me, {single:true});
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('programfaceted'),
     		autoLoad: true});

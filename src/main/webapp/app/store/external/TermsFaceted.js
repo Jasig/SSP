@@ -27,14 +27,10 @@ Ext.define('Ssp.store.external.TermsFaceted', {
     constructor: function(){
 		var me = this;
 		me.callParent(arguments);
-		this.addListener('load', this.sortAfterLoad, me, {single:true});
+		// Unlike Programs and Tags, this service *is* correctly sorted server side and should
+		// stay that way b/c term sorting policies can be so complicated
     	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('termsfaceted'),
     		autoLoad: true});
     	return; 
-    },
-
-	sortAfterLoad: function(){
-		var me = this;
-		me.sort('startDate','ASC');
-	}
+    }
 });
