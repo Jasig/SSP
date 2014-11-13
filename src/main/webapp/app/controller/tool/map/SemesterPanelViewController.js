@@ -124,8 +124,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	
 	onTermNotesButtonClick: function() {
 		var me = this;
-		if(me.termNotesPopUp == null || me.termNotesPopUp.isDestroyed)
-        	me.termNotesPopUp = Ext.create('Ssp.view.tools.map.TermNotes');
+		if ( me.termNotesPopUp ) {
+			me.termNotesPopUp.destroy();
+		}
+        me.termNotesPopUp = Ext.create('Ssp.view.tools.map.TermNotes');
 		
 	    var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
 	    me.termNotesPopUp.query('form')[0].getForm().loadRecord(termNote);
@@ -179,7 +181,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
 		var courseRecord = record;
-		
+
+			if ( me.coursePlanDetails ) {
+				me.coursePlanDetails.destroy();
+			}
     		me.coursePlanDetails = Ext.create('Ssp.view.tools.map.CourseNotes',{enableFields : me.getView().editable});
     		me.coursePlanDetails.parentGrid = me.getView();
     		
@@ -511,7 +516,13 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	},
 	destroy: function(){
 		var me=this;
-		
+
+		if ( me.termNotesPopUp ) {
+			me.termNotesPopUp.destroy();
+		}
+		if ( me.coursePlanDetails ) {
+			me.coursePlanDetails.destroy();
+		}
 		me.getIsImportantTermButton().removeListener("move", me.setTermNoteButton, me);
 		me.getView().view.removeListener('beforedrop', me.onBeforeDrop, me);
 		me.getView().view.removeListener('drop', me.onDrop, me);
