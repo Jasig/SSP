@@ -129,4 +129,9 @@ public class ElectiveController
 		return null;
 	}
 
+	@Override
+	protected String getDefaultSortColumn() {
+		return "sortOrder";
+	}
+
 }
