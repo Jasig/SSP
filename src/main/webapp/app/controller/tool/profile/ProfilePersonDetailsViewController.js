@@ -112,7 +112,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
-                expectedResponseCnt: 4
+                expectedResponseCnt: 0
             }
             me.getView().loadRecord(me.person);
 
@@ -125,6 +125,26 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
                 scope: me
             });
+
+            if (me.termsStore.getTotalCount() <= 0) {
+                me.termsStore.load(function(records, operation, success) {
+                   if (!success) {
+                       Ext.Msg.alert('Error', 'Unable to load Terms. Please see your system administrator for assistance.');
+                   } else {
+                       me.fireOnTermsLoad(serviceResponses);
+                   }
+                });
+            } else {
+                me.fireOnTermsLoad(serviceResponses);
+            }
+        }
+    },
+
+    fireOnTermsLoad: function(serviceResponses){
+        var me = this;
+        var id = me.personLite.get('id');
+
+        if (id != "") {
             me.transcriptService.getFull(id, {
                 success: me.newServiceSuccessHandler('transcriptFull', me.getTranscriptFullSuccess, serviceResponses),
                 failure: me.newServiceFailureHandler('transcriptFull', me.getTranscriptFullFailure, serviceResponses),
@@ -170,7 +190,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             me.afterServiceHandler(serviceResponses);
         };
     },
-    
+
     handleNull: function(value){
         if (value == null || value == undefined || value == 'null') 
             return "";
@@ -337,7 +357,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             
             me.getPrintPlanButton().show();
             me.getEmailPlanButton().show();
-            
+
             me.updatePlanStatus();
         }
     },

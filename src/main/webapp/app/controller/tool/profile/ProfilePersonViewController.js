@@ -32,7 +32,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     //	textStore:'sspTextStore',
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan',
-		termsStore: 'termsStore'
     },
     
     control: {
@@ -82,14 +81,28 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         if (id != "") {
             // display loader
             me.getView().setLoading(true);
-            
-            if (me.termsStore.getTotalCount() <= 0) {
-                me.termsStore.addListener('load', me.termsLoaded, me);
-                me.termsStore.load();
+
+            me.mapPlanService.getCurrent(id, {
+                success: me.getMapPlanServiceSuccess,
+                failure: me.getMapPlanServiceFailure,
+                scope: me
+            });
+
+            if (me.person.get('id') !== me.personLite.get('id')) {
+                me.personService.get(id, {
+                    success: me.getPersonSuccess,
+                    failure: me.getPersonFailure,
+                    scope: me
+                });
+            } else {
+                me.getPersonSuccess(null, null);
             }
-            else {
-                me.fireOnTermsLoad();
-            }
+
+            me.transcriptService.getSummary(id, {
+                success: me.getTranscriptSuccess,
+                failure: me.getTranscriptFailure,
+                scope: me
+            });
         }
     },
     
@@ -102,74 +115,6 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
        	me.profileSpecialServiceGroupsStore.removeAll();
     },
 
-    newServiceSuccessHandler: function(name, callback, serviceResponses) {
-        var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
-            serviceResponses.successes[name] = response;
-        });
-    },
-
-    newServiceFailureHandler: function(name, callback, serviceResponses) {
-        var me = this;
-        return me.newServiceHandler(name, callback, serviceResponses, function(name, serviceResponses, response) {
-            serviceResponses.failures[name] = response;
-        });
-    },
-
-    newServiceHandler: function(name, callback, serviceResponses, serviceResponsesCallback) {
-        return function(r, scope) {
-            var me = scope;
-            serviceResponses.responseCnt++;
-            if ( serviceResponsesCallback ) {
-                serviceResponsesCallback.apply(me, [name, serviceResponses, r]);
-			}
-            if ( callback ) {
-                callback.apply(me, [ serviceResponses ]);
-            }
-            me.afterServiceHandler(serviceResponses);
-        };
-    },
-    
-    termsLoaded: function(){
-        var me = this;
-        
-        me.termsStore.removeListener('load', me.termsLoaded, me);
-        me.fireOnTermsLoad();
-    },
-    
-    fireOnTermsLoad: function(){
-        var me = this;
-        var id = me.personLite.get('id');
-        
-        if (id != "") {
-            var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 2
-            }
-            
-            me.mapPlanService.getCurrent(id, {
-                success: me.newServiceSuccessHandler('map', me.getMapPlanServiceSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('map', me.getMapPlanServiceFailure, serviceResponses),
-                scope: me
-            });
-
-            if (!me.getPersonSuccess(serviceResponses)) {
-                me.personService.get(id, {
-                    success: me.newServiceSuccessHandler('person', me.getPersonSuccess, serviceResponses),
-                    failure: me.newServiceFailureHandler('person', me.getPersonFailure, serviceResponses),
-                    scope: me
-                });
-            }
-            me.transcriptService.getSummary(id, {
-                success: me.newServiceSuccessHandler('transcript', me.getTranscriptSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('transcript', me.getTranscriptFailure, serviceResponses),
-                scope: me
-            });
-        }
-    },
-    
 	handleNull: function(value, defaultValue){
 		if(defaultValue == null || defaultValue == undefined)
 			defaultValue = "";
@@ -178,28 +123,20 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		return value;
 	},
     
-    getMapPlanServiceSuccess: function(serviceResponses){
-        var me = this;
-        var mapResponse = serviceResponses.successes.map;
+    getMapPlanServiceSuccess: function(mapTOResponse, scope){
+        var me = scope;
         var mapNameField = me.getMapNameField();
 
-        if (mapResponse && mapResponse.responseText && Ext.String.trim(mapResponse.toString()).length) {
-            me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
+        if (mapTOResponse && mapTOResponse.responseText && Ext.String.trim(mapTOResponse.toString()).length) {
+            me.currentMapPlan.loadFromServer(Ext.decode(mapTOResponse.responseText));
 			
 			// mapNameField.setFieldLabel('');
         	// mapNameField.setValue('<span style="color:#15428B">Plan Name:  </span>' + me.currentMapPlan.get("name"));
         	mapNameField.setValue(me.currentMapPlan.get("name"));
 			
-            var serviceResponses = {
-                failures: {},
-                successes: {},
-                responseCnt: 0,
-                expectedResponseCnt: 1
-            };
-
             me.personService.getLite(me.currentMapPlan.get('ownerId'), {
-                success: me.newServiceSuccessHandler('personLite', me.getMapPersonSuccess, serviceResponses),
-                failure: me.newServiceFailureHandler('personLite', me.getMapPersonFailure, serviceResponses),
+                success: me.getMapPersonSuccess,
+                failure: me.getMapPersonFailure,
                 scope: me
             });
         }
@@ -207,88 +144,91 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
     
     getMapPlanServiceFailure: function(){
         // nothing to do
+        var me = this;
+        me.afterLoad();
     },
     
-    getMapPersonSuccess: function(serviceResponses){
-        var me = this;
-        var person = serviceResponses.successes.personLite;
+    getMapPersonSuccess: function(personLiteTOResponse, scope){
+        var me = scope;
 		var advisorField = me.getAdvisorField();
 
-        if (!person || !advisorField) {
+        if (!personLiteTOResponse || !advisorField) {
             me.getView().setLoading(false);  //is an invalid state, but removes an infinite loading spinner
             return;
         } else {
             // advisorField.setFieldLabel('');
         	// advisorField.setValue('<span style="color:#15428B">Plan Name:  </span>' + person.fullName());
-        	advisorField.setValue(person.fullName);
+        	advisorField.setValue(personLiteTOResponse.fullName);
         }
     },
     
     getMapPersonFailure: function(){
     	// nothing to do
+    	var me = this;
+    	me.afterLoad();
     },
 
-    getPersonSuccess: function(serviceResponses) {
-        var me = this;
-        var personResponse = serviceResponses.successes.person;
+    getPersonSuccess: function(personTOResponse, scope) {
+        var me = scope;
 
-        if ( (!personResponse && !me.person) || (me.person.get('id') !== me.personLite.get('id') && !personResponse) ) {
-            return false;
-        } else if (me.person.get('id') === me.personLite.get('id') && !personResponse) {
-            personResponse = me.person;
-        } else if (personResponse) {
-            me.person.populateFromGenericObject(personResponse);
+        if ( personTOResponse || (personTOResponse == null && scope == null) ) {
+            if (personTOResponse !== null && personTOResponse.id !== '') {
+                me.person.populateFromGenericObject(personTOResponse);
+            } else if (scope == null) {
+                me = this;
+            } else {
+                this.getPersonFailure();
+            }
+
+            var photoUrlField = me.getPhotoUrlField();
+            var primaryEmailAddressField = me.getPrimaryEmailAddressField();
+            var birthDateField = me.getBirthDateField();
+            var studentTypeField = me.getStudentTypeField();
+            var programStatusField = me.getProgramStatusField();
+            var programStatusReasonField = me.getProgramStatusReasonField();
+
+            // load general student record
+            me.getView().loadRecord(me.person);
+
+            photoUrlField.setSrc(me.person.getPhotoUrl());
+
+            // primaryEmailAddressField.setFieldLabel('');
+            primaryEmailAddressField.setValue('<a href="mailto:' + me.handleNull(me.person.get('primaryEmailAddress')) + '" target="_top">' + me.handleNull(me.person.get('primaryEmailAddress')) + '</a>');
+
+            // birthDateField.setFieldLabel('');
+            // birthDateField.setValue('<span style="color:#15428B">' + me.textStore.getValueByCode('ssp.label.dob') + ':  </span>' + me.person.getFormattedBirthDate());
+            birthDateField.setValue(me.person.getFormattedBirthDate());
+
+            // studentTypeField.setFieldLabel('');
+            // studentTypeField.setValue('<span style="color:#15428B">Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
+            studentTypeField.setValue(me.handleNull(me.person.getStudentTypeName()));
+
+            // programStatusField.setFieldLabel('');
+            // programStatusField.setValue('<span style="color:#15428B">Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
+            programStatusField.setValue(me.handleNull(me.person.getProgramStatusName()));
+
+            if (me.person.getProgramStatusChangeReasonName()) {
+                me.updateProgramStatusReasonField(me.person.getProgramStatusChangeReasonName());
+            }
+
+            // load referral sources
+            if (me.person.get('referralSources') != null) {
+                me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
+            }
+
+            // load service reasonssd
+            if (me.person.get('serviceReasons') != null) {
+                me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
+            }
+
+            // load special service groups
+            if (me.person.get('specialServiceGroups') != null) {
+                me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
+            }
+            me.afterLoad();
         } else {
-            return false;
+            this.getPersonFailure();
         }
-        
-        var photoUrlField = me.getPhotoUrlField();
-        var primaryEmailAddressField = me.getPrimaryEmailAddressField();
-        var birthDateField = me.getBirthDateField();
-        var studentTypeField = me.getStudentTypeField();
-        var programStatusField = me.getProgramStatusField();
-        var programStatusReasonField = me.getProgramStatusReasonField();
-        
-        // load general student record
-        me.getView().loadRecord(me.person);
-        
-        photoUrlField.setSrc(me.person.getPhotoUrl());
-        
-        // primaryEmailAddressField.setFieldLabel('');
-        primaryEmailAddressField.setValue('<a href="mailto:' + me.handleNull(me.person.get('primaryEmailAddress')) + '" target="_top">' + me.handleNull(me.person.get('primaryEmailAddress')) + '</a>');
-        
-        // birthDateField.setFieldLabel('');
-        // birthDateField.setValue('<span style="color:#15428B">' + me.textStore.getValueByCode('ssp.label.dob') + ':  </span>' + me.person.getFormattedBirthDate());
-        birthDateField.setValue(me.person.getFormattedBirthDate());
-        
-        // studentTypeField.setFieldLabel('');
-        // studentTypeField.setValue('<span style="color:#15428B">Type:  </span>' + me.handleNull(me.person.getStudentTypeName()));
-        studentTypeField.setValue(me.handleNull(me.person.getStudentTypeName()));
-        
-        // programStatusField.setFieldLabel('');
-        // programStatusField.setValue('<span style="color:#15428B">Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
-        programStatusField.setValue(me.handleNull(me.person.getProgramStatusName()));
-
-        if (me.person.getProgramStatusChangeReasonName()) {
-            me.updateProgramStatusReasonField(me.person.getProgramStatusChangeReasonName());
-        }
-
-		// load referral sources
-        if (me.person.get('referralSources') != null) {
-            me.profileReferralSourcesStore.loadData(me.person.get('referralSources'));
-        }
-
-        // load service reasonssd
-        if (me.person.get('serviceReasons') != null) {
-            me.profileServiceReasonsStore.loadData(me.person.get('serviceReasons'));
-        }
-
-		// load special service groups
-        if (me.person.get('specialServiceGroups') != null) {
-            me.profileSpecialServiceGroupsStore.loadData(me.person.get('specialServiceGroups'));
-        }
-
-        return true;
     },
 
 	onAfterPersonProgramStatusChange: function(event) {
@@ -319,22 +259,25 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
     getPersonFailure: function() {
         // nothing to do
+        var me = this;
+        me.afterLoad();
     },
 
-    getTranscriptSuccess: function(serviceResponses) {
-        var me = this;
-        var transcriptResponse = serviceResponses.successes.transcript;
-        var transcript = new Ssp.model.Transcript(transcriptResponse);
+    getTranscriptSuccess: function(transcriptTOResponse, scope) {
+        var me = scope;
+        var transcript = new Ssp.model.Transcript(transcriptTOResponse);
         var programs = transcript.get('programs');
         
 		if (programs) {
             var programNames = [];
             // var intendedProgramsAtAdmit = [];
             Ext.Array.each(programs, function(program){
-                if (program.programName && program.programName.length > 0) 
-                    programNames.push(program.programName);
-                // if (program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0) 
+                if (program.programName && program.programName.length > 0) {
+                     programNames.push(program.programName);
+                }
+                // if (program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0) {
                 //     intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
+                // }
             });
             // me.getAcademicProgramsField().setFieldLabel('');
             // me.getAcademicProgramsField().setValue('<span style="color:#15428B">Academic Program:  </span>' + programNames.join(', '));
@@ -346,14 +289,14 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 
     getTranscriptFailure: function() {
         // nothing to do
+        var me = this;
+        me.afterLoad();
     },
 	
 
-    afterServiceHandler: function(serviceResponses) {
+    afterLoad: function() {
         var me = this;
-        if ( serviceResponses.responseCnt >= serviceResponses.expectedResponseCnt ) {
-            me.getView().setLoading(false);
-        }
+        me.getView().setLoading(false);
     },
 
 	destroy: function() {
