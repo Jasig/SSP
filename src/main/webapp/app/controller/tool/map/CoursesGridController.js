@@ -72,6 +72,9 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
+		if ( me.courseDetailsPopUp ) {
+			me.courseDetailsPopUp.destroy();
+		}
    		me.courseDetailsPopUp = Ext.create('Ssp.view.tools.map.CourseDetails');
     	me.courseDetailsPopUp.record = record;
 		me.courseDetailsPopUp.query("#formatted_course_title")[0].setValue( record.get("formattedCourse") + " : " + record.get("title"));
@@ -81,6 +84,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		me.courseDetailsPopUp.query("#departmentCode")[0].setValue(record.get("departmentCode"));
 		me.courseDetailsPopUp.query("#divisionCode")[0].setValue(record.get("divisionCode"));
 		me.courseDetailsPopUp.query("#tags")[0].setValue(record.get("tags"));
+		me.courseDetailsPopUp.query("#prereqs")[0].setValue('');
 		
 		
 		var masterSylComponent = me.courseDetailsPopUp.query("#mastersyllabus")[0];
@@ -97,6 +101,7 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
 		academicLinkComponent.setFieldLabel("<a href=\""+record.get("academicLink")+"\" target=\"_blank\">Academic Link</a>");
 		
 		me.courseRequisitesStore = Ext.create('Ssp.store.external.CourseRequisites');
+		me.courseDetailsPopUp.courseRequisitesStore = me.courseRequisitesStore;
 		me.courseRequisitesStore.load(record.get('code'));
 	    
 		
@@ -104,6 +109,10 @@ Ext.define('Ssp.controller.tool.map.CoursesGridController', {
     showCourseDetails:function(scope){
         var me=this;
         var reqs= '';
+        if ( !(me.courseDetailsPopUp) || me.courseDetailsPopUp.isDestroyed || !(me.courseDetailsPopUp.courseRequisitesStore) ||
+                me.courseDetailsPopUp.courseRequisitesStore !== me.courseRequisitesStore ) {
+            return;
+        }
         me.courseRequisitesStore.each(function(req) {
     		reqFormattedCourse = req.get('requiredFormattedCourse') == me.courseDetailsPopUp.record.get("formattedCourse") ? req.get('requiringCourseCode') : req.get('requiredFormattedCourse');
     		reqs = reqs + reqFormattedCourse+': '+req.get('requisiteCode')+','
