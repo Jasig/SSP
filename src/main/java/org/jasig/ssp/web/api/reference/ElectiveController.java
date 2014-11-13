@@ -147,4 +147,10 @@ public class ElectiveController
 					e);
 		}
 	}
+
+	@Override
+	protected String getDefaultSortColumn() {
+		return "sortOrder";
+	}
+
 }
