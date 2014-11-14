@@ -276,7 +276,9 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             dataIndex: 'creditHoursEarned'
                         }, {
                             text: 'GPA',
-                            dataIndex: 'gradePointAverage'
+                            dataIndex: 'gradePointAverage',
+                            xtype: 'numbercolumn',
+                            format: '0.00'
                         }, {
                             text: 'Paid',
                             dataIndex: 'tuitionPaid'
