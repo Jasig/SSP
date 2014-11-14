@@ -80,6 +80,12 @@ public class RegistrationStatusByTermServiceImpl extends
 	}
 
 	@Override
+	public PagingWrapper<RegistrationStatusByTerm> getAllForPersonWithAnyCourseCount(
+			Person person, SortingAndPaging sortingAndPaging) {
+		return dao.getAllForPersonWithAnyCourseCount(person, sortingAndPaging);
+	}
+
+	@Override
 	public RegistrationStatusByTerm getForTerm(final Person person,
 			final Term term) {
 		return dao.getForTerm(person, term);

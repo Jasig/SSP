@@ -840,10 +840,10 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             // as just a missing indicator metric
             return new Pair<Object, String>(null, null);
         }
-        // PlanStatus is so domain specific, we don't pass it into the evaluate(). That function does have
+        // PlanStatus is so domain specific, we don't pass it back into the evaluate(). That function does have
         // coercion/translation/normalization capabilities, but they're all focused on very low-level types,
         // e.g. Numeric and BigDecimal, or purpose built but still very generic stuff, e.g. Ratio. So
-        // we translate that enum into a name here, the same way we do it for evaluateRegistration()
+        // we translate that enum into a name here, the same way we do it for findRegistrationMetric()
 
         final PlanStatus status = statusReport == null ? null : statusReport.getStatus();
         return new Pair<Object, String>((status == null ? null : status.name()),

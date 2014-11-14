@@ -63,10 +63,22 @@ public interface RegistrationStatusByTermService extends
 	PagingWrapper<RegistrationStatusByTerm> getAllForTerm(
 			@NotNull final Term term, final SortingAndPaging sAndP);
 
+	/**
+	 * Dubious whether any of the finder methods on this service should be filtering on {@code registeredCourseCount},
+	 * but they've been doing so for a very long time, so we leave them alone and introduce this ugly beast for when
+	 * you want all records for a person, regardless of {@code registeredCourseCount}.
+	 *
+	 * @return
+	 */
+	PagingWrapper<RegistrationStatusByTerm> getAllForPersonWithAnyCourseCount(
+			Person person, SortingAndPaging sortingAndPaging);
+
 	Person applyRegistrationStatusForCurrentTerm(@NotNull Person person);
 
 	Person applyCurrentAndFutureRegistrationStatuses(Person person);
 
 	List<RegistrationStatusByTerm> getCurrentAndFutureTerms(Person person)
 			throws ObjectNotFoundException;
+
+
 }
