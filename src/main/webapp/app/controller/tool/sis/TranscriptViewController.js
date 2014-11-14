@@ -76,7 +76,9 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
                 if (termIndex < 0) {
                     var tIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
                     var term = me.termsStore.getAt(tIndex);
-                    courseTranscript.set("termStartDate", term.get("startDate"));
+                    if ( term ) {
+                        courseTranscript.set("termStartDate", term.get("startDate"));
+                    }
                     courseTranscripts.push(courseTranscript);
                 }
             });
