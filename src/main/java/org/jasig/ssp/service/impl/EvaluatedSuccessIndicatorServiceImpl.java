@@ -731,7 +731,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         if ( transcript != null ) {
             completionRatio = transcript.getCreditCompletionRate();
         }
-        return new Pair<Object,String>(completionRatio, (completionRatio == null ? null : completionRatio.toString()));
+        return new Pair<Object,String>(completionRatio, (completionRatio == null ? null : completionRatio.toString() + "%"));
     }
 
     private Pair<Object,String> findStandingMetric(@Nonnull SuccessIndicator successIndicator,

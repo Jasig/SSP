@@ -146,7 +146,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         name: 'neededFor67PtcCompletion',
                         itemId: 'neededFor67PtcCompletion',
 						value: "N/A",
-						labelWidth: 280
+						labelWidth: 240
                     },
                     {
                         xtype: 'tbspacer',
