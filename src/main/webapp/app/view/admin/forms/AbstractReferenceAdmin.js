@@ -145,7 +145,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                             var record = store.findRecord("id", r.id, 0, false, false, true); 
                             			
 							store.load();
-							if( sort ) {
+							if( sort && sort.direction ) {
 								store.sort(sort.field, sort.direction);
 							}
                         },
