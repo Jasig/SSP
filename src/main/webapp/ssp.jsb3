@@ -2438,8 +2438,8 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.PlanStatus",
-                    "name": "PlanStatus.js",
+                    "clsName": "Ssp.store.PlanExists",
+                    "name": "PlanExists.js",
                     "path": "/app/store/"
                 }, 
                 {
@@ -2453,8 +2453,8 @@
                     "path": "/app/store/"
                 }, 
                 {
-                    "clsName": "Ssp.store.MAPStatus",
-                    "name": "MAPStatus.js",
+                    "clsName": "Ssp.store.PlanStatus",
+                    "name": "PlanStatus.js",
                     "path": "/app/store/"
                 },   
                 {
@@ -2466,12 +2466,7 @@
                     "clsName": "Ssp.store.MapStatusReports",
                     "name": "MapStatusReports.js",
                     "path": "/app/store/"
-                }, 
-                {
-                    "clsName": "Ssp.store.MAPStatus",
-                    "name": "MAPStatus.js",
-                    "path": "/app/store/"
-                },     
+                },
                 {
                     "clsName": "Ssp.store.MapStatusReportSubstitutionDetails",
                     "name": "MapStatusReportSubstitutionDetails.js",

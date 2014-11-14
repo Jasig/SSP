@@ -152,7 +152,14 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
+	 // mapStatus has to be preserved for backward compat.
+	 // in /directoryperson it's been replaced with planStatus
 	 final @RequestParam(required = false) String mapStatus,
+
+	 // planStatus semantics have to be preserved for backward compat.
+	 // in /directoryperson it's different: planStatus means the
+	 // same thing as mapStatus here and a new param - planExists -
+	 // replaces planStatus
 	 final @RequestParam(required = false) String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false)  Boolean myPlans,
@@ -226,8 +233,12 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
-	 final @RequestParam(required = false) String mapStatus,
+	 // Semantics of planStatus in /directoryperson changed w/r/t /students/search
+	 // see notes in that handler
 	 final @RequestParam(required = false) String planStatus,
+	 // planExists here is essentially a rename of of planStatus /students/search
+	 // see notes in that handler
+	 final @RequestParam(required = false) String planExists,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -250,7 +261,7 @@ public class PersonSearchController extends AbstractBaseController {
 				gpaEarnedMin,gpaEarnedMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				mapStatus,planStatus,
+				planStatus,planExists,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage));
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
@@ -273,8 +284,12 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
-	 final @RequestParam(required = false) String mapStatus,
+	 // Semantics of planStatus in /directoryperson changed w/r/t /students/search
+	 // see notes in that handler
 	 final @RequestParam(required = false) String planStatus,
+	 // planExists here is essentially a rename of of planStatus /students/search
+	 // see notes in that handler
+	 final @RequestParam(required = false) String planExists,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -297,7 +312,7 @@ public class PersonSearchController extends AbstractBaseController {
 				gpaEarnedMin,gpaEarnedMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				mapStatus,planStatus,
+				planStatus,planExists,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage));
 	}
 		

@@ -34,17 +34,19 @@ import org.jasig.ssp.web.api.PersonSearchController;
 public class PersonSearchRequest {
 	
 	
-	public static final String PLAN_STATUS_ACTIVE = "ACTIVE";
+	public static final String PLAN_EXISTS_ACTIVE = "ACTIVE";
 	
-	public static final String PLAN_STATUS_INACTIVE = "INACTIVE";
+	public static final String PLAN_EXISTS_INACTIVE = "INACTIVE";
 
-	public static final String MAP_STATUS_ON_PLAN = "ON_PLAN";
-	
-	public static final String MAP_STATUS_OFF_PLAN = "OFF_PLAN";
+	public static final String PLAN_EXISTS_NONE = "NONE";
 
-	public static final String MAP_STATUS_ON_TRACK_SUBSTITUTION = "ON_TRACK_SUBSTITUTIO";
+	public static final String PLAN_STATUS_ON_PLAN = "ON_PLAN";
 	
-	public static final String MAP_STATUS_ON_TRACK_SEQUENCE = "ON_TRACK_SEQUENCE";
+	public static final String PLAN_STATUS_OFF_PLAN = "OFF_PLAN";
+
+	public static final String PLAN_STATUS_ON_TRACK_SUBSTITUTION = "ON_TRACK_SUBSTITUTIO";
+	
+	public static final String PLAN_STATUS_ON_TRACK_SEQUENCE = "ON_TRACK_SEQUENCE";
 	
 	public static final String EARLY_ALERT_RESPONSE_RESPONSE_CURRENT = "RESPONSE_CURRENT";
 	
@@ -83,11 +85,11 @@ public class PersonSearchRequest {
 	
 	private String earlyAlertResponseLate;
 	
-	private String planStatus;
+	private String planExists;
 	
 	private String sapStatusCode;
 	
-	private String mapStatus;
+	private String planStatus;
 	
 	private Boolean myCaseload;
 	
@@ -232,16 +234,6 @@ public class PersonSearchRequest {
 	}
 
 
-	public String getMapStatus() {
-		return mapStatus;
-	}
-
-
-	public void setMapStatus(String mapStatus) {
-		this.mapStatus = mapStatus;
-	}
-
-
 	public String getPlanStatus() {
 		return planStatus;
 	}
@@ -249,6 +241,16 @@ public class PersonSearchRequest {
 
 	public void setPlanStatus(String planStatus) {
 		this.planStatus = planStatus;
+	}
+
+
+	public String getPlanExists() {
+		return planExists;
+	}
+
+
+	public void setPlanExists(String planExists) {
+		this.planExists = planExists;
 	}
 
 

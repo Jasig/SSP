@@ -26,14 +26,27 @@ Ext.define('Ssp.store.PlanStatus', {
         me.callParent( arguments );
 		Ext.apply(this, { proxy: '' ,
 			  autoLoad: false });
-		me.load();
         return me;
     },
     load: function() {
         var me=this;
-        var values = [{ displayValue:'Active', code: 'ACTIVE', booleanValue: true },
-                      { displayValue:'Inactive', code: 'INACTIVE', booleanValue: false }
+        var termBound = me.configStore.findRecord('name','map_plan_status_term_bound_strict', 0, false, false, true).get('value');
+        var substitutableCourses = me.configStore.findRecord('name','map_plan_status_use_substitutable_courses', 0, false, false, true).get('value');
+
+        var values = [{ displayValue:'On Plan', code: 'ON_PLAN', booleanValue: true },
+                      { displayValue:'Off Plan', code: 'OFF_PLAN', booleanValue: false },
+                      { displayValue:'On Track Sequence', code: 'ON_TRACK_SEQUENCE', booleanValue: true },
+                      { displayValue:'On Track Substitution', code: 'ON_TRACK_SUBSTITUTION', booleanValue: false }
         ];
+
+        if(substitutableCourses.trim().toLowerCase() === 'false')
+        {
+        	values.splice(3, 1);
+        }    
+        if(termBound.trim().toLowerCase() === 'true')
+        {
+        	values.splice(2, 1);
+        }
         // set the model
         me.loadData( values );
         return me;    	

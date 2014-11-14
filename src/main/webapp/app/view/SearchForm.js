@@ -26,9 +26,9 @@ Ext.define('Ssp.view.SearchForm',{
      	appEventsController: 'appEventsController',
     	programStatusesStore: 'programStatusesStore',
         coachesStore: 'coachesStore',
-        planStatusStore: 'planStatusStore',
+        planExistsStore: 'planExistsStore',
         sapStatusesStore: 'sapStatusesActiveUnpagedStore',
-        mapStatusStore: 'mapStatusStore',
+        planStatusStore: 'planStatusStore',
         personTableTypesStore: 'personTableTypesStore',
         currentlyRegisteredStore: 'currentlyRegisteredStore',
         earlyAlertResponseLateStore: 'earlyAlertResponseLateStore',
@@ -57,7 +57,7 @@ Ext.define('Ssp.view.SearchForm',{
 	initComponent: function() {
     	var me=this;
     	me.configStore.load();
-    	me.mapStatusStore.configStore = me.configStore;
+    	me.planStatusStore.configStore = me.configStore;
         Ext.applyIf(me, {
             width: '50%',
             manageOverflow: 2,
@@ -84,12 +84,7 @@ Ext.define('Ssp.view.SearchForm',{
 			       fieldLabel: 'My Plans',
 			       name: 'myPlans',
 			       itemId: 'myPlans',
-				   columnWidth: 0.33,
-			       listeners: {
-			           change: function() {
-			           	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
-			           }
-			       }
+				   columnWidth: 0.33
 			   },
 				{
 			        xtype: 'checkboxfield',
@@ -108,11 +103,6 @@ Ext.define('Ssp.view.SearchForm',{
 				    itemId: 'myCaseload',
 				    enableKeyEvents:true,
 				    labelWidth:100,
-			        listeners: {
-			            change: function() {
-			             	Ext.ComponentQuery.query('[name=planStatus]')[0].focus();
-			              }
-			        },
 				   labelAlign: 'right',
 				   columnWidth: 0.33
 			   }
@@ -330,26 +320,26 @@ Ext.define('Ssp.view.SearchForm',{
 					                    items: [
 	                {
 			   		    xtype: 'combobox',
-	                    fieldLabel: 'MAP Status',
+	                    fieldLabel: 'Plan Status',
 	                    columnWidth: 0.5,
 	                    emptyText: 'Any',
-	                    name: 'mapStatus',
-		                itemId: 'mapStatus',
-	                    store: me.mapStatusStore,
+	                    name: 'planStatus',
+		                itemId: 'planStatus',
+	                    store: me.planStatusStore,
 	   		   		    valueField: 'code',
 			   		    displayField: 'displayValue',
 			   		    editable: false
 	                },      
 	                {
 			   		    xtype: 'combobox',
-	                    fieldLabel: 'Plan Status',
+	                    fieldLabel: 'Plan Exists',
 	                    columnWidth: 0.5,
 	                    emptyText: 'Any',
-	                    name: 'planStatus',
-		                itemId: 'planStatus',
+	                    name: 'planExists',
+		                itemId: 'planExists',
 						labelAlign: 'right',
 						labelWidth:100,
-	                    store: me.planStatusStore,
+	                    store: me.planExistsStore,
 	   		   		    valueField: 'code',
 			   		    displayField: 'displayValue',
 			   		 editable: false

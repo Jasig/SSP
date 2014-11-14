@@ -35,7 +35,7 @@ public interface PersonSearchRequestTOFactory extends
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, 
+			String sapStatusCode, String planStatus, String planExists,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType, SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	PersonSearchRequest from(String studentId, String firstName, String lastName,
@@ -43,7 +43,7 @@ public interface PersonSearchRequestTOFactory extends
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, 
+			String sapStatusCode, String planStatus, String planExists,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate, String actualStartTerm) throws ObjectNotFoundException;
 
 }

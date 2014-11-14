@@ -177,7 +177,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 
 	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
 	@RequestMapping(value="/search", method = RequestMethod.GET)
-	public @ResponseBody void  search2(	
+	public @ResponseBody void  search(
 	 HttpServletResponse response,
 	 final @RequestParam(required = false) String schoolId,
 	 final @RequestParam(required = false) String firstName,
@@ -193,8 +193,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
 	 final @RequestParam(required = false) String specialServiceGroup,
-	 final @RequestParam(required = false) String mapStatus,
 	 final @RequestParam(required = false) String planStatus,
+	 final @RequestParam(required = false) String planExists,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -221,7 +221,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				gpaEarnedMin,gpaEarnedMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				mapStatus,planStatus,
+				planStatus,planExists,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage);
 
 		service.exportDirectoryPersonSearch(response.getWriter(), form);

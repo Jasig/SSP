@@ -286,11 +286,11 @@ public class DirectoryPersonSearchDao  {
 		//credit hours earned
 		buildCreditHours(personSearchRequest, filterTracker, stringBuilder);
 		
-		//mapStatus
-		buildMapStatus(personSearchRequest, filterTracker,stringBuilder);
-		
 		//planStatus
-		buildPlanStatus(personSearchRequest,filterTracker, stringBuilder);
+		buildPlanStatus(personSearchRequest, filterTracker,stringBuilder);
+		
+		//planExists
+		buildPlanExists(personSearchRequest,filterTracker, stringBuilder);
 		  
 		//financialAidStatus
 		buildFinancialAidStatus(personSearchRequest,filterTracker, stringBuilder);
@@ -503,32 +503,36 @@ public class DirectoryPersonSearchDao  {
 			params.put("lastName",personSearchRequest.getLastName().trim().toUpperCase() + "%");
 		}
 
-		if(hasPlanStatus(personSearchRequest))
+		if(hasPlanExists(personSearchRequest))
 		{
-			params.put("planObjectStatus", 
-					PersonSearchRequest.PLAN_STATUS_ACTIVE.equals(personSearchRequest.getPlanStatus()) 
-					? ObjectStatus.ACTIVE : ObjectStatus.INACTIVE);
+			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
+				params.put("planObjectStatus",ObjectStatus.ACTIVE);
+			}
+			if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
+				params.put("planObjectStatus",ObjectStatus.INACTIVE);
+			}
+			// otherwise the conditional is handled structurally (exists test)
 		}
-		if(hasMapStatus(personSearchRequest))
+		if(hasPlanStatus(personSearchRequest))
 		{ 
 			PlanStatus param = null;
-			if(PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_ON_PLAN.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.ON;
 			}
-			if(PersonSearchRequest.MAP_STATUS_OFF_PLAN.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_OFF_PLAN.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.OFF;
 			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.ON_TRACK_SEQUENCE;
 			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.ON_TRACK_SUBSTITUTION;
 			}			
-			params.put("mapStatus",param);
+			params.put("planStatus",param);
 		}
 		
 		if(hasGpaCriteria(personSearchRequest))
@@ -659,31 +663,39 @@ public class DirectoryPersonSearchDao  {
 	}
 
 
-	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
+	private void buildPlanExists(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
 	{
-		if(hasPlanStatus(personSearchRequest))
+		if(hasPlanExists(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" plan.objectStatus = :planObjectStatus and plan.person.id = dp.personId ");
+			if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+				stringBuilder.append(" not exists elements(p.plans) ");
+			} else {
+				stringBuilder.append(" plan.objectStatus = :planObjectStatus and plan.person.id = dp.personId ");
+			}
+			if ( PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists()) ) {
+				stringBuilder.append(" and not exists ( from Plan as myPlans where myPlans.person.id = dp.personId and myPlans.objectStatus = "
+						+ ObjectStatus.ACTIVE.ordinal() + " ) ");
+			}
 		}
 	}
 
 
-	private void buildMapStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
+	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
 	{
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esps.status = :mapStatus and esps.schoolId = dp.schoolId ");
+			stringBuilder.append(" esps.status = :planStatus and esps.schoolId = dp.schoolId ");
 		}
 		
-		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" msr.plan in elements(p.plans) ");
-			stringBuilder.append(" and msr.planStatus = :mapStatus and msr.person.id = dp.personId ");
+			stringBuilder.append(" and msr.planStatus = :planStatus and msr.person.id = dp.personId ");
 			
 		}
 	}
@@ -820,10 +832,14 @@ public class DirectoryPersonSearchDao  {
 			StringBuilder stringBuilder) 
 	{
 		
-		if(hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest))
+		if(hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest))
 		{
-			stringBuilder.append(" join p.plans as plan ");
-		}	
+			if ( hasPlanExists(personSearchRequest) && PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+				stringBuilder.append(" left join p.plans as plan ");
+			} else {
+				stringBuilder.append(" join p.plans as plan ");
+			}
+		}
 		
 		if(this.hasSpecialServiceGroup(personSearchRequest)){
 			stringBuilder.append(" inner join p.specialServiceGroups as specialServiceGroups ");
@@ -831,14 +847,14 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) 
+	private boolean hasPlanExists(PersonSearchRequest personSearchRequest)
 	{
-		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
+		return !StringUtils.isEmpty(personSearchRequest.getPlanExists());
 	}
 
 
-	private boolean hasMapStatus(PersonSearchRequest personSearchRequest) {
-		return !StringUtils.isEmpty(personSearchRequest.getMapStatus());
+	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) {
+		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
 	}
 
 
@@ -848,8 +864,8 @@ public class DirectoryPersonSearchDao  {
 	}
 	
 	private boolean personRequired(PersonSearchRequest personSearchRequest){
-		return hasSpecialServiceGroup(personSearchRequest) || hasPlanStatus(personSearchRequest) 
-				|| hasMyPlans(personSearchRequest) || hasMapStatus(personSearchRequest);
+		return hasSpecialServiceGroup(personSearchRequest) || hasPlanExists(personSearchRequest)
+				|| hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest);
 	}
 
 	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
@@ -875,11 +891,11 @@ public class DirectoryPersonSearchDao  {
 		
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			stringBuilder.append(", ExternalPersonPlanStatus esps ");
 		}
-		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
 		{
 			stringBuilder.append(", MapStatusReport msr ");
 		}

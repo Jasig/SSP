@@ -82,15 +82,12 @@ Ext.define('Ssp.controller.SearchFormViewController', {
      'financialAidSapStatusCode':{
 			specialkey: "specialKeyPressed"
 	 },	 
-     'mapStatus':{
+     'planStatus':{
 			specialkey: "specialKeyPressed"
 	 },		
-     'planStatus':{
+     'planExists':{
 			specialkey: "specialKeyPressed"
-	 },	
-     'planStatus':{
-			specialkey: "specialKeyPressed"
-	 },		 
+	 },
 	'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
 			blur: "hoursEarnedMinChanged"
@@ -168,8 +165,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=currentlyRegistered]')[0].value,
 				me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
 				me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
-				me.getView().query('combobox[name=mapStatus]')[0].value,
 				me.getView().query('combobox[name=planStatus]')[0].value,
+				me.getView().query('combobox[name=planExists]')[0].value,
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
 				me.getView().query('checkbox[name=myPlans]')[0].value,
 				me.getView().query('checkbox[name=myWatchList]')[0].value,
@@ -695,8 +692,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				currentlyRegistered: me.getView().query('combobox[name=currentlyRegistered]')[0].value == null ? null : new Boolean(me.getView().query('combobox[name=currentlyRegistered]')[0].value).toString(),
 				earlyAlertResponseLate: me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
 				sapStatusCode: me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
-				mapStatus: me.getView().query('combobox[name=mapStatus]')[0].value,
 				planStatus: me.getView().query('combobox[name=planStatus]')[0].value,
+				planExists: me.getView().query('combobox[name=planExists]')[0].value,
 				myCaseload: me.getView().query('checkbox[name=myCaseload]')[0].value,
 				myPlans: me.getView().query('checkbox[name=myPlans]')[0].value,
 				myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,

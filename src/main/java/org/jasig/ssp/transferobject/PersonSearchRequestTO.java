@@ -60,9 +60,9 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private String sapStatusCode;
 	
-	private String mapStatus;
-	
 	private String planStatus;
+	
+	private String planExists;
 	
 	private Boolean myCaseload;
 	
@@ -191,12 +191,12 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.sapStatusCode = sapStatusCode;
 	}
 
-	public String getMapStatus() {
-		return mapStatus;
+	public String getPlanStatus() {
+		return planStatus;
 	}
 
-	public void setMapStatus(String mapStatus) {
-		this.mapStatus = mapStatus;
+	public void setPlanStatus(String planStatus) {
+		this.planStatus = planStatus;
 	}
 
 	@Override
@@ -204,12 +204,12 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		//NO-OP because this TO should only be used for requests.
 	}
 
-	public String getPlanStatus() {
-		return planStatus;
+	public String getPlanExists() {
+		return planExists;
 	}
 
-	public void setPlanStatus(String planStatus) {
-		this.planStatus = planStatus;
+	public void setPlanExists(String planExists) {
+		this.planExists = planExists;
 	}
 
 	public Boolean getMyCaseload() {

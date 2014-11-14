@@ -79,7 +79,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setGpaEarnedMin(to.getGpaEarnedMin());
 		model.setHoursEarnedMax(to.getHoursEarnedMax());
 		model.setHoursEarnedMin(to.getHoursEarnedMin());
-		model.setMapStatus(to.getMapStatus());
+		model.setPlanStatus(to.getPlanStatus());
 		if(to.getProgramStatus() != null)
 		{
 			ProgramStatus programStatus = getProgramStatusDao().get(to.getProgramStatus());
@@ -95,7 +95,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setSchoolId(to.getSchoolId());
 		model.setFirstName(to.getFirstName());
 		model.setLastName(to.getLastName());
-		model.setPlanStatus(to.getPlanStatus());
+		model.setPlanExists(to.getPlanExists());
 		model.setMyCaseload(to.getMyCaseload());
 		model.setMyPlans(to.getMyPlans());
 		model.setMyWatchList(to.getMyWatchList());
@@ -135,7 +135,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,
+			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,
 			Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
@@ -153,8 +153,8 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setCurrentlyRegistered(currentlyRegistered);
 		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
 		to.setSapStatusCode(sapStatusCode);
-		to.setMapStatus(mapStatus);
 		to.setPlanStatus(planStatus);
+		to.setPlanExists(planExists);
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
 		to.setMyWatchList(myWatchList);
@@ -171,7 +171,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
-			String sapStatusCode, String mapStatus, String planStatus, Boolean myCaseload, Boolean myPlans,Boolean myWatchList,
+			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,Boolean myWatchList,
 			Date birthDate, String actualStartTerm) throws ObjectNotFoundException {
 
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
@@ -189,8 +189,8 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setCurrentlyRegistered(currentlyRegistered);
 		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
 		to.setSapStatusCode(sapStatusCode);
-		to.setMapStatus(mapStatus);
 		to.setPlanStatus(planStatus);
+		to.setPlanExists(planExists);
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
 		to.setMyWatchList(myWatchList);

@@ -261,11 +261,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		//credit hours earned
 		buildCreditHours(personSearchRequest, filterTracker, stringBuilder);
 		
-		//mapStatus
-		buildMapStatus(personSearchRequest, filterTracker,stringBuilder);
-		
 		//planStatus
-		buildPlanStatus(personSearchRequest,filterTracker, stringBuilder);
+		buildPlanStatus(personSearchRequest, filterTracker,stringBuilder);
+		
+		//planExists
+		buildPlanExists(personSearchRequest,filterTracker, stringBuilder);
 		  
 		//financialAidStatus
 		buildFinancialAidStatus(personSearchRequest,filterTracker, stringBuilder);
@@ -392,32 +392,36 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.setString("studentIdOrName", wildcardedStudentIdOrNameTerm);
 		}
 
-		if(hasPlanStatus(personSearchRequest))
+		if(hasPlanExists(personSearchRequest))
 		{
-			query.setInteger("planObjectStatus", 
-					PersonSearchRequest.PLAN_STATUS_ACTIVE.equals(personSearchRequest.getPlanStatus()) 
-					? ObjectStatus.ACTIVE.ordinal() : ObjectStatus.INACTIVE.ordinal());
+			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
+				query.setInteger("planObjectStatus",ObjectStatus.ACTIVE.ordinal());
+			}
+			if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
+				query.setInteger("planObjectStatus",ObjectStatus.INACTIVE.ordinal());
+			}
+			// otherwise the conditional is handled structurally (exists test)
 		}
-		if(hasMapStatus(personSearchRequest))
+		if(hasPlanStatus(personSearchRequest))
 		{ 
 			PlanStatus param = null;
-			if(PersonSearchRequest.MAP_STATUS_ON_PLAN.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_ON_PLAN.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.ON;
 			}
-			if(PersonSearchRequest.MAP_STATUS_OFF_PLAN.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_OFF_PLAN.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.OFF;
 			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.ON_TRACK_SEQUENCE;
 			}
-			if(PersonSearchRequest.MAP_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getMapStatus()))
+			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getPlanStatus()))
 			{
 				param = PlanStatus.ON_TRACK_SUBSTITUTION;
 			}			
-			query.setString("mapStatus",param.name());
+			query.setString("planStatus",param == null ? null : param.name());
 		}
 		
 		if(hasGpaCriteria(personSearchRequest))
@@ -545,32 +549,40 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	}
 
 
-	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
+	private void buildPlanExists(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
 	{
-		if(hasPlanStatus(personSearchRequest))
+		if(hasPlanExists(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" plan.objectStatus = :planObjectStatus ");
+			if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+				stringBuilder.append(" not exists elements(p.plans) ");
+			} else {
+				stringBuilder.append(" plan.objectStatus = :planObjectStatus ");
+			}
+			if ( PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists()) ) {
+				stringBuilder.append(" and not exists ( from Plan as myPlans where myPlans.person.id = p.id and myPlans.objectStatus = "
+						+ ObjectStatus.ACTIVE.ordinal() + " ) ");
+			}
 		}
 	}
 
 
-	private void buildMapStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
+	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
 	{
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esps.status = :mapStatus ");
+			stringBuilder.append(" esps.status = :planStatus ");
 			stringBuilder.append(" and esps.schoolId = p.schoolId ");
 		}
 		
-		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" msr.plan in elements(p.plans) ");
-			stringBuilder.append(" and msr.planStatus = :mapStatus ");
+			stringBuilder.append(" and msr.planStatus = :planStatus ");
 			
 		}
 	}
@@ -698,9 +710,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		stringBuilder.append(" left join p.programStatuses as programStatuses ");
 		stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
 		
-		if(hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest))
+		if(hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest))
 		{
-			stringBuilder.append(" join p.plans as plan ");
+			if ( hasPlanExists(personSearchRequest) && PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+				stringBuilder.append(" left join p.plans as plan ");
+			} else {
+				stringBuilder.append(" join p.plans as plan ");
+			}
 		}	
 		
 		if(this.hasSpecialServiceGroup(personSearchRequest)){
@@ -709,14 +725,14 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
-	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) 
+	private boolean hasPlanExists(PersonSearchRequest personSearchRequest)
 	{
-		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
+		return !StringUtils.isEmpty(personSearchRequest.getPlanExists());
 	}
 
 
-	private boolean hasMapStatus(PersonSearchRequest personSearchRequest) {
-		return !StringUtils.isEmpty(personSearchRequest.getMapStatus());
+	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) {
+		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
 	}
 
 
@@ -742,11 +758,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
 			stringBuilder.append(", ExternalPersonPlanStatus esps ");
 		}
-		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
+		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
 		{
 			stringBuilder.append(", org.jasig.ssp.model.MapStatusReport msr ");
 		}
@@ -868,9 +884,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.add(Restrictions.like("programStatus", personSearchRequest.getProgramStatus()));
 		}
 		
-		if(StringUtils.isNotBlank(personSearchRequest.getMapStatus()))
+		if(StringUtils.isNotBlank(personSearchRequest.getPlanStatus()))
 		{
-			query.add(Restrictions.like("mapStatus", personSearchRequest.getMapStatus()));
+			query.add(Restrictions.like("mapStatus", personSearchRequest.getPlanStatus()));
 		}
 		
 		return null;
@@ -883,18 +899,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(personSearchRequest.getSpecialServiceGroup() != null){
 			stringBuilder.append(" Person person ");
 		}
-		
-		/*boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
-
-		if(hasMapStatus(personSearchRequest) && !calculateMapPlanStatus)
-		{
-			stringBuilder.append(", ExternalPersonPlanStatus esps ");
-		}
-		if(hasMapStatus(personSearchRequest) && calculateMapPlanStatus)
-		{
-			stringBuilder.append(", org.jasig.ssp.model.MapStatusReport msr ");
-		}
-		*/
 	}
 
 }
