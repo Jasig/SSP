@@ -505,13 +505,16 @@ public class DirectoryPersonSearchDao  {
 
 		if(hasPlanExists(personSearchRequest))
 		{
+			// otherwise the conditional is handled structurally (exists test)
 			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
 				params.put("planObjectStatus",ObjectStatus.ACTIVE);
-			}
-			if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
+			} else if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
 				params.put("planObjectStatus",ObjectStatus.INACTIVE);
+			} else if (PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists())) {
+				// this is handled structurally (exists test)
+			} else {
+				params.put("planObjectStatus",null);
 			}
-			// otherwise the conditional is handled structurally (exists test)
 		}
 		if(hasPlanStatus(personSearchRequest))
 		{ 

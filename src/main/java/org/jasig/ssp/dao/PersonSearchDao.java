@@ -396,11 +396,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		{
 			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
 				query.setInteger("planObjectStatus",ObjectStatus.ACTIVE.ordinal());
-			}
-			if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
+			} else if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
 				query.setInteger("planObjectStatus",ObjectStatus.INACTIVE.ordinal());
+			} else if (PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists())) {
+				// this is handled structurally (exists test)
+			} else {
+				query.setParameter("planObjectStatus", null);
 			}
-			// otherwise the conditional is handled structurally (exists test)
 		}
 		if(hasPlanStatus(personSearchRequest))
 		{ 

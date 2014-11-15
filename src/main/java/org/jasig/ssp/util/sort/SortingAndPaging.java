@@ -402,12 +402,14 @@ public final class SortingAndPaging { // NOPMD
 		{
 			Session thisSession = (Session)session;
 			fullQuery = addPagingToQuery(thisSession.createQuery(fullHql.toString())).setProperties(bindParams);
+			fullQuery = postProcessBindParams(fullQuery, bindParams);
 			rowCntQuery = thisSession.createQuery(rowCntHql.toString());
 		} else
 		if(session instanceof StatelessSession)
 		{
 			StatelessSession thisStatelessSession = (StatelessSession)session;
 			fullQuery = addPagingToQuery(thisStatelessSession.createQuery(fullHql.toString())).setProperties(bindParams);
+			fullQuery = postProcessBindParams(fullQuery, bindParams);
 			rowCntQuery = thisStatelessSession.createQuery(rowCntHql.toString());
 		} else
 		{
@@ -416,6 +418,7 @@ public final class SortingAndPaging { // NOPMD
 		}
 
 		rowCntQuery.setProperties(bindParams);
+		rowCntQuery = postProcessBindParams(rowCntQuery, bindParams);
 		final Long totalRows = (Long)rowCntQuery.list().get(0);
 
 		// Sorting not added until here b/c if it's present in the count() query
@@ -423,6 +426,27 @@ public final class SortingAndPaging { // NOPMD
 		// present in a group by/aggr function
 		return new Pair<Long,Query>(totalRows,fullQuery);
 	}
+
+	/**
+	 * Workaround for <a href="https://issues.jasig.org/browse/SSP-2981">SSP-2981</a> /
+	 * <a href="https://hibernate.atlassian.net/browse/HHH-7705">HHH-7705</a>.
+	 *
+	 * @param query
+	 * @param bindParams
+	 * @return
+	 */
+	private Query postProcessBindParams(Query query, Map<String,Object> bindParams) {
+		if ( bindParams == null || bindParams.isEmpty() ) {
+			return query;
+		}
+		for ( Map.Entry<String,Object> entry : bindParams.entrySet() ) {
+			if ( entry.getValue() == null ) {
+				query.setParameter(entry.getKey(), entry.getValue());
+			}
+		}
+		return query;
+	}
+
 	public Long applySortingAndPagingToPagedQuery(final Criteria query,
 			final boolean filterByStatus) {
 
