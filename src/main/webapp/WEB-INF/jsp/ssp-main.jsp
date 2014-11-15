@@ -76,7 +76,7 @@
     // If renderSSPFullScreen is set to false
     // then the sspParentDivId will allow you to set a div
     // in which to render the SSP App.
-    var renderSSPFullScreen = false;
+    var renderSSPFullScreen = true;
     var sspParentDivId = '${n}ssp';
     // When set to true ssp will turn on internal auditing functionality
     var sspInDevelopMode = ${model.developModeOn};

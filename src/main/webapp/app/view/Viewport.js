@@ -57,7 +57,8 @@ Ext.define('Ssp.view.Viewport',{
         }
         if (me.renderFullScreen==true)
         {
-        	me.el = el = Ext.getBody();
+            // me.el = el = Ext.getBody();
+            me.el = el = Ext.getElementById( this.parentDivId );
         }else{
         	me.el = el = Ext.getElementById( this.parentDivId );
         }
@@ -78,8 +79,8 @@ Ext.define('Ssp.view.Viewport',{
 
         if (this.renderFullScreen==true)
         {
-            me.width = Ext.Element.getViewportWidth();
-            me.height = Ext.Element.getViewportHeight();
+            me.width = Ext.Element.getViewportWidth()-12;
+            me.height = Ext.Element.getViewportHeight()-145;
         }else{
         	me.width = Ext.Element.getViewportWidth()-35; // me.el.getViewSize().width;
             me.height = me.el.getViewSize().height; //Ext.Element.getViewportHeight()-160;  
@@ -106,8 +107,8 @@ Ext.define('Ssp.view.Viewport',{
     	// originally drawn on the page, but the width will be flexible
     	if (this.renderFullScreen==true)
     	{
-    		newWidth = Ext.Element.getViewportWidth();
-    		newHeight = Ext.Element.getViewportHeight();
+    		newWidth = Ext.Element.getViewportWidth()-12;
+    		newHeight = Ext.Element.getViewportHeight()-145;
     	}else{
     		newWidth = Ext.Element.getViewportWidth()-35; // me.width+(width-me.el.getWidth());
     		newHeight = me.el.getViewSize().height; //Ext.Element.getViewportHeight()-160; // me.height;
