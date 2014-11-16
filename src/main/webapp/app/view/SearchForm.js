@@ -47,6 +47,7 @@ Ext.define('Ssp.view.SearchForm',{
     },    
     width: '100%',
     height: '100%',
+    overflowY: 'scroll',
     scroll: 'vertical',
 	listeners: {
 	      afterlayout: function() {
