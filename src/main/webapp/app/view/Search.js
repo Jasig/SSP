@@ -218,7 +218,13 @@ Ext.define('Ssp.view.Search', {
                 xtype: 'searchForm',
                 itemId: 'searchBar',
                 hidden: true,
-                flex: 1
+                flex: 1,
+                // searchForm needs to register to hear about inter-tab nav events so we pass along the configure
+                // tabPanel as an attempt to avoid arbitrary componentmanager queries or fragile up().up().up()
+                // navigation. Specifically, searchForm needs to manage the state of this component, so we also pass
+                // ourselves in as 'tab'
+                tab: me,
+                tabPanel: me.tabPanel
             }]
         });
         

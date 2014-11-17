@@ -37,7 +37,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			afterlayout: {
 				fn: 'onAfterLayout',
 				single: true
-			}
+			},
+            show: 'onShow',
+            hide: 'onHide'
     	},
   
      'myPlans':{
@@ -117,7 +119,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 	onAfterLayout: function(comp, eobj){
 		var me=this;
-		
+		me.registerBeforeTabChange();
 		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearch, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
@@ -126,6 +128,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},
     destroy: function() {
     	var me=this;
+    	me.deRegisterBeforeTabChange();
     	me.appEventsController.removeEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearch, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onSearchActionComboSelect', callBackFunc: me.onSearchActionComboSelect, scope: me});
 
@@ -138,6 +141,50 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 	   	return me.callParent( arguments );
     },
+	getThisTab: function() {
+		var me = this;
+		return me.getView().tab;
+	},
+	getTabPanel: function() {
+		var me = this;
+		return me.getView().tabPanel;
+	},
+	// All of this searchGridPager show/hide stuff is an attempt to ensure the entire search form renders on
+	// a 768 vertical resolution. See SearchForm.js for more notes
+	getSearchGridPager: function() {
+		var me = this;
+		return me.getThisTab().queryById('searchGridPager');
+	},
+	hideSearchGridPager: function() {
+		var me = this;
+		me.getSearchGridPager().hide();
+	},
+	showSearchGridPager: function() {
+		var me = this;
+		me.getSearchGridPager().show();
+	},
+	onShow: function() {
+		var me = this;
+		me.hideSearchGridPager();
+	},
+	onHide: function() {
+		var me = this;
+		me.showSearchGridPager();
+	},
+	registerBeforeTabChange: function() {
+		var me = this;
+		me.getTabPanel().on('beforetabchange', me.onBeforeTabChange, me);
+	},
+	deRegisterBeforeTabChange: function() {
+		var me = this;
+		me.getTabPanel().un('beforetabchange', me.onBeforeTabChange, me);
+	},
+	onBeforeTabChange: function( tabPanel, newCard, oldCard, eOpts ) {
+		var me = this;
+		if ( newCard.items.items[0] === me.getThisTab() && !(me.getView().isHidden())) {
+			me.hideSearchGridPager();
+		}
+	},
     searchSuccess: function( r, scope){
     	var me=scope;
     	me.searchStore.pageSize = me.searchStore.data.length;

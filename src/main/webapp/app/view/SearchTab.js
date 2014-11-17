@@ -40,6 +40,7 @@ Ext.define('Ssp.view.SearchTab', {
                     	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
                     		newTab.items.items[0].isActiveTab = true;
                     		oldTab.items.items[0].isActiveTab = false;
+
                     		if (newTab.items.items[0].tabContext === 'search') {
                     			return;
                     		} else {
@@ -53,21 +54,23 @@ Ext.define('Ssp.view.SearchTab', {
                         autoScroll: true,
                         border: 0,
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0, tabPanel: me}]
                     },{
                         title: 'My Watch List',
                         autoScroll: true,
                         border: 0,
                         hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1, tabPanel: me}]
                     },{
                         title: 'Search',
                         autoScroll: true,
                         hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
                         border: 0,
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: 'search', isActiveTab: me.defaultActiveTabIndex() === 2}]
+                        // search needs to register to hear about inter-tab nav events so we pass this panel in as an
+                        // attempt to avoid arbitrary componentmanager queries or fragile up().up().up() navigation
+                        items: [{xtype: 'search', tabContext: 'search', isActiveTab: me.defaultActiveTabIndex() === 2, tabPanel: me}]
                     }]
                 })
             ]
