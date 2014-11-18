@@ -59,7 +59,9 @@ Ext.define('Ssp.view.tools.map.FAView', {
                 align: 'stretch',
                 defaultType: 'displayfield',
                 fieldDefaults: {
-                    msgTarget: 'side'
+                    msgTarget: 'side',
+                    width: '100%',
+                    height: '100%'
                 },
                 items: [ {
                     xtype: 'fieldset',
@@ -114,7 +116,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         name: 'gpa20AHrsNeeded',
                         itemId: 'gpa20AHrsNeeded',
 						value: "N/A",
-						labelWidth: 280
+						labelWidth: 290
                     },
                     {
                     	padding: '0 0 0 20',
@@ -122,7 +124,7 @@ Ext.define('Ssp.view.tools.map.FAView', {
                         name: 'gpa20BHrsNeeded',
                         itemId: 'gpa20BHrsNeeded',
 						value: "N/A",
-						labelWidth: 280
+						labelWidth: 290
                     },
                     {
                         fieldLabel: 'Hrs Earned',

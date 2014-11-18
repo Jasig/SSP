@@ -152,8 +152,8 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
             me.getCreditCompletionRateField().setValue(me.handleNull(gpa.creditCompletionRate) === '' ? '' : (Ext.util.Format.number(gpa.creditCompletionRate, '0.00') + '%'));
             me.getCurrentRestrictionsField().setValue(me.handleNull(gpa.currentRestrictions))
 
-            me.getCreditHoursEarnedField().setValue(me.handleNull(gpa.creditHoursEarned));
-            me.getCreditHoursAttemptedField().setValue(me.handleNull(gpa.creditHoursAttempted));
+            me.getCreditHoursEarnedField().setValue(me.handleNull(Ext.util.Format.number(gpa.creditHoursEarned, '0.00')));
+            me.getCreditHoursAttemptedField().setValue(me.handleNull(Ext.util.Format.number(gpa.creditHoursAttempted, '0.00')));
             
         }
         
@@ -175,8 +175,8 @@ Ext.define('Ssp.controller.tool.map.FAViewController', {
 			else
 				me.getOriginalLoanAmountField().setValue('');
         	me.getFinancialAidGpaField().setValue(Ext.util.Format.number(me.handleNull(financialAid.financialAidGpa), '0.00'));
-			me.getGpa20AHrsNeededField().setValue(me.handleNull(financialAid.gpa20AHrsNeeded));
-	        me.getGpa20BHrsNeededField().setValue(me.handleNull(financialAid.gpa20BHrsNeeded));
+			me.getGpa20AHrsNeededField().setValue(Ext.util.Format.number(me.handleNull(financialAid.gpa20AHrsNeeded), '0.00'));
+	        me.getGpa20BHrsNeededField().setValue(Ext.util.Format.number(me.handleNull(financialAid.gpa20BHrsNeeded), '0.00'));
 			me.getNeededFor67PtcCompletionField().setValue(me.handleNull(financialAid.neededFor67PtcCompletion) === '' ? '' : (Ext.util.Format.number(financialAid.neededFor67PtcCompletion, '0.00') + '%'));
 			
 						me.sapStatusCode = financialAid.sapStatusCode;

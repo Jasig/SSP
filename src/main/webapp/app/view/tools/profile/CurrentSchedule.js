@@ -56,8 +56,10 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
 				flex: 0.25
             },
 			{
+                xtype: 'numbercolumn',
                 dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
+                format: '0.00',
 				flex: 0.07
             },
 			{

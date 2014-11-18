@@ -270,10 +270,14 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             dataIndex: 'termCode'
                         }, {
                             text: 'Attempted',
-                            dataIndex: 'creditHoursAttempted'
+                            dataIndex: 'creditHoursAttempted',
+                            xtype: 'numbercolumn',
+                            format: '0.00'
                         }, {
                             text: 'Earned',
-                            dataIndex: 'creditHoursEarned'
+                            dataIndex: 'creditHoursEarned',
+                            xtype: 'numbercolumn',
+                            format: '0.00'
                         }, {
                             text: 'GPA',
                             dataIndex: 'gradePointAverage',

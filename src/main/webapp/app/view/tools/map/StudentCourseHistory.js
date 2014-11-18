@@ -50,9 +50,10 @@ Ext.define('Ssp.view.tools.map.StudentCourseHistory', {
                 text: 'Course Title',
                 flex: 0.30
             }, {
-                xtype: 'gridcolumn',
+                xtype: 'numbercolumn',
                 dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
+                format: '0.00',
                 flex: 0.10
             }, {
                 xtype: 'gridcolumn',
