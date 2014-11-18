@@ -66,9 +66,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
     renderLink: function(){
         return function(value, metadata){
             var returnValueFormatted = "";
-            var valueHref = value.trim();
 
             if (value && value.trim()) {
+                var valueHref = value.trim();
                 if (valueHref.search(/<(.|\n)*?>/igm) < 0) {
                     if (valueHref.indexOf("//") < 0) {
                         valueHref = "http://" + valueHref;
