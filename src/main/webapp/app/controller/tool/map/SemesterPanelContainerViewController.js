@@ -208,11 +208,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.clearMapPlan();		
 		view.removeAll();
 	},
-	onCreateMapPlan:function(){
+	onCreateMapPlan: function() {
+		var me = this;
+		me.getView().setLoading(true);
+		Ext.Function.defer(me.doOnCreateMapPlan, 50, me);
+	},
+	doOnCreateMapPlan:function(){
 		var me = this;
 		var terms = me.getTerms(me.currentMapPlan);
 		
 		if(terms.length == 0){
+			me.getView().setLoading(false);
 			return;
 		}
 		me.fillSemesterStores(terms);
@@ -220,6 +226,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		Ext.suspendLayouts();
 		view.removeAll(true);
 		if(view == null){
+			me.getView().setLoading(false);
 			return;
 		}		
 		var i=0;
@@ -278,8 +285,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.currentMapPlan.repopulatePlanStores(me.semesterStores);
 		view.add(yearViews);	
 		me.currentMapPlan.dirty = false;
-		Ext.resumeLayouts(true);	
+		Ext.resumeLayouts(true);
 		me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
+		me.getView().setLoading(false);
     },
 	
 	createSemesterPanel: function(semesterName, termCode, semesterStore,editPastTerms){
