@@ -61,13 +61,8 @@ Ext.define('Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin', {
                 dataIndex: 'indicatorGroup',
                 flex: 0.20
             }, {
-                header: 'Model Code',
-                dataIndex: 'modelCode',
-                flex: 0.20,
-                renderer: 'htmlEncode'
-            }, {
-                header: 'Model Name',
-                dataIndex: 'modelName',
+                header: 'Indicator Name',
+                dataIndex: 'name',
                 flex: 0.30,
                 renderer: 'htmlEncode'
             }, {
@@ -75,9 +70,14 @@ Ext.define('Ssp.view.admin.forms.successindicator.SuccessIndicatorAdmin', {
                 dataIndex: 'code',
                 flex: 0.20
             }, {
-                header: 'Indicator Name',
-                dataIndex: 'name',
+                header: 'Model Name',
+                dataIndex: 'modelName',
                 flex: 0.30,
+                renderer: 'htmlEncode'
+            }, {
+                header: 'Model Code',
+                dataIndex: 'modelCode',
+                flex: 0.20,
                 renderer: 'htmlEncode'
             }, {
                 header: 'Sort',
