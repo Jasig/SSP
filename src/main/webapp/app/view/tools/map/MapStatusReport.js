@@ -23,29 +23,22 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.MapStatusReportController',
     inject: {
-    	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController',
-		columnRendererUtils : 'columnRendererUtils',
-    	currentMapPlan: 'currentMapPlan',
     	personLite: 'personLite',
-    	mapStatusReportStore: 'mapStatusReportStore',
     	mapStatusReportCourseDetailsStore: 'mapStatusReportCourseDetailsStore',
     	mapStatusReportTermDetailsStore: 'mapStatusReportTermDetailsStore',
-    	mapStatusReportSubstitutionDetailsStore: 'mapStatusReportSubstitutionDetailsStore',
-		person: 'currentPerson'
+    	mapStatusReportSubstitutionDetailsStore: 'mapStatusReportSubstitutionDetailsStore'
     },
-	height:780,
+	height:580,
 	width:900,   
     overflowY: 'auto',
     style : 'z-index: -1;',  
     layout: {
 		type : 'vbox',
         align: 'stretch'
-            },
+    },
     initComponent: function() {
     	var me=this;
-        Ext.apply(me,
-		{
+        Ext.apply(me, {
 			title: 'Map Status Report: '+me.personLite.get('displayFullName'),
             dockedItems: [{
                 dock: 'top',
@@ -57,11 +50,9 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
                     height: 22,
                     xtype: 'button',
                     itemId: 'closeButton'
-                }
-                ]
+                }]
             }],
-			items: [
-				{
+			items: [{
 				    xtype: 'form',
 				    defaultType: 'displayfield',
 				    id: 'statusForm',
@@ -96,8 +87,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 	                    xtype: 'button',
 	                    itemId: 'calcPlanStatusButton'
 	                }]
-				},
-			         {
+				}, {
 			        	xtype: 'gridpanel',
 			        	queryMode:'local',
 			        	title: 'Term Details',
@@ -129,10 +119,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 			            viewConfig: {
 			                markDirty: false
 			            }
-			         },
-			         { 
-			         },
-			         {
+			         }, {
 				        	xtype: 'gridpanel',
 				        	queryMode:'local',
 				        	title: 'Course Details',
@@ -168,10 +155,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				            viewConfig: {
 				                markDirty: false
 				            }
-				         }	,
-				         { 
-				         },
-				         {
+				         }, {
 					        	xtype: 'gridpanel',
 					        	queryMode:'local',
 					        	title: 'On Track Details',
@@ -219,7 +203,6 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 					            }
 					         }			         
 		]});
-
         return this.callParent(arguments);
     }
 });

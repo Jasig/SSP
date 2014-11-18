@@ -520,15 +520,16 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 	onShowMapStatus: function(button){
 		var me=this;
-		if(!me.configStore.getConfigByName('calculate_map_plan_status'))
-		{
+		if (!me.configStore.getConfigByName('calculate_map_plan_status')) {
 			Ext.Msg.alert('Plan Status for '+me.personLite.get('displayFullName')+'.','Plan Status: '+me.currentMapPlan.planStatus+'<br> Details: '+me.currentMapPlan.planStatusDetails);
-		}
-		else
-		if(me.showMapStatusPopup == null || me.showMapStatusPopup.isDestroyed)
-       		me.showMapStatusPopup = Ext.create('Ssp.view.tools.map.MapStatusReport',{hidden:true});
-		me.showMapStatusPopup.show();
-	},  
+		} else {
+		   if (me.showMapStatusPopup == null || me.showMapStatusPopup.isDestroyed) {
+			  me.showMapStatusPopup = Ext.create('Ssp.view.tools.map.MapStatusReport',{hidden:true});
+           }
+		   me.showMapStatusPopup.show();
+        }
+	},
+
     onplanNotesButtonClick: function(button){
         var me=this;
 		if(me.notesPopUp == null || me.notesPopUp.isDestroyed)

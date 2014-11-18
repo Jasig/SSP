@@ -21,9 +21,6 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
     alias: 'widget.coursesview',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
-    	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController',
-		columnRendererUtils : 'columnRendererUtils',
 		programs: 'programsFacetedStore',
 		tags: 'facetedTagsStore',
 		terms: 'termsFacetedStore',
@@ -31,7 +28,6 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		divisions: 'divisionsStore'
     },
     controller: 'Ssp.controller.tool.map.CoursesViewController',
-    
     width: '100%',
     height: '100%',
     initComponent: function(){
@@ -50,8 +46,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                 padding: '0 0 0 0',
                 width: '100%',
                 height: '100%',
-                items: [
-                    {
+                items: [{
 				    xtype: 'fieldset',
 				    border: 0,
 				    title: '',
@@ -84,9 +79,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        xtype: 'button',
 				        itemId: 'programCancel'
 				    }]
-				},
-
-                {
+				}, {
 				    xtype: 'fieldset',
 				    border: 0,
 				    title: '',
@@ -119,8 +112,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        xtype: 'button',
 				        itemId: 'tagCancel'
 				    }]
-				},
-                {
+				}, {
 				    xtype: 'fieldset',
 				    border: 0,
 				    title: '',
@@ -153,8 +145,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        xtype: 'button',
 				        itemId: 'termCancel'
 				    }]
-				},
-                {
+				}, {
 				    xtype: 'fieldset',
 				    border: 0,
 				    title: '',
@@ -223,12 +214,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        xtype: 'button',
 				        itemId: 'divisionCancel'
 				    }]
-				},
-				 {
-                    xtype: 'container',
-                    autoEl: 'hr'
-                },
-                 {
+				}, {
                     xtype: 'fieldset',
                     border: 0,
                     title: '',
@@ -239,15 +225,11 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                     defaults: {
                         anchor: '100%'
                     },
-                    
-                    items: [
-					{
-						 xtype: 'tbspacer',
-                       width: 75
-					},
-					
-					{
-                       fieldLabel: 'Filter By',
+                    items: [{
+					    xtype: 'tbspacer',
+                        width: 50
+					}, {
+                        fieldLabel: 'Filter By',
 						xtype:"textfield",
                         name: 'filterBy',
                         itemId: 'filterBy',
@@ -263,7 +245,6 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 								coursesGrid.getStore().filterBy(getFilterRecord(['title', 'formattedCourse'], searchString)); 
 		                    }
 						}
-						
                     }, {
                         tooltip: 'Clear Filter',
                         text: '',
@@ -283,20 +264,11 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		                    }
 						}
                     }]
-                
-                },
-                {
+                }, {
                     xtype : 'coursesgrid'
-                }
-            
-                ]
-            }
-            
-            
-            ]
-        
+                }]
+            }]
         });
-        
         return me.callParent(arguments);
     }
 });
@@ -324,8 +296,9 @@ function filterString(value, fields, record){
 	fields.forEach(function(field){
 		var val = record.get(field);
 		if (typeof val == "string"){
-			if(val.toLowerCase().indexOf(value.toLowerCase()) > -1)
+			if(val.toLowerCase().indexOf(value.toLowerCase()) > -1) {
 				matches = true;
+            }
 		}
 	});
 	return matches;

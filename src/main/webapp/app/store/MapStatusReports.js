@@ -36,11 +36,13 @@ Ext.define('Ssp.store.MapStatusReports', {
 		
 		var successFunc = function(response){
 	    	var r;
-	    	r = Ext.decode(response.responseText);
-	    		me.loadData(r);
-	    		var model = new Ssp.model.tool.map.MapStatus(r);
-	    		me.add(model);
-	    		me.fireEvent('load');
+            if (!Ext.isEmpty(response.responseText)) {
+                r = Ext.decode(response.responseText);
+                me.loadData(r);
+                var model = new Ssp.model.tool.map.MapStatus(r);
+                me.add(model);
+            }
+                me.fireEvent('load');
 		};
 		
 		me.studentDocumentUrl = me.apiProperties.getItemUrl('mapStatusReport');

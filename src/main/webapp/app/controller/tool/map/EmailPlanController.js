@@ -20,23 +20,17 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController',
 		person: 'currentPerson',
 		currentMapPlan: 'currentMapPlan'
-       
     },
     control: {
     	optionsEmailView: '#optionsEmailView',
-		
-    	
     	'fullFormat': {
     	   selector: '#fullFormat',
     	   listeners: {
             change: 'onoptionsEmailFormatClick'
            }
         },
-        
         'matrixFormat': {
     	   selector: '#matrixFormat',
     	   listeners: {
@@ -44,9 +38,25 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
            }
         }
     },
-    
+
 	init: function() {
 		var me=this;
+		Ext.apply(Ext.form.field.VTypes, {
+		    //  vtype validation function
+		    multiemail : function(val, field) {
+		        var email = /^([\w\-\'\-]+)(\.[\w-\'\-]+)*@([\w\-]+\.){1,5}([A-Za-z]){2,4}$/;
+				var addresses = val.split(',');
+				var matches = true;
+				addresses.forEach(function(address){
+					if (!email.test(address.trim())) {
+						matches = false;
+						return;
+					}
+				});
+		        return matches;
+		    },
+		    multiemailText : "This field needs to be in comma delimited email format: abcd@ssp.org,abcd@ssp.org"
+		});
 
 		me.getOptionsEmailView().hide();
 		
@@ -62,64 +72,56 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
 		
 		var emailCCOwner = me.handleNull(me.currentMapPlan.get('ownerEmail'));
 		
-		
-		
 		var emailCC = '';
 		
-		if (emailCCCoach != "")
-		{
+		if (emailCCCoach != "") {
 			emailCC = emailCCCoach;
 		}
 		
-		if (emailCCContact != "")
-		{
-			if(emailCC != '')
-				{
-					if(emailCC.indexOf(emailCCContact) == -1)
-						emailCC = emailCC + "," + emailCCContact;
-				}
-			else
-				emailCC = emailCCContact;
-		}
-		
-		
-		
-		if (emailCCOwner != "")
-		{
+		if (emailCCContact != "") {
 			if (emailCC != '') {
-				if(emailCC.indexOf(emailCCOwner) == -1)
-					emailCC = emailCC + "," + emailCCOwner;
-			}
-			else 
-				emailCC = emailCCOwner;
+					if (emailCC.indexOf(emailCCContact) == -1) {
+						emailCC = emailCC + "," + emailCCContact;
+                    }
+            } else {
+				emailCC = emailCCContact;
+            }
 		}
 		
-		
+		if (emailCCOwner != "") {
+			if (emailCC != '') {
+				if (emailCC.indexOf(emailCCOwner) == -1) {
+					emailCC = emailCC + "," + emailCCOwner;
+                }
+			} else {
+				emailCC = emailCCOwner;
+            }
+		}
 		emailCCField.setValue(emailCC);
 		return this.callParent(arguments);
     },
-    
-    onoptionsEmailFormatClick: function(cb, nv, ov){
+
+    onoptionsEmailFormatClick: function(cb, nv, ov) {
         var me=this;
-        if (nv){
-        me.getOptionsEmailView().show();
+        if (nv) {
+            me.getOptionsEmailView().show();
         }
-    
     },
     
-    onemailmatrixFormatClick: function(cb, nv, ov){
+    onemailmatrixFormatClick: function(cb, nv, ov) {
         var me=this;
-        if (nv){
-        me.getOptionsEmailView().hide();
+        if (nv) {
+            me.getOptionsEmailView().hide();
         }
     },
 	
-	handleNull: function(value, defaultValue){
-		if(defaultValue == null || defaultValue == undefined)
+	handleNull: function(value, defaultValue) {
+		if (defaultValue == null || defaultValue == undefined) {
 			defaultValue = "";
-		if(value == null || value == undefined || value == 'null')
+        }
+		if (value == null || value == undefined || value == 'null') {
 			return defaultValue;
+        }
 		return value;
 	}
-	
 });
