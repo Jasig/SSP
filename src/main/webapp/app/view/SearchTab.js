@@ -26,6 +26,9 @@ Ext.define('Ssp.view.SearchTab', {
     },
   	initComponent: function() {
    		var me = this;
+        tabPanelAccessor = function() {
+            return me.items.items[0];
+        };
    		Ext.apply(me, {
             submitEmptyText: false,
             title: 'Students',
@@ -38,14 +41,9 @@ Ext.define('Ssp.view.SearchTab', {
                     activeTab: me.defaultActiveTabIndex(),
                     listeners: {
                     	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
+                            // TODO really shouldn't have to do this. Ext.tab.Panel provides a getActiveTab()
                     		newTab.items.items[0].isActiveTab = true;
                     		oldTab.items.items[0].isActiveTab = false;
-
-                    		if (newTab.items.items[0].tabContext === 'search') {
-                    			return;
-                    		} else {
-                    			newTab.items.items[0].fireEvent('viewready');
-                            }
                         }
                     },
                     items: [{
@@ -54,14 +52,14 @@ Ext.define('Ssp.view.SearchTab', {
                         autoScroll: true,
                         border: 0,
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0, tabPanel: me}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0, tabPanelAccessor: tabPanelAccessor}]
                     },{
                         title: 'My Watch List',
                         autoScroll: true,
                         border: 0,
                         hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
-                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1, tabPanel: me}]
+                        items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1, tabPanelAccessor: tabPanelAccessor}]
                     },{
                         title: 'Search',
                         autoScroll: true,
@@ -70,7 +68,7 @@ Ext.define('Ssp.view.SearchTab', {
                         layout: 'fit',
                         // search needs to register to hear about inter-tab nav events so we pass this panel in as an
                         // attempt to avoid arbitrary componentmanager queries or fragile up().up().up() navigation
-                        items: [{xtype: 'search', tabContext: 'search', isActiveTab: me.defaultActiveTabIndex() === 2, tabPanel: me}]
+                        items: [{xtype: 'search', tabContext: 'search', isActiveTab: me.defaultActiveTabIndex() === 2, tabPanelAccessor: tabPanelAccessor}]
                     }]
                 })
             ]

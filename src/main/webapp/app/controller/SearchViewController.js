@@ -108,9 +108,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     },
 
+    eventsWired: false,
+
 	init: function() {
 		var me=this;
         var tabSelection = me.getView().tabContext;
+        me.registerTabNavHandlers();
+
 	   	// ensure the selected person is not loaded twice
 		// once on load and once on selection
 	   //	me.personLite.set('id','');
@@ -228,28 +232,64 @@ Ext.define('Ssp.controller.SearchViewController', {
 		return record
 	},
 
-	onViewReady: function(comp, eobj) {
-		var me=this;
-		// 'do' events are added to avoid potential multiple listener issues
-		me.appEventsController.assignEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.onDoPersonStatusChange, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});
+    getTabPanel: function() {
+        var me = this;
+        return me.tabPanel = me.tabPanel || me.getView().tabPanelAccessor();
+    },
 
-        me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
-		me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
-	   	me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
-	   	me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
-		me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
-		me.appEventsController.assignEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
-		me.appEventsController.assignEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
-	   	me.initSearchGrid();
+    registerTabNavHandlers: function() {
+        var me = this;
+        if ( me.getTabPanel() ) {
+            me.getTabPanel().on('tabchange', me.onTabChange, me);
+        }
+    },
+
+    deRegisterTabNavHandlers: function() {
+        var me = this;
+        if ( me.getTabPanel() ) {
+            me.getTabPanel().un('tabchange', me.onTabChange, me);
+        }
+    },
+
+    onTabChange: function(tabPanel, newCard, oldCard, eOpts) {
+        var me = this;
+        if ( newCard.items.items[0] === me.getView() ) {
+            me.acceptFocus(oldCard);
+        }
+    },
+
+    onViewReady: function() {
+        var me = this;
+        me.acceptFocus();
+    },
+
+    acceptFocus: function(prevTab) {
+        var me = this;
+        var eventsPreviouslyWired = me.eventsWired;
+        if ( !(me.eventsWired) ) {
+            me.appEventsController.assignEvent({eventName: 'doAddPerson', callBackFunc: me.onAddPerson, scope: me});
+            me.appEventsController.assignEvent({eventName: 'doPersonButtonEdit', callBackFunc: me.onEditPerson, scope: me});
+            me.appEventsController.assignEvent({eventName: 'doRetrieveCaseload', callBackFunc: me.getCaseload, scope: me});
+            me.appEventsController.assignEvent({eventName: 'doPersonStatusChange', callBackFunc: me.onDoPersonStatusChange, scope: me});
+            me.appEventsController.assignEvent({eventName: 'onStudentWatchAction', callBackFunc: me.onViewReady, scope: me});
+
+            me.appEventsController.assignEvent({eventName: 'toolsNav', callBackFunc: me.onToolsNav, scope: me});
+            me.appEventsController.assignEvent({eventName: 'collapseStudentRecord', callBackFunc: me.onCollapseStudentRecord, scope: me});
+            me.appEventsController.assignEvent({eventName: 'expandStudentRecord', callBackFunc: me.onExpandStudentRecord, scope: me});
+            me.appEventsController.assignEvent({eventName: 'afterPersonProgramStatusChange', callBackFunc: me.onAfterPersonProgramStatusChange, scope: me});
+            me.appEventsController.assignEvent({eventName: 'onPersonSearchSuccess', callBackFunc: me.searchSuccess, scope: me});
+            me.appEventsController.assignEvent({eventName: 'onPersonSearchFailure', callBackFunc: me.searchFailure, scope: me});
+            me.appEventsController.assignEvent({eventName: 'updateEarlyAlertCounts', callBackFunc: me.onUpdateEarlyAlertCounts, scope: me});
+            me.appEventsController.assignEvent({eventName: 'updateSearchStoreRecord', callBackFunc: me.onUpdateSearchStoreRecord, scope: me});
+            me.eventsWired = true;
+        }
+        if ( !(eventsPreviouslyWired) || (prevTab && !(me.getIsSearch())) ) {
+            me.initSearchGrid();
+            me.harmonizePersonLite();
+        }
+    },
 
 
-		me.harmonizePersonLite();
-	},
 
 	harmonizePersonLite:function() {
 		var me = this;
@@ -284,6 +324,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     destroy: function() {
     	var me=this;
 
+        me.deRegisterTabNavHandlers();
 		me.termsStore.removeListener("load", me.onTermsStoreLoad, me);
 		me.textStore.removeListener("load", me.onTextStoreLoad, me, {single: true});
 		me.personLite.un('idchanged', me.personChanged, me);
@@ -309,6 +350,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			me.instantCaseload.close();
         }
 
+		me.eventsWired = false;
 		return me.callParent( arguments );
     },
 

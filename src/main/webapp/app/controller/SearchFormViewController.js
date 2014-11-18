@@ -147,7 +147,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},
 	getTabPanel: function() {
 		var me = this;
-		return me.getView().tabPanel;
+		return me.tabPanel = me.tabPanel || me.getView().tabPanelAccessor();
 	},
 	// All of this searchGridPager show/hide stuff is an attempt to ensure the entire search form renders on
 	// a 768 vertical resolution. See SearchForm.js for more notes
@@ -173,11 +173,15 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},
 	registerBeforeTabChange: function() {
 		var me = this;
-		me.getTabPanel().on('beforetabchange', me.onBeforeTabChange, me);
+		if ( me.getTabPanel() ) {
+			me.getTabPanel().on('beforetabchange', me.onBeforeTabChange, me);
+		}
 	},
 	deRegisterBeforeTabChange: function() {
 		var me = this;
-		me.getTabPanel().un('beforetabchange', me.onBeforeTabChange, me);
+		if ( me.getTabPanel() ) {
+			me.getTabPanel().un('beforetabchange', me.onBeforeTabChange, me);
+		}
 	},
 	onBeforeTabChange: function( tabPanel, newCard, oldCard, eOpts ) {
 		var me = this;

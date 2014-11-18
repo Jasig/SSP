@@ -224,7 +224,7 @@ Ext.define('Ssp.view.Search', {
                 // navigation. Specifically, searchForm needs to manage the state of this component, so we also pass
                 // ourselves in as 'tab'
                 tab: me,
-                tabPanel: me.tabPanel
+                tabPanelAccessor: me.tabPanelAccessor
             }]
         });
         
