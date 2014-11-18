@@ -35,7 +35,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                     itemId: 'studentSuccessIndicatorGroup',
                     maxHeight: 340,
                     overflowY: 'auto',
-                    flex: 1,
+                    flex: 1
                 }]
             }, {
                 xtype: 'tbspacer',

@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 		formUtils: 'formRendererUtils',
     //	textStore:'sspTextStore',
 		mapPlanService: 'mapPlanService',
-		currentMapPlan: 'currentMapPlan',
+		currentMapPlan: 'currentMapPlan'
     },
     
     control: {

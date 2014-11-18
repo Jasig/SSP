@@ -114,7 +114,7 @@ Ext.define('Ssp.view.SearchForm',{
 				    itemId: 'myCaseload',
 				    enableKeyEvents:true,
 				    labelWidth: 80,
-				    labelAlign: 'right',
+				    labelAlign: 'right'
 			   }
 			]
 

@@ -59,11 +59,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             },
                             {
                                 dataIndex: 'name',
-                                flex:.5
+                                flex: 0.5
                             },
                             {
                                 dataIndex: 'description',
-                                flex:.5
+                                flex: 0.5
                             },
                             {
                                 header: 'Add. Desc',
@@ -192,11 +192,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             },
                             {
                                 dataIndex: 'name',
-                                flex:.5
+                                flex: 0.5
                             },
                             {
                                 dataIndex: 'description',
-                                flex:.5
+                                flex: 0.5
                             },
                             {
                                 header: 'Req. Appt.',
@@ -481,11 +481,11 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             },
                             {
                                 dataIndex: 'name',
-                                flex:.2
+                                flex: 0.2
                             },
                             {
                                 dataIndex: 'description',
-                                flex:.3
+                                flex: 0.3
                             },
                             {
                                 header: 'Acronym',

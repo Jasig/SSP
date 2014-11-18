@@ -103,7 +103,7 @@ Ext.define('Ssp.view.admin.forms.apikey.oauth2.EditOAuth2Client',{
                     allowBlank: false,
                     vtype: 'email',
                     minLength: 1,
-                    maxLength: 100,
+                    maxLength: 100
 
                 },
                 {

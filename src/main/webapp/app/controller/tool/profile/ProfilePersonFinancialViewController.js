@@ -26,7 +26,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonFinancialViewController', {
         personService: 'personService',
         transcriptService: 'transcriptService',
         financialAidFilesStore: 'financialAidFilesAllUnpagedStore',
-        sapStatusesStore: 'sapStatusesAllUnpagedStore',
+        sapStatusesStore: 'sapStatusesAllUnpagedStore'
     },
     
     control: {

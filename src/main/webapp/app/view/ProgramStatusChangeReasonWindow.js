@@ -31,7 +31,7 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
 	title: 'Please provide a reason the student will no longer be participating:',
 	config: {
 		actionCallbacks: null,
-		isBulk: false,
+		isBulk: false
 	},
     initComponent: function(){
     	var me=this;
@@ -94,5 +94,5 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
 			return me.callParent(arguments);
 		}
 		return me;
-	},
+	}
 });

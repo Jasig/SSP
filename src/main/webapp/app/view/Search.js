@@ -78,7 +78,7 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'editPersonButton'
                 }, {
                     xtype: 'tbspacer',
-                    flex: .5
+                    flex: 0.5
                 }, {
                     tooltip: 'Set Student to Active status',
                     text: '',
@@ -131,7 +131,7 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'setInactiveButton'
                 }, {
                     xtype: 'tbspacer',
-                    flex: .5
+                    flex: 0.5
                 }, {
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
@@ -153,7 +153,7 @@ Ext.define('Ssp.view.Search', {
                     labelWidth: 75
                 }, {
                     xtype: 'tbspacer',
-                    flex: .5
+                    flex: 0.5
                 }, {
                     xtype: 'combobox',
                     itemId: 'caseloadStatusCombo',
