@@ -354,11 +354,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 		return me.callParent( arguments );
     },
 
-    initSearchGrid: function() {
+    initSearchGrid: function(forceSearchFormDisplay) {
 	   	var me=this;
 
 	   	if(me.getIsSearch()) {
-			me.displaySearch();
+			me.displaySearch(forceSearchFormDisplay);
 		} else {
             if (me.getIsWatchList()) {
                 me.getWatchList(true);
@@ -371,7 +371,7 @@ Ext.define('Ssp.controller.SearchViewController', {
                     me.displayCaseload();
                 } else {
                     me.search();
-                    me.displaySearch();
+                    me.displaySearch(forceSearchFormDisplay);
                 }
             }
         }
@@ -475,16 +475,17 @@ Ext.define('Ssp.controller.SearchViewController', {
 		searchView.collapse();
 	},
 
-	displaySearch: function() {
-	    var me = this;
-		me.getSearchBar().show();
-		me.getSearchStudentButton().show();
-		me.getResetStudentSearchButton().show();
-		me.getUpTool().show();
-	    Ext.ComponentQuery.query('searchForm')[2].show(); //component always has three from SearchTab using 3 Search.js, 3rd is the "search" tab
-
-        me.setGridView();
-    },
+	displaySearch: function(forceSearchFormDisplay) {
+		var me = this;
+		if ( forceSearchFormDisplay === undefined || forceSearchFormDisplay === null || forceSearchFormDisplay ) {
+			me.getSearchBar().show();
+			me.getSearchStudentButton().show();
+			me.getResetStudentSearchButton().show();
+			me.getUpTool().show();
+			Ext.ComponentQuery.query('searchForm')[2].show(); //component always has three from SearchTab using 3 Search.js, 3rd is the "search" tab
+		}
+		me.setGridView();
+	},
 
 	displayCaseload: function(){
 		var me=this;
@@ -807,7 +808,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var resultPerson = me.findResultPerson(event.personId);
 		if ( resultPerson ) {
 			resultPerson.set("currentProgramStatusName", event.programStatusName);
-			this.initSearchGrid();
+			this.initSearchGrid(false);
 		}
 
 		// No great, centralized place to act as a bus for these sort of change events... maybe the tool
