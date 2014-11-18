@@ -162,7 +162,7 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                 selType: 'rowmodel',
 				cls: 'configgrid',
 				features: [filters],
-                columns: [
+                columns: me.applyColumnOverrides([
 					{
                         header: 'Active',
                         required: true,
@@ -172,7 +172,8 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         flex: 0.10,
                         field: {
                             xtype: 'oscheckbox'
-                        }
+                        },
+                        sortOrder: 10
                     },
                     { header: 'Name',
                         dataIndex: 'name',
@@ -181,18 +182,21 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
 						},
                         field: {
                             xtype: 'textfield',
-							allowBlank: false
+							allowBlank: false,
+                            maxLength: 80
                         },
-                        flex: 50
+                        flex: 50,
+                        sortOrder: 20
                     },
                     { header: 'Description',
                         dataIndex: 'description',
                         flex: 50,
                         field: {
                             xtype: 'textfield'
-                        }
+                        },
+                        sortOrder: 30
                     }
-                ],
+                ]),
                 dockedItems: [
                     {
                         xtype: 'pagingtoolbar',
@@ -228,7 +232,46 @@ Ext.define('Ssp.view.admin.forms.AbstractReferenceAdmin', {
                         }]
                     }]
             });
-    	
+
     	me.callParent(arguments);
+    },
+
+    applyColumnOverrides: function(defaults) {
+        var me = this;
+        var columnsByDataIndex = {};
+        var columns = [];
+        Ext.each(defaults, function(column, index){
+            var dataIndex = column.dataIndex;
+            if ( dataIndex ) {
+                columnsByDataIndex[dataIndex] = column;
+            }
+        });
+        if ( me.interfaceOptions && me.interfaceOptions.columnOverrides && me.interfaceOptions.columnOverrides.length > 0 ) {
+            Ext.each(me.interfaceOptions.columnOverrides, function(columnOverride, index){
+                if ( columnOverride.dataIndex ) {
+                    if ( columnsByDataIndex[columnOverride.dataIndex] ) {
+                        columnsByDataIndex[columnOverride.dataIndex] = Ext.apply({}, columnOverride, columnsByDataIndex[columnOverride.dataIndex]);
+                    } else {
+                        columnsByDataIndex[columnOverride.dataIndex] = columnOverride;
+                    }
+                }
+            });
+        }
+        for ( i in columnsByDataIndex ) {
+            columnsByDataIndex[i].field = me.applyColumnFieldOverrides(i, columnsByDataIndex[i].field);
+            columns.push(columnsByDataIndex[i]);
+        }
+        return Ext.Array.sort(columns, function(o1, o2) {
+            return o1.sortOrder - o2.sortOrder;
+        });
+    },
+
+    applyColumnFieldOverrides: function(dataIndex, defaults) {
+        var me = this;
+        if ( me.interfaceOptions && me.interfaceOptions.columnFieldOverrides && me.interfaceOptions.columnFieldOverrides[dataIndex] ) {
+            return Ext.apply({}, me.interfaceOptions.columnFieldOverrides[dataIndex], defaults);
+        }
+        return defaults;
+
     }
 });

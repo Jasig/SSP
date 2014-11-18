@@ -57,7 +57,8 @@ Ext.define('Ssp.view.admin.forms.config.MessageTemplateDetails', {
                 xtype: 'textareafield',
                 fieldLabel: 'Subject',
                 anchor: '100%',
-                name: 'subject'
+                name: 'subject',
+                maxLength: 250
             }, {
                 xtype: 'textareafield',
                 fieldLabel: 'Body',

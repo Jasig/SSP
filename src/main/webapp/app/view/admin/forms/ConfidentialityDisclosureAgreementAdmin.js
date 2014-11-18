@@ -50,7 +50,8 @@ Ext.define('Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin', {
 					        disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
 					        name: 'name',
 					        allowBlank: false,
-					        anchor: '95%'
+					        anchor: '95%',
+					        maxLength: 80
 					    },{
 					        fieldLabel: 'Description',
 					        xtype: 'textfield',

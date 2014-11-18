@@ -39,7 +39,8 @@ Ext.define('Ssp.view.admin.forms.shg.EditSelfHelpGuideDetails',{
                     fieldLabel: 'Self Help Guide Name',
                     anchor: '100%',
                     name: 'name',
-                    allowBlank:false
+                    allowBlank:false,
+                    maxLength: 80
                 },
                 {
                     xtype: 'textareafield',

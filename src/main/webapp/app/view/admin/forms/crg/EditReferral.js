@@ -32,7 +32,8 @@ Ext.define('Ssp.view.admin.forms.crg.EditReferral',{
                     anchor: '100%',
                     name: 'name',
                     allowBlank: false,
-                    required: true
+                    required: true,
+                    maxLength: 80
                 },
                 {
                     xtype: 'textareafield',

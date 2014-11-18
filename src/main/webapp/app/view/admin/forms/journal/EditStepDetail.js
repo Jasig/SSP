@@ -32,8 +32,8 @@ Ext.define('Ssp.view.admin.forms.journal.EditStepDetail',{
                     anchor: '100%',
                     allowBlank: false,
                     required: true,
-                    name: 'name'
-                    	
+                    name: 'name',
+                    maxLength: 80
                 },
                 {
                     xtype: 'textareafield',

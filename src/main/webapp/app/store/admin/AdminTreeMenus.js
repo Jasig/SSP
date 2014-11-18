@@ -45,60 +45,63 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Disability Accommodations',
                     title: 'Disability Accommodations',
                     store: 'disabilityAccommodationsAll',
-					interfaceOptions: {
+                    // Any config you want AbstractReferenceAdmin to consume effectively *must* be nested inside
+                    // interface options. Some other fields will just happen to make it through, most notably
+                    // 'columns', but only use that if you truly want to completely replace all the column defaults.
+                    // 'columnDefaults' is generally a better choice for more targeted column re-config.
+                    interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
-                    }, 
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.10
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex:.5
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex:.5
+                            },
+                            {
+                                header: 'Add. Desc',
+                                required: true,
+                                dataIndex: 'useDescription',
+                                flex: 0.2,
+                                renderer: me.columnRendererUtils.renderFriendlyBoolean,
+                                field: {
+                                    xtype: 'checkbox'
+                                },
+                                sortOrder: 40
+                            },
+                            {
+                                header: 'Description Label',
+                                required: false,
+                                dataIndex: 'descriptionFieldLabel',
+                                field: {
+                                    xtype: 'textfield',
+                                    maxLength: 80
+                                },
+                                flex: 0.5,
+                                sortOrder: 50
+                            },
+                            {
+                                header: 'Description Label Type (Long/Short)',
+                                required: false,
+                                dataIndex: 'descriptionFieldType',
+                                field: {
+                                    xtype: 'textfield',
+                                    maxLength: 80
+                                },
+                                flex: 0.5,
+                                sortOrder: 60
+                            }
+                        ]
+                    },
                     form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [
-					{
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: 0.10,
-                        field: {
-                            xtype: 'oscheckbox'
-                        }
-                    },{
-                        header: 'Name',
-                        dataIndex: 'name',
-						editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-                        flex: 1
-                    }, {
-                        header: 'Additional Desc',
-                        required: true,
-                        dataIndex: 'useDescription',
-                        flex: 0.2,
-                        renderer: me.columnRendererUtils.renderFriendlyBoolean,
-                        field: {
-                            xtype: 'checkbox'
-                        }
-                    }, {
-                        header: 'Desc Label',
-                        required: false,
-                        dataIndex: 'descriptionFieldLabel',
-                        field: {
-                            xtype: 'textfield'
-                        },
-                        flex: 0.2
-                    }, {
-                        header: 'Long/Short Desc',
-                        required: false,
-                        dataIndex: 'descriptionFieldType',
-                        field: {
-                            xtype: 'textfield'
-                        },
-                        flex: 0.2
-                    }]
+                    leaf: true
                 }, {
                     text: 'Disability Agencies',
                     title: 'Disability Agencies',
@@ -181,63 +184,50 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'studentTypes',
                     interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
-                    },                    
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.10
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex:.5
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex:.5
+                            },
+                            {
+                                header: 'Req. Appt.',
+                                required: true,
+                                dataIndex: 'requireInitialAppointment',
+                                flex: 0.15,
+                                renderer: me.columnRendererUtils.renderFriendlyBoolean,
+                                field: {
+                                    xtype: 'checkbox'
+                                },
+                                sortOrder: 40
+                            },
+                            {
+                                header: 'Student Type Code',
+                                required: true,
+                                dataIndex: 'code',
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 0.25,
+                                sortOrder: 50
+                            }
+                        ]
+                    },
 					form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [{
-					    header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-                        defaultValue: true,
-                        flex: 0.2,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        field: {
-                            xtype: 'oscheckbox',
-                            fieldStyle: "margin-bottom:12px;"
-                        }
-					},{					
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-                        flex: 0.25
-                    }, {
-                        header: 'Description',
-                        required: false,
-                        dataIndex: 'description',
-                        field: {
-                            xtype: 'textfield'
-                        },
-                        flex: 1
-                    }, {
-                        header: 'Require Initial Appointment',
-                        required: true,
-                        dataIndex: 'requireInitialAppointment',
-                        flex: 0.25,
-                        renderer: me.columnRendererUtils.renderFriendlyBoolean,
-                        field: {
-                            xtype: 'checkbox'
-                        }
-                    }, {
-						header: 'Student Type Code',
-						required: true,
-						dataIndex: 'code',
-						editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-						flex: 0.25						
-					}]
+                    leaf: true
                 }, {
                     text: 'Re-Assignment',
                     title: 'Re-Assignment',
@@ -322,54 +312,30 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'racesAll',
 					interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
-                    },                    
-					form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [{
-					    header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-                        defaultValue: true,
-                        flex: 0.2,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        field: {
-                            xtype: 'oscheckbox',
-                            fieldStyle: "margin-bottom:12px;"
+                        deleteButtonVisible: false,
+                        columnOverrides: [{
+                            header: 'Race Code',
+                            required: true,
+                            dataIndex: 'code',
+                            editor:{
+                                allowBlank: false
+                            },
+                            field: {
+                                xtype: 'textfield',
+                                allowBlank: false,
+                                maxLength: 10
+                            },
+                            flex: 30,
+                            sortOrder: 40
+                        }],
+                        columnFieldOverrides: {
+                            description: {
+                                maxLength: 150
+                            }
                         }
-					},{					
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-                        flex: 0.25
-                    }, {
-                        header: 'Description',
-                        required: false,
-                        dataIndex: 'description',
-                        field: {
-                            xtype: 'textfield'
-                        },
-                        flex: 1                 
-                    }, {
-						header: 'Race Code',
-						required: true,
-						dataIndex: 'code',
-						editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-						flex: 0.25						
-					}]
+                    },
+					form: 'AbstractReferenceAdmin',
+                    leaf: true
                 },
                 {
                     text: 'Coursework Hours',
@@ -451,10 +417,24 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Categories',
                     title: 'Categories',
                     store: 'challengeCategoriesAll',
-					interfaceOptions: {
+                    interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
-                    }, 
+                        deleteButtonVisible: false,
+                        // Very targeted override of complex column config fields. If we did this with
+                        // columnOverrides (as seen for several admin types above), the 'field' config on the overridden
+                        // config would be completely replaced by whatever we defined here and we'd end up forced to
+                        // duplicate all its default config. So columnFieldOverrides is a special workaround
+                        // specifically for that complex 'field', ahem, field so its defaults can be retained when
+                        // appropriate.
+                        columnFieldOverrides: {
+                            name: {
+                                maxLength: 50
+                            },
+                            description: {
+                                maxLength: 150
+                            }
+                        }
+                    },
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -491,70 +471,69 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Confidentiality Levels',
                     title: 'Confidentiality Levels',
                     store: 'confidentialityLevelsAll',
-					interfaceOptions: {
+                    interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.10
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex:.2
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex:.3
+                            },
+                            {
+                                header: 'Acronym',
+                                dataIndex: 'acronym',
+                                required: true,
+                                flex: 0.10,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 10,
+                                    fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                                },
+                                sortOrder: 40
+                            },
+                            {
+                                header: 'Data Permission',
+                                dataIndex: 'permission',
+                                required: true,
+                                field: {
+                                    xtype: 'combo',
+                                    store: me.confidentialityLevelOptionsStore,
+                                    displayField: 'name',
+                                    valueField:'name',
+                                    typeAhead: true,
+                                    forceSelection: false,
+                                    associativeField: 'permission'
+                                },
+                                flex: 0.3,
+                                sortOrder: 50
+                            }
+                        ],
+                        columnFieldOverrides: {
+                            objectStatus: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            name: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            description: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            }
+                        }
                     }, 
                     form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [
-					{
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: 0.10,
-                        field: {
-                            xtype: 'oscheckbox'
-                        }
-                    },
-					{
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        flex: 0.20,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        }
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        flex: 0.30,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    }, {
-                        header: 'Acronym',
-                        dataIndex: 'acronym',
-                        required: true,
-                        flex: 0.10,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        }},
-                        {
-                            header: 'Data Permission',
-                            dataIndex: 'permission',
-                            required: true,                        
-                            field: {
-                                xtype: 'combo',
-                                store: me.confidentialityLevelOptionsStore,
-                                displayField: 'name',
-                                valueField:'name',
-                                typeAhead: true,
-                                forceSelection: false,
-                                associativeField: 'permission'
-                            },
-                            flex: 0.3
-                        }]
+                    leaf: true
                 }, {
                     text: 'OAuth2 Clients',
                     title: 'OAuth2 Clients',
@@ -618,72 +597,63 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     leaf: true,
 					interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
-                    }, 
-                    columns: [
-					{
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-						defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: 0.10,
-                        field: {
-                            xtype: 'oscheckbox'
-                        }
-                    },{
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-                        flex: 50
-                    }, {
-                        header: 'Description',
-                        required: false,
-                        dataIndex: 'description',
-                        flex: 80,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    }, {
-                        header: 'Acronym',
-                        required: true,
-                        dataIndex: 'acronym',
-                        flex: 10,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        }
-                     }, {
-                         header: 'Referral Email',
-                         required: false,
-                         dataIndex: 'recipientEmailAddress',
-                         renderer: me.columnRendererUtils.renderValidEmail,
-                         flex: 25,
-                         field: {
-                             xtype: 'textfield',
-                             vtype: 'email'
-                         }
-                      }, {
-                          header: 'Carbon Copy(s)',
-                          required: false,
-                          dataIndex: 'carbonCopy',
-                          renderer: me.columnRendererUtils.renderValidEmail,
-                          flex: 50,
-                          field: {
-                              xtype: 'textfield',
-                              vtype: 'multiemail'
-                          }
-                    }]
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.10
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex: 50
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex: 50
+                            },
+                            {
+                                header: 'Acronym',
+                                required: true,
+                                dataIndex: 'acronym',
+                                flex: 20,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 80
+                                },
+                                sortOrder: 40
+                            },
+                            {
+                                header: 'Referral Email',
+                                required: false,
+                                dataIndex: 'recipientEmailAddress',
+                                renderer: me.columnRendererUtils.renderValidEmail,
+                                flex: 25,
+                                field: {
+                                    xtype: 'textfield',
+                                    vtype: 'email',
+                                    maxLength: 100
+                                },
+                                sortOrder: 50
+                            },
+                            {
+                                header: 'Carbon Copy(s)',
+                                required: false,
+                                dataIndex: 'carbonCopy',
+                                renderer: me.columnRendererUtils.renderValidEmail,
+                                flex: 50,
+                                field: {
+                                    xtype: 'textfield',
+                                    vtype: 'multiemail',
+                                    maxLength: 512
+                                },
+                                sortOrder: 60
+                            }
+                        ]
+                    }
                 }, {
                     text: 'Suggestions',
                     title: 'Suggestions',
@@ -753,226 +723,161 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     },
                     interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            // leave objectStatus default alone
+                            {
+                                dataIndex: 'name',
+                                flex: 0.7
+                            },
+                            {
+                                header: 'Code',
+                                dataIndex: 'code',
+                                required: true,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 50
+                                },
+                                flex: 0.20,
+                                sortOrder: 25
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex: 1
+                            }
+                        ]
                     },
                     form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [{
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-                        defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: 0.20,
-                        field: {
-                            xtype: 'oscheckbox'
-                        }
-                    }, {
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Code',
-                        dataIndex: 'code',
-                        required: true,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        field: {
-                            xtype: 'textfield'
-                        },
-                        flex: 1
-                    }]                    
+                    leaf: true
                 }, {
                     text: 'Message Templates',
                     title: 'Message Templates',
                     store: 'messageTemplates',
                     form: 'messagetemplatesadmin',
                     leaf: true
-                }
-                	,
-                    {
+                }, {
                     text: 'Text',
                     title: 'Text',
                     store: 'text',
-					interfaceOptions: {
+                    interfaceOptions: {
                         addButtonVisible: false,
                         deleteButtonVisible: false,
-                        hasPagingToolbar: false
+                        hasPagingToolbar: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                rowEditable: false,
+                                flex: 0.05
+                            },
+                            {
+                                dataIndex: 'name',
+                                rowEditable: false,
+                                flex: 0.25
+                            },
+                            {
+                                header: 'Value',
+                                dataIndex: 'value',
+                                flex: 0.3,
+                                field: {
+                                    xtype: 'textfield',
+                                    maxLength: 256
+                                },
+                                sortOrder: 22
+                            },
+                            {
+                                header: 'Code',
+                                rowEditable: false,
+                                dataIndex: 'code',
+                                filterable: true,
+                                flex: 0.25,
+                                field: {
+                                    xtype: 'textfield'
+                                },
+                                sortOrder: 26
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex: 0.20
+                            }
+                        ]
                     },
                     form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [
-					{
-                        header: 'Name',
-                        dataIndex: 'name',
-                        required: true,
-                        rowEditable: false,
-                        flex: 0.10,
-                        editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        }
-                    }, {
-                        header: 'Value',
-                        dataIndex: 'value',
-                        flex: 0.10,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    },  {
-                        header: 'Code',
-                        rowEditable: false,
-                        dataIndex: 'code',
-                        filterable: true,
-                        flex: 0.20,
-                        field: {
-                            xtype: 'textfield'
-                        }
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        flex: 0.20,
-                        field: {
-                            xtype: 'textfield'
-                        }
+                    leaf: true
                     }]
-                }	]
-            }	, {text: 'Main Tool',
-	            title: 'Main Tool',
-	            form: '',
-	            expanded: false,
-	            children: [{
-					text: 'SAP Statuses',
-	                title: 'SAP Statuses',
-	                store: 'sapStatusesAll',
-					interfaceOptions: {
-	                    addButtonVisible: true,
-	                    deleteButtonVisible: false                  
-	                },                    
+                },{
+                    text: 'Main Tool',
+                    title: 'Main Tool',
+                    form: '',
+                    expanded: false,
+                    children: [{
+                        text: 'SAP Statuses',
+                        title: 'SAP Statuses',
+                        store: 'sapStatusesAll',
+                        interfaceOptions: {
+                            addButtonVisible: true,
+                            deleteButtonVisible: false,
+                            columnOverrides: [
+                            {
+                                header: 'SAP Code',
+                                required: true,
+                                dataIndex: 'code',
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 25,
+                                sortOrder: 40
+                            }
+                        ],
+                        columnFieldOverrides: {
+                            description: {
+                                maxLength: 150
+                            }
+                        }
+	                },
 					form: 'AbstractReferenceAdmin',
-	                leaf: true,
-	                columns: [{
-					    header: 'Active',
-	                    required: true,
-	                    dataIndex: 'objectStatus',
-	                    defaultValue: true,
-	                    flex: 0.2,
-	                    renderer: me.columnRendererUtils.renderObjectStatus,
-	                    field: {
-	                        xtype: 'oscheckbox',
-	                        fieldStyle: "margin-bottom:12px;"
-	                    }
-					},{					
-	                    header: 'Name',
-	                    dataIndex: 'name',
-	                    required: true,
-	                    editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-	                    flex: 0.25
-	                }, {
-	                    header: 'Description',
-	                    required: false,
-	                    dataIndex: 'description',
-	                    field: {
-	                        xtype: 'textfield'
-	                    },
-	                    flex: 1                 
-	                }, {
-						header: 'SAP Code',
-						required: true,
-						dataIndex: 'code',
-						editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-						flex: 0.25						
-					}]
+	                leaf: true
 	            }, {
 					text: 'Financial Aid Files',
 	                title: 'Financial Aid Files',
 	                store: 'financialAidFilesAll',
-					interfaceOptions: {
-	                    addButtonVisible: true,
-	                    deleteButtonVisible: false                  
-	                },                    
-					form: 'AbstractReferenceAdmin',
-	                leaf: true,
-	                columns: [{
-					    header: 'Active',
-	                    required: true,
-	                    dataIndex: 'objectStatus',
-	                    defaultValue: true,
-	                    flex: 0.2,
-	                    renderer: me.columnRendererUtils.renderObjectStatus,
-	                    field: {
-	                        xtype: 'oscheckbox',
-	                        fieldStyle: "margin-bottom:12px;"
-	                    }
-					},{					
-	                    header: 'Name',
-	                    dataIndex: 'name',
-	                    required: true,
-	                    editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-	                    flex: 0.25
-	                }, {
-	                    header: 'Description',
-	                    required: false,
-	                    dataIndex: 'description',
-	                    field: {
-	                        xtype: 'textfield'
-	                    },
-	                    flex: 1                 
-	                }, {
-						header: 'File Code',
-						required: true,
-						dataIndex: 'code',
-						editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							allowBlank: false
-                        },
-						flex: 0.25						
-					}
-					]
-	            },
-				{
-                
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                header: 'File Code',
+                                required: true,
+                                dataIndex: 'code',
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 25,
+                                sortOrder: 40
+                            }
+                        ],
+                        columnFieldOverrides: {
+                            description: {
+                                maxLength: 150
+                            }
+                        }
+	                },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                }, {
                     text: 'Success Indicators',
                     title: 'Success Indicators',
                     form: 'successindicatoradmin',
@@ -1002,151 +907,151 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             name: "colors",
                             store: me.colorsAllUnpagedStore,
                             clearFilter: true
-                        }]
-                    },                    
-                    form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [{
-                        header: 'Order',
-                        dataIndex: 'sortOrder',
-                        required: true,
-						editor:{
-							allowBlank: false
-						},
-                        field: {
-                            xtype: 'textfield',
-							 fieldStyle: "margin-bottom:12px;",
-							allowBlank: false
-                        },
-                        flex: 0.1
-                    }, {
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-                        defaultValue: true,
-                        flex: 0.2,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        field: {
-                            xtype: 'oscheckbox',
-                            fieldStyle: "margin-bottom:12px;"
+                        }],
+                        columnOverrides: [
+                            // careful with flex values here. Some mixes can result in the combo box expander
+                            // rendering off-screen.
+                            {
+                                header: 'Order',
+                                dataIndex: 'sortOrder',
+                                required: true,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    fieldStyle: "margin-bottom:12px;", // workaround for presence of combobox field
+                                    allowBlank: false
+                                },
+                                flex: 0.1,
+                                sortOrder: 5
+                            },
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.1
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex: 0.2
+                            },
+                            {
+                                header: 'Elective Code',
+                                dataIndex: 'code',
+                                defaultValue: "",
+                                required: true,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    fieldStyle: "margin-bottom:12px;", // workaround for presence of combobox field
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 0.2,
+                                sortOrder: 25
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex: 0.5
+                            },
+                            {
+                                header: 'Color',
+                                dataIndex: 'color',
+                                renderer: me.columnRendererUtils.renderElectiveColor,
+                                required: true,
+                                field: {
+                                    xtype: 'combo',
+                                    store: me.colorsAllUnpagedStore,
+                                    displayField: 'name',
+                                    valueField: 'id',
+                                    forceSelection: true,
+                                    associativeField: 'color'
+                                },
+                                flex: 0.2,
+                                sortOrder: 40
+                            }
+                        ],
+                        columnFieldOverrides: {
+                            objectStatus: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            name: {
+                                maxLength: 50,
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            description: {
+                                maxLength: 150,
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            }
                         }
-                    }, {
-                        header: 'Elective Name',
-                        dataIndex: 'name',
-                        required: true,
-                        defaultValue: "",
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
-                        flex: 0.2
-                    }, {
-                        header: 'Elective Code',
-                        dataIndex: 'code',
-                        defaultValue: "",
-                        required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
-                        flex: 0.2
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        defaultValue: "",
-                        field: {
-                            xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;"
-                        },
-                        flex: 1
-                    }, {
-                        header: 'Color',
-                        dataIndex: 'color',
-                        renderer: me.columnRendererUtils.renderElectiveColor,
-                        required: true,                        
-                        field: {
-                            xtype: 'combo',
-                            store: me.colorsAllUnpagedStore,
-                            displayField: 'name',
-                            valueField: 'id',
-                            forceSelection: true,
-                            associativeField: 'color'
-                        },
-                        flex: 0.2
-                    }]
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
                 }, {
                     text: 'Colors',
                     title: 'Color Management',
                     store: 'colorsAll',
-					interfaceOptions: {
+                    interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                    
-                    },       
-					form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [{
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-                        defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: 0.20,
-                        field: {
-                            xtype: 'oscheckbox',
-                            fieldStyle: "margin-bottom:12px;"
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.1
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex: 0.2
+                            },
+                            {
+                                header: 'Color Code',
+                                dataIndex: 'code',
+                                required: true,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    fieldStyle: "margin-bottom:12px;", // workaround for presence of combobox field
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 0.20,
+                                sortOrder: 22
+                            },
+                            {
+                                header: 'Hex Code',
+                                dataIndex: 'hexCode',
+                                renderer: me.columnRendererUtils.renderHex,
+                                required: true,
+                                field: {
+                                    xtype: 'sspcolorpicker'
+                                },
+                                flex: 0.20,
+                                sortOrder: 26
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex: 0.6
+                            }
+                        ],
+                        columnFieldOverrides: {
+                            objectStatus: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            name: {
+                                maxLength: 50,
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            description: {
+                                maxLength: 150,
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            }
                         }
-                    }, {
-                        header: 'Color Name',
-                        dataIndex: 'name',
-                        required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Color Code',
-                        dataIndex: 'code',
-                        required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								 fieldStyle: "margin-bottom:12px;",
-								allowBlank: false
-	                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Hex Code',
-                        dataIndex: 'hexCode',
-                        renderer: me.columnRendererUtils.renderHex,
-                        required: true,
-                        field: {
-                            xtype: 'sspcolorpicker'
-                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        field: {
-                            xtype: 'textfield',
-                            fieldStyle: "margin-bottom:12px;"
-                        },
-                        flex: 1
-                    }]
+                    },
+					form: 'AbstractReferenceAdmin',
+                    leaf: true
                 }, {
                     text: 'Tags',
                     title: 'Tag Management',
@@ -1156,52 +1061,36 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     },
                     interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'name',
+                                flex: 50
+                            },
+                            {
+                                header: 'Tag Code',
+                                dataIndex: 'code',
+                                required: true,
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 20,
+                                sortOrder: 25
+                            }
+                        ],
+                        columnFieldOverrides: {
+                            description: {
+                                maxLength: 150
+                            }
+                        }
                     },
                     form: 'AbstractReferenceAdmin',
-                    leaf: true,
-                    columns: [{
-                        header: 'Active',
-                        required: true,
-                        dataIndex: 'objectStatus',
-                        defaultValue: true,
-                        renderer: me.columnRendererUtils.renderObjectStatus,
-                        flex: 0.20,
-                        field: {
-                            xtype: 'oscheckbox'
-                        }
-                    }, {
-                        header: 'Tag Name',
-                        dataIndex: 'name',
-                        required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								allowBlank: false
-	                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Tag Code',
-                        dataIndex: 'code',
-                        required: true,
-                        	editor:{
-								allowBlank: false
-							},
-	                        field: {
-	                            xtype: 'textfield',
-								allowBlank: false
-	                        },
-                        flex: 0.20
-                    }, {
-                        header: 'Description',
-                        dataIndex: 'description',
-                        field: {
-                            xtype: 'textfield'
-                        },
-                        flex: 1
-                    }]
+                    leaf: true
                 }]
             }]
         };

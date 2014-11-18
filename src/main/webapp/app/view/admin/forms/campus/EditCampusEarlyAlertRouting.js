@@ -54,7 +54,8 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampusEarlyAlertRouting',{
                     fieldLabel: 'Group Name',
                     width: 500,
                     name: 'groupName',
-                    allowBlank: true
+                    allowBlank: true,
+                    maxLength: 255
                 },{
                     xtype: 'textfield',
                     fieldLabel: 'Group Email',

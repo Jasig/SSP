@@ -35,7 +35,8 @@ Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
                     anchor: '100%',
                     name: 'name',
                     allowBlank: false,
-                    required: true
+                    required: true,
+                    maxLength: 80
                 },
                 {
                     xtype: 'textareafield',
@@ -47,7 +48,8 @@ Ext.define('Ssp.view.admin.forms.crg.EditChallenge',{
                     xtype: 'textfield',
                     fieldLabel: 'Tags',
                     anchor: '100%',
-                    name: 'tags'
+                    name: 'tags',
+                    maxLength: 255
                 },{
                     xtype: 'combobox',
                     name: 'defaultConfidentialityLevelId',
