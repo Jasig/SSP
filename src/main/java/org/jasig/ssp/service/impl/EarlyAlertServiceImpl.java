@@ -824,21 +824,23 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		LOGGER.debug("Early Alerts out of compliance: {}", eaOutOfCompliance.size());
 		Map<UUID, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, List<EarlyAlertMessageTemplateTO>>();
 		Map<UUID, Person> coaches = new HashMap<UUID, Person>();
+		final boolean includeCoachAsRecipient = this.earReminderRecipientConfig.includeCoachAsRecipient();
+		final boolean includeEarlyAlertCoordinatorAsRecipient = this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipient();
+		final boolean includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach = this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach();
+		LOGGER.info("Config: includeCoachAsRecipient(): {}", includeCoachAsRecipient);
+		LOGGER.info("Config: includeEarlyAlertCoordinatorAsRecipient(): {}", includeEarlyAlertCoordinatorAsRecipient);
+		LOGGER.info("Config: includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach(): {}", includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach);
 		for (EarlyAlert earlyAlert: eaOutOfCompliance){
-			LOGGER.info("Config: includeCoachAsRecipient(): {}", this.earReminderRecipientConfig.includeCoachAsRecipient());
-			LOGGER.info("Config: includeEarlyAlertCoordinatorAsRecipient(): {}", this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipient());
-			LOGGER.info("Config: includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach(): {}", this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach());
 			final Set<Person> recipients = new HashSet<Person>();
 			Person coach = earlyAlert.getPerson().getCoach();
-			if (this.earReminderRecipientConfig.includeCoachAsRecipient()) {
+			if (includeCoachAsRecipient) {
 				if (coach == null) {
 					LOGGER.warn("Early Alert with id: {} is associated with a person without a coach, so skipping email to coach.", earlyAlert.getId());
 				} else {
 					recipients.add(coach);
 				}
 			}
-			if (this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipient() 
-					|| (coach == null && this.earReminderRecipientConfig.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach())) {
+			if (includeEarlyAlertCoordinatorAsRecipient || (coach == null && includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach)) {
 				final Campus campus = earlyAlert.getCampus();
 				if (campus == null) {
 					LOGGER.error("Early Alert with id: {} does not have valid a campus, so skipping email to EAC.", earlyAlert.getId());
@@ -860,10 +862,10 @@ public class EarlyAlertServiceImpl extends // NOPMD
 					}
 				}
 			}
+			LOGGER.debug("Early Alert: {}; Recipients: {}", earlyAlert.getId(), recipients);
 			if (recipients.isEmpty()) {
 				continue;
 			} else {
-				LOGGER.warn("Recipients: {}", recipients);
 				for (Person person : recipients) {
 					// We've definitely got a coach by this point
 					if (easByCoach.containsKey(person.getId())){

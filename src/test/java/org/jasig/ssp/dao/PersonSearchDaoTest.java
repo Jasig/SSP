@@ -225,7 +225,7 @@ public class PersonSearchDaoTest {
 			personSearchRequest.setDeclaredMajor("HIST");
 			personSearchRequest.setGpaEarnedMax(new BigDecimal(5.0));
 			personSearchRequest.setGpaEarnedMin(new BigDecimal(1.0));
-			personSearchRequest.setMapStatus("OFF");
+			personSearchRequest.setPlanStatus("OFF");
 			personSearchRequest.setProgramStatus(activeProgramStatus);
 			
 			dao.search(personSearchRequest);

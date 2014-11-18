@@ -145,26 +145,52 @@ public class EarlyAlertResponseReminderRecipientsConfigImplTest {
 		assertTrue(this.impl.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach());
 	}
 
+	// miscellaneous
+
+	@Test
+	public void testThatConfigValueIsTrimmedBeforeMatchingValidValues() {
+		this.setConfigValue(" " + EarlyAlertResponseReminderRecipientsConfigImpl.COACH_AND_EAC + " ");
+		assertTrue(this.impl.includeCoachAsRecipient());
+		assertTrue(this.impl.includeEarlyAlertCoordinatorAsRecipient());
+		assertFalse(this.impl.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach());
+	}
+
+	@Test
+	public void testThatNullConfigValueDoeNotCauseExceptionAndThatDefaultIsUsed() {
+		this.configValueIsNull();
+		assertTrue(this.impl.includeCoachAsRecipient());
+		assertFalse(this.impl.includeEarlyAlertCoordinatorAsRecipient());
+		assertTrue(this.impl.includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach());
+	}
+
 	// helper methods
 
 	private void configValueIsCoachOnly() {
-		given(this.configService.getByNameNullOrDefaultValue(anyString())).willReturn(EarlyAlertResponseReminderRecipientsConfigImpl.COACH_ONLY);
+		this.setConfigValue(EarlyAlertResponseReminderRecipientsConfigImpl.COACH_ONLY);
 	}
 
 	private void configValueIsCoachOnlyOrEacIfNoCoach() {
-		given(this.configService.getByNameNullOrDefaultValue(anyString())).willReturn(EarlyAlertResponseReminderRecipientsConfigImpl.COACH_ONLY_OR_EAC_IF_NO_COACH);
+		this.setConfigValue(EarlyAlertResponseReminderRecipientsConfigImpl.COACH_ONLY_OR_EAC_IF_NO_COACH);
 	}
 
 	private void configValueIsEacOnly() {
-		given(this.configService.getByNameNullOrDefaultValue(anyString())).willReturn(EarlyAlertResponseReminderRecipientsConfigImpl.EAC_ONLY);
+		this.setConfigValue(EarlyAlertResponseReminderRecipientsConfigImpl.EAC_ONLY);
 	}
 
 	private void configValueIsCoachAndEac() {
-		given(this.configService.getByNameNullOrDefaultValue(anyString())).willReturn(EarlyAlertResponseReminderRecipientsConfigImpl.COACH_AND_EAC);
+		this.setConfigValue(EarlyAlertResponseReminderRecipientsConfigImpl.COACH_AND_EAC);
 	}
 
 	private void configValueIsInvalid() {
-		given(this.configService.getByNameNullOrDefaultValue(anyString())).willReturn("invalid_value");
+		this.setConfigValue("invalid_value");
+	}
+
+	private void configValueIsNull() {
+		this.setConfigValue(null);
+	}
+
+	private void setConfigValue(final String value) {
+		given(this.configService.getByNameNullOrDefaultValue(anyString())).willReturn(value);
 	}
 
 }

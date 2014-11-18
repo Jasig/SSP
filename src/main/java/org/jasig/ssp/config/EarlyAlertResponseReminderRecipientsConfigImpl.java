@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jasig.ssp.service.reference.ConfigService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +32,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EarlyAlertResponseReminderRecipientsConfigImpl implements EarlyAlertResponseReminderRecipientsConfig {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(EarlyAlertResponseReminderRecipientsConfigImpl.class);
 
 	public static final String CONFIG_NAME = "ear_reminder_recipients";
 	public static final String COACH_AND_EAC = "coach_and_eac";
@@ -79,14 +83,21 @@ public class EarlyAlertResponseReminderRecipientsConfigImpl implements EarlyAler
 
 	private String getConfigValueToUse() {
 		String result = this.getConfigValue();
-		if (!VALID_VALUES.contains(result)) {
+		if (result == null || !VALID_VALUES.contains(result.trim())) {
 			result = this.defaultValue;
 		}
-		return result;
+		return result.trim();
 	}
 
 	private String getConfigValue() {
-		return this.configService.getByNameNullOrDefaultValue(COACH_ONLY_OR_EAC_IF_NO_COACH);
+		final String value = this.configService.getByNameNullOrDefaultValue(CONFIG_NAME);
+		LOGGER.info("Config value retrieved for [{}]: \"{}\"", CONFIG_NAME, value);
+		return value;
+	}
+
+	@Override
+	public String toString() {
+		return "EarlyAlertResponseReminderRecipientsConfigImpl [defaultValue=" + defaultValue + "]";
 	}
 
 }
