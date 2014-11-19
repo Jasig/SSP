@@ -118,7 +118,7 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
                 emailTestArr = ccAddresses.split(',');
                 Ext.each(emailTestArr,function(emailAddress,index){
                     if (valid == true)
-                        valid = this.validateEmailAddress( emailAddress );
+                        valid = this.validateEmailAddress( emailAddress.trim() );
                 }, this);
             }else{
                 valid = this.validateEmailAddress( ccAddresses );
