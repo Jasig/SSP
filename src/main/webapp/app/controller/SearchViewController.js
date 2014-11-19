@@ -171,11 +171,13 @@ Ext.define('Ssp.controller.SearchViewController', {
     onTextStoreLoad:function() {
     	var me = this;
     	var index = !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ? 0 : 2;
-    	var birthDateField = Ext.ComponentQuery.query('searchForm')[index].query('datefield[itemId=birthDate]')[0];
-    	if ( birthDateField ) {
-    	    birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob') + ':' );
-    	}
-
+    	var searchForm = Ext.ComponentQuery.query('searchForm')[index];
+    	if ( searchForm ) {
+            var birthDateField = searchForm.query('datefield[itemId=birthDate]')[0];
+            if ( birthDateField ) {
+                birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob') + ':' );
+            }
+        }
     	me.setGridView();
     },
 
@@ -1282,12 +1284,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	translateSelectedStatusToSearchableStatus: function() {
 		var me = this;
-		if ( !(me.getCaseloadStatusCombo().getValue()) ) {
-			return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
-		} else if ( me.getCaseloadStatusCombo().getValue() === 'All' ) {
-			return null;
-		} else {
-			return me.getCaseloadStatusCombo().getValue()
+		if ( me.getCaseloadStatusCombo() ) {
+            if ( !(me.getCaseloadStatusCombo().getValue()) ) {
+                return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+            } else if ( me.getCaseloadStatusCombo().getValue() === 'All' ) {
+                return null;
+            } else {
+                return me.getCaseloadStatusCombo().getValue()
+            }
 		}
 	},
 	translateProgramStatusActionToDisplayName: function(action) {
@@ -1367,11 +1371,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	    });
 	},
 
-    getProgramStatusesSuccess: function( r, scope) {
+    getProgramStatusesSuccess: function(r, scope) {
     	var me=scope;
     	var activeProgramStatusId = "";
     	var programStatus;
-    	if ( me.programStatusesStore.getCount() > 0 && me.getCaseloadStatusCombo() != null) {
+    	if (me.programStatusesStore && me.getCaseloadStatusCombo() && me.programStatusesStore.getCount() > 0) {
 			me.getCaseloadStatusCombo().setValue(Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
     	}
     },
