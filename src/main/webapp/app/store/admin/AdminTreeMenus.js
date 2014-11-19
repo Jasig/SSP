@@ -988,7 +988,6 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false,
-                        dragAndDropReorder: true,
                         headerInstructions: "Double-click to edit and drag to re-order items.",
                         storeDependencies: [{
                             name: "colors",
