@@ -42,6 +42,12 @@ Ext.define('Ssp.util.Util', {
                     fl = field.getFieldLabel();
                 }
             }
+        },
+        fixedWidthFloatRenderer: function(val) {
+            if ( val === undefined || val === null ) {
+                return '';
+            }
+            return Ext.util.Format.number(val, '0.00');
         }
     },
 

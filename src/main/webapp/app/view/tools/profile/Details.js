@@ -271,18 +271,18 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         }, {
                             text: 'Attempted',
                             dataIndex: 'creditHoursAttempted',
-                            xtype: 'numbercolumn',
-                            format: '0.00'
+                            xtype: 'gridcolumn',
+                            renderer: Ssp.util.Util.fixedWidthFloatRenderer
                         }, {
                             text: 'Earned',
                             dataIndex: 'creditHoursEarned',
-                            xtype: 'numbercolumn',
-                            format: '0.00'
+                            xtype: 'gridcolumn',
+                            renderer: Ssp.util.Util.fixedWidthFloatRenderer
                         }, {
                             text: 'GPA',
                             dataIndex: 'gradePointAverage',
-                            xtype: 'numbercolumn',
-                            format: '0.00'
+                            xtype: 'gridcolumn',
+                            renderer: Ssp.util.Util.fixedWidthFloatRenderer
                         }, {
                             text: 'Paid',
                             dataIndex: 'tuitionPaid'

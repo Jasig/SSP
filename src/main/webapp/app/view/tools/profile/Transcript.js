@@ -50,10 +50,10 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
                 text: 'Course Title',
                 flex: 0.30
             }, {
-                xtype: 'numbercolumn',
+                xtype: 'gridcolumn',
                 dataIndex: 'creditEarned',
                 text: 'Cr Hrs',
-                format: '0.00',
+                renderer: Ssp.util.Util.fixedWidthFloatRenderer,
                 flex: 0.10
             }, {
                 xtype: 'gridcolumn',
