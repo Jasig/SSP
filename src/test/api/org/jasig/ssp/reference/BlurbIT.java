@@ -149,11 +149,11 @@ public class BlurbIT extends AbstractReferenceTest {
                         .contentType("application/json")
                         .statusCode(200)
                         .log().ifError()
-                        .body("results", equalTo(76))
+                        .body("results", equalTo(80))
                         .and()
                         .body("success", equalTo("true"))
                         .and()
-                        .body("rows", hasSize(76))
+                        .body("rows", hasSize(80))
                         .and();
 
         spec = expectListResponseObjectAtIndex(spec, 0, BLURB_ROWS);
@@ -232,7 +232,7 @@ public class BlurbIT extends AbstractReferenceTest {
         expect()
             .statusCode(200)
             .contentType("application/json")
-            .body("results", equalTo(76))
+            .body("results", equalTo(80))
         .when()
             .get(BLURB_PATH);
     }

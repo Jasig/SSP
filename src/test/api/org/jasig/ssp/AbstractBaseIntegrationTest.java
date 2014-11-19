@@ -74,6 +74,7 @@ public abstract class AbstractBaseIntegrationTest {
             CREATED_MODIFIED_BY_DEFAULT.put("id", "58ba5ee3-734e-4ae9-b9c5-943774b4de41");
             CREATED_MODIFIED_BY_DEFAULT.put("firstName", "System");
             CREATED_MODIFIED_BY_DEFAULT.put("lastName", "Administrator");
+            CREATED_MODIFIED_BY_DEFAULT.put("fullName", "System Administrator");
         }
 
         return CREATED_MODIFIED_BY_DEFAULT;
@@ -89,6 +90,8 @@ public abstract class AbstractBaseIntegrationTest {
         CREATED_MODIFIED_BY_CURRENT.put("id", portalLoginService.getCurrentlyLoggedInUserInfo().get("id"));
         CREATED_MODIFIED_BY_CURRENT.put("firstName", portalLoginService.getCurrentlyLoggedInUserInfo().get("firstName"));
         CREATED_MODIFIED_BY_CURRENT.put("lastName", portalLoginService.getCurrentlyLoggedInUserInfo().get("lastName"));
+        CREATED_MODIFIED_BY_CURRENT.put("fullName", portalLoginService.getCurrentlyLoggedInUserInfo().get("firstName")
+                + " " + portalLoginService.getCurrentlyLoggedInUserInfo().get("lastName"));
 
         return CREATED_MODIFIED_BY_CURRENT;
     }
