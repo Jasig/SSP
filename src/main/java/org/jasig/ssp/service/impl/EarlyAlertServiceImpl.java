@@ -158,6 +158,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	}
 
 	@Override
+	@Transactional(rollbackFor = { ObjectNotFoundException.class, ValidationException.class })
 	public EarlyAlert create(@NotNull final EarlyAlert earlyAlert)
 			throws ObjectNotFoundException, ValidationException {
 		// Validate objects
