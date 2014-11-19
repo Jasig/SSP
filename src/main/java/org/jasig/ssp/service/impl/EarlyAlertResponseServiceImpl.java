@@ -176,6 +176,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 
 	@Override
+	@Transactional(rollbackFor = ValidationException.class)
 	public EarlyAlertResponse create(@NotNull final EarlyAlertResponseTO obj)
 			throws ValidationException {
 
@@ -272,6 +273,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 
 	@Override
+	@Transactional(rollbackFor = ObjectNotFoundException.class)
 	public EarlyAlertResponse save(final EarlyAlertResponse obj)
 			throws ObjectNotFoundException {
 		final EarlyAlertResponse current = getDao().get(obj.getId());
