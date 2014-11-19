@@ -721,8 +721,8 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		if(StringUtils.isNotBlank(primaryEmailAddress)){
 			emailAddresses.add(primaryEmailAddress);
 		}
-		if(StringUtils.isNotBlank(secondaryEmailAddress))
-			emailAddresses.add(secondaryEmailAddress);
+		// do *not* include back to secondary email addr. might be a personal addr and we never know when we're allowed
+		// to *automatically* generate messages to such addr.
 		return emailAddresses;
 	}
 	

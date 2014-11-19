@@ -177,17 +177,17 @@ public class MessageServiceImpl implements MessageService {
 			throw new ValidationException("Recipient missing.");
 		}
 		String toAddress = to.getPrimaryEmailAddress();
-		if(StringUtils.isBlank(toAddress))
-			toAddress = to.getSecondaryEmailAddress();
+		// do *not* fall back to secondary email addr. might be a personal addr and we never know when we're allowed to
+		// *automatically* generate messages to such addr.
 
 		if (StringUtils.isBlank(toAddress)) {
 			throw new ValidationException(
-					"Recipient primary e-mail address is missing.");
+					"Recipient e-mail address is missing.");
 		}
 		
 		if(!validateEmail(toAddress)){
 			throw new ValidationException(
-				"Recipient primary e-mail address is invalid.");
+				"Recipient e-mail address is invalid.");
 		}
 		
 		final Message message = createMessage(subjAndBody);
