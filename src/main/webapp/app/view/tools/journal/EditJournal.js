@@ -119,7 +119,6 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
 						        xtype: 'ssphtmleditor',
 						        itemId: 'commentTxt',
 		                        name: 'comment',
-		                        allowBlank: false,
 						        fieldLabel: '',
 						        anchor: '100%',
 						        labelSeparator: '',
