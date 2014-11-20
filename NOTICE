@@ -178,6 +178,7 @@ This project includes:
   Maven Project Builder under The Apache Software License, Version 2.0
   Maven Repository Metadata Model under The Apache Software License, Version 2.0
   Maven Wagon API under The Apache Software License, Version 2.0
+  Mockito under The MIT License
   OAuth 1(a) for Spring Security under Apache 2.0
   OAuth2 for Spring Security under Apache 2.0
   Objenesis under Apache 2
