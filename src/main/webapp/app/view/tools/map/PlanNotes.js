@@ -23,6 +23,7 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
     height: 500,
     width: 500,
     resizable: true,
+    modal: true,
     initComponent: function() {
 		var me=this;
 		Ext.apply(me, 

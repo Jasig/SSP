@@ -30,6 +30,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
     resizable: true,
     parentGrid: null,
     enableFields: true,
+    modal: true,
     initComponent: function() {
 		var me=this;
 		Ext.apply(me, 

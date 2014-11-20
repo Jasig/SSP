@@ -27,6 +27,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
     height: 425,
     width: 700,
     resizable: true,
+    modal: true,
     initComponent: function() {
         var me = this;
         Ext.apply(me, {

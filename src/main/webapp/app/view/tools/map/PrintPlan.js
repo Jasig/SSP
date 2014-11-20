@@ -28,6 +28,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
     height: 300,
     width: 400,
     resizable: true,
+    modal: true,
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
