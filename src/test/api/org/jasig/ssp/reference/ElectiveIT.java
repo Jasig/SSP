@@ -119,12 +119,13 @@ public class ElectiveIT extends AbstractReferenceTest {
         ELECTIVE_PRG.put("color", "8dad87be-936b-450d-8f4a-f733b679a7dd");
 
         ELECTIVE_ROWS = new JSONArray();
-        ELECTIVE_ROWS.add(ELECTIVE_ART);
-        ELECTIVE_ROWS.add(ELECTIVE_ENG);
+
         ELECTIVE_ROWS.add(ELECTIVE_GEN);
-        ELECTIVE_ROWS.add(ELECTIVE_HUM);
-        ELECTIVE_ROWS.add(ELECTIVE_LNG);
         ELECTIVE_ROWS.add(ELECTIVE_PRG);
+        ELECTIVE_ROWS.add(ELECTIVE_LNG);
+        ELECTIVE_ROWS.add(ELECTIVE_ART);
+        ELECTIVE_ROWS.add(ELECTIVE_HUM);
+        ELECTIVE_ROWS.add(ELECTIVE_ENG);
 
         ELECTIVE_RESPONSE = new JSONObject();
         ELECTIVE_RESPONSE.put("success", "true");
