@@ -322,8 +322,8 @@ public class PlanDaoTest {
 	@Test
 	public void  testDaoReportMethodsNull(){
 		SearchPlanTO form = new SearchPlanTO(null, null, null, null, null, null, null);
-		List<PlanCourseCountTO>  planCount = dao.getPlanCourseCount(form);
-		List<PlanAdvisorCountTO>  advisorsCount = dao.getOwnerPlanCount(form);
+		List<PlanCourseCountTO>  planCount = dao.getPlanCountByCourse(form);
+		List<PlanAdvisorCountTO>  advisorsCount = dao.getPlanCountByOwner(form);
 		List<PlanStudentStatusTO>  studentStatus = dao.getPlanStudentStatusByCourse(form);
 		
 		assertEquals(0, planCount.size());
