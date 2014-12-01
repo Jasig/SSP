@@ -329,17 +329,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		if ( courseOp ) {
 			if ( courseOp.op === 'MOVE' && courseOp.fromStore !== me.getView().getStore() ) {
 				var planCourse = me.currentMapPlan.getPlanCourseFromCourseCode(courseOp.course.get("code"), panel.getItemId());
-				var invalidReasons = planCourse.invalidReasons;
-				if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1 && courseOp.op === 'MOVE') {
-					var message = " \n Are you sure you want to add the course? " +
-						planCourse.formattedCourse +
-						" generates the following concerns: " +
-						invalidReasons;
-					awaitingUser = true;
-					Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.newOnConfirmInvalidCourseOp(courseOp), me);
-				} else {
-					// no user feedback needed, fall through to dirty flag and spinner mgmt
-				}
+				if (planCourse) {
+				    var invalidReasons = planCourse.invalidReasons;
+                    if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1 && courseOp.op === 'MOVE') {
+                        var message = " \n Are you sure you want to add the course? " +
+                            planCourse.formattedCourse +
+                            " generates the following concerns: " +
+                            invalidReasons;
+                        awaitingUser = true;
+                        Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.newOnConfirmInvalidCourseOp(courseOp), me);
+                    } else {
+                        // no user feedback needed, fall through to dirty flag and spinner mgmt
+                    }
+                }
 			} else {
 				// Nothing to do because unlike the branch above, we can't reasonably report on the invalidating effects
 				// of the operation in terms of the specific course being acted on. Here's we're dealing with a DELETE

@@ -524,10 +524,12 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(planCourses && planCourses.length > 0){
 			for(index in courses){
 				var termStore = semesterStores[index];
-				termStore.suspendEvents();
-				termStore.loadRecords(courses[index], {addRecords:false});
-				termStore.sync();
-				termStore.resumeEvents();
+				if (termStore) {
+				    termStore.suspendEvents();
+				    termStore.loadRecords(courses[index], {addRecords:false});
+				    termStore.sync();
+				    termStore.resumeEvents();
+                }
 			}
 		}
 		if(markDirty != null){

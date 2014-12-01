@@ -24,7 +24,7 @@ Ext.define('Ssp.store.external.Terms', {
         apiProperties: 'apiProperties'
     },
     
-    constructor: function(){
+    constructor: function() {
         var me = this;
         me.callParent(arguments);
         me.addListener('load', me.sortAfterLoad, me, {
@@ -40,12 +40,12 @@ Ext.define('Ssp.store.external.Terms', {
         return;
     },
     
-    sortAfterLoad: function(){
+    sortAfterLoad: function() {
         var me = this;
         me.sort('startDate', 'DESC');
     },
     
-    getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum, minimum){
+    getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum, minimum) {
         var me = this;
         var store = Ext.create('Ext.data.Store', {
             model: "Ssp.model.external.Term"
@@ -54,7 +54,8 @@ Ext.define('Ssp.store.external.Terms', {
         me.sortStoreByDate(store, sortEarliestFirst);
         return store;
     },
-    getClonedStoreSortedByDate: function(sortEarliestFirst){
+
+    getClonedStoreSortedByDate: function(sortEarliestFirst) {
         var me = this;
         var store = Ext.create('Ext.data.Store', {
             model: "Ssp.model.external.Term"
@@ -63,14 +64,16 @@ Ext.define('Ssp.store.external.Terms', {
         me.sortStoreByDate(store, sortEarliestFirst);
         return store;
     },
-    sortStoreByDate: function(store, sortEarliestFirst){
-        if (sortEarliestFirst) 
+
+    sortStoreByDate: function(store, sortEarliestFirst) {
+        if (sortEarliestFirst) {
             store.sort('startDate', 'ASC');
-        else 
+        } else {
             store.sort('startDate', 'DESC');
+        }
     },
     
-    getFutureTermsStore: function(sortEarliestFirst){
+    getFutureTermsStore: function(sortEarliestFirst) {
         var me = this;
         var store = Ext.create('Ext.data.Store', {
             model: "Ssp.model.external.Term"
@@ -80,7 +83,7 @@ Ext.define('Ssp.store.external.Terms', {
         return store;
     },
     
-    getTermsFromTermCodesStore: function(termCodes){
+    getTermsFromTermCodesStore: function(termCodes) {
         var me = this;
         var terms = [];
         Ext.Array.forEach(termCodes, function(termCode){
@@ -95,7 +98,7 @@ Ext.define('Ssp.store.external.Terms', {
         return store;
     },
     
-    getTermsFromTermCodes: function(termCodes){
+    getTermsFromTermCodes: function(termCodes) {
         var me = this;
         return me.getTermsFromTermCodesStore(termCodes).getRange(0);
     },
@@ -105,18 +108,20 @@ Ext.define('Ssp.store.external.Terms', {
     // minimum is the number of school years from current term to start collecting terms
     // negative values pull previous years, positive goes into the future, 0 pulls current year
     // null start at current term
-    getCurrentAndFutureTerms: function(maximum, minimum){
+    getCurrentAndFutureTerms: function(maximum, minimum) {
         var me = this;
         var startIndex = 0
         var endIndex = me.findBy(me.isCurrentTerm);
-        if(endIndex == -1)
+        if (endIndex == -1) {
         	endIndex = me.getCount();
+        }
         
         var startReportYear = me.getAt(endIndex).get("reportYear");
         if (maximum !== null && maximum !== undefined) {
             startIndex = me.findExact('reportYear', startReportYear + maximum);
-            if (startIndex == -1) 
+            if (startIndex == -1) {
                 startIndex = 0;
+            }
         }
         
         // No specific call to find the last that meets criteria or to pull indexes
@@ -125,46 +130,56 @@ Ext.define('Ssp.store.external.Terms', {
         	var index = me.findExact('reportYear', startReportYear + minimum);
         	var gindex = index;
         	var count = 0;
-        	while(index != -1){
+        	while (index != -1) {
         		index = me.findExact('reportYear', startReportYear + minimum, ++index);
-        		if(index != -1){
+        		if (index != -1) {
         			gindex = index;
         		}
-        		if(++count >= 10)
+        		if (++count >= 10) {
         			break;
+                }
         	}
-            if (gindex == -1)
+            if (gindex == -1) {
             	endIndex = me.getCount();
-            else
+            } else {
             	endIndex = gindex;
+            }
         }
-        
         return me.getRange(startIndex, endIndex);
     },
     
-    isPastTerm: function(termCode){
+    isPastTerm: function(termCode) {
         var me = this;
-        var startIndex = 0
+        var startIndex = 0;
         var currentTermIndex = me.findBy(me.isCurrentTerm);
-        var termIndex = me.findExact('code', termCode)
-        
-        if (me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime()) 
-            return true;
-        else 
-            return termIndex <= currentTermIndex ? false : true;
+        var termIndex = me.findExact('code', termCode);
+
+        if (currentTermIndex && termIndex && me.getAt(termIndex)) {
+            if (me.getAt(termIndex).get('endDate').getTime() <= (new Date()).getTime()) {
+                return true;
+            } else {
+                return termIndex <= currentTermIndex ? false : true;
+            }
+        } else {
+            return false;
+        }
     },
     
     getFutureTerms: function(){
         var me = this;
-        var currentTermIndex = me.findBy(me.isCurrentTerm) - 1;
-        return me.getRange(0, currentTermIndex);
+        var currentTermIndex = (me.findBy(me.isCurrentTerm)-1);
+        if (currentTermIndex >= 0) {
+            return me.getRange(0, currentTermIndex);
+        }
     },
     
     isCurrentTerm: function(record, id){
         var me = this;
-        if (record.get('startDate').getTime() >= (new Date()).getTime()) 
+        if (record.get('startDate') && (record.get('startDate').getTime() >= (new Date()).getTime())) {
             return false;
-        return true;
+        } else {
+            return true;
+        }
     },
     
     getCurrentAndFutureYearStore: function(sortEarliestFirst){
@@ -188,6 +203,4 @@ Ext.define('Ssp.store.external.Terms', {
         
         return store;
     }
-    
-    
 });
