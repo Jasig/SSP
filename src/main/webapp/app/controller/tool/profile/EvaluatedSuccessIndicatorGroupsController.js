@@ -166,7 +166,6 @@ Ext.define('Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsControlle
 
     renderViewSpecs: function(specs) {
         var me = this;
-        Ext.suspendLayouts();
         if ( specs.STUDENT[0].items.length ) {
             me.getStudentSuccessIndicatorGroup().add(specs.STUDENT);
         } else {
@@ -182,7 +181,6 @@ Ext.define('Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsControlle
         } else {
             me.getRiskSuccessIndicatorGroup().up().hide();
         }
-        Ext.resumeLayouts(true);
         me.getView().setLoading(false);
     }
 
