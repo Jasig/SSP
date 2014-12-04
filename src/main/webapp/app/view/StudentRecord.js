@@ -21,7 +21,8 @@ Ext.define('Ssp.view.StudentRecord', {
     alias: 'widget.studentrecord',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        appEventsController: 'appEventsController'
     },    
     controller: 'Ssp.controller.StudentRecordViewController',
     width: '100%',
@@ -32,6 +33,20 @@ Ext.define('Ssp.view.StudentRecord', {
             title: '',
             collapsible: true,
             collapseDirection: 'left',
+            listeners: {
+                beforecollapse: function() {
+                    me.appEventsController.loadMaskOn();
+                },
+                collapse: function() {
+                    me.appEventsController.loadMaskOff();
+                },
+                beforeexpand: function() {
+                    me.appEventsController.loadMaskOn();
+                },
+                expand: function() {
+                    me.appEventsController.loadMaskOff();
+                }
+            },
             cls: 'studentpanel',
             layout: {
                 type: 'hbox',

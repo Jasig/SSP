@@ -34,6 +34,20 @@ Ext.define('Ssp.view.SearchTab', {
             title: 'Students',
             collapsible: true,
             collapseDirection: 'left',
+            listeners: {
+                beforecollapse: function() {
+                    me.appEventsController.loadMaskOn();
+                },
+                collapse: function() {
+                    me.appEventsController.loadMaskOff();
+                },
+                beforeexpand: function() {
+                    me.appEventsController.loadMaskOn();
+                },
+                expand: function() {
+                    me.appEventsController.loadMaskOff();
+                }
+            },
             border: 0,
             layout: 'fit',
             items: [
