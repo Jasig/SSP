@@ -57,7 +57,6 @@ import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
 import org.jasig.ssp.util.SspStringUtils;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +66,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.PatternMatchUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -243,9 +243,9 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         try {
             for ( SuccessIndicator successIndicator : successIndicators ) {
                 try {
-                    final EvaluatedSuccessIndicatorTO evaluation = evaluate(successIndicator, person);
+                    final List<EvaluatedSuccessIndicatorTO> evaluation = evaluate(successIndicator, person);
                     if ( evaluation != null ) {
-                        evaluations.add(evaluation);
+                        evaluations.addAll(evaluation);
                     }
                 } catch ( Exception e ) {
                     // This rarely happens b/c evaluate() should be catching nearly all problems since the goal
@@ -264,8 +264,53 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         rsltHolder.set(evaluations);
     }
 
-    private EvaluatedSuccessIndicatorTO evaluate(@Nonnull SuccessIndicator successIndicator,
-                                                 @Nonnull Person person) {
+    private static class SuccessIndicatorMetric {
+        private Object rawValue;
+        private String displayValue;
+        private String displayValueDescription;
+        private String code;
+        private String name;
+
+        private SuccessIndicatorMetric() {}
+
+        private SuccessIndicatorMetric(Object rawValue, String displayValue, String displayValueDescription, String code, String name) {
+            this.rawValue = rawValue;
+            this.displayValue = displayValue;
+            this.displayValueDescription = displayValueDescription;
+            this.code = code;
+            this.name = name;
+        }
+    }
+
+    private static class SuccessIndicatorEvaluationContext {
+        private SuccessIndicatorEvaluation evaluation;
+        private SuccessIndicatorMetric metric;
+        private Exception failure;
+
+        private SuccessIndicatorEvaluationContext() {
+            super();
+            metric = new SuccessIndicatorMetric();
+        }
+
+        private SuccessIndicatorEvaluationContext(SuccessIndicatorEvaluation evaluation) {
+            this(evaluation, null);
+        }
+
+        private SuccessIndicatorEvaluationContext(SuccessIndicatorMetric metric) {
+            this(null, metric);
+        }
+
+        private SuccessIndicatorEvaluationContext(SuccessIndicatorEvaluation evaluation, SuccessIndicatorMetric metric) {
+            this.evaluation = evaluation;
+            this.metric = metric;
+            if ( this.metric == null ) {
+                this.metric = new SuccessIndicatorMetric();
+            }
+        }
+    }
+
+    private List<EvaluatedSuccessIndicatorTO> evaluate(@Nonnull SuccessIndicator successIndicator,
+                                                       @Nonnull Person person) {
 
         // Have struggled w/ the right cohesion level for this method. Currently responsible for building the
         // full evaluation response *and* calculating the eval itself, including selection of 'no data' and/or 'no
@@ -273,69 +318,85 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         // evaluation. Previous revisions did split that up but ended up being difficult to name and suprisingly
         // difficult to understand. So for now it's all clumped up together.
 
-        String metricDisplay = null;
-        SuccessIndicatorEvaluation evaluation = null;
-        Exception failure = null;
+        final List<SuccessIndicatorEvaluationContext> evaluationContexts = Lists.newLinkedList();
         try {
 
-            final Pair<Object,String> metricDescriptor = findMetric(successIndicator, person);
-            final Object metricValue = metricDescriptor.getFirst();
-            metricDisplay = metricDescriptor.getSecond();
+            final List<SuccessIndicatorMetric> metrics = findMetrics(successIndicator, person);
+            if ( metrics.isEmpty() ) {
 
-            final boolean isMetric = !(isEmptyNonNormalizedMetric(metricValue, successIndicator, person));
-            if ( !(isMetric) ) {
-                evaluation = successIndicator.getNoDataExistsEvaluation();
-            }
+                if ( !(isWildcardedIndicator(successIndicator)) ) {
+                    evaluationContexts.add(new SuccessIndicatorEvaluationContext(successIndicator.getNoDataExistsEvaluation(),
+                            emptyMetricDescriptor(successIndicator)));
+                }
+                // otherwise return no evaluations at all. if the indicator is wildcarded, there's no pointing in
+                // rendering a placeholder since the indicator itself is meaningless.
 
-            if ( evaluation == null ) {
-                // indicator value i.e. metric normalization and existence check at this layer so it can be responsible
-                // centrally for both 'no data' and 'no match' handling
-                switch ( successIndicator.getEvaluationType() ) {
-                    case SCALE:
+            } else {
 
-                        BigDecimal normalizedScaleMetric = null;
-                        try {
-                            normalizedScaleMetric = normalizeForScaleEvaluation(metricValue, successIndicator);
-                        } catch ( NumberFormatException e ) {
-                            // see rationale for debug level logging elsewhere in this class
-                            LOGGER.debug("Failed to find numeric representation of metric [{}] for person [{}] for evaluation against a " +
-                                    "numeric scale using success indicator [{}]",
-                                    new Object[] { metricValue, person.getId(), successIndicatorLoggingId(successIndicator), e });
-                            // we have data, we just can't narrow its type for evaluation against a numeric scale, so this is
-                            // a non-match, which is handled outside the switch
-                            failure = e;
-                            break;
-                        } // anything else is a programmer error and we can't really distinguish between 'no data' and 'no match' so raise it
+                for ( SuccessIndicatorMetric metric : metrics ) {
+                    final SuccessIndicatorEvaluationContext evaluationContext = new SuccessIndicatorEvaluationContext(metric);
 
-                        // shouldn't happen, but just in case, and b/c this layer is responsible for 'no data' evaluations of
-                        // normalized indicator metrics
-                        if ( normalizedScaleMetric == null ) {
-                            evaluation = successIndicator.getNoDataExistsEvaluation();
+                    final boolean isMetric = !(isEmptyNonNormalizedMetric(evaluationContext.metric.rawValue, successIndicator, person));
+                    if ( !(isMetric) ) {
+                        evaluationContext.evaluation = successIndicator.getNoDataExistsEvaluation();
+                    } else {
+                        // indicator value i.e. metric normalization and existence check at this layer so it can be responsible
+                        // centrally for both 'no data' and 'no match' handling
+                        switch ( successIndicator.getEvaluationType() ) {
+                            case SCALE:
+
+                                BigDecimal normalizedScaleMetric = null;
+                                try {
+                                    normalizedScaleMetric = normalizeForScaleEvaluation(evaluationContext.metric.rawValue, successIndicator);
+                                } catch ( NumberFormatException e ) {
+                                    // see rationale for debug level logging elsewhere in this class
+                                    LOGGER.debug("Failed to find numeric representation of metric [{}] with value [{}] for person [{}] for " +
+                                            "evaluation against a numeric scale using success indicator [{}]",
+                                            new Object[] { evaluationContext.metric.code, evaluationContext.metric.rawValue, person.getId(),
+                                                    successIndicatorLoggingId(successIndicator), e });
+                                    // we have data, we just can't narrow its type for evaluation against a numeric scale, so this is
+                                    // a non-match, which is handled outside the switch
+                                    evaluationContext.failure = e;
+                                    break;
+                                } // anything else is a programmer error and we can't really distinguish between 'no data' and 'no match' so raise it
+
+                                // shouldn't happen, but just in case, and b/c this layer is responsible for 'no data' evaluations of
+                                // normalized indicator metrics
+                                if ( normalizedScaleMetric == null ) {
+                                    evaluationContext.evaluation = successIndicator.getNoDataExistsEvaluation();
+                                } else {
+                                    evaluationContext.evaluation = evaluateScale(normalizedScaleMetric, successIndicator, person);
+                                }
+                                break;
+
+                            case STRING:
+
+                                // any normalization problem is a programmer error and we can't really distinguish between 'no data' and
+                                // 'no match' so raise it
+                                final List<String> normalizedStringMetric = normalizeForStringEvaluation(evaluationContext.metric.rawValue, successIndicator);
+                                if ( isEmptyNormalizedString(normalizedStringMetric) ) {
+                                    evaluationContext.evaluation = successIndicator.getNoDataExistsEvaluation();
+                                } else {
+                                    evaluationContext.evaluation = evaluateString(normalizedStringMetric, successIndicator, person);
+                                }
+                                break;
+
+                            default:
+                                throw new UnsupportedOperationException("Unrecognized evaluation type [" +
+                                        successIndicator.getEvaluationType() + "] in success indicator [" +
+                                        successIndicatorLoggingId(successIndicator) + "]");
+
                         }
-                        evaluation = evaluateScale(normalizedScaleMetric, successIndicator, person);
-                        break;
+                    }
 
-                    case STRING:
+                    if ( evaluationContext.evaluation == null ) {
+                        evaluationContext.evaluation = successIndicator.getNoDataMatchesEvaluation();
+                    }
 
-                        // any normalization problem is a programmer error and we can't really distinguish between 'no data' and
-                        // 'no match' so raise it
-                        final List<String> normalizedStringMetric = normalizeForStringEvaluation(metricValue, successIndicator);
-                        if ( isEmptyNormalizedString(normalizedStringMetric) ) {
-                            evaluation = successIndicator.getNoDataExistsEvaluation();
-                        }
-                        evaluation = evaluateString(normalizedStringMetric, successIndicator, person);
-                        break;
-
-                    default:
-                        throw new UnsupportedOperationException("Unrecognized evaluation type [" +
-                                successIndicator.getEvaluationType() + "] in success indicator [" +
-                                successIndicatorLoggingId(successIndicator) + "]");
+                    evaluationContexts.add(evaluationContext);
 
                 }
-            }
 
-            if ( evaluation == null ) {
-                evaluation = successIndicator.getNoDataMatchesEvaluation();
             }
 
         } catch ( Exception e ) {
@@ -346,27 +407,33 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             // TODO would be nice to have a better 'error' eval to return, or at least a field
             // to set on the evaluated indicator TO to indicate an error occurred so the
             // eval might be misleading
-            metricDisplay = null;
-            failure = e;
-            evaluation = successIndicator.getNoDataExistsEvaluation();
+            final SuccessIndicatorEvaluationContext evaluationContext =
+                    new SuccessIndicatorEvaluationContext(successIndicator.getNoDataExistsEvaluation(),
+                            emptyMetricDescriptor(successIndicator));
+            evaluationContext.failure = e;
+            evaluationContexts.add(evaluationContext);
         }
 
-        // wait to set display value to make sure there wasn't an error during eval
-        final EvaluatedSuccessIndicatorTO indicatorTO = newBaseEvaluation(successIndicator, person);
-        indicatorTO.setDisplayValue(StringUtils.isBlank(metricDisplay) ? (failure == null ? "[NO DATA]" : "[ERROR]") : metricDisplay);
-        indicatorTO.setEvaluation(evaluation);
-        indicatorTO.setEvaluationDisplayName(findEvaluationDisplayName(evaluation));
-        return indicatorTO;
+        final List<EvaluatedSuccessIndicatorTO> indicatorTOs = Lists.newArrayListWithExpectedSize(evaluationContexts.size());
+        for ( SuccessIndicatorEvaluationContext evaluationContext : evaluationContexts ) {
+            final EvaluatedSuccessIndicatorTO indicatorTO = newBaseEvaluation(successIndicator, evaluationContext, person);
+            indicatorTO.setDisplayValue(StringUtils.isBlank(evaluationContext.metric.displayValue)
+                    ? (evaluationContext.failure == null ? "[NO DATA]" : "[ERROR]") : evaluationContext.metric.displayValue);
+            indicatorTO.setEvaluation(evaluationContext.evaluation);
+            indicatorTO.setEvaluationDisplayName(findEvaluationDisplayName(evaluationContext.evaluation));
+            indicatorTOs.add(indicatorTO);
+        }
+        return indicatorTOs;
     }
 
-    private Pair<Object, String> findMetric(SuccessIndicator successIndicator, Person person) {
+    private List<SuccessIndicatorMetric> findMetrics(SuccessIndicator successIndicator, Person person) {
         switch ( successIndicator.getIndicatorGroup() ) {
             case STUDENT:
-                return findMetricInStudentIndicatorGroup(successIndicator, person);
+                return Lists.newArrayList(findMetricInStudentIndicatorGroup(successIndicator, person));
             case INTERVENTION:
-                return findMetricInInterventionIndicatorGroup(successIndicator, person);
+                return Lists.newArrayList(findMetricInInterventionIndicatorGroup(successIndicator, person));
             case RISK:
-                return findMetricInRiskIndicatorGroup(successIndicator, person);
+                return findMetricsInRiskIndicatorGroup(successIndicator, person);
             default:
                 throw new IllegalStateException("Unexpected indicator group [" +
                         successIndicator.getIndicatorGroup() + "] for indicator [" +
@@ -546,6 +613,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     }
 
     private EvaluatedSuccessIndicatorTO newBaseEvaluation(@Nonnull SuccessIndicator successIndicator,
+                                                          @Nonnull SuccessIndicatorEvaluationContext evaluationContext,
                                                           @Nonnull Person person) {
         final EvaluatedSuccessIndicatorTO indicatorTO = new EvaluatedSuccessIndicatorTO();
         indicatorTO.setPersonId(person.getId());
@@ -559,6 +627,9 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         indicatorTO.setIndicatorSortOrder(successIndicator.getSortOrder());
         indicatorTO.setIndicatorModelCode(successIndicator.getModelCode());
         indicatorTO.setIndicatorModelName(successIndicator.getModelName());
+        indicatorTO.setDisplayName(evaluationContext.metric.name);
+        indicatorTO.setEvaluatedIndicatorCode(evaluationContext.metric.code);
+        indicatorTO.setDisplayValueDescription(evaluationContext.metric.displayValueDescription);
         return indicatorTO;
     }
 
@@ -586,8 +657,8 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     // TODO refactor to externalize per-indicator 'metric' extractions... this class is getting out of hand trying do
     // them all inline. Should have individual services register 'indicator metric providers' to perform those
     // extractions
-    private Pair<Object,String> findMetricInStudentIndicatorGroup(@Nonnull SuccessIndicator successIndicator,
-                                                                        @Nonnull Person person) {
+    private SuccessIndicatorMetric findMetricInStudentIndicatorGroup(@Nonnull SuccessIndicator successIndicator,
+                                                                     @Nonnull Person person) {
 
         switch ( successIndicator.getCode() ) {
             case "system.student.gpa":
@@ -610,14 +681,15 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
     }
 
-    private Pair<Object,String> findGpaMetric(@Nonnull SuccessIndicator successIndicator,
-                                              @Nonnull Person person) {
+    private SuccessIndicatorMetric findGpaMetric(@Nonnull SuccessIndicator successIndicator,
+                                                 @Nonnull Person person) {
         final ExternalStudentTranscript transcript = findTranscriptFor(person);
         BigDecimal gpa = null;
         if ( transcript != null ) {
             gpa = transcript.getGradePointAverage();
         }
-        return new Pair<Object,String>(gpa, (gpa == null ? null : gpa.toString()));
+        return new SuccessIndicatorMetric(gpa, (gpa == null ? null : gpa.toString()), null,
+                successIndicator.getCode(), successIndicator.getName());
     }
 
     private static enum RegistrationStatusMetric {
@@ -658,8 +730,8 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         }
     }
 
-    private Pair<Object,String> findRegistrationMetric(@Nonnull SuccessIndicator successIndicator,
-                                                       @Nonnull Person person) {
+    private SuccessIndicatorMetric findRegistrationMetric(@Nonnull SuccessIndicator successIndicator,
+                                                          @Nonnull Person person) {
 
         List<Term> currentAndFutureTerms = null;
         try {
@@ -671,7 +743,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         final boolean areCurrentOrFutureTerms = currentAndFutureTerms != null && !(currentAndFutureTerms.isEmpty());
 
         if ( !(areCurrentOrFutureTerms) ) {
-            return emptyMetricDescriptor();
+            return emptyMetricDescriptor(successIndicator);
         }
 
         final Map<String,Term> currentAndFutureTermsByCode = Maps.newLinkedHashMap();
@@ -694,14 +766,15 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         } catch ( ObjectNotFoundException e ) {
             // really shouldn't happen, but if it does, indicates all current/future terms have gone missing, so
             // handle it the same was as in that check above
-            return emptyMetricDescriptor();
+            return emptyMetricDescriptor(successIndicator);
         }
 
         if ( regStatuses == null || regStatuses.isEmpty() ) {
             // current/future terms exist, but this person has no registration records in any of them.
             // or has zeroes in all of them. treat as if they are all zeroes
-            return new Pair<Object,String>(RegistrationStatusMetric.NONE.name(),
-                    RegistrationStatusMetric.NONE.screenDisplayName());
+            return new SuccessIndicatorMetric(RegistrationStatusMetric.NONE.name(),
+                    RegistrationStatusMetric.NONE.screenDisplayName(), null, successIndicator.getCode(),
+                    successIndicator.getName());
         }
 
         RegistrationStatusMetric regStatusMetric = RegistrationStatusMetric.NONE;
@@ -721,51 +794,53 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             }
         }
 
-        return new Pair<Object,String>(regStatusMetric, regStatusMetric.screenDisplayName());
+        return new SuccessIndicatorMetric(regStatusMetric, regStatusMetric.screenDisplayName(), null,
+                successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findCreditCompletionMetric(@Nonnull SuccessIndicator successIndicator,
-                                                           @Nonnull Person person) {
+    private SuccessIndicatorMetric findCreditCompletionMetric(@Nonnull SuccessIndicator successIndicator,
+                                                              @Nonnull Person person) {
         final ExternalStudentTranscript transcript = findTranscriptFor(person);
         BigDecimal completionRatio = null;
         if ( transcript != null ) {
             completionRatio = transcript.getCreditCompletionRate();
         }
-        return new Pair<Object,String>(completionRatio, (completionRatio == null ? null : completionRatio.toString() + "%"));
+        return new SuccessIndicatorMetric(completionRatio, (completionRatio == null ? null : completionRatio.toString() + "%"),
+                null, successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findStandingMetric(@Nonnull SuccessIndicator successIndicator,
-                                                   @Nonnull Person person) {
+    private SuccessIndicatorMetric findStandingMetric(@Nonnull SuccessIndicator successIndicator,
+                                                      @Nonnull Person person) {
         final ExternalStudentTranscript transcript = findTranscriptFor(person);
         String standing = null;
         if ( transcript != null ) {
             standing = transcript.getAcademicStanding();
         }
-        return new Pair<Object,String>(standing, standing);
+        return new SuccessIndicatorMetric(standing, standing, null, successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findSapMetric(@Nonnull SuccessIndicator successIndicator,
-                                              @Nonnull Person person) {
+    private SuccessIndicatorMetric findSapMetric(@Nonnull SuccessIndicator successIndicator,
+                                                 @Nonnull Person person) {
         final ExternalStudentFinancialAid fa = findFinancialAidFor(person);
         String sap = null;
         if ( fa != null ) {
             sap = fa.getSapStatusCode();
         }
-        return new Pair<Object,String>(sap, sap);
+        return new SuccessIndicatorMetric(sap, sap, null, successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findRestrictionsMetric(@Nonnull SuccessIndicator successIndicator,
-                                                       @Nonnull Person person) {
+    private SuccessIndicatorMetric findRestrictionsMetric(@Nonnull SuccessIndicator successIndicator,
+                                                          @Nonnull Person person) {
         final ExternalStudentTranscript transcript = findTranscriptFor(person);
         String restrictions = null;
         if ( transcript != null ) {
             restrictions = transcript.getCurrentRestrictions();
         }
-        return new Pair<Object,String>(restrictions, restrictions);
+        return new SuccessIndicatorMetric(restrictions, restrictions, null, successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findMetricInInterventionIndicatorGroup(@Nonnull SuccessIndicator successIndicator,
-                                                                             @Nonnull Person person) {
+    private SuccessIndicatorMetric findMetricInInterventionIndicatorGroup(@Nonnull SuccessIndicator successIndicator,
+                                                                          @Nonnull Person person) {
         switch ( successIndicator.getCode() ) {
             case "system.intervention.intakesubmitted":
                 return findIntakeSubmittedMetric(successIndicator, person);
@@ -782,13 +857,14 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         }
     }
 
-    private Pair<Object,String> findIntakeSubmittedMetric(@Nonnull SuccessIndicator successIndicator,
-                                                                @Nonnull Person person) {
+    private SuccessIndicatorMetric findIntakeSubmittedMetric(@Nonnull SuccessIndicator successIndicator,
+                                                             @Nonnull Person person) {
         Date intakeSubmissionDate = person.getStudentIntakeCompleteDate();
         // Doesn't go for all boolean indicators you could imagine, but for this one there is no conceptual distinction
         // between 'no data' and 'false'
-        return new Pair<Object, String>(new Boolean(intakeSubmissionDate != null),
-                formatIntakeSubmissionDateForDisplay(intakeSubmissionDate));
+        return new SuccessIndicatorMetric(new Boolean(intakeSubmissionDate != null),
+                formatIntakeSubmissionDateForDisplay(intakeSubmissionDate), null,
+                successIndicator.getCode(), successIndicator.getName());
     }
 
     private String formatIntakeSubmissionDateForDisplay(@Nullable Date intakeSubmissionDate) {
@@ -798,8 +874,8 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         return DateOnlyFormatting.dateFormatter().format(intakeSubmissionDate);
     }
 
-    private Pair<Object,String> findOpenTasksMetric(@Nonnull SuccessIndicator successIndicator,
-                                                          @Nonnull Person person) {
+    private SuccessIndicatorMetric findOpenTasksMetric(@Nonnull SuccessIndicator successIndicator,
+                                                       @Nonnull Person person) {
 
         // Special service method invented specifically for this use case... without it, pulling back
         // a list of actual Tasks to filter ends up taking easily half the elapsed time of the entire
@@ -812,10 +888,10 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         final long total = open + closed;
 
         final String display = new StringBuilder().append(open).append("/").append(total).toString();
-        return new Pair<Object, String>(open, display);
+        return new SuccessIndicatorMetric(open, display, null, successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findOpenAlertsMetric(@Nonnull SuccessIndicator successIndicator,
+    private SuccessIndicatorMetric findOpenAlertsMetric(@Nonnull SuccessIndicator successIndicator,
                                                            @Nonnull Person person) {
         // Would obviously need to change if we have more states in the future, but for now this is the most efficient
         // solution.
@@ -828,17 +904,17 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         final long total = active + closed;
 
         final String display = new StringBuilder().append(active).append("/").append(total).toString();
-        return new Pair<Object, String>(active, display);
+        return new SuccessIndicatorMetric(active, display, null, successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findMapStatusMetric(SuccessIndicator successIndicator, Person person) {
+    private SuccessIndicatorMetric findMapStatusMetric(SuccessIndicator successIndicator, Person person) {
         AbstractPlanStatusReportTO statusReport = null;
         try {
             statusReport = mapStatusService.getByPersonId(person.getId());
         } catch (ObjectNotFoundException e) {
             // actually means 'no such person', which means something terrible has gone wrong, but we'll treat it
             // as just a missing indicator metric
-            return new Pair<Object, String>(null, null);
+            return emptyMetricDescriptor(successIndicator);
         }
         // PlanStatus is so domain specific, we don't pass it back into the evaluate(). That function does have
         // coercion/translation/normalization capabilities, but they're all focused on very low-level types,
@@ -846,27 +922,70 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         // we translate that enum into a name here, the same way we do it for findRegistrationMetric()
 
         final PlanStatus status = statusReport == null ? null : statusReport.getStatus();
-        return new Pair<Object, String>((status == null ? null : status.name()),
-                (status == null ? null : status.getDisplayName()));
+        return new SuccessIndicatorMetric((status == null ? null : status.name()),
+                (status == null ? null : status.getDisplayName()), null,
+                successIndicator.getCode(), successIndicator.getName());
     }
 
-    private Pair<Object,String> findMetricInRiskIndicatorGroup(@Nonnull SuccessIndicator successIndicator,
-                                                               @Nonnull Person person) {
+    private List<SuccessIndicatorMetric> findMetricsInRiskIndicatorGroup(@Nonnull SuccessIndicator successIndicator,
+                                                                         @Nonnull Person person) {
 
         final Map<String, ExternalStudentRiskIndicator> externalRiskIndicators = findExternalRiskIndicatorsFor(person);
-        if ( externalRiskIndicators.isEmpty() ) { // we're guaranteed the list is non-null
-            return emptyMetricDescriptor();
+
+        if ( isWildcardedIndicator(successIndicator) ) {
+            final List<SuccessIndicatorMetric> metrics = Lists.newLinkedList();
+            for ( Map.Entry<String, ExternalStudentRiskIndicator> entry : externalRiskIndicators.entrySet() ) {
+                final ExternalStudentRiskIndicator externalRiskIndicator = entry.getValue();
+                if ( matchesWildcardIndicator(externalRiskIndicator, successIndicator) ) {
+                    metrics.add(new SuccessIndicatorMetric(externalRiskIndicator.getIndicatorValue(),
+                            externalRiskIndicator.getIndicatorValue(),
+                            externalRiskIndicator.getIndicatorValueDescription(),
+                            externalRiskIndicator.getIndicatorCode(),
+                            wildcardedExternalRiskIndicatorDisplayName(externalRiskIndicator, successIndicator)));
+                }
+            }
+            return metrics;
+        } else {
+            final ExternalStudentRiskIndicator externalRiskIndicator =
+                    externalRiskIndicators.get(externalRiskMapKeyFor(successIndicator));
+            if ( externalRiskIndicator == null ) {
+                return Lists.newArrayList(emptyMetricDescriptor(successIndicator));
+            }
+            // TODO probably useful to have a way to get at the normalized representation of indicatorValue for display
+            // purposes
+            return Lists.newArrayList(new SuccessIndicatorMetric(externalRiskIndicator.getIndicatorValue(),
+                    externalRiskIndicator.getIndicatorValue(), externalRiskIndicator.getIndicatorValueDescription(),
+                    successIndicator.getCode(), successIndicator.getName()));
         }
 
-        final ExternalStudentRiskIndicator externalRiskIndicator =
-                externalRiskIndicators.get(externalRiskMapKeyFor(successIndicator));
-        if ( externalRiskIndicator == null ) {
-            return emptyMetricDescriptor();
-        }
+    }
 
-        // TODO probably useful to have a way to get at the normalized representation of indicatorValue for display
-        // purposes
-        return new Pair<Object,String>(externalRiskIndicator.getIndicatorValue(),externalRiskIndicator.getIndicatorValue());
+    private boolean isWildcardedIndicator(@Nonnull SuccessIndicator successIndicator) {
+        // make sure this stays sync'd up with matchesWildcardIndicator() - need to use the same wildcard char.
+        // also note that we intentionally only support wildcards in indicator codes not indicator *model* codes.
+        // not really sure you'd ever need a wildcarded model code, but if we did support it, then we'd probably
+        // need to dynamically select the model display name from the external indicator and bubble that all the
+        // way up, none of which really seems like worthwhile complexity.
+        return successIndicator.getCode().indexOf('*') > -1;
+    }
+
+    private boolean matchesWildcardIndicator(@Nonnull ExternalStudentRiskIndicator externalRiskIndicator,
+                                             @Nonnull SuccessIndicator successIndicator) {
+        final String externalRiskIndicatorModelCode = externalRiskIndicator.getModelCode();
+        final String successIndicatorModelCode = successIndicator.getModelCode();
+        if (!(externalRiskIndicatorModelCode.equals(successIndicatorModelCode))) { // successIndicatorModelCode can be null
+            return false;
+        }
+        // make sure this stays sync'd up with isWildcardedIndicator() - need to use the same wildcard char
+        final String externalRiskIndicatorCode = externalRiskIndicator.getIndicatorCode();
+        final String successIndicatorCode = successIndicator.getCode();
+        return PatternMatchUtils.simpleMatch(successIndicatorCode, externalRiskIndicatorCode);
+    }
+
+    private String wildcardedExternalRiskIndicatorDisplayName(@Nonnull ExternalStudentRiskIndicator externalRiskIndicator,
+                                                              @Nonnull SuccessIndicator successIndicator) {
+        return StringUtils.isBlank(externalRiskIndicator.getIndicatorName())
+                ? successIndicator.getName() : externalRiskIndicator.getIndicatorName();
     }
 
     private Person findPersonOrFail(UUID personId) throws ObjectNotFoundException {
@@ -1012,8 +1131,8 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         return successIndicator == null ? null : (successIndicator.getCode() + "(" + successIndicator.getId() + ")");
     }
 
-    private Pair<Object,String> emptyMetricDescriptor() {
-        return new Pair<Object,String>(null,null);
+    private SuccessIndicatorMetric emptyMetricDescriptor(SuccessIndicator successIndicator) {
+        return new SuccessIndicatorMetric(null, null, null, successIndicator.getCode(), successIndicator.getName());
     }
 
 }

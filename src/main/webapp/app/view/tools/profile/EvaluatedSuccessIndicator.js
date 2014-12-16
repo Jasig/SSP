@@ -28,9 +28,9 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicator', {
         var tpl = new Ext.XTemplate('<tpl for=".">' +
                 '<div class="wrapper">' +
                     '<div class="success-indicator {[this.indicatorCls(values)]}">' +
-                        '<h3 class="title" data-qtip="{indicatorName}: {indicatorDescription}">{indicatorName}</h3>' +
-                        '<p class="value" data-qtip="{indicatorValue}">{indicatorValue}</p>' +
-                        '<p class="rating"><i class="fa {[this.iconCls(values)]}" ></i>{indicatorEvaluationDisplayName}</p>' +
+                        '<h3 class="title" data-qtip="{indicatorName:htmlEncode}<tpl if="this.isNotEmpty(indicatorDescription)">: {indicatorDescription:htmlEncode}</tpl>">{indicatorName:htmlEncode}</h3>' +
+                        '<p class="value" data-qtip="{indicatorValue:htmlEncode}<tpl if="this.isNotEmpty(indicatorValueDescription)">: {indicatorValueDescription:htmlEncode}</tpl>">{indicatorValue:htmlEncode}</p>' +
+                        '<p class="rating"><i class="fa {[this.iconCls(values)]}" ></i>{indicatorEvaluationDisplayName:htmlEncode}</p>' +
                     '</div>' +
             '</tpl>', {
                 normalizeEval: function(indicator) {
@@ -50,6 +50,9 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicator', {
                         default:
                             return 'fa-ban';
                     }
+                },
+                isNotEmpty: function(value) {
+                    return !(Ext.isEmpty(value));
                 }
         });
 
