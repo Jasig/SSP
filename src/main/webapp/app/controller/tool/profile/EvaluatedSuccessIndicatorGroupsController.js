@@ -74,9 +74,10 @@ Ext.define('Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsControlle
         return {
             xtype: 'evaluatedsuccessindicator',
             data: {
-                indicatorName: serverModel.get('indicatorName'),
+                indicatorName: serverModel.get('displayName'),
                 indicatorDescription: serverModel.get('indicatorDescription'),
                 indicatorValue: serverModel.get('displayValue'),
+                indicatorValueDescription: serverModel.get('displayValueDescription'),
                 indicatorEvaluation: serverModel.get('evaluation') ? serverModel.get('evaluation') : null,
                 indicatorEvaluationDisplayName: serverModel.get('evaluationDisplayName') ? serverModel.get('evaluationDisplayName') : null,
                 indicatorModelName: serverModel.get('indicatorModelName') ? serverModel.get('indicatorModelName') : null,

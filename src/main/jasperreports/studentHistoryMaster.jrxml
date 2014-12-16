@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Licensed to Apereo under one or more contributor license
-    agreements. See the NOTICE file distributed with this work
-    for additional information regarding copyright ownership.
-    Apereo licenses this file to you under the Apache License,
-    Version 2.0 (the "License"); you may not use this file
-    except in compliance with the License.  You may obtain a
-    copy of the License at the following location:
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -35,6 +15,7 @@
 		<field name="displayValue" class="java.lang.String"/>
 		<field name="evaluation" class="org.jasig.ssp.transferobject.SuccessIndicatorEvaluation"/>
 		<field name="evaluationDisplayName" class="java.lang.String"/>
+		<field name="displayName" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="studentTO" class="org.jasig.ssp.transferobject.reports.PersonReportTO"/>
 	<parameter name="reportDate" class="java.lang.String"/>
@@ -466,12 +447,12 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{studentEvaluatedSuccessIndicators})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="53" width="138">
-						<textField isStretchWithOverflow="true">
+						<textField isStretchWithOverflow="true" isBlankWhenNull="false">
 							<reportElement x="9" y="1" width="118" height="16" uuid="454faf73-2514-4b29-9d5e-0a31abc586be"/>
 							<textElement>
 								<font size="10" isBold="true"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{indicatorName}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{displayName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
 							<reportElement positionType="Float" x="9" y="17" width="83" height="16" uuid="d4535e16-19a7-45d1-ad77-95fe39ab3995"/>
@@ -554,7 +535,7 @@
 							<textElement>
 								<font isBold="true"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{indicatorName}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{displayName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
 							<reportElement positionType="Float" x="9" y="17" width="83" height="16" uuid="bd0873db-000b-46f0-b033-eb34807948ae"/>
@@ -635,7 +616,7 @@
 							<textElement>
 								<font isBold="true"/>
 							</textElement>
-							<textFieldExpression><![CDATA[$F{indicatorName}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$F{displayName}]]></textFieldExpression>
 						</textField>
 						<textField isStretchWithOverflow="true">
 							<reportElement positionType="Float" x="9" y="17" width="83" height="16" uuid="d6799b4f-bc62-4218-a16a-2483c4315cab"/>

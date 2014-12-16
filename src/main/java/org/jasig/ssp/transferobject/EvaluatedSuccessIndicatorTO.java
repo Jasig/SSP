@@ -37,9 +37,11 @@ public class EvaluatedSuccessIndicatorTO {
     private int indicatorSortOrder;
     private ObjectStatus objectStatus;
     private String displayValue;
+    private String displayName;
+    private String displayValueDescription;
     private SuccessIndicatorEvaluation evaluation;
     private String evaluationDisplayName;
-
+    private String evaluatedIndicatorCode;
 
     public String getId() {
         return id;
@@ -129,6 +131,22 @@ public class EvaluatedSuccessIndicatorTO {
         this.displayValue = displayValue;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayValueDescription() {
+        return displayValueDescription;
+    }
+
+    public void setDisplayValueDescription(String displayValueDescription) {
+        this.displayValueDescription = displayValueDescription;
+    }
+
     public SuccessIndicatorEvaluation getEvaluation() {
         return evaluation;
     }
@@ -151,5 +169,13 @@ public class EvaluatedSuccessIndicatorTO {
 
     public void setEvaluationDisplayName(String evaluationDisplayName) {
         this.evaluationDisplayName = evaluationDisplayName;
+    }
+
+    public String getEvaluatedIndicatorCode() {
+        return evaluatedIndicatorCode;
+    }
+
+    public void setEvaluatedIndicatorCode(String evaluatedIndicatorCode) {
+        this.evaluatedIndicatorCode = evaluatedIndicatorCode;
     }
 }
