@@ -44,6 +44,21 @@ Ext.define('Ssp.store.external.Terms', {
         var me = this;
         me.sort('startDate', 'DESC');
     },
+
+    getCurrentTermIndex: function() {
+        var me = this;
+        var idx = -1;
+        var now = new Date().getTime();
+        me.each(function(record) {
+            if ( record.get('endDate') && record.get('endDate').getTime() < now ) {
+                return false;
+            }
+            idx++;
+        });
+        // if all terms historical, will return -1. If some or all end in the future, will return the one
+        // with the nearest start
+        return idx;
+    },
     
     getCurrentAndFutureTermsStore: function(sortEarliestFirst, maximum, minimum) {
         var me = this;
@@ -111,7 +126,7 @@ Ext.define('Ssp.store.external.Terms', {
     getCurrentAndFutureTerms: function(maximum, minimum) {
         var me = this;
         var startIndex = 0
-        var endIndex = me.findBy(me.isCurrentTerm);
+        var endIndex = me.getCurrentTermIndex();
         if (endIndex == -1) {
         	endIndex = me.getCount();
         }
@@ -151,7 +166,7 @@ Ext.define('Ssp.store.external.Terms', {
     isPastTerm: function(termCode) {
         var me = this;
         var startIndex = 0;
-        var currentTermIndex = me.findBy(me.isCurrentTerm);
+        var currentTermIndex = me.getCurrentTermIndex();
         var termIndex = me.findExact('code', termCode);
 
         if (currentTermIndex && termIndex && me.getAt(termIndex)) {
@@ -167,21 +182,12 @@ Ext.define('Ssp.store.external.Terms', {
     
     getFutureTerms: function(){
         var me = this;
-        var currentTermIndex = (me.findBy(me.isCurrentTerm)-1);
+        var currentTermIndex = (me.getCurrentTermIndex()-1);
         if (currentTermIndex >= 0) {
             return me.getRange(0, currentTermIndex);
         }
     },
-    
-    isCurrentTerm: function(record, id){
-        var me = this;
-        if (record.get('startDate') && (record.get('startDate').getTime() >= (new Date()).getTime())) {
-            return false;
-        } else {
-            return true;
-        }
-    },
-    
+
     getCurrentAndFutureYearStore: function(sortEarliestFirst){
         var me = this;
         var store = Ext.create('Ext.data.Store', {
