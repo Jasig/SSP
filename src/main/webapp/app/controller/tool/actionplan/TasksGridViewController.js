@@ -239,34 +239,34 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
         }
     },
     
-   onDrop:function(node, data, overModel, dropPosition, options)
-	{   
-    	var me=this;
-		
-		var posId = me.getView().getView().indexOf(data.records[0]);
-		var badRecord = me.store.getAt(posId);
-		var task = new Ssp.model.tool.actionplan.Task();
+   onDrop:function(node, data, overModel, dropPosition, options) {
+        var me=this;
+
+        // Not sure why the all the indirection - must be the dropped records
+        // are already added to the store, but have the wrong type? Been this
+        // way a long time so for SSP-3029 (multi-drop bug), kept that same
+        // basic logic and added a loop over it.
+        var posId, badRecord;
+        Ext.each(data.records, function(item){
+            posId = me.getView().getView().indexOf(item);
+            badRecord = me.store.getAt(posId);
+            var task = new Ssp.model.tool.actionplan.Task();
             task.set('name', badRecord.data.challengeReferralName);
             task.set('description', badRecord.data.challengeReferralDescription);
             task.set('link',badRecord.data.challengeReferralLink);
             task.set('challengeReferralId', badRecord.data.challengeReferralId);
             task.set('challengeId', badRecord.data.challengeId);
-			task.set('dueDate', taskDueDate);
-			task.set('confidentialityLevel',confLevel);
-		if(badRecord)
-        {
-        	me.store.data.replace(this.store.data.getKey(badRecord),task);
-			me.getView().getStore().loadRecords(me.store.getRange());
-        }
-        else
-        {
-        	me.store.add(task);
-			
-        }
-		
-	},
-	
-    
+            task.set('dueDate', taskDueDate);
+            task.set('confidentialityLevel',confLevel);
+            if (badRecord) {
+                me.store.data.replace(this.store.data.getKey(badRecord),task);
+                me.getView().getStore().loadRecords(me.store.getRange());
+            } else {
+                me.store.add(task);
+            }
+        });
+   },
+
     getTStore: function(){
         var me = this;
         return me.store;
