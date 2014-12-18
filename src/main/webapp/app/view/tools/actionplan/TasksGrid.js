@@ -114,9 +114,9 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 plugins: {
                     ptype: 'gridviewdragdrop',
                     dropGroup: 'gridtogrid',
-                    dragGroup: 'gridtogrid',
-                    enableDrop: true,
-                    enableDrag: true
+                    // don't enable drag (e.g. for reorder) w/o double checking that it works.
+                    // was disabled for SSP-3029 b/c it definitely didn't work at that time.
+                    enableDrop: true
                 }
             },
             columns: [{
