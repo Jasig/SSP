@@ -123,7 +123,7 @@ public class WatchStudentController
 		
 		PagingWrapper<PersonSearchResult2> watchList = service.watchListFor(programStatus, person, buildSortAndPage( limit,  start,  sort,  sortDirection));
 		
-		return new PagedResponse<PersonSearchResult2TO>(true, new Long(watchList.getRows().size()),
+		return new PagedResponse<PersonSearchResult2TO>(true, watchList.getResults(),
 				searchTOFactory.asTOList(watchList.getRows()));
 	}
 	  
