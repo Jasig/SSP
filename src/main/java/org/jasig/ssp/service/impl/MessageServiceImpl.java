@@ -427,25 +427,31 @@ public class MessageServiceImpl implements MessageService {
 			//We used the configured outbound email address for every outgoing message
 			//If a message was initiated by an end user, their name will be attached to the 'from' while
 			//the configured outbound address will be the actual address used for example "Amy Aministrator (SSP) <myconfiguredaddress@foobar.com>"
-			String name = appName + " Administrator";
-			if (message.getSender() != null && 
+			String fromName = appName + " Administrator";
+			InternetAddress[] replyToAddrs = null;
+			final boolean isEndUserMessage = message.getSender() != null &&
 					!message.getSender().getEmailAddresses().isEmpty() && 
-					!message.getSender().getId().equals(Person.SYSTEM_ADMINISTRATOR_ID)) {
-				InternetAddress[] froms = getEmailAddresses( message.getSender(), "from:",message.getId());
-				if(froms.length > 0){
-					name = message.getSender().getFullName() + " ("+appName+")";
+					!message.getSender().getId().equals(Person.SYSTEM_ADMINISTRATOR_ID);
+			if ( isEndUserMessage ) {
+				replyToAddrs = getEmailAddresses( message.getSender(), "from:",message.getId());
+				if(replyToAddrs.length > 0){
+					fromName = message.getSender().getFullName() + " ("+appName+")";
 				}
 			}
 
-			from = new InternetAddress(configService.getByName("outbound_email_address").getValue(), name);
+			from = new InternetAddress(configService.getByName("outbound_email_address").getValue(), fromName);
 			if (!this.validateEmail(from.getAddress())) {
 				throw new AddressException("Invalid from: email address [" + from.getAddress() + "]");
+			}
+
+			if ( !(isEndUserMessage) ) {
+				replyToAddrs = new InternetAddress[] { from };
 			}
 			
 			 mimeMessageHelper.setFrom(from);
 			 message.setSentFromAddress(from.toString());
-			 mimeMessageHelper.setReplyTo(from);
-			 message.setSentReplyToAddress(from.toString());
+			 mimeMessageHelper.setReplyTo(replyToAddrs[0]);
+			 message.setSentReplyToAddress(replyToAddrs[0].toString());
 			
 			// process TO addresses
 			InternetAddress[] tos = null;
