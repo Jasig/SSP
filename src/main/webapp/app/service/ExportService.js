@@ -51,7 +51,7 @@ Ext.define('Ssp.service.ExportService', {
         return url+'?'+encodedUrl;
     },
 
-    buildExportCaseloadUrl: function( programStatusId, searchType){
+    buildExportCaseloadUrl: function( programStatusId, searchType, pagination){
         var me=this;
         var url = me.getBaseUrl(searchType);
         var activeParams = {};
@@ -61,6 +61,11 @@ Ext.define('Ssp.service.ExportService', {
             activeParams['programStatusId'] = programStatusId;
         }
         activeParams['status'] = 'ACTIVE';
+        if ( pagination ) {
+            for ( i in pagination ) {
+                activeParams[i] = pagination[i];
+            }
+        }
 
         var encodedUrl = Ext.urlEncode(activeParams);
         return url+'?'+encodedUrl;

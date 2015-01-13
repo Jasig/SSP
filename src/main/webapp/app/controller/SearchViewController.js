@@ -1101,7 +1101,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	exportSearch: function(searchType) {
 		var me = this;
-		var url = me.exportService.buildExportCaseloadUrl(me.translateSelectedStatusToSearchableStatus(), me.translateCurrentTabToApiPath());
+		var url = me.exportService.buildExportCaseloadUrl(me.translateSelectedStatusToSearchableStatus(),
+														me.translateCurrentTabToApiPath(), { limit: -1 });
 		window.open(url,'_blank');
 	},
 	onExportConfirm: function(btnId) {
