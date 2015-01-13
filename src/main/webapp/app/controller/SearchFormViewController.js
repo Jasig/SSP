@@ -444,6 +444,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	// to caseload/watchlist involves completely different URL building
 	exportSearch: function(criteria) {
 		var me = this;
+		if ( criteria.limit === undefined || criteria.limit === null ) {
+			criteria.limit = -1;
+		}
 		window.open(me.exportService.buildExportSearchUrl(criteria),'_blank');
 	},
 	// copy/paste from SearchViewController except for 'criteria'
