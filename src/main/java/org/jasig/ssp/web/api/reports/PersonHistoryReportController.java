@@ -21,45 +21,39 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
-import net.sf.jasperreports.engine.JRException;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
+import org.jasig.ssp.factory.reference.BlurbTOFactory;
+import org.jasig.ssp.factory.reference.CareerDecisionStatusTOFactory;
 import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.external.ExternalCareerDecisionStatus;
 import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Blurb;
+import org.jasig.ssp.model.reference.CareerDecisionStatus;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.*;
-import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
-import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidAwardTermService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
-import org.jasig.ssp.service.external.RegistrationStatusByTermService;
-import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.external.*;
+import org.jasig.ssp.service.reference.BlurbService;
+import org.jasig.ssp.service.reference.CareerDecisionStatusService;
 import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
+import org.jasig.ssp.transferobject.reference.CareerDecisionStatusTO;
 import org.jasig.ssp.transferobject.reports.PersonReportTO;
 import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.web.api.validation.ValidationException;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +64,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
+
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -92,6 +86,11 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
     private static final String STUDENT_EVALUATED_SUCCESS_INDICATORS = "studentEvaluatedSuccessIndicators";
     private static final String INTERVENTION_EVALUATED_SUCCESS_INDICATORS = "interventionEvaluatedSuccessIndicators";
     private static final String RISK_EVALUATED_SUCCESS_INDICATORS = "riskEvaluatedSuccessIndicators";
+	private static final String LABELS = "sspLabels";
+	private static final String CAREER_STATUS_TO = "careerStatusTO";
+	private static final String BLURB_SEPARATOR = ".";
+	private static final String SSP_LABEL_NAMES_BLURB_PREFIX = "ssp.label";
+	private static final String SSP_LABEL_NAMES_BLURB_QUERY = SSP_LABEL_NAMES_BLURB_PREFIX + BLURB_SEPARATOR + "*";
 
     private static final Ordering<EvaluatedSuccessIndicatorTO> INDICATOR_ORDERING = new Ordering<EvaluatedSuccessIndicatorTO>() {
         public int compare(EvaluatedSuccessIndicatorTO left, EvaluatedSuccessIndicatorTO right) {
@@ -150,6 +149,17 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 	protected transient TermService termService;
 	@Autowired
 	private transient EvaluatedSuccessIndicatorService evaluatedSuccessIndicatorService;
+	@Autowired
+	private BlurbService blurbService;
+	@Autowired
+	private BlurbTOFactory blurbTOFactory;
+	@Autowired
+	private transient ExternalCareerDecisionStatusService externalCareerDecisionStatusService;
+	@Autowired
+	private transient CareerDecisionStatusService careerDecisionStatusService;
+	@Autowired
+	private transient CareerDecisionStatusTOFactory careerDecisionStatusTOFactory;
+
 
 	@RequestMapping(value = "/{personId}/history/print", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
@@ -200,7 +210,7 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 		}
 
         // get financial aid, academic, and transcript info for student summary
-        final ExternalStudentRecordsLite record = new ExternalStudentRecordsLite();
+        final ExternalStudentRecordsLite record = new ExternalStudentRecordsLite();       //TODO handle career status
         record.setPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(schoolId));
         record.setGPA(externalStudentTranscriptService.getRecordsBySchoolId(schoolId));
         record.setFinancialAid(externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId));
@@ -254,6 +264,10 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
         final List<EvaluatedSuccessIndicatorTO> riskEvaluatedSuccessIndicators =
                 filteredAndSortedIndicators(evaluatedSuccessIndicators, SuccessIndicatorGroup.RISK);
 
+		final HashMap<String, String> sspLabels = transferBlurbsToMap(blurbService.getAll(allActive(), SSP_LABEL_NAMES_BLURB_QUERY));
+
+		final CareerDecisionStatusTO careerStatusTO = syncExternalCareerStatusToReferenceCareerStatus(schoolId);
+
         final Map<String, Object> parameters = Maps.newHashMap();
 		
 		SearchParameters.addReportDateToMap(parameters);
@@ -265,6 +279,8 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
         parameters.put(STUDENT_EVALUATED_SUCCESS_INDICATORS, studentEvaluatedSuccessIndicators);
         parameters.put(INTERVENTION_EVALUATED_SUCCESS_INDICATORS, interventionEvaluatedSuccessIndicators);
         parameters.put(RISK_EVALUATED_SUCCESS_INDICATORS, riskEvaluatedSuccessIndicators);
+		parameters.put(LABELS, sspLabels);
+		parameters.put(CAREER_STATUS_TO, careerStatusTO);
 
 		this.renderReport(response, parameters, studentHistoryTOs, REPORT_URL, reportType,
 				REPORT_FILE_TITLE + personTO.getLastName());
@@ -405,5 +421,40 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 		}
 
 		return retVal;
+	}
+
+	private HashMap<String, String> transferBlurbsToMap(PagingWrapper<Blurb> blurbs) {
+		final HashMap<String, String> labels = Maps.newHashMap();
+
+		if (blurbs != null && blurbs.getResults() > 0) {
+			for ( Blurb blurbIterator : blurbs ) {
+				labels.put(blurbIterator.getCode(), blurbIterator.getValue());
+			}
+		}
+		return labels;
+	}
+
+	private CareerDecisionStatusTO syncExternalCareerStatusToReferenceCareerStatus(final String schoolId) {
+		if (!StringUtils.isBlank(schoolId)) {
+			final ExternalCareerDecisionStatus externalCareerStatus = externalCareerDecisionStatusService.getStudentCareerStatusBySchoolId(schoolId);
+			if (externalCareerStatus != null) {
+				final CareerDecisionStatus careerStatus = careerDecisionStatusService.getByCode(externalCareerStatus.getCode());
+				if (careerStatus != null) {
+					return careerDecisionStatusTOFactory.from(careerStatus);
+				} else {
+					//Perhaps still want to display the orphaned external_career_status.code not mapped to reference yet
+					final CareerDecisionStatusTO toReturn = new CareerDecisionStatusTO();
+					toReturn.setCode(externalCareerStatus.getCode());
+					toReturn.setName(externalCareerStatus.getCode());
+					return toReturn;
+				}
+			}
+
+		}
+		return null;
+	}
+
+	public static SortingAndPaging allActive() {
+		return SortingAndPaging.allActiveSorted(null);
 	}
 }
