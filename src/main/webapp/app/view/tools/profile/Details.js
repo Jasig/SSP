@@ -96,6 +96,24 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         itemId: 'f1Status',
                         labelWidth: 24
                     }, {
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.local-gpa'),
+                        name: 'localGPA',
+                        itemId: 'localGPA',
+                        labelWidth: 84,
+                        hidden: true
+                    }, {
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.program-gpa'),
+                        name: 'programGPA',
+                        itemId: 'programGPA',
+                        labelWidth: 84,
+                        hidden: true
+                    }, {
+                         fieldLabel: me.textStore.getValueByCode('ssp.label.career-decision-status'),
+                         name: 'careerStatus',
+                         itemId: 'careerStatus',
+                         labelWidth: 84,
+                         hidden: true
+                    }, {
                         fieldLabel: 'Standing',
                         name: 'academicStanding',
                         itemId: 'academicStanding',

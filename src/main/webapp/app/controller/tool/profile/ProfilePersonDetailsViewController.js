@@ -46,6 +46,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         maritalStatusField: '#maritalStatus',
         ethnicityField: '#ethnicity',
         raceField: '#race',
+        gpaLocalField: '#localGPA',
+        gpaProgramField: '#programGPA',
+        careerStatusField: '#careerStatus',
         residencyCountyField: '#residencyCounty',
         f1StatusField: '#f1Status',
         academicStandingField: '#academicStanding',
@@ -94,7 +97,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         if (!me.programStatusChangeReasonsStore.getTotalCount()) {
             me.programStatusChangeReasonsStore.load();
         }
-        
+
         return me.callParent(arguments);
     },
     
@@ -207,7 +210,19 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 			me.getAcademicStandingField().setFieldLabel('');
             me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
 			me.getCurrentRestrictionsField().setFieldLabel('');
-			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions))
+			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions));
+
+            if (gpa.localGpa) {
+                var gpaLocalFormatted = Ext.util.Format.number(me.handleNull(gpa.localGpa), '0.00');
+                me.getGpaLocalField().setValue(gpaLocalFormatted);
+                me.getGpaLocalField().show();
+            }
+
+            if (gpa.programGpa) {
+                var gpaProgramFormatted = Ext.util.Format.number(me.handleNull(gpa.programGpa), '0.00');
+                me.getGpaProgramField().setValue(gpaProgramFormatted);
+                me.getGpaProgramField().show();
+            }
 
             var gpaFormatted = Ext.util.Format.number(me.handleNull(gpa.gradePointAverage), '0.00');
             var grid = me.getCumTermGrid();
@@ -440,7 +455,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             scope: me
         });
     },
-    
+
     getPersonSuccess: function(serviceResponses) {
         var me = this;
         var person = serviceResponses.successes.person;

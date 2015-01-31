@@ -20,10 +20,7 @@ package org.jasig.ssp.transferobject.reference;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
-
 import org.jasig.ssp.model.reference.Blurb;
-import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.transferobject.TransferObject;
 
 import com.google.common.collect.Lists;

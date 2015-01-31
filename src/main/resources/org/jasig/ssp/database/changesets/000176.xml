@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="paul.spaude" id="create career status table" >
+        <createTable tableName="career_decision_status">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="${nvarchar.type}(80)">
+                <constraints nullable="false" />
+            </column>
+            <column name="code" type="${nvarchar.type}(2)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="career_status_code_unq"/>
+            </column>
+            <column name="description" type="${nvarchar.type}(150)">
+                <constraints nullable="true" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false" foreignKeyName="career_status_created_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true" foreignKeyName="career_status_modified_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <sql>grant all on career_decision_status to ${database.app.username}</sql>
+        <rollback>
+            <dropTable tableName="career_decision_status" />
+        </rollback>
+    </changeSet>
+
+    <changeSet author='paul.spaude' id='add local, program gpa and careerstatus blurbs'>
+        <insert tableName="blurb">
+            <column name="id" value="807d5b58-3b4b-4685-8bd8-372875ed5276" />
+            <column name="name" value="Local GPA" />
+            <column name="code" value="ssp.label.local-gpa"/>
+            <column name="value" value="Local GPA"/>
+            <column name="description" value="Local GPA Field" />
+            <column name="created_date" valueDate="2014-01-26T00:00:00" />
+            <column name="modified_date" valueDate="2014-01-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="blurb">
+            <column name="id" value="0c0782b3-af03-463a-8b5f-c3289cab55ad" />
+            <column name="name" value="Program GPA" />
+            <column name="code" value="ssp.label.program-gpa"/>
+            <column name="value" value="Program GPA"/>
+            <column name="description" value="Program GPA Field" />
+            <column name="created_date" valueDate="2014-01-26T00:00:00" />
+            <column name="modified_date" valueDate="2014-01-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <insert tableName="blurb">
+            <column name="id" value="68b01925-1a77-4f51-a4f9-5adac678a0f2" />
+            <column name="name" value="Career Status" />
+            <column name="code" value="ssp.label.career-decision-status"/>
+            <column name="value" value="Career Status"/>
+            <column name="description" value="Career Status Field" />
+            <column name="created_date" valueDate="2014-01-26T00:00:00" />
+            <column name="modified_date" valueDate="2014-01-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

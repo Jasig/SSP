@@ -20,12 +20,6 @@ package org.jasig.ssp.transferobject.external;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
 
 public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStudentTranscript>,
@@ -44,6 +38,8 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 	private String currentRestrictions;
 	private String academicStanding;
 	private String gpaTrendIndicator;
+	private BigDecimal localGpa;
+	private BigDecimal programGpa;
 
 	@Override
 	public void from(ExternalStudentTranscript model) {
@@ -60,6 +56,8 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 		currentRestrictions = model.getCurrentRestrictions();
 		academicStanding = model.getAcademicStanding();
 		gpaTrendIndicator = model.getGpaTrendIndicator();
+		localGpa = model.getLocalGpa();
+		programGpa = model.getProgramGpa();
 	}
 
 	/**
@@ -150,7 +148,7 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 	}
 
 	/**
-	 * @param gradePointAverrage the gradePointAverrage to set
+	 * @param gradePointAverage the gradePointAverage to set
 	 */
 	public void setGradePointAverage(final BigDecimal gradePointAverage) {
 		this.gradePointAverage = gradePointAverage;
@@ -240,4 +238,31 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 		this.gpaTrendIndicator = gpaTrendIndicator;
 	}
 
+	/**
+	 * @return the localGpa
+	 */
+	public BigDecimal getLocalGpa() {
+		return localGpa;
+	}
+
+	/**
+	 * @param localGpa the programGpa to set
+	 */
+	public void setLocalGpa(final BigDecimal localGpa) {
+		this.localGpa = localGpa;
+	}
+
+	/**
+	 * @return the programGpa
+	 */
+	public BigDecimal getProgramGpa() {
+		return programGpa;
+	}
+
+	/**
+	 * @param programGpa the programGpa to set
+	 */
+	public void setProgramGpa(final BigDecimal programGpa) {
+		this.programGpa = programGpa;
+	}
 }

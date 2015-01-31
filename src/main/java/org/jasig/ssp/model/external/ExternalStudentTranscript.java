@@ -86,6 +86,14 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	@Size(max = 25)
 	private String gpaTrendIndicator;
 
+	@Column(nullable = true)
+	private BigDecimal localGpa;
+
+	@Column(nullable = true)
+	private BigDecimal programGpa;
+
+
+
 	/**
 	 * @return the schoolId
 	 */
@@ -157,14 +165,14 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	}
 
 	/**
-	 * @return the gradePointAverrage
+	 * @return the gradePointAverage
 	 */
 	public BigDecimal getGradePointAverage() {
 		return gradePointAverage;
 	}
 
 	/**
-	 * @param gradePointAverrage the gradePointAverrage to set
+	 * @param gradePointAverage the gradePointAverage to set
 	 */
 	public void setGradePointAverage(final BigDecimal gradePointAverage) {
 		this.gradePointAverage = gradePointAverage;
@@ -238,5 +246,33 @@ public class ExternalStudentTranscript extends AbstractExternalData implements
 	 */
 	public void setGpaTrendIndicator(String gpaTrendIndicator) {
 		this.gpaTrendIndicator = gpaTrendIndicator;
+	}
+
+	/**
+	 * @return the localGpa
+	 */
+	public BigDecimal getLocalGpa() {
+		return localGpa;
+	}
+
+	/**
+	 * @param localGpa the localGpa to set
+	 */
+	public void setLocalGpa(final BigDecimal localGpa) {
+		this.localGpa = localGpa;
+	}
+
+	/**
+	 * @return the programGpa
+	 */
+	public BigDecimal getProgramGpa() {
+		return programGpa;
+	}
+
+	/**
+	 * @param programGpa the programGpa to set
+	 */
+	public void setProgramGpa(final BigDecimal programGpa) {
+		this.programGpa = programGpa;
 	}
 }
