@@ -38,7 +38,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
 		currentMapPlan: 'currentMapPlan',
         courseTranscriptsStore: 'courseTranscriptsStore',
         termsStore: 'termsStore',
-        termTranscriptsStore: 'termTranscriptsStore'
+        termTranscriptsStore: 'termTranscriptsStore',
+        careerDecisionStatusesStore: 'careerDecisionStatusesAllStore'
     },
     
     control: {
@@ -129,6 +130,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 scope: me
             });
 
+            me.loadCareerStatus();
+
             if (me.termsStore.getTotalCount() <= 0) {
                 me.termsStore.load(function(records, operation, success) {
                    if (!success) {
@@ -140,6 +143,53 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             } else {
                 me.fireOnTermsLoad(serviceResponses);
             }
+        }
+    },
+
+    loadCareerStatus: function() {
+        var me = this;
+        var careerStatusUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCareerDecisionStatus') );
+        careerStatusUrl = careerStatusUrl.replace( '{personId}', me.personLite.get("id") );
+		me.apiProperties.makeRequest({
+   			url: careerStatusUrl,
+   			method: 'GET',
+   			successFunc: me.careerStatusSuccess,
+   			failureFunc: me.careerStatusFailure,
+   			scope: me
+   		})
+    },
+
+    careerStatusSuccess: function(response, scope) {
+        var me = this;
+        if (response && response.responseText.indexOf("code") > -1) {
+            if (me.careerDecisionStatusesStore.getTotalCount() <= 0) {
+                me.careerDecisionStatusesStore.load(function(records, operation, success) {
+                    if (success) {
+                        me.renderCareerStatus(Ext.decode(response.responseText));
+                    }
+                });
+            } else {
+                me.renderCareerStatus(Ext.decode(response.responseText));
+            }
+        }
+        me.careerStatusFailure();
+    },
+
+    careerStatusFailure: function() {
+        //nothing to do
+    },
+
+    renderCareerStatus: function(externalCareerStatusObject) {
+        var me = this;
+
+        if (externalCareerStatusObject && externalCareerStatusObject.code) {
+            var careerStatus = me.careerDecisionStatusesStore.findRecord('code', externalCareerStatusObject.code, 0, false, true, true);
+            if (careerStatus) {
+                me.getCareerStatusField().setValue(me.handleNull(careerStatus.get('name')));
+            } else {
+                me.getCareerStatusField().setValue(me.handleNull(externalCareerStatusObject.code));
+            }
+            me.getCareerStatusField().show();
         }
     },
 

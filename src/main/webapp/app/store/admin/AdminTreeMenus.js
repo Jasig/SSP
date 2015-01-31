@@ -878,6 +878,36 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
+                    text: 'Career Decision Statuses',
+                    title: 'Career Decision Statuses',
+                    store: 'careerDecisionStatusesAll',
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false,
+                        columnOverrides: [{
+                            header: 'Career Status Code',
+                            required: true,
+                            dataIndex: 'code',
+                            editor:{
+                                allowBlank: false
+                            },
+                            field: {
+                                xtype: 'textfield',
+                                allowBlank: false,
+                                maxLength: 2
+                            },
+                            flex: 25,
+                            sortOrder: 40
+                        }],
+                        columnFieldOverrides: {
+                            description: {
+                                maxLength: 150
+                            }
+                        }
+	                },
+					form: 'AbstractReferenceAdmin',
+	                leaf: true
+                }, {
                     text: 'Success Indicators',
                     title: 'Success Indicators',
                     form: 'successindicatoradmin',

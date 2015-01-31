@@ -142,17 +142,22 @@
                     "clsName": "Ssp.model.reference.CourseworkHours",
                     "name": "CourseworkHours.js",
                     "path": "/app/model/reference/"
-                },                
+                },
+                {
+                  "clsName": "Ssp.model.reference.CareerDecisionStatus",
+                  "name": "CareerDecisionStatus.js",
+                  "path": "/app/model/reference/"
+                },
                 {
                     "clsName": "Ssp.model.reference.RegistrationLoad",
                     "name": "RegistrationLoad.js",
                     "path": "/app/model/reference/"
                 },  
-                 {
+                {
                     "clsName": "Ssp.model.reference.SapStatus",
                     "name": "SapStatus.js",
                     "path": "/app/model/reference/"
-                },  
+                },
                 {
                     "clsName": "Ssp.model.reference.EnrollmentStatus",
                     "name": "EnrollmentStatus.js",
@@ -176,6 +181,11 @@
                 {
                     "clsName": "Ssp.store.reference.CourseworkHours",
                     "name": "CourseworkHours.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.CareerDecisionStatuses",
+                    "name": "CareerDecisionStatuses.js",
                     "path": "/app/store/reference/"
                 },
                 {

@@ -405,6 +405,7 @@ Ext.require([
     'Ssp.store.reference.RegistrationLoads',
     'Ssp.store.reference.CourseworkHours',
 	'Ssp.store.reference.MessageTemplates',
+	'Ssp.store.reference.CareerDecisionStatuses',
     'Ssp.store.LTIConsumers',
     'Ssp.store.OAuth2Clients',
     'Ssp.store.Permissions',
@@ -556,6 +557,7 @@ var apiUrls = [
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
+  {name: 'careerstatus', url: 'reference/careerstatus'},
   {name: 'oauth2Client', url: 'oauth2/client'},
   {name: 'ltiConsumer', url: 'lti/tc'},
   {name: 'permission', url: 'reference/permission'},
@@ -573,6 +575,7 @@ var apiUrls = [
   {name: 'personDocument', url: 'person/{id}/document'},
   {name: 'personRegistrationStatusByTerm', url: 'person/{personId}/registrationStatusByTerm'},
   {name: 'personEvaluatedSuccessIndicator', url: 'person/{personId}/evaluatedSuccessIndicator'},
+  {name: 'personCareerDecisionStatus', url: 'person/{personId}/careerstatus'},
   {name: 'personEarlyAlert', url: 'person/{personId}/earlyAlert'},
   {name: 'personEarlyAlertResponse', url: 'person/{personId}/earlyAlert/{earlyAlertId}/response'},
   {name: 'personGoal', url: 'person/{id}/goal'},
@@ -1263,7 +1266,7 @@ Ext.onReady(function(){
 							 });
 				    	},
 				    	singleton: true
-				    },				    
+				    },
 				    colorsStore: {
 				    	fn: function(){
 				    		return Ext.create('Ssp.store.reference.Colors', {
@@ -1326,6 +1329,30 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
+                    careerDecisionStatusesAllStore: {
+                        fn: function(){
+                            return Ext.create('Ssp.store.reference.CareerDecisionStatuses', {
+                                 extraParams: {status: "ALL"}
+                             });
+                        },
+                        singleton: true
+                    },
+                    careerDecisionAllUnpagedStore: {
+                        fn: function(){
+                            return Ext.create('Ssp.store.reference.CareerDecisionStatuses', {
+                                extraParams: {status: "ALL", limit: "-1"}
+                            });
+                        },
+                        singleton: true
+                    },
+                    careerDecisionActiveUnpagedStore: {
+                        fn: function(){
+                            return Ext.create('Ssp.store.reference.CareerDecisionStatuses', {
+                                extraParams: {status: "ACTIVE", limit: "-1"}
+                            });
+                        },
+                        singleton: true
+                    },
 					
 				    //disabilityAccommodationsStore: 'Ssp.store.reference.DisabilityAccommodations',
 					disabilityAccommodationsStore: {

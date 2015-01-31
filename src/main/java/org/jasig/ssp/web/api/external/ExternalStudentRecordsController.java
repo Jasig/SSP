@@ -24,25 +24,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
 import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentAcademicProgramTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentFinancialAidTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentRecordsTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentRiskIndicatorTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentTestTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentTranscriptCourseTOFactory;
-import org.jasig.ssp.factory.external.ExternalStudentTranscriptTermTOFactory;
+import org.jasig.ssp.factory.external.*;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.JournalEntry;
@@ -54,11 +44,8 @@ import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentRecords;
 import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
-import org.jasig.ssp.model.external.ExternalStudentRiskIndicator;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
-import org.jasig.ssp.security.BasicAuthenticationRestTemplate;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertService;
@@ -69,17 +56,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.service.external.ExternalPersonService;
-import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidAwardTermService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidFileService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
-import org.jasig.ssp.service.external.ExternalStudentRiskIndicatorService;
-import org.jasig.ssp.service.external.ExternalStudentTestService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
-import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EnrollmentStatusService;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
@@ -88,13 +65,7 @@ import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.RecentActivityTO;
 import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentRecordsTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentRiskIndicatorTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentTestTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptCourseTO;
-import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTermTO;
+import org.jasig.ssp.transferobject.external.*;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
@@ -197,6 +168,12 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 
 	@Autowired
 	private transient ExternalStudentRiskIndicatorTOFactory externalStudentRiskIndicatorTOFactory;
+
+	@Autowired
+	private transient ExternalCareerDecisionStatusService externalCareerDecisionStatusService;
+
+	@Autowired
+	private transient ExternalCareerDecisionStatusTOFactory externalCareerDecisionStatusTOFactory;
 	
 	@Autowired
 	private transient PersonDemographicsService personDemographicsService;
@@ -533,6 +510,19 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		final List<ExternalStudentRiskIndicatorTO> externalStudentRiskIndicatorTOs =
 				externalStudentRiskIndicatorTOFactory.asTOList(externalStudentRiskIndicatorService.getBySchoolId(schoolId));
 		return externalStudentRiskIndicatorTOs;
+	}
+
+	@RequestMapping(value = "/careerstatus", method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_PERSON_READ)
+	public @ResponseBody ExternalCareerDecisionStatusTO getStudentCareerStatus(final @PathVariable UUID id)
+			throws ObjectNotFoundException {
+		final String schoolId = getStudentId(id);
+		if ( schoolId == null ) {
+			throw new ObjectNotFoundException(id, Person.class.getName());
+		}
+		final ExternalCareerDecisionStatusTO externalCareerDecisionStatusTO =
+				externalCareerDecisionStatusTOFactory.from(externalCareerDecisionStatusService.getStudentCareerStatusBySchoolId(schoolId));
+		return externalCareerDecisionStatusTO;
 	}
 	
 	private String getPersonLiteName(PersonLiteTO person){

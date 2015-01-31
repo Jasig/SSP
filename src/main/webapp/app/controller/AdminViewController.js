@@ -52,6 +52,7 @@ Ext.define('Ssp.controller.AdminViewController', {
 		racesAllStore: 'racesAllStore',
 		sapStatusesAllStore: 'sapStatusesAllStore',
 		financialAidFilesAllStore: 'financialAidFilesAllStore',
+		careerDecisionStatusesAllStore: 'careerDecisionStatusesAllStore',
     	formUtils: 'formRendererUtils',
     	fundingSourcesAllStore: 'fundingSourcesAllStore',
     	gendersStore: 'gendersStore',
