@@ -20,14 +20,11 @@ package org.jasig.ssp.web.api;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.factory.PersonSearchResultTOFactory;
@@ -61,8 +58,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import au.com.bytecode.opencsv.CSVWriter;
+
 
 @Controller
 @RequestMapping("/1/person")
@@ -130,12 +127,14 @@ public class PersonSearchController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResultTO>(true,
 				results.getResults(), factory.asTOList(results.getRows()));
 	}
-	
-    protected CSVWriter initCsvWriter(Map<String, Object> model,
-            HttpServletRequest request, HttpServletResponse response)
+
+
+    protected CSVWriter initCsvWriter(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
     throws IOException {
         return new CSVWriter(response.getWriter());
-    }		
+    }
+
+
 	@DynamicPermissionChecking
 	@ResponseBody
 	@RequestMapping(value="/students/search", method = RequestMethod.GET)
@@ -148,6 +147,10 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+     final @RequestParam(required = false) BigDecimal localGpaMin,
+     final @RequestParam(required = false) BigDecimal localGpaMax,
+     final @RequestParam(required = false) BigDecimal programGpaMin,
+     final @RequestParam(required = false) BigDecimal programGpaMax,
 	 final @RequestParam(required = false) Boolean currentlyRegistered,
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
@@ -162,8 +165,8 @@ public class PersonSearchController extends AbstractBaseController {
 	 // replaces planStatus
 	 final @RequestParam(required = false) String planStatus,
 	 final @RequestParam(required = false) Boolean myCaseload,
-	 final @RequestParam(required = false)  Boolean myPlans,
-	 final @RequestParam(required = false)  Boolean myWatchList,
+	 final @RequestParam(required = false) Boolean myPlans,
+	 final @RequestParam(required = false) Boolean myWatchList,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
      final @RequestParam(required = false) String actualStartTerm,
 	 final @RequestParam(required = false) ObjectStatus status,
@@ -174,7 +177,8 @@ public class PersonSearchController extends AbstractBaseController {
 	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
-		PersonSearchRequest form = personSearchRequestFactory.from(studentId,
+		PersonSearchRequest form = personSearchRequestFactory.from(
+                studentId,
 				null, 
 				null,
 				programStatus,
@@ -185,6 +189,10 @@ public class PersonSearchController extends AbstractBaseController {
 				hoursEarnedMax,
 				gpaEarnedMin,
 				gpaEarnedMax,
+                localGpaMin,
+                localGpaMax,
+                programGpaMin,
+                programGpaMax,
 				currentlyRegistered,
 				earlyAlertResponseLate,
 				sapStatusCode,
@@ -194,7 +202,7 @@ public class PersonSearchController extends AbstractBaseController {
 				myPlans,
 				myWatchList,
 				birthDate, 
-                                actualStartTerm);
+                actualStartTerm);
 		
 		
 		String sortConfigured = sort == null ? "lastName":sort;
@@ -214,7 +222,8 @@ public class PersonSearchController extends AbstractBaseController {
 		return new PagedResponse<PersonSearchResult2TO>(true,
 				models.getResults(), factory2.asTOList(models.getRows()));	
 	}
-	
+
+
 	@DynamicPermissionChecking
 	@ResponseBody
 	@RequestMapping(value="/directoryperson/search", method = RequestMethod.GET)
@@ -229,6 +238,10 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+     final @RequestParam(required = false) BigDecimal localGpaMin,
+     final @RequestParam(required = false) BigDecimal localGpaMax,
+     final @RequestParam(required = false) BigDecimal programGpaMin,
+     final @RequestParam(required = false) BigDecimal programGpaMax,
 	 final @RequestParam(required = false) Boolean currentlyRegistered,
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
@@ -259,13 +272,17 @@ public class PersonSearchController extends AbstractBaseController {
 				coachId,declaredMajor,
 				hoursEarnedMin,hoursEarnedMax,
 				gpaEarnedMin,gpaEarnedMax,
+                localGpaMin, localGpaMax,
+                programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage));
-		return new PagedResponse<PersonSearchResult2TO>(true,
-				models.getResults(), factory2.asTOList(models.getRows()));	
+
+         return new PagedResponse<PersonSearchResult2TO>(true, models.getResults(), factory2.asTOList(models.getRows()));
 	}
+
+
 	@DynamicPermissionChecking
 	@ResponseBody
 	@RequestMapping(value="/directoryperson/search/count", method = RequestMethod.GET)
@@ -280,6 +297,10 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+     final @RequestParam(required = false) BigDecimal localGpaMin,
+     final @RequestParam(required = false) BigDecimal localGpaMax,
+     final @RequestParam(required = false) BigDecimal programGpaMin,
+     final @RequestParam(required = false) BigDecimal programGpaMax,
 	 final @RequestParam(required = false) Boolean currentlyRegistered,
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
@@ -310,31 +331,36 @@ public class PersonSearchController extends AbstractBaseController {
 				coachId,declaredMajor,
 				hoursEarnedMin,hoursEarnedMax,
 				gpaEarnedMin,gpaEarnedMax,
+                localGpaMin, localGpaMax,
+                programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage));
 	}
-		
-	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
+
+
+	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection) {
 		String sortConfigured = sort == null ? "dp.lastName":"dp."+ sort;
-		if(sortConfigured.equals("dp.coach")){
+		if(sortConfigured.equals("dp.coach")) {
 			sortConfigured = "dp.coachLastName";
-		}else if(sortConfigured.equals("dp.currentProgramStatusName")){
+		} else if(sortConfigured.equals("dp.currentProgramStatusName")) {
 			sortConfigured = "dp.programStatusName";
-		}else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
+		} else if(sortConfigured.equals("dp.numberOfEarlyAlerts")) {
 			sortConfigured = "dp.activeAlertsCount";
-		}else if(sortConfigured.equals("dp.studentType")){
+		} else if(sortConfigured.equals("dp.studentType")) {
 			sortConfigured = "dp.studentTypeName";
 		}
 		SortingAndPaging sortAndPage = SortingAndPaging
-		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
-				sortDirection, null);
-		if(sortConfigured.equals("dp.coachLastName")){
+                .createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured, sortDirection, null);
+
+        if (sortConfigured.equals("dp.coachLastName")) {
 			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
 		}
+
 		return sortAndPage;
 	}
+
 
 	private void assertSearchApiAuthorization(HttpServletRequest request)
 			throws AccessDeniedException {

@@ -21,10 +21,10 @@ package org.jasig.ssp.transferobject;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+
 
 /**
  * PersonSearchResult transfer object
@@ -53,6 +53,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private BigDecimal gpaEarnedMin;
 	
 	private BigDecimal gpaEarnedMax;
+
+    private BigDecimal localGpaMin;
+
+    private BigDecimal localGpaMax;
+
+    private BigDecimal programGpaMin;
+
+    private BigDecimal programGpaMax;
 	
 	private Boolean currentlyRegistered;
 	
@@ -77,7 +85,6 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private String personTableType;
 	
 	private SortingAndPaging sortAndPage;
-	
 	
 	public String getSchoolId() {
 		return schoolId;
@@ -235,7 +242,6 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	
 
 	public String getPersonTableType() {
 		return personTableType;
@@ -249,7 +255,6 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		return sortAndPage;
 	}
 
-
 	public void setSortAndPage(SortingAndPaging sortAndPage) {
 		this.sortAndPage = sortAndPage;
 	}
@@ -262,11 +267,43 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.myWatchList = myWatchList;
 	}
 
-        public String getActualStartTerm () {
+    public String getActualStartTerm () {
                 return actualStartTerm;
         }
 
-        public void setActualStartTerm (final String actualStartTerm) {
+    public void setActualStartTerm (final String actualStartTerm) {
                 this.actualStartTerm = actualStartTerm;
         }
+
+    public BigDecimal getLocalGpaMin () {
+        return localGpaMin;
+    }
+
+    public void setLocalGpaMin (final BigDecimal localGpaMin) {
+        this.localGpaMin = localGpaMin;
+    }
+
+    public BigDecimal getLocalGpaMax () {
+        return localGpaMax;
+    }
+
+    public void setLocalGpaMax (final BigDecimal localGpaMax) {
+        this.localGpaMax = localGpaMax;
+    }
+
+    public BigDecimal getProgramGpaMin () {
+        return programGpaMin;
+    }
+
+    public void setProgramGpaMin (final BigDecimal programGpaMin) {
+        this.programGpaMin = programGpaMin;
+    }
+
+    public BigDecimal getProgramGpaMax () {
+        return programGpaMax;
+    }
+
+    public void setProgramGpaMax (final BigDecimal programGpaMax) {
+        this.programGpaMax = programGpaMax;
+    }
 }

@@ -23,16 +23,13 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSearchService;
@@ -41,12 +38,8 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.WatchStudentService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyFormatting;
 import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
-import org.jasig.ssp.util.security.DynamicPermissionChecking;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -60,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 @RequestMapping("/1/exportableCaseload")
@@ -189,6 +183,10 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	 final @RequestParam(required = false) BigDecimal hoursEarnedMax,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMin,
 	 final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+     final @RequestParam(required = false) BigDecimal localGpaMin,
+     final @RequestParam(required = false) BigDecimal localGpaMax,
+     final @RequestParam(required = false) BigDecimal programGpaMin,
+     final @RequestParam(required = false) BigDecimal programGpaMax,
 	 final @RequestParam(required = false) Boolean currentlyRegistered,
 	 final @RequestParam(required = false) String earlyAlertResponseLate,
 	 final @RequestParam(required = false) String sapStatusCode,
@@ -219,6 +217,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				coachId,declaredMajor,
 				hoursEarnedMin,hoursEarnedMax,
 				gpaEarnedMin,gpaEarnedMax,
+                localGpaMin, localGpaMax,
+                programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists,

@@ -41,39 +41,37 @@ Ext.define('Ssp.service.SearchService', {
 		// toolbar applied to the SearchView will not
 		// apply the params when using next or previous page
 		var activeParams = {};
-		
 
 		for (key in params) {
-		    if(params[key] && params[key] != null){
+		    if(params[key] && params[key] != null) {
 				activeParams[key] = params[key];
 			}
 		}
-
 		
 		var encodedUrl = Ext.urlEncode(activeParams);
 		var count;
 
-		 Ext.Ajax.request({
-				url: me.getBaseUrl()+'/count?' + encodedUrl,
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-				success: function(response, view) {
-					if (callbacks != null && callbacks.success ) {
-						if ( response && response.responseText ) {
-							callbacks.success.call(callbacks.scope, Ext.decode(response.responseText));
-						} else {
-							callbacks.success.call(callbacks.scope, null);
-						}
-					}
-				},
-				failure: function(response) {
-					if (callbacks != null && callbacks.failure) {
-						callbacks.failure.call(callbacks.scope, response);
-					} else {
-						this.apiProperties.handleError(response);
-					}
-				}
-			}, this);
+		Ext.Ajax.request({
+		    url: me.getBaseUrl()+'/count?' + encodedUrl,
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            success: function(response, view) {
+                if (callbacks != null && callbacks.success ) {
+                    if ( response && response.responseText ) {
+                        callbacks.success.call(callbacks.scope, Ext.decode(response.responseText));
+                    } else {
+                        callbacks.success.call(callbacks.scope, null);
+                    }
+                }
+            },
+            failure: function(response) {
+                if (callbacks != null && callbacks.failure) {
+                    callbacks.failure.call(callbacks.scope, response);
+                } else {
+                    this.apiProperties.handleError(response);
+                }
+            }
+		}, this);
 	},
 
 	searchWithParams: function(params, callbacks) {
@@ -89,9 +87,9 @@ Ext.define('Ssp.service.SearchService', {
 		// apply the params when using next or previous page
 		var activeParams = {};
 		
-		if(me.store.extraParams){
+		if(me.store.extraParams) {
 			for (key in me.store.extraParams) {
-				if(me.store.extraParams[key] && me.store.extraParams[key] != null){
+				if(me.store.extraParams[key] && me.store.extraParams[key] != null) {
 					activeParams[key] = me.store.extraParams[key];
 				}
 			}
@@ -99,21 +97,19 @@ Ext.define('Ssp.service.SearchService', {
 		
 		if(me.store.params){
 			for (key in me.store.params) {
-				if(me.store.params[key] && me.store.params[key] != null){
+				if(me.store.params[key] && me.store.params[key] != null) {
 					activeParams[key] = me.store.params[key];
 				}
 			}
 		}
 		
 		for (key in params) {
-		    if(params[key] && params[key] != null){
+		    if(params[key] && params[key] != null) {
 				activeParams[key] = params[key];
 			}
 		}
 
-		
 		var encodedUrl = Ext.urlEncode(activeParams);
-
 		Ext.apply(me.store.getProxy(),{url: me.getBaseUrl()+'?' + encodedUrl});
 
 		me.store.load({
@@ -121,15 +117,12 @@ Ext.define('Ssp.service.SearchService', {
 
 			},
 			callback: function(records, operation, success) {
-				if (success)
-				{
-					if (callbacks != null)
-					{
+				if (success) {
+					if (callbacks != null) {
 						callbacks.success( records, callbacks.scope );
 					}
-				}else{
-					if (callbacks != null)
-					{
+				} else {
+					if (callbacks != null) {
 						callbacks.failure( records, callbacks.scope );
 					}
 				}
@@ -138,7 +131,7 @@ Ext.define('Ssp.service.SearchService', {
 		});
 	},
 
-    search: function( searchTerm, outsideCaseload, callbacks ){
+    search: function( searchTerm, outsideCaseload, callbacks ) {
     	var me = this;
 		me.searchWithParams({
 			searchTerm: searchTerm,
@@ -157,6 +150,10 @@ Ext.define('Ssp.service.SearchService', {
     		 hoursEarnedMax,
     		 gpaEarnedMin,
     		 gpaEarnedMax,
+             localGpaMin,
+             localGpaMax,
+             programGpaMin,
+             programGpaMax,
     		 currentlyRegistered,
     		 earlyAlertResponseLate,
     		 sapStatusCode,
@@ -172,29 +169,33 @@ Ext.define('Ssp.service.SearchService', {
     	var me = this;
     	
 		me.searchWithParams({
-	     schoolId: schoolId,
-	     firstName: firstName,
-	     lastName: lastName,
-		 programStatus: programStatus,
-		 specialServiceGroup: specialServiceGroup,
-		 coachId: coachId,
-		 declaredMajor: declaredMajor,
-		 hoursEarnedMin: hoursEarnedMin,
-		 hoursEarnedMax: hoursEarnedMax,
-		 gpaEarnedMin: gpaEarnedMin,
-		 gpaEarnedMax: gpaEarnedMax,
-		 // required because false is not sent as a parameter we are depending on null to indicate no search
-		 currentlyRegistered: currentlyRegistered == null ? null : new Boolean(currentlyRegistered).toString(),
-		 earlyAlertResponseLate: earlyAlertResponseLate,
-		 sapStatusCode: sapStatusCode,
-		 planStatus: planStatus,
-		 planExists: planExists,
-		 myCaseload: myCaseload,
-		 myPlans: myPlans,
-		 myWatchList: myWatchList,
-		 birthDate: birthDate,
-		 actualStartTerm: actualStartTerm,
-		 personTableType: personTableType
+            schoolId: schoolId,
+            firstName: firstName,
+            lastName: lastName,
+            programStatus: programStatus,
+            specialServiceGroup: specialServiceGroup,
+            coachId: coachId,
+            declaredMajor: declaredMajor,
+            hoursEarnedMin: hoursEarnedMin,
+            hoursEarnedMax: hoursEarnedMax,
+            gpaEarnedMin: gpaEarnedMin,
+            gpaEarnedMax: gpaEarnedMax,
+            localGpaMin: localGpaMin,
+            localGpaMax: localGpaMax,
+            programGpaMin: programGpaMin,
+            programGpaMax: programGpaMax,
+            // required because false is not sent as a parameter we are depending on null to indicate no search
+            currentlyRegistered: currentlyRegistered == null ? null : new Boolean(currentlyRegistered).toString(),
+            earlyAlertResponseLate: earlyAlertResponseLate,
+            sapStatusCode: sapStatusCode,
+            planStatus: planStatus,
+            planExists: planExists,
+            myCaseload: myCaseload,
+            myPlans: myPlans,
+            myWatchList: myWatchList,
+            birthDate: birthDate,
+            actualStartTerm: actualStartTerm,
+            personTableType: personTableType
 		}, callbacks);
 	}
 });

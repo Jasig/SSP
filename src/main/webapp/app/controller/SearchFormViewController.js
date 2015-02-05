@@ -41,83 +41,98 @@ Ext.define('Ssp.controller.SearchFormViewController', {
             show: 'onShow',
             hide: 'onHide'
     	},
-  
-     'myPlans':{
+		'myPlans':{
 			specialkey: "specialKeyPressed"
-	 },   
-     'myWatchList':{
+		},
+		 'myWatchList':{
 			specialkey: "specialKeyPressed"
-	 },	 
-     'myCaseload':{
+		},
+		'myCaseload':{
 			specialkey: "specialKeyPressed"
-	 },	
-     'schoolId':{
+		},
+		'schoolId':{
 			specialkey: "specialKeyPressed"
-	 },	
-     'personTableType':{
+		},
+		'personTableType':{
 			specialkey: "specialKeyPressed"
-	 },	 
-     'birthDate':{
+		},
+		'birthDate':{
 			specialkey: "specialKeyPressed"
-	 },	
-     'programStatus':{
+		},
+		'programStatus':{
 			specialkey: "specialKeyPressed"
-	 },	
-     'currentlyRegistered':{
+		},
+		'currentlyRegistered':{
 			specialkey: "specialKeyPressed"
-	 },	
-     'specialServiceGroup':{
+		},
+		'specialServiceGroup':{
 			specialkey: "specialKeyPressed"
-	 },	 
-     'actualStartTerm':{
+		},
+		'actualStartTerm':{
 			specialkey: "specialKeyPressed"
-	 },	 	
-     'declaredMajor':{
+		},
+		'declaredMajor':{
 			specialkey: "specialKeyPressed"
-	 },	 
-     'coachId':{
+		},
+		'coachId':{
 			specialkey: "specialKeyPressed"
-	 },		
-     'earlyAlertResponseLate':{
+		},
+		'earlyAlertResponseLate':{
 			specialkey: "specialKeyPressed"
-	 },		
-     'financialAidSapStatusCode':{
+		},
+		'financialAidSapStatusCode':{
 			specialkey: "specialKeyPressed"
-	 },	 
-     'planStatus':{
+		},
+		'planStatus':{
 			specialkey: "specialKeyPressed"
-	 },		
-     'planExists':{
+		},
+		'planExists':{
 			specialkey: "specialKeyPressed"
-	 },
-	'hoursEarnedMin':{
+		},
+		'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
 			blur: "hoursEarnedMinChanged"
-	 },
-	'hoursEarnedMax':{
+		},
+		'hoursEarnedMax':{
 			specialkey: "specialKeyPressed",
 			blur: 'hoursEarnedMaxChanged'
-	 },
-	 'gpaMin':{
+		},
+		'gpaMin':{
 			specialkey: "specialKeyPressed",
 			blur: 'gpaMinChanged'
-	 },
-	 'gpaMax':{
+		},
+		'gpaMax':{
 			specialkey: "specialKeyPressed",
 			blur: 'gpaMaxChanged'
-	 },
-	 'schoolId': {
-	        specialkey: "specialKeyPressed"
-	    }
+		},
+		'localGpaMin':{
+			specialkey: "specialKeyPressed",
+			blur: 'gpaMinChanged'
+		},
+		'localGpaMax':{
+			specialkey: "specialKeyPressed",
+			blur: 'gpaMaxChanged'
+		},
+		'programGpaMin':{
+			specialkey: "specialKeyPressed",
+			blur: 'gpaMinChanged'
+		},
+		'programGpaMax':{
+			specialkey: "specialKeyPressed",
+			blur: 'gpaMaxChanged'
+		},
+		'schoolId': {
+			specialkey: "specialKeyPressed"
+		}
     },
-    
+
 	init: function() {
 		var me=this;    	
 		me.coachesStore.clearFilter(true);
 		return me.callParent(arguments);
     },
 
-	onAfterLayout: function(comp, eobj){
+	onAfterLayout: function(comp, eobj) {
 		var me=this;
 		me.registerBeforeTabChange();
 		me.appEventsController.assignEvent({eventName: 'onStudentSearchRequested', callBackFunc: me.onSearch, scope: me});
@@ -126,6 +141,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	   	// load program statuses
 		me.getProgramStatuses();	
 	},
+
     destroy: function() {
     	var me=this;
     	me.deRegisterBeforeTabChange();
@@ -141,64 +157,77 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 	   	return me.callParent( arguments );
     },
+
 	getThisTab: function() {
 		var me = this;
 		return me.getView().tab;
 	},
+
 	getTabPanel: function() {
 		var me = this;
 		return me.tabPanel = me.tabPanel || me.getView().tabPanelAccessor();
 	},
+
 	// All of this searchGridPager show/hide stuff is an attempt to ensure the entire search form renders on
 	// a 768 vertical resolution. See SearchForm.js for more notes
 	getSearchGridPager: function() {
 		var me = this;
 		return me.getThisTab().queryById('searchGridPager');
 	},
+
 	hideSearchGridPager: function() {
 		var me = this;
 		me.getSearchGridPager().hide();
 	},
+
 	showSearchGridPager: function() {
 		var me = this;
 		me.getSearchGridPager().show();
 	},
+
 	onShow: function() {
 		var me = this;
 		me.hideSearchGridPager();
 	},
+
 	onHide: function() {
 		var me = this;
 		me.showSearchGridPager();
 	},
+
 	registerBeforeTabChange: function() {
 		var me = this;
 		if ( me.getTabPanel() ) {
 			me.getTabPanel().on('beforetabchange', me.onBeforeTabChange, me);
 		}
 	},
+
 	deRegisterBeforeTabChange: function() {
 		var me = this;
 		if ( me.getTabPanel() ) {
 			me.getTabPanel().un('beforetabchange', me.onBeforeTabChange, me);
 		}
 	},
+
 	onBeforeTabChange: function( tabPanel, newCard, oldCard, eOpts ) {
 		var me = this;
 		if ( newCard.items.items[0] === me.getThisTab() && !(me.getView().isHidden())) {
 			me.hideSearchGridPager();
 		}
 	},
+
     searchSuccess: function( r, scope){
     	var me=scope;
     	me.searchStore.pageSize = me.searchStore.data.length;
     	me.getView().setLoading( false );
 		me.getView().hide();
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
-    },  
+    },
+
     exportSearchSuccess: function( r, scope){
     	var me=scope;
-    }, 
+    },
+
 	search: function(){
 		var me=this;		
 		me.searchService.search2( 
@@ -212,7 +241,11 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('numberfield[name=hoursEarnedMin]')[0].value,
 				me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,			
 				me.getView().query('numberfield[name=gpaMin]')[0].value,
-				me.getView().query('numberfield[name=gpaMax]')[0].value,				
+				me.getView().query('numberfield[name=gpaMax]')[0].value,
+				me.getView().query('numberfield[name=localGpaMin]')[0].value,
+				me.getView().query('numberfield[name=localGpaMax]')[0].value,
+                me.getView().query('numberfield[name=programGpaMin]')[0].value,
+                me.getView().query('numberfield[name=programGpaMax]')[0].value,
 				me.getView().query('combobox[name=currentlyRegistered]')[0].value,
 				me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
 				me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
@@ -231,13 +264,16 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		});	
 		
 	},
+
 	dateFieldValueFromName: function(name){
 		var me =  this;
 		var value = me.getView().query('datefield[name=' + name + ']')[0].value;
-		if(value !== null && value !== undefined && !(value === ""))
+		if (value !== null && value !== undefined && !(value === "")) {
 			return me.formUtils.toJSONStringifiableDate(value).formattedStr;
+		}
 		return null;
 	},
+
 	textFieldValueFromName: function(name){
 		var me =  this;
 		var value = me.getView().query('textfield[name=' + name + ']')[0].value;
@@ -248,6 +284,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var me=this;
 		me.getView().getForm().reset();
 	},
+
 	getProgramStatuses: function(){
 		var me=this;
 		me.programStatusService.getAll({
@@ -258,15 +295,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	},
 
 	getProgramStatusesSuccess: function( r, scope){
-    	var me=scope;
-    	var activeProgramStatusId = "";
-    	var programStatus;
-    	if ( me.programStatusesStore.getCount() > 0)
-    	{
-    	}
+    //	var me=scope;                               //Commented out useless
+    //	var activeProgramStatusId = "";
+    //	var programStatus;
+    //	if ( me.programStatusesStore.getCount() > 0) {      TODO: Finish attempt here or remove
+    //	}
     },	
     getProgramStatusesFailure: function( r, scope){
-    	var me=scope;
+    	//var me=scope;                       //Commented out useless  TODO: Finish attempt here or remove
     },
    
 	// copy/paste from SearchViewController
@@ -286,6 +322,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk program status change request. Please contact your administrator');
 		}
 	},
+
 	// copy/paste from SearchViewController
 	onBulkProgramStatusChangeSuccess: function() {
 		var me = this;
@@ -293,6 +330,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		Ext.Msg.alert('Bulk Program Status Change Request Queued','Your bulk Program Status change request has ' +
 			'been queued successfully. Bulk changes are processed gradually and may not be reflected immediately on-screen.');
 	},
+
 	// copy/paste from SearchViewController except for 'criteria', which is passed in instead of being built just in time
 	doBulkProgramStatusChange: function(action, criteria, programStatusChangeReasonId, programStatusChangeReasonName) {
 		var me = this;
@@ -318,6 +356,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			scope: me
 		});
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	newDoBulkProgramStatusChange: function(action, criteria) {
 		var me = this;
@@ -325,11 +364,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.doBulkProgramStatusChange(action, criteria, programStatusChangeReasonId, programStatusChangeReasonName);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	cancelBulkProgramStatusChange: function(action, criteria) {
 		var me = this;
 		me.appEventsController.loadMaskOff();
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	newCancelBulkProgramStatusChange: function(action, criteria) {
 		var me = this;
@@ -337,11 +378,12 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.cancelBulkProgramStatusChange(action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	bulkProgramStatusChange: function(action, criteria) {
 		var me = this;
 		me.appEventsController.loadMaskOn();
-		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
+		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING') {
 			var dialog = Ext.create('Ssp.view.ProgramStatusChangeReasonWindow', {
 				height: 150,
 				width: 500,
@@ -362,6 +404,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.doBulkProgramStatusChange(action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController
 	onBulkWatchChangeFailure: function(resp, action) {
 		var me = this;
@@ -380,6 +423,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			Ext.Msg.alert('SSP Error','There was an issue procesing your bulk ' + displayName + ' request. Please contact your system administrator');
 		}
 	},
+
 	// copy/paste from SearchViewController
 	onBulkWatchChangeSuccess: function(action) {
 		var me = this;
@@ -389,6 +433,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		Ext.Msg.alert('Bulk ' + displayName + ' Request Queued','Your bulk ' + displayName + ' request has ' +
 			'been queued successfully. Bulk changes are processed gradually and may not be reflected immediately on-screen.');
 	},
+
 	// copy/paste from SearchViewController
 	newOnBulkWatchChangeFailure: function(action) {
 		var me = this;
@@ -396,6 +441,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.onBulkWatchChangeFailure(resp, action);
 		}
 	},
+
 	// copy/paste from SearchViewController
 	newOnBulkWatchChangeSuccess: function(action) {
 		var me = this;
@@ -403,6 +449,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.onBulkWatchChangeSuccess(action);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	bulkWatchChange: function(action, criteria) {
 		var me = this;
@@ -428,6 +475,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			scope: me
 		});
 	},
+
 	bulkEmail: function(criteria){
 		var me=this;
 		var store = null;
@@ -440,6 +488,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		});
 		me.emailStudentPopup.show();
 	},
+
 	// Similar purpose to function with same name SearchViewController, but exporting a search result as opposed
 	// to caseload/watchlist involves completely different URL building
 	exportSearch: function(criteria) {
@@ -449,6 +498,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		window.open(me.exportService.buildExportSearchUrl(criteria),'_blank');
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	onExportConfirm: function(btnId, criteria){
 		var me=this;
@@ -456,6 +506,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.exportSearch(criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	onBulkEmailConfirm: function(btnId, criteria) {
 		var me = this;
@@ -463,18 +514,21 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.bulkEmail(criteria);
 		}
 	},
+
 	newOnExportConfirm: function (criteria) {
 		var me = this;
 		return function(btnId) {
 			me.onExportConfirm(btnId, criteria);
 		}
 	},
+
 	newOnBulkEmailConfirm: function (criteria) {
 		var me = this;
 		return function(btnId) {
 			me.onBulkEmailConfirm(btnId, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying
 	onBulkProgramStatusChangeConfirm: function(btnId, action, criteria) {
 		var me = this;
@@ -482,6 +536,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.bulkProgramStatusChange(action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying
 	onBulkWatchChangeConfirm: function(btnId, action, criteria) {
 		var me = this;
@@ -489,6 +544,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.bulkWatchChange(action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying
 	newOnBulkProgramStatusChangeConfirm: function(action, criteria) {
 		var me = this;
@@ -496,6 +552,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.onBulkProgramStatusChangeConfirm(btnId, action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying
 	newOnBulkWatchChangeConfirm: function(action, criteria) {
 		var me = this;
@@ -503,6 +560,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.onBulkWatchChangeConfirm(btnId, action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying into the
 	// ok/cancel dialog callback, and slightly different search/export invocation.
 	promptWithExportCount: function(count, criteria) {
@@ -520,6 +578,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			fn: me.newOnExportConfirm(criteria),
 			scope: me
 		});
+
 	},
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying into the
 	// ok/cancel dialog callback, and minor messaging differences
@@ -548,6 +607,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			});
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	promptWithBulkProgramStatusChangeCount: function(count, action, criteria) {
 		var me = this;
@@ -581,6 +641,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			scope: me
 		});
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	promptWithBulkWatchChangeCount: function(count, action, criteria) {
 		var me = this;
@@ -609,6 +670,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			scope: me
 		});
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	onBulkActionCountFailure: function(cnt, action, criteria) {
 		var me = this;
@@ -616,6 +678,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		Ext.Msg.alert('SSP Error', 'Failed to look up the number of records which would be affected by the ' +
 			'requested action. Retry or contact your system administrator');
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	onBulkActionCountSuccess: function(cnt, action, criteria) {
 		var me = this;
@@ -631,6 +694,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			Ext.Msg.alert('SSP Error', 'Unrecognized bulk action request');
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	newBulkActionCountResultFailureCallback: function(action, criteria) {
 		var me = this;
@@ -638,6 +702,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			return me.onBulkActionCountFailure(cnt, action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController except for 'criteria'
 	newBulkActionCountResultSuccessCallback: function(action, criteria) {
 		var me = this;
@@ -645,6 +710,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			return me.onBulkActionCountSuccess(cnt, action, criteria);
 		}
 	},
+
 	// copy/paste from SearchViewController
 	translateProgramStatusActionToDisplayName: function(action) {
 		switch (action) {
@@ -659,6 +725,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		return null;
 	},
+
 	translateProgramStatusActionToDomainId: function(action) {
 		switch (action) {
 			case 'PROGRAM_STATUS_ACTIVE':
@@ -672,9 +739,11 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		return null;
 	},
+
 	translateWatchActionToDomainOperation: function(action) {
 		return action;
 	},
+
 	translateWatchActionToDisplayName: function(action) {
 		switch (action) {
 			case 'WATCH':
@@ -684,6 +753,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		return null;
 	},
+
 	onSearchActionComboSelect: function(records){
 		var me=this;
 
@@ -698,19 +768,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var message = "";
 		var valuesInvalid = false;
 
-        if(me.checkGpaFields()) {
-		    if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-			    valuesInvalid = true;
-			    message += "GPA Min is greater than GPA Maximum. ";
-            }
-
-			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
-			    me.getGpaMin().setValue(0);
-			}
-
-			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
-			    me.getGpaMin().setValue(0);
-			}
+        if (me.checkGpaFields()) {
+        	me.checkAllGpaMinLessThanMax();
 		}
 
 		if (me.checkHoursEarnedFields()) {
@@ -764,14 +823,15 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			);
 		}
 	},
-	onSearch: function(){
+
+	onSearch: function() {
 		var me = this;
-		if(!me.getView().getForm().isDirty())
-		{
+
+		if (!me.getView().getForm().isDirty()) {
 	     	Ext.Msg.alert('SSP Error', 'Please enter some filter values.'); 
 	     	return;
 		}
-		if(!me.getView().getForm().isValid()){
+		if(!me.getView().getForm().isValid()) {
 			Ext.Msg.alert('SSP Error', 'One or more search filters are invalid. Problems have been highlighted.');
 			return;
 		}
@@ -779,20 +839,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var valuesInvalid = false;
 
 		if (me.checkGpaFields()) {
-            if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-                valuesInvalid = true;
-                message += "GPA Min is greater than GPA Maximum. ";
-            }
-		
-			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
-			    me.getGpaMin().setValue(0);
-			}
-
-            if(me.checkGpaFields()){
-                if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
-                    me.getGpaMin().setValue(0);
-                }
-            }
+			me.checkAllGpaMinLessThanMax();
         }
 
         if (me.checkHoursEarnedFields()) {
@@ -854,46 +901,173 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         return false;
 	},
 
-	checkGpaFields: function(){
+	checkGpaFields: function(gpaFieldName){
         var me=this;
-        if (me.getGpaMin && me.getGpaMax) {
-            return true;
+
+        if (gpaFieldName === "local") {
+			if (me.getLocalGpaMin && me.getLocalGpaMax) {
+				return true;
+			}
+        } else if (gpaFieldName === "program") {
+			if (me.getProgramGpaMin && me.getProgramGpaMax) {
+				return true;
+			}
+        } else if (gpaFieldName === "gpa") {
+			if (me.getGpaMin && me.getGpaMax) {
+				return true;
+			}
+        } else if (gpaFieldName === "all") {
+            //check all fields
+			if (me.getLocalGpaMin && me.getLocalGpaMax && me.getProgramGpaMin && me.getProgramGpaMax && me.getGpaMin && me.getGpaMax) {
+				return true;
+			}
+        } else {
+        	//check for any
+        	if (me.getLocalGpaMin && me.getLocalGpaMax || me.getProgramGpaMin && me.getProgramGpaMax || me.getGpaMin && me.getGpaMax) {
+        		return true;
+        	}
         }
         return false;
 	},
 	
-	gpaMinChanged: function(){
+	gpaMinChanged: function(gpaMinChanged) {
 		var me=this;
-		if (me.checkGpaFields()) {
-            if(me.getGpaMin().getValue() === null){
-                me.getGpaMax().setValue(null);
-                return;
-            }
-            if(me.getGpaMax().getValue() == null){
-                me.getGpaMax().setValue(me.getGpaMin().getValue());
-                return;
-            }
-            if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-                me.getGpaMax().setValue(me.getGpaMin().getValue());
-            }
-        }
+
+		switch (gpaMinChanged.getName()) {
+			case 'localGpaMin':
+				if (me.checkGpaFields("local")) {
+					if (me.getLocalGpaMin().getValue() === null) {
+						me.getLocalGpaMax().setValue(null);
+						return;
+					}
+					if (me.getLocalGpaMax().getValue() == null) {
+						me.getLocalGpaMax().setValue(me.getLocalGpaMin().getValue());
+						return;
+					}
+					if (me.getLocalGpaMin().getValue() > me.getLocalGpaMax().getValue()) {
+						me.getLocalGpaMax().setValue(me.getLocalGpaMin().getValue());
+					}
+				}
+			break;
+			case 'programGpaMin':
+				if (me.checkGpaFields("program")) {
+					if (me.getProgramGpaMin().getValue() === null) {
+						me.getProgramGpaMax().setValue(null);
+						return;
+					}
+					if (me.getProgramGpaMax().getValue() == null) {
+						me.getProgramGpaMax().setValue(me.getProgramGpaMin().getValue());
+						return;
+					}
+					if (me.getProgramGpaMin().getValue() > me.getProgramGpaMax().getValue()) {
+						me.getProgramGpaMax().setValue(me.getProgramGpaMin().getValue());
+					}
+				}
+			break;
+			default:
+				if (me.checkGpaFields("gpa")) {
+					if (me.getGpaMin().getValue() === null) {
+						me.getGpaMax().setValue(null);
+						return;
+					}
+					if (me.getGpaMax().getValue() == null) {
+						me.getGpaMax().setValue(me.getGpaMin().getValue());
+						return;
+					}
+					if (me.getGpaMin().getValue() > me.getGpaMax().getValue()) {
+						me.getGpaMax().setValue(me.getGpaMin().getValue());
+					}
+				}
+			break;
+		}
 	},
 	
-	gpaMaxChanged: function(){
+	gpaMaxChanged: function(gpaMaxChanged){
 		var me=this;
-        if (me.checkGpaFields()) {
-            if(!me.getGpaMin().getValue()){
-                me.getGpaMin().setValue(0);
-                return;
-            }
 
-            if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-                me.getGpaMin().setValue(me.getGpaMax().getValue());
-            }
-        }
+        switch (gpaMaxChanged.getName()) {
+			case 'localGpaMax':
+				if (me.checkGpaFields("local")) {
+					if ( !me.getLocalGpaMin().getValue() ) {
+						me.getLocalGpaMin().setValue(0);
+						return;
+					}
+					if ( me.getLocalGpaMin().getValue() > me.getLocalGpaMax().getValue() ) {
+						me.getLocalGpaMin().setValue(me.getLocalGpaMax().getValue());
+					}
+				}
+			break;
+			case 'programGpaMax':
+				if (me.checkGpaFields("program")) {
+					if ( !me.getProgramGpaMin().getValue() ) {
+						me.getProgramGpaMin().setValue(0);
+						return;
+					}
+					if ( me.getProgramGpaMin().getValue() > me.getProgramGpaMax().getValue() ) {
+						me.getProgramGpaMin().setValue(me.getProgramGpaMax().getValue());
+					}
+				}
+			break;
+			default:
+				if (me.checkGpaFields("gpa")) {
+					if ( !me.getGpaMin().getValue() ) {
+						me.getGpaMin().setValue(0);
+						return;
+					}
+					if ( me.getGpaMin().getValue() > me.getGpaMax().getValue() ) {
+						me.getGpaMin().setValue(me.getGpaMax().getValue());
+					}
+				}
+			break;
+		}
 	},
 
-    searchFailure: function( r, scope){
+	checkAllGpaMinLessThanMax: function() {
+		var me = this;
+
+		if (me.checkGpaFields("local")) {
+			if(me.getLocalGpaMin().getValue() > me.getLocalGpaMax().getValue()){
+				valuesInvalid = true;
+				message += "Local GPA Min is greater than Local GPA Maximum. ";
+			}
+
+			if ( me.getLocalGpaMin().getValue() == null && me.getLocalGpaMax().getValue() != null ) {
+				me.getLocalGpaMin().setValue(0);
+			}
+
+			if ( me.getLocalGpaMin().getValue() == null && me.getLocalGpaMax().getValue() != null ) {
+				me.getLocalGpaMin().setValue(0);
+			}
+		} else if (me.checkGpaFields("program")) {
+			if(me.getProgramGpaMin().getValue() > me.getProgramGpaMax().getValue()){
+				valuesInvalid = true;
+				message += "Program GPA Min is greater than Program GPA Maximum. ";
+			}
+
+			if ( me.getProgramGpaMin().getValue() == null && me.getProgramGpaMax().getValue() != null ) {
+				me.getProgramGpaMin().setValue(0);
+			}
+
+			if ( me.getProgramGpaMin().getValue() == null && me.getProgramGpaMax().getValue() != null ) {
+				me.getProgramGpaMin().setValue(0);
+			}
+		} else {
+			if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
+				valuesInvalid = true;
+				message += "GPA Min is greater than GPA Maximum. ";
+			}
+
+			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
+				me.getGpaMin().setValue(0);
+			}
+
+			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
+				me.getGpaMin().setValue(0);
+			}
+		}
+	},
+
+    searchFailure: function( r, scope) {
     	var me=scope;
 		me.appEventsController.getApplication().fireEvent("onPersonSearchFailure");
     }

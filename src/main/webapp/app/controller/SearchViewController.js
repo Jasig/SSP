@@ -173,9 +173,17 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var index = !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ? 0 : 2;
     	var searchForm = Ext.ComponentQuery.query('searchForm')[index];
     	if ( searchForm ) {
-            var birthDateField = searchForm.query('datefield[itemId=birthDate]')[0];
+            var birthDateField = searchForm.query('datefield[itemId=birthDate]')[0]; //TODO: Refactor out or a better textStore loading sequence
             if ( birthDateField ) {
                 birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob') + ':' );
+            }
+            var localGpaField = searchForm.query('label[itemId=localGpa]')[0];
+            if ( localGpaField ) {
+            	localGpaField.setText( me.textStore.getValueByCode('ssp.label.local-gpa'));
+            }
+            var programGpaField = searchForm.query('label[itemId=programGpa]')[0];
+            if ( programGpaField ) {
+            	programGpaField.setText( me.textStore.getValueByCode('ssp.label.program-gpa'));
             }
         }
     	me.setGridView();

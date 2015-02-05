@@ -20,12 +20,11 @@ package org.jasig.ssp.factory;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
-
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+
 
 public interface PersonSearchRequestTOFactory extends
 		TOFactory<PersonSearchRequestTO, PersonSearchRequest> {
@@ -34,7 +33,9 @@ public interface PersonSearchRequestTOFactory extends
 			String programStatus,String specialServiceGroup,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
-			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
+			BigDecimal gpaEarnedMax, BigDecimal localGpaMin, BigDecimal localGpaMax,
+            BigDecimal programGpaMin, BigDecimal programGpaMax,
+            Boolean currentlyRegistered, String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType, SortingAndPaging sAndP) throws ObjectNotFoundException;
 
@@ -42,7 +43,9 @@ public interface PersonSearchRequestTOFactory extends
 			String programStatus,String specialServiceGroup,
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
-			BigDecimal gpaEarnedMax, Boolean currentlyRegistered, String earlyAlertResponseLate,
+            BigDecimal gpaEarnedMax, BigDecimal localGpaMin, BigDecimal localGpaMax,
+            BigDecimal programGpaMin, BigDecimal programGpaMax,
+            Boolean currentlyRegistered, String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate, String actualStartTerm) throws ObjectNotFoundException;
 

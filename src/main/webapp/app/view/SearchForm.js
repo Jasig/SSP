@@ -62,7 +62,6 @@ Ext.define('Ssp.view.SearchForm',{
 	        Ext.ComponentQuery.query('[name=schoolId]')[0].focus();
 	      }
 	},
-
 	initComponent: function() {
     	var me=this;
     	me.configStore.load();
@@ -76,29 +75,25 @@ Ext.define('Ssp.view.SearchForm',{
             },
 			fieldDefaults: {
 			            anchor: '100%'
-			        },
-
+			},
 		    bodyPadding: '0 4 0 4',
 			defaults:{
 			    	 enableKeyEvents:true
 			},
-
-            items: [
-			{  layout:'column',
+            items: [{
+               layout:'column',
 			   border: false,
 	           manageOverflow: 3,
-			   items:[
+			   items:[{
 				// Not doing relative column widths on these things b/c it makes us susceptible to wrapping
 				// which makes the form scroll vertically on small resolutions, but something is wrong with visibility
 				// calculations and you then can't scroll the entire form into view (as discussed at length above)
-				{
-			       xtype: 'checkboxfield',
+                   xtype: 'checkboxfield',
 			       fieldLabel: 'My Plans',
 			       name: 'myPlans',
 			       itemId: 'myPlans',
 			       labelWidth: 60
-			   },
-				{
+			    }, {
 			        xtype: 'checkboxfield',
 			        fieldLabel: 'My Watches', // not 'My Watch List' b/c this is slightly shorter and less likely to wrap
 			        name: 'myWatchList',
@@ -106,8 +101,7 @@ Ext.define('Ssp.view.SearchForm',{
 				    enableKeyEvents:true,
 				    labelWidth: 80,
 				    labelAlign: 'right'
-			   },
-				{
+			    }, {
 			        xtype: 'checkboxfield',
 			        fieldLabel: 'My Caseload',
 			        name: 'myCaseload',
@@ -115,111 +109,104 @@ Ext.define('Ssp.view.SearchForm',{
 				    enableKeyEvents:true,
 				    labelWidth: 80,
 				    labelAlign: 'right'
-			   }
-			]
-
-			},
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'School ID',
-                    emptyText: 'Enter School ID (Exact)',
-                    width: 100,
-                    name: 'schoolId',
-                    itemId: 'schoolId',
+			    }]
+			}, {
+				xtype: 'textfield',
+				fieldLabel: 'School ID',
+				emptyText: 'Enter School ID (Exact)',
+				width: 100,
+				name: 'schoolId',
+				itemId: 'schoolId',
+				enableKeyEvents:true,
+				listeners: {
+					  afterrender: function(field) {
+						field.focus(false, 0);
+					  }
+				}
+			}, {
+				layout: 'column',
+                border: false,
+                items: [{
+					xtype: 'textfield',
+					fieldLabel: 'First',
+					emptyText: 'Enter All or Part of First Name',
+					columnWidth: 0.5,
+					name: 'firstName',
 					enableKeyEvents:true,
 					listeners: {
-					      afterrender: function(field) {
-					        field.focus(false, 0);
-					      }
+						  afterrender: function(field) {
+							field.focus(false, 0);
+						  },
+						  specialkey:{
+							scope: me,
+							fn: function(field, el) {
+								if(el.getKey() == Ext.EventObject.ENTER){
+									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+								}
+							}
+						}
 					}
-                },
-
-                {	layout: 'column',
-                    border: false,
-                    items: [
-             
-                            {
-                                xtype: 'textfield',
-                                fieldLabel: 'First',
-                                emptyText: 'Enter All or Part of First Name',
-                                columnWidth: 0.5,
-                                name: 'firstName',
-            					enableKeyEvents:true,
-            					listeners: {
-            					      afterrender: function(field) {
-            					        field.focus(false, 0);
-            					      },
-            						  specialkey:{
-            							scope: me,
-            							fn: function(field, el) {
-            								if(el.getKey() == Ext.EventObject.ENTER){
-            									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-            								}
-            							}	
-            			    	  	}
-            					}
-                            },
-                            {
-                                xtype: 'textfield',
-                                fieldLabel: 'Last',
-                                emptyText: 'Enter All or Part of Last Name ',
-                                columnWidth: 0.5,
-								labelWidth:50,
-                                name: 'lastName',
-								labelAlign: 'right',
-            					enableKeyEvents:true,
-            					listeners: {
-            					      afterrender: function(field) {
-            					        field.focus(false, 0);
-            					      },
-            						  specialkey:{
-            							scope: me,
-            							fn: function(field, el) {
-            								if(el.getKey() == Ext.EventObject.ENTER){
-            									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
-            								}
-            							}	
-            			    	  	}
-            					}
-                            }]},
-							{	layout: 'column',
-						                    border: false,
-						                    items: [
-							{
-					   		    xtype: 'combobox',
-			                    fieldLabel: 'Student Exists In',
-					   		    store: me.personTableTypesStore,
-			   		   		    valueField: 'code',
-			   		   		    emptyText: 'Anywhere',
-					   		    displayField: 'displayValue',
-								columnWidth: 0.5,
-				                itemId: 'personTableType',
-			                    name: 'personTableType',
-			                    editable: false
-			                },	{
-							       xtype: 'datefield',
-							       format: 'm/d/Y',
-				             	   allowBlank: true,
-				             	   showToday:false, 
-				             	   validateOnChange: false,
-				 					columnWidth: 0.5,
-				             	   labelAlign: 'right',
-								   labelWidth: 50,
-				             	   labelSeparator: '',
-				             	   emptyText: 'mm/dd/yyyy',
-				             	   fieldLabel: (me.textStore.getValueByCode('ssp.label.dob') ? me.textStore.getValueByCode('ssp.label.dob') : "DOB") + ":",
-				             	   name: 'birthDate',
-								   itemId: 'birthDate',
-								  onExpand: function() {
-									    var value = this.getValue();
-									    var today = new Date();
-									    this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
-									}}]},
-				{	layout: 'column',
-			                    border: false,
-			                    items: [
-								
-                {
+				}, {
+					xtype: 'textfield',
+					fieldLabel: 'Last',
+					emptyText: 'Enter All or Part of Last Name ',
+					columnWidth: 0.5,
+					labelWidth:50,
+					name: 'lastName',
+					labelAlign: 'right',
+					enableKeyEvents:true,
+					listeners: {
+						  afterrender: function(field) {
+							field.focus(false, 0);
+						  },
+						  specialkey:{
+							scope: me,
+							fn: function(field, el) {
+								if(el.getKey() == Ext.EventObject.ENTER){
+									this.appEventsController.getApplication().fireEvent("onStudentSearchRequested");
+								}
+							}
+						}
+					}
+				}]
+			}, {
+				layout: 'column',
+				border: false,
+				items: [{
+					xtype: 'combobox',
+					fieldLabel: 'Student Exists In',
+					store: me.personTableTypesStore,
+					valueField: 'code',
+					emptyText: 'Anywhere',
+					displayField: 'displayValue',
+					columnWidth: 0.5,
+					itemId: 'personTableType',
+					name: 'personTableType',
+					editable: false
+				}, {
+				    xtype: 'datefield',
+				    format: 'm/d/Y',
+				    allowBlank: true,
+				    showToday:false,
+				    validateOnChange: false,
+					columnWidth: 0.5,
+				    labelAlign: 'right',
+				    labelWidth: 50,
+				    labelSeparator: '',
+				    emptyText: 'mm/dd/yyyy',
+				    fieldLabel: (me.textStore.getValueByCode('ssp.label.dob') ? me.textStore.getValueByCode('ssp.label.dob') : "DOB") + ":",
+				    name: 'birthDate',
+				    itemId: 'birthDate',
+				    onExpand: function() {
+						var value = this.getValue();
+						var today = new Date();
+						this.picker.setValue(Ext.isDate(value) ? value : new Date(today.getYear()-20, today.getMonth(), today.getDate(), 0, 0, 0, 0));
+					}
+				}]
+			}, {
+				layout: 'column',
+			    border: false,
+			    items: [{
 		   		    xtype: 'combobox',
                     fieldLabel: 'Program Status',
                     emptyText: 'Select Status',
@@ -230,8 +217,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                itemId: 'programStatus',
                     name: 'programStatus',
                     editable: false
-                }, 
-				{
+                }, {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Registered',
 		   		    emptyText: 'Any',
@@ -244,200 +230,275 @@ Ext.define('Ssp.view.SearchForm',{
    		   		    valueField: 'booleanValue',
 		   		    displayField: 'displayValue',
 		   		    editable: false
-                }]},	{
-			   		    xtype: 'combobox',
-	                    fieldLabel: 'Special Service Group',
-	                    emptyText: 'Select Special Service Group',
-			   		    store: me.specialServiceGroupsActiveUnpagedStore,
-	   		   		    valueField: 'id',
-			   		    displayField: 'name',
-			            width:100,
-		                itemId: 'specialServiceGroup',
-	                    name: 'specialServiceGroup',
-	                    editable: false
-	                },
-	                {
-	                    xtype: 'combobox',
-	                    fieldLabel: 'Start Term',
-	                    emptyText: 'Select Start Term',
-	                    store: me.termsStore,
-	                    valueField: 'code',
-	                    displayField: 'name',
-	                    width: 50,
-		                itemId: 'actualStartTerm',
-	                    name: 'actualStartTerm',
-	                    mode: 'local',
-	                    editable: false
-	                },
-	               {
-			   		    xtype: 'combobox',
-	                    fieldLabel: 'Declared Major',
-	                    emptyText: 'Select Major',
-	                    width:100,
-		                itemId: 'declaredMajor',
-	                    name: 'declaredMajor',
-			   		    store: this.programsStore,
-	   		   		    valueField: 'code',
-			   		    displayField: 'name',
-	   		   		    mode: 'local',
-					    editable: false                     
-	                },
-				
-               
-				 {
-			   		    xtype: 'combobox',
-	                    fieldLabel: 'Assigned Coach',
-	                    emptyText: 'Select Coach',
-	                    width: 100,
-	                    name: 'coachId',
-		                itemId: 'coachId',
-			   		    store: this.coachesStore,
-	   		   		    valueField: 'id',
-			   		    displayField: 'fullName',
-	   		   		    mode: 'local',
-					    editable: false                    
-	                },	{	layout: 'column',
-					                    border: false,
-					                    items: [	{
-				   		    xtype: 'combobox',
-		                    fieldLabel: 'Early Alert Status',
-				   		    emptyText: 'Any',
-							 columnWidth: 0.5,
-		                    name: 'earlyAlertResponseLate',
-			                itemId: 'earlyAlertResponseLate',
-		                    store: me.earlyAlertResponseLateStore,
-		   		   		    valueField: 'code',
-				   		    displayField: 'displayValue',
-				   		    editable: false
-		                }, 
-		                {
-				   		    xtype: 'combobox',
-		                    fieldLabel: 'FA SAP Status',
-		                     columnWidth: 0.5,
-							labelWidth:100,
-							labelAlign:'right',
-		                    emptyText: 'Any',
-		                    name: 'financialAidSapStatusCode',
-			                itemId: 'financialAidSapStatusCode',
-		                    store: me.sapStatusesStore,
-		   		   		    valueField: 'code',
-				   		    displayField: 'name',
-				   		    editable: false
-		                } ]},
-		                ,
-	    				{	layout: 'column',
-					                    border: false,
-					                    items: [
-	                {
-			   		    xtype: 'combobox',
-	                    fieldLabel: 'Plan Status',
-	                    columnWidth: 0.5,
-	                    emptyText: 'Any',
-	                    name: 'planStatus',
-		                itemId: 'planStatus',
-	                    store: me.planStatusStore,
-	   		   		    valueField: 'code',
-			   		    displayField: 'displayValue',
-			   		    editable: false
-	                },      
-	                {
-			   		    xtype: 'combobox',
-	                    fieldLabel: 'Plan Exists',
-	                    columnWidth: 0.5,
-	                    emptyText: 'Any',
-	                    name: 'planExists',
-		                itemId: 'planExists',
-						labelAlign: 'right',
-						labelWidth:80,
-	                    store: me.planExistsStore,
-	   		   		    valueField: 'code',
-			   		    displayField: 'displayValue',
-			   		 editable: false
-	                }]},        
-                {   layout: 'column',
+                }]
+			}, {
+				xtype: 'combobox',
+				fieldLabel: 'Special Service Group',
+				emptyText: 'Select Special Service Group',
+				store: me.specialServiceGroupsActiveUnpagedStore,
+				valueField: 'id',
+				displayField: 'name',
+				width:100,
+				itemId: 'specialServiceGroup',
+				name: 'specialServiceGroup',
+				editable: false
+			}, {
+				xtype: 'combobox',
+				fieldLabel: 'Start Term',
+				emptyText: 'Select Start Term',
+				store: me.termsStore,
+				valueField: 'code',
+				displayField: 'name',
+				width: 50,
+				itemId: 'actualStartTerm',
+				name: 'actualStartTerm',
+				mode: 'local',
+				editable: false
+			}, {
+				xtype: 'combobox',
+				fieldLabel: 'Declared Major',
+				emptyText: 'Select Major',
+				width:100,
+				itemId: 'declaredMajor',
+				name: 'declaredMajor',
+				store: this.programsStore,
+				valueField: 'code',
+				displayField: 'name',
+				mode: 'local',
+				editable: false
+			}, {
+				xtype: 'combobox',
+				fieldLabel: 'Assigned Coach',
+				emptyText: 'Select Coach',
+				width: 100,
+				name: 'coachId',
+				itemId: 'coachId',
+				store: this.coachesStore,
+				valueField: 'id',
+				displayField: 'fullName',
+				mode: 'local',
+				editable: false
+			},	{
+				layout: 'column',
+				border: false,
+				items: [{
+					xtype: 'combobox',
+					fieldLabel: 'Early Alert Status',
+					emptyText: 'Any',
+					columnWidth: 0.5,
+					name: 'earlyAlertResponseLate',
+					itemId: 'earlyAlertResponseLate',
+					store: me.earlyAlertResponseLateStore,
+					valueField: 'code',
+					displayField: 'displayValue',
+					editable: false
+				}, {
+					xtype: 'combobox',
+					fieldLabel: 'FA SAP Status',
+					columnWidth: 0.5,
+					labelWidth:100,
+					labelAlign:'right',
+					emptyText: 'Any',
+					name: 'financialAidSapStatusCode',
+					itemId: 'financialAidSapStatusCode',
+					store: me.sapStatusesStore,
+					valueField: 'code',
+					displayField: 'name',
+					editable: false
+				}]
+			}, {
+				layout: 'column',
+				border: false,
+				items: [{
+					xtype: 'combobox',
+					fieldLabel: 'Plan Status',
+					columnWidth: 0.5,
+					emptyText: 'Any',
+					name: 'planStatus',
+					itemId: 'planStatus',
+					store: me.planStatusStore,
+					valueField: 'code',
+					displayField: 'displayValue',
+					editable: false
+				}, {
+					xtype: 'combobox',
+					fieldLabel: 'Plan Exists',
+					columnWidth: 0.5,
+					emptyText: 'Any',
+					name: 'planExists',
+					itemId: 'planExists',
+					labelAlign: 'right',
+					labelWidth:80,
+					store: me.planExistsStore,
+					valueField: 'code',
+					displayField: 'displayValue',
+			   		editable: false
+				}]
+			}, {
+				layout: {
+					type: 'hbox',
+					align: 'stretch'
+				},
+				border: false,
+				items: [{
+					layout: {
+						type: 'vbox'
+					},
                 	border: false,
-                	items: [
-                {
-                    xtype: 'label',
-                    text: 'Hours Earned:',
-                    padding: '3 0 0 0', // so this aligns vertically with its two numberfields defined below
-                    width: 105 // no relative column widths b/c you really want all three cols always close together
-                },
-                {
-                     xtype: 'numberfield',
-                     allowDecimals: true,
-                     decimalPrecision: 2,
-                     allowBlank: true,
-                     minValue: 0.0,
-                     step: 1,
-					labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
-                     width: 85, // no relative column widths b/c you really want all three cols always close together
-                     labelAlign: 'right',
-                     fieldLabel: 'From',
-                     name: 'hoursEarnedMin',
-					 enableKeyEvents:true,
-					 itemId: 'hoursEarnedMin'
-               },
-               {
-                   xtype: 'numberfield',
-                   minValue: 0.0,
-                   step: 1,
-                   allowDecimals: true,
-                   decimalPrecision: 2,
-                   allowBlank: true,
-                   width: 85, // no relative column widths b/c you really want all three cols always close together
-                   labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
-                   labelAlign: 'right',
-                   fieldLabel: 'To',
-                   name: 'hoursEarnedMax',
-				   itemId: 'hoursEarnedMax',
-				   enableKeyEvents:true
-              }]
-                },
-             {	   layout: 'column',
-                   border: false,
-                   items: [
-                           {
-                        	   xtype: 'label',
-                        	   text: 'GPA:',
-                        	   padding: '3 0 0 0', // so this aligns vertically with its two numberfields defined below
-                        	   width: 105 // no relative column widths b/c you really want all three cols always close together
-                           },             
-                           {
-                        	   xtype: 'numberfield',
-                        	   minValue: 0.0,
-                        	   maxValue: 5.0,
-                        	   step: 0.1,
-                        	   decimalPrecision:2,
-                        	   allowDecimals: true,
-                        	   allowBlank: true,
-                        	   labelAlign: 'right',
-                        	   width: 85, // no relative column widths b/c you really want all three cols always close together
-                        	   labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
-                        	   fieldLabel: 'From',
-                        	   name: 'gpaMin',
-							   itemId: 'gpaMin',
-							   enableKeyEvents:true
-                           },
-                           {
-                        	   xtype: 'numberfield',
-                        	   minValue: 0.001,
-                        	   maxValue: 5,
-                        	   step: 0.1,
-                        	   decimalPrecision:2,
-                        	   allowDecimals: true,
-                        	   allowBlank: true,
-                        	   labelAlign: 'right',
-                        	   width: 85, // no relative column widths b/c you really want all three cols always close together
-                        	   labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
-                        	   fieldLabel: 'To',
-                        	   name: 'gpaMax',
-							   itemId: 'gpaMax',
-							   enableKeyEvents:true
-                           }              
-                ]}      
-            ]
-              
+                	width: 105,
+                	items: [{
+						xtype: 'label',
+						text: 'Hours Earned',
+						style: 'display:inline-block;text-align:center;color:#15428B',
+						padding: '0 0 5 25',
+						width: 105 // no relative column widths b/c you really want all three cols always close together
+                	}, {
+						xtype: 'numberfield',
+						allowDecimals: true,
+						decimalPrecision: 2,
+						allowBlank: true,
+						minValue: 0.0,
+						step: 1,
+						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
+						width: 95, // no relative column widths b/c you really want all three cols always close together
+						labelAlign: 'right',
+						fieldLabel: 'From',
+						name: 'hoursEarnedMin',
+						enableKeyEvents:true,
+						itemId: 'hoursEarnedMin'
+               		}, {
+						xtype: 'numberfield',
+						minValue: 0.0,
+						step: 1,
+						allowDecimals: true,
+						decimalPrecision: 2,
+						allowBlank: true,
+						width: 95, // no relative column widths b/c you really want all three cols always close together
+						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
+						labelAlign: 'right',
+						fieldLabel: 'To',
+						name: 'hoursEarnedMax',
+						itemId: 'hoursEarnedMax',
+						enableKeyEvents:true
+	  				}]
+                }, {
+					layout: {
+						type: 'vbox'
+					},
+					border: false,
+				    width: 75,
+					items: [{
+					   xtype: 'label',
+					   text: 'GPA',
+					   style: 'display:inline-block;text-align:center;color:#15428B',
+                       padding: '0 0 5 0',
+					   width: 65 // no relative column widths b/c you really want all three cols always close together
+					}, {
+						   xtype: 'numberfield',
+						   minValue: 0.0,
+						   maxValue: 5.0,
+						   step: 0.1,
+						   decimalPrecision:2,
+						   allowDecimals: true,
+						   allowBlank: true,
+						   width: 65, // no relative column widths b/c you really want all three cols always close together
+						   name: 'gpaMin',
+						   itemId: 'gpaMin',
+						   enableKeyEvents:true
+					}, {
+						   xtype: 'numberfield',
+						   minValue: 0.001,
+						   maxValue: 5,
+						   step: 0.1,
+						   decimalPrecision:2,
+						   allowDecimals: true,
+						   allowBlank: true,
+						   width: 65, // no relative column widths b/c you really want all three cols always close together
+						   name: 'gpaMax',
+						   itemId: 'gpaMax',
+						   enableKeyEvents:true
+				    }]
+                }, {
+					layout: {
+						type: 'vbox'
+					},
+					border: false,
+					width: 70,
+					items: [{
+					   xtype: 'label',
+					   text: 'Local GPA',
+					   itemId: 'localGpa',
+					   style: 'display:inline-block;text-align:center;color:#15428B',
+					   padding: '0 0 5 0',
+					   width: 65 // no relative column widths b/c you really want all three cols always close together
+					}, {
+						   xtype: 'numberfield',
+						   minValue: 0.0,
+						   maxValue: 5.0,
+						   step: 0.1,
+						   decimalPrecision:2,
+						   allowDecimals: true,
+						   allowBlank: true,
+						   width: 65, // no relative column widths b/c you really want all three cols always close together
+						   name: 'localGpaMin',
+						   itemId: 'localGpaMin',
+						   enableKeyEvents:true
+					}, {
+						   xtype: 'numberfield',
+						   minValue: 0.001,
+						   maxValue: 5,
+						   step: 0.1,
+						   decimalPrecision:2,
+						   allowDecimals: true,
+						   allowBlank: true,
+						   width: 65, // no relative column widths b/c you really want all three cols always close together
+						   name: 'localGpaMax',
+						   itemId: 'localGpaMax',
+						   enableKeyEvents:true
+				    }]
+                }, {
+					layout: {
+						type: 'vbox',
+						padding: '0 0 0 2'
+					},
+					border: false,
+					width: 85,
+					items: [{
+					   xtype: 'label',
+					   itemId: 'programGpa',
+					   text: 'Program GPA',
+					   style: 'display:inline-block;text-align:center;color:#15428B',
+                       padding: '0 0 5 0',
+					   width: 75 // no relative column widths b/c you really want all three cols always close together
+					}, {
+					   xtype: 'numberfield',
+					   minValue: 0.0,
+					   maxValue: 5.0,
+					   step: 0.1,
+					   decimalPrecision:2,
+					   allowDecimals: true,
+					   allowBlank: true,
+					   padding: '0 0 0 3',
+					   width: 65, // no relative column widths b/c you really want all three cols always close together
+					   name: 'programGpaMin',
+					   itemId: 'programGpaMin',
+					   enableKeyEvents:true
+					}, {
+					   xtype: 'numberfield',
+					   minValue: 0.001,
+					   maxValue: 5,
+					   step: 0.1,
+					   decimalPrecision:2,
+					   allowDecimals: true,
+					   allowBlank: true,
+					   padding: '0 0 0 3',
+					   width: 65, // no relative column widths b/c you really want all three cols always close together
+					   name: 'programGpaMax',
+					   itemId: 'programGpaMax',
+					   enableKeyEvents:true
+                	}]
+				}]
+			}]
         });
         return this.callParent(arguments);
     }	

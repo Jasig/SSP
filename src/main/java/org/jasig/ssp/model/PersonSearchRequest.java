@@ -20,12 +20,12 @@ package org.jasig.ssp.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.PersonSearchController;
+
 
 /**
  * PersonSearchResult model for use by {@link PersonSearchResultTO} and then
@@ -80,6 +80,14 @@ public class PersonSearchRequest {
 	private BigDecimal gpaEarnedMin;
 	
 	private BigDecimal gpaEarnedMax;
+
+    private BigDecimal localGpaMin;
+
+    private BigDecimal localGpaMax;
+
+    private BigDecimal programGpaMin;
+
+    private BigDecimal programGpaMax;
 	
 	private Boolean currentlyRegistered;
 	
@@ -344,11 +352,52 @@ public class PersonSearchRequest {
 	}
 
 
-        public String getActualStartTerm () {
+    public String getActualStartTerm () {
                 return actualStartTerm;
         }
 
-        public void setActualStartTerm (final String actualStartTerm) {
+
+    public void setActualStartTerm (final String actualStartTerm) {
                 this.actualStartTerm = actualStartTerm;
         }
+
+
+    public BigDecimal getLocalGpaMin () {
+        return localGpaMin;
+    }
+
+
+    public void setLocalGpaMin (final BigDecimal localGpaMin) {
+        this.localGpaMin = localGpaMin;
+    }
+
+
+    public BigDecimal getLocalGpaMax () {
+        return localGpaMax;
+    }
+
+
+    public void setLocalGpaMax (final BigDecimal localGpaMax) {
+        this.localGpaMax = localGpaMax;
+    }
+
+
+    public BigDecimal getProgramGpaMin () {
+        return programGpaMin;
+    }
+
+
+    public void setProgramGpaMin (final BigDecimal programGpaMin) {
+        this.programGpaMin = programGpaMin;
+    }
+
+
+    public BigDecimal getProgramGpaMax () {
+        return programGpaMax;
+    }
+
+
+    public void setProgramGpaMax (final BigDecimal programGpaMax) {
+        this.programGpaMax = programGpaMax;
+    }
 }
