@@ -23,9 +23,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -54,8 +52,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.google.common.collect.Lists;
+
 
 /**
  * PersonSearch DAO
@@ -426,16 +424,27 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.setString("planStatus",param == null ? null : param.name());
 		}
 		
-		if(hasGpaCriteria(personSearchRequest))
-		{
-			if(personSearchRequest.getGpaEarnedMin() != null)
-			{
+		if (hasAnyGpaCriteria(personSearchRequest)) {
+			if (personSearchRequest.getGpaEarnedMin() != null) {
 				query.setBigDecimal("gpaEarnedMin", personSearchRequest.getGpaEarnedMin());
 			}
-			if(personSearchRequest.getGpaEarnedMax() != null)
-			{
+			if (personSearchRequest.getGpaEarnedMax() != null) {
 				query.setBigDecimal("gpaEarnedMax", personSearchRequest.getGpaEarnedMax());
-			}			
+			}
+
+            if (personSearchRequest.getLocalGpaMin() != null) {
+                query.setBigDecimal("localGpaMin", personSearchRequest.getLocalGpaMin());
+            }
+            if (personSearchRequest.getLocalGpaMax() != null) {
+                query.setBigDecimal("localGpaMax", personSearchRequest.getLocalGpaMax());
+            }
+
+            if (personSearchRequest.getProgramGpaMin() != null) {
+                query.setBigDecimal("programGpaMin", personSearchRequest.getProgramGpaMin());
+            }
+            if (personSearchRequest.getProgramGpaMax() != null) {
+                query.setBigDecimal("programGpaMax", personSearchRequest.getProgramGpaMax());
+            }
 		}
 		
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
@@ -614,26 +623,59 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	}
 
 
-	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasGpaCriteria(personSearchRequest))
-		{
+	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if (hasAnyGpaCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if(personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() != null)
-			{
+            boolean appendAnd = false;
+
+			if (personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() != null) {
 				stringBuilder.append(" est.gradePointAverage >= :gpaEarnedMin ");
 				stringBuilder.append(" and est.gradePointAverage <= :gpaEarnedMax ");
+                appendAnd = true;
 			}
-			if(personSearchRequest.getGpaEarnedMax() == null && personSearchRequest.getGpaEarnedMin() != null)
-			{
+			if (personSearchRequest.getGpaEarnedMax() == null && personSearchRequest.getGpaEarnedMin() != null) {
 				stringBuilder.append(" est.gradePointAverage >= :gpaEarnedMin ");
+                appendAnd = true;
 			}
-			if(personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() == null)
-			{
+			if (personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() == null) {
 				stringBuilder.append(" est.gradePointAverage <= :gpaEarnedMax ");
-			}		
-			stringBuilder.append(" and est.schoolId = p.schoolId ");
+                appendAnd = true;
+			}
 
+
+            if ((personSearchRequest.getLocalGpaMax() != null || personSearchRequest.getLocalGpaMin() != null) && appendAnd) {
+                stringBuilder.append(" and ");
+            }
+            if (personSearchRequest.getLocalGpaMax() != null && personSearchRequest.getLocalGpaMin() != null) {
+                stringBuilder.append(" est.localGpa >= :localGpaMin ");
+                stringBuilder.append(" and est.localGpa <= :localGpaMax ");
+                appendAnd = true;
+            }
+            if (personSearchRequest.getLocalGpaMax() == null && personSearchRequest.getLocalGpaMin() != null ) {
+                stringBuilder.append(" est.localGpa >= :localGpaMin ");
+                appendAnd = true;
+            }
+            if (personSearchRequest.getLocalGpaMax() != null && personSearchRequest.getLocalGpaMin() == null ) {
+                stringBuilder.append(" est.localGpa <= :localGpaMax ");
+                appendAnd = true;
+            }
+
+
+            if ((personSearchRequest.getProgramGpaMax() != null || personSearchRequest.getProgramGpaMin() != null) && appendAnd) {
+                stringBuilder.append(" and ");
+            }
+            if (personSearchRequest.getProgramGpaMax() != null && personSearchRequest.getProgramGpaMin() != null ) {
+                stringBuilder.append(" est.programGpa >= :programGpaMin ");
+                stringBuilder.append(" and est.programGpa <= :programGpaMax ");
+            }
+            if (personSearchRequest.getProgramGpaMax() == null && personSearchRequest.getProgramGpaMin() != null ) {
+                stringBuilder.append(" est.programGpa >= :programGpaMin ");
+            }
+            if (personSearchRequest.getProgramGpaMax() != null && personSearchRequest.getProgramGpaMin() == null ) {
+                stringBuilder.append(" est.programGpa <= :programGpaMax ");
+            }
+
+			stringBuilder.append(" and est.schoolId = p.schoolId ");
 		}
 	}
 
@@ -753,8 +795,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
 		}
 		
-		if(hasGpaCriteria(personSearchRequest) || hasHoursEarnedCriteria(personSearchRequest))
-		{
+		if (hasAnyGpaCriteria(personSearchRequest) || hasHoursEarnedCriteria(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentTranscript est ");
 		}
 		
@@ -798,9 +839,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	}
 
 
-	private boolean hasGpaCriteria(PersonSearchRequest personSearchRequest) 
-	{
-		return personSearchRequest.getGpaEarnedMax() != null || personSearchRequest.getGpaEarnedMax() != null;
+	private boolean hasAnyGpaCriteria(PersonSearchRequest personSearchRequest) {
+		return (personSearchRequest.getGpaEarnedMin() != null || personSearchRequest.getGpaEarnedMax() != null ||
+                personSearchRequest.getLocalGpaMin() != null || personSearchRequest.getLocalGpaMax() != null ||
+                personSearchRequest.getProgramGpaMin() != null || personSearchRequest.getProgramGpaMax() != null);
 	}
 
 

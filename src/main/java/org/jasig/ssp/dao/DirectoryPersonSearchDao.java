@@ -20,18 +20,15 @@ package org.jasig.ssp.dao;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.internal.SessionFactoryImpl;
@@ -43,7 +40,6 @@ import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
 import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
@@ -59,6 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 
 /**
  * PersonSearch DAO
@@ -538,16 +535,27 @@ public class DirectoryPersonSearchDao  {
 			params.put("planStatus",param);
 		}
 		
-		if(hasGpaCriteria(personSearchRequest))
-		{
-			if(personSearchRequest.getGpaEarnedMin() != null)
-			{
+		if (hasAnyGpaCriteria(personSearchRequest)) {
+			if (personSearchRequest.getGpaEarnedMin() != null) {
 				params.put("gpaEarnedMin", personSearchRequest.getGpaEarnedMin());
 			}
-			if(personSearchRequest.getGpaEarnedMax() != null)
-			{
+			if (personSearchRequest.getGpaEarnedMax() != null) {
 				params.put("gpaEarnedMax", personSearchRequest.getGpaEarnedMax());
-			}			
+			}
+
+            if (personSearchRequest.getLocalGpaMin() != null) {
+                params.put("localGpaMin", personSearchRequest.getLocalGpaMin());
+            }
+            if (personSearchRequest.getLocalGpaMax() != null) {
+                params.put("localGpaMax", personSearchRequest.getLocalGpaMax());
+            }
+
+            if (personSearchRequest.getProgramGpaMin() != null) {
+                params.put("programGpaMin", personSearchRequest.getProgramGpaMin());
+            }
+            if (personSearchRequest.getProgramGpaMax() != null) {
+                params.put("programGpaMax", personSearchRequest.getProgramGpaMax());
+            }
 		}
 
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
@@ -726,25 +734,57 @@ public class DirectoryPersonSearchDao  {
 	}
 
 
-	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasGpaCriteria(personSearchRequest))
-		{
+	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if (hasAnyGpaCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if(personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() != null)
-			{
+            boolean appendAnd = false;
+
+            if (personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() != null) {
 				stringBuilder.append(" dp.gradePointAverage >= :gpaEarnedMin ");
 				stringBuilder.append(" and dp.gradePointAverage <= :gpaEarnedMax ");
+                appendAnd = true;
 			}
-			if(personSearchRequest.getGpaEarnedMax() == null && personSearchRequest.getGpaEarnedMin() != null)
-			{
+			if (personSearchRequest.getGpaEarnedMax() == null && personSearchRequest.getGpaEarnedMin() != null) {
 				stringBuilder.append(" dp.gradePointAverage >= :gpaEarnedMin ");
+                appendAnd = true;
 			}
-			if(personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() == null)
-			{
+			if (personSearchRequest.getGpaEarnedMax() != null && personSearchRequest.getGpaEarnedMin() == null) {
 				stringBuilder.append(" dp.gradePointAverage <= :gpaEarnedMax ");
-			}		
+                appendAnd = true;
+			}
 
+
+            if ((personSearchRequest.getLocalGpaMax() != null || personSearchRequest.getLocalGpaMin() != null) && appendAnd) {
+                stringBuilder.append(" and ");
+            }
+            if (personSearchRequest.getLocalGpaMax() != null && personSearchRequest.getLocalGpaMin() != null ) {
+                stringBuilder.append(" dp.localGpa >= :localGpaMin ");
+                stringBuilder.append(" and dp.localGpa <= :localGpaMax ");
+                appendAnd = true;
+            }
+            if (personSearchRequest.getLocalGpaMax() == null && personSearchRequest.getLocalGpaMin() != null) {
+                stringBuilder.append(" dp.localGpa >= :localGpaMin ");
+                appendAnd = true;
+            }
+            if (personSearchRequest.getLocalGpaMax() != null && personSearchRequest.getLocalGpaMin() == null) {
+                stringBuilder.append(" dp.localGpa <= :localGpaMax ");
+                appendAnd = true;
+            }
+
+
+            if ((personSearchRequest.getProgramGpaMax() != null || personSearchRequest.getProgramGpaMin() != null) && appendAnd) {
+                stringBuilder.append(" and ");
+            }
+            if (personSearchRequest.getProgramGpaMax() != null && personSearchRequest.getProgramGpaMin() != null) {
+                stringBuilder.append(" dp.programGpa >= :programGpaMin ");
+                stringBuilder.append(" and dp.programGpa <= :programGpaMax ");
+            }
+            if (personSearchRequest.getProgramGpaMax() == null && personSearchRequest.getProgramGpaMin() != null) {
+                stringBuilder.append(" dp.programGpa >= :programGpaMin ");
+            }
+            if (personSearchRequest.getProgramGpaMax() != null && personSearchRequest.getProgramGpaMin() == null) {
+                stringBuilder.append(" dp.programGpa <= :programGpaMax ");
+            }
 		}
 	}
 	
@@ -922,9 +962,10 @@ public class DirectoryPersonSearchDao  {
 		return hasMyWatchList(personSearchRequest) || hasWatcher(personSearchRequest);
 	}
 
-	private boolean hasGpaCriteria(PersonSearchRequest personSearchRequest) 
-	{
-		return personSearchRequest.getGpaEarnedMax() != null || personSearchRequest.getGpaEarnedMax() != null;
+	private boolean hasAnyGpaCriteria(PersonSearchRequest personSearchRequest) {
+		return (personSearchRequest.getGpaEarnedMin() != null || personSearchRequest.getGpaEarnedMax() != null ||
+                personSearchRequest.getLocalGpaMin() != null || personSearchRequest.getLocalGpaMax() != null ||
+                personSearchRequest.getProgramGpaMin() != null || personSearchRequest.getProgramGpaMax() != null);
 	}
 
 	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) 

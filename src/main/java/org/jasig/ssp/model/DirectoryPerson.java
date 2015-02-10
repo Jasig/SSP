@@ -25,28 +25,19 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.AbstractExternalData;
 import org.jasig.ssp.model.external.ExternalData;
-import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.model.reference.StudentType;
+
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -448,6 +439,12 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	
 	@Nullable
 	private ObjectStatus objectStatus;
+
+    @Nullable
+    private BigDecimal localGpa;
+
+    @Nullable
+    private BigDecimal programGpa;
 	
 
 	/**
@@ -869,6 +866,22 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	public void setClosedAlertsCount(Integer closedAlertsCount) {
 		this.closedAlertsCount = closedAlertsCount;
 	}
+
+    public BigDecimal getLocalGpa() {
+        return localGpa;
+    }
+
+    public void setLocalGpa(BigDecimal localGpa) {
+        this.localGpa = localGpa;
+    }
+
+    public BigDecimal getProgramGpa() {
+        return programGpa;
+    }
+
+    public void setProgramGpa(BigDecimal programGpa) {
+        this.programGpa = programGpa;
+    }
 
 
 
