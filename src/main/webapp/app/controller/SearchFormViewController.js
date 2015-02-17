@@ -769,7 +769,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var valuesInvalid = false;
 
         if (me.checkGpaFields()) {
-        	me.checkAllGpaMinLessThanMax();
+        	valuesInvalid = me.checkAllGpaMinLessThanMax(message);
+        	message = valuesInvalid[1];
+        	valuesInvalid = valuesInvalid[0];
 		}
 
 		if (me.checkHoursEarnedFields()) {
@@ -839,7 +841,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var valuesInvalid = false;
 
 		if (me.checkGpaFields()) {
-			me.checkAllGpaMinLessThanMax();
+        	valuesInvalid = me.checkAllGpaMinLessThanMax(message);
+            message = valuesInvalid[1];
+        	valuesInvalid = valuesInvalid[0];
         }
 
         if (me.checkHoursEarnedFields()) {
@@ -1022,13 +1026,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 	},
 
-	checkAllGpaMinLessThanMax: function() {
+	checkAllGpaMinLessThanMax: function(messageReturn) {
 		var me = this;
+		var valuesInvalidReturn = false;
 
 		if (me.checkGpaFields("local")) {
 			if(me.getLocalGpaMin().getValue() > me.getLocalGpaMax().getValue()){
-				valuesInvalid = true;
-				message += "Local GPA Min is greater than Local GPA Maximum. ";
+				valuesInvalidReturn = true;
+				messageReturn += "Local GPA Min is greater than Local GPA Maximum. ";
 			}
 
 			if ( me.getLocalGpaMin().getValue() == null && me.getLocalGpaMax().getValue() != null ) {
@@ -1040,8 +1045,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			}
 		} else if (me.checkGpaFields("program")) {
 			if(me.getProgramGpaMin().getValue() > me.getProgramGpaMax().getValue()){
-				valuesInvalid = true;
-				message += "Program GPA Min is greater than Program GPA Maximum. ";
+				valuesInvalidReturn = true;
+				messageReturn += "Program GPA Min is greater than Program GPA Maximum. ";
 			}
 
 			if ( me.getProgramGpaMin().getValue() == null && me.getProgramGpaMax().getValue() != null ) {
@@ -1053,8 +1058,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			}
 		} else {
 			if(me.getGpaMin().getValue() > me.getGpaMax().getValue()){
-				valuesInvalid = true;
-				message += "GPA Min is greater than GPA Maximum. ";
+				valuesInvalidReturn = true;
+				messageReturn += "GPA Min is greater than GPA Maximum. ";
 			}
 
 			if ( me.getGpaMin().getValue() == null && me.getGpaMax().getValue() != null ) {
@@ -1065,6 +1070,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getGpaMin().setValue(0);
 			}
 		}
+		return [valuesInvalidReturn, messageReturn];
 	},
 
     searchFailure: function( r, scope) {

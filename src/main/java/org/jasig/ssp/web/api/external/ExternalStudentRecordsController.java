@@ -40,11 +40,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Task;
-import org.jasig.ssp.model.external.ExternalPerson;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
-import org.jasig.ssp.model.external.ExternalStudentRecords;
-import org.jasig.ssp.model.external.ExternalStudentRecordsLite;
-import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
@@ -448,9 +444,11 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		
 		ExternalStudentFinancialAid record = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId);
 
-		final ExternalStudentFinancialAidTO recordTO = externalStudentFinancialAidTOFactory.from(record);
-		
-		return recordTO;
+        if (record != null) {
+            return externalStudentFinancialAidTOFactory.from(record);
+        } else {
+            return new ExternalStudentFinancialAidTO();
+        }
 	}
 	
 
@@ -520,9 +518,14 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		if ( schoolId == null ) {
 			throw new ObjectNotFoundException(id, Person.class.getName());
 		}
-		final ExternalCareerDecisionStatusTO externalCareerDecisionStatusTO =
-				externalCareerDecisionStatusTOFactory.from(externalCareerDecisionStatusService.getStudentCareerStatusBySchoolId(schoolId));
-		return externalCareerDecisionStatusTO;
+
+        final ExternalCareerDecisionStatus careerDecisionStatus = externalCareerDecisionStatusService.getStudentCareerStatusBySchoolId(schoolId);
+
+        if (careerDecisionStatus != null) {
+            return externalCareerDecisionStatusTOFactory.from(careerDecisionStatus);
+        } else {
+            return new ExternalCareerDecisionStatusTO();
+        }
 	}
 	
 	private String getPersonLiteName(PersonLiteTO person){
