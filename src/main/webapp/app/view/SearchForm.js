@@ -354,20 +354,6 @@ Ext.define('Ssp.view.SearchForm',{
 						width: 105 // no relative column widths b/c you really want all three cols always close together
                 	}, {
 						xtype: 'numberfield',
-						allowDecimals: true,
-						decimalPrecision: 2,
-						allowBlank: true,
-						minValue: 0.0,
-						step: 1,
-						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
-						width: 95, // no relative column widths b/c you really want all three cols always close together
-						labelAlign: 'right',
-						fieldLabel: 'From',
-						name: 'hoursEarnedMin',
-						enableKeyEvents:true,
-						itemId: 'hoursEarnedMin'
-               		}, {
-						xtype: 'numberfield',
 						minValue: 0.0,
 						step: 1,
 						allowDecimals: true,
@@ -376,10 +362,24 @@ Ext.define('Ssp.view.SearchForm',{
 						width: 95, // no relative column widths b/c you really want all three cols always close together
 						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
 						labelAlign: 'right',
-						fieldLabel: 'To',
+						fieldLabel: 'High',
 						name: 'hoursEarnedMax',
 						itemId: 'hoursEarnedMax',
 						enableKeyEvents:true
+               		}, {
+						xtype: 'numberfield',
+						allowDecimals: true,
+						decimalPrecision: 2,
+						allowBlank: true,
+						minValue: 0.0,
+						step: 1,
+						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
+						width: 95, // no relative column widths b/c you really want all three cols always close together
+						labelAlign: 'right',
+						fieldLabel: 'Low',
+						name: 'hoursEarnedMin',
+						enableKeyEvents:true,
+						itemId: 'hoursEarnedMin'
 	  				}]
                 }, {
 					layout: {
@@ -395,18 +395,6 @@ Ext.define('Ssp.view.SearchForm',{
 					   width: 65 // no relative column widths b/c you really want all three cols always close together
 					}, {
 						   xtype: 'numberfield',
-						   minValue: 0.0,
-						   maxValue: 5.0,
-						   step: 0.1,
-						   decimalPrecision:2,
-						   allowDecimals: true,
-						   allowBlank: true,
-						   width: 65, // no relative column widths b/c you really want all three cols always close together
-						   name: 'gpaMin',
-						   itemId: 'gpaMin',
-						   enableKeyEvents:true
-					}, {
-						   xtype: 'numberfield',
 						   minValue: 0.001,
 						   maxValue: 5,
 						   step: 0.1,
@@ -416,6 +404,18 @@ Ext.define('Ssp.view.SearchForm',{
 						   width: 65, // no relative column widths b/c you really want all three cols always close together
 						   name: 'gpaMax',
 						   itemId: 'gpaMax',
+						   enableKeyEvents:true
+					}, {
+						   xtype: 'numberfield',
+						   minValue: 0.0,
+						   maxValue: 5.0,
+						   step: 0.1,
+						   decimalPrecision:2,
+						   allowDecimals: true,
+						   allowBlank: true,
+						   width: 65, // no relative column widths b/c you really want all three cols always close together
+						   name: 'gpaMin',
+						   itemId: 'gpaMin',
 						   enableKeyEvents:true
 				    }]
                 }, {
@@ -433,18 +433,6 @@ Ext.define('Ssp.view.SearchForm',{
 					   width: 65 // no relative column widths b/c you really want all three cols always close together
 					}, {
 						   xtype: 'numberfield',
-						   minValue: 0.0,
-						   maxValue: 5.0,
-						   step: 0.1,
-						   decimalPrecision:2,
-						   allowDecimals: true,
-						   allowBlank: true,
-						   width: 65, // no relative column widths b/c you really want all three cols always close together
-						   name: 'localGpaMin',
-						   itemId: 'localGpaMin',
-						   enableKeyEvents:true
-					}, {
-						   xtype: 'numberfield',
 						   minValue: 0.001,
 						   maxValue: 5,
 						   step: 0.1,
@@ -454,6 +442,18 @@ Ext.define('Ssp.view.SearchForm',{
 						   width: 65, // no relative column widths b/c you really want all three cols always close together
 						   name: 'localGpaMax',
 						   itemId: 'localGpaMax',
+						   enableKeyEvents:true
+					}, {
+						   xtype: 'numberfield',
+						   minValue: 0.0,
+						   maxValue: 5.0,
+						   step: 0.1,
+						   decimalPrecision:2,
+						   allowDecimals: true,
+						   allowBlank: true,
+						   width: 65, // no relative column widths b/c you really want all three cols always close together
+						   name: 'localGpaMin',
+						   itemId: 'localGpaMin',
 						   enableKeyEvents:true
 				    }]
                 }, {
@@ -472,19 +472,6 @@ Ext.define('Ssp.view.SearchForm',{
 					   width: 75 // no relative column widths b/c you really want all three cols always close together
 					}, {
 					   xtype: 'numberfield',
-					   minValue: 0.0,
-					   maxValue: 5.0,
-					   step: 0.1,
-					   decimalPrecision:2,
-					   allowDecimals: true,
-					   allowBlank: true,
-					   padding: '0 0 0 3',
-					   width: 65, // no relative column widths b/c you really want all three cols always close together
-					   name: 'programGpaMin',
-					   itemId: 'programGpaMin',
-					   enableKeyEvents:true
-					}, {
-					   xtype: 'numberfield',
 					   minValue: 0.001,
 					   maxValue: 5,
 					   step: 0.1,
@@ -495,6 +482,19 @@ Ext.define('Ssp.view.SearchForm',{
 					   width: 65, // no relative column widths b/c you really want all three cols always close together
 					   name: 'programGpaMax',
 					   itemId: 'programGpaMax',
+					   enableKeyEvents:true
+					}, {
+					   xtype: 'numberfield',
+					   minValue: 0.0,
+					   maxValue: 5.0,
+					   step: 0.1,
+					   decimalPrecision:2,
+					   allowDecimals: true,
+					   allowBlank: true,
+					   padding: '0 0 0 3',
+					   width: 65, // no relative column widths b/c you really want all three cols always close together
+					   name: 'programGpaMin',
+					   itemId: 'programGpaMin',
 					   enableKeyEvents:true
                 	}]
 				}]
