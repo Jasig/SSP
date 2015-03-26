@@ -76,7 +76,7 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/AddressLabels")
 public class AddressLabelsReportController extends ReportBaseController<BaseStudentReportTO> { // NOPMD
 
-	private static String REPORT_URL = "/reports/addressLabels.jasper";
+	private static String REPORT_URL = "/reports/generalStudentReport.jasper";
 	private static String REPORT_FILE_TITLE = "General_Student_Report";
 	
 	private static final Logger LOGGER = LoggerFactory

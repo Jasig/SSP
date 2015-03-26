@@ -26,9 +26,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="162"/>
-	<property name="ireport.y" value="275"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -294,7 +294,7 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="1" width="752" height="34" backcolor="#70C2E7"/>
 			</rectangle>
 			<textField>
-				<reportElement uuid="51521069-0c9c-4d7d-8367-0ef31b2422e1" x="254" y="10" width="224" height="20"/>
+				<reportElement uuid="51521069-0c9c-4d7d-8367-0ef31b2422e1" x="0" y="1" width="752" height="34"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>

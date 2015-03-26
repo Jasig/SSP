@@ -281,7 +281,7 @@ public class PersonTaskController extends
 		response.setContentType("application/pdf");
 
 		final InputStream is = getClass().getResourceAsStream(
-				"/reports/studentActionPlan.jasper");
+				"/reports/studentTaskReport.jasper");
 		try {
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
@@ -292,7 +292,7 @@ public class PersonTaskController extends
 
 				response.setHeader(
 						"Content-disposition",
-						"attachment; filename=StudentTaskReport-"
+						"attachment; filename=Student_Task_Report-"
 								+ person.getLastName() + ".pdf");
 
 				JasperExportManager.exportReportToPdfStream(decodedInput,

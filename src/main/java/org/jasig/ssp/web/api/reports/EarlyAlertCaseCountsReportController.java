@@ -66,8 +66,8 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/earlyalertcasecounts")
 public class EarlyAlertCaseCountsReportController extends ReportBaseController<EarlyAlertTermCaseCountsTO> {
 	
-	private static String REPORT_URL = "/reports/earlyAlertCaseCounts.jasper";
-	private static String REPORT_URL_CSV = "/reports/earlyAlertCaseCounts_csv.jasper";
+	private static String REPORT_URL = "/reports/earlyAlertCaseCountsReport.jasper";
+	private static String REPORT_URL_CSV = "/reports/earlyAlertCaseCountsReport_csv.jasper";
 	private static String REPORT_FILE_TITLE = "Early_Alert_Case_Counts_Report";
 
 	private static final Logger LOGGER = LoggerFactory

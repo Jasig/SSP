@@ -31,7 +31,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("generalStudentForm","General Student Report"));
 		reports.add(new Pair<String,String>("caseLoadForm","Current Caseload Statuses Report"));		
 		reports.add(new Pair<String,String>("caseloadActivityReport","Caseload Activity Report"));			
-		reports.add(new Pair<String,String>("confidentialityAgreementForm","Confidentiality Agreement"));		
+		reports.add(new Pair<String,String>("confidentialityAgreementForm","Confidentiality Agreement Form"));
 		reports.add(new Pair<String,String>("counselingRefGuideForm","Counseling Reference Guide"));		
 		reports.add(new Pair<String,String>("counselorCaseManagementReport","Counselor Case Management Report"));
 		reports.add(new Pair<String,String>("specialServicesForm","Special Services Report"));
@@ -49,9 +49,9 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>(null,"- Journal/Task Reports -"));
 		reports.add(new Pair<String,String>("journalSessionDetail","Journal Step Detail Report"));
 		reports.add(new Pair<String,String>(null, "- MAP Reports -"));
-		reports.add(new Pair<String,String>("numberCoursesInPlan","Number of Plans by Course"));
-		reports.add(new Pair<String,String>("numberPlansByOwner","Number of Plans by Owner"));
-		reports.add(new Pair<String,String>("numberStudentsByStatus","Number of Students by Status"));
+		reports.add(new Pair<String,String>("numberCoursesInPlan","Number of Plans by Course Report"));
+		reports.add(new Pair<String,String>("numberPlansByOwner","Number of Plans by Owner Report"));
+		reports.add(new Pair<String,String>("numberStudentsByStatus","Number of Students by Status Report"));
 	}
 	
 	public List<Pair<String, String>> getReports() {

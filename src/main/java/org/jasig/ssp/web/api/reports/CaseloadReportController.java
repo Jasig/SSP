@@ -70,8 +70,8 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/Caseload")
 public class CaseloadReportController extends ReportBaseController<CaseLoadReportTO> {
 
-	private static String REPORT_URL = "/reports/caseLoad.jasper";
-	private static String REPORT_FILE_TITLE = "CaseLoad_Report";
+	private static String REPORT_URL = "/reports/currentCaseloadStatusesReport.jasper";
+	private static String REPORT_FILE_TITLE = "Current_Caseload_Statuses_Report";
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CaseloadReportController.class);

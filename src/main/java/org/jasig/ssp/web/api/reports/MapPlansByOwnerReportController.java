@@ -53,8 +53,8 @@ import java.util.Map;
 @RequestMapping("/1/report/map/numberplansbyowner")
 public class MapPlansByOwnerReportController extends ReportBaseController<PlanAdvisorCountTO> {
 
-	private static String REPORT_URL_PDF = "/reports/numberPlansByOwner.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "Number_Of_Plans_By_Owner";
+	private static String REPORT_URL_PDF = "/reports/numberPlansByOwnerReport.jasper";
+	private static String REPORT_FILE_TITLE_NUMBER_PLANS_BY_ADVISOR = "Number_Of_Plans_By_Owner_Report";
 
 	@Autowired
 	protected transient TermService termService;

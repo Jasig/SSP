@@ -76,8 +76,8 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/person")
 public class PersonHistoryReportController extends ReportBaseController<StudentHistoryTO> {
 
-	private static final String REPORT_URL = "/reports/studentHistoryMaster.jasper";
-	private static final String REPORT_FILE_TITLE = "StudentHistoryReport-";
+	private static final String REPORT_URL = "/reports/coachingHistoryMasterReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Coaching_History_Report-";
 	private static final String STUDENT_TO = "studentTO";
     private static final String STUDENT_RECORD_TO = "studentRecordTO";
     private static final String STUDENT_PLAN_TO = "studentPlanTO";

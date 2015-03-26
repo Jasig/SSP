@@ -20,7 +20,7 @@
 
 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberCoursesInPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="164f8d13-17e7-4916-b62f-ad389a420c72">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="termCodes" class="java.lang.String"/>
@@ -96,11 +96,11 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="3" width="572" height="26" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="192" y="9" width="201" height="20"/>
-				<textElement>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="0" y="3" width="572" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Number of Plans By Course]]></text>
+				<text><![CDATA[Number of Plans By Course Report]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

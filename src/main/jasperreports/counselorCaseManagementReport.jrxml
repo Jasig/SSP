@@ -261,13 +261,13 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
+		<band height="39" splitType="Stretch">
 			<rectangle radius="10">
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="0" width="751" height="35" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="190" y="11" width="310" height="20"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="1" y="0" width="751" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Counselor Case Management Report]]></text>

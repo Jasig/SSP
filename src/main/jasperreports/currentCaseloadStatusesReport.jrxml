@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
@@ -143,16 +143,16 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch">
+		<band height="38" splitType="Stretch">
 			<rectangle radius="10">
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="1" y="1" width="751" height="34" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="326" y="7" width="116" height="20"/>
-				<textElement>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="2" y="1" width="750" height="34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Case Load]]></text>
+				<text><![CDATA[Current Caseload Statuses Report]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

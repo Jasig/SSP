@@ -68,7 +68,7 @@ import java.util.UUID;
 @RequestMapping("/1/report/disabilityservices")
 public class DisabilityServicesReportController extends ReportBaseController<DisabilityServicesReportTO> { // NOPMD
 
-	private static String REPORT_URL_PDF = "/reports/disabilityServices.jasper";
+	private static String REPORT_URL_PDF = "/reports/disabilityServicesReport.jasper";
 	private static String REPORT_FILE_TITLE = "Disability_Services_Report";
 	
 	private static final Logger LOGGER = LoggerFactory

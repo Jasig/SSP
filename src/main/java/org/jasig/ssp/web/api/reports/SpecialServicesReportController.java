@@ -65,9 +65,9 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/SpecialServices")
 public class SpecialServicesReportController extends ReportBaseController<BaseStudentReportTO> {
 
-	private static final String REPORT_URL = "/reports/specialServiceGroups.jasper";
-	private static final String REPORT_FILE_TITLE = "SpecialServicesReport";
-	private static final String REPORT_TITLE = "Special Service Groups Report";
+	private static final String REPORT_URL = "/reports/specialServicesReport.jasper";
+	private static final String REPORT_FILE_TITLE = "Special_Services_Report";
+	private static final String REPORT_TITLE = "Special Services Report";
 	private static final String DATA_FILE = "SpecialServicesReportingTO.java - Bean Array";
 	
 	private static final Logger LOGGER = LoggerFactory

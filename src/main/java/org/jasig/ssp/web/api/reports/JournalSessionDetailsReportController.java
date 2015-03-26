@@ -73,7 +73,7 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/journalsessiondetail")
 public class JournalSessionDetailsReportController extends ReportBaseController<JournalStepStudentReportTO> {
 
-	private static String REPORT_URL_PDF = "/reports/journalSessionDetailReport.jasper";
+	private static String REPORT_URL_PDF = "/reports/journalStepDetailsReport.jasper";
 	private static String REPORT_FILE_TITLE = "Journal_Step_Details_Report";
 	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
 	

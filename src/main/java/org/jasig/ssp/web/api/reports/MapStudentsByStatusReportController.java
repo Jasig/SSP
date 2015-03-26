@@ -60,8 +60,8 @@ import java.util.Map;
 @RequestMapping("/1/report/map/numberstudentsbystatus")
 public class MapStudentsByStatusReportController extends ReportBaseController<PlanStudentStatusByCourseTO> {
 
-	private static String REPORT_URL_PDF = "/reports/numberStudentsByStatus.jasper";
-	private static String REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS = "Number_Of_Students_By_Status";
+	private static String REPORT_URL_PDF = "/reports/numberStudentsByStatusReport.jasper";
+	private static String REPORT_FILE_TITLE_NUMBER_STUDENTS_BY_STATUS = "Number_Of_Students_By_Status_Report";
 
 	@Autowired
 	protected transient TermService termService;

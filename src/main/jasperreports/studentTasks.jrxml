@@ -26,7 +26,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString language="json">
@@ -47,11 +47,11 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="572" height="35" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="210" y="9" width="152" height="20"/>
-				<textElement>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="0" y="0" width="572" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Student Action Plan]]></text>
+				<text><![CDATA[Student Tasks]]></text>
 			</staticText>
 		</band>
 	</title>

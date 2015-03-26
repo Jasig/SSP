@@ -248,8 +248,8 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="0" width="752" height="34" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="e354f4d5-cd81-4caf-8384-5c8867553047" x="275" y="10" width="232" height="20"/>
-				<textElement>
+				<reportElement uuid="e354f4d5-cd81-4caf-8384-5c8867553047" x="1" y="0" width="751" height="34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Early Alert Reason Counts Report]]></text>

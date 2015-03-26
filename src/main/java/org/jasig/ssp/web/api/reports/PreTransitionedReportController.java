@@ -76,7 +76,7 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/pretransitioned")
 public class PreTransitionedReportController extends ReportBaseController<BaseStudentReportTO> {
 	
-	private static final String REPORT_URL_PDF = "/reports/preTransitioned.jasper";
+	private static final String REPORT_URL_PDF = "/reports/counselorCaseManagementReport.jasper";
 	private static final String REPORT_FILE_TITLE = "Counselor_Case_Management_Report";
 	
 

@@ -26,9 +26,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
-	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="384"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1" uuid="f5197e6d-0a3f-4ac7-8f4f-7a16b128dbb3">
 		<parameter name="realPath" class="java.lang.String"/>
 		<field name="indicatorName" class="java.lang.String"/>
@@ -72,11 +72,11 @@
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="6457d202-3d00-44b4-9231-1ea0a8b713f2" x="84" y="15" width="393" height="35" backcolor="#46C6D2"/>
+				<reportElement uuid="6457d202-3d00-44b4-9231-1ea0a8b713f2" x="1" y="15" width="570" height="35" backcolor="#46C6D2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Student Summary and Counseling History]]></text>
+				<text><![CDATA[Student Summary and Coaching History Report]]></text>
 			</staticText>
 		</band>
 	</title>

@@ -626,7 +626,7 @@
 
 
 <div class="hideable-form special-services-form" style="display:none">
-	<h1>Special Services</h1>
+	<h1>Special Services Report</h1>
 	<form action="/ssp/api/1/report/SpecialServices/" method="get" class="alert-form">
 
 		<!-- Student Type -->
@@ -783,7 +783,7 @@
 </div>
 
 <div class="hideable-form early-alert-case-counts-report" style="display:none">
-	<h1>Early Alert Case Counts</h1>
+	<h1>Early Alert Case Counts Report</h1>
 	<form action="/ssp/api/1/report/earlyalertcasecounts" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
@@ -845,7 +845,7 @@
 
 
 <div class="hideable-form early-alert-course-counts-report" style="display:none">
-	<h1>Early Alert Course Counts</h1>
+	<h1>Early Alert Course Counts Report</h1>
 	<form action="/ssp/api/1/report/earlyalertcoursecounts" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
@@ -939,7 +939,7 @@
 
 
 <div class="hideable-form early-alert-reason-counts-report" style="display:none">
-	<h1>Early Alert Reason Counts</h1>
+	<h1>Early Alert Reason Counts Report</h1>
 	<form action="/ssp/api/1/report/earlyalertreasoncounts" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">
 
@@ -2627,7 +2627,7 @@
 
 
 <div class="hideable-form number-courses-in-plan-report" style="display:none">
-	<h1>Number Of Plans by Course</h1>
+	<h1>Number Of Plans by Course Report</h1>
 	<form action="/ssp/api/1/report/map/numbercourses" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
@@ -2712,7 +2712,7 @@
 </div><!-- end number courses in plan report -->
 
 <div class="hideable-form number-plans-by-owner-report" style="display:none">
-	<h1>Number Of Plans By Owner</h1>
+	<h1>Number Of Plans By Owner Report</h1>
 	<form action="/ssp/api/1/report/map/numberplansbyowner" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
@@ -2782,7 +2782,7 @@
 </div><!-- number plans by owner report -->
 
 <div class="hideable-form number-students-by-status-report" style="display:none">
-	<h1>Number Of Students By Status</h1>
+	<h1>Number Of Students By Status Report</h1>
 	<form action="/ssp/api/1/report/map/numberstudentsbystatus" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		

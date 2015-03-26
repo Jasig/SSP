@@ -201,8 +201,8 @@
 				<reportElement uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d" x="0" y="3" width="751" height="25" backcolor="#70C2E7"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="242" y="5" width="222" height="20"/>
-				<textElement>
+				<reportElement uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d" x="0" y="5" width="750" height="23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Early Alert Student Referral Report]]></text>
