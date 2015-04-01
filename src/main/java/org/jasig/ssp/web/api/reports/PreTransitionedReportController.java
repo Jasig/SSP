@@ -37,11 +37,7 @@ import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
-import org.jasig.ssp.service.external.RegistrationStatusByTermService;
-import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -108,7 +104,9 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 	
 	@Autowired
 	protected transient TermService termService;
-	
+
+	@Autowired
+	protected transient ExternalStudentAcademicProgramService externalStudentAcademicProgramService;
 	
 	@Autowired
 	protected transient RegistrationStatusByTermService registrationStatusByTermService;
@@ -205,10 +203,13 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 		
 		final PagingWrapper<BaseStudentReportTO> reports = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
+
 		Term currentTerm = termService.getCurrentTerm();
 		List<BaseStudentReportTO> compressedReports = this.processStudentReportTOs(reports);
-		for(BaseStudentReportTO report:compressedReports){
-			report.setStudentTranscript(externalStudentTranscriptService, externalStudentFinancialAidService);
+
+		for(BaseStudentReportTO report:compressedReports) {
+			report.setAcademicPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(report.getSchoolId()));
+ 			report.setStudentTranscript(externalStudentTranscriptService, externalStudentFinancialAidService);
 			report.setCurrentRegistrationStatus(registrationStatusByTermService);
 			report.setLastTermGPAAndLastTermRegistered(externalStudentTranscriptTermService, currentTerm);
 		}
@@ -234,7 +235,9 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 				"STUDENT_ID",
 				"PHONE_HOME",
 				"PHONE_CELL",
+				"PRIMARY_EMAIL",
 				"STUDENT_TYPE",
+				"ACADEMIC_PROGRAM",
 				"PROGRAM_STATUS",
 				"ACTUAL_START_TERM",
 				"ACADEMIC_STANDING",
@@ -259,7 +262,9 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 				reportResultElement.getSchoolId(),
 				reportResultElement.getHomePhone(),
 				reportResultElement.getCellPhone(),
+				reportResultElement.getPrimaryEmailAddress(),
 				reportResultElement.getStudentTypeName(),
+				reportResultElement.getAcademicProgramNames(),
 				reportResultElement.getCurrentProgramStatusName(),
 				reportResultElement.getActualStartTerm(),
 				reportResultElement.getAcademicStanding(),

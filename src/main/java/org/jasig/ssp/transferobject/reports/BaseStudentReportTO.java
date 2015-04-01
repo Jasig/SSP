@@ -27,21 +27,11 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.UUID;
-
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.StringUtils;
-import org.jasig.mygps.model.transferobject.TaskReportTO;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonProgramStatus;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
-import org.jasig.ssp.model.external.ExternalStudentTranscript;
-import org.jasig.ssp.model.external.ExternalStudentTranscriptTerm;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
-import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
@@ -50,7 +40,6 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 
-import com.google.common.collect.Lists;
 
 public class BaseStudentReportTO implements Serializable {
 
@@ -119,6 +108,8 @@ public class BaseStudentReportTO implements Serializable {
 	private UUID specialServiceGroupId;
 	private String specialServiceGroupName;
 	private ObjectStatus specialServiceGroupAssocObjectStatus;
+
+	private String academicProgramNames;
 
 	private Boolean isIlp;
 	
@@ -702,60 +693,54 @@ public class BaseStudentReportTO implements Serializable {
 	}
 	
 	
-public void setCurrentRegistrationStatus(RegistrationStatusByTermService registrationStatusByTermService )
-			throws ObjectNotFoundException {
-	
-	   if(getSchoolId() != null && !getSchoolId().isEmpty()){
-		   RegistrationStatusByTerm termStatus = registrationStatusByTermService
-				.getForCurrentTerm(getSchoolId());
-		   if(termStatus != null){
-			   setRegistrationStatus(termStatus.getRegisteredCourseCount());
+	public void setCurrentRegistrationStatus(RegistrationStatusByTermService registrationStatusByTermService )
+				throws ObjectNotFoundException {
+
+		   if(getSchoolId() != null && !getSchoolId().isEmpty()){
+			   RegistrationStatusByTerm termStatus = registrationStatusByTermService
+					.getForCurrentTerm(getSchoolId());
+			   if(termStatus != null){
+				   setRegistrationStatus(termStatus.getRegisteredCourseCount());
+			   }
 		   }
-	   }
-}
+	}
 
-public void setLastTermGPAAndLastTermRegistered(ExternalStudentTranscriptTermService externalStudentTranscriptTermService, Term currentTerm)
-		throws ObjectNotFoundException {
+	public void setLastTermGPAAndLastTermRegistered(ExternalStudentTranscriptTermService externalStudentTranscriptTermService, Term currentTerm)
+			throws ObjectNotFoundException {
 
-   if(getSchoolId() != null && !getSchoolId().isEmpty()){
-	   List<ExternalStudentTranscriptTerm> termTranscripts = externalStudentTranscriptTermService.
-			   getExternalStudentTranscriptTermsBySchoolId(getSchoolId());
+	   if(getSchoolId() != null && !getSchoolId().isEmpty()){
+		   List<ExternalStudentTranscriptTerm> termTranscripts = externalStudentTranscriptTermService.
+				   getExternalStudentTranscriptTermsBySchoolId(getSchoolId());
 
-	   for(ExternalStudentTranscriptTerm transcript:termTranscripts){
-		   if(transcript.getCreditHoursAttempted() != null && transcript.getCreditHoursAttempted().floatValue() > 0.0){
-			   if(currentTerm == null || !transcript.getTermCode().equals(currentTerm.getCode())){
-				   setLastTermGradePointAverage(transcript.getGradePointAverage());
-				   setLastTermRegistered(transcript.getTermCode());
-			   	   return;
+		   for(ExternalStudentTranscriptTerm transcript:termTranscripts){
+			   if(transcript.getCreditHoursAttempted() != null && transcript.getCreditHoursAttempted().floatValue() > 0.0){
+				   if(currentTerm == null || !transcript.getTermCode().equals(currentTerm.getCode())){
+					   setLastTermGradePointAverage(transcript.getGradePointAverage());
+					   setLastTermRegistered(transcript.getTermCode());
+					   return;
+				   }
 			   }
 		   }
 	   }
-   }
-}
+	}
 
-public void setStudentTranscript(ExternalStudentTranscriptService externalStudentTranscriptService, 
-		ExternalStudentFinancialAidService externalStudentFinancialAidService )
-		throws ObjectNotFoundException {
-	if(getSchoolId() != null && !getSchoolId().isEmpty()){
-		ExternalStudentTranscript transcript = externalStudentTranscriptService
-			.getRecordsBySchoolId(getSchoolId());
-		if(transcript != null){
-			this.setGradePointAverage(transcript.getGradePointAverage());
-			this.setAcademicStanding(transcript.getAcademicStanding());
-		}
-		ExternalStudentFinancialAid financialAid = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(getSchoolId());
-		if(financialAid != null){
-			financialAidStatus = financialAid.getCurrentYearFinancialAidAward();
+	public void setStudentTranscript(ExternalStudentTranscriptService externalStudentTranscriptService,
+			ExternalStudentFinancialAidService externalStudentFinancialAidService )
+			throws ObjectNotFoundException {
+		if(getSchoolId() != null && !getSchoolId().isEmpty()){
+			ExternalStudentTranscript transcript = externalStudentTranscriptService
+				.getRecordsBySchoolId(getSchoolId());
+			if(transcript != null){
+				this.setGradePointAverage(transcript.getGradePointAverage());
+				this.setAcademicStanding(transcript.getAcademicStanding());
+			}
+			ExternalStudentFinancialAid financialAid = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(getSchoolId());
+			if(financialAid != null){
+				financialAidStatus = financialAid.getCurrentYearFinancialAidAward();
+			}
 		}
 	}
-}
 
-/**
- * @return the academicStanding
- */
-public String getAcademicStanding() {
-	return academicStanding;
-}
 
 /**
  * @param academicStanding the academicStanding to set
@@ -764,56 +749,91 @@ public void setAcademicStanding(String academicStanding) {
 	this.academicStanding = academicStanding;
 }
 
-/**
- * @return the financialAidStatus
- */
-public String getFinancialAidStatus() {
-	return financialAidStatus;
-}
+	/**
+	 * @return the academicStanding
+	 */
+	public String getAcademicStanding() {
+		return academicStanding;
+	}
 
-/**
- * @param financialAidStatus the financialAidStatus to set
- */
-public void setFinancialAidStatus(String financialAidStatus) {
-	this.financialAidStatus = financialAidStatus;
-}
+	/**
+	 * @param academicStanding the academicStanding to set
+	 */
+	public void setAcademicStanding(String academicStanding) {
+		this.academicStanding = academicStanding;
+	}
 
-/**
- * @return the lastTermGradePointAverage
- */
-public BigDecimal getLastTermGradePointAverage() {
-	return lastTermGradePointAverage;
-}
+	/**
+	 * @return the financialAidStatus
+	 */
+	public String getFinancialAidStatus() {
+		return financialAidStatus;
+	}
 
-/**
- * @param lastTermGradePointAverage the lastTermGradePointAverage to set
- */
-public void setLastTermGradePointAverage(BigDecimal lastTermGradePointAverage) {
-	this.lastTermGradePointAverage = lastTermGradePointAverage;
-}
+	/**
+	 * @param financialAidStatus the financialAidStatus to set
+	 */
+	public void setFinancialAidStatus(String financialAidStatus) {
+		this.financialAidStatus = financialAidStatus;
+	}
 
-/**
- * @return the lastTermRegistered
- */
-public String getLastTermRegistered() {
-	return lastTermRegistered;
-}
+	/**
+	 * @return the lastTermGradePointAverage
+	 */
+	public BigDecimal getLastTermGradePointAverage() {
+		return lastTermGradePointAverage;
+	}
 
-/**
- * @param lastTermRegistered the lastTermRegistered to set
- */
-public void setLastTermRegistered(String lastTermRegistered) {
-	this.lastTermRegistered = lastTermRegistered;
-}
+	/**
+	 * @param lastTermGradePointAverage the lastTermGradePointAverage to set
+	 */
+	public void setLastTermGradePointAverage(BigDecimal lastTermGradePointAverage) {
+		this.lastTermGradePointAverage = lastTermGradePointAverage;
+	}
 
-public List<CoachPersonLiteTO> getWatchers() {
-	return watchers;
-}
+	/**
+	 * @return the lastTermRegistered
+	 */
+	public String getLastTermRegistered() {
+		return lastTermRegistered;
+	}
 
-public void setWatchers(List<CoachPersonLiteTO> watchers) {
-	this.watchers = watchers;
-}
+	/**
+	 * @param lastTermRegistered the lastTermRegistered to set
+	 */
+	public void setLastTermRegistered(String lastTermRegistered) {
+		this.lastTermRegistered = lastTermRegistered;
+	}
 
+	public List<CoachPersonLiteTO> getWatchers() {
+		return watchers;
+	}
 
+	public void setWatchers(List<CoachPersonLiteTO> watchers) {
+		this.watchers = watchers;
+	}
 
+	/**
+	 * @return the academicPrograms
+	 */
+	public String getAcademicProgramNames() {
+		return academicProgramNames;
+	}
+
+	/**
+	 * @param academicPrograms the programs to set
+	 */
+	public void setAcademicPrograms(List<ExternalStudentAcademicProgram> externalAcademicPrograms) {
+		if (externalAcademicPrograms != null && !externalAcademicPrograms.isEmpty()) {
+			StringBuilder academicProgramsNames = new StringBuilder();
+			for (ExternalStudentAcademicProgram externalStudentAcademicProgram : externalAcademicPrograms) {
+				if (academicProgramsNames.length() > 0) {
+					academicProgramsNames.append(", " + externalStudentAcademicProgram.getProgramName());
+				} else {
+					academicProgramsNames.append(externalStudentAcademicProgram.getProgramName());
+				}
+			}
+			this.academicProgramNames = academicProgramsNames.toString();
+		}
+	}
 }
