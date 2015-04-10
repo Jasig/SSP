@@ -16,26 +16,46 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jasig.ssp.dao.external;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Repository
 public class ExternalStudentTranscriptDao extends
 		AbstractExternalDataDao<ExternalStudentTranscript> {
 
-		public ExternalStudentTranscriptDao()
-		{
-			super(ExternalStudentTranscript.class);
+	public ExternalStudentTranscriptDao() {
+		super(ExternalStudentTranscript.class);
+	}
+
+	public ExternalStudentTranscript getRecordsBySchoolId(String schoolId) {
+		Criteria criteria = this.createCriteria();
+
+		criteria.add(Restrictions.eq("schoolId", schoolId));
+		return (ExternalStudentTranscript) criteria.uniqueResult();
+	}
+
+	public List<ExternalStudentTranscript> getBatchedRecordsBySchoolIds(final List<String> schoolIds) {
+
+		if (schoolIds == null || schoolIds.size() < 1) {
+			return new <ExternalStudentTranscript>ArrayList();
 		}
-		
-		public ExternalStudentTranscript getRecordsBySchoolId(String schoolId){
-			Criteria criteria = this.createCriteria();
-			
-			criteria.add(Restrictions.eq("schoolId", schoolId));
-			return (ExternalStudentTranscript) criteria.uniqueResult();
-		}
+
+		BatchProcessor<String, ExternalStudentTranscript> processor =  new BatchProcessor<String, ExternalStudentTranscript>(schoolIds);
+		do {
+			final Criteria criteria = createCriteria();
+			processor.process(criteria, "schoolId");
+
+		} while(processor.moreToProcess());
+
+		return processor.getUnsortedUnpagedResultsAsList();
+	}
 }

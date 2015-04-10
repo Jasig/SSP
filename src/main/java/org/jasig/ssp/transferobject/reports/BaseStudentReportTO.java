@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.*;
@@ -742,12 +743,12 @@ public class BaseStudentReportTO implements Serializable {
 	}
 
 
-/**
- * @param academicStanding the academicStanding to set
- */
-public void setAcademicStanding(String academicStanding) {
-	this.academicStanding = academicStanding;
-}
+	public void setCumalativeGpaAndAcademicStanding(ExternalStudentTranscript transcript) {
+		if (transcript != null) {
+			this.setGradePointAverage(transcript.getGradePointAverage());
+			this.setAcademicStanding(transcript.getAcademicStanding());
+		}
+	}
 
 	/**
 	 * @return the academicStanding
@@ -821,11 +822,11 @@ public void setAcademicStanding(String academicStanding) {
 	}
 
 	/**
-	 * @param academicPrograms the programs to set
+	 * @param academicPrograms the programs to set (will overwrite existing)
 	 */
-	public void setAcademicPrograms(List<ExternalStudentAcademicProgram> externalAcademicPrograms) {
+	public void setAcademicPrograms(final List<ExternalStudentAcademicProgram> externalAcademicPrograms) {
 		if (externalAcademicPrograms != null && !externalAcademicPrograms.isEmpty()) {
-			StringBuilder academicProgramsNames = new StringBuilder();
+			final StringBuilder academicProgramsNames = new StringBuilder();
 			for (ExternalStudentAcademicProgram externalStudentAcademicProgram : externalAcademicPrograms) {
 				if (academicProgramsNames.length() > 0) {
 					academicProgramsNames.append(", " + externalStudentAcademicProgram.getProgramName());
@@ -833,6 +834,24 @@ public void setAcademicStanding(String academicStanding) {
 					academicProgramsNames.append(externalStudentAcademicProgram.getProgramName());
 				}
 			}
+			this.academicProgramNames = academicProgramsNames.toString();
+		}
+	}
+
+	/**
+	 * @param academicProgram the program to add to current list
+	 */
+	public void addAcademicProgram(final ExternalStudentAcademicProgram externalAcademicProgram) {
+
+		if (externalAcademicProgram != null && !externalAcademicProgram.getProgramName().isEmpty()) {
+			final StringBuilder academicProgramsNames = new StringBuilder();
+
+			if ( StringUtils.isNotBlank(this.academicProgramNames) ) {
+				academicProgramsNames.append(this.academicProgramNames + ", " + externalAcademicProgram.getProgramName());
+			} else {
+				academicProgramsNames.append(externalAcademicProgram.getProgramName());
+			}
+
 			this.academicProgramNames = academicProgramsNames.toString();
 		}
 	}

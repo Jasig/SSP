@@ -25,6 +25,7 @@ import org.jasig.ssp.dao.external.ExternalStudentTranscriptDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 
 @Service
@@ -38,6 +39,10 @@ public class ExternalStudentTranscriptServiceImpl extends
 	
 	public ExternalStudentTranscript getRecordsBySchoolId(String schoolId){
 		return dao.getRecordsBySchoolId(schoolId);
+	}
+
+	public List<ExternalStudentTranscript> getBatchedRecordsBySchoolIds(final List<String> schoolIds) {
+		return dao.getBatchedRecordsBySchoolIds(schoolIds);
 	}
 	
 	@Override

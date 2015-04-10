@@ -16,15 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jasig.ssp.dao.external;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.springframework.stereotype.Repository;
+
 
 @Repository
 public class ExternalStudentAcademicProgramDao extends
@@ -41,5 +44,22 @@ public class ExternalStudentAcademicProgramDao extends
 		criteria.addOrder(Order.asc("degreeName"));
 		
 		return (List<ExternalStudentAcademicProgram>)criteria.list();
+	}
+
+	public List<ExternalStudentAcademicProgram> getAcademicProgramsBySchoolIds(final List<String> schoolIds) {
+
+		if ( schoolIds == null || schoolIds.size() < 1 ) {
+			return new <ExternalStudentAcademicProgram>ArrayList();
+		}
+
+		final BatchProcessor<String, ExternalStudentAcademicProgram> processor = new BatchProcessor<>(schoolIds);
+		do {
+			final Criteria criteria = createCriteria();
+			criteria.addOrder(Order.asc("degreeName"));
+			processor.process(criteria, "schoolId");
+
+		} while ( processor.moreToProcess() );
+
+		return processor.getUnsortedUnpagedResultsAsList();
 	}
 }

@@ -16,42 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
-import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +53,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
+
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -84,23 +73,37 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 
 	@Autowired
 	private transient PersonService personService;
+
 	@Autowired
 	private transient PersonTOFactory personTOFactory;
+
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
+
 	@Autowired
 	private transient ReferralSourceService referralSourcesService;
+
 	@Autowired
 	private transient TermService termService;
+
 	@Autowired
 	private transient ProgramStatusService programStatusService;
+
 	@Autowired
 	protected transient StudentTypeService studentTypeService;	
+
 	@Autowired
-	protected transient ServiceReasonService serviceReasonService;	
+	protected transient ServiceReasonService serviceReasonService;
+
+	@Autowired
+	protected transient ExternalStudentAcademicProgramService externalStudentAcademicProgramService;
+
+	@Autowired
+	protected transient ExternalStudentTranscriptService externalStudentTranscriptService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
+
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
@@ -134,56 +137,89 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
-		
+
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
-		
+
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
-		
+
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
-		
-		SearchParameters.addReferenceLists(studentTypeIds, 
-				specialServiceGroupIds, 
+
+		SearchParameters.addReferenceLists(studentTypeIds,
+				specialServiceGroupIds,
 				referralSourcesIds,
 				serviceReasonIds,
-				parameters, 
-				personSearchForm, 
-				studentTypeService, 
-				ssgService, 
+				parameters,
+				personSearchForm,
+				studentTypeService,
+				ssgService,
 				referralSourcesService,
 				serviceReasonService);
-		
-		SearchParameters.addDateRange(createDateFrom, 
-				createDateTo, 
-				termCode, 
-				parameters, 
-				personSearchForm, 
+
+		SearchParameters.addDateRange(createDateFrom,
+				createDateTo,
+				termCode,
+				parameters,
+				personSearchForm,
 				termService);
-		
+
 		SearchParameters.addReferenceTypes(programStatus,
-				null, 
+				null,
 				false,
 				null,
 				homeDepartment,
-				parameters, 
-				personSearchForm, 
-				programStatusService, 
+				parameters,
+				personSearchForm,
+				programStatusService,
 				null);
-		
-		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm, 
-				anticipatedStartYear, 
-				actualStartTerm, 
-				actualStartYear, 
-				parameters, 
+
+		SearchParameters.addAnticipatedAndActualStartTerms(anticipatedStartTerm,
+				anticipatedStartYear,
+				actualStartTerm,
+				actualStartYear,
+				parameters,
 				personSearchForm);
 
 		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
-		
-		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
-		SearchParameters.addStudentCount(compressedReports, parameters);
-		renderReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
+		final Map<String, BaseStudentReportTO> compressedReportMap = processStudentReportTOsAsMap(people);
+		final List<String> schoolIdKeys = new ArrayList<String>(compressedReportMap.keySet());
+		final List<ExternalStudentAcademicProgram> academicPrograms = externalStudentAcademicProgramService.getBatchedAcademicProgramsBySchoolIds(schoolIdKeys);
+		final List<ExternalStudentTranscript> transcripts = externalStudentTranscriptService.getBatchedRecordsBySchoolIds(schoolIdKeys);
+
+		for ( ExternalStudentTranscript transcript : transcripts ) {
+			compressedReportMap.get(transcript.getSchoolId()).setCumalativeGpaAndAcademicStanding(transcript);
+		}
+
+		for (ExternalStudentAcademicProgram academicProgram : academicPrograms) {
+			compressedReportMap.get(academicProgram.getSchoolId()).addAcademicProgram(academicProgram);
+		}
+
+		parameters.put("studentCount", compressedReportMap == null ? 0 : compressedReportMap.size());
+		renderReport(response, parameters, compressedReportMap.values(), REPORT_URL, reportType, REPORT_FILE_TITLE);
+	}
+
+	/**
+	 * Semi-override of method in ReportBaseController to eliminate multiple loops through ReportTOs
+	 * @param people
+	 * @return
+	 */
+	private Map<String, BaseStudentReportTO> processStudentReportTOsAsMap(PagingWrapper<BaseStudentReportTO> people) {
+		Map<String, BaseStudentReportTO> compressedReportMap = Maps.newHashMap();
+		if (people == null || people.getResults() <= 0) {
+			return compressedReportMap;
+		}
+
+		for (BaseStudentReportTO reportTO : new ArrayList<BaseStudentReportTO>(people.getRows())) {
+			if (compressedReportMap.containsKey(reportTO.getSchoolId())) {
+				compressedReportMap.get(reportTO.getSchoolId()).processDuplicate(reportTO);
+			} else {
+				reportTO.normalize();
+				compressedReportMap.put(reportTO.getSchoolId(), reportTO);
+			}
+		}
+		return compressedReportMap;
 	}
 
 	@Override
