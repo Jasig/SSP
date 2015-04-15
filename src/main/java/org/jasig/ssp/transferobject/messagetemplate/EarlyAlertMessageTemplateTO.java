@@ -31,7 +31,7 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 
 	private static final long serialVersionUID = 1432740352046594692L;
 	
-	private CoachPersonLiteMessageTemplateTO person;
+	private StudentPersonLiteMessageTemplateTO person;
 	
 	private CoachPersonLiteMessageTemplateTO coach;
 	
@@ -59,11 +59,11 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 			getWatcherEmails().addAll(watcherEmailAddresses);
 	}
 
-	public CoachPersonLiteMessageTemplateTO getPerson() {
+	public StudentPersonLiteMessageTemplateTO getPerson() {
 		return person;
 	}
 
-	public void setPerson(CoachPersonLiteMessageTemplateTO person) {
+	public void setPerson(StudentPersonLiteMessageTemplateTO person) {
 		this.person = person;
 	}
 	
@@ -86,7 +86,7 @@ public class EarlyAlertMessageTemplateTO extends EarlyAlertTO {
 	@Override
 	public final void from(EarlyAlert model){
 		super.from(model);
-		person = new CoachPersonLiteMessageTemplateTO(model.getPerson());
+		person = new StudentPersonLiteMessageTemplateTO(model.getPerson());
 		if(model.getPerson().getCoach() != null){
 			coach = new CoachPersonLiteMessageTemplateTO(model.getPerson().getCoach());
 		}

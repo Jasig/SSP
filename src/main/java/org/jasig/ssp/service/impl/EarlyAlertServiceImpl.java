@@ -467,7 +467,19 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				.getAllForCampus(earlyAlert.getCampus(), new SortingAndPaging(
 						ObjectStatus.ACTIVE));
 		if (routes.getResults() > 0) {
-			for (final EarlyAlertRouting route : routes.getRows()) {
+			
+			ArrayList<String> alreadySent = new ArrayList<String>();
+		
+ 			for (final EarlyAlertRouting route : routes.getRows()) {
+				//check if this alert has already been sent to this recipient
+				if (alreadySent.contains(route.getPerson().getPrimaryEmailAddress())) {
+					continue;
+				}
+				else {
+					alreadySent.add(route.getPerson().getPrimaryEmailAddress());
+				}
+			
+			
 				// Check that route applies
 				if (route.getEarlyAlertReason() == null) {
 					throw new ObjectNotFoundException(
@@ -599,13 +611,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				throw new IllegalArgumentException(
 						"EarlyAlert.CreatedBy is missing.");
 			}
-//
-//			try {
-//				//earlyAlert.setCreatedBy(new AuditPerson(personService.get(earlyAlert.getCreatedBy().getId())).getId());
-//			} catch (final ObjectNotFoundException e) {
-//				throw new IllegalArgumentException(
-//						"EarlyAlert.CreatedBy.Id could not be loaded.", e);
-//			}
 		}
 
 		final Map<String, Object> templateParameters = Maps.newHashMap();
@@ -713,20 +718,6 @@ public class EarlyAlertServiceImpl extends // NOPMD
 		if ( person == null ) {
 			return; // can occur in some legit person lookup call paths
 		}
-//		Map<UUID,Number> activeCnts =
-//				getCountOfActiveAlertsForPeopleIds(Sets.newHashSet(person.getId()));
-//		if ( activeCnts == null || !(activeCnts.containsKey(person.getId())) ) {
-//			person.setActiveAlertsCount(0);
-//		} else {
-//			person.setActiveAlertsCount(activeCnts.get(person.getId()));
-//		}
-//		Map<UUID,Number> closedCnts =
-//				getCountOfClosedAlertsForPeopleIds(Sets.newHashSet(person.getId()));
-//		if ( closedCnts == null || !(closedCnts.containsKey(person.getId())) ) {
-//			person.setClosedAlertsCount(0);
-//		} else {
-//			person.setClosedAlertsCount(closedCnts.get(person.getId()));
-//		}
 	}
 
 	@Override
@@ -822,7 +813,7 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			return;
 		}
 		List<EarlyAlert> eaOutOfCompliance = dao.getResponseDueEarlyAlerts(lastResponseDate);
-		LOGGER.debug("Early Alerts out of compliance: {}", eaOutOfCompliance.size());
+		
 		Map<UUID, List<EarlyAlertMessageTemplateTO>> easByCoach = new HashMap<UUID, List<EarlyAlertMessageTemplateTO>>();
 		Map<UUID, Person> coaches = new HashMap<UUID, Person>();
 		final boolean includeCoachAsRecipient = this.earReminderRecipientConfig.includeCoachAsRecipient();
