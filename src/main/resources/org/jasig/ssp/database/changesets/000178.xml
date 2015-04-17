@@ -46,7 +46,7 @@
 #if($!earlyAlert.creator.workPhone)<tr><th>Instructor Phone</th><td>$!earlyAlert.creator.workPhone</td></tr>#end
 <tr><th>Advisor</th><td>$!earlyAlert.coach.getFullName()</td></tr>
          <tr>
-            <th>Enrollment Status (Steves Test)</th>
+            <th>Enrollment Status</th>
             <td>$earlyAlert.person.currentProgramStatusName</td>
          </tr>
 </table>

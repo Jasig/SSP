@@ -18,8 +18,8 @@
  */
 Ext.define('Ssp.model.StudentActivity', {
 	extend: 'Ext.data.Model',
-    fields: [{name: 'activity', type: 'string'},
-        {name: 'coachName', type: 'string'},
+    fields: [{name: 'activity', type: 'string'},       
+        {name: 'coachNameLastFirst', type: 'string'},
         {name: 'coachId', type: 'string'},
         {name: 'activityDateFormatted', type: 'string'},
         {name: 'activityDate', type: 'date', dateFormat: 'time'}],

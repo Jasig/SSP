@@ -39,7 +39,7 @@ public class RecentActivityTO {
 	public static final RecentActivityTOActivityDateComparator RECENT_ACTIVITY_TO_DATE_COMPARATOR =
 			new RecentActivityTOActivityDateComparator();
 	
-	private String coachName;
+	private String coachName;	
 	private String activity;
 	private Date activityDate;
 	private UUID coachId;
@@ -67,6 +67,25 @@ public class RecentActivityTO {
 	public void setCoachName(String coachName) {
 		this.coachName = coachName;
 	}
+	
+	/**
+	 * @return the coachName last, first
+	 */
+	public String getCoachNameLastFirst() {
+		String name = getCoachName();
+		if (name.indexOf(' ') <=0){
+			return name;
+		}
+		else {
+			int split = name.indexOf(' ');
+
+		    String firstName = name.substring(0, split);
+		    String lastName = name.substring(split + 1, name.length());
+		    
+		    return lastName + ", " + firstName;
+		}
+	}
+	
 	/**
 	 * @return the activity
 	 */

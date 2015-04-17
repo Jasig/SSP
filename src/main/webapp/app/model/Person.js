@@ -114,7 +114,7 @@ Ext.define('Ssp.model.Person', {
     
     getCoachFullName: function(){
     	var coach = this.get('coach');
-    	return ((coach != null)? coach.firstName + ' ' + coach.lastName : "");   	
+    	return ((coach != null)? coach.lastName + ', ' + coach.firstName : "");   	
     },     
 
     getCoachWorkPhone: function(){

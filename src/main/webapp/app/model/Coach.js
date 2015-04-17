@@ -24,7 +24,7 @@ Ext.define('Ssp.model.Coach', {
              {
                  name: 'fullName',
                  convert: function(value, record) {
-                     return record.get('firstName') + ' '+ record.get('lastName');
+                     return record.get('lastName') + ', ' + record.get('firstName');
                  }
              },
              {name:'departmentName',type:'string'},

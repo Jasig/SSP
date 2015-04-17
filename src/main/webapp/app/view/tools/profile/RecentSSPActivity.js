@@ -33,7 +33,7 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
             xtype: 'gridcolumn',
 			
             columns: [{
-                dataIndex: 'coachName',
+                dataIndex: 'coachNameLastFirst',
                 text: 'Coach',
 				flex: 1
             }, {
