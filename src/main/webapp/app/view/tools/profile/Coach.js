@@ -55,17 +55,16 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
-                    
                     padding: '0 5 15 5',
-                    
                     flex: 0.30,
                     items: [{
                     
                         fieldLabel: 'Assigned Coach',
                         name: 'coachName',
+                        labelWidth: 95,
                         itemId: 'coachName',
-                        labelAlign: 'top',
-                        labelPad: 0,
+                        //labelAlign: 'top',
+                       // labelPad: 0,
 						flex: 1
                     }, {
                         xtype: 'tbspacer',
@@ -76,26 +75,26 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         itemId: 'coachWorkPhone',
                         labelWidth: 40,
 						flex: 1
-                    
                     }, {
-                        fieldLabel: '',
+                        fieldLabel: 'Email',
                         name: 'coachPrimaryEmailAddress',
+                        labelWidth: 40,
                         itemId: 'coachPrimaryEmailAddress',
 						flex: 1
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: '',
+                        fieldLabel: 'Department',
                         name: 'coachDepartmentName',
+                        labelWidth: 70,
                         itemId: 'coachDepartmentName'
-                    
                     }, {
-                        fieldLabel: '',
+                        fieldLabel: 'Office',
                         name: 'coachOfficeLocation',
+                        labelWidth: 40,
                         itemId: 'coachOfficeLocation',
 						flex: 1
-                    
                     }
 					/*, {
                         fieldLabel: 'Coach Type',
@@ -104,13 +103,10 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     flex: 1
                     
                     }*/]
-                
                 }, {
                     xtype: 'fieldset',
-                    border: 1,
-                    title: 'Most recent activity of this coach with the record',
-                    cls: 'makeTitleBold',
-                    
+                    fieldLabel: '',
+                    border: 0,
                     defaultType: 'displayfield',
                     defaults: {
                         anchor: '100%'
@@ -118,27 +114,72 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     flex: 0.50,
                     padding: '0 5 5 5',
                     items: [{
-                        fieldLabel: 'Date',
-                        name: 'coachLastServiceDate',
-                        itemId: 'coachLastServiceDate',
-                        labelWidth: 35,
-                        labelSeperator: false
-                    
+                            xtype: 'fieldset',
+                            border: 1,
+                            title: 'Most recent activity of this coach with the record',
+                            cls: 'makeTitleBold',
+                            defaultType: 'displayfield',
+                            defaults: {
+                                anchor: '100%'
+                            },
+                            flex: 0.50,
+                            padding: '0 5 5 5',
+                            items: [{
+                                fieldLabel: 'Date',
+                                name: 'coachLastServiceDate',
+                                itemId: 'coachLastServiceDate',
+                                labelWidth: 35,
+                                labelSeperator: false
+
+                            }, {
+                                xtype: 'tbspacer',
+                                height: '10'
+                            }, {
+                                fieldLabel: 'Last Service Provided',
+                                name: 'coachLastServiceProvided',
+                                itemId: 'coachLastServiceProvided',
+                                labelAlign: 'top',
+                                labelPad: 0,
+                                labelWidth: 150
+
+                            }]
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: 'Last Service Provided',
-                        name: 'coachLastServiceProvided',
-                        itemId: 'coachLastServiceProvided',
-                        labelAlign: 'top',
-                        labelPad: 0,
-                        labelWidth: 150
-                    
+                        xtype: 'fieldset',
+                        border: 1,
+                        title: 'Previous Coach Information',
+                        itemId: 'previousCoachDisplay',
+                        hidden: true,
+                        cls: 'makeTitleBold',
+                        defaultType: 'displayfield',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        flex: 0.50,
+                        padding: '0 5 5 5',
+                        items: [{
+                            fieldLabel: 'Last Coach',
+                            labelWidth: 75,
+                            name: 'previousCoachName',
+                            itemId: 'previousCoachName',
+                            hidden: true
+                        }, {
+                            fieldLabel: 'Changed By',
+                            labelWidth: 75,
+                            name: 'previousCoachChangedByName',
+                            itemId: 'previousCoachChangedByName',
+                            hidden: true
+                        }, {
+                            fieldLabel: 'Changed On',
+                            labelWidth: 75,
+                            name: 'previousCoachChangeDate',
+                            itemId: 'previousCoachChangeDate',
+                            hidden: true
+                        }]
                     }]
-                
                 }]
-            
             }, {
                 xtype: 'recentsspactivity',
 				anchor: '100% , 40%',

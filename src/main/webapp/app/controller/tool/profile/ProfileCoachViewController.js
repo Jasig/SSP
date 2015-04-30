@@ -25,13 +25,13 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
         person: 'currentPerson',
         personLite: 'personLite',
         personService: 'personService',
+        coachHistoryService: 'coachHistoryService',
         studentActivityService: 'studentActivityService',
         studentActivitiesStore: 'studentActivitiesStore',
         configStore: 'configStore'
     },
     
     control: {
-    	
     	coachNameField: '#coachName',
     	coachWorkPhoneField: '#coachWorkPhone',
     	coachDepartmentNameField: '#coachDepartmentName',
@@ -39,8 +39,13 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	coachPrimaryEmailAddressField: '#coachPrimaryEmailAddress',
     	coachPhotoUrlField: '#coachPhotoUrl',
     	coachLastServiceDateField: '#coachLastServiceDate',
-    	coachLastServiceProvidedField: '#coachLastServiceProvided'
-     },
+    	coachLastServiceProvidedField: '#coachLastServiceProvided',
+    	previousCoachDisplay: '#previousCoachDisplay',
+		previousCoachNameField: '#previousCoachName',
+        previousCoachChangedByNameField: '#previousCoachChangedByName',
+        previousCoachChangeDateField: '#previousCoachChangeDate'
+    },
+
 	init: function() {
 		var me=this;
 		
@@ -77,7 +82,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		var coachOfficeLocationField = me.getCoachOfficeLocationField();
 		var coachPrimaryEmailAddressField = me.getCoachPrimaryEmailAddressField();
 		var coachPhotoUrlField = me.getCoachPhotoUrlField();
-		
+
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		
@@ -95,8 +100,58 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
 		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
 		coachPhotoUrlField.setSrc( me.person.getCoachPhotoUrl() );
+
+		me.coachHistoryService.getCurrentCoachChangeHistory( id, {
+			success: me.getCoachHistorySuccess,
+			failure: me.getPersonFailure,
+			scope: me
+		});
+
 		// hide the loader
     	me.getView().setLoading( false ); 
+    },
+
+    getCoachHistorySuccess: function(r, scope) {
+    	var me = scope;
+
+        var personCoachHistory = new Ext.create('Ssp.model.PersonCoachHistory');
+		var previousCoachNameField = me.getPreviousCoachNameField();
+		var previousCoachChangedByNameField = me.getPreviousCoachChangedByNameField();
+		var previousCoachChangeDateField = me.getPreviousCoachChangeDateField();
+
+		if (r != null && previousCoachNameField && previousCoachChangeDateField && previousCoachChangedByNameField) {
+			personCoachHistory.populateFromGenericObject(r);
+			me.getPreviousCoachDisplay().show();
+
+			if (personCoachHistory.get('previousCoach') != null &&
+					personCoachHistory.get('previousCoach').fullName.indexOf("null null") < 0) {
+				previousCoachNameField.setValue((personCoachHistory.get('previousCoach')).fullName);
+				previousCoachNameField.show();
+			} else {
+				previousCoachNameField.setValue("Current Coach Hasn't Been Changed.");
+				previousCoachNameField.show();
+			}
+
+			if (personCoachHistory.get('modifiedBy') != null &&
+					personCoachHistory.get('modifiedBy').fullName.indexOf("null null") < 0) {
+				if ((personCoachHistory.get('modifiedBy')).fullName.indexOf("System Administrator") > -1) {
+					previousCoachChangedByNameField.setValue("System Process");
+					previousCoachChangedByNameField.show();
+
+				} else {
+					previousCoachChangedByNameField.setValue((personCoachHistory.get('modifiedBy')).fullName);
+					previousCoachChangedByNameField.show();
+				}
+			}
+
+			if (personCoachHistory.get('modifiedDate') != null && personCoachHistory.get('modifiedDate') != null) {
+				previousCoachChangeDateField.setValue(Ext.util.Format.date(personCoachHistory.get('modifiedDate'),'m/d/Y'));
+				previousCoachChangeDateField.show();
+			}
+		}
+
+		// hide the loader
+		me.getView().setLoading( false );
     },
     
     getPersonFailure: function( response, scope){

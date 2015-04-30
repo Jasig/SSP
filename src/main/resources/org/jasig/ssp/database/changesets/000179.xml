@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+      http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="Add Coach Audit and Revision Tables" author="paul.spaude">
+        <createTable tableName="person_coach_revision_info">
+            <column name="revision_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="revision_timestamp" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true" foreignKeyName="person_coach_revision_info_modified_by_person_id"
+                             references="person(id)" />
+            </column>
+        </createTable>
+
+        <createTable tableName="person_coach_audit">
+            <column name="person_class" type="${nvarchar.type}(31)">
+                <constraints nullable="false" />
+            </column>
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="rev" type="int">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="person_coach_audit_rev_person_coach_revision_info_id"
+                             references="person_coach_revision_info(revision_id)"/>
+            </column>
+            <column name="revtype" type="smallint">
+                <constraints nullable="true" />
+            </column>
+            <column name="coach_id" type="uuid">
+                <constraints nullable="true" foreignKeyName="person_coach_audit_coach_id_person_id"
+                             references="person(id)" />
+            </column>
+        </createTable>
+
+        <sql>GRANT ALL ON ${schema}.person_coach_audit TO ${database.app.username}</sql>
+        <sql>GRANT ALL ON ${schema}.person_coach_revision_info TO ${database.app.username}</sql>
+        <rollback>
+            <dropTable tableName="person_coach_audit" />
+            <dropTable tableName="person_coach_revision_info" />
+        </rollback>
+    </changeSet>
+
+    <changeSet dbms="postgresql" author="paul.spaude" id="Grant person_coach_revision_info_revision_id_seq postgres">
+        <sql splitStatements="true" >
+            GRANT ALL ON ${schema}.person_coach_revision_info_revision_id_seq TO ${database.app.username};
+            ALTER TABLE ${schema}.person_coach_revision_info ALTER COLUMN revision_id SET DEFAULT nextval('person_coach_revision_info_revision_id_seq'::regclass);
+        </sql>
+    </changeSet>
+
+    <changeSet id="Seed Existing CoachAssignment For CoachAudit+CoachRevInfo" author="paul.spaude">
+        <sql splitStatements="true" >
+            INSERT INTO ${schema}.person_coach_revision_info (revision_timestamp, modified_date, modified_by) SELECT '1429916906765', created_date, id FROM PERSON WHERE coach_id IS NOT NULL;
+            INSERT INTO ${schema}.person_coach_audit (person_class, id, rev, revtype, coach_id) SELECT 'user', r.modified_by, r.revision_id, 0, p.coach_id FROM person_coach_revision_info r LEFT JOIN person p ON p.id = r.modified_by WHERE p.coach_id IS NOT NULL AND r.modified_by IS NOT NULL;
+            UPDATE ${schema}.person_coach_revision_info SET modified_by = '58ba5ee3-734e-4ae9-b9c5-943774b4de41' WHERE modified_by IS NOT NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

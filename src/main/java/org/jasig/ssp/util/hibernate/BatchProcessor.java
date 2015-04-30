@@ -87,14 +87,16 @@ public class BatchProcessor<I, O> {
 		}
 	}
 	
-	public void updateProcess(Query query, String propertyName){
+	public List<I> updateProcess(Query query, String propertyName){
 		if(batches.hasNext()){
 			List<I> batch = batches.next();
 			if(batch != null && !batch.isEmpty()){
 				query.setParameterList(propertyName, batch);
 				count += query.executeUpdate();
 			}
+			return batch;
 		}
+		return null;
 	}
 	
 	public void countDistinct(Query query, String propertyName){

@@ -482,7 +482,8 @@ Ext.require([
     'Ssp.service.StudentIntakeService',
     'Ssp.service.TranscriptService',
 	'Ssp.service.MapPlanService',
-	'Ssp.service.CourseService', 
+	'Ssp.service.CourseService',
+	'Ssp.service.PersonCoachHistoryService',
     'Ssp.controller.ApplicationEventsController',
     'Ext.tab.*',
 	'Ext.util.Filter',
@@ -626,7 +627,8 @@ var apiUrls = [
   {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'termsfaceted', url: 'reference/term/facet'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
-  {name: 'successIndicator', url: 'reference/successIndicator'}
+  {name: 'successIndicator', url: 'reference/successIndicator'},
+  {name: 'personCoachHistory', url: 'person/{id}/coachHistory'}
 ];
 
 Ext.onReady(function(){	
@@ -2060,7 +2062,8 @@ Ext.onReady(function(){
 			        transcriptService: 'Ssp.service.TranscriptService',
 			        mapPlanService: 'Ssp.service.MapPlanService',
 			        studentActivityService: 'Ssp.service.StudentActivityService',
-			        courseService: 'Ssp.service.CourseService'
+			        courseService: 'Ssp.service.CourseService',
+			        coachHistoryService: 'Ssp.service.PersonCoachHistoryService'
 				});
 
 

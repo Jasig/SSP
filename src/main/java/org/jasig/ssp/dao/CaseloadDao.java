@@ -51,12 +51,16 @@ import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.hibernate.OrderAsString;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Lists;
 
 @Repository
 public class CaseloadDao extends AbstractDao<Person> {
+
+	@Autowired
+	private transient PersonCoachAuditDao personCoachAuditDao;
 
 	public CaseloadDao() {
 		super(Person.class);
@@ -395,9 +399,10 @@ public class CaseloadDao extends AbstractDao<Person> {
 		BatchProcessor<String, Object> update = new BatchProcessor<String, Object>(Lists.newArrayList(obj.getStudentIds()));
 		do{
 			Query query = createHqlQuery( sql ).setEntity( "coach", coach );
-			update.updateProcess(query, "studentId");
-		}while(update.moreToProcess());
-		
+			List<String> currentBatchOfStudentSchoolIds = update.updateProcess(query, "studentId");
+			// personCoachAuditDao.auditBatchCoachAssignment(coach, currentBatchOfStudentSchoolIds); TODO Batch Audit Coach Change
+		} while(update.moreToProcess());
+
 		return update.getCount().intValue();
 	}
 

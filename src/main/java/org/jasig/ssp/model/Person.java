@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -42,19 +41,21 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Sort;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 
 /**
  * A Person entity.
@@ -70,6 +71,7 @@ import com.google.common.collect.Sets;
 		discriminatorType= DiscriminatorType.STRING
 )
 @DiscriminatorValue("user")
+@AuditTable("person_coach_audit")
 public class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	private static final long serialVersionUID = 4159658337332259029L;
@@ -579,6 +581,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	private Set<Task> tasks;
 
 	@Nullable
+	@Audited
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "coach_id", nullable = true)

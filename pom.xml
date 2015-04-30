@@ -450,6 +450,13 @@
 			<version>1.0.0</version>
 		</dependency>
 
+		<!-- Auditing -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<version>4.0.1.Final</version>
+		</dependency>
+
 		<!-- Persistence -->
 		<dependency>
 			<groupId>postgresql</groupId>
