@@ -48,7 +48,6 @@ import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Sort;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
 import org.jasig.ssp.model.reference.StudentType;

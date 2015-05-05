@@ -68,9 +68,6 @@ public class PersonCoachHistoryController extends AbstractBaseController{
 			throws ObjectNotFoundException {
 
 		if (personId != null) {
-
-			this.personCoachAuditDao.auditBatchCoachAssignment(new Person(personId), new ArrayList<String>());
-
 			return personCoachHistoryService.getLastCoachHistory(personId);
 		}
 

@@ -127,26 +127,27 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 					personCoachHistory.get('previousCoach').fullName.indexOf("null null") < 0) {
 				previousCoachNameField.setValue((personCoachHistory.get('previousCoach')).fullName);
 				previousCoachNameField.show();
+
+                if (personCoachHistory.get('modifiedBy') != null &&
+                        personCoachHistory.get('modifiedBy').fullName.indexOf("null null") < 0) {
+                    if ((personCoachHistory.get('modifiedBy')).fullName.indexOf("System Administrator") > -1) {
+                        previousCoachChangedByNameField.setValue("System Process");
+                        previousCoachChangedByNameField.show();
+
+                    } else {
+                        previousCoachChangedByNameField.setValue((personCoachHistory.get('modifiedBy')).fullName);
+                        previousCoachChangedByNameField.show();
+                    }
+                }
+
+                if (personCoachHistory.get('modifiedDate') != null && personCoachHistory.get('modifiedDate') != null) {
+                    previousCoachChangeDateField.setValue(Ext.util.Format.date(personCoachHistory.get('modifiedDate'),'m/d/Y'));
+                    previousCoachChangeDateField.show();
+                }
+
 			} else {
-				previousCoachNameField.setValue("Current Coach Hasn't Been Changed.");
+				previousCoachNameField.setValue("No Change.");
 				previousCoachNameField.show();
-			}
-
-			if (personCoachHistory.get('modifiedBy') != null &&
-					personCoachHistory.get('modifiedBy').fullName.indexOf("null null") < 0) {
-				if ((personCoachHistory.get('modifiedBy')).fullName.indexOf("System Administrator") > -1) {
-					previousCoachChangedByNameField.setValue("System Process");
-					previousCoachChangedByNameField.show();
-
-				} else {
-					previousCoachChangedByNameField.setValue((personCoachHistory.get('modifiedBy')).fullName);
-					previousCoachChangedByNameField.show();
-				}
-			}
-
-			if (personCoachHistory.get('modifiedDate') != null && personCoachHistory.get('modifiedDate') != null) {
-				previousCoachChangeDateField.setValue(Ext.util.Format.date(personCoachHistory.get('modifiedDate'),'m/d/Y'));
-				previousCoachChangeDateField.show();
 			}
 		}
 

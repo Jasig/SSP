@@ -19,6 +19,9 @@
 package org.jasig.ssp.dao;
 
 
+import com.google.common.collect.Maps;
+import org.hibernate.Session;
+import org.hibernate.envers.RevisionType;
 import org.jasig.ssp.model.*;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.PersonCoachAuditTO;
@@ -27,9 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -52,6 +53,8 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
 
     private static final String AUDIT_PERSON_HQL_QUERY =
             "SELECT auditPerson FROM AuditPerson as auditPerson WHERE auditPerson.id IN :personIds";
+
+    private static final String UUIDS_FROM_SCHOOLIDS_HQL_QUERY = "SELECT id FROM Person p WHERE p.schoolId IN (:schoolIds)";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonCoachAuditDao.class);
 
@@ -124,15 +127,49 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
      * @return int saved result count (-1) on error/null parameter or (0) on empty parameter
      */
     public int auditBatchCoachAssignment (Person coachToSet, List<String> batchOfStudentSchoolIds) {
-        if (coachToSet != null && batchOfStudentSchoolIds != null) {
-            if (coachToSet.getId() != null && batchOfStudentSchoolIds.size() > 0) {
-                UUID currentUserUUID = securityService.currentlyAuthenticatedUser().getPerson().getId();
+        if ( coachToSet != null && batchOfStudentSchoolIds != null ) {
+            if ( coachToSet.getId() != null && batchOfStudentSchoolIds.size() > 0 ) {
 
-            //TODO Bulk Insert to person_coach_audit and person_coach_revision_info
+                try {
+                    final Session session = sessionFactory.getCurrentSession();
+                    final UUID currentUserUUID = securityService.currentlyAuthenticatedUser().getPerson().getId();
+                    final Date currentTimestamp = new Date();
 
+                    final PersonCoachRevisionEntity revInfoEntity = new PersonCoachRevisionEntity(); //create new revinfo
+                    revInfoEntity.setTimestamp(currentTimestamp.getTime());
+                    revInfoEntity.setModifiedDate(currentTimestamp);
+                    revInfoEntity.setModifiedBy(new AuditPerson(currentUserUUID));
 
+                    session.save(revInfoEntity);  //enter new row into revision info table and return auto-generated id
+
+                    if ( revInfoEntity != null && revInfoEntity.getId() > -1 ) {
+                        final List<UUID> studentUUIDs = createHqlQuery(UUIDS_FROM_SCHOOLIDS_HQL_QUERY)
+                                .setParameterList("schoolIds", batchOfStudentSchoolIds).list();          //get UUIDS from SchoolIds for the batch
+
+                        for ( UUID studentId : studentUUIDs ) {
+                            final Map<String, Object> personAuditOriginalId = Maps.newHashMap();  //creates originalId portion of Person_Coach_AUD
+                            personAuditOriginalId.put("REV", revInfoEntity);
+                            personAuditOriginalId.put("id", studentId);
+
+                            final Map<String, Object> personAuditEntity = Maps.newHashMap();    //creates the Person_Coach_AUD record
+                            personAuditEntity.put("REVTYPE", RevisionType.MOD);
+                            personAuditEntity.put("coach_id", coachToSet.getId());
+                            personAuditEntity.put("originalId", personAuditOriginalId);
+
+                            session.save("org.jasig.ssp.model.Person_AUD", personAuditEntity);
+                        }
+
+                        session.flush();
+                        session.clear();
+
+                        return studentUUIDs.size();
+                    }
+                } catch (ClassCastException | NullPointerException cne) {
+                    LOGGER.error("Error inserting batched Coach Audit records in bulk Caseload Assign!" + cne);
+                }
+            } else {
+                return 0;
             }
-            return 0;
         }
         return -1;
     }

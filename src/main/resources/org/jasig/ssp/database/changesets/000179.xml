@@ -79,9 +79,8 @@
 
     <changeSet id="Seed Existing CoachAssignment For CoachAudit+CoachRevInfo" author="paul.spaude">
         <sql splitStatements="true" >
-            INSERT INTO ${schema}.person_coach_revision_info (revision_timestamp, modified_date, modified_by) SELECT '1429916906765', created_date, id FROM PERSON WHERE coach_id IS NOT NULL;
-            INSERT INTO ${schema}.person_coach_audit (person_class, id, rev, revtype, coach_id) SELECT 'user', r.modified_by, r.revision_id, 0, p.coach_id FROM person_coach_revision_info r LEFT JOIN person p ON p.id = r.modified_by WHERE p.coach_id IS NOT NULL AND r.modified_by IS NOT NULL;
-            UPDATE ${schema}.person_coach_revision_info SET modified_by = '58ba5ee3-734e-4ae9-b9c5-943774b4de41' WHERE modified_by IS NOT NULL;
+            INSERT INTO ${schema}.person_coach_revision_info (revision_timestamp, modified_date, modified_by) SELECT '1429916906765', created_date, id FROM PERSON WHERE id = '58ba5ee3-734e-4ae9-b9c5-943774b4de41';
+            INSERT INTO ${schema}.person_coach_audit (person_class, id, rev, revtype, coach_id) SELECT 'user', p.id, (SELECT revision_id FROM person_coach_revision_info WHERE modified_by = '58ba5ee3-734e-4ae9-b9c5-943774b4de41' AND revision_timestamp = '1429916906765'), 0, p.coach_id FROM Person p WHERE p.coach_id IS NOT NULL;
         </sql>
     </changeSet>
 

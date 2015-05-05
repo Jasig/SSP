@@ -400,7 +400,7 @@ public class CaseloadDao extends AbstractDao<Person> {
 		do{
 			Query query = createHqlQuery( sql ).setEntity( "coach", coach );
 			List<String> currentBatchOfStudentSchoolIds = update.updateProcess(query, "studentId");
-			// personCoachAuditDao.auditBatchCoachAssignment(coach, currentBatchOfStudentSchoolIds); TODO Batch Audit Coach Change
+			personCoachAuditDao.auditBatchCoachAssignment(coach, currentBatchOfStudentSchoolIds);
 		} while(update.moreToProcess());
 
 		return update.getCount().intValue();
