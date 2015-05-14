@@ -2447,7 +2447,7 @@
 </div> <!-- end disability services report -->
 
 <div class="hideable-form journal-session-detail-report" style="display:none">
-	<h1>Journal Session Details Report</h1>
+	<h1>Journal Step Detail Report</h1>
 	<form action="/ssp/api/1/report/journalsessiondetail" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		<!-- Home Department -->

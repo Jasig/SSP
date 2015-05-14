@@ -73,9 +73,9 @@ import com.google.common.collect.Maps;
 @RequestMapping("/1/report/journalsessiondetail")
 public class JournalSessionDetailsReportController extends ReportBaseController<JournalStepStudentReportTO> {
 
-	private static String REPORT_URL_PDF = "/reports/journalStepDetailsReport.jasper";
-	private static String REPORT_FILE_TITLE = "Journal_Step_Details_Report";
-	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
+	private static String REPORT_URL_PDF = "/reports/journalStepDetailReport.jasper";
+	private static String REPORT_FILE_TITLE = "Journal_Step_Detail_Report";
+	private static String JOURNAL_STEP_DETAILS = "journalStepDetail";
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(JournalSessionDetailsReportController.class);
@@ -178,7 +178,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				null);
 
 		List<UUID> cleanJournalStepDetailIds = SearchParameters.cleanUUIDListOfNulls(journalStepDetailIds);
-		SearchParameters.addUUIDSToMap(JOURNAL_SESSION_DETAILS, 
+		SearchParameters.addUUIDSToMap(JOURNAL_STEP_DETAILS,
 				SearchParameters.ALL, 
 				cleanJournalStepDetailIds, 
 				parameters, 
