@@ -317,7 +317,7 @@
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ACADEMIC STANDING]]></text>
+				<text><![CDATA[STANDING]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="5a5f5430-af2e-4a79-ba88-9322a65fb0af" stretchType="RelativeToBandHeight" x="478" y="0" width="19" height="20"/>
