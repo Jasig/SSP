@@ -380,14 +380,14 @@
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[PRIMARY EMAIL]]></text>
+				<text><![CDATA[EMAIL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="1b9e042e-794f-4407-81ec-aa5fe01487b0" stretchType="RelativeToBandHeight" x="295" y="0" width="52" height="20" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ACADEMIC PROGRAM]]></text>
+				<text><![CDATA[PROGRAM]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
