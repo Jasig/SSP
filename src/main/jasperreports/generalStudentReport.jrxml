@@ -340,14 +340,14 @@
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[CUM GPA]]></text>
+				<text><![CDATA[GPA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="6872f74e-a4f3-43c3-be41-bd4f32342030" x="580" y="0" width="62" height="25"/>
 				<textElement textAlignment="Center">
 					<font isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[ACADEMIC STANDING]]></text>
+				<text><![CDATA[STANDING]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="53a08189-4aba-4a9c-a976-6b70c2bb6ee9" x="642" y="0" width="49" height="25"/>
@@ -361,7 +361,7 @@
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[ACADEMIC PROGRAM]]></text>
+				<text><![CDATA[PROGRAM]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
