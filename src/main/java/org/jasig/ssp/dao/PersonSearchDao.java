@@ -19,11 +19,14 @@
 package org.jasig.ssp.dao;
 
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+
 import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -52,6 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.google.common.collect.Lists;
 
 
@@ -333,7 +337,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasFinancialAidStatus(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esfa.sapStatusCode = :sapStatusCode ");
+			stringBuilder.append(" esfa.sapStatusCode in (:sapStatusCode)");
 			stringBuilder.append(" and esfa.schoolId = p.schoolId ");
 		}
 		
@@ -342,7 +346,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasFinancialAidStatus(
 			PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSapStatusCode() != null;
+		return personSearchRequest.getSapStatusCode() != null && personSearchRequest.getSapStatusCode().size()>0;
 	}
 
 
@@ -353,8 +357,6 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" programStatus = :programStatus ");
 		}
-		
-		
 	}
 
 
@@ -367,7 +369,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasSpecialServiceGroup(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup = :specialServiceGroup ");
+			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) ");
 		}
 		
 		
@@ -375,7 +377,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSpecialServiceGroup() != null;
+		return (personSearchRequest.getSpecialServiceGroup()) != null && (personSearchRequest.getSpecialServiceGroup().size() > 0);
 	}
 
 
@@ -455,7 +457,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				me = securityService.currentlyAuthenticatedUser().getPerson();
 			}
 			if ( hasCoach(personSearchRequest) ) {
-				coach = personSearchRequest.getCoach();
+				//coach = personSearchRequest.getCoach();
 			}
 
 			UUID queryPersonId = null;
@@ -473,6 +475,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
 			}
 			query.setParameter("coachId", queryPersonId);
+			
+			List<UUID> coachIds = new ArrayList<UUID>();
+			List<Person> coaches = personSearchRequest.getCoach();
+			for(Person coachn: coaches) {
+				coachIds.add(coachn.getId());
+			}
+			query.setParameter("coachId", coachIds);
 		}
 		
 		if(hasAnyWatchCriteria(personSearchRequest))
@@ -505,7 +514,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasDeclaredMajor(personSearchRequest))
 		{
-			query.setString("programCode", personSearchRequest.getDeclaredMajor());
+			//query.setString("programCode", personSearchRequest.getDeclaredMajor());
+			query.setParameter("programCode", personSearchRequest.getDeclaredMajor());
 		}
 		
 		if(hasHoursEarnedCriteria(personSearchRequest))
@@ -532,7 +542,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasFinancialAidStatus(personSearchRequest))
 		{
-			query.setString("sapStatusCode", personSearchRequest.getSapStatusCode());
+			query.setEntity("sapStatusCode", personSearchRequest.getSapStatusCode());
 		}
 		
 		if(hasCurrentlyRegistered(personSearchRequest))
@@ -556,7 +566,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasCoach(PersonSearchRequest personSearchRequest) 
 	{
-		return personSearchRequest.getCoach() != null;
+		return personSearchRequest.getCoach() != null && personSearchRequest.getCoach().size() > 0;
 	}
 
 
@@ -685,7 +695,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasDeclaredMajor(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esap.programCode = :programCode");
+			stringBuilder.append(" esap.programCode in (:programCode)");
 			stringBuilder.append(" and esap.schoolId = p.schoolId");
 		}
 	}
@@ -696,7 +706,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" p.coach.id = :coachId ");
+			//stringBuilder.append(" p.coach.id = :coachId ");
+			stringBuilder.append(" p.coach.id in (:coachId) ");
 		}
 	}
 
@@ -771,6 +782,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasPlanExists(PersonSearchRequest personSearchRequest)
 	{
+		//return personSearchRequest.getPlanExists() != null && !personSearchRequest.getPlanExists().isEmpty();
 		return !StringUtils.isEmpty(personSearchRequest.getPlanExists());
 	}
 
@@ -799,7 +811,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			stringBuilder.append(", ExternalStudentTranscript est ");
 		}
 		
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());		
 
 		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
 		{
@@ -848,7 +860,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) 
 	{
-		return !StringUtils.isEmpty(personSearchRequest.getDeclaredMajor());
+		//there should only be one declared major, use the top one if it's there.
+		if (personSearchRequest.getDeclaredMajor() == null || personSearchRequest.getDeclaredMajor().size() <=0) return false;
+		
+		String declaredMajor = personSearchRequest.getDeclaredMajor().get(0);		
+		return !StringUtils.isEmpty(declaredMajor);
 	}
 
 
@@ -898,9 +914,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.add(Restrictions.gt("currentRegistrationStatus", 0));
 		}
 		
-		if(StringUtils.isNotBlank(personSearchRequest.getDeclaredMajor()))
+		if(hasDeclaredMajor(personSearchRequest) )
 		{
-			query.add(Restrictions.eq("declaredMajor", personSearchRequest.getDeclaredMajor()));
+			query.add(Restrictions.in("declaredMajor", personSearchRequest.getDeclaredMajor()));
 		}
 		
 		if(StringUtils.isNotBlank(personSearchRequest.getSchoolId()))
@@ -920,12 +936,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(personSearchRequest.getCoach() != null)
 		{
-			query.add(Restrictions.like("coach", personSearchRequest.getCoach()));
+			//query.add(Restrictions.like("coach", personSearchRequest.getCoach()));
+			query.add(Restrictions.in("coach", personSearchRequest.getCoach()));
 		}
 		
 		if(personSearchRequest.getProgramStatus() != null)
 		{
-			query.add(Restrictions.like("programStatus", personSearchRequest.getProgramStatus()));
+			query.add(Restrictions.in("programStatus", personSearchRequest.getProgramStatus()));
 		}
 		
 		if(StringUtils.isNotBlank(personSearchRequest.getPlanStatus()))
@@ -933,16 +950,19 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.add(Restrictions.like("mapStatus", personSearchRequest.getPlanStatus()));
 		}
 		
+		
 		return null;
 	}
 	
+	/*
+	 * never used locally, candidate for deletion
 	private void buildDirectoryPersonFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
 	{
 		stringBuilder.append(" from PersonDirectory p ");
 		
-		if(personSearchRequest.getSpecialServiceGroup() != null){
+		if(personSearchRequest.getSpecialServiceGroup() != null && (personSearchRequest.getSpecialServiceGroup().size()>0)){
 			stringBuilder.append(" Person person ");
 		}
 	}
-
+	*/
 }

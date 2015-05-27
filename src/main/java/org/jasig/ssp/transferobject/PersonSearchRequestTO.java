@@ -19,8 +19,13 @@
 package org.jasig.ssp.transferobject;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -38,11 +43,11 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private String lastName;
 
-	private UUID programStatus;
+	private List<UUID> programStatus;
 	
-	private UUID specialServiceGroup;
+	private List<UUID> specialServiceGroup;
 
-	private UUID coachId;
+	private List<UUID> coachId;
 
 	private String declaredMajor;
 
@@ -56,7 +61,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
     private BigDecimal localGpaMin;
 
-    private BigDecimal localGpaMax;
+    private BigDecimal localGpaMax; 
 
     private BigDecimal programGpaMin;
 
@@ -66,7 +71,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private String earlyAlertResponseLate;
 	
-	private String sapStatusCode;
+	private List<String> sapStatusCode;
 	
 	private String planStatus;
 	
@@ -80,7 +85,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private Date birthDate;
 
-    private String actualStartTerm;
+    private List<String> actualStartTerm;
 	
 	private String personTableType;
 	
@@ -110,28 +115,68 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.lastName = lastName;
 	}
 
-	public UUID getProgramStatus() {
+	public List<UUID> getProgramStatus() {
 		return programStatus;
 	}
 
-	public void setProgramStatus(UUID programStatus) {
+	public void setProgramStatus(List<UUID> programStatus) {
 		this.programStatus = programStatus;
 	}
+	
+	public void setProgramStatus(String programStatusin) {
+		if(programStatusin != null) {
+			List<String> items = Arrays.asList(programStatusin.split("\\s*,\\s*"));
+			ArrayList<UUID> programStatus = new ArrayList<UUID>();
+			for(String item: items)
+			{
+				programStatus.add(UUID.fromString(item));
+			}
+			this.programStatus = programStatus;
+		}
+	}
 
-	public UUID getSpecialServiceGroup() {
+	public List<UUID> getSpecialServiceGroup() {
 		return specialServiceGroup;
 	}
 
-	public void setSpecialServiceGroup(UUID specialServiceGroup) {
+	public void setSpecialServiceGroup(List<UUID> specialServiceGroup) {
 		this.specialServiceGroup = specialServiceGroup;
 	}
-
-	public UUID getCoachId() {
-		return coachId;
+	
+	//comma separated string of specialservicegroupids
+	public void setSpecialServiceGroup(String specialServiceGroups) {
+		if(specialServiceGroups != null) {
+			List<String> items = Arrays.asList(specialServiceGroups.split("\\s*,\\s*"));
+			ArrayList<UUID> specialServiceGroupIds = new ArrayList<UUID>();
+			for(String item: items)
+			{
+				specialServiceGroupIds.add(UUID.fromString(item));
+			}
+			this.specialServiceGroup = specialServiceGroupIds;
+		}
 	}
 
-	public void setCoachId(UUID coachId) {
-		this.coachId = coachId;
+	public List<UUID> getCoachId() {
+		return coachId;
+	}
+	
+	public void setCoachId(List<UUID> coachIds) {		
+		this.coachId = coachIds;
+	}
+
+	public void setCoachId(String coaches) {
+		if(coaches != null) {
+			List<String> items = Arrays.asList(coaches.split("\\s*,\\s*"));
+			ArrayList<UUID> coachIds = new ArrayList<UUID>();
+			for(String item: items)
+			{
+				coachIds.add(UUID.fromString(item));
+			}
+			this.coachId = coachIds;
+		}
+		
+		
+		//this.coachId = coachId;
 	}
 
 	public String getDeclaredMajor() {
@@ -190,13 +235,28 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.earlyAlertResponseLate = earlyAlertResponseLate;
 	}
 
-	public String getSapStatusCode() {
+	public List<String> getSapStatusCode() {
 		return sapStatusCode;
 	}
 
-	public void setSapStatusCode(String sapStatusCode) {
+	public void setSapStatusCode(List<String> sapStatusCode) {
 		this.sapStatusCode = sapStatusCode;
 	}
+	
+	
+	//handle a list of comma separated values
+	public void setSapStatusCode(String sapStatusCode) {
+		if(sapStatusCode != null) {
+			List<String> items = Arrays.asList(sapStatusCode.split("\\s*,\\s*"));
+			ArrayList<String> sapStatusCodes = new ArrayList<String>();
+			for(String item: items)
+			{
+				sapStatusCodes.add(item);
+			}
+			this.sapStatusCode = sapStatusCodes;
+		}
+	}
+	
 
 	public String getPlanStatus() {
 		return planStatus;
@@ -205,11 +265,29 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	public void setPlanStatus(String planStatus) {
 		this.planStatus = planStatus;
 	}
+	
+	/*
+	//handle a list of comma separated values
+	public void setPlanStatus(String planStatus) {
+		if(planStatus != null) {
+			List<String> items = Arrays.asList(planStatus.split("\\s*,\\s*"));
+			ArrayList<String> planStatuses = new ArrayList<String>();
+			for(String item: items)
+			{
+				planStatuses.add(item);
+			}
+			this.planStatus = planStatuses;
+		}
+	}
+	*/
 
 	@Override
 	public void from(PersonSearchRequest model) {
 		//NO-OP because this TO should only be used for requests.
 	}
+
+	
+	
 
 	public String getPlanExists() {
 		return planExists;
@@ -218,6 +296,31 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	public void setPlanExists(String planExists) {
 		this.planExists = planExists;
 	}
+	
+	/*
+	public List<String> getPlanExists() {
+		return planExists;
+	}
+
+	public void setPlanExists(List<String> planExists) {
+		this.planExists = planExists;
+	}
+	
+	
+	//handle a list of comma separated values
+	public void setPlanExists(String planExists) {
+		if(planExists != null) {
+			List<String> items = Arrays.asList(planExists.split("\\s*,\\s*"));
+			ArrayList<String> planExistses = new ArrayList<String>();
+			for(String item: items)
+			{
+				planExistses.add(item);
+			}
+			this.planExists = planExistses;
+		}
+	}
+	*/
+	
 
 	public Boolean getMyCaseload() {
 		return myCaseload;
@@ -267,13 +370,25 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.myWatchList = myWatchList;
 	}
 
-    public String getActualStartTerm () {
+    public List<String> getActualStartTerm () {
                 return actualStartTerm;
         }
 
-    public void setActualStartTerm (final String actualStartTerm) {
+    public void setActualStartTerm (final List<String> actualStartTerm) {
                 this.actualStartTerm = actualStartTerm;
         }
+    
+    public void setActualStartTerm (String actualStartTerm) {
+    	if(StringUtils.isNotEmpty(actualStartTerm)) {
+			List<String> items = Arrays.asList(actualStartTerm.split("\\s*,\\s*"));
+			ArrayList<String> actualStartTermList = new ArrayList<String>();
+			for(String item: items)
+			{
+				actualStartTermList.add(item);
+			}
+			this.actualStartTerm = actualStartTermList;
+		}
+}
 
     public BigDecimal getLocalGpaMin () {
         return localGpaMin;
