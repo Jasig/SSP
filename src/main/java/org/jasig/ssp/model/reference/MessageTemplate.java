@@ -92,6 +92,9 @@ public class MessageTemplate
     public static final UUID EMAIL_JOURNAL_ENTRY_ID = UUID.
     		fromString("65bb389e-8c4f-4a7e-adc2-0938b1e66abe");
 
+	public static final UUID EMAIL_COACHING_ASSIGNMENT_CHANGE_ID = UUID.
+			fromString("b0e61fad-74c2-4154-9248-7ca8db867fdf");
+
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;

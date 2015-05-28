@@ -81,6 +81,9 @@ public interface MessageTemplateService extends
 	SubjectAndBody createEarlyAlertResponseToReferralSourceMessage(
 			Map<String, Object> messageParams);
 
+	SubjectAndBody createCoachingAssignmentChangeMessage(
+			Map<String, Object> messageParams);
+
     SubjectAndBody createMyGPSWelcomeMessage();
 
 	

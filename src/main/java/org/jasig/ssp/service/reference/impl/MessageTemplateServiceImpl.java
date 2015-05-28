@@ -266,7 +266,15 @@ public class MessageTemplateServiceImpl extends
 				MessageTemplate.EARLYALERT_RESPONSE_REQUIRED_ID,
 				messageParams);
 	}
-	
+
+	@Override
+	public SubjectAndBody createCoachingAssignmentChangeMessage(
+			final Map<String, Object> messageParams) {
+		return populateFromTemplate(
+				MessageTemplate.EMAIL_COACHING_ASSIGNMENT_CHANGE_ID,
+				messageParams);
+	}
+
 	@Override
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
 			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params, Map<String,Object> additionalParams) {

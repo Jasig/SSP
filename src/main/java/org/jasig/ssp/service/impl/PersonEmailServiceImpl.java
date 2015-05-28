@@ -28,6 +28,7 @@ import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.MessageTemplate;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -371,16 +372,29 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 	@Transactional
 	public void sendCoachingAssignmentChangeEmail(Person model, UUID oldCoachId) throws ObjectNotFoundException, SendFailedException, ValidationException {
 
-		if(oldCoachId == null || model.getCoach() == null || !model.getCoach().hasEmailAddresses())
+		if(oldCoachId == null || model.getCoach() == null || !model.getCoach().hasEmailAddresses()) {
 			return;
-		Person oldCoach = personService.get(oldCoachId);
-		String appTitle = configService.getByNameEmpty("app_title");
-		String serverExternalPath = configService.getByNameEmpty("serverExternalPath");
+		}
+		final Person oldCoach = personService.get(oldCoachId);
+		final Person currentUser = securityService.currentUser().getPerson();
 
-		String message = oldCoach.getFullName()+" has assigned "+model.getFullName()+" to your caseload in "+appTitle+". Please visit "+serverExternalPath+" to view the student's information in "+appTitle+".";
-		String subject = "A coaching assignment has changed in "+appTitle;
+		Map<String,Object> messageParams = new HashMap<String,Object>();
+		messageParams.put("studentFullName", model.getFullName());
+		messageParams.put("studentFirstName", model.getFirstName());
+		messageParams.put("studentLastName", model.getLastName());
+		messageParams.put("schoolId", model.getSchoolId());
+		messageParams.put("oldCoachFullName", oldCoach.getFullName());
+		messageParams.put("oldCoachFirstName", oldCoach.getFirstName());
+		messageParams.put("oldCoachLastName", oldCoach.getLastName());
+		messageParams.put("newCoachFullName", model.getCoach().getFullName());
+		messageParams.put("newCoachtFirstName", model.getCoach().getFirstName());
+		messageParams.put("newCoachLastName", model.getCoach().getLastName());
+		messageParams.put("changedByFullName", currentUser.getFullName());
+		messageParams.put("changedByFirstName", currentUser.getFirstName());
+		messageParams.put("changedByLastName", currentUser.getLastName());
 
-		SubjectAndBody subjectAndBody = new SubjectAndBody(subject, message);
+		SubjectAndBody subjectAndBody = messageTemplateService.createCoachingAssignmentChangeMessage(messageParams);
+
 		if(oldCoach.hasEmailAddresses() && model.getWatcherEmailAddresses().isEmpty()){
 			messageService.createMessage(model.getCoach(),
 					StringUtils.arrayToCommaDelimitedString(oldCoach.getEmailAddresses()
