@@ -16,6 +16,80 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+<!--
+var comboTPLorig = new Ext.XTemplate(
+         '<tpl for=".">',
+             '<div class="x-boundlist-item">',
+                          '<tpl if="values.field1">',
+                 '{name} ( ',
+                 '<input type="checkbox" checked="checked" disabled="disabled" />',
+                 ' )',
+             '</tpl>',
+              '<tpl if="!values.field1">',
+                 '{name} ( ',
+                 '<input type="checkbox" disabled="disabled" />',
+                 ' )',
+             '</tpl>',
+           '</div>',
+         '</tpl>' // end for
+     );
+
+
+function toggleCheck(obj) {
+	var $checkbox =$(obj).find(':checkbox');
+	$checkbox.attr('checked', !$checkbox.attr('checked'));
+}
+
+var comboTPLNameDisplay = new Ext.XTemplate(
+         '<tpl for=".">',
+             '<div class="x-boundlist-item" >',
+                 '<tpl if="values.field1">',                 
+	                 '<input type="checkbox" checked="checked" />',                
+	                 '{name}',                 
+	             '</tpl>',
+	              '<tpl if="!values.field1">',             
+	                 '<input type="checkbox" />',
+	                 '{name}',
+	             '</tpl>',
+	          '</div>',
+         '</tpl>' // end for
+     );
+
+var comboTPLDisplayValueDisplay = new Ext.XTemplate(
+        '<tpl for=".">',
+            '<div class="x-boundlist-item" >',
+                '<tpl if="values.field1">',                 
+	                 '<input type="checkbox" checked="checked" />',                
+	                 '{displayValue}',                 
+	             '</tpl>',
+	              '<tpl if="!values.field1">',             
+	                 '<input type="checkbox" />',
+	                 '{displayValue}',
+	             '</tpl>',
+	          '</div>',
+        '</tpl>' // end for
+    );
+
+
+
+
+var comboTPLFullNameDisplay = new Ext.XTemplate(
+        '<tpl for=".">',
+            '<div class="x-boundlist-item" >',
+                '<tpl if="values.field1">',                 
+	                 '<input type="checkbox" checked="checked" />',                
+	                 '{fullName}',                 
+	             '</tpl>',
+	              '<tpl if="!values.field1">',             
+	                 '<input type="checkbox" />',
+	                 '{fullName}',
+	             '</tpl>',
+	          '</div>',
+        '</tpl>' // end for
+    );
+-->
+
 Ext.define('Ssp.view.SearchForm',{
 	extend: 'Ext.form.Panel',
 	alias : 'widget.searchForm',
@@ -172,7 +246,9 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 				border: false,
-				items: [{
+				items: [
+	        
+				        {					
 					xtype: 'combobox',
 					fieldLabel: 'Student Exists In',
 					store: me.personTableTypesStore,
@@ -182,7 +258,9 @@ Ext.define('Ssp.view.SearchForm',{
 					columnWidth: 0.5,
 					itemId: 'personTableType',
 					name: 'personTableType',
-					editable: false
+					editable: false,
+					//tpl: comboTPLDisplayValueDisplay,
+					multiSelect: true
 				}, {
 				    xtype: 'datefield',
 				    format: 'm/d/Y',
@@ -206,8 +284,10 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 			    border: false,
-			    items: [{
+			    items: [           
+			            {
 		   		    xtype: 'combobox',
+		   		    multiSelect: true,
                     fieldLabel: 'Program Status',
                     emptyText: 'Select Status',
 		   		    store: me.programStatusesStore,
@@ -217,6 +297,7 @@ Ext.define('Ssp.view.SearchForm',{
 	                itemId: 'programStatus',
                     name: 'programStatus',
                     editable: false
+                    //tpl: comboTPLNameDisplay
                 }, {
 		   		    xtype: 'combobox',
                     fieldLabel: 'Registered',
@@ -230,9 +311,11 @@ Ext.define('Ssp.view.SearchForm',{
    		   		    valueField: 'booleanValue',
 		   		    displayField: 'displayValue',
 		   		    editable: false
+		   		    //tpl: comboTPLDisplayValueDisplay
                 }]
 			}, {
 				xtype: 'combobox',
+				multiSelect: true,
 				fieldLabel: 'Special Service Group',
 				emptyText: 'Select Special Service Group',
 				store: me.specialServiceGroupsActiveUnpagedStore,
@@ -242,8 +325,10 @@ Ext.define('Ssp.view.SearchForm',{
 				itemId: 'specialServiceGroup',
 				name: 'specialServiceGroup',
 				editable: false
+				//tpl: comboTPLNameDisplay
 			}, {
 				xtype: 'combobox',
+				multiSelect: true,
 				fieldLabel: 'Start Term',
 				emptyText: 'Select Start Term',
 				store: me.termsStore,
@@ -254,8 +339,10 @@ Ext.define('Ssp.view.SearchForm',{
 				name: 'actualStartTerm',
 				mode: 'local',
 				editable: false
+				//tpl: comboTPLNameDisplay
 			}, {
 				xtype: 'combobox',
+				multiSelect: true,
 				fieldLabel: 'Declared Major',
 				emptyText: 'Select Major',
 				width:100,
@@ -266,9 +353,11 @@ Ext.define('Ssp.view.SearchForm',{
 				displayField: 'name',
 				mode: 'local',
 				editable: false
+				//tpl: comboTPLNameDisplay
 			}, {
 				xtype: 'combobox',
 				fieldLabel: 'Assigned Coach',
+				multiSelect: true,
 				emptyText: 'Select Coach',
 				width: 100,
 				name: 'coachId',
@@ -278,6 +367,7 @@ Ext.define('Ssp.view.SearchForm',{
 				displayField: 'fullName',
 				mode: 'local',
 				editable: false
+				//tpl: comboTPLFullNameDisplay
 			},	{
 				layout: 'column',
 				border: false,
@@ -292,6 +382,7 @@ Ext.define('Ssp.view.SearchForm',{
 					valueField: 'code',
 					displayField: 'displayValue',
 					editable: false
+					//tpl: comboTPLDisplayValueDisplay
 				}, {
 					xtype: 'combobox',
 					fieldLabel: 'FA SAP Status',
@@ -304,7 +395,9 @@ Ext.define('Ssp.view.SearchForm',{
 					store: me.sapStatusesStore,
 					valueField: 'code',
 					displayField: 'name',
-					editable: false
+					editable: false,
+					multiSelect: true
+					//tpl: comboTPLNameDisplay
 				}]
 			}, {
 				layout: 'column',
@@ -320,6 +413,7 @@ Ext.define('Ssp.view.SearchForm',{
 					valueField: 'code',
 					displayField: 'displayValue',
 					editable: false
+					//tpl: comboTPLDisplayValueDisplay
 				}, {
 					xtype: 'combobox',
 					fieldLabel: 'Plan Exists',
@@ -333,6 +427,7 @@ Ext.define('Ssp.view.SearchForm',{
 					valueField: 'code',
 					displayField: 'displayValue',
 			   		editable: false
+			   		//tpl: comboTPLDisplayValueDisplay
 				}]
 			}, {
 				layout: {

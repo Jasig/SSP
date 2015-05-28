@@ -208,8 +208,16 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
 		PersonSearchRequest form = new PersonSearchRequest();
-		form.setCoach(coach);
-		form.setProgramStatus(programStatus);
+		
+		//added to handle multiple coach searches
+		ArrayList<Person> coachList = new ArrayList<Person>();
+		coachList.add(coach);
+		form.setCoach(coachList);
+		
+		ArrayList<ProgramStatus> programStatusList = new ArrayList<ProgramStatus>();
+		programStatusList.add(programStatus);
+		
+		form.setProgramStatus(programStatusList);
 		form.setPersonTableType(PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
 		form.setSortAndPage(sAndP);
 		return searchPersonDirectory(form);
@@ -354,12 +362,19 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	// on it and most of its peers. This export scenario is a special case, though, where
 	// we really don't want to be holding open a transaction if we can help it.
 	public void exportableCaseLoadFor(CaseloadCsvWriterHelper csvWriterHelper,
-			ProgramStatus programStatus, Person person,
+			ProgramStatus programStatus, Person coach,
 			SortingAndPaging buildSortAndPage) throws IOException 
 		{
 			PersonSearchRequest form = new PersonSearchRequest();
-			form.setCoach(person);
-			form.setProgramStatus(programStatus);
+			
+			ArrayList<Person> coachList = new ArrayList<Person>();	
+			coachList.add(coach);
+			form.setCoach(coachList);
+			
+			ArrayList<ProgramStatus> programStatusList = new ArrayList<ProgramStatus>();
+			programStatusList.add(programStatus);			
+			form.setProgramStatus(programStatusList);
+			
 			form.setSortAndPage(buildSortAndPage);
 			directoryPersonDao.exportableSearch(csvWriterHelper,form);
 		}
@@ -380,11 +395,19 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Override
 	@Transactional
-	public Long caseLoadCountFor(ProgramStatus programStatus, Person person,
+	public Long caseLoadCountFor(ProgramStatus programStatus, Person coach,
 			SortingAndPaging buildSortAndPage) {
 		PersonSearchRequest form = new PersonSearchRequest();
-		form.setCoach(person);
-		form.setProgramStatus(programStatus);
+		
+		ArrayList<Person> coachList = new ArrayList<Person>();	
+		coachList.add(coach);
+		form.setCoach(coachList);
+		
+		
+		ArrayList<ProgramStatus> programStatusList = new ArrayList<ProgramStatus>();
+		programStatusList.add(programStatus);
+		
+		form.setProgramStatus(programStatusList);
 		form.setSortAndPage(buildSortAndPage);
 		
 		return directoryPersonDao.getCaseloadCountFor( form , buildSortAndPage);

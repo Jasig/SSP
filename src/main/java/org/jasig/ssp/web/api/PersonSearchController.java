@@ -257,7 +257,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) Boolean myWatchList,
 	 final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
      final @RequestParam(required = false) String actualStartTerm,
-	 final @RequestParam(required = false) String personTableType,
+	 final @RequestParam(required = false) String personTableType, 
 	 final @RequestParam(required = false) Integer start,
 	 final @RequestParam(required = false) Integer limit,
 	 final @RequestParam(required = false) String sort,

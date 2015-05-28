@@ -19,7 +19,12 @@
 package org.jasig.ssp.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
@@ -63,15 +68,15 @@ public class PersonSearchRequest {
 	// id of the person
 	private String schoolId;
 
-	private ProgramStatus programStatus;
+	private ArrayList<ProgramStatus> programStatus;
 	
-	private SpecialServiceGroup specialServiceGroup;
+	private List<SpecialServiceGroup> specialServiceGroup;
 
-	private Person coach;
+	private List<Person> coach;
 	
 	private Person watcher;
 
-	private String declaredMajor;
+	private List<String> declaredMajor;
 
 	private BigDecimal hoursEarnedMin;
 	
@@ -95,7 +100,7 @@ public class PersonSearchRequest {
 	
 	private String planExists;
 	
-	private String sapStatusCode;
+	private List<String> sapStatusCode;
 	
 	private String planStatus;
 	
@@ -111,7 +116,7 @@ public class PersonSearchRequest {
 	
 	private String lastName;
 
-    private String actualStartTerm;
+    private List<String> actualStartTerm;
 	
 	private String personTableType;
 	
@@ -132,44 +137,78 @@ public class PersonSearchRequest {
 	}
 
 
-	public ProgramStatus getProgramStatus() {
+	public ArrayList<ProgramStatus> getProgramStatus() {
 		return programStatus;
 	}
-
-
-	public void setProgramStatus(ProgramStatus programStatus) {
-		this.programStatus = programStatus;
+	
+	public ArrayList<String> getProgramStatusNames() {
+		ArrayList<String> retVal = new ArrayList<String>();
+		for(ProgramStatus ps: programStatus) {
+			retVal.add(ps.getName());
+		}
+			
+		return retVal;
 	}
 
 
-	public SpecialServiceGroup getSpecialServiceGroup() {
+	public void setProgramStatus(ArrayList<ProgramStatus> programStatus) {
+		this.programStatus = programStatus;
+	}
+	
+	public void setProgramStatus(ProgramStatus programStatus) {
+		ArrayList<ProgramStatus> psList = new ArrayList<ProgramStatus>();
+		psList.add(programStatus);
+		this.programStatus = psList;
+	}
+
+
+	public List<SpecialServiceGroup> getSpecialServiceGroup() {
 		return specialServiceGroup;
 	}
 
 
-	public void setSpecialServiceGroup(SpecialServiceGroup specialServiceGroup) {
+	public void setSpecialServiceGroup(List<SpecialServiceGroup> specialServiceGroup) {
 		this.specialServiceGroup = specialServiceGroup;
+	}
+	
+	public void setSpecialServiceGroup(SpecialServiceGroup specialServiceGroup) {
+		List<SpecialServiceGroup> specialServiceGroupList = new ArrayList<SpecialServiceGroup>();
+		specialServiceGroupList.add(specialServiceGroup);
+		this.specialServiceGroup = specialServiceGroupList;
 	}
 
 
-	public Person getCoach() {
+	public List<Person> getCoach() {
 		return coach;
 	}
 
 
-	public void setCoach(Person coach) {
+	public void setCoach(List<Person> coach) {
 		this.coach = coach;
 	}
 
 
-	public String getDeclaredMajor() {
+	public List<String> getDeclaredMajor() {
 		return declaredMajor;
 	}
 
 
-	public void setDeclaredMajor(String declaredMajor) {
+	public void setDeclaredMajor(List<String> declaredMajor) {
 		this.declaredMajor = declaredMajor;
 	}
+	
+	public void setDeclaredMajor(String declaredMajor) {
+		
+		if(StringUtils.isNotEmpty(declaredMajor)) {
+			List<String> items = Arrays.asList(declaredMajor.split("\\s*,\\s*"));
+			ArrayList<String> declaredMajorList = new ArrayList<String>();
+			for(String item: items)
+			{
+				declaredMajorList.add(item);
+			}
+			this.declaredMajor = declaredMajorList;
+		}
+	}	
 
 
 	public BigDecimal getHoursEarnedMin() {
@@ -231,25 +270,53 @@ public class PersonSearchRequest {
 		this.earlyAlertResponseLate = earlyAlertResponseLate;
 	}
 
-
-	public String getSapStatusCode() {
+	
+	public List<String> getSapStatusCode() {
 		return sapStatusCode;
 	}
 
-
-	public void setSapStatusCode(String sapStatusCode) {
+	public void setSapStatusCode(List<String> sapStatusCode) {
 		this.sapStatusCode = sapStatusCode;
 	}
-
+	
+	
+	//handle a list of comma separated values
+	public void setSapStatusCode(String sapStatusCode) {
+		if(sapStatusCode != null) {
+			List<String> items = Arrays.asList(sapStatusCode.split("\\s*,\\s*"));
+			ArrayList<String> sapStatusCodes = new ArrayList<String>();
+			for(String item: items)
+			{
+				sapStatusCodes.add(item);
+			}
+			this.sapStatusCode = sapStatusCodes;
+		}
+	}
 
 	public String getPlanStatus() {
 		return planStatus;
 	}
 
-
 	public void setPlanStatus(String planStatus) {
 		this.planStatus = planStatus;
 	}
+	
+	
+	/*
+	//handle a list of comma separated values
+	public void setPlanStatus(String planStatus) {
+		if(planStatus != null) {
+			List<String> items = Arrays.asList(planStatus.split("\\s*,\\s*"));
+			ArrayList<String> planStatuses = new ArrayList<String>();
+			for(String item: items)
+			{
+				planStatuses.add(item);
+			}
+			this.planStatus = planStatuses;
+		}
+	}
+	*/
+
 
 
 	public String getPlanExists() {
@@ -260,6 +327,31 @@ public class PersonSearchRequest {
 	public void setPlanExists(String planExists) {
 		this.planExists = planExists;
 	}
+
+	
+	/*
+	public List<String> getPlanExists() {
+		return planExists;
+	}
+
+
+	public void setPlanExists(List<String> planExists) {
+		this.planExists = planExists;
+	}
+	
+	//handle a list of comma separated values
+	public void setPlanExists(String planExists) {
+		if(planExists != null) {
+			List<String> items = Arrays.asList(planExists.split("\\s*,\\s*"));
+			ArrayList<String> planExistses = new ArrayList<String>();
+			for(String item: items)
+			{
+				planExistses.add(item);
+			}
+			this.planExists = planExistses;
+		}
+	}
+	*/
 
 
 	public Boolean getMyCaseload() {
@@ -352,14 +444,31 @@ public class PersonSearchRequest {
 	}
 
 
-    public String getActualStartTerm () {
+    public List<String> getActualStartTerm () {
                 return actualStartTerm;
         }
 
 
-    public void setActualStartTerm (final String actualStartTerm) {
+    public void setActualStartTerm (final List<String> actualStartTerm) {
                 this.actualStartTerm = actualStartTerm;
         }
+    
+    public void setActualStartTerm (String actualStartTerm) {
+    	
+    	if(StringUtils.isNotEmpty(actualStartTerm)) {
+			List<String> items = Arrays.asList(actualStartTerm.split("\\s*,\\s*"));
+			ArrayList<String> actualStartTermList = new ArrayList<String>();
+			for(String item: items)
+			{
+				actualStartTermList.add(item);
+			}
+			this.actualStartTerm = actualStartTermList;
+		}
+    	
+    	//List<String> startTermList = new ArrayList<String>();
+    	//startTermList.add(actualStartTerm);
+        //this.actualStartTerm = startTermList;
+}
 
 
     public BigDecimal getLocalGpaMin () {

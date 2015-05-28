@@ -19,8 +19,10 @@
 package org.jasig.ssp.factory.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.reference.ProgramStatusDao;
 import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
@@ -70,8 +72,12 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		final PersonSearchRequest model = new PersonSearchRequest();
 
         if (to.getCoachId() != null) {
-			Person coach = getPersonDao().get(to.getCoachId());
-			model.setCoach(coach);
+        	//cycle through each of the coachids
+        	ArrayList<Person> coaches = new ArrayList<Person>();
+			for (UUID coachid : to.getCoachId()) { 
+				coaches.add(getPersonDao().get(coachid));				
+			}
+			model.setCoach(coaches);
 		}
 		model.setCurrentlyRegistered(to.getCurrentlyRegistered());
 		model.setDeclaredMajor(to.getDeclaredMajor());
@@ -84,14 +90,23 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
         model.setProgramGpaMax(to.getProgramGpaMax());
         model.setProgramGpaMin(to.getProgramGpaMin());
 		model.setPlanStatus(to.getPlanStatus());
-		if (to.getProgramStatus() != null) {
-			ProgramStatus programStatus = getProgramStatusDao().get(to.getProgramStatus());
+		
+		if (to.getProgramStatus() != null) {			
+			//cycle through each programstatus
+			ArrayList<ProgramStatus> programStatus = new ArrayList<ProgramStatus>();
+			for (UUID programstatusId : to.getProgramStatus()) { 
+				programStatus.add(getProgramStatusDao().get(programstatusId));				
+			}
 			model.setProgramStatus(programStatus);
 		}
 		
 		if (to.getSpecialServiceGroup() != null) {
-			SpecialServiceGroup specialServiceGroup = getSpecialServiceGroupDao().get(to.getSpecialServiceGroup());
-			model.setSpecialServiceGroup(specialServiceGroup);
+			
+			ArrayList<SpecialServiceGroup> specialServiceGroupList = new ArrayList<SpecialServiceGroup>();
+			for (UUID specialServiceGroupId : to.getSpecialServiceGroup()) { 
+				specialServiceGroupList.add(getSpecialServiceGroupDao().get(specialServiceGroupId));				
+			}
+			model.setSpecialServiceGroup(specialServiceGroupList);
 		}
 		model.setSapStatusCode(to.getSapStatusCode());
 		model.setSchoolId(to.getSchoolId());
@@ -144,9 +159,17 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);
 		to.setLastName(lastName);
-		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
-		to.setSpecialServiceGroup(specialServiceGroup == null ? null : UUID.fromString(specialServiceGroup));
-		to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
+		
+		//comma separated set of UUIDs as a String
+		to.setProgramStatus(programStatus);
+		
+		//comma separated set of UUIDs as a String
+		to.setSpecialServiceGroup(specialServiceGroup);
+		
+		//comma separated set of UUIDs as a String
+		//to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
+		to.setCoachId(coachId);
+		
 		to.setDeclaredMajor(declaredMajor);
 		to.setHoursEarnedMin(hoursEarnedMin);
 		to.setHoursEarnedMax(hoursEarnedMax);
@@ -181,14 +204,22 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,Boolean myWatchList,
 			Date birthDate, String actualStartTerm) throws ObjectNotFoundException {
 
-		PersonSearchRequestTO to = new PersonSearchRequestTO();
+		PersonSearchRequestTO to = new PersonSearchRequestTO(); 
 		to.setSchoolId(schoolId);
 		to.setFirstName(firstName);
 		to.setLastName(lastName);
-		to.setProgramStatus(programStatus == null ? null : UUID.fromString(programStatus));
-		to.setSpecialServiceGroup(specialServiceGroup == null ? null : UUID.fromString(specialServiceGroup));
-		to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
+		
+		//comma delineated set of UUIDs as Strings
+		to.setProgramStatus(programStatus);
+		
+		//comma delineated set of UUIDs as Strings
+		to.setSpecialServiceGroup(specialServiceGroup);
+		
+		to.setCoachId(coachId);
+		
+		//comma delineated set of Strings (there can be a single one)
 		to.setDeclaredMajor(declaredMajor);
+		
 		to.setHoursEarnedMin(hoursEarnedMin);
 		to.setHoursEarnedMax(hoursEarnedMax);
 		to.setGpaEarnedMin(gpaEarnedMin);
@@ -206,6 +237,8 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setMyPlans(myPlans);
 		to.setMyWatchList(myWatchList);
 		to.setBirthDate(birthDate);
+		
+		//comma delineated set of Strings (there can be a single one)
         to.setActualStartTerm(actualStartTerm);
 		return from(to);
 	}

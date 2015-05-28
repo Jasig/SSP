@@ -20,11 +20,14 @@ package org.jasig.ssp.dao;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
@@ -36,7 +39,7 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
-import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
+import org.jasig.ssp.model.ScheduledApplicationTaskStatus; 
 import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
@@ -174,7 +177,8 @@ public class DirectoryPersonSearchDao  {
 	 */
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
-		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);
+		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);	
+		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
 		return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
@@ -219,6 +223,10 @@ public class DirectoryPersonSearchDao  {
 		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
+		
+		
+		LOGGER.error("hqlSelect: " + hqlSelect + "     without select: " + hqlWithoutSelect);
+		
 		return querySet;
 	}
 
@@ -351,12 +359,14 @@ public class DirectoryPersonSearchDao  {
                                       StringBuilder stringBuilder) {
         if( hasActualStartTerm(personSearchRequest) ) {
             appendAndOrWhere(stringBuilder, filterTracker);
-            stringBuilder.append(" dp.actualStartTerm = :actualStartTerm ");
+            stringBuilder.append(" dp.actualStartTerm in (:actualStartTerm) ");
         }
     }
 
     private boolean hasActualStartTerm(PersonSearchRequest personSearchRequest) {
-        return (StringUtils.isNotBlank(personSearchRequest.getActualStartTerm()));
+    	List<String> startTermList = personSearchRequest.getActualStartTerm();
+    	return (startTermList != null) && (startTermList.size() > 0);
+        //return (StringUtils.isNotBlank(personSearchRequest.getActualStartTerm()));
     }
 	
 	private void buildEarlyAlertCriteria(PersonSearchRequest personSearchRequest,
@@ -415,7 +425,7 @@ public class DirectoryPersonSearchDao  {
 		if(hasFinancialAidStatus(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" dp.sapStatusCode = :sapStatusCode ");
+			stringBuilder.append(" dp.sapStatusCode in (:sapStatusCode)");
 		}
 		
 	}
@@ -423,7 +433,7 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasFinancialAidStatus(
 			PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSapStatusCode() != null;
+		return personSearchRequest.getSapStatusCode() != null && !personSearchRequest.getSapStatusCode().isEmpty();
 	}
 	
 	private void buildPersonTableType(PersonSearchRequest personSearchRequest,
@@ -445,7 +455,7 @@ public class DirectoryPersonSearchDao  {
 		if(hasProgramStatus(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" dp.programStatusName = :programStatusName ");
+			stringBuilder.append(" dp.programStatusName in (:programStatusName) ");
 		}
 		
 		
@@ -465,13 +475,13 @@ public class DirectoryPersonSearchDao  {
 		if(hasSpecialServiceGroup(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup = :specialServiceGroup and specialServiceGroup is not null ");
+			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null ");
 		}
 	}
 
 
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSpecialServiceGroup() != null;
+		return (personSearchRequest.getSpecialServiceGroup() != null && !(personSearchRequest.getSpecialServiceGroup().size() <= 0) );
 	}
 	
 	private void buildWatchList(PersonSearchRequest personSearchRequest,
@@ -561,29 +571,38 @@ public class DirectoryPersonSearchDao  {
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			Person me = null;
-			Person coach = null;
+			List<Person> coaches = null;
 			if ( hasMyCaseload(personSearchRequest) ) {
 				me = securityService.currentlyAuthenticatedUser().getPerson();
 			}
 			if ( hasCoach(personSearchRequest) ) {
-				coach = personSearchRequest.getCoach();
+				coaches = personSearchRequest.getCoach();
 			}
 
 			UUID queryPersonId = null;
-			Person compareTo = null;
+			List<Person> compareTo = null;
 			if ( me != null ) {
 				queryPersonId = me.getId();
-				compareTo = coach;
-			} else if ( coach != null ) {
-				queryPersonId = coach.getId();
-				compareTo = me;
+				compareTo = coaches;
+			} else if ( coaches != null ) {
+				//queryPersonId = coaches.getId();
+				//compareTo = me;
 			}
 			// If me and coach aren't the same, the query is non-sensical, so set the 'queryPersonId' to null which
 			// will effectively force the query to return no results.
-			if ( queryPersonId != null && compareTo != null ) {
-				queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
+			//if ( queryPersonId != null && compareTo != null ) {
+			//	for(Person p: compareTo) {
+					
+			//	}
+			//	queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
+			//	queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
+			//}
+			List<UUID> coachIds = new ArrayList<UUID>();
+			//List<Person> coaches = personSearchRequest.getCoach();
+			for(Person coach: coaches) {
+				coachIds.add(coach.getId());
 			}
-			params.put("coachId", queryPersonId);
+			params.put("coachId", coachIds);
 		}
 
 		if(hasAnyWatchCriteria(personSearchRequest))
@@ -631,9 +650,14 @@ public class DirectoryPersonSearchDao  {
 			}	
 		}
 		
+		
+		//String hql = "from A where name in (:names)";
+		//Query q = s.createQuery(hql);
+		//q.setParameterList("names", l);
+		
 		if(hasProgramStatus(personSearchRequest))
 		{
-			params.put("programStatusName", personSearchRequest.getProgramStatus().getName());
+			params.put("programStatusName", personSearchRequest.getProgramStatusNames());
 		}
 		
 		if(hasSpecialServiceGroup(personSearchRequest))
@@ -670,7 +694,7 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasCoach(PersonSearchRequest personSearchRequest) 
 	{
-		return personSearchRequest.getCoach() != null;
+		return personSearchRequest.getCoach() != null && personSearchRequest.getCoach().size()>0;
 	}
 
 
@@ -793,7 +817,7 @@ public class DirectoryPersonSearchDao  {
 		if(hasDeclaredMajor(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esap.programCode = :programCode ");
+			stringBuilder.append(" esap.programCode in (:programCode) ");
 			stringBuilder.append(" and esap.schoolId = dp.id ");
 		}
 	}
@@ -801,11 +825,14 @@ public class DirectoryPersonSearchDao  {
 
 	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
 	{
+		
+		LOGGER.debug("HAS COACH");
 		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" dp.coachId = :coachId ");
+			stringBuilder.append(" dp.coachId in (:coachId) ");
 		}
+		LOGGER.debug("END HAS COACH");
 	}
 
 
@@ -892,6 +919,7 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasPlanExists(PersonSearchRequest personSearchRequest)
 	{
+		//return personSearchRequest.getPlanExists() != null && !personSearchRequest.getPlanExists().isEmpty();
 		return !StringUtils.isEmpty(personSearchRequest.getPlanExists());
 	}
 
@@ -970,7 +998,9 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) 
 	{
-		return !StringUtils.isEmpty(personSearchRequest.getDeclaredMajor());
+		List<String> declaredMajors = personSearchRequest.getDeclaredMajor();
+		return (declaredMajors != null) && (declaredMajors.size() > 0);
+		//return !StringUtils.isEmpty(personSearchRequest.getDeclaredMajor());
 	}
 
 	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) 
