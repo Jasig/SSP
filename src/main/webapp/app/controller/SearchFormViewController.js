@@ -152,6 +152,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
             me.emailStudentPopup.destroy();
         }
 
+        if ( me.customizableExportPopup ) {
+            me.customizableExportPopup.destroy();
+        }
+
         me.clear();
         me.searchStore.removeAll();
 
@@ -493,10 +497,26 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 	// to caseload/watchlist involves completely different URL building
 	exportSearch: function(criteria) {
 		var me = this;
+
 		if ( criteria.limit === undefined || criteria.limit === null ) {
 			criteria.limit = -1;
 		}
 		window.open(me.exportService.buildExportSearchUrl(criteria),'_blank');
+	},
+
+	// Customizable Search Export
+	exportCustomizableSearch: function(criteria) {
+		var me = this;
+
+        if ( me.customizableExportPopup ) {
+            me.customizableExportPopup.destroy();
+        }
+
+        me.customizableExportPopup = Ext.create('Ssp.view.CustomizableExportView', {
+            bulkCriteria: criteria
+        });
+
+        me.customizableExportPopup.show();
 	},
 
 	// copy/paste from SearchViewController except for 'criteria'
@@ -504,6 +524,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var me=this;
 		if (btnId=="ok") {
 			me.exportSearch(criteria);
+		}
+	},
+
+	onCustomizableExportConfirm: function(btnId, criteria){
+		var me=this;
+		if (btnId=="ok") {
+			me.exportCustomizableSearch(criteria);
 		}
 	},
 
@@ -519,6 +546,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var me = this;
 		return function(btnId) {
 			me.onExportConfirm(btnId, criteria);
+		}
+	},
+
+	newOnCustomExportConfirm: function (criteria) {
+		var me = this;
+		return function(btnId) {
+			me.onCustomizableExportConfirm(btnId, criteria);
 		}
 	},
 
@@ -580,6 +614,25 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		});
 
 	},
+
+	promptWithCustomizableExportCount: function(count, criteria) {
+		var me = this;
+		var message;
+		count = parseInt(count);
+		// loadMaskOff() copy/pasted in both prompt*() functions to try to delay that dismissal as long
+		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
+		me.appEventsController.loadMaskOff();
+
+		Ext.Msg.confirm({
+			title:'Confirm',
+			msg: count + " student/s will be custom exported. Continue?",
+			buttons: Ext.Msg.OKCANCEL,
+			fn: me.newOnCustomExportConfirm(criteria),
+			scope: me
+		});
+
+	},
+
 	// copy/paste from SearchViewController except for 'criteria', which requires special currying into the
 	// ok/cancel dialog callback, and minor messaging differences
 	promptWithBulkEmailCount: function(count, criteria) {
@@ -690,6 +743,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			me.promptWithBulkProgramStatusChangeCount(cnt, action, criteria);
 		} else if ( action.indexOf('WATCH') !== -1 ) {
 			me.promptWithBulkWatchChangeCount(cnt, action, criteria);
+		} else if ( action === 'CUSTOM_EXPORT' ) {
+			me.promptWithCustomizableExportCount(cnt, criteria);
 		} else {
 			Ext.Msg.alert('SSP Error', 'Unrecognized bulk action request');
 		}

@@ -180,15 +180,6 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	private String primaryEmailAddress;
 
 	/**
-	 * Secondary e-mail address.
-	 * 
-	 * Optional. Maximum length of 100 characters.
-	 */
-	@Column(length = 100)
-	@Size(max = 100)
-	private String secondaryEmailAddress;
-
-	/**
 	 * User name. Used to identify the user in secondary systems like LDAP.
 	 * 
 	 * Maximum length of 50.
@@ -393,7 +384,7 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@Nullable
 	@Type(type = "uuid-custom")
 	private UUID coachId;
-	
+
 	@Nullable
 	private String coachFirstName;
 	
@@ -445,7 +436,20 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
     @Nullable
     private BigDecimal programGpa;
-	
+
+    /**
+     * Secondary e-mail address.
+     *
+     * Optional. Maximum length of 100 characters.
+     */
+    @Column(length = 100)
+    @Size(max = 100)
+    private String secondaryEmailAddress;
+
+    @Nullable
+    private String coachSchoolId;
+
+
 
 	/**
 	 * Initialize a Person.
@@ -714,6 +718,16 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	public void setCoachId(final UUID coachId) {
 		this.coachId = coachId;
+	}
+
+
+	@Nullable
+	public String getCoachSchoolId () {
+		return coachSchoolId;
+	}
+
+	public void setCoachSchoolId (@Nullable String coachSchoolId) {
+		this.coachSchoolId = coachSchoolId;
 	}
 
 	public String getCoachFirstName() {

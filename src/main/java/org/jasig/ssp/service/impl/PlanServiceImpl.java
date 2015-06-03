@@ -20,7 +20,6 @@ package org.jasig.ssp.service.impl;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
@@ -103,6 +102,11 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	public Plan getCurrentForStudent(UUID personId) {
 		return dao.getActivePlanForStudent(personId);
 	}
+
+	@Override
+	public List<Plan> getCurrentPlansForStudents(List<UUID> personIds) {
+		return getDao().getActivePlanForStudents(personIds);
+	}
 	
 	@Override
 	public Person getOwnerForPlan(UUID id) {
@@ -153,7 +157,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 			SortingAndPaging sAndP,UUID personId) {
 		return getDao().getAllForStudent(sAndP, personId);
 	}
-	
+
 	@Override
 	public Plan copyAndSave(Plan obj) throws CloneNotSupportedException {
 		//If plan has been marked as active, we must mark all other plans as inactive

@@ -20,7 +20,6 @@ package org.jasig.ssp.service;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -44,9 +43,9 @@ PlanOutputTO, MessageTemplatePlanPrintParams> {
 
 	Plan getCurrentForStudent(UUID personId);
 
-	PagingWrapper<Plan> getAllForStudent(
-			SortingAndPaging createForSingleSortWithPaging,UUID personId);
-	
+	List<Plan> getCurrentPlansForStudents(List<UUID> personIds);
+
+	PagingWrapper<Plan> getAllForStudent(SortingAndPaging createForSingleSortWithPaging,UUID personId);
 
 	List<PlanAdvisorCountTO> getPlanCountByOwner(SearchPlanTO form);
 	

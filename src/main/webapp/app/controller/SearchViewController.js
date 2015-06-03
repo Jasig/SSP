@@ -367,7 +367,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     initSearchGrid: function(forceSearchFormDisplay) {
 	   	var me=this;
 
-	   	if(me.getIsSearch()) {
+       	if(me.getIsSearch()) {
 			me.displaySearch(forceSearchFormDisplay);
 		} else {
             if (me.getIsWatchList()) {
@@ -487,6 +487,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 	displaySearch: function(forceSearchFormDisplay) {
 		var me = this;
+
 		if ( forceSearchFormDisplay === undefined || forceSearchFormDisplay === null || forceSearchFormDisplay ) {
 			me.getSearchBar().show();
 			me.getSearchStudentButton().show();
@@ -505,6 +506,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.getUpTool().hide();
 		me.setGridView();
 	},
+
 	displayWatchList: function(){
 		var me=this;
 		me.getSearchBar().hide();
@@ -514,6 +516,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.setGridView();
 
 	},
+
 	applyColumns: function() {
 		var me=this;
 		var grid = me.getView();
@@ -1249,6 +1252,13 @@ Ext.define('Ssp.controller.SearchViewController', {
 			scope: me
 		});
 	},
+
+	promptWithCustomizableNotice: function() {
+	    var me = this;
+	    me.appEventsController.loadMaskOff();
+        Ext.Msg.alert('Only Available in Search Tab','The Customizable Export is only Available in the Search Tab.');
+	},
+
 	onBulkActionCountFailure: function(cnt, action) {
 		var me = this;
 		me.appEventsController.loadMaskOff();
@@ -1264,7 +1274,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 		} else if ( action.indexOf('PROGRAM_STATUS_') === 0 ) {
 			me.promptWithBulkProgramStatusChangeCount(cnt, action);
 		} else if ( action.indexOf('WATCH') !== -1 ) {
-			me.promptWithBulkWatchChangeCount(cnt, action);
+            me.promptWithBulkWatchChangeCount(cnt, action);
+        } else if ( action === 'CUSTOM_EXPORT' ) {
+            me.promptWithCustomizableNotice();
 		} else {
 			Ext.Msg.alert('SSP Error', 'Unrecognized bulk action request');
 		}

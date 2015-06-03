@@ -57,6 +57,9 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
             if(me.authenticatedPerson.hasAccess('BULK_WATCH_ACTION')) {
                 me.add({id: "UNWATCH", name: "Unwatch"});
             }
+            if (me.authenticatedPerson.hasAccess('EXPORT_CUSTOMIZABLE_SEARCH_TO_CSV_ACTION')) {
+                me.add({id: "CUSTOM_EXPORT", name: "Custom Export to CSV"});
+            }
         }
         return me;
     }

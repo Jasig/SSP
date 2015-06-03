@@ -20,11 +20,10 @@ package org.jasig.ssp.web.api;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
@@ -49,6 +48,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,6 +62,11 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExportableCaseloadController.class);
 	private static final String DEFAULT_APP_TITLE = "export"; //SSP is branding, so go very generic
+
+	private static final String[] CUSTOM_OPTIONS_MASTER_LIST = {"address", "alternatecontact", "sspstatus",
+			"demographics", "academicprogram", "academicgpa", "academicstanding", "department", "servicereasons",
+			"referralsources", "specialservicegroups", "sapstatus", "starttermyear", "facompletionrate", "mapinfo",
+			"extra"};
 
 	@Override
 	protected Logger getLogger() {
@@ -91,7 +96,6 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	private transient PersonSearchRequestTOFactory personSearchRequestFactory;
 	
 	@Autowired
-	
 	private transient SecurityService securityService;
 	
 	@PreAuthorize("hasRole('ROLE_PERSON_CASELOAD_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
@@ -227,6 +231,130 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		service.exportDirectoryPersonSearch(response.getWriter(), form);
 		
 	}
+
+	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
+	@RequestMapping(value="/customizableSearch", method = RequestMethod.GET)
+	public @ResponseBody void  customizableSearch(
+			HttpServletResponse response,
+			final @RequestParam(required = false) String schoolId,
+			final @RequestParam(required = false) String firstName,
+			final @RequestParam(required = false) String lastName,
+			final @RequestParam(required = false) String programStatus,
+			final @RequestParam(required = false) String coachId,
+			final @RequestParam(required = false) String declaredMajor,
+			final @RequestParam(required = false) BigDecimal hoursEarnedMin,
+			final @RequestParam(required = false) BigDecimal hoursEarnedMax,
+			final @RequestParam(required = false) BigDecimal gpaEarnedMin,
+			final @RequestParam(required = false) BigDecimal gpaEarnedMax,
+			final @RequestParam(required = false) BigDecimal localGpaMin,
+			final @RequestParam(required = false) BigDecimal localGpaMax,
+			final @RequestParam(required = false) BigDecimal programGpaMin,
+			final @RequestParam(required = false) BigDecimal programGpaMax,
+			final @RequestParam(required = false) Boolean currentlyRegistered,
+			final @RequestParam(required = false) String earlyAlertResponseLate,
+			final @RequestParam(required = false) String sapStatusCode,
+			final @RequestParam(required = false) String specialServiceGroup,
+			final @RequestParam(required = false) String planStatus,
+			final @RequestParam(required = false) String planExists,
+			final @RequestParam(required = false) Boolean myCaseload,
+			final @RequestParam(required = false) Boolean myPlans,
+			final @RequestParam(required = false) Boolean myWatchList,
+			final @RequestParam(required = false) @DateTimeFormat(pattern=DateOnlyFormatting.DEFAULT_DATE_PATTERN) Date birthDate,
+			final @RequestParam(required = false) String actualStartTerm,
+			final @RequestParam(required = false) String personTableType,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection,
+			final @RequestParam(required = false) List customOptions,
+			final HttpServletRequest request) throws ObjectNotFoundException, IOException
+	{
+
+		response.setHeader("Content-Disposition", "attachment; filename="+buildFileName("customsearch_"));
+		response.setContentType("text/csv");
+
+		SortingAndPaging sortAndPage = buildSortAndPage(limit,  start,  sort,  sortDirection);
+		PersonSearchRequest form = personSearchRequestFactory.from(schoolId,
+				firstName, lastName,
+				programStatus,specialServiceGroup,
+				coachId,declaredMajor,
+				hoursEarnedMin,hoursEarnedMax,
+				gpaEarnedMin,gpaEarnedMax,
+				localGpaMin, localGpaMax,
+				programGpaMin, programGpaMax,
+				currentlyRegistered,earlyAlertResponseLate,
+				sapStatusCode,
+				planStatus,planExists,
+				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, sortAndPage);
+
+		service.exportDirectoryPersonSearchCustomizable(response.getWriter(), form, cleanCustomOptionsAndMapToMaster(customOptions));
+	}
+
+	private Map<Integer, Boolean> cleanCustomOptionsAndMapToMaster (List<String> customOptions) {
+		final Map<Integer, Boolean> customOptionsCleaned = Maps.newHashMap();
+
+		for (int index=0; index < CUSTOM_OPTIONS_MASTER_LIST.length; index++) {
+			customOptionsCleaned.put(index, false); //load default of false for all options
+		}
+
+		if ( !CollectionUtils.isEmpty(customOptions)) {
+			for (String option : customOptions) {
+				                                                               //if option exists set true
+				if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[0])) {
+					customOptionsCleaned.put(0, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[1])) {
+					customOptionsCleaned.put(1, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[2])) {
+					customOptionsCleaned.put(2, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[3])) {
+					customOptionsCleaned.put(3, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[4])) {
+					customOptionsCleaned.put(4, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[5])) {
+					customOptionsCleaned.put(5, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[6])) {
+					customOptionsCleaned.put(6, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[7])) {
+					customOptionsCleaned.put(7, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[8])) {
+					customOptionsCleaned.put(8, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[9])) {
+					customOptionsCleaned.put(9, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[10])) {
+					customOptionsCleaned.put(10, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[11])) {
+					customOptionsCleaned.put(11, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[12])) {
+					customOptionsCleaned.put(12, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[13])) {
+					customOptionsCleaned.put(13, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[14])) {
+					customOptionsCleaned.put(14, true);
+
+				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[15])) {
+					customOptionsCleaned.put(15, true);
+
+				} else {
+					//Do nothing reserved if default needed
+				}
+			}
+		}
+		return customOptionsCleaned;
+	}
 		
 	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
 		String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
@@ -255,6 +383,4 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
-
-
-	}
+}

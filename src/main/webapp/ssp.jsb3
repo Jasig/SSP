@@ -954,6 +954,10 @@
                     "path": "/app/controller/"
                 },
                 {
+                    "clsName": "Ssp.controller.CustomizableExportController",
+                    "name": "CustomizableExportController.js",
+                    "path": "/app/controller/"                },
+                {
                     "clsName": "Ssp.controller.StudentRecordViewController",
                     "name": "StudentRecordViewController.js",
                     "path": "/app/controller/"
@@ -1654,7 +1658,12 @@
                     "clsName": "Ssp.view.EmailStudentForm",
                     "name": "EmailStudentForm.js",
                     "path": "/app/view/"
-                },  
+                },
+                {
+                    "clsName": "Ssp.view.CustomizableExportView",
+                    "name": "CustomizableExportView.js",
+                    "path": "/app/view/"
+                },
                 {
                     "clsName": "Ssp.view.EmailStudentView",
                     "name": "EmailStudentView.js",

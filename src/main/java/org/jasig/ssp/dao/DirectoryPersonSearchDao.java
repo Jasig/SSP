@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
@@ -35,12 +34,7 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.model.PersonSearchResult2;
-import org.jasig.ssp.model.ScheduledApplicationTaskStatus; 
-import org.jasig.ssp.model.ScheduledTaskStatus;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -157,35 +151,18 @@ public class DirectoryPersonSearchDao  {
 	/**
 	 * Search people by the specified terms.
 	 * 
-	 * @param programStatus
-	 *            program status filter
-	 * @param requireProgramStatus
-	 *            implicitly <code>true</code> if <code>programStatus</code> is
-	 *            non-null. Else <code>false</code> allows searching without
-	 *            requiring a program status; defaults to <code>true</code>
-	 * @param outsideCaseload
-	 *            false allows searches without checking the Coach (advisor)
-	 *            property; defaults to true
-	 * @param searchTerm
-	 *            Search term that search first and last name and school ID;
-	 *            required
-	 * @param advisor
-	 *            required if outsideCaseload is not {@link Boolean#FALSE}.
-	 * @param sAndP
-	 *            Sorting and paging parameters
 	 * @return List of people that match the specified filters
 	 */
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
-		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);	
-		
+		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(), personSearchRequest, false);
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
 		return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
 	}
 
 	private Pair<Long, Query> prepSearchQuery(Object session,
-			PersonSearchRequest personSearchRequest) {
+			PersonSearchRequest personSearchRequest, boolean fullResultSearch) {
 		Term currentTerm;
 		Map<String,Object> params = null;
 		FilterTracker filterTracker = new FilterTracker();
@@ -203,7 +180,14 @@ public class DirectoryPersonSearchDao  {
 			currentTerm.setEndDate(Calendar.getInstance().getTime());
 			
 		}
-		final String hqlSelect = buildSelect().toString();
+
+		final String hqlSelect;
+
+		if (fullResultSearch) {
+			hqlSelect = buildFullSelect().toString();
+		} else {
+			hqlSelect = buildSelect().toString();
+		}
 
 		final StringBuilder hqlWithoutSelect = new StringBuilder();
 		
@@ -223,10 +207,7 @@ public class DirectoryPersonSearchDao  {
 		
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
-		
-		
-		LOGGER.error("hqlSelect: " + hqlSelect + "     without select: " + hqlWithoutSelect);
-		
+
 		return querySet;
 	}
 
@@ -239,26 +220,73 @@ public class DirectoryPersonSearchDao  {
 				
 			;*/
 		stringBuilder.append(" select distinct " +
-				 "dp.schoolId as person_schoolId," +
-				 "dp.firstName as person_firstName, " +
-				 "dp.middleName as person_middleName, " +
-				 "dp.lastName as person_lastName, " +
-				 "dp.primaryEmailAddress as person_primaryEmailAddress, " +
-				 "dp.personId as person_id, " +
-				 "dp.studentIntakeCompleteDate as person_studentIntakeCompleteDate, " +
-				 "dp.birthDate as person_birthDate, " +
-                 "dp.actualStartTerm as person_actualStartTerm, " +
-				 "dp.studentTypeName as person_studentTypeName, " +
-				 "dp.programStatusName as person_currentProgramStatusName, " +
-				 "dp.activeAlertsCount as person_activeAlerts, " +
-				 "dp.closedAlertsCount as person_closedAlerts, " +
-				 "dp.earlyAlertResponseDueCount as person_numberEarlyAlertResponsesRequired, " +
-				 "dp.coachFirstName as person_coachFirstName, " +
-				 "dp.coachLastName as person_coachLastName, " +
-				 "dp.coachId as person_coachId, " +
-				 "dp.photoUrl as person_photoUrl ");
+				"dp.schoolId as person_schoolId," +
+				"dp.firstName as person_firstName, " +
+				"dp.middleName as person_middleName, " +
+				"dp.lastName as person_lastName, " +
+				"dp.primaryEmailAddress as person_primaryEmailAddress, " +
+				"dp.personId as person_id, " +
+				"dp.studentIntakeCompleteDate as person_studentIntakeCompleteDate, " +
+				"dp.birthDate as person_birthDate, " +
+				"dp.actualStartTerm as person_actualStartTerm, " +
+				"dp.studentTypeName as person_studentTypeName, " +
+				"dp.programStatusName as person_currentProgramStatusName, " +
+				"dp.activeAlertsCount as person_activeAlerts, " +
+				"dp.closedAlertsCount as person_closedAlerts, " +
+				"dp.earlyAlertResponseDueCount as person_numberEarlyAlertResponsesRequired, " +
+				"dp.coachFirstName as person_coachFirstName, " +
+				"dp.coachLastName as person_coachLastName, " +
+				"dp.coachId as person_coachId, " +
+				"dp.photoUrl as person_photoUrl ");
 		return stringBuilder;
 	}
+
+	private StringBuilder buildFullSelect(){
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append(" select distinct " +
+				"dp.schoolId as person_schoolId," +
+				"dp.username as person_username, " +
+				"dp.firstName as person_firstName, " +
+				"dp.middleName as person_middleName, " +
+				"dp.lastName as person_lastName, " +
+				"dp.primaryEmailAddress as person_primaryEmailAddress, " +
+				"dp.secondaryEmailAddress as person_secondaryEmailAddress, " +
+				"dp.personId as person_id, " +
+				"dp.addressLine1 as person_addressLine1, " +
+				"dp.addressLine2 as person_addressLine2, " +
+				"dp.city as person_city, " +
+				"dp.state as person_state, " +
+				"dp.zipCode as person_zipCode, " +
+				"dp.residencyCounty as person_residencyCounty, " +
+				"dp.homePhone as person_homePhone, " +
+				"dp.workPhone as person_workPhone, " +
+				"dp.cellPhone as person_cellPhone, " +
+				"dp.actualStartTerm as person_actualStartTerm, " +
+				"dp.actualStartYear as person_actualStartYear, " +
+				"dp.f1Status as person_f1Status, " +
+				"dp.gradePointAverage as person_gradePointAverage, " +
+				"dp.localGpa as person_localGpa, " +
+				"dp.programGpa as person_programGpa, " +
+				"dp.currentRegistrationStatus as person_currentRegistrationStatus, " +
+				"dp.creditHoursEarned as person_creditHoursEarned, " +
+				"dp.studentIntakeCompleteDate as person_studentIntakeCompleteDate, " +
+				"dp.birthDate as person_birthDate, " +
+				"dp.actualStartTerm as person_actualStartTerm, " +
+				"dp.studentTypeName as person_studentTypeName, " +
+				"dp.programStatusName as person_currentProgramStatusName, " +
+				"dp.activeAlertsCount as person_activeAlerts, " +
+				"dp.closedAlertsCount as person_closedAlerts, " +
+				"dp.earlyAlertResponseDueCount as person_numberEarlyAlertResponsesRequired, " +
+				"dp.coachFirstName as person_coachFirstName, " +
+				"dp.coachLastName as person_coachLastName, " +
+				"dp.coachId as person_coachId, " +
+				"dp.coachSchoolId as person_coachSchoolId, " +
+				"dp.photoUrl as person_photoUrl ");
+
+		return stringBuilder;
+	}
+
 	private void buildWhere(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
 		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
@@ -516,7 +544,7 @@ public class DirectoryPersonSearchDao  {
 			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
 				params.put("planObjectStatus",ObjectStatus.ACTIVE);
 			} else if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
-				params.put("planObjectStatus",ObjectStatus.INACTIVE);
+				params.put("planObjectStatus", ObjectStatus.INACTIVE);
 			} else if (PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists())) {
 				// this is handled structurally (exists test)
 			} else {
@@ -845,7 +873,7 @@ public class DirectoryPersonSearchDao  {
 	{
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
-			appendAndOrWhere(stringBuilder,filterTracker);
+			appendAndOrWhere(stringBuilder, filterTracker);
 			if(personSearchRequest.getCurrentlyRegistered())
 			{
 				stringBuilder.append("dp.currentRegistrationStatus > 0");
@@ -1035,6 +1063,42 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
+	public List<PersonSearchResultFull> exportableCustomizableSearch(PersonSearchRequest personSearchRequest) throws IOException {
+
+		StatelessSession openStatelessSession = null;
+
+		try {
+			openStatelessSession = sessionFactory.openStatelessSession();
+			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, true);
+
+			querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+					PersonSearchResultFull.class, "person_"));
+
+			querySet.getSecond().getQueryString();
+
+			Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+
+			return query.list();
+
+		} finally {
+			if ( openStatelessSession != null ) {
+				try {
+					openStatelessSession.close();
+				} catch (Exception e) {
+					// nothing to do and likely harmless
+					LOGGER.info("Failed to close Hibernate StatelessSession, Customizable Exporter", e);
+				}
+			}
+		}
+	 }
+
+	public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
+		
+		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest, false);
+
+		return querySet.getFirst();
+	}
+
 	public void exportableSearch(
 			CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest) throws IOException {
 
@@ -1042,14 +1106,18 @@ public class DirectoryPersonSearchDao  {
 
 		try {
 			openStatelessSession = sessionFactory.openStatelessSession();
-			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession,personSearchRequest);
+			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, false);
 
 			querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 					PersonSearchResult2.class, "person_"));
+
+			querySet.getSecond().getQueryString();
+
 			Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+
 			ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
 
-			csvWriterHelper.write(results,-1L);
+			csvWriterHelper.write(results, -1L);
 		} finally {
 			if ( openStatelessSession != null ) {
 				try {
@@ -1060,14 +1128,5 @@ public class DirectoryPersonSearchDao  {
 				}
 			}
 		}
-		
-	 }
-
-	public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
-		
-		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest);
-
-		return querySet.getFirst();
 	}
-
 }

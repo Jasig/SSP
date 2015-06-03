@@ -35,6 +35,7 @@ Ext.define('Ssp.service.ExportService', {
 		baseUrl = baseUrl + '/' + searchType;
     	return baseUrl;
     },
+
     buildExportSearchUrl: function(params) {
         var me=this;
 
@@ -67,6 +68,25 @@ Ext.define('Ssp.service.ExportService', {
             }
         }
 
+        var encodedUrl = Ext.urlEncode(activeParams);
+        return url+'?'+encodedUrl;
+    },
+
+    buildExportCustomizableSearchUrl: function(params, selectedOptions) {
+        var me=this;
+        var activeParams = {};
+
+        for (key in params) {
+            if(params[key] && params[key] != null) {
+                activeParams[key] = params[key];
+            }
+        }
+
+        if (selectedOptions) {
+            activeParams["customOptions"] = selectedOptions;
+        }
+
+        var url = me.getBaseUrl('customizableSearch');
         var encodedUrl = Ext.urlEncode(activeParams);
         return url+'?'+encodedUrl;
     }

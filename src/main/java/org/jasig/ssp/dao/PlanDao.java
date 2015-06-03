@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -45,7 +44,6 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.google.common.collect.Lists;
 
 @Repository
@@ -76,6 +74,14 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		return activePlan;
 	}
 
+	public List<Plan> getActivePlanForStudents(List<UUID> ids)
+	{
+		List<Plan> activePlansForStudents = (List<Plan>) createCriteria()
+				.add(Restrictions.in("person.id", ids))
+				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE))
+				.list();
+		return activePlansForStudents;
+	}
 	
 	public PagingWrapper<Plan> getAllForStudent(final SortingAndPaging sAndP,UUID personId) {
 		Criteria criteria = createCriteria();

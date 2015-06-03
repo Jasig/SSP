@@ -24,6 +24,8 @@ import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -49,6 +51,10 @@ public class ExternalStudentFinancialAidServiceImpl extends AbstractExternalData
 		
 		return getDao().getStudentFinancialAidBySchoolId(schoolId);
 	}
-	
 
+	@Override
+	public List<ExternalStudentFinancialAid> getStudentFinancialAidBySchoolIds(List<String> schoolIds) {
+
+		return getDao().getStudentFinancialAidBySchoolIds(schoolIds);
+	}
 }

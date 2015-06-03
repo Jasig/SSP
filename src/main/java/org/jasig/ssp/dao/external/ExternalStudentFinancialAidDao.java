@@ -22,6 +22,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class ExternalStudentFinancialAidDao extends AbstractExternalDataDao<ExternalStudentFinancialAid> {
@@ -34,5 +35,11 @@ public class ExternalStudentFinancialAidDao extends AbstractExternalDataDao<Exte
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("schoolId", schoolId));		
 		return (ExternalStudentFinancialAid)criteria.uniqueResult();
+	}
+
+	public List<ExternalStudentFinancialAid> getStudentFinancialAidBySchoolIds(List<String> schoolIds){
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.in("schoolId", schoolIds));
+		return (List<ExternalStudentFinancialAid>) criteria.list();
 	}
 }

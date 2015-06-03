@@ -20,13 +20,7 @@ package org.jasig.ssp.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
+import java.util.*;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
@@ -192,6 +186,9 @@ public interface PersonSearchService {
 			SortingAndPaging buildSortAndPage) throws IOException;
 
 	void exportDirectoryPersonSearch(PrintWriter writer, PersonSearchRequest form) throws IOException;
+
+	void exportDirectoryPersonSearchCustomizable(PrintWriter writer, PersonSearchRequest form,
+												 Map<Integer, Boolean> optionsMap) throws IOException;
 
 	Long caseLoadCountFor(ProgramStatus programStatus, Person person,
 			SortingAndPaging buildSortAndPage);

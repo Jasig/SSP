@@ -18,10 +18,15 @@
  */
 package org.jasig.ssp.service.external;
 
+
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import java.util.List;
+
 
 public interface ExternalStudentFinancialAidService extends
 		ExternalDataService<ExternalStudentFinancialAid> {
 
 	ExternalStudentFinancialAid getStudentFinancialAidBySchoolId(String schoolId);
+
+	List<ExternalStudentFinancialAid> getStudentFinancialAidBySchoolIds(List<String> schoolIds);
 }

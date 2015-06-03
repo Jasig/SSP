@@ -19,27 +19,26 @@
 package org.jasig.ssp.service.impl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.jasig.ssp.dao.CaseloadDao;
 import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.PersonSearchDao;
-import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.model.PersonSearchResult;
-import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.service.AppointmentService;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonProgramStatusService;
-import org.jasig.ssp.service.PersonSearchService;
-import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.*;
+import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
+import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
 import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
+import org.jasig.ssp.util.csvwriter.CustomizableCaseloadCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -48,7 +47,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.util.CollectionUtils;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,6 +60,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
+
 
 /**
  * PersonSearch service implementation
@@ -94,6 +94,19 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient PlanService planService;
+
+    @Autowired
+    private transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
+
+	@Autowired
+	private transient ExternalStudentAcademicProgramService externalStudentAcademicProgramService;
+
+	@Autowired
+	private transient ExternalStudentTranscriptService externalStudentTranscriptService;
+
 
 	@Override
 	@Transactional
@@ -342,13 +355,15 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			PersonSearchRequest form) {
 		return directoryPersonDao.search(form);
 	}
+
 	
 	@Override
 	@Transactional
 	public void refreshDirectoryPerson(){
 		directoryPersonDao.refreshDirectoryPerson();
 	}
-	
+
+
 	@Override
 	@Transactional
 	public void refreshDirectoryPersonBlue(){
@@ -363,8 +378,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	// we really don't want to be holding open a transaction if we can help it.
 	public void exportableCaseLoadFor(CaseloadCsvWriterHelper csvWriterHelper,
 			ProgramStatus programStatus, Person coach,
-			SortingAndPaging buildSortAndPage) throws IOException 
-		{
+			SortingAndPaging buildSortAndPage) throws IOException {
 			PersonSearchRequest form = new PersonSearchRequest();
 			
 			ArrayList<Person> coachList = new ArrayList<Person>();	
@@ -377,7 +391,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			
 			form.setSortAndPage(buildSortAndPage);
 			directoryPersonDao.exportableSearch(csvWriterHelper,form);
-		}
+    }
 
 
 	@Override
@@ -392,14 +406,13 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	}
 
-
 	@Override
 	@Transactional
 	public Long caseLoadCountFor(ProgramStatus programStatus, Person coach,
 			SortingAndPaging buildSortAndPage) {
 		PersonSearchRequest form = new PersonSearchRequest();
-		
-		ArrayList<Person> coachList = new ArrayList<Person>();	
+
+		ArrayList<Person> coachList = new ArrayList<Person>();
 		coachList.add(coach);
 		form.setCoach(coachList);
 		
@@ -421,4 +434,100 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	}
 
 
+    @Override
+    // explicitly leaving out @Transactional. See comment on exportDirectoryPersonSearch
+    public void exportDirectoryPersonSearchCustomizable(
+            PrintWriter writer, PersonSearchRequest form, Map<Integer, Boolean> customOptions) throws IOException {
+
+        final CustomizableCaseloadCsvWriterHelper csvWriterHelper =
+                new CustomizableCaseloadCsvWriterHelper(writer, customOptions);
+
+        if (csvWriterHelper != null) {
+			final Map<String, PersonSearchResultFull> resultsBySchoolIdMap = Maps.newHashMap();
+			final List<PersonSearchResultFull> personDirectoryResults = directoryPersonDao.exportableCustomizableSearch(form);
+
+            if (!CollectionUtils.isEmpty(personDirectoryResults)) {
+                final List<UUID> personUUIDs = Lists.newArrayList();
+				final List<String> personSchoolIds = Lists.newArrayList();
+
+				loadIdListsAndResultMap(personUUIDs, personSchoolIds, resultsBySchoolIdMap, personDirectoryResults);
+
+                loadCustomizableDataForOptions(customOptions, personUUIDs, personSchoolIds, resultsBySchoolIdMap);
+            }
+            csvWriterHelper.write(resultsBySchoolIdMap.values(), -1L);
+        }
+    }
+
+    private void loadIdListsAndResultMap(List<UUID> resultUUIDs, List<String> resultSchoolIds,
+										 Map<String, PersonSearchResultFull> resultMap,
+										 		List<PersonSearchResultFull> results) {
+        for (PersonSearchResultFull person : results) {
+			resultUUIDs.add(person.getId());
+			resultSchoolIds.add(person.getSchoolId());
+            resultMap.put(person.getSchoolId(), person);
+        }
+    }
+
+    private void loadCustomizableDataForOptions (Map<Integer, Boolean> customOptions, List<UUID> personUUIDs,
+										 List<String> personSchoolIds, Map<String,PersonSearchResultFull> resultMap) {
+
+		if (customOptions.get(11) || customOptions.get(5)) {
+			//sapStatus and financialAidGpa
+			final List<ExternalStudentFinancialAid> sapAndFinancialAidGpas = externalStudentFinancialAidService.
+					getStudentFinancialAidBySchoolIds(personSchoolIds);
+
+			for (ExternalStudentFinancialAid sapFinancialIterator : sapAndFinancialAidGpas) {
+				resultMap.get(sapFinancialIterator.getSchoolId()).setFinancialAidGpaAndSapStatus(
+						sapFinancialIterator.getFinancialAidGpa(), sapFinancialIterator.getSapStatus());
+			}
+		}
+		if (customOptions.get(3)) {
+			//demographics
+		}
+		if (customOptions.get(13)) {
+			//financialAidCompletionRate
+		}
+		if (customOptions.get(4)) {
+			//academicProgram (code/name/intended program at admit)
+			final List<ExternalStudentAcademicProgram> programs = externalStudentAcademicProgramService.
+					getBatchedAcademicProgramsBySchoolIds(personSchoolIds);
+
+			for (ExternalStudentAcademicProgram programIterator : programs) {
+				resultMap.get(programIterator.getSchoolId()).setAcademicProgramAndIntended(
+						programIterator.getProgramCode(), programIterator.getProgramName(), programIterator.getIntendedProgramAtAdmit());
+			}
+		}
+		if (customOptions.get(6)) {
+			//academicStanding
+			final List<ExternalStudentTranscript> transcripts = externalStudentTranscriptService.
+					getBatchedRecordsBySchoolIds(personSchoolIds);
+
+			for (ExternalStudentTranscript transcriptIterator : transcripts) {
+				resultMap.get(transcriptIterator.getSchoolId()).setAcademicStanding(transcriptIterator.getAcademicStanding());
+			}
+		}
+		if (customOptions.get(8) || customOptions.get(9) || customOptions.get(10) || customOptions.get(7)) {
+			//serviceReasons, referralSources, specialServiceGroups, department
+			List<Person> persons = personService.peopleFromListOfIds(personUUIDs, null);
+
+			for (Person personIterator : persons) {
+				resultMap.get(personIterator.getSchoolId()).setDepartmentServiceReasonsReferralSourcesAndSpecialServiceGroups(
+						personIterator.getNullSafeDepartmentName(), personIterator.getServiceReasons(),
+						personIterator.getReferralSources(), personIterator.getSpecialServiceGroups());
+			}
+		}
+		if (customOptions.get(14)) {
+			//map data
+			final List<Plan> plans = planService.getCurrentPlansForStudents(personUUIDs);
+
+			for (Plan planIterator : plans ) {
+				final AuditPerson modifiedBy = planIterator.getModifiedBy();
+				resultMap.get(planIterator.getPerson().getSchoolId()).setMapData(planIterator.getName(),
+						planIterator.getProgramCode(), planIterator.getCatalogYearCode(),
+							planIterator.getOwner().getFullName(), planIterator.getIsFinancialAid(),
+								planIterator.getIsF1Visa(), (modifiedBy.getFirstName() + " " + modifiedBy.getLastName()),
+									planIterator.getModifiedDate());
+			}
+		}
+	}
 }
