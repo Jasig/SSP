@@ -66,12 +66,12 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	@Size(max = 200)
 	private String contactEmail;
 	
-	@Column(length = 2000)
-	@Size(max = 2000)
+	@Column(length = 4000)
+	@Size(max = 4000)
 	private String contactNotes;
 	
-	@Column(length = 2000)
-	@Size(max = 2000)
+	@Column(length = 4000)
+	@Size(max = 4000)
 	private String studentNotes;
 	
 	@Column(nullable = false)

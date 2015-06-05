@@ -68,7 +68,9 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        itemId: 'contactNotes',
 				        autoscroll: true,
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
-				        flex:1
+				        flex:1,
+				        maxLength: 4000,
+				        enforceMaxLength: true
 				    },{
 				        fieldLabel: 'Student Notes',
 				        name: 'studentNotes',
@@ -77,7 +79,9 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        xtype: 'textareafield',
 				        flex:1,
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
-				        autoscroll: true
+				        autoscroll: true,
+				        maxLength: 4000,
+				        enforceMaxLength: true
 				    },
 				    {
 				    	xtype: 'numberfield',

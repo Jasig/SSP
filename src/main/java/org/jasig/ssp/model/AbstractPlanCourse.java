@@ -63,12 +63,12 @@ public abstract class AbstractPlanCourse<T extends AbstractPlan> extends Abstrac
 	@Column(nullable = false)
 	private Integer orderInTerm;
 	
-	@Column(length = 2000)
-	@Size(max = 2000)
+	@Column(length = 4000)
+	@Size(max = 4000)
 	private String studentNotes;
 	
-	@Column(length = 2000)
-	@Size(max = 2000)
+	@Column(length = 4000)
+	@Size(max = 4000)
 	private String contactNotes;
 	
 	

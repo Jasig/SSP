@@ -42,12 +42,12 @@ public class TermNote extends AbstractAuditable implements Cloneable {
 	@JoinColumn(name = "plan_id", updatable = false, nullable = true)	
 	private Plan plan;
 	
-	@Column(length = 2000)
-	@Size(max = 2000)
+	@Column(length = 4000)
+	@Size(max = 4000)
 	private String studentNotes;
 	
-	@Column(length = 2000)
-	@Size(max = 2000)
+	@Column(length = 4000)
+	@Size(max = 4000)
 	private String contactNotes;
 	
 	@NotNull

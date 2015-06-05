@@ -238,14 +238,14 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
             				        itemId: 'contactNotes',
             				        allowBlank:true,
             				        xtype: 'textareafield',
-									maxLength: 2000
+									maxLength: 4000
             				    },{
             				        fieldLabel: 'Student Notes',
             				    	name: 'studentNotes',
             				    	itemId: 'studentNotes',
             			        	allowBlank:true,
             			        	xtype: 'textareafield',
-									maxLength: 2000
+									maxLength: 4000
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicGoals',

@@ -59,14 +59,18 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
 				        name: 'contactNotes',
 				        xtype: 'textareafield',
 				        autoscroll: true,
-				        flex:1
+				        flex:1,
+				        maxLength: 4000,
+				        enforceMaxLength: true
 				    },{
 				        fieldLabel: 'Student Notes',
 				        name: 'studentNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
 				        flex:1,
-				        autoscroll: true
+				        autoscroll: true,
+				        maxLength: 4000,
+				        enforceMaxLength: true
 				    },
 				    {
                         name: 'isImportant',

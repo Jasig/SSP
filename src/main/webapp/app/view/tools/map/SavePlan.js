@@ -216,7 +216,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             				        itemId: 'contactNotes',
 									width: '80%',
             				        xtype: 'textareafield',
-									maxLength: 2000
+									maxLength: 4000
             				    },{
             				        fieldLabel: 'Student Notes',
             				    	name: 'studentNotes',
@@ -224,7 +224,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             			        	itemId: 'studentNotes',
             			        	xtype: 'textareafield',
 									width: '80%',
-									maxLength: 2000
+									maxLength: 4000
                 			    },{
                 			        fieldLabel: 'Academic Goals',
                 			        name: 'academicGoals',
