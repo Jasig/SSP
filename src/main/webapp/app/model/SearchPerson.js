@@ -69,7 +69,7 @@ Ext.define('Ssp.model.SearchPerson', {
       		firstName = me.get('coach')? me.get('coach').firstName : "";
       		lastName = me.get('coach')? me.get('coach').lastName : "";
 		}
-      	return lastName + ", " + firstName;
+      	return ((lastName) ? lastName + ", " + firstName : "");
      },
      
      getStudentTypeName: function(){
