@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
+
 import java.util.*;
 
 
@@ -49,7 +51,7 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
             "INNER JOIN personCoachAudit.originalId.REV AS personCoachRevisionInfo " +
             "WHERE personCoachAudit.originalId.id = :personId " +
             "ORDER BY personCoachAudit.originalId.REV DESC ";
-            //this HQL is specific to mappings created by Envers which does differ from names granted in src and Liquibase
+            //this HQL uses specific mappings created by Envers which does differ from names granted in src and Liquibase
 
     private static final String AUDIT_PERSON_HQL_QUERY =
             "SELECT auditPerson FROM AuditPerson as auditPerson WHERE auditPerson.id IN :personIds";
@@ -95,8 +97,18 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
                             .setParameterList("personIds", previousAndCurrentCoachUUIDs).setMaxResults(2).list();
                     // grabs the 1 or 2 AuditPersons from UUIDS retrieved previously
 
-                    if ( currentAndPreviousCoachAuditPersons != null ) {
-                        personCoachAuditTOReturn.setCurrentCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(0))); //"generally" guaranteed at least the current coach was recorded
+                    if ( !CollectionUtils.isEmpty(currentAndPreviousCoachAuditPersons) ) {
+                        if (currentAndPreviousCoachAuditPersons.size() < 2) {
+                            personCoachAuditTOReturn.setCurrentCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(0))); //"generally" guaranteed at least the current coach was recorded
+
+                        } else if (currentAndPreviousCoachAuditPersons.get(0).getId().equals(previousAndCurrentCoachUUIDs[0])) {
+                            personCoachAuditTOReturn.setCurrentCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(0))); //order of auditPerson query not guaranteed
+                            personCoachAuditTOReturn.setPreviousCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(1)));
+
+                        } else {
+                            personCoachAuditTOReturn.setCurrentCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(1)));
+                            personCoachAuditTOReturn.setPreviousCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(0)));
+                        }
                     }
 
                     if ( lastCoachRevision[2] != null ) {
@@ -108,10 +120,6 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
                     }
 
                     personCoachAuditTOReturn.setStudentId(personId);
-
-                    if ( currentAndPreviousCoachAuditPersons != null && currentAndPreviousCoachAuditPersons.size() > 1 ) {
-                        personCoachAuditTOReturn.setPreviousCoach(new PersonLiteTO(currentAndPreviousCoachAuditPersons.get(1)));
-                    }
                 }
             } catch (ClassCastException | NullPointerException cne) {
                 LOGGER.error("Error retrieving Coach Audit record(s) for a Person! Id[" + personId + "] " + cne);
