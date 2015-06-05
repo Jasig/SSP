@@ -93,7 +93,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		me.getView().loadRecord( me.person );
 		
 		// load additional values
-		
+
 		coachNameField.setValue( me.person.getCoachFullName() );
 		coachWorkPhoneField.setValue( me.person.getCoachWorkPhone() );
 		coachDepartmentNameField.setValue( me.person.getCoachDepartmentName() );
@@ -130,7 +130,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 
                 if (personCoachHistory.get('modifiedBy') != null &&
                         personCoachHistory.get('modifiedBy').fullName.indexOf("null null") < 0) {
-                    if ((personCoachHistory.get('modifiedBy')).fullName.indexOf("System Administrator") > -1) {
+                    if ((personCoachHistory.get('modifiedBy')).fullName.indexOf("System") > -1) {
                         previousCoachChangedByNameField.setValue("System Process");
                         previousCoachChangedByNameField.show();
 
