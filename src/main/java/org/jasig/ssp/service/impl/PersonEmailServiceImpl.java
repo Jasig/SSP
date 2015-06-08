@@ -53,6 +53,8 @@ import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
 import org.jasig.ssp.transferobject.form.EmailAddress;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
+import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.StudentPersonLiteMessageTemplateTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -376,22 +378,12 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 			return;
 		}
 		final Person oldCoach = personService.get(oldCoachId);
-		final Person currentUser = securityService.currentUser().getPerson();
 
 		Map<String,Object> messageParams = new HashMap<String,Object>();
-		messageParams.put("studentFullName", model.getFullName());
-		messageParams.put("studentFirstName", model.getFirstName());
-		messageParams.put("studentLastName", model.getLastName());
-		messageParams.put("schoolId", model.getSchoolId());
-		messageParams.put("oldCoachFullName", oldCoach.getFullName());
-		messageParams.put("oldCoachFirstName", oldCoach.getFirstName());
-		messageParams.put("oldCoachLastName", oldCoach.getLastName());
-		messageParams.put("newCoachFullName", model.getCoach().getFullName());
-		messageParams.put("newCoachtFirstName", model.getCoach().getFirstName());
-		messageParams.put("newCoachLastName", model.getCoach().getLastName());
-		messageParams.put("changedByFullName", currentUser.getFullName());
-		messageParams.put("changedByFirstName", currentUser.getFirstName());
-		messageParams.put("changedByLastName", currentUser.getLastName());
+		messageParams.put("student", new StudentPersonLiteMessageTemplateTO(model));
+		messageParams.put("oldCoach", new CoachPersonLiteMessageTemplateTO(oldCoach));
+		messageParams.put("newCoach", new CoachPersonLiteMessageTemplateTO(model.getCoach()));
+		messageParams.put("changedBy", new CoachPersonLiteMessageTemplateTO(securityService.currentUser().getPerson()));
 
 		SubjectAndBody subjectAndBody = messageTemplateService.createCoachingAssignmentChangeMessage(messageParams);
 

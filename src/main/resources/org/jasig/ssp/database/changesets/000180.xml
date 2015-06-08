@@ -36,9 +36,9 @@
             <column name="description"
                     value="Message sent to the old and new coaches when a student's coach is changed. Subject is the Title and Body is the message." />
             <column name="subject"><![CDATA[A coaching assignment has changed in ${applicationTitle}]]></column>
-            <column name="body"><![CDATA[<html><body><p>$!{changedByFullName} has assigned $!{studentFullName} ($!{schoolId}) to your caseload
- in $!{applicationTitle}.  #if($oldCoachFullName)The student was previously assigned to $!{oldCoachFullName}.#end Please visit <a href='$!{linkToSSP}'>$!{linkToSSP}</a> to
- view the student's information in $!{applicationTitle}.</p>
+            <column name="body"><![CDATA[<html><body><p>$!{changedBy.firstName} $!{changedBy.lastName} has assigned $!{student.firstName} $!{student.lastName} ($!{student.schoolId})
+ to your caseload in $!{applicationTitle}.  #if($oldCoach.firstName)The student was previously assigned to $!{oldCoach.firstName} $!{oldCoach.lastName}.#end Please visit
+ <a href='$!{linkToSSP}'>$!{linkToSSP}</a> to view the student's information in $!{applicationTitle}.</p>
  <p>This is an automated message, please do not use the reply option.</p>
  </body></html>]]>
             </column>
