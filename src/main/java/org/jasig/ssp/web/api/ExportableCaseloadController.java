@@ -232,7 +232,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		
 	}
 
-	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_BULK_SEARCH_EXPORT')")
+	@PreAuthorize("hasRole('ROLE_PERSON_SEARCH_READ') and hasRole('ROLE_CUSTOM_BULK_SEARCH_EXPORT')")
 	@RequestMapping(value="/customizableSearch", method = RequestMethod.GET)
 	public @ResponseBody void  customizableSearch(
 			HttpServletResponse response,
@@ -298,58 +298,11 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		}
 
 		if ( !CollectionUtils.isEmpty(customOptions)) {
-			for (String option : customOptions) {
-				                                                               //if option exists set true
-				if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[0])) {
-					customOptionsCleaned.put(0, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[1])) {
-					customOptionsCleaned.put(1, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[2])) {
-					customOptionsCleaned.put(2, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[3])) {
-					customOptionsCleaned.put(3, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[4])) {
-					customOptionsCleaned.put(4, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[5])) {
-					customOptionsCleaned.put(5, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[6])) {
-					customOptionsCleaned.put(6, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[7])) {
-					customOptionsCleaned.put(7, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[8])) {
-					customOptionsCleaned.put(8, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[9])) {
-					customOptionsCleaned.put(9, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[10])) {
-					customOptionsCleaned.put(10, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[11])) {
-					customOptionsCleaned.put(11, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[12])) {
-					customOptionsCleaned.put(12, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[13])) {
-					customOptionsCleaned.put(13, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[14])) {
-					customOptionsCleaned.put(14, true);
-
-				} else if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[15])) {
-					customOptionsCleaned.put(15, true);
-
-				} else {
-					//Do nothing reserved if default needed
+			for (String option : customOptions) {                   //if option exists set true
+				for (int optionsIndex=0; optionsIndex < CUSTOM_OPTIONS_MASTER_LIST.length; optionsIndex++) {
+					if (option.toLowerCase().contains(CUSTOM_OPTIONS_MASTER_LIST[optionsIndex])) {
+                        customOptionsCleaned.put(optionsIndex, true);
+                    }
 				}
 			}
 		}
