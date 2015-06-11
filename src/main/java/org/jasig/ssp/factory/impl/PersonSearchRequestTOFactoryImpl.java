@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
-
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.reference.ProgramStatusDao;
 import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
@@ -161,16 +160,16 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setLastName(lastName);
 		
 		//comma separated set of UUIDs as a String
-		to.setProgramStatus(programStatus);
+		to.setProgramStatuses(programStatus);
 		
 		//comma separated set of UUIDs as a String
-		to.setSpecialServiceGroup(specialServiceGroup);
+		to.setSpecialServiceGroups(specialServiceGroup);
 		
 		//comma separated set of UUIDs as a String
 		//to.setCoachId(coachId == null ? null : UUID.fromString(coachId));
-		to.setCoachId(coachId);
+		to.setCoachIds(coachId);
 		
-		to.setDeclaredMajor(declaredMajor);
+		to.setDeclaredMajors(declaredMajor);
 		to.setHoursEarnedMin(hoursEarnedMin);
 		to.setHoursEarnedMax(hoursEarnedMax);
 		to.setGpaEarnedMin(gpaEarnedMin);
@@ -181,15 +180,15 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
         to.setProgramGpaMax(programGpaMax);
 		to.setCurrentlyRegistered(currentlyRegistered);
 		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
-		to.setSapStatusCode(sapStatusCode);
+		to.setSapStatusCodes(sapStatusCode);
 		to.setPlanStatus(planStatus);
 		to.setPlanExists(planExists);
 		to.setMyCaseload(myCaseload);
 		to.setMyPlans(myPlans);
 		to.setMyWatchList(myWatchList);
 		to.setBirthDate(birthDate);
-        to.setActualStartTerm(actualStartTerm);
-		to.setPersonTableType(personTableType);
+        to.setActualStartTerms(actualStartTerm);
+		to.setPersonTableTypes(personTableType);
 		to.setSortAndPage(sortAndPage);
 		return from(to);
 	}
@@ -210,15 +209,15 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setLastName(lastName);
 		
 		//comma delineated set of UUIDs as Strings
-		to.setProgramStatus(programStatus);
+		to.setProgramStatuses(programStatus);
 		
 		//comma delineated set of UUIDs as Strings
-		to.setSpecialServiceGroup(specialServiceGroup);
+		to.setSpecialServiceGroups(specialServiceGroup);
 		
-		to.setCoachId(coachId);
+		to.setCoachIds(coachId);
 		
 		//comma delineated set of Strings (there can be a single one)
-		to.setDeclaredMajor(declaredMajor);
+		to.setDeclaredMajors(declaredMajor);
 		
 		to.setHoursEarnedMin(hoursEarnedMin);
 		to.setHoursEarnedMax(hoursEarnedMax);
@@ -230,7 +229,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
         to.setProgramGpaMax(programGpaMax);
 		to.setCurrentlyRegistered(currentlyRegistered);
 		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
-		to.setSapStatusCode(sapStatusCode);
+		to.setSapStatusCodes(sapStatusCode);
 		to.setPlanStatus(planStatus);
 		to.setPlanExists(planExists);
 		to.setMyCaseload(myCaseload);
@@ -239,7 +238,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setBirthDate(birthDate);
 		
 		//comma delineated set of Strings (there can be a single one)
-        to.setActualStartTerm(actualStartTerm);
+        to.setActualStartTerms(actualStartTerm);
 		return from(to);
 	}
 }

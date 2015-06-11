@@ -940,7 +940,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 	buildBulkActionSearchCriteria: function() {
 		var me = this;
 		var criteria = {};
-		criteria.programStatus = me.translateSelectedStatusToSearchableStatus();
 
 		if ( me.getIsCaseload() ) {
 			criteria.myCaseload = true;

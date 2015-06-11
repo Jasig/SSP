@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
@@ -65,6 +66,9 @@ public class PersonSearchRequest {
 	
 	public static final String PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY = "EXTERNAL_DATA_ONLY";
 	
+
+
+
 	// id of the person
 	private String schoolId;
 
@@ -122,12 +126,17 @@ public class PersonSearchRequest {
 	
 	private SortingAndPaging sortAndPage;
 
-	public PersonSearchRequest() {
+
+
+
+    public PersonSearchRequest() {
 		super();
 	}
 
 
-	public String getSchoolId() {
+
+
+    public String getSchoolId() {
 		return schoolId;
 	}
 
@@ -152,13 +161,17 @@ public class PersonSearchRequest {
 
 
 	public void setProgramStatus(ArrayList<ProgramStatus> programStatus) {
-		this.programStatus = programStatus;
+		if (CollectionUtils.isNotEmpty(programStatus)) {
+            this.programStatus = programStatus;
+        }
 	}
 	
 	public void setProgramStatus(ProgramStatus programStatus) {
-		ArrayList<ProgramStatus> psList = new ArrayList<ProgramStatus>();
-		psList.add(programStatus);
-		this.programStatus = psList;
+		if (programStatus != null) {
+            ArrayList<ProgramStatus> psList = new ArrayList<ProgramStatus>();
+            psList.add(programStatus);
+            this.programStatus = psList;
+        }
 	}
 
 
@@ -168,13 +181,17 @@ public class PersonSearchRequest {
 
 
 	public void setSpecialServiceGroup(List<SpecialServiceGroup> specialServiceGroup) {
-		this.specialServiceGroup = specialServiceGroup;
+		if (CollectionUtils.isNotEmpty(specialServiceGroup)) {
+            this.specialServiceGroup = specialServiceGroup;
+        }
 	}
 	
 	public void setSpecialServiceGroup(SpecialServiceGroup specialServiceGroup) {
-		List<SpecialServiceGroup> specialServiceGroupList = new ArrayList<SpecialServiceGroup>();
-		specialServiceGroupList.add(specialServiceGroup);
-		this.specialServiceGroup = specialServiceGroupList;
+		if (specialServiceGroup != null) {
+            List<SpecialServiceGroup> specialServiceGroupList = new ArrayList<SpecialServiceGroup>();
+            specialServiceGroupList.add(specialServiceGroup);
+            this.specialServiceGroup = specialServiceGroupList;
+        }
 	}
 
 
@@ -184,8 +201,18 @@ public class PersonSearchRequest {
 
 
 	public void setCoach(List<Person> coach) {
-		this.coach = coach;
+		if (CollectionUtils.isNotEmpty(coach)) {
+            this.coach = coach;
+        }
 	}
+
+    public void setCoach(Person coach) {
+        if (coach != null) {
+            List<Person> coachList = Lists.newArrayList();
+            coachList.add(coach) ;
+            this.coach = coachList;
+        }
+    }
 
 
 	public List<String> getDeclaredMajor() {
@@ -194,16 +221,16 @@ public class PersonSearchRequest {
 
 
 	public void setDeclaredMajor(List<String> declaredMajor) {
-		this.declaredMajor = declaredMajor;
+		if (CollectionUtils.isNotEmpty(declaredMajor)) {
+            this.declaredMajor = declaredMajor;
+        }
 	}
 	
 	public void setDeclaredMajor(String declaredMajor) {
-		
-		if(StringUtils.isNotEmpty(declaredMajor)) {
+		if (StringUtils.isNotEmpty(declaredMajor)) {
 			List<String> items = Arrays.asList(declaredMajor.split("\\s*,\\s*"));
 			ArrayList<String> declaredMajorList = new ArrayList<String>();
-			for(String item: items)
-			{
+			for (String item: items) {
 				declaredMajorList.add(item);
 			}
 			this.declaredMajor = declaredMajorList;
@@ -276,17 +303,18 @@ public class PersonSearchRequest {
 	}
 
 	public void setSapStatusCode(List<String> sapStatusCode) {
-		this.sapStatusCode = sapStatusCode;
+		if (CollectionUtils.isNotEmpty(sapStatusCode)) {
+            this.sapStatusCode = sapStatusCode;
+        }
 	}
 	
 	
 	//handle a list of comma separated values
 	public void setSapStatusCode(String sapStatusCode) {
-		if(sapStatusCode != null) {
+		if (StringUtils.isNotBlank(sapStatusCode)) {
 			List<String> items = Arrays.asList(sapStatusCode.split("\\s*,\\s*"));
 			ArrayList<String> sapStatusCodes = new ArrayList<String>();
-			for(String item: items)
-			{
+			for (String item: items) {
 				sapStatusCodes.add(item);
 			}
 			this.sapStatusCode = sapStatusCodes;
@@ -450,25 +478,21 @@ public class PersonSearchRequest {
 
 
     public void setActualStartTerm (final List<String> actualStartTerm) {
-                this.actualStartTerm = actualStartTerm;
+        if (CollectionUtils.isNotEmpty(actualStartTerm)) {
+            this.actualStartTerm = actualStartTerm;
         }
+    }
     
     public void setActualStartTerm (String actualStartTerm) {
-    	
-    	if(StringUtils.isNotEmpty(actualStartTerm)) {
+    	if (StringUtils.isNotEmpty(actualStartTerm)) {
 			List<String> items = Arrays.asList(actualStartTerm.split("\\s*,\\s*"));
 			ArrayList<String> actualStartTermList = new ArrayList<String>();
-			for(String item: items)
-			{
+			for (String item: items) {
 				actualStartTermList.add(item);
 			}
 			this.actualStartTerm = actualStartTermList;
 		}
-    	
-    	//List<String> startTermList = new ArrayList<String>();
-    	//startTermList.add(actualStartTerm);
-        //this.actualStartTerm = startTermList;
-}
+    }
 
 
     public BigDecimal getLocalGpaMin () {

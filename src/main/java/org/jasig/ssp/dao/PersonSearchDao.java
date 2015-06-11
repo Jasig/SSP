@@ -18,15 +18,11 @@
  */
 package org.jasig.ssp.dao;
 
+
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
+import java.util.*;
 import javax.validation.constraints.NotNull;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -55,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.google.common.collect.Lists;
 
 
@@ -346,7 +341,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasFinancialAidStatus(
 			PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSapStatusCode() != null && personSearchRequest.getSapStatusCode().size()>0;
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getSapStatusCode()));
 	}
 
 
@@ -361,7 +356,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getProgramStatus() != null;
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getProgramStatus()));
 	}
 	
 	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest,
@@ -377,7 +372,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
-		return (personSearchRequest.getSpecialServiceGroup()) != null && (personSearchRequest.getSpecialServiceGroup().size() > 0);
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getSpecialServiceGroup()));
 	}
 
 
@@ -564,9 +559,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	}
 
 
-	private boolean hasCoach(PersonSearchRequest personSearchRequest) 
-	{
-		return personSearchRequest.getCoach() != null && personSearchRequest.getCoach().size() > 0;
+	private boolean hasCoach(PersonSearchRequest personSearchRequest) {
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getCoach()));
 	}
 
 
@@ -780,15 +774,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
-	private boolean hasPlanExists(PersonSearchRequest personSearchRequest)
-	{
-		//return personSearchRequest.getPlanExists() != null && !personSearchRequest.getPlanExists().isEmpty();
-		return !StringUtils.isEmpty(personSearchRequest.getPlanExists());
+	private boolean hasPlanExists(PersonSearchRequest personSearchRequest) {
+		return StringUtils.isNotEmpty(personSearchRequest.getPlanExists());
 	}
 
 
 	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) {
-		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
+		return StringUtils.isNotEmpty(personSearchRequest.getPlanStatus());
 	}
 
 
@@ -858,13 +850,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	}
 
 
-	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) 
-	{
-		//there should only be one declared major, use the top one if it's there.
-		if (personSearchRequest.getDeclaredMajor() == null || personSearchRequest.getDeclaredMajor().size() <=0) return false;
-		
-		String declaredMajor = personSearchRequest.getDeclaredMajor().get(0);		
-		return !StringUtils.isEmpty(declaredMajor);
+	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) {
+		if (CollectionUtils.isEmpty(personSearchRequest.getDeclaredMajor())) {
+            return false;
+        }
+        //there should only be one declared major, use the top one if it's there.
+        String declaredMajor = personSearchRequest.getDeclaredMajor().get(0);
+		return StringUtils.isNotEmpty(declaredMajor);
 	}
 
 

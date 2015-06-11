@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.ScrollMode;
@@ -360,12 +363,13 @@ public class DirectoryPersonSearchDao  {
 	}
 	
 	
-	private Boolean sspPersonOnly(PersonSearchRequest personSearchRequest){
-		return personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
+	private Boolean sspPersonOnly(PersonSearchRequest personSearchRequest) {
+		return (personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY));
 	}
 	private Boolean requiresObjectStatus(PersonSearchRequest personSearchRequest){
-		if(personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY))
-			return false;
+		if (personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
+            return false;
+        }
 		return true;
 	}
 
@@ -392,9 +396,7 @@ public class DirectoryPersonSearchDao  {
     }
 
     private boolean hasActualStartTerm(PersonSearchRequest personSearchRequest) {
-    	List<String> startTermList = personSearchRequest.getActualStartTerm();
-    	return (startTermList != null) && (startTermList.size() > 0);
-        //return (StringUtils.isNotBlank(personSearchRequest.getActualStartTerm()));
+        return (CollectionUtils.isNotEmpty(personSearchRequest.getActualStartTerm()));
     }
 	
 	private void buildEarlyAlertCriteria(PersonSearchRequest personSearchRequest,
@@ -459,18 +461,17 @@ public class DirectoryPersonSearchDao  {
 	}
 
 
-	private boolean hasFinancialAidStatus(
-			PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getSapStatusCode() != null && !personSearchRequest.getSapStatusCode().isEmpty();
+	private boolean hasFinancialAidStatus(PersonSearchRequest personSearchRequest) {
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getSapStatusCode()));
 	}
 	
 	private void buildPersonTableType(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder){
-		if(this.hasPersonTableType(personSearchRequest)){
-			if(personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)){
+			FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if (this.hasPersonTableType(personSearchRequest)) {
+			if (personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.personId IS NOT NULL ");
-			}else if(personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)){
+			} else if(personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.personId IS NULL ");
 			}
@@ -491,7 +492,7 @@ public class DirectoryPersonSearchDao  {
 
 
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
-		return personSearchRequest.getProgramStatus() != null;
+        return (CollectionUtils.isNotEmpty(personSearchRequest.getProgramStatus()));
 	}
 	
 	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest){
@@ -509,7 +510,7 @@ public class DirectoryPersonSearchDao  {
 
 
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
-		return (personSearchRequest.getSpecialServiceGroup() != null && !(personSearchRequest.getSpecialServiceGroup().size() <= 0) );
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getSpecialServiceGroup()));
 	}
 	
 	private void buildWatchList(PersonSearchRequest personSearchRequest,
@@ -596,41 +597,40 @@ public class DirectoryPersonSearchDao  {
             }
 		}
 
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
-		{
-			Person me = null;
-			List<Person> coaches = null;
-			if ( hasMyCaseload(personSearchRequest) ) {
-				me = securityService.currentlyAuthenticatedUser().getPerson();
-			}
-			if ( hasCoach(personSearchRequest) ) {
-				coaches = personSearchRequest.getCoach();
-			}
+		if (hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest)) {
+            List<Person> me = null;
+            List<Person> coaches = null;
 
-			UUID queryPersonId = null;
-			List<Person> compareTo = null;
-			if ( me != null ) {
-				queryPersonId = me.getId();
-				compareTo = coaches;
-			} else if ( coaches != null ) {
-				//queryPersonId = coaches.getId();
-				//compareTo = me;
-			}
-			// If me and coach aren't the same, the query is non-sensical, so set the 'queryPersonId' to null which
-			// will effectively force the query to return no results.
-			//if ( queryPersonId != null && compareTo != null ) {
-			//	for(Person p: compareTo) {
-					
-			//	}
-			//	queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
-			//	queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
-			//}
-			List<UUID> coachIds = new ArrayList<UUID>();
-			//List<Person> coaches = personSearchRequest.getCoach();
-			for(Person coach: coaches) {
-				coachIds.add(coach.getId());
-			}
-			params.put("coachId", coachIds);
+            if ( hasMyCaseload(personSearchRequest) ) {
+                me = Lists.newArrayList();
+                me.add(securityService.currentlyAuthenticatedUser().getPerson());
+            }
+            if ( hasCoach(personSearchRequest) ) {
+                coaches = personSearchRequest.getCoach();
+            }
+
+            List<UUID> queryPersonIds = Lists.newArrayList();
+            List<Person> compareTo = null;
+            if ( me != null ) {
+                queryPersonIds.add(me.get(0).getId());
+                compareTo = coaches;
+            } else if ( coaches != null ) {
+                for (Person coach : coaches) {
+                    queryPersonIds.add(coach.getId());
+                }
+                compareTo = me;
+            }
+
+            //Handles case of both hasMyCaseload and hasCoaches
+            // If me and coach aren't the same, the query is non-sensical (search My Caseload with other Coaches?),
+            // so set the 'queryPersonId' to null which will effectively force the query to return no results.
+            if ( queryPersonIds != null && compareTo != null ) {
+                if ( compareTo.size() > 1 || !queryPersonIds.get(0).equals(compareTo.get(0).getId()) ) {
+                    queryPersonIds = null; //if coach selected equals current user (MyCaseload's coach) then return
+                }
+            }
+
+            params.put("coachId", queryPersonIds);
 		}
 
 		if(hasAnyWatchCriteria(personSearchRequest))
@@ -720,9 +720,8 @@ public class DirectoryPersonSearchDao  {
 	}
 
 
-	private boolean hasCoach(PersonSearchRequest personSearchRequest) 
-	{
-		return personSearchRequest.getCoach() != null && personSearchRequest.getCoach().size()>0;
+	private boolean hasCoach(PersonSearchRequest personSearchRequest) {
+        return (CollectionUtils.isNotEmpty(personSearchRequest.getCoach()));
 	}
 
 
@@ -945,15 +944,13 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-	private boolean hasPlanExists(PersonSearchRequest personSearchRequest)
-	{
-		//return personSearchRequest.getPlanExists() != null && !personSearchRequest.getPlanExists().isEmpty();
-		return !StringUtils.isEmpty(personSearchRequest.getPlanExists());
+	private boolean hasPlanExists(PersonSearchRequest personSearchRequest) {
+		return StringUtils.isNotEmpty(personSearchRequest.getPlanExists());
 	}
 
 
 	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) {
-		return !StringUtils.isEmpty(personSearchRequest.getPlanStatus());
+		return StringUtils.isNotEmpty(personSearchRequest.getPlanStatus());
 	}
 
 
@@ -1024,11 +1021,8 @@ public class DirectoryPersonSearchDao  {
                 personSearchRequest.getProgramGpaMin() != null || personSearchRequest.getProgramGpaMax() != null);
 	}
 
-	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) 
-	{
-		List<String> declaredMajors = personSearchRequest.getDeclaredMajor();
-		return (declaredMajors != null) && (declaredMajors.size() > 0);
-		//return !StringUtils.isEmpty(personSearchRequest.getDeclaredMajor());
+	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) {
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getDeclaredMajor()));
 	}
 
 	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) 

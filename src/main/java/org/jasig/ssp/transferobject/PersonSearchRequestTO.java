@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.PersonSearchRequest;
@@ -49,7 +50,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	private List<UUID> coachId;
 
-	private String declaredMajor;
+	private List<String> declaredMajor;
 
 	private BigDecimal hoursEarnedMin;
 	
@@ -90,6 +91,9 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	private String personTableType;
 	
 	private SortingAndPaging sortAndPage;
+
+
+
 	
 	public String getSchoolId() {
 		return schoolId;
@@ -120,15 +124,16 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	}
 
 	public void setProgramStatus(List<UUID> programStatus) {
-		this.programStatus = programStatus;
+		if (CollectionUtils.isNotEmpty(programStatus)) {
+            this.programStatus = programStatus;
+        }
 	}
 	
-	public void setProgramStatus(String programStatusin) {
-		if(programStatusin != null) {
+	public void setProgramStatuses(String programStatusin) {
+		if(StringUtils.isNotBlank(programStatusin)) {
 			List<String> items = Arrays.asList(programStatusin.split("\\s*,\\s*"));
 			ArrayList<UUID> programStatus = new ArrayList<UUID>();
-			for(String item: items)
-			{
+			for (String item: items) {
 				programStatus.add(UUID.fromString(item));
 			}
 			this.programStatus = programStatus;
@@ -140,16 +145,17 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	}
 
 	public void setSpecialServiceGroup(List<UUID> specialServiceGroup) {
-		this.specialServiceGroup = specialServiceGroup;
+	    if (CollectionUtils.isNotEmpty(specialServiceGroup)) {
+            this.specialServiceGroup = specialServiceGroup;
+        }
 	}
 	
 	//comma separated string of specialservicegroupids
-	public void setSpecialServiceGroup(String specialServiceGroups) {
-		if(specialServiceGroups != null) {
+	public void setSpecialServiceGroups(String specialServiceGroups) {
+		if (StringUtils.isNotBlank(specialServiceGroups)) {
 			List<String> items = Arrays.asList(specialServiceGroups.split("\\s*,\\s*"));
 			ArrayList<UUID> specialServiceGroupIds = new ArrayList<UUID>();
-			for(String item: items)
-			{
+			for (String item: items) {
 				specialServiceGroupIds.add(UUID.fromString(item));
 			}
 			this.specialServiceGroup = specialServiceGroupIds;
@@ -160,36 +166,41 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		return coachId;
 	}
 	
-	public void setCoachId(List<UUID> coachIds) {		
-		this.coachId = coachIds;
-	}
+	public void setCoachId(List<UUID> coachIds) {
+        this.coachId = coachIds;
+    }
 
-	public void setCoachId(String coaches) {
-		if(coaches != null) {
+	public void setCoachIds(String coaches) {
+		if (StringUtils.isNotBlank(coaches)) {
 			List<String> items = Arrays.asList(coaches.split("\\s*,\\s*"));
 			ArrayList<UUID> coachIds = new ArrayList<UUID>();
-			for(String item: items)
-			{
+			for (String item: items) {
 				coachIds.add(UUID.fromString(item));
 			}
 			this.coachId = coachIds;
 		}
-		
-		
-		//this.coachId = coachId;
 	}
 
-	public String getDeclaredMajor() {
+	public List<String> getDeclaredMajor() {
 		return declaredMajor;
 	}
 
-	public void setDeclaredMajor(String declaredMajor) {
-		this.declaredMajor = declaredMajor;
-	}
+    public void setDeclaredMajors(String declaredMajor) {
+        if (StringUtils.isNotBlank(declaredMajor)) {
+            List<String> items = Arrays.asList(declaredMajor.split("\\s*,\\s*"));
+            this.declaredMajor = items;
+        }
+    }
 
-	public BigDecimal getHoursEarnedMin() {
-		return hoursEarnedMin;
-	}
+    public void setDeclaredMajor(List<String> declaredMajorIn) {
+        if (CollectionUtils.isNotEmpty(declaredMajorIn)) {
+            this.declaredMajor = declaredMajorIn;
+        }
+    }
+
+    public BigDecimal getHoursEarnedMin() {
+        return hoursEarnedMin;
+    }
 
 	public void setHoursEarnedMin(BigDecimal hoursEarnedMin) {
 		this.hoursEarnedMin = hoursEarnedMin;
@@ -240,17 +251,18 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	}
 
 	public void setSapStatusCode(List<String> sapStatusCode) {
-		this.sapStatusCode = sapStatusCode;
+	    if (CollectionUtils.isNotEmpty(sapStatusCode)) {
+            this.sapStatusCode = sapStatusCode;
+        }
 	}
 	
 	
 	//handle a list of comma separated values
-	public void setSapStatusCode(String sapStatusCode) {
-		if(sapStatusCode != null) {
+	public void setSapStatusCodes(String sapStatusCode) {
+		if (StringUtils.isNotBlank(sapStatusCode)) {
 			List<String> items = Arrays.asList(sapStatusCode.split("\\s*,\\s*"));
-			ArrayList<String> sapStatusCodes = new ArrayList<String>();
-			for(String item: items)
-			{
+			ArrayList<String> sapStatusCodes = Lists.newArrayList();
+			for (String item: items) {
 				sapStatusCodes.add(item);
 			}
 			this.sapStatusCode = sapStatusCodes;
@@ -347,12 +359,24 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	}
 
 	public String getPersonTableType() {
-		return personTableType;
-	}
+        return personTableType;
+    }
 
-	public void setPersonTableType(String personTableType) {
-		this.personTableType = personTableType;
-	}
+    public void setPersonTableTypes(String personTableType) {
+        if (StringUtils.isNotBlank(personTableType)) {
+            this.personTableType = personTableType;
+        }
+    }
+
+    public void setPersonTableType(List<String> personTableTypeIn) {
+        if (CollectionUtils.isNotEmpty(personTableTypeIn)) {
+            StringBuilder personTableType = new StringBuilder();
+            for (String item: personTableTypeIn) {
+                personTableType.append(item);
+            }
+            this.personTableType = personTableType.toString();
+        }
+    }
 
 	public SortingAndPaging getSortAndPage() {
 		return sortAndPage;
@@ -372,23 +396,24 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
     public List<String> getActualStartTerm () {
                 return actualStartTerm;
-        }
+    }
 
     public void setActualStartTerm (final List<String> actualStartTerm) {
-                this.actualStartTerm = actualStartTerm;
+        if (CollectionUtils.isNotEmpty(actualStartTerm)) {
+            this.actualStartTerm = actualStartTerm;
         }
+    }
     
-    public void setActualStartTerm (String actualStartTerm) {
-    	if(StringUtils.isNotEmpty(actualStartTerm)) {
+    public void setActualStartTerms (String actualStartTerm) {
+    	if (StringUtils.isNotEmpty(actualStartTerm)) {
 			List<String> items = Arrays.asList(actualStartTerm.split("\\s*,\\s*"));
-			ArrayList<String> actualStartTermList = new ArrayList<String>();
-			for(String item: items)
-			{
+			ArrayList<String> actualStartTermList = Lists.newArrayList();
+			for (String item: items) {
 				actualStartTermList.add(item);
 			}
 			this.actualStartTerm = actualStartTermList;
 		}
-}
+    }
 
     public BigDecimal getLocalGpaMin () {
         return localGpaMin;
