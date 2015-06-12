@@ -26,6 +26,7 @@ Ext.define('Ssp.model.Person', {
              {name: 'homePhone', type: 'string'},
     		 {name: 'cellPhone', type: 'string'},
              {name: 'workPhone', type: 'string'},
+             {name: 'alternatePhone', type: 'string'},
              {name: 'nonLocalAddress', type:'boolean', useNull: true},
     		 {name: 'addressLine1', type: 'string'},
              {name: 'addressLine2', type: 'string'},

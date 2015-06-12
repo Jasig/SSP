@@ -83,6 +83,9 @@ public class PersonTO // NOPMD
 
 	private String cellPhone;
 
+    @Nullable
+    private String alternatePhone;
+
 	@Nullable
 	private Boolean nonLocalAddress;
 	
@@ -204,6 +207,11 @@ public class PersonTO // NOPMD
 		homePhone = model.getHomePhone();
 		workPhone = model.getWorkPhone();
 		cellPhone = model.getCellPhone();
+
+        if (StringUtils.isNotBlank(model.getAlternatePhone())) {
+            alternatePhone = model.getAlternatePhone();
+        }
+
 		nonLocalAddress = model.getNonLocalAddress();
 		addressLine1 = model.getAddressLine1();
 		addressLine2 = model.getAddressLine2();
@@ -479,7 +487,16 @@ public class PersonTO // NOPMD
 		this.cellPhone = cellPhone;
 	}
 
-	public Boolean getNonLocalAddress() {
+    public String getAlternatePhone() {
+        return alternatePhone;
+    }
+
+    public void setAlternatePhone(final String alternatePhone) {
+        this.alternatePhone = alternatePhone;
+    }
+
+
+    public Boolean getNonLocalAddress() {
 		return nonLocalAddress;
 	}
 

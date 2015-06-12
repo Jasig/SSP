@@ -87,6 +87,7 @@ public class PersonTOFactoryImpl extends
 		model.setHomePhone(tObject.getHomePhone());
 		model.setWorkPhone(tObject.getWorkPhone());
 		model.setCellPhone(tObject.getCellPhone());
+        model.setAlternatePhone(tObject.getAlternatePhone());
 		model.setNonLocalAddress(tObject.getNonLocalAddress());
 		model.setAddressLine1(tObject.getAddressLine1());
 		model.setAddressLine2(tObject.getAddressLine2());

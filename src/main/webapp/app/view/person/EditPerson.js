@@ -155,6 +155,14 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: true,
                     itemId: 'secondaryEmailAddress',
                     width: 250
+                }, {
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
+                    name: 'alternatePhone',
+                    emptyText: 'xxx-xxx-xxxx',
+                    maxLength: 25,
+                    allowBlank: true,
+                    itemId: 'alternatePhone',
+                    width: 250
                 }]
             }]
         });

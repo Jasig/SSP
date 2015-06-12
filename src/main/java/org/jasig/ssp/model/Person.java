@@ -266,6 +266,17 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	@Size(max = 25)
 	private String cellPhone;
 
+
+    /**
+     * Alternate (internal only) phone number.
+     *  This field is never syncd or linked to external_data
+     *   so that an always up to date phone number can be kept.
+     * Maximum length of 25.
+     */
+    @Column(length = 25)
+    @Size(max = 25)
+    private String alternatePhone;
+
 	@Nullable
 	private Boolean nonLocalAddress;	
 	
@@ -827,6 +838,14 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		this.cellPhone = cellPhone;
 	}
 
+    public String getAlternatePhone() {
+        return alternatePhone;
+    }
+
+    public void setAlternatePhone (final String alternatePhone) {
+        this.alternatePhone = alternatePhone;
+    }
+
 	public Boolean getNonLocalAddress() {
 		return nonLocalAddress;
 	}
@@ -1289,6 +1308,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 		result *= hashField("homePhone", homePhone);
 		result *= hashField("workPhone", workPhone);
 		result *= hashField("cellPhone", cellPhone);
+        result *= hashField("alternatePhone", alternatePhone);
 		result *= nonLocalAddress == null ? 2
 				: (nonLocalAddress ? 5 : 3);
 		result *= hashField("addressLine1", addressLine1);

@@ -190,6 +190,16 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        maxLength: 10,
 				        allowBlank:true,
 				        itemId: 'zipCode'
+				    }, {
+                        xtype: 'displayfield',
+                        fieldLabel: 'ALTERNATE PHONE',
+				    }, {
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
+                        name: 'alternatePhone',
+                        emptyText: 'xxx-xxx-xxxx',
+                        maxLength: 25,
+                        allowBlank:true,
+                        itemId: 'alternatePhone'
 				    },{
 				    	xtype: 'displayfield',
 				    	fieldLabel: 'ALTERNATE ADDRESS'

@@ -25,8 +25,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		apiProperties: 'apiProperties',
         person: 'currentPerson',
         authenticatedPerson: 'authenticatedPerson',
-    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
-        
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        configStore: 'configStore'
 	},
 	
     control: {
@@ -66,8 +66,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
  		return this.callParent(arguments);
     },
     
-	onAfterLayout: function(){
+	onAfterLayout: function() {
 		var me = this;
+
 		if (me.person.get('id')) {
 		    me.updateStudentRecord({'person':me.person});
 		} else {
@@ -76,21 +77,22 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 	},
     
     
-    onCollapsed: function(){
+    onCollapsed: function() {
     	var me=this;
     	me.appEventsController.getApplication().fireEvent('collapseStudentRecord');
     },
-    onExpanded: function(){
+    onExpanded: function() {
     	var me=this;
     	me.appEventsController.getApplication().fireEvent('expandStudentRecord');
     },
     
-    getBaseUrl: function(id){
+    getBaseUrl: function(id) {
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personWatch') );
 		baseUrl = baseUrl.replace('{id}', id);
 		return baseUrl;
     },
+
     updateWatchUiWithId: function(id, isChanged) {
         var me = this;
         me.person.watchId = id;
@@ -99,20 +101,24 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         } else {
             me.getWatchStudentButton().setText('Watch Student');
         }
+
         if ( isChanged ) {
             me.appEventsController.getApplication().fireEvent('onStudentWatchAction');
         }
         me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
         me.appEventsController.loadMaskOff();
     },
-    successWatch: function( response ){
+
+    successWatch: function( response ) {
         var me = this;
         me.updateWatchUiWithId(Ext.decode(response.responseText).id, true);
     },
-    successUnWatch: function( response ){
+
+    successUnWatch: function( response ) {
         var me = this;
         me.updateWatchUiWithId('', true);
     },
+
     fatalWatchUnWatchFailure: function(action) {
         var me = this;
         Ext.Msg.alert('SSP Error','There was an issue procesing your ' + action + ' request. Please reload the page and ' +
@@ -120,6 +126,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
         me.appEventsController.loadMaskOff();
     },
+
     failureWatch: function(response, options) {
         var me = this;
         if ( response && response.status === 409 && response.responseText &&
@@ -130,6 +137,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
             me.fatalWatchUnWatchFailure('Watch');
         }
     },
+
     failureUnWatch: function(response, options) {
         var me = this;
         if ( response && response.status === 404 ) {
@@ -139,7 +147,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
             me.fatalWatchUnWatchFailure('Unwatch');
         }
     },
-    onWatchStudentButtonClick: function(button){
+
+    onWatchStudentButtonClick: function(button) {
         var me = this;
         
    		var watchStudent = Ext.create('Ssp.model.WatchStudent');
@@ -147,10 +156,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
    		watchStudent.set('watcherId',me.authenticatedPerson.get('id'));
 
 		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
-	    if(!(me.person.watchId))
-	    {
+	    if (!(me.person.watchId)) {
 			Ext.MessageBox.confirm('Watch Student', 'Are you sure you want to watch this student?', function(btn){
-				if(btn === 'yes'){
+				if (btn === 'yes') {
 		    		me.getWatchStudentButton().hide();
 		    		me.appEventsController.loadMaskOn();
 		    		me.apiProperties.makeRequest({
@@ -161,16 +169,14 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 		    			failureFunc: me.failureWatch,
 		    			scope: me
 		    		});	
-				} else if(btn === 'no') {
+				} else if (btn === 'no') {
 				   return;
 				}
 			});	
 
-	    }
-	    else
-	    {
+	    } else {
 			Ext.MessageBox.confirm('Un-Watch Student', 'Are you sure you want to stop watching this student?', function(btn){
-				if(btn === 'yes'){
+				if (btn === 'yes') {
 			   	   	me.getWatchStudentButton().hide();
 			   	   	me.appEventsController.loadMaskOn();
 			   	   	watchStudent.set('id',me.person.watchId);
@@ -186,14 +192,12 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 				   return;
 				}
 			});
-    	
 	    }
     },	   
 	onStudentRecordEditButtonClick: function(button){
         var me=this;
         var skipCallBack = this.appEventsController.getApplication().fireEvent('personToolbarEdit',me);  
-        if(skipCallBack)
-        {
+        if (skipCallBack) {
         	me.studentRecordEdit();
         }
     },
@@ -216,8 +220,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     },
 	updateWatchLink: function(args) {
 		var me = this;
-		if(me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'))
-		{
+		if (me.authenticatedPerson.hasAccess('WATCHLIST_TOOL')) {
 			me.getWatchStudentButton().hide();
 
 			var successFunc = function(response, view){
@@ -243,61 +246,107 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 			});
 		}
 	},
-    updateStudentRecord: function(args){
+    updateStudentRecord: function(args) {
 		var me = this;
-		if(args && args.person && args.person.get("id") && args.person.get("id").length && args.person.get("id").length > 0){
+
+		if (args && args.person && args.person.get("id") && args.person.get("id").length && args.person.get("id").length > 0) {
+            var view = me.getView();
+            var schoolId = args.person.get('schoolId');
+            var fullName = args.person.getFullName();
+            var coachName = args.person.getCoachFullName();
+            var fullTitle = fullName + '  -   ID#: ' + schoolId;
+            var title = fullName + '          ' + '  -   ID#: ' + schoolId + '         ';
+
+            var phoneNumberDisplayOrder = me.configStore.getConfigByName('phone_display_order');
+            var phoneNumbers = [];
+            phoneNumbers[0] = args.person.get('homePhone');
+            phoneNumbers[1] = args.person.get('cellPhone');
+            phoneNumbers[2] = args.person.get('workPhone');
+            phoneNumbers[3] = args.person.get('alternatePhone');
+
+            if (phoneNumberDisplayOrder) {
+                var phoneNumberOrderArray = phoneNumberDisplayOrder.split(',');
+                var index = 0;
+                var titleFlag = false;
+
+                for (index = 0; index < phoneNumberOrderArray.length; index++) {
+                    if (phoneNumberOrderArray[index].trim().toLowerCase() === 'home' && phoneNumbers[0] != '') {
+                        if (index === 0 || !titleFlag) {
+                            title = title + phoneNumbers[0] + ' (H)';
+                            titleFlag = true;
+                        }
+                        fullTitle = fullTitle + '    ' + phoneNumbers[0] + ' (H)';
+                    } else if (phoneNumberOrderArray[index].trim().toLowerCase() === 'cell' && phoneNumbers[1] != '') {
+                        if (index === 0 || !titleFlag) {
+                            title = title + phoneNumbers[1] + ' (C)';
+                            titleFlag = true;
+                        }
+                        fullTitle = fullTitle + '    ' + phoneNumbers[1] + ' (C)';
+                    } else if (phoneNumberOrderArray[index].trim().toLowerCase() === 'work' && phoneNumbers[2] != '') {
+                        if (index === 0 || !titleFlag) {
+                            title = title + phoneNumbers[2] + ' (W)';
+                            titleFlag = true;
+                        }
+                        fullTitle = fullTitle + '    ' + phoneNumbers[2] + ' (W)';
+                    } else if (phoneNumberOrderArray[index].trim().toLowerCase() === 'alternate' && phoneNumbers[3] != '') {
+                        if (index === 0 || !titleFlag) {
+                            title = title + phoneNumbers[3] + ' (A)';
+                            titleFlag = true;
+                        }
+                        fullTitle = fullTitle + '    ' + phoneNumbers[3] + ' (A)';
+                    }
+                }
+            }
+
     		me.updateWatchLink(args);
-
 			me.showByPermission(me.getViewCoachingHistoryButton(), me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'));
-
 			me.showElement(me.getStudentRecordEditButton());
 			me.showElement(me.getEmailCoachButton());
-			var fullName = args.person.getFullName();
-			var coachName = args.person.getCoachFullName();
-			if(args.person.get('homePhone') != '')
-				var homePhone = '    ' + args.person.get('homePhone') + ' (H)' ;
-			else
-				var homePhone = '';
-			if(args.person.get('cellPhone') != '')
-				var cellPhone = '    ' + args.person.get('cellPhone') + ' (C)';
-			else
-				var cellPhone = '';
-			
-			
-			if(me.getView())
-	        	me.getView().setTitle(fullName + '          ' + '  -   ID#: ' + args.person.get('schoolId') + homePhone + cellPhone);
-			if(me.getEmailCoachButton())
+
+			if (view) {
+	            view.setTitle(title);
+	        	view.getHeader().getEl().set({
+	        	    'data-qtip': fullTitle
+	        	});
+            }
+
+			if (me.getEmailCoachButton()) {
 	        	me.getEmailCoachButton().setText('Coach: ' + coachName);
-			
-		}else{
+            }
+
+		} else {
 			me.hideElement(me.getWatchStudentButton());
 			me.hideElement(me.getViewCoachingHistoryButton());
 			me.hideElement(me.getStudentRecordEditButton());
-			if(me.getView())
+			if (me.getView()) {
 				me.getView().setTitle('');
+            }
 			me.hideElement(me.getEmailCoachButton());
 		}
     },
 
-	showByPermission:function(element, hasPermission){
+	showByPermission:function(element, hasPermission) {
 		var me = this;
-		if(hasPermission)
+		if (hasPermission) {
 			me.showElement(element);
-		else
+        } else {
 			me.hideElement(element);
+        }
 	},
 
-	hideElement: function(element){
-		if(element)
+	hideElement: function(element) {
+		if (element) {
 			element.hide();
+        }
 	},
 	
-	showElement: function(element){
-		if(element)
+	showElement: function(element) {
+		if (element) {
 			element.show();
+        }
 	},
     
-    destroy: function(){
+    destroy: function() {
 		var me = this;
     	 me.appEventsController.removeEvent({
              eventName: 'updateStudentRecord',
@@ -307,6 +356,6 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
     	 
  		me.appEventsController.removeEvent({eventName: 'doPersonToolbarEdit', callBackFunc: me.studentRecordEdit, scope: me});
 
-    	 return me.callParent(arguments);
+    	return me.callParent(arguments);
     }
 });
