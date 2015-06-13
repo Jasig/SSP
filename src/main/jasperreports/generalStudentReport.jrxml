@@ -28,8 +28,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="540"/>
-	<property name="ireport.y" value="197"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="198"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
@@ -91,6 +91,12 @@
 	<field name="academicStanding" class="java.lang.String"/>
 	<field name="activeSpecialServiceGroupNames" class="java.lang.String"/>
 	<field name="academicProgramNames" class="java.lang.String"/>
+	<field name="workPhone" class="java.lang.String"/>
+	<field name="cellPhone" class="java.lang.String"/>
+	<field name="alternatePhone" class="java.lang.String"/>
+	<field name="singlePhoneNumberForReport" class="java.lang.String">
+		<fieldDescription><![CDATA[singlePhoneNumberForReport]]></fieldDescription>
+	</field>
 	<variable name="rowIndex" class="java.lang.Integer">
 		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
 		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
@@ -315,13 +321,6 @@
 				<text><![CDATA[ST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7e8a2c84-5e76-4c4b-bcf5-48d1873e2d79" stretchType="RelativeToBandHeight" x="355" y="0" width="63" height="14"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[PHONE(H)]]></text>
-			</staticText>
-			<staticText>
 				<reportElement uuid="b8d1916e-ffdc-4a75-bc88-ed1c37f1b2c9" stretchType="RelativeToBandHeight" x="418" y="0" width="56" height="25"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
@@ -362,6 +361,13 @@
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[PROGRAM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3dea10a7-d886-46b5-a285-7f15bd24a096" stretchType="RelativeToBandHeight" x="355" y="0" width="63" height="14"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PHONE]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -436,7 +442,7 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{homePhone} == null ? "" : $F{homePhone})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{singlePhoneNumberForReport}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="8bef58a2-cca0-4694-9796-487168a3b195" stretchType="RelativeToBandHeight" x="419" y="2" width="55" height="32"/>

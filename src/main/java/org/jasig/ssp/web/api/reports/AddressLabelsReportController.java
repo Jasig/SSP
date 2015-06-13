@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
@@ -33,11 +34,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
-import org.jasig.ssp.service.reference.ServiceReasonService;
-import org.jasig.ssp.service.reference.SpecialServiceGroupService;
-import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.service.reference.*;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -101,9 +98,8 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 	@Autowired
 	protected transient ExternalStudentTranscriptService externalStudentTranscriptService;
 
-	// @Autowired
-	// private transient PersonTOFactory factory;
-
+	@Autowired
+    protected transient ConfigService configurationService;
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
@@ -183,7 +179,9 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
 				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 
-		final Map<String, BaseStudentReportTO> compressedReportMap = processStudentReportTOsAsMap(people);
+        final String[] phoneOrderList = configurationService.getByNameNullOrDefaultValue("phone_display_order").trim().split(",");
+
+        final Map<String, BaseStudentReportTO> compressedReportMap = processStudentReportTOsAsMap(people, phoneOrderList);
 		final List<String> schoolIdKeys = new ArrayList<String>(compressedReportMap.keySet());
 		final List<ExternalStudentAcademicProgram> academicPrograms = externalStudentAcademicProgramService.getBatchedAcademicProgramsBySchoolIds(schoolIdKeys);
 		final List<ExternalStudentTranscript> transcripts = externalStudentTranscriptService.getBatchedRecordsBySchoolIds(schoolIdKeys);
@@ -196,7 +194,7 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 			compressedReportMap.get(academicProgram.getSchoolId()).addAcademicProgram(academicProgram);
 		}
 
-		parameters.put("studentCount", compressedReportMap == null ? 0 : compressedReportMap.size());
+        parameters.put("studentCount", compressedReportMap == null ? 0 : compressedReportMap.size());
 		renderReport(response, parameters, compressedReportMap.values(), REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 
@@ -205,22 +203,38 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 	 * @param people
 	 * @return
 	 */
-	private Map<String, BaseStudentReportTO> processStudentReportTOsAsMap(PagingWrapper<BaseStudentReportTO> people) {
+	private Map<String, BaseStudentReportTO> processStudentReportTOsAsMap(PagingWrapper<BaseStudentReportTO> people, final String[] phoneOrderConfig) {
 		Map<String, BaseStudentReportTO> compressedReportMap = Maps.newHashMap();
 		if (people == null || people.getResults() <= 0) {
 			return compressedReportMap;
 		}
 
 		for (BaseStudentReportTO reportTO : new ArrayList<BaseStudentReportTO>(people.getRows())) {
-			if (compressedReportMap.containsKey(reportTO.getSchoolId())) {
+            if (compressedReportMap.containsKey(reportTO.getSchoolId())) {
 				compressedReportMap.get(reportTO.getSchoolId()).processDuplicate(reportTO);
 			} else {
 				reportTO.normalize();
+                reportTO.setSinglePhoneNumberForReport(setPhoneNumberToDisplay(phoneOrderConfig, reportTO));
 				compressedReportMap.put(reportTO.getSchoolId(), reportTO);
 			}
 		}
 		return compressedReportMap;
 	}
+
+    private String setPhoneNumberToDisplay (final String[] phoneOrderList, final BaseStudentReportTO studentReportTO) {
+        for (int index=0; index < phoneOrderList.length; index++) {
+            if (phoneOrderList[index].equals("home") && StringUtils.isNotBlank(studentReportTO.getHomePhone())) {
+                return studentReportTO.getHomePhone() + " (H)";
+            } else if (phoneOrderList[index].equals("cell") && StringUtils.isNotBlank(studentReportTO.getCellPhone())) {
+                return studentReportTO.getCellPhone() + " (C)";
+            } else if (phoneOrderList[index].equals("work") && StringUtils.isNotBlank(studentReportTO.getWorkPhone())) {
+                return studentReportTO.getWorkPhone() + " (P)";
+            } else if (phoneOrderList[index].equals("alternate") && StringUtils.isNotBlank(studentReportTO.getAlternatePhone())) {
+                return studentReportTO.getAlternatePhone() + " (A)";
+            }
+        }
+        return "";
+    }
 
 	@Override
 	protected Logger getLogger() {

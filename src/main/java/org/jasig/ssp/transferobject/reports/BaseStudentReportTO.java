@@ -86,6 +86,9 @@ public class BaseStudentReportTO implements Serializable {
 	private String zipCode;
     private String cellPhone;
     private String homePhone;
+    private String workPhone;
+    private String alternatePhone;
+    private String singlePhoneNumberForReport;
 	private String studentTypeName;
 	private String studentTypeCode;
 	private Integer registrationStatus;
@@ -227,13 +230,29 @@ public class BaseStudentReportTO implements Serializable {
 		this.zipCode = zipCode;
 	}
 
-	public String getCellPhone() {
-		return cellPhone;
+	public String getWorkPhone() {
+		return workPhone;
 	}
 
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
+	public void setWorkPhone(String workPhone) {
+		this.workPhone = workPhone;
 	}
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
+    public void setCellPhone(String cellPhone) {
+        this.cellPhone = cellPhone;
+    }
+
+    public String getSinglePhoneNumberForReport() {
+        return this.singlePhoneNumberForReport;
+    }
+
+    public void setSinglePhoneNumberForReport(String singleValidPhoneNumberToDisplayInReport) {
+        this.singlePhoneNumberForReport = singleValidPhoneNumberToDisplayInReport;
+    }
 
 	public String getHomePhone() {
 		return homePhone;
@@ -242,6 +261,14 @@ public class BaseStudentReportTO implements Serializable {
 	public void setHomePhone(String homePhone) {
 		this.homePhone = homePhone;
 	}
+
+    public String getAlternatePhone() {
+        return alternatePhone;
+    }
+
+    public void setAlternatePhone(String alternatePhone) {
+        this.alternatePhone = alternatePhone;
+    }
 
 	public String getCurrentProgramStatusName() {
 		return currentProgramStatusName;
@@ -465,6 +492,8 @@ public class BaseStudentReportTO implements Serializable {
 		setZipCode(person.getZipCode());
 		setHomePhone(person.getHomePhone());
 		setCellPhone(person.getCellPhone());
+        setWorkPhone(person.getWorkPhone());
+        setAlternatePhone(person.getAlternatePhone());
 		setSchoolId(person.getSchoolId());
 		setCoach(new CoachPersonLiteTO(person.getCoach()));
 		setStudentTypeName(person.getStudentType().getName());
@@ -487,6 +516,8 @@ public class BaseStudentReportTO implements Serializable {
 		setZipCode(person.getZipCode());
 		setHomePhone(person.getHomePhone());
 		setCellPhone(person.getCellPhone());
+        setWorkPhone(person.getWorkPhone());
+        setAlternatePhone(person.getAlternatePhone());
 		setSchoolId(person.getSchoolId());
 		setCoachFirstName(person.getCoachFirstName());
 		setCoachMiddleName(person.getCoachMiddleName());
