@@ -20,7 +20,7 @@ Ext.define('Ssp.controller.CustomizableExportController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-        exportService: 'exportService',
+        exportService: 'exportService'
     },
     control: {
         'exportButton': {

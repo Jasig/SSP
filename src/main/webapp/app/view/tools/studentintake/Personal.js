@@ -192,7 +192,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
 				        itemId: 'zipCode'
 				    }, {
                         xtype: 'displayfield',
-                        fieldLabel: 'ALTERNATE PHONE',
+                        fieldLabel: 'ALTERNATE PHONE'
 				    }, {
                         fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
                         name: 'alternatePhone',

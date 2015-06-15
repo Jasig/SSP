@@ -37,7 +37,7 @@ Ext.define('Ssp.view.CustomizableExportView', {
             },
             defaults: {
                 border: 'false',
-                fieldLabel: '',
+                fieldLabel: ''
             },
             bodyStyle: 'background:none',
             bodyPadding: 8,

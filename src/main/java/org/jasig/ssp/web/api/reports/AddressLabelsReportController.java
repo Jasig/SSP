@@ -228,7 +228,7 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
             } else if (phoneOrderList[index].equals("cell") && StringUtils.isNotBlank(studentReportTO.getCellPhone())) {
                 return studentReportTO.getCellPhone() + " (C)";
             } else if (phoneOrderList[index].equals("work") && StringUtils.isNotBlank(studentReportTO.getWorkPhone())) {
-                return studentReportTO.getWorkPhone() + " (P)";
+                return studentReportTO.getWorkPhone() + " (W)";
             } else if (phoneOrderList[index].equals("alternate") && StringUtils.isNotBlank(studentReportTO.getAlternatePhone())) {
                 return studentReportTO.getAlternatePhone() + " (A)";
             }
