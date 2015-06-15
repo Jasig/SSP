@@ -223,14 +223,14 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		PersonSearchRequest form = new PersonSearchRequest();
 		
 		//added to handle multiple coach searches
-		ArrayList<Person> coachList = new ArrayList<Person>();
-		coachList.add(coach);
-		form.setCoach(coachList);
-		
-		ArrayList<ProgramStatus> programStatusList = new ArrayList<ProgramStatus>();
-		programStatusList.add(programStatus);
-		
-		form.setProgramStatus(programStatusList);
+		if (coach != null) {
+            form.setCoach(Lists.newArrayList(coach));
+        }
+
+        if (programStatus != null) {
+            form.setProgramStatus(Lists.newArrayList(programStatus));
+        }
+
 		form.setPersonTableType(PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
 		form.setSortAndPage(sAndP);
 		return searchPersonDirectory(form);

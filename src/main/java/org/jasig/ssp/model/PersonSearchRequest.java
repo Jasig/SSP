@@ -72,7 +72,7 @@ public class PersonSearchRequest {
 	// id of the person
 	private String schoolId;
 
-	private ArrayList<ProgramStatus> programStatus;
+	private List<ProgramStatus> programStatus;
 	
 	private List<SpecialServiceGroup> specialServiceGroup;
 
@@ -146,21 +146,21 @@ public class PersonSearchRequest {
 	}
 
 
-	public ArrayList<ProgramStatus> getProgramStatus() {
+	public List<ProgramStatus> getProgramStatus() {
 		return programStatus;
 	}
 	
-	public ArrayList<String> getProgramStatusNames() {
+	public List<String> getProgramStatusNames() {
 		ArrayList<String> retVal = new ArrayList<String>();
 		for(ProgramStatus ps: programStatus) {
 			retVal.add(ps.getName());
 		}
-			
+
 		return retVal;
 	}
 
 
-	public void setProgramStatus(ArrayList<ProgramStatus> programStatus) {
+	public void setProgramStatus(List<ProgramStatus> programStatus) {
 		if (CollectionUtils.isNotEmpty(programStatus)) {
             this.programStatus = programStatus;
         }
