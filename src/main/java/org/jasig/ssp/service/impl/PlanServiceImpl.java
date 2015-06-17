@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PlanDao;
@@ -33,6 +35,7 @@ import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.external.ExternalProgramService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -79,7 +82,9 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	@Autowired
 	private ExternalStudentTranscriptService externalStudentTranscriptService;
 
-	
+	@Autowired
+	private transient ExternalProgramService externalProgramService;
+
 	@Autowired
 	private PlanTOFactory planTOFactory;
 	
@@ -214,8 +219,14 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 			List<TermCourses<Plan,PlanTO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
 			outputPlan.setTermCourses(courses);
 			outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
-			 
-			SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, null);
+
+			Map<String,Object> params = new HashMap<String,Object>();
+			String programCode = outputPlan.getOutputPlan().getNonOutputTO().getProgramCode();
+			if (programCode != null && programCode.trim() != "") {
+				params.put("programName", externalProgramService.getByCode(programCode).getName());
+			}
+
+		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, params);
 			return subjectAndBody;
 	}
 

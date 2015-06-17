@@ -45,10 +45,7 @@ import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.external.ExternalCourseRequisiteService;
-import org.jasig.ssp.service.external.ExternalCourseService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
-import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanCourseTO;
@@ -93,6 +90,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	
 	@Autowired
 	private ExternalStudentTranscriptCourseService studentTranscriptService;
+
+	@Autowired
+	private transient ExternalProgramService externalProgramService;
 
 	@Autowired
 	private transient ConfigService configService;
@@ -145,13 +145,20 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		List<TermCourses<T,TO>> courses = collectTermCourses(plan);
 		BigDecimal totalPlanCreditHours = calculateTotalPlanHours(courses);
 		BigDecimal totalPlanDevHours = calculateTotalPlanDevHours(courses);
+
+		Map<String,Object> params = new HashMap<String,Object>();
+		String programCode = planOutput.getNonOutputTO().getProgramCode();
+		if (programCode != null && programCode.trim() != "") {
+			params.put("programName", externalProgramService.getByCode(programCode).getName());
+		}
 		
 		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
 				planOutput, 
 				totalPlanCreditHours, 
 				totalPlanDevHours, 
 				courses,
-				getInstitutionName());
+				getInstitutionName(),
+				params);
 		return subjectAndBody;
 	}
 	

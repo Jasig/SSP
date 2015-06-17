@@ -96,7 +96,9 @@ public interface MessageTemplateService extends
 			final BigDecimal totalPlanCreditHours,
 			final BigDecimal totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,
-			final String institutionName);
+			final String institutionName,
+			final Map<String,Object> additionalParams);
+
 
 	SubjectAndBody createMapStatusReportEmail(MapStatusReportSummary summary);
 

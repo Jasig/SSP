@@ -312,7 +312,8 @@ public class MessageTemplateServiceImpl extends
 			final BigDecimal totalPlanCreditHours,
 			final BigDecimal totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,
-			final String institutionName) {
+			final String institutionName,
+			final Map<String,Object> additionalParams) {
  
 		final Map<String, Object> messageParams = addParamsToMapPlan(
 				student,
@@ -346,7 +347,9 @@ public class MessageTemplateServiceImpl extends
 			messageParams.put("completedHours", planOutput.getGpa().getCreditHoursEarned());
 			messageParams.put("completionRage", planOutput.getGpa().getCreditCompletionRate());
 		}
-		
+		if(additionalParams != null)
+			messageParams.put("printParams", additionalParams);
+
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);
 	}
@@ -634,6 +637,9 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("attemptedHours", new BigDecimal(20));
 		messageParams.put("completedHours", new BigDecimal(18));
 		messageParams.put("completionRage", new BigDecimal(90));
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("programName", "ProgramName");
+		messageParams.put("printParams",params);
 		return messageParams;
 	}
 
