@@ -63,13 +63,20 @@ Ext.define('Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin', {
      		                   xtype: 'button',
      		                   action: 'edit',
      		                   itemId: 'editButton'
-                }]
+                },'-',{
+                    text: 'Preview',
+                               iconCls: 'icon-preview',
+                               xtype: 'button',
+                               action: 'preview',
+                               itemId: 'previewButton'
+                    }
+                ]
             }, {
                 xtype: 'toolbar',
                 dock: 'top',
                 items: [{
                     xtype: 'label',
-                    text: 'Click on an existing Message to Edit.'
+                    text: 'Click on an existing Message to Edit or Preview.'
                 }]
             }]
         });

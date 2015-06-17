@@ -237,6 +237,7 @@ Ext.require([
 	'Ssp.view.admin.forms.config.MessageTemplatesAdmin',
     'Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin',
 	'Ssp.view.admin.forms.config.MessageTemplateDetails',
+	'Ssp.view.admin.forms.config.MessageTemplatePreview',
 
     //OAUTH2 ADMIN VIEWS
     'Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin',
@@ -557,6 +558,7 @@ var apiUrls = [
   {name: 'registrationLoad', url: 'reference/registrationLoad'},
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
+  {name: 'messageTemplatePreview', url: 'messageTemplatePreview'},
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'careerstatus', url: 'reference/careerstatus'},

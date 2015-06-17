@@ -21,6 +21,7 @@ package org.jasig.ssp.service.reference;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.EarlyAlert;
@@ -37,6 +38,7 @@ import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 
 /**
@@ -97,4 +99,6 @@ public interface MessageTemplateService extends
 			final String institutionName);
 
 	SubjectAndBody createMapStatusReportEmail(MapStatusReportSummary summary);
+
+	MessageTemplateTO createMessageTemplatePreview(UUID uuid);
 }

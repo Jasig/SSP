@@ -3126,6 +3126,11 @@
                     "path": "/app/view/admin/forms/config/"
                 },
                 {
+                    "clsName": "Ssp.view.admin.forms.config.MessageTemplatePreview",
+                    "name": "MessageTemplatePreview.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
                     "clsName": "Ssp.view.admin.forms.config.MessageTemplatesAdmin",
                     "name": "MessageTemplatesAdmin.js",
                     "path": "/app/view/admin/forms/config/"

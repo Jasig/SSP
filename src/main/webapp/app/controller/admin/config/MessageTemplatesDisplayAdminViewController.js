@@ -35,7 +35,10 @@ Ext.define('Ssp.controller.admin.config.MessageTemplatesDisplayAdminViewControll
     control: {
     	'editButton': {
 			click: 'onEditClick'
-		}
+		},
+        'previewButton': {
+         	click: 'onPreviewClick'
+         }
     },       
 	init: function() {
 		var me=this;
@@ -55,7 +58,7 @@ Ext.define('Ssp.controller.admin.config.MessageTemplatesDisplayAdminViewControll
 		var grid, record, idx;
 		grid = button.up('grid');
 		record = grid.getView().getSelectionModel().getSelection()[0];
-		
+
 		this.adminSelectedIndex.set('value', -1);
         if (record) 
         {	
@@ -65,8 +68,66 @@ Ext.define('Ssp.controller.admin.config.MessageTemplatesDisplayAdminViewControll
      	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
         }
 	},
-	
+
+	onPreviewClick: function(button) {
+		var me = this;
+   		var grid, record, idx;
+   		grid = button.up('grid');
+   		record = grid.getView().getSelectionModel().getSelection()[0];
+
+   		this.adminSelectedIndex.set('value', -1);
+        if (record)
+        {
+   			var id = record.data.id;
+
+           	var url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('messageTemplatePreview') + '?id=' + id);
+
+			me.apiProperties.makeRequest({
+				url: url,
+				method: 'GET',
+				successFunc: me.displayPreview,
+				failureFunc: me.failureFunc,
+				scope: me
+			});
+
+        }else{
+            Ext.Msg.alert('SSP Error', 'Please select an item to preview.');
+        }
+   	},
+
+   	failureFunc: function() {
+	   	Ext.Msg.alert('SSP Error', 'Could not create message template preview.');
+   	},
+
+	destroy: function() {
+		var me=this;
+		if ( me.messageTemplatePopup ) {
+			me.messageTemplatePopup.destroy();
+		}
+		return me.callParent( arguments );
+	},
+
 	displayEditor: function(){
 		var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
-	}
+	},
+
+    displayPreview: function(response, scope){
+		var me = scope;
+    	if (response.responseText != "")
+		{
+		    var decoded = Ext.decode(response.responseText);
+			if (decoded != null)
+			{
+				var model = new  Ext.create('Ssp.model.MessageTemplates');
+				model.populateFromGenericObject(decoded);
+			}
+		}
+		if ( me.messageTemplatePopup ) {
+			me.messageTemplatePopup.destroy();
+		}
+		me.messageTemplatePopup = Ext.create('Ssp.view.admin.forms.config.MessageTemplatePreview', {
+			messageTemplatePreviewData: model
+		});
+		me.messageTemplatePopup.show();
+     }
 });

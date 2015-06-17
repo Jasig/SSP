@@ -20,11 +20,7 @@ package org.jasig.ssp.service.reference.impl;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
@@ -34,6 +30,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TermCourses;
+import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.VelocityTemplateService;
@@ -45,9 +42,16 @@ import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertOutcomeMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertResponseMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
+import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
+import org.jasig.ssp.util.DateTimeUtils;
+import org.jasig.ssp.util.MessageTemplatePreviewTOBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,6 +117,13 @@ public class MessageTemplateServiceImpl extends
 	private SubjectAndBody populateFromTemplate(
 			final UUID messageTemplateId,
 			final Map<String, Object> templateParameters) {
+
+			MessageTemplateTO messageTemplateTO = populateFromTemplateAsMessageTempateTO(messageTemplateId, templateParameters);
+			return new SubjectAndBody(messageTemplateTO.getSubject(), messageTemplateTO.getBody());
+	}
+	private MessageTemplateTO populateFromTemplateAsMessageTempateTO(
+			final UUID messageTemplateId,
+			final Map<String, Object> templateParameters)  {
 		try {
 			setInstitutionValues(templateParameters);
 			final MessageTemplate messageTemplate = dao.get(messageTemplateId);
@@ -127,7 +138,10 @@ public class MessageTemplateServiceImpl extends
 							messageTemplate.bodyTemplateId(),
 							templateParameters);
 
-			return new SubjectAndBody(subject, body);
+			MessageTemplateTO messageTemplateTO = new MessageTemplateTO(messageTemplate);
+			messageTemplateTO.setSubject(subject);
+			messageTemplateTO.setBody(body);
+			return messageTemplateTO;
 		} catch (final ObjectNotFoundException e) {
 			throw new ConfigException(messageTemplateId,
 					ConfigException.TEMPLATE_TYPE, e);
@@ -421,4 +435,266 @@ public class MessageTemplateServiceImpl extends
         setInstitutionValues(messageParams);
         return populateFromTemplate(MessageTemplate.MYGPS_WELCOME_MESSAGE_ID, messageParams);
     }
+
+	public MessageTemplateTO createMessageTemplatePreview (UUID id) {
+		final Map<String, Object> messageParams;
+
+		if ( id.equals(MessageTemplate.ACTION_PLAN_EMAIL_ID) ) {
+			messageParams = createPreviewActionPlanEmailMessageParams();
+		} else if (id.equals(MessageTemplate.ACTION_PLAN_STEP_ID)) {
+			messageParams = createPreviewActionPlanStepEmailMessageParams();
+		} else if (id.equals(MessageTemplate.EMAIL_COACHING_ASSIGNMENT_CHANGE_ID)) {
+			messageParams = createPreviewCoachingAssignmentChangeMessageMessageParams();
+		} else if (id.equals(MessageTemplate.CONTACT_COACH_ID)) {
+			messageParams = createContactCoachEmailMessageParams();
+		} else if (id.equals(MessageTemplate.CUSTOM_ACTION_PLAN_TASK_ID)) {
+			messageParams = createCustomActionPlanTaskEmailMessageParams();
+		} else if (id.equals(MessageTemplate.EARLYALERT_CONFIRMATIONTOADVISOR_ID)) {
+			messageParams = createEarlyAlertConfirmationToAdvisorMessageParams();
+		} else if (id.equals(MessageTemplate.EARLYALERT_CONFIRMATIONTOFACULTY_ID)) {
+			messageParams = createEarlyAlertConfirmationToFacultyMessageParams();
+		} else if (id.equals(MessageTemplate.JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID)) {
+			messageParams = createEarlyAlertJournalEntryMessageParams();
+		} else if (id.equals(MessageTemplate.EARLYALERT_RESPONSE_REQUIRED_ID)) {
+			messageParams = createEarlyAlertResponseRequiredReminderToCoachMessageParams();
+		} else if (id.equals(MessageTemplate.EARLYALERT_RESPONSETOFACULTYFROMCOACH_ID)) {
+			messageParams = createEarlyAlertResponseToFacultyFromCoachMessageParams();
+		} else if (id.equals(MessageTemplate.EARLYALERT_RESPONSE_TO_REFERRAL_SOURCE_ID)) {
+			messageParams = createEarlyAlertResponseToReferralSourceFromCoachMessageParams();
+		} else if (id.equals(MessageTemplate.EARLYALERT_MESSAGETOSTUDENT_ID)) {
+			messageParams = createEarlyAlertSentToStudentMessageParams();
+		} else if (id.equals(MessageTemplate.EMAIL_JOURNAL_ENTRY_ID)) {
+			messageParams = createEmailJournalEntryMessageParams();
+		} else if (id.equals(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID)) {
+			messageParams = createMapPlanFullPrintoutMessageParams();
+		} else if (id.equals(MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID)) {
+			messageParams = createMapPlanPrintoutMessageParams();
+		} else if (id.equals(MessageTemplate.MAP_STATUS_REPORT_ID)) {
+			messageParams = createMapStatusCalculationRunReportMessageParams();
+		} else if (id.equals(MessageTemplate.MYGPS_WELCOME_MESSAGE_ID)) {
+			messageParams = createMyGPSWelcomeMessageMessageParams();
+		} else if (id.equals(MessageTemplate.NEW_STUDENT_INTAKE_TASK_EMAIL_ID)) {
+			messageParams = createNewStudentIntakeTaskEmailMessageParams();
+		} else if (id.equals(MessageTemplate.OUTPUT_TEMPLATE_PLAN_MATRIX_ID)) {
+			messageParams = createTemplatePlanPrintoutMessageParams();
+		} else{
+			messageParams = new HashMap<String, Object>();
+		}
+
+		return populateFromTemplateAsMessageTempateTO(id, messageParams);
+	}
+
+	private Map<String, Object> createPreviewActionPlanEmailMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("taskTOs", MessageTemplatePreviewTOBuilder.createTaskTOList());
+		messageParams.put("goalTOs", MessageTemplatePreviewTOBuilder.createGoalTOList());
+		messageParams.put("strengthTOs", MessageTemplatePreviewTOBuilder.createStrengthTOList());
+		messageParams.put("student", MessageTemplatePreviewTOBuilder.createPerson());
+		messageParams.put("fullName", "Student FullName");
+		return messageParams;
+	}
+
+	private Map<String,Object> createPreviewActionPlanStepEmailMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("task", MessageTemplatePreviewTOBuilder.createTaskMessageTemplateTO());
+		messageParams.put("dueDateFormatted", formatDate(Calendar.getInstance().getTime()));
+		return messageParams;
+	}
+
+	private Map<String,Object> createPreviewCoachingAssignmentChangeMessageMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("student", MessageTemplatePreviewTOBuilder.createStudentPersonLiteMessageTemplateTO());
+		messageParams.put("oldCoach", MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO());
+		messageParams.put("newCoach", MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO());
+		messageParams.put("changedBy", MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO());
+		return messageParams;
+	}
+
+	private Map<String,Object> createContactCoachEmailMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("subject", "This is the email subject");
+		messageParams.put("message", "This is the body of the email");
+		messageParams.put("student", MessageTemplatePreviewTOBuilder.createPerson());
+		messageParams.put("fullName", "Student Fullname");
+		return messageParams;
+	}
+
+	private Map<String,Object> createCustomActionPlanTaskEmailMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("task", MessageTemplatePreviewTOBuilder.createTaskMessageTemplateTO());
+		messageParams.put("dueDateFormatted", formatDate(Calendar.getInstance().getTime()));
+		return messageParams;
+	}
+
+	private Map<String,Object> createEarlyAlertMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("course", MessageTemplatePreviewTOBuilder.createFacultyCourse());
+		messageParams.put("term", MessageTemplatePreviewTOBuilder.createTerm());
+		messageParams.put("earlyAlert", MessageTemplatePreviewTOBuilder.createEarlyAlertMessageTemplateTO());
+		messageParams.put("termToRepresentEarlyAlert",configService.getByNameEmpty("term_to_represent_early_alert"));
+		messageParams.put("TermToRepresentEarlyAlert",configService.getByNameEmpty("term_to_represent_early_alert"));
+		messageParams.put("linkToSSP",configService.getByNameEmpty("serverExternalPath"));
+		messageParams.put("applicationTitle",configService.getByNameEmpty("app_title"));
+		messageParams.put("institutionName",configService.getByNameEmpty("inst_name"));
+		messageParams.put("FirstName", "FirstName");
+		messageParams.put("LastName", "LastName");
+		messageParams.put("CourseName", "CourseName");
+		return messageParams;
+	}
+	private Map<String,Object> createEarlyAlertConfirmationToAdvisorMessageParams() {
+		return createEarlyAlertMessageParams();
+	}
+
+	private Map<String,Object> createEarlyAlertConfirmationToFacultyMessageParams() {
+		return createEarlyAlertMessageParams();
+	}
+
+	private Map<String,Object> createEarlyAlertJournalEntryMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("course", MessageTemplatePreviewTOBuilder.createFacultyCourse());
+		messageParams.put("term", MessageTemplatePreviewTOBuilder.createTerm());
+		messageParams.put("earlyAlert", MessageTemplatePreviewTOBuilder.createEarlyAlertMessageTemplateTO());
+		messageParams.put("termToRepresentEarlyAlert", configService.getByNameEmpty("term_to_represent_early_alert"));
+		messageParams.put("TermToRepresentEarlyAlert", configService.getByNameEmpty("term_to_represent_early_alert"));
+		messageParams.put("linkToSSP", configService.getByNameEmpty("serverExternalPath"));
+		messageParams.put("applicationTitle", configService.getByNameEmpty("app_title"));
+		messageParams.put("institutionName", configService.getByNameEmpty("inst_name"));
+		messageParams.put("FirstName", "FirstName");
+		messageParams.put("LastName", "LastName");
+		messageParams.put("CourseName", "CourseName");
+		messageParams.put("earlyAlertResponse", MessageTemplatePreviewTOBuilder.createEarlyAlertResponseMessageTemplateTO());
+		messageParams.put("workPhone", "WorkPhone");
+		messageParams.put("officeLocation", "officeLocation");
+		return messageParams;
+	}
+
+	private Map<String,Object> createEarlyAlertResponseRequiredReminderToCoachMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("earlyAlertTOPairs", MessageTemplatePreviewTOBuilder.createEarlyAlertTOPairs());
+		messageParams.put("coach", MessageTemplatePreviewTOBuilder.createPerson(false));
+		messageParams.put("DateTimeUtils", DateTimeUtils.class);
+		messageParams.put("termToRepresentEarlyAlert", configService.getByNameEmpty("term_to_represent_early_alert"));
+		return messageParams;
+	}
+
+	private Map<String,Object> createEarlyAlertResponseToFacultyFromCoachMessageParams() {
+		Map<String, Object> messageParams = createEarlyAlertMessageParams();
+		messageParams.put("earlyAlert", MessageTemplatePreviewTOBuilder.createEarlyAlertMessageTemplateTO());
+		messageParams.put("earlyAlertResponse", MessageTemplatePreviewTOBuilder.createEarlyAlertResponseMessageTemplateTO());
+		messageParams.put("earlyAlertReferral", MessageTemplatePreviewTOBuilder.createEarlyAlertReferralTO(""));
+		messageParams.put("earlyAlertOutcome", MessageTemplatePreviewTOBuilder.createEarlyAlertOutcomeMessageTemplateTO());
+		return messageParams;
+	}
+
+	private Map<String,Object> createEarlyAlertResponseToReferralSourceFromCoachMessageParams() {
+		Map<String, Object> messageParams = createEarlyAlertMessageParams();
+		messageParams.put("earlyAlert", MessageTemplatePreviewTOBuilder.createEarlyAlertMessageTemplateTO());
+		messageParams.put("earlyAlertResponse", MessageTemplatePreviewTOBuilder.createEarlyAlertResponseMessageTemplateTO());
+		messageParams.put("earlyAlertReferral", MessageTemplatePreviewTOBuilder.createEarlyAlertReferralTO(""));
+		messageParams.put("earlyAlertOutcome", MessageTemplatePreviewTOBuilder.createEarlyAlertOutcomeMessageTemplateTO());
+		return messageParams;
+	}
+
+	private Map<String,Object> createEarlyAlertSentToStudentMessageParams() {
+		return createEarlyAlertMessageParams();
+	}
+
+	private Map<String,Object> createEmailJournalEntryMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("message", MessageTemplatePreviewTOBuilder.createMessageTO());
+		messageParams.put("messageContext", MessageTemplatePreviewTOBuilder.createMessageContextTO());
+		return messageParams;
+	}
+
+	private Map<String,Object> createMapPlanFullPrintoutMessageParams() {
+		final  Map<String, Object> messageParams = addParamsToMapPlan(
+				MessageTemplatePreviewTOBuilder.createPerson("_student"),
+				MessageTemplatePreviewTOBuilder.createPerson("_owner", false),
+				MessageTemplatePreviewTOBuilder.createPlanTO(),
+				new BigDecimal(50),
+				MessageTemplatePreviewTOBuilder.createTermCourses(),
+				"InstitutionName",
+				"These are the plan notes.");
+
+		messageParams.put("isPrivate", false);
+		messageParams.put("includeCourseDescription", true);
+		messageParams.put("includeFinancialAidInformation", true);
+		messageParams.put("includeHeaderFooter", true);
+		messageParams.put("includeTotalTimeExpected",  true);
+		messageParams.put("totalPlanDevHours", new BigDecimal(100));
+		messageParams.put("planContactNotes", "These are the plan contact notes.");
+		messageParams.put("planStudentNotes", "These are the plan student notes.");
+		messageParams.put("contactEmail", "contact@email.edu");
+		messageParams.put("contactPhone", "555-666-7777");
+		messageParams.put("contactTitle", "Plan ContactTitle");
+		messageParams.put("contactName", "Plan ContactName");
+		messageParams.put("neededFor67PercentCompletion", new BigDecimal(25));
+		messageParams.put("financialAidGpa", new BigDecimal(3.5));
+		messageParams.put("hoursNeededB", new BigDecimal(30));
+		messageParams.put("attemptedHours", new BigDecimal(20));
+		messageParams.put("completedHours", new BigDecimal(18));
+		messageParams.put("completionRage", new BigDecimal(90));
+		return messageParams;
+	}
+
+	private Map<String,Object> createMapPlanPrintoutMessageParams() {
+		final Map<String, Object> messageParams = addParamsToMapPlan(
+				MessageTemplatePreviewTOBuilder.createPerson("_student"),
+				MessageTemplatePreviewTOBuilder.createPerson("_owner", false),
+				MessageTemplatePreviewTOBuilder.createPlanTO(),
+				new BigDecimal(50),
+				MessageTemplatePreviewTOBuilder.createTermCourses(),
+				"InstitutionName",
+				"These are the plan notes.");
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("programName", "ProgramName");
+		messageParams.put("printParams",params);
+		return messageParams;
+	}
+
+	private Map<String,Object> createMapStatusCalculationRunReportMessageParams() {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, ''yy HH:mm:ss z");
+		messageParams.put("startTime", sdf.format(Calendar.getInstance().getTime()));
+		messageParams.put("endTime", sdf.format(Calendar.getInstance().getTime()));
+		messageParams.put("totalPlans", 10);
+		messageParams.put("title", "Map Status Report");
+		messageParams.put("reportSummaryDetails", MessageTemplatePreviewTOBuilder.createMapStatusReportSummaryDetails());
+		messageParams.put("termConfigReminder", false);
+		messageParams.put("error", false);
+		return messageParams;
+	}
+
+	private Map<String,Object> createMyGPSWelcomeMessageMessageParams() {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		setInstitutionValues(messageParams);
+		return messageParams;
+	}
+
+	private Map<String,Object> createNewStudentIntakeTaskEmailMessageParams() {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("taskName", "Task Name");
+		messageParams.put("student", MessageTemplatePreviewTOBuilder.createPerson());
+		messageParams.put("fullName", "Student FullName");
+		messageParams.put("description", "Task Description");
+		messageParams.put("dueDateFormatted", formatDate(Calendar.getInstance().getTime()));
+		return messageParams;
+	}
+
+	private Map<String,Object> createTemplatePlanPrintoutMessageParams() {
+		final Map<String, Object> messageParams = addParamsToMapPlan(
+				MessageTemplatePreviewTOBuilder.createPerson("_student"),
+				MessageTemplatePreviewTOBuilder.createPerson("_owner", false),
+				MessageTemplatePreviewTOBuilder.createPlanTO(),
+				new BigDecimal(50),
+				MessageTemplatePreviewTOBuilder.createTermCourses(),
+				"InstitutionName",
+				"These are the plan notes.");
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("departmentName", "PlanDepartmentName");
+		params.put("divisionName", "PlanDivisionName");
+		params.put("programName", "PlanProgramName");
+		messageParams.put("printParams",params);
+		return messageParams;
+	}
 }
