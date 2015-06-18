@@ -39,7 +39,7 @@ public class MessageTemplatePreviewTOBuilder {
         Person person = new Person();
         setSetters(person, suffix);
         if (addCoach) {
-            person.setCoach(createPerson(suffix, false));
+            person.setCoach(createPerson(suffix + "_Coach", false));
         }
         return person;
     }

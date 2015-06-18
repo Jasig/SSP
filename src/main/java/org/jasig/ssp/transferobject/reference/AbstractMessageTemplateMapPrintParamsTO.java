@@ -36,7 +36,8 @@ public class AbstractMessageTemplateMapPrintParamsTO<TOO extends AbstractPlanOut
 	UUID messageTemplateId;
 	Person owner;
 	Person student;
-	
+	Person lastModifiedBy;
+
 	AbstractPlanOutputTO<T,TO> outputPlan;
 	
 	public AbstractPlanOutputTO<T, TO> getOutputPlan() {
@@ -82,5 +83,12 @@ public class AbstractMessageTemplateMapPrintParamsTO<TOO extends AbstractPlanOut
 	public void setStudent(Person student) {
 		this.student = student;
 	}
-	
+
+	public Person getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	public void setLastModifiedBy(Person lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
 }

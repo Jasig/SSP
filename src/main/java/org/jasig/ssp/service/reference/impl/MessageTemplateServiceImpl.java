@@ -46,6 +46,7 @@ import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertOutcomeMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertResponseMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
@@ -295,7 +296,8 @@ public class MessageTemplateServiceImpl extends
 		
 		final Map<String, Object> messageParams =  addParamsToMapPlan(
 				params.getStudent(), 
-				params.getOwner(), 
+				params.getOwner(),
+				params.getLastModifiedBy(),
 				params.getOutputPlan().getNonOutputTO(),
 				params.getTotalPlanCreditHours(),
 				params.getTermCourses(),
@@ -317,7 +319,8 @@ public class MessageTemplateServiceImpl extends
  
 		final Map<String, Object> messageParams = addParamsToMapPlan(
 				student,
-				owner, 
+				owner,
+				modifiedBy,
 				planOutput.getNonOutputTO(), 
 				totalPlanCreditHours,
 				termCourses,
@@ -350,20 +353,14 @@ public class MessageTemplateServiceImpl extends
 		if(additionalParams != null)
 			messageParams.put("printParams", additionalParams);
 
-		if (modifiedBy!=null) {
-			messageParams.put("lastModifiedByName", modifiedBy.getFullName());
-			messageParams.put("lastModifiedByEmail", modifiedBy.getPrimaryEmailAddress());
-			messageParams.put("lastModifiedByPhone", modifiedBy.getWorkPhone());
-		}
-
-
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);
 	}
 	
 	private <T extends AbstractPlan,TO extends AbstractPlanTO<T>> Map<String, Object> addParamsToMapPlan(
 			final Person student,
-			final Person owner, 
+			final Person owner,
+			final Person modifiedBy,
 			final TO plan, 
 			final BigDecimal totalPlanCreditHours,
 			final List<TermCourses<T,TO>> termCourses,
@@ -380,16 +377,21 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("planStudentNotes", plan.getStudentNotes());
 		messageParams.put("termCourses", termCourses);
 
-		if(student != null)
+		if(student != null) {
 			addStudent(messageParams, student);
-		
+			Person coach = student.getCoach();
+			if (coach != null) {
+				messageParams.put("coach", new CoachPersonLiteMessageTemplateTO(coach));
+			}
+		}
+
 		messageParams.put("contactPhone", plan.getContactPhone());
 		messageParams.put("contactName", plan.getContactName());
 		messageParams.put("contactEmail", plan.getContactEmail());
 		messageParams.put("contactTitle", plan.getContactTitle());
-		
 
-		
+
+
 		messageParams.put("ownerPhone", owner.getWorkPhone());
 		messageParams.put("ownerFullName", owner.getFullName());
 		messageParams.put("ownerEmail", owner.getPrimaryEmailAddress());
@@ -402,10 +404,9 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("institution", institutionName);
 		messageParams.put("createdDateFormatted", formatDate(new Date()));
 
-		messageParams.put("coachName", student.getCoach().getFullName());
-		messageParams.put("coachEmail", student.getCoach().getPrimaryEmailAddress());
-		messageParams.put("coachPhone", student.getCoach().getWorkPhone());
-
+		if (modifiedBy!=null) {
+			messageParams.put("lastModifiedBy", new CoachPersonLiteMessageTemplateTO(modifiedBy));
+		}
 		return messageParams;
 		
 	}
@@ -624,6 +625,7 @@ public class MessageTemplateServiceImpl extends
 		final  Map<String, Object> messageParams = addParamsToMapPlan(
 				MessageTemplatePreviewTOBuilder.createPerson("_student"),
 				MessageTemplatePreviewTOBuilder.createPerson("_owner", false),
+				MessageTemplatePreviewTOBuilder.createPerson("_lastModifiedBy", false),
 				MessageTemplatePreviewTOBuilder.createPlanTO(),
 				new BigDecimal(50),
 				MessageTemplatePreviewTOBuilder.createTermCourses(),
@@ -652,14 +654,6 @@ public class MessageTemplateServiceImpl extends
 		params.put("programName", "ProgramName");
 		messageParams.put("printParams",params);
 
-		messageParams.put("lastModifiedByName", "LastModifiedByName");
-		messageParams.put("lastModifiedByEmail", "lastModifiedBy@email.edu");
-		messageParams.put("lastModifiedByPhone", "555-666-7777");
-		messageParams.put("coachName", "CoachName");
-		messageParams.put("coachEmail", "coach@email.edu");
-		messageParams.put("coachPhone", "555-666-7777");
-
-
 		return messageParams;
 	}
 
@@ -667,6 +661,7 @@ public class MessageTemplateServiceImpl extends
 		final Map<String, Object> messageParams = addParamsToMapPlan(
 				MessageTemplatePreviewTOBuilder.createPerson("_student"),
 				MessageTemplatePreviewTOBuilder.createPerson("_owner", false),
+				MessageTemplatePreviewTOBuilder.createPerson("_lastModifiedBy", false),
 				MessageTemplatePreviewTOBuilder.createPlanTO(),
 				new BigDecimal(50),
 				MessageTemplatePreviewTOBuilder.createTermCourses(),
@@ -709,8 +704,9 @@ public class MessageTemplateServiceImpl extends
 
 	private Map<String,Object> createTemplatePlanPrintoutMessageParams() {
 		final Map<String, Object> messageParams = addParamsToMapPlan(
-				MessageTemplatePreviewTOBuilder.createPerson("_student"),
+				null,
 				MessageTemplatePreviewTOBuilder.createPerson("_owner", false),
+				MessageTemplatePreviewTOBuilder.createPerson("_lastModifiedBy", false),
 				MessageTemplatePreviewTOBuilder.createPlanTO(),
 				new BigDecimal(50),
 				MessageTemplatePreviewTOBuilder.createTermCourses(),

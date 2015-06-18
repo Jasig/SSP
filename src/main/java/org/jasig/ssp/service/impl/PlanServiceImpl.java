@@ -137,6 +137,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 				params.setStudent(personService.get(
 						UUID.fromString(planOutputDataTO.getPlan().getPersonId())));
 			}
+			params.setLastModifiedBy(personService.get(planOutputDataTO.getPlan().getModifiedBy().getId()));
 			output = createMatrixOutput(params);
 		} else{
 			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());

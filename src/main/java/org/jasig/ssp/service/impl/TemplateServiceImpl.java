@@ -143,7 +143,9 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 			params.setOwner(personService.get(
 					UUID.fromString(templateOutputDataTO.getPlan().getOwnerId())));
 		}
-		
+
+		params.setLastModifiedBy(personService.get(templateOutputDataTO.getPlan().getModifiedBy().getId()));
+
 		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
 			output = createMatrixOutput(params);
 		} else{
