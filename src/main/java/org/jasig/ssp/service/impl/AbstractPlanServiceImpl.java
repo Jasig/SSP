@@ -140,7 +140,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		//TODO eventually find a better way to set the student when in context
 		Person student = plan instanceof PlanTO ?  personService.get(UUID.fromString(((PlanTO)plan).getPersonId())) : null;
 		Person owner = personService.get(UUID.fromString(plan.getOwnerId()));
-		
+		Person modifiedBy = personService.get(planOutput.getNonOutputTO().getModifiedBy().getId());
 		
 		List<TermCourses<T,TO>> courses = collectTermCourses(plan);
 		BigDecimal totalPlanCreditHours = calculateTotalPlanHours(courses);
@@ -152,7 +152,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			params.put("programName", externalProgramService.getByCode(programCode).getName());
 		}
 		
-		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, 
+		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, modifiedBy,
 				planOutput, 
 				totalPlanCreditHours, 
 				totalPlanDevHours, 

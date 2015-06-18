@@ -92,7 +92,7 @@ public interface MessageTemplateService extends
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
 			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params, Map<String,Object> additionalParams);
 	
-	public  <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final AbstractPlanOutputTO<T,TO> plan, 
+	public  <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student, final Person owner, final Person modifiedBy, final AbstractPlanOutputTO<T,TO> plan,
 			final BigDecimal totalPlanCreditHours,
 			final BigDecimal totalPlanDevHours,
 			final List<TermCourses<T, TO>> termCourses,

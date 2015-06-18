@@ -307,7 +307,7 @@ public class MessageTemplateServiceImpl extends
 	}
 	
 	@Override
-	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, 
+	public <T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanFullOutput(final Person student,final Person owner, final Person modifiedBy,
 			final AbstractPlanOutputTO<T, TO> planOutput, 
 			final BigDecimal totalPlanCreditHours,
 			final BigDecimal totalPlanDevHours,
@@ -323,7 +323,7 @@ public class MessageTemplateServiceImpl extends
 				termCourses,
 				institutionName,
 				planOutput.getNotes());
- 
+
 		messageParams.put("isPrivate", planOutput.getIsPrivate());
 		messageParams.put("includeCourseDescription", planOutput.getIncludeCourseDescription());
 		messageParams.put("includeFinancialAidInformation", planOutput.getIncludeFinancialAidInformation());
@@ -349,6 +349,13 @@ public class MessageTemplateServiceImpl extends
 		}
 		if(additionalParams != null)
 			messageParams.put("printParams", additionalParams);
+
+		if (modifiedBy!=null) {
+			messageParams.put("lastModifiedByName", modifiedBy.getFullName());
+			messageParams.put("lastModifiedByEmail", modifiedBy.getPrimaryEmailAddress());
+			messageParams.put("lastModifiedByPhone", modifiedBy.getWorkPhone());
+		}
+
 
 		return populateFromTemplate(MessageTemplate.OUTPUT_MAP_PLAN_FULL_ID,
 				messageParams);
@@ -394,7 +401,11 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("totalPlanHours", totalPlanCreditHours);
 		messageParams.put("institution", institutionName);
 		messageParams.put("createdDateFormatted", formatDate(new Date()));
-		
+
+		messageParams.put("coachName", student.getCoach().getFullName());
+		messageParams.put("coachEmail", student.getCoach().getPrimaryEmailAddress());
+		messageParams.put("coachPhone", student.getCoach().getWorkPhone());
+
 		return messageParams;
 		
 	}
@@ -640,6 +651,15 @@ public class MessageTemplateServiceImpl extends
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("programName", "ProgramName");
 		messageParams.put("printParams",params);
+
+		messageParams.put("lastModifiedByName", "LastModifiedByName");
+		messageParams.put("lastModifiedByEmail", "lastModifiedBy@email.edu");
+		messageParams.put("lastModifiedByPhone", "555-666-7777");
+		messageParams.put("coachName", "CoachName");
+		messageParams.put("coachEmail", "coach@email.edu");
+		messageParams.put("coachPhone", "555-666-7777");
+
+
 		return messageParams;
 	}
 
