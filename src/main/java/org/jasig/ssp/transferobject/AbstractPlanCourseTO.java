@@ -49,6 +49,8 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 	private Boolean isTranscript;
 	
 	private UUID electiveId;
+	private String electiveName;
+	private String electiveCode;
 
 	private BigDecimal creditHours;
 
@@ -89,10 +91,12 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.setContactNotes(model.getContactNotes());
 		this.setStudentNotes(model.getStudentNotes());
 		this.setIsImportant(model.getIsImportant());
-		if(model.getElective() != null)
+		if(model.getElective() != null) {
 			this.setElectiveId(model.getElective().getId());
-		
-		// validation transients 
+			this.setElectiveName(model.getElective().getName());
+			this.setElectiveCode(model.getElective().getCode());
+		}
+		// validation transients
 		this.setIsValidInTerm(model.getIsValidInTerm());
 		this.setHasPrerequisites(model.getHasPrerequisites());
 		this.setHasCorequisites(model.getHasCorequisites());
@@ -327,4 +331,19 @@ public class AbstractPlanCourseTO<P extends AbstractPlan ,T extends AbstractPlan
 		this.duplicateOfTranscript = duplicateOfTranscript;
 	}
 
+	public String getElectiveName() {
+		return electiveName;
+	}
+
+	public void setElectiveName(String electiveName) {
+		this.electiveName = electiveName;
+	}
+
+	public String getElectiveCode() {
+		return electiveCode;
+	}
+
+	public void setElectiveCode(String electiveCode) {
+		this.electiveCode = electiveCode;
+	}
 }

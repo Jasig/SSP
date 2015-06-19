@@ -40,6 +40,7 @@ import org.jasig.ssp.model.external.ExternalCourseRequisite;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
 import org.jasig.ssp.model.external.RequisiteCode;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -47,6 +48,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.reference.ElectiveService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.transferobject.AbstractPlanCourseTO;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
@@ -90,6 +92,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	
 	@Autowired
 	private ExternalStudentTranscriptCourseService studentTranscriptService;
+
+	@Autowired
+	private transient ElectiveService electiveService;
 
 	@Autowired
 	private transient ExternalProgramService externalProgramService;
@@ -341,10 +346,15 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		List<TermNoteTO> termNotes = plan.getTermNotes();
 		List<Term> currentAndFutureTerms = getTermService().getCurrentAndFutureTerms();
 		List<Term> futureTerms = currentAndFutureTerms.subList(0, Math.min(6,currentAndFutureTerms.size()));
-		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : plan.getCourses()){				
+		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> course : plan.getCourses()){
+			if (course.getElectiveId()!=null) {
+				Elective elective = electiveService.get(course.getElectiveId());
+				course.setElectiveCode(elective.getCode());
+				course.setElectiveName(elective.getName());
+			}
 			if(!semesterCourses.containsKey(course.getTermCode())){
 				Term term = getTermService().getByCode(course.getTermCode());
-				
+
 				
 				TermCourses<T,TO> termCourses = new TermCourses<T,TO>(term);
 				for(TermNoteTO termNote:termNotes){
