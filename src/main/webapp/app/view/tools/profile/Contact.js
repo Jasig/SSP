@@ -97,10 +97,10 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             fieldLabel: me.textStore.getValueByCode('ssp.label.cell-phone'),
                             name: 'cellPhone'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.work-phone'),
                             name: 'workPhone'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.work-phone'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
                             name: 'alternatePhone'
                         }, {
                             fieldLabel: me.textStore.getValueByCode('ssp.label.school-email'),
