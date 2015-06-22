@@ -357,10 +357,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			sAndP.addStatusFilterToCriteria(criteria);
 		}
 		
-		if(homeDepartment != null && homeDepartment.length() >= 0){
+		if (homeDepartment != null && homeDepartment.length() >= 0) {
 			criteria.createAlias("staffDetails", "personStaffDetails");
 			criteria.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
-		}else{
+		} else {
 			criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 		}
 
@@ -388,8 +388,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 	
 	private Boolean setCoachAlias(Criteria criteria, String alias, Boolean created){
-		if(created.equals(true))
-			return created;
+		if (created.equals(true)) {
+            return created;
+        }
 		criteria.createAlias("coach", alias);
 		return true;
 	}
@@ -510,18 +511,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 		
 		if (personSearchTO.getDisabilityStatusId() != null) {
-			if (personSearchTO.getDisabilityIsNotNull() == null || personSearchTO.getDisabilityIsNotNull() == false)
-
-			criteria.createAlias("disability", "personDisability");
-
-
-			criteria.add(Restrictions.eq(
-					"personDisability.disabilityStatus.id",
-					personSearchTO.getDisabilityStatusId()));
+			if (personSearchTO.getDisabilityIsNotNull() == null || personSearchTO.getDisabilityIsNotNull() == false) {
+                criteria.createAlias("disability", "personDisability");
+            }
+			criteria.add(Restrictions.eq("personDisability.disabilityStatus.id", personSearchTO.getDisabilityStatusId()));
 
 			// Direct operational-to-operational relationship, so probably should have a persondisability.objectstatus
 			// filter, but the UI completely disregards that field, so have decided against adding such a filter here.
-
 		}
 		
 		if (personSearchTO.getDisabilityTypeId() != null) {
@@ -559,11 +555,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
 		List<UUID> ids = getStudentUUIDs(form);
-		if(ids.size() == 0)
-			return null;
+		if (ids.size() == 0) {
+            return null;
+        }
 		
 		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids);
-		do{
+		do {
 			final Criteria criteria = createCriteria();
 					
 			final ProjectionList projections = Projections.projectionList();
@@ -572,14 +569,13 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		
 			addBasicStudentProperties(projections, criteria, sAndP.getStatus());
 			
-			criteria.setResultTransformer(new AliasToBeanResultTransformer(
-					BaseStudentReportTO.class));
-			processor.process(criteria, "id");
+			criteria.setResultTransformer(new AliasToBeanResultTransformer(BaseStudentReportTO.class));
+
+            processor.process(criteria, "id");
 			
-		}while(processor.moreToProcess());
+		} while(processor.moreToProcess());
 
 		return new PagingWrapper<BaseStudentReportTO>(ids.size(), processor.getSortedAndPagedResultsAsList());
-
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -587,9 +583,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
 		List<UUID> ids = getStudentUUIDs(form);
-		if(ids.size() == 0)
-			return null;
-		BatchProcessor<UUID, DisabilityServicesReportTO> processor =  new BatchProcessor<UUID,DisabilityServicesReportTO>(ids, sAndP);
+		if(ids.size() == 0) {
+            return null;
+        }
+
+        BatchProcessor<UUID, DisabilityServicesReportTO> processor =  new BatchProcessor<UUID,DisabilityServicesReportTO>(ids, sAndP);
 		do{
 			final Criteria criteria = createCriteria();
 			
@@ -670,7 +668,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("schoolId").as("schoolId"));
 		projections.add(Projections.groupProperty("primaryEmailAddress").as("primaryEmailAddress"));
 		projections.add(Projections.groupProperty("secondaryEmailAddress").as("secondaryEmailAddress"));
-		projections.add(Projections.groupProperty("cellPhone").as("cellPhone"));
+        projections.add(Projections.groupProperty("alternatePhone").as("alternatePhone"));
+        projections.add(Projections.groupProperty("workPhone").as("workPhone"));
+        projections.add(Projections.groupProperty("cellPhone").as("cellPhone"));
 		projections.add(Projections.groupProperty("homePhone").as("homePhone"));
 		projections.add(Projections.groupProperty("addressLine1").as("addressLine1"));
 		projections.add(Projections.groupProperty("addressLine2").as("addressLine2"));
