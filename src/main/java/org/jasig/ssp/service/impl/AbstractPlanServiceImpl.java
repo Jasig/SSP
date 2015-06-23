@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
 import javax.validation.constraints.NotNull;
 
@@ -234,7 +237,8 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				transcriptedCoursesByFormattedCourseCode.put(transcriptedCourse.getFormattedCourse(), transcriptedCourse);
 			}
 		}
-		
+
+		final Set<String> passingGrades = new HashSet<String>(Arrays.asList(configService.getByNameNullOrDefaultValue("map_plan_status_passing_grades").replaceAll(" ", "").split(",")));
 		Map<String, Term> termCodeTerm = new HashMap<String, Term>();
 		Map<String, String> courseCodeTermCode = new HashMap<String,String>();
 		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
@@ -253,13 +257,18 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			}
 			courseCodeTermCode.put(course.getCourseCode(), course.getTermCode());
 			courseCodeCourse.put(course.getCourseCode(), course);
-			
+
 			// This section sets isTranscript and duplicateOfTranscript since course may be from client.
 			if(transcriptedCoursesByFormattedCourseCode.containsKey(course.getFormattedCourse())){
 				ExternalStudentTranscriptCourse transcriptCourse = transcriptedCoursesByFormattedCourseCode.get(course.getFormattedCourse());
-				course.setIsTranscript(true);
-				if(!transcriptCourse.getTermCode().equals(course.getTermCode())){
-					course.setDuplicateOfTranscript(true);
+				if (passingGrades.contains(transcriptCourse.getGrade())){
+					course.setIsTranscript(true);
+					if (!transcriptCourse.getTermCode().equals(course.getTermCode())) {
+						course.setDuplicateOfTranscript(true);
+					}
+				} else {
+					course.setIsTranscript(false);
+					course.setDuplicateOfTranscript(false);
 				}
 			}
 		}
