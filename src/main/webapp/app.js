@@ -247,6 +247,11 @@ Ext.require([
     'Ssp.view.admin.forms.apikey.lticonsumer.LTIConsumerAdmin',
     'Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',
     
+    //MAPTemplate Admin views
+    'Ssp.view.admin.forms.map.MapTemplatesAdmin',
+    'Ssp.view.admin.forms.map.MapTemplatesListAdmin',
+    'Ssp.view.admin.forms.map.MapTemplatesFilterAdmin',
+    
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
     

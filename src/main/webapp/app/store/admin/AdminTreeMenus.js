@@ -408,7 +408,14 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }]
-            }, {
+            }, {    inject: {
+                columnRendererUtils: 'columnRendererUtils',
+                colorsStore: 'colorsStore',
+                colorsUnpagedStore: 'colorsUnpagedStore',
+                colorsAllStore: 'colorsAllStore',
+                colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+                confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore'
+            },
                 text: 'Counseling Reference Guide',
                 title: 'Counseling Reference Guide',
                 form: '',
@@ -1120,7 +1127,17 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     },
                     form: 'AbstractReferenceAdmin',
                     leaf: true
-                }]
+                },
+                
+                {
+                    text: 'Template Status',
+                    title: 'Template Status Manager',
+                    store: 'planTemplatesSummary',
+                    form: 'maptemplatesadmin',                    
+                    leaf: true,
+                    addButtonVisible: false
+                }
+                ]
             }]
         };
         
