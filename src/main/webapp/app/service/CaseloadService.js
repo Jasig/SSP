@@ -33,10 +33,13 @@ Ext.define('Ssp.service.CaseloadService', {
     	return baseUrl;
     },
     
-    getBaseUrlForIdCaseload: function(id){
+	getBaseUrlForIdCaseload: function(id, programStatusId){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseloadId') );
 		baseUrl = baseUrl.replace('{id}',id);
+		if (programStatusId!=null) {
+			baseUrl = baseUrl + "?programStatusId=" +programStatusId;
+		}
     	return baseUrl;
     },    
     getProgramAndStatusAgnosticCaseload: function( store, callbacks ){
@@ -178,7 +181,7 @@ Ext.define('Ssp.service.CaseloadService', {
 		});
     },
     
-    getCaseloadById: function( personId, store, callbacks ){
+    getCaseloadById: function( personId, programStatusId, store, callbacks ){
     	var me=this;
     	var success = function( response, view ){
     		var r = Ext.decode(response.responseText);
@@ -202,7 +205,7 @@ Ext.define('Ssp.service.CaseloadService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url:me.getBaseUrlForIdCaseload(personId),
+			url:me.getBaseUrlForIdCaseload(personId, programStatusId),
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,

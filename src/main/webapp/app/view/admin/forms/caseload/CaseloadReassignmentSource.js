@@ -25,6 +25,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController',
     inject: {
         apiProperties: 'apiProperties',
+        programStatusesStore: 'programStatusesStore',
         authenticatedPerson: 'authenticatedPerson',
         allCoachesCurrentStore: 'allCoachesCurrentStore',
         reassignCaseloadStore: 'reassignCaseloadStore'
@@ -89,8 +90,22 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     		   		        displayField: 'fullName',
        		   		        mode: 'local',
     				        editable: false
-       		                       }]  
-     		       		  },     		       		
+       		               },
+						   {
+							xtype: 'combobox',
+							multiSelect: false,
+							fieldLabel: 'Program Status',
+							emptyText: 'Select Status',
+							store: me.programStatusesStore,
+							valueField: 'id',
+							displayField: 'name',
+							columnWidth: 0.5,
+							itemId: 'sourceProgramStatusBox',
+							name: 'sourceProgramStatusBox',
+       		   		        mode: 'local',
+							editable: false
+						   }]
+     		       		  },
      		              {
      		               xtype: 'toolbar',
      		               items: [{
