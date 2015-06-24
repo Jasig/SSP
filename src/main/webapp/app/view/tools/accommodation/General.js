@@ -79,7 +79,7 @@ Ext.define('Ssp.view.tools.accommodation.General', {
                         xtype: 'textareafield',
                         fieldLabel: 'Please Explain Temporary Eligibility',
                         name: 'tempEligibilityDescription',
-						maxLength: 50
+						maxLength: 250
                     },
                     {
                         xtype: 'textfield',

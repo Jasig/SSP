@@ -119,8 +119,8 @@ public class PersonDisability // NOPMD
 	
 	private Boolean noSpecialEd;		
 
-	@Column(length = 50)
-	@Size(max = 50)
+	@Column(length = 250)
+	@Size(max = 250)
 	private String tempEligibilityDescription;
 
 	private Boolean onMedication;	
