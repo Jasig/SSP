@@ -16,6 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+Ext.define('defaultTabLabel', { 
+	index: 0 
+});  
+
 Ext.define('Ssp.controller.SearchViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
@@ -262,6 +267,16 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
 
     onTabChange: function(tabPanel, newCard, oldCard, eOpts) {
+    	
+    	//set the 'make default tab' text
+		var activeTabIndex = tabPanel.items.findIndex('id', newCard.id);		               					
+		if(activeTabIndex == defaultTabLabel.index) {
+			Ext.getCmp('defaultTabLabel').setText('Default Search Tab');
+		}
+		else {		
+			Ext.getCmp('defaultTabLabel').setText('Click to Make Default');		
+		}		   
+    	
         var me = this;
         if ( newCard.items.items[0] === me.getView() ) {
             me.acceptFocus(oldCard);
@@ -1505,3 +1520,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
 	}
 });
+
+
+

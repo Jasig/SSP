@@ -53,6 +53,7 @@ Ext.define('Ssp.view.SearchTab', {
             items: [
                 Ext.createWidget('tabpanel', {
                     activeTab: me.defaultActiveTabIndex(),
+                    id: 'searchTabPanel',
                     listeners: {
                     	tabchange: function(tabPanel, newTab, oldTab, eOpts)  {
                             // TODO really shouldn't have to do this. Ext.tab.Panel provides a getActiveTab()
@@ -60,6 +61,24 @@ Ext.define('Ssp.view.SearchTab', {
                     		oldTab.items.items[0].isActiveTab = false;
                         }
                     },
+                     tbar: [{ 
+                    	xtype: 'label', 
+                    	text: 'Default Search Tab', 
+                    	id : 'defaultTabLabel',
+                    	listeners: { 
+                    		element: 'el', 
+               				click: function () { 
+               					
+               					//clicking sets a cookie and the defaultTabLabel Index to the current tab
+               					//the next time they log in this will be the default tab
+								var activeTab = Ext.getCmp('searchTabPanel').getActiveTab();
+								var activeTabIndex = Ext.getCmp('searchTabPanel').items.findIndex('id', activeTab.id);		               					
+		               			Ext.util.Cookies.set('defaultTabIndex', activeTabIndex); 
+		               			Ext.getCmp('defaultTabLabel').setText('Default Search Tab');
+		               			defaultTabLabel.index = activeTabIndex;		               			
+               				} 
+                    	} 
+                    }],
                     items: [{
                         title: 'My Caseload',
                         hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
@@ -97,6 +116,14 @@ Ext.define('Ssp.view.SearchTab', {
     },
 	defaultActiveTabIndex: function() {
 		var me = this;
+		
+		//set the default Tab Index
+		var tabIndex = Ext.util.Cookies.get('defaultTabIndex');
+		if(tabIndex!=null){
+			defaultTabLabel.index = parseInt(tabIndex);	
+			return parseInt(tabIndex);
+		}
+		
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
 			return 0;
 		} else if ( me.authenticatedPerson.hasAccess('WATCHLIST_TOOL') ) {
