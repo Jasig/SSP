@@ -180,13 +180,19 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	@Autowired
 	private transient EnrollmentStatusService enrollmentStatusService;
 
+    @Autowired
+    private transient ExternalStudentTranscriptNonCourseEntityService externalStudentTranscriptNonCourseEntityService;
+
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalStudentRecordsController.class);
-	@Override
+
+
+    @Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+
 	
 	/**
 	 * Using the Student UUID passed, return the ExternalStudentRecordsLiteTO in its current state,
@@ -232,8 +238,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		record.setTerms(externalStudentTranscriptCourseService.getTranscriptsBySchoolId(schoolId));		
 		record.setFinancialAidAcceptedTerms(externalStudentFinancialAidAwardTermService.getStudentFinancialAidAwardsBySchoolId(schoolId));
 		record.setFinancialAidFiles(externalStudentFinancialAidFileService.getStudentFinancialAidFilesBySchoolId(schoolId));
+        record.setNonCourseEntities(externalStudentTranscriptNonCourseEntityService.getNonCourseTranscriptsBySchoolId(schoolId));
 		ExternalStudentRecordsTO recordTO = new ExternalStudentRecordsTO(record, getBalancedOwed(id, schoolId));
-		
 
 		//update the course faculty names
 		updateFactultyNames(recordTO); 

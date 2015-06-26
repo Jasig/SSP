@@ -21,13 +21,8 @@ package org.jasig.ssp.model.external;
 import java.io.Serializable;
 import java.util.List;
 
-public class ExternalStudentRecords extends AbstractExternalData implements
-		ExternalData, Serializable {
+public class ExternalStudentRecords extends AbstractExternalData implements ExternalData, Serializable {
 	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4432569410223412913L;
 
 	private ExternalStudentTranscript gpa;
@@ -36,31 +31,36 @@ public class ExternalStudentRecords extends AbstractExternalData implements
 	private List<ExternalStudentFinancialAidFile> financialAidFiles;
 	private List<ExternalStudentAcademicProgram> programs;
 	private List<ExternalStudentTranscriptCourse> terms;
+    private List<ExternalStudentTranscriptNonCourseEntity> nonCourseEntities;
+
+
 	/**
 	 * @return the gpa
 	 */
 	public ExternalStudentTranscript getGPA() {
 		return gpa;
 	}
+
 	/**
 	 * @param gpa the gpa to set
 	 */
 	public void setGPA(ExternalStudentTranscript gpa) {
 		this.gpa = gpa;
 	}
+
 	/**
 	 * @return the programs
 	 */
 	public List<ExternalStudentAcademicProgram> getPrograms() {
 		return programs;
 	}
-	/**
+
+    /**
 	 * @param programs the programs to set
 	 */
 	public void setPrograms(List<ExternalStudentAcademicProgram> programs) {
 		this.programs = programs;
 	}
-	
 
 	/**
 	 * @return the terms
@@ -68,30 +68,35 @@ public class ExternalStudentRecords extends AbstractExternalData implements
 	public List<ExternalStudentTranscriptCourse> getTerms() {
 		return terms;
 	}
+
 	/**
 	 * @param terms the terms to set
 	 */
 	public void setTerms(List<ExternalStudentTranscriptCourse> terms) {
 		this.terms = terms;
 	}
+
 	/**
 	 * @return the financialAid
 	 */
 	public ExternalStudentFinancialAid getFinancialAid() {
 		return financialAid;
 	}
+
 	/**
 	 * @param financialAid the financialAid to set
 	 */
 	public void setFinancialAid(ExternalStudentFinancialAid financialAid) {
 		this.financialAid = financialAid;
 	}
+
 	/**
 	 * @return the financialAidAcceptedTerms
 	 */
 	public List<ExternalStudentFinancialAidAwardTerm> getFinancialAidAcceptedTerms() {
 		return financialAidAcceptedTerms;
 	}
+
 	/**
 	 * @param financialAidAcceptedTerms the financialAidAcceptedTerms to set
 	 */
@@ -104,9 +109,16 @@ public class ExternalStudentRecords extends AbstractExternalData implements
 		return financialAidFiles;
 	}
 	
-	
-	public void setFinancialAidFiles(
-			List<ExternalStudentFinancialAidFile> financialAidFiles) {
+	public void setFinancialAidFiles(List<ExternalStudentFinancialAidFile> financialAidFiles) {
 		this.financialAidFiles = financialAidFiles;
 	}
+
+    public List<ExternalStudentTranscriptNonCourseEntity> getNonCourseEntities() {
+        return nonCourseEntities;
+    }
+
+    public void setNonCourseEntities(
+            List<ExternalStudentTranscriptNonCourseEntity> externalStudentTranscriptNonCourseEntities) {
+        this.nonCourseEntities = externalStudentTranscriptNonCourseEntities;
+    }
 }

@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,13 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.Transcript', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name: 'gpa', type: 'auto'},
-             {name: 'programs', type: 'auto'},
-             {name: 'financialAid', type: 'auto'},
-             {name: 'financialAidAcceptedTerms', type: 'auto'},
-             {name: 'financialAidFiles', type: 'auto'},
-             {name: 'terms', type: 'auto'},
-             {name: 'nonCourseEntities', type: 'auto'}]
-});
+package org.jasig.ssp.service.external;
+
+import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
+import java.util.List;
+
+public interface ExternalStudentTranscriptNonCourseEntityService extends
+		ExternalDataService<ExternalStudentTranscriptNonCourseEntity> {
+	
+	List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolId (String schoolId);
+	List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolIdAndTermCode (String schoolId, String termCode);
+}

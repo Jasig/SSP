@@ -26,11 +26,12 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
         store: 'currentScheduleStore',
         termsStore: 'termsStore'
     },
-    init: function(){
+
+    init: function() {
         var me = this;
-        var personId = me.personLite.get('id');
-        
         me.store.removeAll();
+
+        var personId = me.personLite.get('id');
         if (personId != "") {
             me.getView().setLoading(true);
             
@@ -43,13 +44,11 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
             else {
                 me.termStoreLoaded();
             }
-          
         }
         return this.callParent(arguments);
     },
     
-    
-    termStoreLoaded: function(){
+    termStoreLoaded: function() {
         var me = this;
         var personId = me.personLite.get('id');
         if (personId != "") {
@@ -61,53 +60,60 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
         }
     },
     
-    
-    getScheduleSuccess: function(r, scope){
+    getScheduleSuccess: function(r, scope) {
         var me = scope;
-        
         var courseSchedules = [];
         var transcript = new Ssp.model.Transcript(r);
-        var items = transcript.get('terms');
-        if (items) {
-            Ext.Array.each(items, function(item){
-                var courseTranscript = Ext.create('Ssp.model.CourseTranscript', item);
+
+        if (transcript) {
+            var items = transcript.get('terms');
+            if (items) {
+                Ext.Array.each(items, function(item){
+                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', item);
 				
-                var termIndex = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseTranscript.get("termCode"));
-                if (termIndex >= 0) {
-                    var term = me.termsStore.getCurrentAndFutureTermsStore(true).getAt(termIndex);
-                    courseTranscript.set("termStartDate", term.get("startDate"));
+                    var termIndex = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseTranscript.get("termCode"));
+                    if (termIndex >= 0) {
+                        var term = me.termsStore.getCurrentAndFutureTermsStore(true).getAt(termIndex);
+                        courseTranscript.set("termStartDate", term.get("startDate"));
                     
-                    courseSchedules.push(courseTranscript);
-                }
-            });
+                        courseSchedules.push(courseTranscript);
+                    }
+                });
+            }
+
+            var nonCourseItems = transcript.get('nonCourseEntities');
+            if (nonCourseItems) {
+                Ext.Array.each(nonCourseItems, function(nonCourse) {
+                    var courseForNonCourseDisplay = Ext.create('Ssp.model.CourseTranscript', nonCourse);
+                    var termIndexNonCourse = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseForNonCourseDisplay.get("termCode"));
+
+                    if (termIndexNonCourse < 0) {
+                        var nonTIndex = me.termsStore.findExact("code", courseForNonCourseDisplay.get("termCode"));
+                        var nonCourseTerm = me.termsStore.getAt(nonTIndex);
+                        courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
+                    }
+
+                    courseForNonCourseDisplay.set("title", 'NonCourse: ' + courseForNonCourseDisplay.get('title'));
+                    courseForNonCourseDisplay.set("formattedCourse", 'Overrides: ' + nonCourse.targetFormattedCourse);
+                    courseSchedules.push(courseForNonCourseDisplay);
+                });
+            }
         }
         
         if (courseSchedules.length > 0) {
-        
             me.store.loadData(courseSchedules);
-            
             me.store.sort([{
-            
                 property: 'termStartDate',
-                
                 direction: 'ASC'
-            
             }, {
-            
                 property: 'formattedCourse',
-                
                 direction: 'ASC'
-            
             }]);
-            
         }
-       
         me.getView().setLoading(false);
-        
-        
     },
     
-    getScheduleFailure: function(response, scope){
+    getScheduleFailure: function(response, scope) {
         var me = scope;
         me.getView().setLoading(false);
     }

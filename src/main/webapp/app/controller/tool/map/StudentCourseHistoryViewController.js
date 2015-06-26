@@ -26,29 +26,29 @@ Ext.define('Ssp.controller.tool.map.StudentCourseHistoryViewController', {
         store: 'studentCourseHistoryStore',
 		termsStore: 'termsStore'
     },
+
 	init: function() {
 		var me=this;
-		var personId = me.personLite.get('id');
-
         me.store.removeAll();
-		if(personId != ""){
+
+		var personId = me.personLite.get('id');
+		if (personId != "") {
 	    	me.getView().setLoading( true );
-	    	if(me.termsStore.getTotalCount() <= 0){
+	    	if (me.termsStore.getTotalCount() <= 0) {
 				me.termsStore.addListener("load", me.termStoreLoaded, me, {single:true});
 				me.termsStore.load();
-			}else{
+			} else {
 				me.termStoreLoaded();
 			}
-			
 	    }
-		
+
 		return this.callParent(arguments);
     },
     
-	termStoreLoaded: function(){
+	termStoreLoaded: function() {
 		var me = this;
 		var personId = me.personLite.get('id');
-		if(personId != ""){
+		if (personId != "") {
 			me.service.getFull( personId, {
 				success: me.getTranscriptSuccess,
 				failure: me.getTranscriptFailure,
@@ -57,42 +57,59 @@ Ext.define('Ssp.controller.tool.map.StudentCourseHistoryViewController', {
 		}
 	},
 	
-    getTranscriptSuccess: function( r, scope ){
+    getTranscriptSuccess: function( r, scope ) {
     	var me=scope;
-
         var courseTranscripts = [];
         var transcript = new Ssp.model.Transcript(r);
-        var terms = transcript.get('terms');
-        if ( terms ) {
-            Ext.Array.each(terms, function(term) {
-                    var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
-					var termIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
-					if(termIndex >= 0){
-						var term = me.termsStore.getAt(termIndex);
-						courseTranscript.set("termStartDate", term.get("startDate"));
-					}
-                    courseTranscripts.push(courseTranscript);
-					
-            });
+
+        if (transcript) {
+            var terms = transcript.get('terms');
+            if (terms) {
+                Ext.Array.each(terms, function(term) {
+                        var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
+                        var termIndex = me.termsStore.findExact("code", courseTranscript.get("termCode"));
+                        if (termIndex >= 0) {
+                            var term = me.termsStore.getAt(termIndex);
+                            courseTranscript.set("termStartDate", term.get("startDate"));
+                        }
+                        courseTranscripts.push(courseTranscript);
+                });
+            }
+
+            var nonCourseItems = transcript.get('nonCourseEntities');
+            if (nonCourseItems) {
+                Ext.Array.each(nonCourseItems, function(nonCourse) {
+                    var courseForNonCourseDisplay = Ext.create('Ssp.model.CourseTranscript', nonCourse);
+                    var termIndexNonCourse = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseForNonCourseDisplay.get("termCode"));
+
+                    if (termIndexNonCourse < 0) {
+                        var nonTIndex = me.termsStore.findExact("code", courseForNonCourseDisplay.get("termCode"));
+                        var nonCourseTerm = me.termsStore.getAt(nonTIndex);
+                        courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
+                    }
+
+                    courseForNonCourseDisplay.set("title", 'NonCourse: ' + courseForNonCourseDisplay.get('title'));
+                    courseForNonCourseDisplay.set("formattedCourse", 'Overrides: ' + nonCourse.targetFormattedCourse);
+                    courseTranscripts.push(courseForNonCourseDisplay);
+                });
+            }
         }
 
-        if(courseTranscripts.length > 0){
+        if (courseTranscripts.length > 0) {
         	me.store.loadData(courseTranscripts);
-        	me.store.sort([
-        	               {
-        	            	   property : 'termStartDate',
-        	            	   direction: 'DESC'
-        	               },
-        	               {
-        	            	   property : 'formattedCourse',
-        	            	   direction: 'ASC'
-        	               }]);
+        	me.store.sort([{
+                property : 'termStartDate',
+                direction: 'DESC'
+            }, {
+                property : 'formattedCourse',
+                direction: 'ASC'
+            }]);
     	}
-        me.getView().setLoading( false );
+        me.getView().setLoading(false);
     },
     
-    getTranscriptFailure: function( response, scope ){
+    getTranscriptFailure: function( response, scope ) {
     	var me=scope;
-    	me.getView().setLoading( false );  	
+    	me.getView().setLoading(false);
     }
 });
