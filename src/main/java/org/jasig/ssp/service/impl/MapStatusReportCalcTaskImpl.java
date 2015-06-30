@@ -130,7 +130,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		final boolean termBound = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_term_bound_strict").trim());
 
 		//Lets figure out our cutoff term
-		final Term cutoffTerm = mapStatusReportService.deriveCuttoffTerm();
+		final Term cutoffTerm = mapStatusReportService.deriveCutoffTerm();
 		
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
 		List<MapStatusReportPerson> allActivePlans = planService.getAllActivePlanIds();

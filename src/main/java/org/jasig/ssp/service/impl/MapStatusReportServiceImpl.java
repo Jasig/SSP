@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.MapStatusReportDao;
 import org.jasig.ssp.dao.PersonAssocAuditableCrudDao;
@@ -107,7 +107,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	
 	private static String CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE = "COURSE_CODE";
 
-	
+
+
 	@Override
 	public MapStatusReport save(MapStatusReport obj)
 			throws ObjectNotFoundException, ValidationException {
@@ -180,10 +181,10 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		}
 		
 		//Build the term part of the report
-		buildTermDetails(report, reportTermDetails, courseReportsByTerm,planCoursesByTerm);
+		buildTermDetails(report, reportTermDetails, courseReportsByTerm, planCoursesByTerm);
 		
-		report.setPlanStatus(calculatePlanStatus(reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses));
-		report.setPlanRatio(calculatePlanRatio(report,planCourses,reportCourseDetails,reportSubstitutionDetails,termBound,useSubstitutableCourses,planCoursesByTerm,reportTermDetails));
+		report.setPlanStatus(calculatePlanStatus(reportCourseDetails, reportSubstitutionDetails, termBound, useSubstitutableCourses));
+		report.setPlanRatio(calculatePlanRatio(report, planCourses, reportCourseDetails, reportSubstitutionDetails, termBound, useSubstitutableCourses, planCoursesByTerm, reportTermDetails));
 		report.setCourseDetails(reportCourseDetails);
 		report.setTermDetails(reportTermDetails);
 		report.setSubstitutionDetails(reportSubstitutionDetails);
@@ -660,52 +661,40 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	}
 
 	@Override
-	public Term deriveCuttoffTerm() {
-		String cutoffTermCode = configService.getByNameEmpty("map_plan_status_cutoff_term_code");
-		if(cutoffTermCode.trim().isEmpty() )
-		{
-			//If a registration window is open for a defined term.  Use that 
-			List<Term> termsWithRegistrationWindowOpen = termService.getTermsWithRegistrationWindowOpenIfAny();
-			Term latestTerm = null;
-			if(!termsWithRegistrationWindowOpen.isEmpty())
-			{
-				for (Term term : termsWithRegistrationWindowOpen) {
-					if(latestTerm == null)
-					{
-						latestTerm = term;
-					}
-					else
-					{
-						if(term.getStartDate().after(latestTerm.getStartDate()))
-						{
-							latestTerm = term;
-						}
-					}
-				}
-			}
-			try {
-				//If there is no registration window open, go with the current term.
-				return latestTerm == null ? termService.getCurrentTerm() : latestTerm;
-			} catch (ObjectNotFoundException e) {
-				//if we can't resolve the current term, we have bigger problems
-				LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely a data issue in the EXTERNAL_TERM table");
-				throw new IllegalArgumentException("Current term could not be resolved.  Map Report Calcuation aborted.");
-			}
-		}
-		else
-		{
-			try {
-				return termService.getByCode(cutoffTermCode);
-			} catch (ObjectNotFoundException e) {
-				try {
-					return termService.getCurrentTerm();
-				} catch (ObjectNotFoundException e1) {
-					//if we can't resolve the current term, we have bigger problems
-					LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely a data issue in the EXTERNAL_TERM table");
-					throw new IllegalArgumentException("Current term could not be resolved.  Map Report Calcuation aborted.");
-				}
-			}
-		}
+	public Term deriveCutoffTerm() {
+		final String cutoffTermCode = configService.getByNameEmpty("map_plan_status_cutoff_term_code");
+
+        if (StringUtils.isNotBlank(cutoffTermCode)) {
+            try {
+                return termService.getByCode(cutoffTermCode.trim());
+            } catch (ObjectNotFoundException e) {
+                LOGGER.error("Map Status Calculation can't find Cutoff Term {}. Check the configuration or EXTERNAL_TERM table for accuracy.", cutoffTermCode.trim());
+            }
+        }
+
+        //If a registration window is open for a defined term.  Use that
+        final List<Term> termsWithRegistrationWindowOpen = termService.getTermsWithRegistrationWindowOpenIfAny();
+        Term latestTerm = null;
+        if (CollectionUtils.isNotEmpty(termsWithRegistrationWindowOpen)) {
+            for (Term term : termsWithRegistrationWindowOpen) {
+                if (latestTerm == null) {
+                    latestTerm = term;
+                } else {
+                    if (term.getStartDate().after(latestTerm.getStartDate())) {
+                        latestTerm = term;
+                    }
+                }
+            }
+        }
+
+        try {
+            //If there is no registration window open, go with the current term.
+            return ((latestTerm == null) ? termService.getCurrentTerm() : latestTerm);
+        } catch (ObjectNotFoundException e) {
+            //if we can't resolve the current term, we have bigger problems
+            LOGGER.error("Map Status Calculation will stop because the current term cannot be resolved.  This is likely a data issue in the EXTERNAL_TERM table");
+            throw new IllegalArgumentException("Current term could not be resolved.  Map Report Calculation aborted.");
+        }
 	}
 
 	@Override
@@ -760,7 +749,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		
 
 		//Lets figure out our cutoff term
-		Term cutoffTerm = deriveCuttoffTerm();
+		Term cutoffTerm = deriveCutoffTerm();
 		
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
 		Plan plan = planService.getCurrentForStudent(personId);
