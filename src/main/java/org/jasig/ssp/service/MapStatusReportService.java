@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
@@ -54,7 +53,7 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 
 	Set<String> getPassingGrades();
 
-	Term deriveCuttoffTerm();
+	Term deriveCutoffTerm();
 
 	Collection<ExternalSubstitutableCourse> getAllSubstitutableCourses();
 
@@ -79,7 +78,4 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 	List<MapStatusReportOwnerAndCoachInfo> getWatchersOffPlanStudent();
 
 	List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person person);
-
-
-
 }
