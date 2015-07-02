@@ -82,6 +82,10 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 				{
 					criteria.add(Restrictions.eq("departmentCode", searchTO.getDepartmentCode()));
 				}
+				if(!StringUtils.isEmpty(searchTO.getName()))
+				{
+					criteria.add(Restrictions.like("name", "%" + searchTO.getName() + "%"));
+				}
 				return processCriteriaWithStatusSortingAndPaging(criteria,
 				 				sNp);
 	}

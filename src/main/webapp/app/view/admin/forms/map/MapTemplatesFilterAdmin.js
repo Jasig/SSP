@@ -23,10 +23,13 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 	alias : 'widget.maptemplatesfilteradmin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    //controller: 'Ssp.controller.admin.apikey.lticonsumer.LTIConsumerAdminViewController',
+    controller: 'Ssp.controller.admin.map.LoadTemplateViewController',
     inject: {
         apiProperties: 'apiProperties',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+programsStore: 'programsStore',
+departmentsStore: 'departmentsStore',
+divisionsStore: 'divisionsStore'
     },
 	initComponent: function() {
 		var me=this;
@@ -81,6 +84,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 									    items: [{
 									        xtype: 'combobox',
 									        name: 'program',
+										id: 'program',
 									        store: me.programsStore,
 									        fieldLabel: 'Program',
 											labelWidth:80,
@@ -116,6 +120,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 										    items: [{
 										        xtype: 'combobox',
 										        name: 'department',
+											id: 'department',
 										        store: me.departmentsStore,
 										        fieldLabel: 'Department',
 												labelWidth:80,
@@ -150,6 +155,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 										    items: [{
 										        xtype: 'combobox',
 										        name: 'division',
+											id: 'division',
 										        store: me.divisionsStore,
 										        fieldLabel: 'Division',
 												labelWidth:80,
@@ -172,41 +178,6 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 										        itemId: 'divisionCancel'
 										    	}]
 										},{
-									    xtype: 'fieldset',
-									    border: 0,
-									    title: '',
-									    margin: '0 0 0 0',
-									    padding: '0 0 0 5',
-									    layout: 'hbox',
-									    defaults: {
-									        anchor: '100%'
-									    	},
-									    items: [{
-									        	xtype: 'combobox',
-									        	name: 'isPrivateFilter',
-									        	fieldLabel: 'Visibility',
-												labelWidth:80,
-												store: Ext.create('Ext.data.Store', {
-												    fields: ['value', 'name'],
-												    	data : [
-													        	{"value":"ALL","name":"ALL"},
-													        	{"value":"ANONYMOUS","name":"ANONYMOUS"},
-													        	{"value":"AUTHENTICATED","name":"AUTHENTICATED"},
-													        	{"value":"PRIVATE","name":"PRIVATE"}
-													    	]
-												}),
-											
-									        		emptyText: 'Filter by Template Type',
-									        		valueField: 'value',
-									        		displayField: 'name',
-													value: "ALL",
-									        		mode: 'local',
-									        		queryMode: 'local',
-									        		allowBlank: false,
-									        		itemId: 'typeFilter',
-									        		width: 290
-									    		}]
-											},{
 								    	xtype: 'fieldset',
 								    	border: 0,
 								    	title: '',
@@ -219,6 +190,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 								    	items: [{
 							        		xtype: 'combobox',
 							        		name: 'objectStatusFilter',
+							        		id: 'objectStatusFilter',
 							        		fieldLabel: 'Status',
 											labelWidth:80,
 							        		emptyText: 'Filter by Status',
@@ -232,8 +204,8 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 											}),
 							        		valueField: 'name',
 							        		displayField: 'name',
-											defaultValue: "ACTIVE",
-											value:'ACTIVE',
+											defaultValue: "ALL",
+											value:'ALL',
 							        		mode: 'local',
 							        		queryMode: 'local',
 							        		allowBlank: false,
@@ -257,30 +229,15 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 			                                fieldLabel: 'Title',
 			                                name: 'templateNameFilter',
 			                                itemId: 'templateNameFilter',
+			                                id: 'templateNameFilter',
 			                                maxLength: 50,
 			                                allowBlank:true,
 			                                labelWidth:80,
 											width: 290,
-											enableKeyEvents:true,
-											listeners:{
-												keyup: function(textField, e, eOpts) {
-													var me = this;
-							                        var searchString = textField.getValue().trim();
-							                        var templatesGrid = me.findParentByType('loadtemplates').query('#allPlansTemplateGridPanel')[0];
-													templatesGrid.getStore().filterBy(getFilterRecord(['name'], searchString)); 
-							                    }
-											}
+											enableKeyEvents:true											
 			                            }]}
-			                            
-			            
 			            ]}]
-			         }]
-				    
-				    
-				    
-				    
-				    
-				      ,
+			         }],
 					    
 		           dockedItems: [
      		              {

@@ -28,20 +28,24 @@ public class TemplateSearchTO {
 	private String divisionCode;
 	private String programCode;
 	private String departmentCode;
+	private String name;
 	
 	public TemplateSearchTO() {
 
 	}
 
 	public TemplateSearchTO(MapTemplateVisibility visibility, ObjectStatus objectStatus,
-			String divisionCode, String programCode, String departmentCode) {
+			String divisionCode, String programCode, String departmentCode, String name) {
 		super();
 		this.visibility = visibility;
 		this.objectStatus = objectStatus;
 		this.divisionCode = divisionCode;
 		this.programCode = programCode;
 		this.departmentCode = departmentCode;
+		this.name = name;
 	}
+
+
 
 	public MapTemplateVisibility getVisibility() {
 		return visibility;
@@ -81,6 +85,14 @@ public class TemplateSearchTO {
 
 	public void setDepartmentCode(String departmentCode) {
 		this.departmentCode = departmentCode;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public Boolean visibilityAll(){

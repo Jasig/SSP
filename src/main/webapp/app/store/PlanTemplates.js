@@ -16,35 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-
-Ext.define('Ssp.view.admin.forms.map.MapTemplatesAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.maptemplatesadmin',
-	title: 'MAP Templates',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.AdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'hbox',
-        align: 'stretch'
+Ext.define('Ssp.store.PlanTemplates', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.tool.map.Plan',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
     },
-    initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-							xtype: 'maptemplatesfilteradmin', 
-							//flex: 1,
-							width: '40%'
-	                  },
-	                  {
-		                  	xtype: 'maptemplateslistadmin', 
-		                  	//flex: 1,
-		                  	width: '60%'
-		              }
-	          ]});
-    	return this.callParent(arguments);
-    }
+	constructor: function(){
+		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('templatePlan')),
+			  			  autoLoad: true,
+						     sorters: [{
+						         property: 'name',
+						         direction: 'ASC'
+						     }, {
+						         property: 'modifiedDate',
+						         direction: 'DESC'
+						     }]	});
+		return this.callParent(arguments);
+	}
 });

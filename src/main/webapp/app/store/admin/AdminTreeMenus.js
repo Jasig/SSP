@@ -1133,7 +1133,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Template Status',
                     title: 'Template Status Manager',
                     store: 'planTemplatesSummary',
-                    form: 'maptemplatesadmin',                    
+                    form: 'maptemplatesadmin',
+                    
                     leaf: true,
                     addButtonVisible: false
                 }

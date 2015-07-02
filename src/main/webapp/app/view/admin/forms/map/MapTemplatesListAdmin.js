@@ -86,6 +86,12 @@ Ext.define(
 														sortable : true
 													},
 													{
+														text : 'Program Code',
+														width : 200,
+														dataIndex : 'programCode',
+														sortable : true
+													},
+													{
 														text : 'Date/ Time',
 														width : 125,
 														dataIndex : 'modifiedDate',
@@ -109,27 +115,6 @@ Ext.define(
 														pageSize : me.apiProperties
 																.getPagingSize()
 													}
-													/*,
-													{
-														xtype : 'toolbar',
-														items : [ {
-															text : 'Save',
-															iconCls : 'icon-add',
-															xtype : 'button',
-															hidden : !me.authenticatedPerson
-																	.hasAccess('API_KEY_ADD_BUTTON'),
-															action : 'save',
-															itemId : 'saveButton'
-														} ]
-													},													
-													{
-														xtype : 'toolbar',
-														dock : 'top',
-														items : [ {
-															xtype : 'label',
-															text : 'Double click on an existing Client to Edit or Deactivate. Click on "Add" to create a new Client.'
-														} ]
-													}*/ 
 													]
 										});
 

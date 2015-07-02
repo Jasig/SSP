@@ -122,13 +122,16 @@ Ext.define('Ssp.view.SearchTab', {
 		if(tabIndex!=null){
 			defaultTabLabel.index = parseInt(tabIndex);	
 			return parseInt(tabIndex);
-		}
+		}		
 		
 		if ( me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ) {
+			defaultTabLabel.index = 0;
 			return 0;
 		} else if ( me.authenticatedPerson.hasAccess('WATCHLIST_TOOL') ) {
+			defaultTabLabel.index = 1;
 			return 1;
 		} else {
+			defaultTabLabel.index = 2;
 		    return 2;
         }
 	}

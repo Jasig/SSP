@@ -121,11 +121,12 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode,
-			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
+			final @RequestParam(required = false) String departmentCode,
+			final @RequestParam(required = false) String name) throws ObjectNotFoundException,
 			ValidationException {
 		
 		TemplateSearchTO searchTO = new TemplateSearchTO(visibility,  objectStatus,
-															divisionCode,  programCode,  departmentCode);
+															divisionCode,  programCode,  departmentCode, name);
 		validateAccessForGet(searchTO);
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
@@ -190,11 +191,12 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) ObjectStatus objectStatus,
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode,
-			final @RequestParam(required = false) String departmentCode) throws ObjectNotFoundException,
+			final @RequestParam(required = false) String departmentCode,
+			final @RequestParam(required = false) String name) throws ObjectNotFoundException,
 			ValidationException {
 		
 		TemplateSearchTO searchTO = new TemplateSearchTO(visibility, objectStatus,
-				divisionCode,  programCode,  departmentCode);
+				divisionCode,  programCode,  departmentCode, name);
 		
 		validateAccessForGet(searchTO);
 		final PagingWrapper<Template> data = getService().getAll(

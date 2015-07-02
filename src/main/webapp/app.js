@@ -1569,6 +1569,15 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					}, 
+					planTemplatesStore: {
+						fn: function(){
+							return Ext.create('Ssp.store.PlanTemplates', {
+							     storeId: 'planTemplatesSummaryStore',		
+							     extraParams: {sort: "name", status: "ALL", limit: "-1"}
+							});
+						},
+						singleton: true
+					}, 
 			    	employmentShiftsStore: 'Ssp.store.reference.EmploymentShifts',
 			    	ethnicitiesStore: 'Ssp.store.reference.Ethnicities',
 					ethnicitiesAllStore: {

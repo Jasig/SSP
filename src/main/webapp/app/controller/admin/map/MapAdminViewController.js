@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
-		store: 'planTemplatesSummaryStore',
+		store: 'planTemplatesStore',
         formUtils: 'formRendererUtils',
         semesterStores : 'currentSemesterStores',
         authenticatedPerson: 'authenticatedPerson',
@@ -40,10 +40,7 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
                selector: '#templatePanel'
            }
    ],
-    control: {
-        //'saveButton': {
-        //    click: 'onSaveClick'
-        //},
+    control: {    
               
         isTemplateActive: {
             selector: '#isTemplateActive',
@@ -61,20 +58,7 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
 
         return me.callParent(arguments);
     },
-
-    onEditClick: function(view, record, item, index, event, eventListenerOpts) {
-        this.displayEditor(record);
-    },
-
-    onSaveClick: function(button){
-    	//alert('something was saved');
-    },    
-    
-	getTemplateBaseUrl: function(){
-		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
-		return baseUrl;
-    },
+     
     
     onGetTemplateSuccess: function(response, t) {    	
     	var me = t;
@@ -97,20 +81,15 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     	}
     	
     	plan.loadFromServer(planfromResponse);    	
-		plan.set('ownerId',me.authenticatedPerson.get('id'));
 		plan.set('isTemplate', true);
-        plan.set('personId',  me.personLite.get('id'));
-        plan.set('personId', false);
-        plan.set('isPrivate', false);
-        
-        
+        //plan.set('isPrivate', false);
+                
         var planCourses = plan.get('planCourses');
         for(var k = 0; k < planCourses.length; k++){
     		course = planCourses[k];
     		course.id=null;
     	}
-        
-    	
+            	
     	var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
     	
     	// update
@@ -123,15 +102,13 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
 			scope: me
 		});	   	
     },
+    
     onGetTemplateFailure: function(response, t) {
     	console.log('Get Template From ServerFailure: ' + JSON.stringify(response));
     },
     
-    //maintain list of eventual saved items
-    onCheckChange: function(column, rowIndex, checked, eOpts){
-    	
-    	var me = this;
-    	
+    onCheckChange: function(column, rowIndex, checked, eOpts){    
+    	var me = this;    	
     	var mapPlanService = Ext.create('Ssp.service.MapPlanService');
 		var plan = Ext.create('Ssp.model.tool.map.Plan');
 		var grid = Ext.getCmp("templatePanel");		
@@ -143,99 +120,9 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
 		callbacks.scope = me;		
 		plan.loadFromServer(grid.store.getAt(rowIndex).data);
 		    
-		mapPlanService.getTemplate(plan.get('id'), callbacks);
-		//me.updateTemplate(plan);
+		mapPlanService.getTemplate(plan.get('id'), callbacks);		
     },
-    
-    updateTemplate: function(plan) {
-    	var me = this;
-    	
-    	//var plan = Ext.create('Ssp.model.tool.map.Plan');
-    	//plan.loadFromServer(plant);
-    	
-    	var callbacks = new Object();
-    	callbacks.success = me.onLoadCompleteSuccess;
-		callbacks.failure = me.onLoadCompleteFailure;
-		callbacks.scope = me;		
-		var grid = Ext.getCmp("templatePanel");		
-    	
-    	
-    	plan.set('ownerId',me.authenticatedPerson.get('id'));
-		plan.set('isTemplate', true);
-        plan.set('personId',  me.personLite.get('id'));
-        plan.set('personId', false);
-        plan.set('isPrivate', false);
-        
-        
-        var planCourses = plan.get('planCourses');
-        for(var k = 0; k < planCourses.length; k++){
-    		course = planCourses[k];
-    		course.id=null;
-    	}
-        
-    	var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
-    	
-    	// update
-		me.apiProperties.makeRequest({
-			url: url+'/'+ plan.get('id'), 
-			method: 'PUT',
-			jsonData: plan.getSimpleJsonData(),
-			successFunc: callbacks.success,
-			failureFunc: callbacks.failure,
-			scope: callbacks.scope
-		});	   	
-    },
-    
-    
-    
-    
-	getTemplateBaseUrl: function(){
-		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
-		return baseUrl;
-    },
-        
-    saveTemplate: function(semesterStores, currentMapTemplate ){
-		var me=this;
-		var url = me.getTemplateBaseUrl();
-		//me.currentMapTemplate.set('ownerId',me.authenticatedPerson.get('id'));
-		
-		
-		var plan = Ext.create('Ssp.model.tool.map.Plan');
-		plan.loadFromServer(currentMapTemplate);
-				
-	    console.log(plan.getSimpleJsonData());
-
-		
-		var callbacks = new Object();
-		callbacks.success = me.onLoadCompleteSuccess;
-		callbacks.failure = me.onLoadCompleteFailure;
-		callbacks.scope = me;
-		
-	    var success = function( response ){
-	    	callbacks.success( response, callbacks.scope );
-	    };
-
-	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	 
-	    	callbacks.failure( response, callbacks.scope );
-	    };
-			   
-
-	    
-		// update
-		me.apiProperties.makeRequest({
-			url: url+'/'+ plan.get('id'), 
-			//url: url+'/'+ plan.id,
-			method: 'PUT',
-			jsonData: plan.getSimpleJsonData(),
-			successFunc: success,
-			failureFunc: failure,
-			scope: me
-		});	
-			
-    },
-    
+                 
     onLoadCompleteFailure: function(response, t) {
      	alert('failure: ' + response + ' '+ t);
     },
@@ -244,8 +131,4 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     	var me = t;
     	Ext.getCmp('templatePanel').getStore().load();
     }
-    
-    
-    
-    
 });

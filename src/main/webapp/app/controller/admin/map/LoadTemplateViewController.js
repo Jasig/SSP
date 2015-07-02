@@ -1,0 +1,220 @@
+/*
+ * Licensed to Apereo under one or more contributor license
+ * agreements. See the NOTICE file distributed with this work
+ * for additional information regarding copyright ownership.
+ * Apereo licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License.  You may obtain a
+ * copy of the License at the following location:
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject:{
+		appEventsController: 'appEventsController',
+		formUtils: 'formRendererUtils',
+    	currentMapPlan: 'currentMapPlan',
+    	store: 'planTemplatesSummaryStore',
+        personLite: 'personLite',
+    	apiProperties: 'apiProperties',
+    	mapPlanService:'mapPlanService',
+		programsStore: 'programsStore',
+        departmentsStore: 'departmentsStore',
+    	mapEventUtils: 'mapEventUtils',
+        divisionsStore: 'divisionsStore'
+    },
+    
+	control: {
+    	
+	   'name': {
+		   selector: '#templateNameFilter',
+    	   listeners: {
+    		   keyup: 'ontemplateNameKeyUp'
+           }
+	   },		
+	   'program': {
+    	   selector: '#program',
+    	   listeners: {
+            select: 'onProgramSelect'
+           }
+        },
+        'department':{
+           selector: '#department',
+           hidden: false,
+           listeners: {
+            select: 'onDepartmentSelect'
+           }
+        },
+        'division':{
+           selector: '#division',
+           listeners: {
+            select: 'onDivisionSelect'
+           }
+        },
+        'programCancel':{
+            selector: '#programCancel',
+            hidden: true,
+              listeners: {
+               click: 'onProgramCancelClick'
+              }
+           },           
+        'departmentCancel':{
+            selector: '#departmentCancel',
+            hidden: false,
+            listeners: {
+             click: 'onDepartmentCancelClick'
+             }
+         },        
+        'divisionCancel':{
+           selector: '#divisionCancel',
+           listeners: {
+            click: 'onDivisionCancelClick'
+           }
+        },
+		'objectStatusFilter':{
+            selector: '#objectStatusFilter',
+            hidden: false,
+            listeners: {
+             select: 'onObjectStatusFilterSelect'
+            }
+         },
+         view: {
+            show: 'onShow'
+         },
+		 
+	},
+
+	init: function() {
+		var me=this;
+	    //me.resetForm();
+		if(me.programsStore.getTotalCount() < 1)
+	    	me.programsStore.load();
+		if(me.departmentsStore.getTotalCount() < 1)
+	    	me.departmentsStore.load();
+		if(me.divisionsStore.getTotalCount() < 1)
+	    	me.divisionsStore.load();
+	    me.store.addListener("load", me.onStoreLoaded, me);
+		return me.callParent(arguments);
+    },
+
+    loadTemplates: function() {
+        var me = this;
+        me.getView().setLoading(true);
+        me.store.load(); 
+		me.store.filter([
+		{
+			property: 'objectStatus',
+			value: 'ACTIVE'
+		}
+		]);
+		// callback registered in init()
+    },
+    
+    onStoreLoaded: function(){
+    	var me = this;
+    	me.store.sort();
+    	me.getView().setLoading(false);
+    },
+
+    onShow: function() {
+        // do this on show rather than init b/c this component isn't destroyed
+        // when dismissed, but we need to make sure you see all the latest
+        // Template changes whenever we do display this component. The easiest
+        // way to do that is to just hit the store/server again every time the
+        // view fires its show event
+        var me = this;
+        me.loadTemplates();
+    },
+    resetForm: function() {
+        var me = this;
+         me.getView().query("form")[0].getForm().reset();
+    },
+	
+	 onProgramSelect: function(){
+	        var me=this;
+	        me.handleSelect(me);
+	        var params = {};
+	        me.setParam(params, me.getProgram(), "programCode");
+    },  
+    
+    onProgramCancelClick: function(button){
+        var me=this;
+        me.getProgram().setValue("");
+        me.handleSelect(me);
+    },
+    
+    onDepartmentSelect: function(){
+        var me=this;
+		me.handleSelect(me);
+    }, 
+    
+    onDepartmentCancelClick: function(button){
+        var me=this;
+        me.getDepartment().setValue("");
+        me.handleSelect(me);
+    },
+    
+    onDivisionSelect: function(){
+        var me=this;
+		me.handleSelect(me);
+    },   
+    
+    onDivisionCancelClick: function(button){
+        var me=this;
+        me.getDivision().setValue("");
+        me.handleSelect(me);
+    },
+    
+    ontemplateNameKeyUp: function(){
+        var me=this;
+		me.handleSelect(me);
+    },   
+    
+    handleSelect: function(mte){
+		var grid = Ext.getCmp("templatePanel");
+    	var params = {};
+    	var me = this;
+		me.setParam(params, Ext.getCmp('program'), 'programCode');
+    	me.setParam(params, Ext.getCmp('department'), 'departmentCode');
+    	me.setParam(params, Ext.getCmp('division'), 'divisionCode');
+    	me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
+		params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
+    	grid.store.on('load', me.onLoadComplete, this, {single: true});
+    	grid.store.load({params: params});
+    },
+    
+    onLoadComplete: function(){
+		var me = this;
+    	me.onObjectStatusFilterSelect();
+    },    
+    setParam: function(params, field, fieldName){
+    	if(field.getValue() && field.getValue().length > 0)
+    		params[fieldName] = field.getValue();
+    },
+	onObjectStatusFilterSelect:function(){
+		var me = this;	
+		var grid = Ext.getCmp("templatePanel");
+		var objectStatus = Ext.getCmp('objectStatusFilter').getRawValue();	
+		grid.store.clearFilter(false);
+		if(objectStatus!='ALL'){
+			grid.store.filter('objectStatus', Ext.getCmp('objectStatusFilter').getRawValue());
+		}
+	},
+	
+	destroy:function(){
+	    var me=this;
+	    me.store.clearFilter(false);
+	    me.store.removeListener("load", me.onStoreLoaded, me);
+	    return me.callParent( arguments );
+	}
+		
+});
