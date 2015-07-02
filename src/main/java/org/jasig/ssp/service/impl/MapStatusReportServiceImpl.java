@@ -733,14 +733,14 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	}
 
 	@Override
-	public void oldReportForStudent(UUID personId) {
-		 dao.oldReportForStudent(personId);
+	public void deleteAllOldReportsForStudent(UUID personId) {
+		 dao.deleteAllOldReportsForPerson(personId);
 	}
 
 	@Override
 	public Boolean calculateStatusForStudent(UUID personId) throws ObjectNotFoundException, ValidationException {
-		
-		oldReportForStudent(personId);
+
+        deleteAllOldReportsForStudent(personId);
 		//Load up our configs
 		Set<String> gradesSet = getPassingGrades();
 		Set<String> additionalCriteriaSet = getAdditionalCriteria();
@@ -787,5 +787,4 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	public List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person person) {
 		return dao.getOffPlanPlansForWatcher(person);
 	}
-
 }

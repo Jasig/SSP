@@ -46,11 +46,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.mail.SendFailedException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -97,6 +95,7 @@ public class PersonEarlyAlertController extends
 	protected EarlyAlertService getService() {
 		return service;
 	}
+
 
 	// Overriding to specify full request path since we needed a custom create
 	// method
@@ -159,7 +158,7 @@ public class PersonEarlyAlertController extends
 		if (obj.getSendEmailToStudent() != null
 				&& Boolean.TRUE.equals(obj.getSendEmailToStudent())) {
 			try {
-				service.sendMessageToStudent(factory.from(earlyAlertTO));
+                service.sendMessageToStudent(service.get(earlyAlertTO.getId()));
 			} catch (final SendFailedException exc) {
 				LOGGER.error(
 						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",

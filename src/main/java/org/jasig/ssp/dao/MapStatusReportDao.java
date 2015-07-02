@@ -21,7 +21,6 @@ package org.jasig.ssp.dao;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -39,14 +38,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<MapStatusReport> implements PersonAssocAuditableCrudDao<MapStatusReport> { 
 
- 
-
 	public MapStatusReportDao() {
 		super(MapStatusReport.class);
 	}
+
 	protected MapStatusReportDao(Class<MapStatusReport> persistentClass) {
 		super(MapStatusReport.class);
 	}
+
 
 	public void deleteAllOldReports() {
 		Session session = sessionFactory.openSession();
@@ -65,6 +64,7 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 		session.close();
 
 	} 
+
 	@SuppressWarnings("unchecked")
 	public List<MapStatusReportSummaryDetail> getSummaryDetails() {
 		String detailsQuery = " select new org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail(msr.planStatus,count(*)) from MapStatusReport msr group by msr.planStatus order by count(*) desc";
@@ -79,7 +79,6 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 
 		return createHqlQuery(detailsQuery).setString("planStatus", PlanStatus.OFF.name()).list();
 	}
-	
 
 	@SuppressWarnings("unchecked")
 	public List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner) {
@@ -113,11 +112,12 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 		return createHqlQuery(query).setEntity("person", person).list();
 	}
 	
-	public void oldReportForStudent(UUID personId) {
+	public void deleteAllOldReportsForPerson(UUID personId) {
 		Collection<MapStatusReport> allForPersonId = getAllForPersonId(personId, null).getRows();
 		for (MapStatusReport mapStatusReport : allForPersonId) {
 			delete(mapStatusReport);
 		}
+        sessionFactory.getCurrentSession().flush();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -138,7 +138,4 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 		List<MapStatusReportPerson> result  = query.setEntity("watcher", watcher).setString("planStatus", PlanStatus.OFF.name()).list();
 		return result;
 	}
-
-
-
 }

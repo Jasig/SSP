@@ -63,15 +63,13 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 	
 	List<MapStatusReportPerson> getOffPlanPlansForOwner(Person owner);
 
-	List<MapStatusReportCourseDetails> getAllCourseDetailsForPerson(
-			Person person);
+	List<MapStatusReportCourseDetails> getAllCourseDetailsForPerson(Person person);
 
 	List<MapStatusReportTermDetails> getAllTermDetailsForPerson(Person person);
 
-	List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(
-			Person person);
+	List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(Person person);
 
-	void oldReportForStudent(UUID personId);
+	void deleteAllOldReportsForStudent(UUID personId);
 
 	Boolean calculateStatusForStudent(UUID personId) throws ObjectNotFoundException, ValidationException;
 
