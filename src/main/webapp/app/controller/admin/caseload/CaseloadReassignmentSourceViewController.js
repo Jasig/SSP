@@ -45,6 +45,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 		},		
 		'sourceCoachBox': {
 				change: 'onCoachChange'
+
    		},
    		'sourceProgramStatusBox': {
    				change: 'onProgramStatusChange'
@@ -67,23 +68,39 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 	     	Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
     	}
     	me.coachId = newValue;
-    	me.caseloadService.getCaseloadById(me.coachId, me.programStatusId, me.store, {success: success, failure: failure, scope: me});
+
+	if (me.coachId == null && me.programStatusId == null){
+		Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
+		me.getView().setLoading(false);
+	}
+	else {
+	    	me.caseloadService.getCaseloadById(me.coachId, me.programStatusId, me.store, {success: success, failure: failure, scope: me});
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
-	},   
+	}
+     },   
+
      onProgramStatusChange: function(combobox, newValue,oldValue,eOpts) {
 	   	var me=this;
 		me.programStatusId = newValue;
-    	if (me.coachId!=null) {
-			me.getView().setLoading(true);
-			var success = function(){
-				me.getView().setLoading(false);
-			}
-			var failure = function(){
-				Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.');
-			}
+
+		me.getView().setLoading(true);
+		var success = function(){
+			me.getView().setLoading(false);
+		}
+		var failure = function(){
+			Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.');
+		}
+
+
+		if (me.coachId == null && me.programStatusId == null){
+			Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
+			me.getView().setLoading(false);
+		}
+		else {
 			me.caseloadService.getCaseloadById(me.coachId, me.programStatusId, me.store, {success: success, failure: failure, scope: me});
 			me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		}
+
 	},
 	onAddAllButtonClick: function(button) {
 		var me=this;

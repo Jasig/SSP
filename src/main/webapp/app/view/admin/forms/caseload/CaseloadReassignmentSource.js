@@ -76,35 +76,38 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     		            ],
     		        
     		           dockedItems: [
-     		       		{
-      		               xtype: 'toolbar',
-        		           dock: 'top',
-       		               items: [{
-       		   		        xtype: 'combobox',
-       		   		        name: 'sourceCoachBox',
-       		   		        itemId: 'sourceCoachBox',
-       		   		        fieldLabel: 'Currently Assigned To',
-       		   		        emptyText: 'Select One',
-       		   		        store: me.allCoachesCurrentStore,
-       		   		        valueField: 'id',
-    		   		        displayField: 'fullName',
-       		   		        mode: 'local',
-    				        editable: false
-       		               },
-						   {
-							xtype: 'combobox',
-							multiSelect: false,
-							fieldLabel: 'Program Status',
-							emptyText: 'Select Status',
-							store: me.programStatusesStore,
-							valueField: 'id',
-							displayField: 'name',
-							columnWidth: 0.5,
-							itemId: 'sourceProgramStatusBox',
-							name: 'sourceProgramStatusBox',
-       		   		        mode: 'local',
-							editable: false
-						   }]
+     		       	   {
+				xtype: 'toolbar',
+				   dock: 'top',
+				items: [{
+					xtype: 'combobox',
+					name: 'sourceCoachBox',
+					itemId: 'sourceCoachBox',
+					fieldLabel: 'Currently Assigned To',
+					emptyText: 'Select One',
+					store: me.allCoachesCurrentStore,
+					valueField: 'id',
+					displayField: 'fullName',
+					mode: 'local',
+					labelWidth: 120,
+					editable: false,
+				allowBlank: true
+				},'->',
+			   {
+				xtype: 'combobox',
+				multiSelect: false,
+				fieldLabel: 'Program Status',
+				emptyText: 'Select Status',
+				store: me.programStatusesStore,
+				valueField: 'id',
+				displayField: 'name',
+				columnWidth: 0.5,
+				itemId: 'sourceProgramStatusBox',
+				name: 'sourceProgramStatusBox',
+	        		mode: 'local',
+				editable: false,
+				allowBlank: true
+			   }]
      		       		  },
      		              {
      		               xtype: 'toolbar',

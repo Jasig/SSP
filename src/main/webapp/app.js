@@ -513,7 +513,8 @@ Ext.require([
 	'Ext.form.field.ComboBox',
 	'Ext.grid.column.Action',
 	'Ext.grid.feature.Grouping',
-	'Ext.layout.container.Column'
+	'Ext.layout.container.Column',
+	'Ext.util.Cookies'
 ]);
 
 var apiUrls = [

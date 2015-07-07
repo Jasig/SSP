@@ -27,18 +27,26 @@ Ext.define('Ssp.service.CaseloadService', {
 		return this.callParent( arguments );
     },
     
+
+
     getBaseUrl: function(){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
     	return baseUrl;
     },
     
-	getBaseUrlForIdCaseload: function(id, programStatusId){
+    getBaseUrlForIdCaseload: function(id, programStatusId){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseloadId') );
-		baseUrl = baseUrl.replace('{id}',id);
-		if (programStatusId!=null) {
-			baseUrl = baseUrl + "?programStatusId=" +programStatusId;
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('directoryPersonSearch') );
+		//baseUrl = baseUrl.replace('{id}',id);
+		if (programStatusId!=null && id !=null) {
+			baseUrl = baseUrl + "?programStatus=" +programStatusId + "&coachId=" + id;
+		}
+		else if (programStatusId!=null) {
+			baseUrl = baseUrl + "?programStatus=" +programStatusId;
+		}
+		else if (id!=null) {
+			baseUrl = baseUrl + "?coachId=" + id;
 		}
     	return baseUrl;
     },    
