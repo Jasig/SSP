@@ -3082,7 +3082,144 @@
 	</form>
 </div><!-- number studens by status report -->
 
-	</div>
+
+<div class="hideable-form journal-case-notes-by-student-report" style="display:none">
+	<h1>Journal Session Details Report</h1>
+	<form action="/ssp/api/1/report/journalcasenotesbystudent" method="get"
+		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		<!-- Home Department -->
+		<div class="ea-input">
+			<select id="journalCaseNotesHomeDepartment" name="homeDepartment" class="input-home-department-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Home Department:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		
+		<!-- Assigned Counselor -->
+		<div class="ea-input">
+			<select id="journalCaseNotesCounselorGroup" name="coachId" class="input-assigned-counselor-group">
+				<option value="">${all_found}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Assigned Counselor:</span>
+		</div>
+		<div class="ea-clear"></div>		
+		
+		<!-- program Status -->
+		<div class="ea-input">
+			<select id="journalCaseNotesProgramStatusGroup" name="programStatus" class="input-program-status-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Program Status:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Student Type -->
+		<div class="ea-input">
+			<select class="input-student-type-group" id="journalCaseNotesStudentTypeIds" name="studentTypeIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Student Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
+		<!-- Service Reason -->
+		<div class="ea-input">
+			<select class="input-service-reason-group" id="journalCaseNotesServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Service Reason:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Special Service Groups -->
+		<div class="ea-input">
+			<select  class="input-special-service-group" id="journalCaseNotesSpecialServiceGroupIds" name="specialServiceGroupIds"
+				multiple="multiple">
+				<option value="">${not_applicable}</option>
+				</select>
+		</div>
+		<div class="ea-label">
+			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+				
+		<!-- Date Range Description -->
+		<div class="ea-input">
+		</div>
+		<div class="ea-label">
+			<span>${date_range_journal_entry}</span>
+		</div>
+		<div class="ea-clear"></div>
+		<!-- Semester -->
+		<div class="ea-time-span">
+			<div class="ea-term">
+				<div class="ea-input">
+					<select id="journalCaseNotesTermCode" name="termCode" class="input-term-group">
+						<option value="">${not_applicable}</option>
+						</select>
+				</div>
+				<div class="ea-label">
+					<span>Term:</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-date-range">
+				<!-- Date From -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="journalCaseNotesCreateDateFrom">
+				</div>
+				<div class="ea-label">
+					<span>Start Date (inclusive)::</span>
+				</div>
+				<div class="ea-clear"></div><!-- Date To -->
+				<div class="ea-input">
+					<input class="input-calendar-type" type="textbox" name="createDateTo" id="journalCaseNotesCreateDateTo">
+				</div>
+				<div class="ea-label">
+					<span>End Date (exclusive)::</span>
+				</div>
+				<div class="ea-clear"></div>
+			</div>
+			<div class="ea-buttons">
+
+								<button class="switch-date-range-type button" value="setbyrange">
+								</button>
+							</td>
+							
+			</div>
+		</div>
+		<!-- output type -->
+		<div class="ea-input">
+			<label><span>pdf</span></label><input type="radio" name="reportType"
+				value="pdf" /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" checked />
+		</div> 
+
+		<div class="ea-label">
+			<span>Output Type:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<div class="ea-buttons">
+			<div class="buttons">
+				<input class="button primary button-send" type="submit"
+					value="submit" />
+			</div>
+		</div>
+	</form>
+	</div><!-- end journal case notes by student report -->
     
   </div> <!-- end: portlet-body -->
 

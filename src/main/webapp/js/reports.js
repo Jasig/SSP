@@ -461,6 +461,7 @@ var ssp = ssp || {};
 							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
 							studentChallenges : '.student-challenges-report',
 							journalSessionDetail : '.journal-session-detail-report',
+							journalCaseNotes : '.journal-case-notes-by-student-report',
 							earlyAlertClass : '.early-alert-class-report',
 							numberCoursesInPlan : '.number-courses-in-plan-report',
 							numberPlansByOwner : '.number-plans-by-owner-report',

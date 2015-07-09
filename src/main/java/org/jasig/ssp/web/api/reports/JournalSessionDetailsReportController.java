@@ -20,7 +20,6 @@ package org.jasig.ssp.web.api.reports;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -32,27 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
-import org.apache.commons.lang.StringUtils;
-import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.JournalStepDetail;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.JournalStepDetailService;
-import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
-import org.jasig.ssp.service.reference.ServiceReasonService;
-import org.jasig.ssp.service.reference.SpecialServiceGroupService;
-import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,39 +57,17 @@ import com.google.common.collect.Maps;
 @Controller
 @RequestMapping("/1/report/journalsessiondetail")
 public class JournalSessionDetailsReportController extends ReportBaseController<JournalStepStudentReportTO> {
-
 	private static String REPORT_URL_PDF = "/reports/journalStepDetailReport.jasper";
-	private static String REPORT_FILE_TITLE = "Journal_Step_Detail_Report";
-	private static String JOURNAL_STEP_DETAILS = "journalStepDetail";
-	
+	private static String REPORT_FILE_TITLE = "Journal_Session_Details_Report";
+		
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(JournalSessionDetailsReportController.class);
 
 	@Autowired
-	private transient PersonService personService;
-	@Autowired
-	private transient PersonTOFactory personTOFactory;
-	@Autowired
-	private transient SpecialServiceGroupService ssgService;
-	@Autowired
-	private transient ReferralSourceService referralSourcesService;
-	@Autowired
-	private transient TermService termService;
-	@Autowired
-	private transient ProgramStatusService programStatusService;
-	@Autowired
-	protected transient StudentTypeService studentTypeService;	
-	@Autowired
-	protected transient ServiceReasonService serviceReasonService;	
+	JournalEntryService journalEntryService;
 	
 	@Autowired
-	protected transient JournalStepDetailService journalEntryStepDetailService;	
-	
-	@Autowired
-	protected transient JournalEntryService journalEntryService;	
-
-	// @Autowired
-	// private transient PersonTOFactory factory;
+	JournalReportParameters journalReportParameters; 
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
@@ -134,67 +97,25 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 			final @RequestParam(required = false) String termCode,
             final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) String homeDepartment,
-			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
-			throws ObjectNotFoundException, IOException {
+			final @RequestParam(required = false, defaultValue = REPORT_TYPE_CSV) String reportType)
+			throws ObjectNotFoundException, JRException, IOException {
 		
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final JournalStepSearchFormTO personSearchForm = new JournalStepSearchFormTO();
-		
-		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
-		
-		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
-
-        if ( StringUtils.isNotBlank(actualStartTerm) ) {
-            SearchParameters.addactualStartTerm(actualStartTerm, null, parameters);
-            personSearchForm.setActualStartTerm(actualStartTerm);
-        }
-		
-		SearchParameters.addReferenceLists(studentTypeIds, 
-				specialServiceGroupIds, 
-				null,
+		journalReportParameters.setParameters( status,
+				parameters, 
+				personSearchForm,
+				coachId,
+				programStatus,	
+				hasStepDetails,
+				specialServiceGroupIds,
+				studentTypeIds,
 				serviceReasonIds,
-				parameters, 
-				personSearchForm, 
-				studentTypeService, 
-				ssgService, 
-				referralSourcesService,
-				serviceReasonService);
-		
-		SearchParameters.addDateRange(createDateFrom, 
-				createDateTo, 
-				termCode, 
-				parameters, 
-				personSearchForm, 
-				termService);
-		
-		SearchParameters.addReferenceTypes(programStatus,
-				null, 
-				false,
-				null,
-				homeDepartment,
-				parameters, 
-				personSearchForm, 
-				programStatusService, 
-				null);
-
-		List<UUID> cleanJournalStepDetailIds = SearchParameters.cleanUUIDListOfNulls(journalStepDetailIds);
-		SearchParameters.addUUIDSToMap(JOURNAL_STEP_DETAILS,
-				SearchParameters.ALL, 
-				cleanJournalStepDetailIds, 
-				parameters, 
-				journalEntryStepDetailService);
-		
-		
-		if((cleanJournalStepDetailIds == null || cleanJournalStepDetailIds.isEmpty())){
-			cleanJournalStepDetailIds = new ArrayList<UUID>();
-			PagingWrapper<JournalStepDetail> details = journalEntryStepDetailService.getAll(SortingAndPaging.createForSingleSortAll(status, "sortOrder", "ASC"));
-			for(JournalStepDetail detail:details){
-				cleanJournalStepDetailIds.add(detail.getId());
-			}
-		}
-		personSearchForm.setJournalStepDetailIds(cleanJournalStepDetailIds);
-		
-		personSearchForm.setHasStepDetails(hasStepDetails);
+				journalStepDetailIds,
+				createDateFrom,
+				createDateTo,
+				termCode,
+				homeDepartment);
 		
 		final List<JournalStepStudentReportTO> reports = (List<JournalStepStudentReportTO>)
 				Lists.newArrayList(journalEntryService.getJournalStepStudentReportTOsFromCriteria(
@@ -238,6 +159,8 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				reportResultElement.getJournalStepDetailName()
 		});
 	}
+	
+	
 
 	@Override
 	protected Logger getLogger() {
