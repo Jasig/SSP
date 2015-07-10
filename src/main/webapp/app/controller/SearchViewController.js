@@ -557,11 +557,11 @@ Ext.define('Ssp.controller.SearchViewController', {
                 } else {
                     if (me.authenticatedPerson.hasAnyBulkPermissions()) {
                         me.getCaseloadActionCombo().show();
-						me.getSetNonParticipatingStatusButton().show();
-						me.getSetNoShowStatusButton().show();
-						me.getSetActiveStatusButton().show();
-						me.getSetInactiveButton().show();
                     }
+					me.getSetNonParticipatingStatusButton().show();
+					me.getSetNoShowStatusButton().show();
+					me.getSetActiveStatusButton().show();
+					me.getSetInactiveButton().show();
                 }
             }
         }
