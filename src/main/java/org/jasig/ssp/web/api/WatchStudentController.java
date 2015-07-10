@@ -19,6 +19,7 @@
 package org.jasig.ssp.web.api;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -36,7 +37,9 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.WatchStudentService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResult2TO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.WatchStudentTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
@@ -148,6 +151,8 @@ public class WatchStudentController
 		
 		return  service.watchListCountFor(programStatus, person, buildSortAndPage( limit,  start,  sort,  sortDirection));
 	}
+	
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_DELETE')")
 	public @ResponseBody
@@ -224,5 +229,18 @@ public class WatchStudentController
 		}
 		return sortAndPage;
 	}
+	
+	
+	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_READ')")
+	@RequestMapping(value = "/whoiswatching", method = RequestMethod.GET)
+	public @ResponseBody
+	java.util.List<PersonTO> getWatchListCount(
+			@PathVariable @NotNull final UUID personId)
+			throws ObjectNotFoundException, ValidationException {
+
+		List<PersonTO> watchers = service.getWatchersForStudent(personId);
+		return watchers;
+	}
+	
 	
 }

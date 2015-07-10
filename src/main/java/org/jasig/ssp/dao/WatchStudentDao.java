@@ -53,4 +53,15 @@ public class WatchStudentDao extends
 		return (WatchStudent) result.get(0);
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public List<WatchStudent> getWatchersForStudent(UUID studentId) {
+		String hqlQuery = "from org.jasig.ssp.model.WatchStudent where student = :student";
+		List<WatchStudent> result = createHqlQuery(hqlQuery).setEntity("student", new Person(studentId)).list();
+		
+		if(result.isEmpty())
+			return null;
+		
+		return result;
+	}
+	
 }

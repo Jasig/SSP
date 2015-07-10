@@ -733,7 +733,12 @@
                     "clsName": "Ssp.store.WatchList",
                     "name": "WatchList.js",
                     "path": "/app/store/"
-                },                
+                },    
+                {
+                    "clsName": "Ssp.store.WatchingStudentList",
+                    "name": "WatchingStudentList.js",
+                    "path": "/app/store/"
+                },             
                 {
                     "clsName": "Ssp.store.Caseload",
                     "name": "Caseload.js",
@@ -1101,6 +1106,11 @@
                     "name": "ProfileCoachViewController.js",
                     "path": "/app/controller/tool/profile/"
                 },
+                {
+                    "clsName": "Ssp.controller.tool.profile.ProfileWatchersViewController",
+                    "name": "ProfileWatchersViewController.js",
+                    "path": "/app/controller/tool/profile/"
+                },
 			  	{
 	                 "clsName": "Ssp.controller.tool.profile.CurrentDroppedScheduleViewController",
                     "name": "CurrentDroppedScheduleViewController.js",
@@ -1134,6 +1144,11 @@
                 {
                     "clsName": "Ssp.view.tools.profile.Coach",
                     "name": "Coach.js",
+                    "path": "/app/view/tools/profile/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.profile.Watchers",
+                    "name": "Watchers.js",
                     "path": "/app/view/tools/profile/"
                 },
                 {

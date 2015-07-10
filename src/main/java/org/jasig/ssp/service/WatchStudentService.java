@@ -22,6 +22,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.form.BulkWatchChangeRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -30,6 +32,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -49,4 +52,7 @@ public interface WatchStudentService extends PersonAssocAuditableService<WatchSt
 			SortingAndPaging buildSortAndPage);
 
 	JobTO changeInBulk(BulkWatchChangeRequestForm form) throws IOException, ObjectNotFoundException, ValidationException;
+	
+	//returns a list of watchers for a student
+	List<PersonTO> getWatchersForStudent(UUID studentId);
 }

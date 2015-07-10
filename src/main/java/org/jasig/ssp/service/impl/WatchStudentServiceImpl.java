@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.impl;
 
 import com.google.common.collect.Maps;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.ObjectExistsException;
@@ -45,6 +46,8 @@ import org.jasig.ssp.service.jobqueue.JobExecutionResult;
 import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
+import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.WatchStudentTO;
 import org.jasig.ssp.transferobject.form.BulkWatchChangeJobSpec;
 import org.jasig.ssp.transferobject.form.BulkWatchChangeRequestForm;
@@ -64,8 +67,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -386,6 +391,17 @@ public class WatchStudentServiceImpl
 
 	private static enum EmailVolume {
 		SINGLE,BULK
+	}
+
+	@Override
+	public List<PersonTO> getWatchersForStudent(UUID studentId) {
+		// TODO Auto-generated method stub
+		List<WatchStudent> t = dao.getWatchersForStudent(studentId);
+		List<PersonTO> retVal = new ArrayList<PersonTO>();
+		for(WatchStudent ws:t) {
+			retVal.add(new PersonTO(ws.getPerson()));
+		}
+		return retVal;
 	}
 
 

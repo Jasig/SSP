@@ -16,80 +16,83 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.profile.Profile', {
-    extend: 'Ext.form.Panel',
-    alias: 'widget.profile',
-    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.tool.profile.ProfileToolViewController',
-    
-    width: '100%',
-    height: '100%',
-    initComponent: function(){
-        var me = this;
-        Ext.apply(me, {
-            layout: 'fit',
-            title: 'Profile',
+Ext.define("Ssp.view.tools.profile.Profile", {
+    extend: "Ext.form.Panel",
+    alias: "widget.profile",
+    mixins: [ "Deft.mixin.Injectable", "Deft.mixin.Controllable" ],
+    controller: "Ssp.controller.tool.profile.ProfileToolViewController",
+    width: "100%",
+    height: "100%",
+    initComponent: function() {
+        var a = this;
+        Ext.apply(a, {
+            layout: "fit",
+            title: "Profile",
             padding: 0,
             border: 0,
             preventHeader: true,
-            items: [Ext.createWidget('tabpanel', {
-                width: '100%',
-                height: '100%',
+            items: [ Ext.createWidget("tabpanel", {
+                width: "100%",
+                height: "100%",
                 activeTab: 0,
-                itemId: 'profileTabs',
-                items: [{
-                    title: 'Dashboard',
+                itemId: "profileTabs",
+                items: [ {
+                    title: "Dashboard",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'profiledashboard'
-                    }]
+                    items: [ {
+                        xtype: "profiledashboard"
+                    } ]
                 }, {
-                    title: 'Details',
+                    title: "Details",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'profiledetails'
-                    }]
+                    items: [ {
+                        xtype: "profiledetails"
+                    } ]
                 }, {
-                    title: 'Financial',
+                    title: "Financial",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'profilefinancial'
-                    }]
+                    items: [ {
+                        xtype: "profilefinancial"
+                    } ]
                 }, {
-                    title: 'Transcript',
+                    title: "Transcript",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'transcript'
-                    }]
+                    items: [ {
+                        xtype: "transcript"
+                    } ]
                 }, {
-                    title: 'Placement',
+                    title: "Placement",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'placement'
-                    }]
+                    items: [ {
+                        xtype: "placement"
+                    } ]
                 }, {
-                    title: 'Contact',
+                    title: "Contact",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'profilecontact'
-                    }]
+                    items: [ {
+                        xtype: "profilecontact"
+                    } ]
                 }, {
-                    title: 'Coach',
+                    title: "Coach",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'profilecoach'
-                    }]
+                    items: [ {
+                        xtype: "profilecoach"
+                    } ]
                 }, {
-                    title: 'Schedule',
+                    title: "Watchers",
                     autoScroll: true,
-                    items: [{
-                        xtype: 'profileschedule'
-                    }]
-                }
-				]
-            })]
+                    items: [ {
+                        xtype: "profilewatchers"
+                    } ]
+                }, {
+                    title: "Schedule",
+                    autoScroll: true,
+                    items: [ {
+                        xtype: "profileschedule"
+                    } ]
+                } ]
+            }) ]
         });
-        
-        return me.callParent(arguments);
+        return a.callParent(arguments);
     }
 });

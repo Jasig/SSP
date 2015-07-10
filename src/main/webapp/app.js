@@ -65,6 +65,7 @@ Ext.require([
     'Ssp.view.tools.profile.ServicesProvided',
     'Ssp.view.tools.profile.ServiceReasons',
 	'Ssp.view.tools.profile.Coach',
+	'Ssp.view.tools.profile.Watchers',
 	'Ssp.view.tools.profile.Contact',
 	'Ssp.view.tools.profile.Placement',
     'Ssp.view.tools.profile.Transcript',
@@ -356,6 +357,7 @@ Ext.require([
 	'Ssp.store.Caseload',
 	'Ssp.store.DirectoryPersonSearch',
 	'Ssp.store.WatchList',
+	'Ssp.store.WatchingStudentList',
     'Ssp.store.Tasks',
     'Ssp.store.StudentActivities',
     'Ssp.store.Goals',
@@ -605,6 +607,7 @@ var apiUrls = [
   {name: 'personSearch', url: 'person/search'},
   {name: 'personMapPlan', url: 'person/{id}/map/plan'},
   {name: 'personWatch', url: 'person/{id}/watchstudent'},
+  {name: 'personWatchedBy', url: 'person/{id}/watchstudent/whoiswatching'},  
   {name: 'templatePlan', url: 'reference/map/template'},
   {name: 'placement', url: 'person/{id}/test'},
   {name: 'studentDocument', url: 'person/{id}/studentdocument'},
@@ -1186,7 +1189,20 @@ Ext.onReady(function(){
 							 });
 				    	},
 				    	singleton: true
-				    },				    
+				    },	
+				    watchStudentListStore: {
+				    	fn: function(){
+				    		return Ext.create('Ssp.store.WatchingStudentList', {
+							     storeId: 'watchingStudentListStoreMain',		
+							     params : {
+										page : 0,
+										start : 0,
+										limit : 100
+									}	
+							 });
+				    	},
+				    	singleton: true
+				    },	
 					reassignCaseloadStagingStore: 'Ssp.store.CaseloadUnpaged',
 					reassignCaseloadStore: 'Ssp.store.CaseloadUnpaged',
 					contactPersonStore: 'Ssp.store.ContactPerson',
