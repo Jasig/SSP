@@ -18,25 +18,31 @@
  */
 package org.jasig.ssp.service.impl;
 
-import org.jasig.ssp.dao.JournalEntryDao;
-import org.jasig.ssp.model.JournalEntry;
-import org.jasig.ssp.model.JournalEntryDetail;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.jasig.ssp.dao.JournalEntryDao;
+import org.jasig.ssp.dao.PersonDao;
+import org.jasig.ssp.model.JournalEntry;
+import org.jasig.ssp.model.JournalEntryDetail;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
+import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.JournalCaseNotesStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +60,9 @@ public class JournalEntryServiceImpl
 
 	@Autowired
 	private transient PersonProgramStatusService personProgramStatusService;
+	
+	@Autowired
+	private transient PersonDao personDao;
 
 	@Override
 	protected JournalEntryDao getDao() {
@@ -116,9 +125,25 @@ public class JournalEntryServiceImpl
 	}
 	
 	@Override
-	public PagingWrapper<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  
-			SortingAndPaging sAndP){
-		return dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm,  
-				sAndP);
+	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{
+		 List<JournalCaseNotesStudentReportTO> personsWithJournalEntries = dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm, sAndP);
+		 Map<String, JournalCaseNotesStudentReportTO> map = new HashMap<String, JournalCaseNotesStudentReportTO>();
+		 for(JournalCaseNotesStudentReportTO entry:personsWithJournalEntries){
+			 map.put(entry.getSchoolId(), entry);
+		 }
+		 personSearchForm.setCreateDateFrom(null);
+		 personSearchForm.setCreateDateTo(null);
+		 SortingAndPaging personSAndP = SortingAndPaging.createForSingleSortAll(ObjectStatus.ACTIVE, "lastName", "DESC") ;
+		 PagingWrapper<BaseStudentReportTO> persons = personDao.getStudentReportTOs(personSearchForm, personSAndP);
+		 List<JournalCaseNotesStudentReportTO> personsNoEntry = new ArrayList<JournalCaseNotesStudentReportTO>();
+		
+		 for(BaseStudentReportTO person:persons){
+			 if(!map.containsKey(person.getSchoolId()) && person.getCoachLastName() != null){
+				 JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
+				 personsNoEntry.add(entry);
+			}
+		 }
+		 personsWithJournalEntries.addAll(personsNoEntry);
+		 return personsWithJournalEntries;
 	}
 }

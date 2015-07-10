@@ -124,6 +124,7 @@ public class BaseStudentReportTO implements Serializable {
 	private BigDecimal lastTermGradePointAverage;
 	private String lastTermRegistered;
 	private String financialAidStatus;
+	private Date createdDate;
 	
 	private Person person;
 	
@@ -500,6 +501,13 @@ public class BaseStudentReportTO implements Serializable {
 		setStudentTypeCode(person.getStudentType().getCode());
 
 		normalize();
+		setCreatedDate(person.getCreatedDate());
+		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
+		setProgramStatusName(getCurrentProgramStatusName());
+		if(getStudentTypeName().equals(ILP))
+			setIsIlp(true);
+		else
+			setIsIlp(false);
 	}
 	
 	public void setPerson(BaseStudentReportTO person) {
@@ -538,6 +546,12 @@ public class BaseStudentReportTO implements Serializable {
 		setSpecialServiceGroupName(person.getSpecialServiceGroupName());
 		setSpecialServiceGroupAssocObjectStatus(person.getSpecialServiceGroupAssocObjectStatus());
 		setRegistrationStatus(person.getRegistrationStatus());
+		setCreatedDate(person.getCreatedDate());
+		setProgramStatusName(person.getProgramStatusName());
+		if(getStudentTypeName().equals(ILP))
+			setIsIlp(true);
+		else
+			setIsIlp(false);
 
 		normalize();
 	}
@@ -886,4 +900,13 @@ public class BaseStudentReportTO implements Serializable {
 			this.academicProgramNames = academicProgramsNames.toString();
 		}
 	}
+	
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
 }

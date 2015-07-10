@@ -227,7 +227,7 @@ public class JournalEntryDao
 		ProjectionList projections = Projections.projectionList();
 		projections.add(Projections.distinct(Projections.groupProperty("journalEntryDetails.id").as("journalentry_journalEntryDetailId")));
 		addBasicStudentProperties( projections, criteria);
-		
+				
 		projections.add(Projections.groupProperty("journalStepDetail.name").as("journalentry_journalStepDetailName"));
 		criteria.setProjection(projections);
 		criteria.setResultTransformer(
@@ -271,7 +271,7 @@ public class JournalEntryDao
 	}
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(
+	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(
 			JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) {
 		final Criteria criteria = createCriteria(sAndP);
 		
@@ -295,7 +295,7 @@ public class JournalEntryDao
 		criteria.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
 						JournalCaseNotesStudentReportTO.class, "journalentry_"));
-		return  new PagingWrapper<JournalCaseNotesStudentReportTO>(criteria.list().size(), (List<JournalCaseNotesStudentReportTO>)criteria.list());
+		return  (List<JournalCaseNotesStudentReportTO>)criteria.list();
 	}
 	
 private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){
@@ -375,23 +375,20 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
 					personSearchForm.getHomeDepartment()));
 		}
+
 		if (personSearchForm.getWatcher() != null
 				&&personSearchForm.getWatcher().getId() != null) {
 			criteria.createAlias("person.watchers", "watchers");
 			criteria.add(Restrictions.eq("watchers.person.id", personSearchForm.getWatcher().getId()));
 		}		
+		criteria.createAlias("person.programStatuses", "personProgramStatuses");
+		
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 		if (personSearchForm.getProgramStatus() != null) {
-			criteria.createAlias("person.programStatuses",
-					"personProgramStatuses");
 			criteria.add(Restrictions
 							.eq("personProgramStatuses.programStatus.id",
 									personSearchForm
 											.getProgramStatus()));
-			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
-
-		}else{
-			criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);	
-			
 		}
 		if (personSearchForm.getSpecialServiceGroupIds() != null) {
 			criteria.createAlias("person.specialServiceGroups",
