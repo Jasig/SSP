@@ -48,7 +48,7 @@ Ext.define('Ssp.controller.admin.AbstractReferenceAdminViewController', {
     onBeforeEdit: function( editor, e, eOpts ){
 		var me=this;
 		var access = me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_EDIT');
-		// Test if the record is restricted content 
+		// Test if the record is restricted content
 		if ( me.authenticatedPerson.isDeveloperRestrictedContent( e.record ) )
 		{
 			me.authenticatedPerson.showDeveloperRestrictedContentAlert();

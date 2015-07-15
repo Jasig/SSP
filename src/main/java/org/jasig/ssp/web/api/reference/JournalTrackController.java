@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.reference; // NOPMD
 
 import java.util.UUID;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.ssp.factory.TOFactory;
@@ -43,6 +44,7 @@ import org.jasig.ssp.transferobject.reference.JournalTrackJournalStepTO;
 import org.jasig.ssp.transferobject.reference.JournalTrackTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/1/reference/journalTrack")
+@PreAuthorize(Permission.SECURITY_REFERENCE_JOURNAL_WRITE)
 public class JournalTrackController
 		extends
 		AbstractAuditableReferenceController<JournalTrack, JournalTrackTO> {
@@ -181,5 +184,62 @@ public class JournalTrackController
 		service.removeJournalStepFromJournalTrack(journalStep, journalTrack);
 
 		return new ServiceResponse(true);
+	}
+
+	/**
+	 * Persist a new instance of the specified object.
+	 * <p>
+	 * Must not include an id.
+	 *
+	 * @param obj
+	 *            New instance to persist.
+	 * @return Original instance plus the generated id.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified data contains an id (since it shouldn't).
+	 */
+	@Override
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody JournalTrackTO create(@Valid @RequestBody final JournalTrackTO obj)
+			throws ObjectNotFoundException,	ValidationException {
+		return super.create(obj);
+	}
+
+	/**
+	 * Persist any changes to the specified instance.
+	 *
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 */
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public @ResponseBody JournalTrackTO save(@PathVariable final UUID id, @Valid @RequestBody final JournalTrackTO obj)
+			throws ValidationException, ObjectNotFoundException {
+		return super.save(id, obj);
+	}
+
+	/**
+	 * Marks the specified data instance with a status of
+	 * {@link ObjectStatus#INACTIVE}.
+	 *
+	 * @param id
+	 *            The id of the data instance to mark deleted.
+	 * @return Success boolean.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody ServiceResponse delete(@PathVariable final UUID id)
+			throws ObjectNotFoundException {
+		return super.delete(id);
 	}
 }

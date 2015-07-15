@@ -48,6 +48,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/1/messageTemplatePreview")
+@PreAuthorize(Permission.SECURITY_REFERENCE_SYSTEM_CONFIG_WRITE)
 public class MessageTemplatePreviewController extends AbstractBaseController {
 
 
@@ -73,7 +74,6 @@ public class MessageTemplatePreviewController extends AbstractBaseController {
 	 * @throws ValidationException
 	 *             If that specified data is not invalid.
 	 */
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	MessageTemplateTO get(

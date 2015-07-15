@@ -20,15 +20,24 @@ package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.EarlyAlertReferralTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.EarlyAlertReferral;
+import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.UUID;
 
 /**
  * Some basic methods for manipulating EarlyAlertReferral reference data.
@@ -39,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/1/reference/earlyAlertReferral")
+@PreAuthorize(Permission.SECURITY_REFERENCE_EARLY_ALERT_WRITE)
 public class EarlyAlertReferralController
 		extends
 		AbstractAuditableReferenceController<EarlyAlertReferral, EarlyAlertReferralTO> {
@@ -79,5 +89,62 @@ public class EarlyAlertReferralController
 	@Override
 	protected TOFactory<EarlyAlertReferralTO, EarlyAlertReferral> getFactory() {
 		return factory;
+	}
+
+	/**
+	 * Persist a new instance of the specified object.
+	 * <p>
+	 * Must not include an id.
+	 *
+	 * @param obj
+	 *            New instance to persist.
+	 * @return Original instance plus the generated id.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified data contains an id (since it shouldn't).
+	 */
+	@Override
+	@RequestMapping(method = RequestMethod.POST)
+	public @ResponseBody EarlyAlertReferralTO create(@Valid @RequestBody final EarlyAlertReferralTO obj)
+			throws ObjectNotFoundException,	ValidationException {
+		return super.create(obj);
+	}
+
+	/**
+	 * Persist any changes to the specified instance.
+	 *
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 */
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public @ResponseBody EarlyAlertReferralTO save(@PathVariable final UUID id, @Valid @RequestBody final EarlyAlertReferralTO obj)
+			throws ValidationException, ObjectNotFoundException {
+		return super.save(id, obj);
+	}
+
+	/**
+	 * Marks the specified data instance with a status of
+	 * {@link ObjectStatus#INACTIVE}.
+	 *
+	 * @param id
+	 *            The id of the data instance to mark deleted.
+	 * @return Success boolean.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody ServiceResponse delete(@PathVariable final UUID id)
+			throws ObjectNotFoundException {
+		return super.delete(id);
 	}
 }
