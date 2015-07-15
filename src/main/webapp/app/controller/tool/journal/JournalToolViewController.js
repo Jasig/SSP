@@ -56,7 +56,11 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		
 		'cancelButton': {
 			click: 'onCancelClick'
-		}		
+		},
+		
+		'journalHistoryButton': {
+			click: 'onViewJournalHistoryButtonClick'
+		}
 	},
 	
     init: function() {
@@ -97,6 +101,15 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 		});
 		
 	},
+	onViewJournalHistoryButtonClick: function(button){
+        var me=this;
+        var personId = me.personLite.get('id');
+        var personJournalViewHistoryUrl = (me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewJournalHistory')).replace('{id}',personId);
+        me.apiProperties.getReporter().load({
+            url:personJournalViewHistoryUrl,
+            params: ""
+        });
+    },
  
     getAllJournalEntriesSuccess: function( r, scope ) {
 		var me=scope;

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="studentActionPlan" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="aac79acd-053b-4b36-bb85-9b85200e4ec8">
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="144"/>
+	<subDataset name="dataset1" uuid="f5197e6d-0a3f-4ac7-8f4f-7a16b128dbb3">
+		<parameter name="realPath" class="java.lang.String"/>
+		<field name="indicatorName" class="java.lang.String"/>
+		<field name="displayValue" class="java.lang.String"/>
+		<field name="evaluation" class="org.jasig.ssp.transferobject.SuccessIndicatorEvaluation"/>
+		<field name="evaluationDisplayName" class="java.lang.String"/>
+		<field name="displayName" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="studentTO" class="org.jasig.ssp.transferobject.reports.PersonReportTO"/>
+	<parameter name="reportDate" class="java.lang.String"/>
+	<parameter name="studentRecordTO" class="org.jasig.ssp.transferobject.external.ExternalStudentRecordsLiteTO"/>
+	<parameter name="studentPlanTO" class="org.jasig.ssp.transferobject.PlanTO"/>
+	<parameter name="studentMapStatusTO" class="org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO"/>
+	<parameter name="planProjectedGraduationTerm" class="java.lang.String"/>
+	<parameter name="studentEvaluatedSuccessIndicators" class="java.util.List"/>
+	<parameter name="interventionEvaluatedSuccessIndicators" class="java.util.List"/>
+	<parameter name="riskEvaluatedSuccessIndicators" class="java.util.List"/>
+	<parameter name="realPath" class="java.lang.String"/>
+	<parameter name="sspLabels" class="java.util.Map"/>
+	<parameter name="careerStatusTO" class="org.jasig.ssp.transferobject.reference.CareerDecisionStatusTO"/>
+	<field name="dateDayOnly" class="java.lang.String"/>
+	<field name="journalEntries" class="java.util.List"/>
+	<field name="taskList" class="java.util.List"/>
+	<field name="earlyAlerts" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="13" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<text><![CDATA[Report Date: ]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="1" y="15" width="572" height="35" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="0" width="172" height="13" uuid="67d697f1-244d-4278-88e7-247b8c6f0833"/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="15" width="570" height="35" backcolor="#46C6D2" uuid="6457d202-3d00-44b4-9231-1ea0a8b713f2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Journal Entry History]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="103" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
+			<staticText>
+				<reportElement x="1" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="5699d48e-300c-4b6c-9177-20746b23d6d8"/>
+				<text><![CDATA[Student Name: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="20" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="45f683de-3fd9-4a9b-a469-fae2e9702ab1"/>
+				<text><![CDATA[Student ID: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="80" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="27f4a600-8ef4-45a8-95f4-f03599cc7c5d"/>
+				<text><![CDATA[Email: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="273" y="0" width="140" height="20" isPrintWhenDetailOverflows="true" uuid="20e4ea5f-68b6-4362-b7d7-cfb9f983566a"/>
+				<text><![CDATA[Student Coach: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="3df642a5-92ae-4643-b264-e210473c3cd3">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getFirstName() + " " +
+(($P{studentTO}.getMiddleName() == null || $P{studentTO}.getMiddleName().trim().equals("")) ? "" : ($P{studentTO}.getMiddleName() + " "))
++ $P{studentTO}.getLastName()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="100" y="20" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="1015c59d-3678-4ce2-82de-f770ddefaa4a">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getSchoolId()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="100" y="40" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="9ba9258b-3530-4c3d-8d72-b4ae9f393973">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getHomePhone()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="101" y="80" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="236de62a-798b-49c0-81f4-6c2bf75e74a0">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getPrimaryEmailAddress()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="413" y="0" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="fe872ac9-3ea8-46f4-ac16-9189c110a58a">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getCoach().getFirstName() + " " + $P{studentTO}.getCoach().getLastName()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="273" y="20" width="139" height="20" isPrintWhenDetailOverflows="true" uuid="d10c3567-a366-4224-b50a-0b9a1eacf5be"/>
+				<text><![CDATA[SSP Status: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="411" y="20" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="66d3915a-22b0-4d20-91b3-4e8d4ee28dff">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getCurrentProgramStatusName()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="100" y="60" width="160" height="20" isPrintWhenDetailOverflows="true" uuid="524fdeb9-0811-4426-bcf4-9f1c5e40a0f9">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{studentTO}.getCellPhone()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1" y="40" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="7bba69ff-8666-43c3-bf30-835e0f7874cb">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{sspLabels}.get("ssp.label.home-phone") == null ? "Home Phone: " : $P{sspLabels}.get("ssp.label.home-phone") + ": "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1" y="60" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="05536658-d4a0-409b-abbe-f5dff32329d7">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$P{sspLabels}.get("ssp.label.cell-phone") == null ? "Cell Phone: " : $P{sspLabels}.get("ssp.label.cell-phone") + ": "]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[($F{dateDayOnly} != null && !($F{dateDayOnly}.trim().equals("")))
+&& (!$F{journalEntries}.isEmpty() || !$F{taskList}.isEmpty() || !$F{earlyAlerts}.isEmpty())]]></printWhenExpression>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#D6D6D6" uuid="ecb4de43-0aa5-484c-8c57-a3194ab29d30"/>
+				<textElement>
+					<font size="14" isBold="true" isItalic="false"/>
+					<paragraph firstLineIndent="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateDayOnly}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[!$F{journalEntries}.isEmpty()]]></printWhenExpression>
+			<subreport>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="14" y="17" width="558" height="22" isRemoveLineWhenBlank="true" uuid="9e8c4f35-4564-41fb-9f57-97834d567f98">
+					<printWhenExpression><![CDATA[!$F{journalEntries}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{journalEntries})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["reports/journalEntries_subreport.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="572" height="16" backcolor="#DAF1E4" uuid="b7b6e397-15cd-474a-bc44-2585d8216aa0">
+					<printWhenExpression><![CDATA[!$F{journalEntries}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph firstLineIndent="8"/>
+				</textElement>
+				<text><![CDATA[JOURNAL ENTRY]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

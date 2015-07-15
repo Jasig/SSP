@@ -128,6 +128,16 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
                     xtype: 'button',
                     hidden: !me.authenticatedPerson.hasAccess('DELETE_JOURNAL_ENTRY_BUTTON'),
                     itemId: 'deleteButton'
+                },
+                {
+                    tooltip: 'Click to generate report of student\'s Journal History',
+                    text: 'Journal History',
+                    width: 105,
+                    height: 20,
+                    xtype: 'button',
+    				cls: "makeTransparent x-btn-link",
+    				hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
+                    itemId: 'journalHistoryButton'
                 }]
             }]
         });
