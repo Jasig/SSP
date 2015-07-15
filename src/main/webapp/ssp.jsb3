@@ -733,12 +733,7 @@
                     "clsName": "Ssp.store.WatchList",
                     "name": "WatchList.js",
                     "path": "/app/store/"
-                },    
-                {
-                    "clsName": "Ssp.store.WatchingStudentList",
-                    "name": "WatchingStudentList.js",
-                    "path": "/app/store/"
-                },             
+                },
                 {
                     "clsName": "Ssp.store.Caseload",
                     "name": "Caseload.js",
@@ -2463,6 +2458,11 @@
                 {
                     "clsName": "Ssp.store.People",
                     "name": "People.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.WatchingStudentList",
+                    "name": "WatchingStudentList.js",
                     "path": "/app/store/"
                 },
                 {
