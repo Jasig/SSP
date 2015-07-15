@@ -25,7 +25,6 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.transferobject.JournalEntryTO;
 import org.jasig.ssp.transferobject.reports.PersonReportTO;
-import org.jasig.ssp.transferobject.reports.StudentHistoryTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;

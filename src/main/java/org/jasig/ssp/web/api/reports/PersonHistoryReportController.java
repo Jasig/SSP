@@ -90,7 +90,7 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 	private static final String CAREER_STATUS_TO = "careerStatusTO";
 	private static final String BLURB_SEPARATOR = ".";
 	private static final String SSP_LABEL_NAMES_BLURB_PREFIX = "ssp.label";
-	private static final String SSP_LABEL_NAMES_BLURB_QUERY = SSP_LABEL_NAMES_BLURB_PREFIX + BLURB_SEPARATOR + "*";
+	static final String SSP_LABEL_NAMES_BLURB_QUERY = SSP_LABEL_NAMES_BLURB_PREFIX + BLURB_SEPARATOR + "*";
 
     private static final Ordering<EvaluatedSuccessIndicatorTO> INDICATOR_ORDERING = new Ordering<EvaluatedSuccessIndicatorTO>() {
         public int compare(EvaluatedSuccessIndicatorTO left, EvaluatedSuccessIndicatorTO right) {
@@ -302,7 +302,7 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 		return new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.US);
 	}
 
-    private static int sortDateDescending( Date date1, Date date2 ) {
+    static int sortDateDescending( Date date1, Date date2 ) {
         if ( date1.compareTo(date2) < 0 ) {
             return 1;
         } else if ( date1.compareTo(date2) > 0 ) {
@@ -423,7 +423,7 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 		return retVal;
 	}
 
-	private HashMap<String, String> transferBlurbsToMap(PagingWrapper<Blurb> blurbs) {
+	static HashMap<String, String> transferBlurbsToMap(PagingWrapper<Blurb> blurbs) {
 		final HashMap<String, String> labels = Maps.newHashMap();
 
 		if (blurbs != null && blurbs.getResults() > 0) {
