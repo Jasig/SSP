@@ -18,10 +18,17 @@
  */
 package org.jasig.ssp.service.impl;
 
+import java.util.List;
+
 import org.jasig.ssp.dao.PersonChallengeDao;
 import org.jasig.ssp.model.PersonChallenge;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonChallengeService;
+import org.jasig.ssp.transferobject.reference.ReferenceCounterTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.transferobject.reports.StudentChallengesTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +45,15 @@ public class PersonChallengeServiceImpl extends
 	@Override
 	protected PersonChallengeDao getDao() {
 		return dao;
+	}
+	
+	public List<StudentChallengesTO> getStudentChallenges(PersonSearchFormTO form,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException{
+		return dao.getStudentChallenges(form, sAndP);
+	}
+	
+	public List<ReferenceCounterTO> getStudentChallengesCount(PersonSearchFormTO form) throws ObjectNotFoundException {
+		return dao.getStudentChallengesCount(form);
 	}
 
 }

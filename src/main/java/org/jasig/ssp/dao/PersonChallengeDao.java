@@ -18,7 +18,23 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.ReferenceCounterTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.transferobject.reports.StudentChallengesTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,10 +45,67 @@ public class PersonChallengeDao extends
 		AbstractPersonAssocAuditableCrudDao<PersonChallenge> implements
 		PersonAssocAuditableCrudDao<PersonChallenge> {
 
+	@Autowired
+	PersonDao personDao;
 	/**
 	 * Constructor
 	 */
 	public PersonChallengeDao() {
 		super(PersonChallenge.class);
+	}
+	
+	public List<StudentChallengesTO> getStudentChallenges(PersonSearchFormTO form,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+		
+		List<UUID> ids = personDao.getStudentUUIDs(form);
+		
+		Criteria criteria = createCriteria();
+		criteria.createAlias("person", "p");
+		criteria.createAlias("p.coach", "coach");
+		criteria.createAlias("p.studentType", "studentType");
+		criteria.createAlias("challenge", "c");
+		criteria.add(Restrictions.in("p.id", ids));
+		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+		
+		
+		final ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.groupProperty("c.name").as("challengeName"));
+		projections.add(Projections.groupProperty("id").as("id"));
+		projections.add(Projections.groupProperty("p.firstName").as("firstName"));
+		projections.add(Projections.groupProperty("p.lastName").as("lastName"));
+		projections.add(Projections.groupProperty("p.schoolId").as("schoolId"));
+		projections.add(Projections.groupProperty("studentType.name").as("studentType"));
+		projections.add(Projections.groupProperty("coach.firstName").as("coachFirstName"));
+		projections.add(Projections.groupProperty("coach.lastName").as("coachLastName"));
+		criteria.setProjection(projections);
+		criteria.addOrder(Order.asc("challengeName"));
+		criteria.addOrder(Order.asc("lastName"));
+		criteria.addOrder(Order.asc("firstName"));
+		criteria.setResultTransformer(new AliasToBeanResultTransformer(
+				StudentChallengesTO.class));
+		return (List<StudentChallengesTO>)criteria.list();
+	}
+	
+	public List<ReferenceCounterTO> getStudentChallengesCount(PersonSearchFormTO form) throws ObjectNotFoundException {
+		List<UUID> ids = personDao.getStudentUUIDs(form);
+		
+
+		Criteria criteria = createCriteria();
+		criteria.createAlias("person", "p");
+		criteria.createAlias("challenge", "c");
+		criteria.add(Restrictions.in("p.id", ids));
+		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+		
+		
+		final ProjectionList projections = Projections.projectionList();
+		projections.add(Projections.groupProperty("c.name").as("name"));
+		projections.add(Projections.countDistinct("p.id").as("count"));
+
+		criteria.setProjection(projections);
+		criteria.addOrder(Order.asc("name"));
+		criteria.setResultTransformer(new AliasToBeanResultTransformer(
+				ReferenceCounterTO.class));
+		return (List<ReferenceCounterTO>)criteria.list();
+		
 	}
 }

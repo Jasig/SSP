@@ -18,12 +18,23 @@
  */
 package org.jasig.ssp.service;
 
+import java.util.List;
+
 import org.jasig.ssp.model.PersonChallenge;
+import org.jasig.ssp.transferobject.reference.ReferenceCounterTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
+import org.jasig.ssp.transferobject.reports.StudentChallengesTO;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 
 /**
  * PersonChallenge service
  */
 public interface PersonChallengeService
 		extends PersonAssocAuditableService<PersonChallenge> {
+	
+	public List<StudentChallengesTO> getStudentChallenges(PersonSearchFormTO form,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+	
+	public List<ReferenceCounterTO> getStudentChallengesCount(PersonSearchFormTO form) throws ObjectNotFoundException;
 
 }

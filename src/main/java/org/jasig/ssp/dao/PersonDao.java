@@ -42,7 +42,6 @@ import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -52,7 +51,6 @@ import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.stereotype.Repository;
@@ -501,6 +499,16 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (personSearchTO.getCreateDateTo() != null) {
 			criteria.add(Restrictions.le("createdDate",
 					personSearchTO.getCreateDateTo()));
+		}
+		
+		if (personSearchTO.getStudentIntakeCompleteDateFrom() != null) {
+			criteria.add(Restrictions.ge("studentIntakeCompleteDate",
+					personSearchTO.getStudentIntakeCompleteDateFrom()));
+		}
+		
+		if (personSearchTO.getStudentIntakeCompleteDateTo() != null) {
+			criteria.add(Restrictions.le("studentIntakeCompleteDate",
+					personSearchTO.getStudentIntakeCompleteDateTo()));
 		}
 		
 		if (personSearchTO.getDisabilityIsNotNull() != null && personSearchTO.getDisabilityIsNotNull() == true) {

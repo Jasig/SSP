@@ -459,6 +459,7 @@ var ssp = ssp || {};
 							earlyAlertStudentProgress : '.early-alert-student-progress-report',
 							earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
 							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
+							studentChallenges : '.student-challenges-report',
 							journalSessionDetail : '.journal-session-detail-report',
 							earlyAlertClass : '.early-alert-class-report',
 							numberCoursesInPlan : '.number-courses-in-plan-report',

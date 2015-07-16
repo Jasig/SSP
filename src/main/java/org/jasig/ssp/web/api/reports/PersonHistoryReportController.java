@@ -160,7 +160,6 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 	@Autowired
 	private transient CareerDecisionStatusTOFactory careerDecisionStatusTOFactory;
 
-
 	@RequestMapping(value = "/{personId}/history/print", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_READ)
 	public @ResponseBody
