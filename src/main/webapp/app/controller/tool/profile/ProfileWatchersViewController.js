@@ -39,7 +39,9 @@ Ext.define('Ssp.controller.tool.profile.ProfileWatchersViewController', {
         me.getView().setLoading(true);
         me.getView().setTitle('Current Watchers for ' + me.personLite.get('firstName'));
         var personId = me.personLite.get('id');
+
         me.store.removeAll();
+
         var p = me.getBaseUrl(personId);
         me.store.getProxy().url = p;
         me.store.load({

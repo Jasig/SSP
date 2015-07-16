@@ -28,7 +28,11 @@ Ext.define('Ssp.store.WatchingStudentList', {
         Ext.apply(me, {
             proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personWatchedBy')),
             autoLoad: false,
-            autoSync: false
+            autoSync: false,
+		    pageSize: -1,
+		    params : {
+                limit: '-1'
+            }
         });
         return me.callParent(arguments);
     }

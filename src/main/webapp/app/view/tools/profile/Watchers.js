@@ -45,7 +45,7 @@ Ext.define("Ssp.view.tools.profile.Watchers", {
                 flex: 1
             }, {
                 dataIndex: "primaryEmailAddress",
-                text: "email",
+                text: "Email",
                 flex: 1
             }]
         });
