@@ -25,7 +25,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
-        confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore'
+        confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
+       	authenticatedPerson: 'authenticatedPerson'
     },
     autoLoad: false,
     constructor: function(){
@@ -40,6 +41,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Accommodation',
                 title: 'Accommodation',
                 form: '',
+                securityRole: 'REFERENCE_ACCOMMODATION_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Disability Accommodations',
@@ -137,6 +139,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Caseload Assignment',
                 title: 'Caseload Assignment',
                 form: '',
+                securityRole: 'REFERENCE_CASELOAD_ASSIGNMENT_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Program Status Change Reasons',
@@ -239,6 +242,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Student Intake',
                 title: 'Student Intake',
                 form: '',
+                securityRole: 'REFERENCE_STUDENT_INTAKE_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Child Care Arrangements',
@@ -419,6 +423,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Counseling Reference Guide',
                 title: 'Counseling Reference Guide',
                 form: '',
+                securityRole: 'REFERENCE_COUNSELING_REF_GUIDE_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Categories',
@@ -461,6 +466,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'MyGPS',
                 title: 'MyGPS',
                 form: '',
+                securityRole: 'REFERENCE_MYGPS_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Self Help Guides',
@@ -473,6 +479,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Security',
                 title: 'Security',
                 form: '',
+                securityRole: 'REFERENCE_SECURITY_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Confidentiality Levels',
@@ -559,6 +566,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Early Alert',
                 title: 'Early Alert',
                 form: '',
+                securityRole: 'REFERENCE_EARLY_ALERT_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Campuses',
@@ -676,6 +684,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'Journal',
                 title: 'Journal',
                 form: '',
+                securityRole: 'REFERENCE_JOURNAL_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Sources',
@@ -714,6 +723,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'System Configuration',
                 title: 'System Configuration',
                 form: '',
+                securityRole: 'REFERENCE_SYSTEM_CONFIG_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Configuration Options',
@@ -819,6 +829,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Main Tool',
                     title: 'Main Tool',
                     form: '',
+                    securityRole: 'REFERENCE_MAIN_TOOL_WRITE',
                     expanded: false,
                     children: [{
                         text: 'SAP Statuses',
@@ -924,6 +935,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 text: 'MAP',
                 title: 'MAP',
                 form: '',
+                securityRole: 'REFERENCE_MAP_WRITE',
                 expanded: false,
                 children: [{
                     text: 'Electives',
@@ -1143,7 +1155,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         };
         
         Ext.apply(me, {
-            root: items,
+            root:  me.applySecurity(items),
             folderSort: true,
             sorters: [{
                 property: 'text',
@@ -1151,5 +1163,24 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
             }]
         });
         return me.callParent(arguments);
+    },
+
+    applySecurity: function( items ){
+        var me=this;
+
+        if (me.authenticatedPerson.hasAccess('REFERENCE_WRITE')) {
+            return items;
+        } else {
+            Ext.Array.each(items, function(item, index) {
+                var sspSecureChildren = [];
+                Ext.Array.each(item.children, function(child, index){
+                    if (me.authenticatedPerson.hasAccess( child.securityRole ) ) {
+                        sspSecureChildren.push( child );
+                    }
+                })
+                item.children = sspSecureChildren;
+            });
+            return items;
+        }
     }
 });

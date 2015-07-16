@@ -20,8 +20,8 @@ package org.jasig.ssp.dao;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.WatchStudent;
+import org.jasig.ssp.util.sort.PagingWrapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -44,24 +44,23 @@ public class WatchStudentDao extends
 	}
 
 	@SuppressWarnings("rawtypes")
-	public WatchStudent getStudentWatcherRelationShip(UUID watcherId,
-			UUID studentId) {
-		String hqlQuery = "from org.jasig.ssp.model.WatchStudent where person = :person and student = :student";
-		List result = createHqlQuery(hqlQuery).setEntity("person", new Person(watcherId)).setEntity("student", new Person(studentId)).list();
-		if(result.isEmpty())
-			return null;
-		return (WatchStudent) result.get(0);
+	public WatchStudent getStudentWatcherRelationShip(UUID watcherId, UUID studentId) {
+		final String hqlQuery = "from org.jasig.ssp.model.WatchStudent where person = :person and student = :student";
+		final List result = createHqlQuery(hqlQuery).setEntity("person", new Person(watcherId)).setEntity("student", new Person(studentId)).list();
+
+        if (result.isEmpty()) {
+            return null;
+        }
+
+        return (WatchStudent) result.get(0);
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public List<WatchStudent> getWatchersForStudent(UUID studentId) {
-		String hqlQuery = "from org.jasig.ssp.model.WatchStudent where student = :student";
-		List<WatchStudent> result = createHqlQuery(hqlQuery).setEntity("student", new Person(studentId)).list();
-		
-		if(result.isEmpty())
-			return null;
-		
-		return result;
+	public PagingWrapper<WatchStudent> getWatchersForStudent(UUID studentId) {
+		final String hqlQuery = "from org.jasig.ssp.model.WatchStudent where student = :student";
+
+        final List<WatchStudent> result = createHqlQuery(hqlQuery).setEntity("student", new Person(studentId)).list();
+
+    	return new PagingWrapper<WatchStudent>(result.size(), result);
 	}
-	
 }

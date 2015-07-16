@@ -19,13 +19,11 @@
 package org.jasig.ssp.web.api;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.factory.WatchStudentTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -37,12 +35,10 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.WatchStudentService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.WatchStudentTO;
-import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -58,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * WatchStudent controller
@@ -85,26 +82,31 @@ public class WatchStudentController
 	protected transient PersonService personService;
 
 	@Autowired
-	protected transient WatchStudentTOFactory factory;
-	
-	@Autowired
 	private transient ProgramStatusService programStatusService;
 
-	protected WatchStudentService getService() {
-		return service;
-	}
+    @Autowired
+    protected transient WatchStudentTOFactory factory;
+
 	@Autowired
 	private transient PersonSearchResult2TOFactory searchTOFactory;
+
+    @Autowired
+    private transient PersonTOFactory personTOFactory;
 	
 	protected WatchStudentTOFactory getFactory() {
 		return factory;
 	}
 
+    protected WatchStudentService getService() {
+        return service;
+    }
+
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-	  
+
+
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_READ')")
 	public @ResponseBody
@@ -210,37 +212,35 @@ public class WatchStudentController
 		return new WatchStudentTO(model);
 	}
 	
-	private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
-		String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
-		if(sortConfigured.equals("dp.coach")){
-			sortConfigured = "dp.coachLastName";
-		}else if(sortConfigured.equals("dp.currentProgramStatusName")){
-			sortConfigured = "dp.programStatusName";
-		}else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
-			sortConfigured = "dp.activeAlertsCount";
-		}else if(sortConfigured.equals("dp.studentType")){
-			sortConfigured = "dp.studentTypeName";
-		}
-		SortingAndPaging sortAndPage = SortingAndPaging
-		.createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
-				sortDirection, "dp.lastName");
-		if(sortConfigured.equals("dp.coachLastName")){
-			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
-		}
-		return sortAndPage;
-	}
-	
-	
 	@PreAuthorize("hasRole('ROLE_PERSON_WATCHLIST_READ')")
 	@RequestMapping(value = "/whoiswatching", method = RequestMethod.GET)
 	public @ResponseBody
-	java.util.List<PersonTO> getWatchListCount(
+	PagedResponse<PersonTO> getWatchListCount(
 			@PathVariable @NotNull final UUID personId)
 			throws ObjectNotFoundException, ValidationException {
 
-		List<PersonTO> watchers = service.getWatchersForStudent(personId);
-		return watchers;
+		final PagingWrapper<Person> personWatchers = service.getWatchersForStudent(personId);
+
+        return new PagedResponse<PersonTO>(true, personWatchers.getResults(), personTOFactory.asTOList(personWatchers.getRows()));
 	}
-	
-	
+
+    private SortingAndPaging buildSortAndPage(Integer limit, Integer start, String sort, String sortDirection){
+        String sortConfigured = sort == null ? "dp.lastName":"dp."+sort;
+        if(sortConfigured.equals("dp.coach")){
+            sortConfigured = "dp.coachLastName";
+        }else if(sortConfigured.equals("dp.currentProgramStatusName")){
+            sortConfigured = "dp.programStatusName";
+        }else if(sortConfigured.equals("dp.numberOfEarlyAlerts")){
+            sortConfigured = "dp.activeAlertsCount";
+        }else if(sortConfigured.equals("dp.studentType")){
+            sortConfigured = "dp.studentTypeName";
+        }
+        SortingAndPaging sortAndPage = SortingAndPaging
+                .createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured,
+                        sortDirection, "dp.lastName");
+        if(sortConfigured.equals("dp.coachLastName")){
+            sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
+        }
+        return sortAndPage;
+    }
 }

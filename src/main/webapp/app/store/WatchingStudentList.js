@@ -19,26 +19,21 @@
 Ext.define('Ssp.store.WatchingStudentList', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.Person',
-    mixins: ['Deft.mixin.Injectable'],
+    mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'
     },
-    remoteSort: true,
     constructor: function() {
         var me = this;
-
         Ext.apply(me, {
             proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('personWatchedBy')),
             autoLoad: false,
             autoSync: false,
-            pageSize: 100
-
+		    pageSize: -1,
+		    params : {
+                limit: '-1'
+            }
         });
         return me.callParent(arguments);
-    },
-
-    onBeforeSort: function() {
-        this.callParent(arguments);
-        this.currentPage = 1;
     }
 });

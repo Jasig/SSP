@@ -32,6 +32,7 @@ import org.jasig.ssp.service.RequestTrustService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ConfigTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -57,6 +58,7 @@ import com.google.common.collect.Lists;
  */
 @Controller
 @RequestMapping("/1/reference/config")
+@PreAuthorize(Permission.SECURITY_REFERENCE_SYSTEM_CONFIG_WRITE)
 public class ConfigController
 		extends
 		AbstractAuditableReferenceController<Config, ConfigTO> {
@@ -186,4 +188,40 @@ public class ConfigController
 		return configTO;
 	}
 
+	/**
+	 * Persist any changes to the specified instance.
+	 *
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 */
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public @ResponseBody ConfigTO save(@PathVariable final UUID id, @Valid @RequestBody final ConfigTO obj)
+			throws ValidationException, ObjectNotFoundException {
+		return super.save(id, obj);
+	}
+
+	/**
+	 * Marks the specified data instance with a status of
+	 * {@link ObjectStatus#INACTIVE}.
+	 *
+	 * @param id
+	 *            The id of the data instance to mark deleted.
+	 * @return Success boolean.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	@Override
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody ServiceResponse delete(@PathVariable final UUID id)
+			throws ObjectNotFoundException {
+		return super.delete(id);
+	}
 }

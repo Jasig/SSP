@@ -357,7 +357,6 @@ Ext.require([
 	'Ssp.store.Caseload',
 	'Ssp.store.DirectoryPersonSearch',
 	'Ssp.store.WatchList',
-	'Ssp.store.WatchingStudentList',
     'Ssp.store.Tasks',
     'Ssp.store.StudentActivities',
     'Ssp.store.Goals',
@@ -419,6 +418,7 @@ Ext.require([
     'Ssp.store.OAuth2Clients',
     'Ssp.store.Permissions',
     'Ssp.store.People',
+    'Ssp.store.WatchingStudentList',
     'Ssp.store.Placement',   
     'Ssp.store.reference.RegistrationLoadRanges', 
     'Ssp.store.reference.WeeklyCourseWorkHourRanges', 
@@ -1190,20 +1190,8 @@ Ext.onReady(function(){
 							 });
 				    	},
 				    	singleton: true
-				    },	
-				    watchStudentListStore: {
-				    	fn: function(){
-				    		return Ext.create('Ssp.store.WatchingStudentList', {
-							     storeId: 'watchingStudentListStoreMain',		
-							     params : {
-										page : 0,
-										start : 0,
-										limit : 100
-									}	
-							 });
-				    	},
-				    	singleton: true
-				    },	
+				    },
+				    watchStudentListStore: 'Ssp.store.WatchingStudentList',
 					reassignCaseloadStagingStore: 'Ssp.store.CaseloadUnpaged',
 					reassignCaseloadStore: 'Ssp.store.CaseloadUnpaged',
 					contactPersonStore: 'Ssp.store.ContactPerson',

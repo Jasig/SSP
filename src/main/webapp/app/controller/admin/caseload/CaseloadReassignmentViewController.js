@@ -20,11 +20,28 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-    	coachesStore: 'coachesStore'
+    	coachesStore: 'coachesStore',
+       	authenticatedPerson: 'authenticatedPerson'
+    },
+    control: {
+        view: {
+    	    afterlayout: {
+    		    fn: 'onAfterLayout',
+    			single: true
+    		},
+        }
     },
 	init: function() {
-		this.coachesStore.clearFilter(true);
-		this.coachesStore.load();	
-		return this.callParent(arguments);
+	    var me = this;
+        me.coachesStore.clearFilter(true);
+        me.coachesStore.load();
+		return me.callParent(arguments);
+    },
+    onAfterLayout: function(){
+        var me = this;
+	    if (!me.authenticatedPerson.hasAccess('TOOLCASELOADREASSIGNMENT_TOOL')) {
+            me.getView().setDisabled(true);
+            me.authenticatedPerson.showUnauthorizedAccessAlert();
+	    }
     }
 });
