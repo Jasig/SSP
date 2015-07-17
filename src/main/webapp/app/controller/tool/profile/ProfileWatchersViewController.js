@@ -57,6 +57,14 @@ Ext.define('Ssp.controller.tool.profile.ProfileWatchersViewController', {
     callbackFunction: function(records, operation, success, scope) {
         var me = scope;
         if (success) {
+            var count = me.store.getCount();
+            if (count == 0) {
+                me.getView().setTitle('There are no current watchers for ' + me.personLite.get('firstName'));
+            } else if (count == 1) {
+                me.getView().setTitle('There is one current watcher for ' + me.personLite.get('firstName'));
+            } else {
+                me.getView().setTitle('There are ' + me.store.getCount() + ' current watchers for ' + me.personLite.get('firstName'));
+            }
             me.getView().setLoading(false);
         } else {
             Ext.Msg.alert("A system error has occurred while retrieving the list of watchers.");
