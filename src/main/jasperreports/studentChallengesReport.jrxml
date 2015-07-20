@@ -8,8 +8,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="100"/>
+	<property name="ireport.x" value="141"/>
+	<property name="ireport.y" value="20"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -225,11 +225,11 @@
 				<reportElement x="246" y="34" width="130" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
 				<text><![CDATA[Student Start Range:]]></text>
 			</staticText>
-			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
+			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="376" y="33" width="96" height="15" uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3"/>
 				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="472" y="33" width="96" height="15" uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e"/>
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
@@ -245,11 +245,11 @@
 				<reportElement x="246" y="49" width="130" height="15" uuid="aa3ba0e0-e4b8-4ae7-aa71-39284b559a3f"/>
 				<text><![CDATA[Intake Completion Range:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="376" y="49" width="96" height="15" uuid="d537502c-8a89-445f-84d3-9a6a78c31a3d"/>
 				<textFieldExpression><![CDATA[$P{studentIntakeStartDate}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="472" y="48" width="96" height="16" uuid="d30bb55e-3f15-424e-aafe-72959cc7cba6"/>
 				<textFieldExpression><![CDATA[$P{studentIntakeEndDate}]]></textFieldExpression>
 			</textField>
@@ -348,23 +348,23 @@ data.JRBeanCollectionDataSource($P{challengeTotals})]]></dataSourceExpression>
 					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
 				</graphicElement>
 			</rectangle>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="109" y="0" width="100" height="13" uuid="a4dd7e89-1ba4-4ece-830b-39a37c3f75c7"/>
 				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="212" y="0" width="87" height="13" uuid="a865ae7b-0acf-4261-a029-1fd1041286c9"/>
 				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="299" y="0" width="133" height="13" uuid="bcab1e79-ea00-41c5-b169-b27733a28eac"/>
 				<textFieldExpression><![CDATA[$F{studentType}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="9" y="0" width="97" height="15" uuid="0f943df7-8529-491e-b451-c85354fa7717"/>
 				<textFieldExpression><![CDATA[$F{schoolId}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="432" y="2" width="176" height="13" uuid="42d6633a-75d7-49c2-8796-7bb62ca9d329"/>
 				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
