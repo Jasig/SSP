@@ -48,6 +48,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("earlyAlertStudentOutreach","Early Alert Student Outreach Report"));
 		reports.add(new Pair<String,String>("earlyAlertStudentOutcome","Early Alert Student Outcome Report"));
 		reports.add(new Pair<String,String>(null,"- Journal/Task Reports -"));
+		reports.add(new Pair<String,String>("journalCaseNotes","Journal Case Note Counts Report"));
 		reports.add(new Pair<String,String>("journalSessionDetail","Journal Step Detail Report"));
 		reports.add(new Pair<String,String>(null, "- MAP Reports -"));
 		reports.add(new Pair<String,String>("numberCoursesInPlan","Number of Plans by Course Report"));
