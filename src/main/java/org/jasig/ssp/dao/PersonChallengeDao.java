@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ import org.jasig.ssp.transferobject.reports.StudentChallengesTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 /**
  * CRUD methods for the PersonChallenge model.
@@ -58,6 +60,10 @@ public class PersonChallengeDao extends
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
 		List<UUID> ids = personDao.getStudentUUIDs(form);
+		
+		if(CollectionUtils.isEmpty(ids)){
+			return new ArrayList<StudentChallengesTO>();
+		}
 		
 		Criteria criteria = createCriteria();
 		criteria.createAlias("person", "p");
@@ -89,6 +95,9 @@ public class PersonChallengeDao extends
 	public List<ReferenceCounterTO> getStudentChallengesCount(PersonSearchFormTO form) throws ObjectNotFoundException {
 		List<UUID> ids = personDao.getStudentUUIDs(form);
 		
+		if(CollectionUtils.isEmpty(ids)){
+			return new ArrayList<ReferenceCounterTO>();
+		}
 
 		Criteria criteria = createCriteria();
 		criteria.createAlias("person", "p");

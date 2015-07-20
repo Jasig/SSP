@@ -2582,31 +2582,36 @@
 				</div>
 				<div class="ea-clear"></div>
 			</div>
-			
-			<!-- Date Range Selection -->
+		    <div class="ea-buttons">
+				<div>
+					<button class="switch-date-range-type button" value="setbyrange"></button>
+				</div>
+			</div>
+		</div>
+			<!-- Date Range Student Intake -->
 		<div class="ea-time-span">
 			<div class="ea-term">
 				<div class="ea-input">
-					<select id="generalStudentInputTermCode" name="studentIntakeTermCode" class="input-term-group">
+					<select id="studentChallengesIntakeInputTermCode" name="studentIntakeTermCode" class="input-term-group">
 						<option value="">${not_applicable}</option>
 						</select>
 				</div>
 				<div class="ea-label">
-					<span>Term:</span>
+					<span>Term Intake Completed:</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
 			<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="studentIntakeCompleteDateFrom" id="generalStudentIntakeDateFrom">
+					<input class="input-calendar-type" type="textbox" name="studentIntakeCompleteDateFrom" id="studentChallengesStudentIntakeCompleteDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Student Intake Completed From (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="studentIntakeCompleteDateTo" id="generalStudentIntakeDateo">
+					<input class="input-calendar-type" type="textbox" name="studentIntakeCompleteDateTo" id="studentChallengesStudentIntakeCompleteDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Student Intake Completed To (exclusive)::</span>
@@ -2615,19 +2620,8 @@
 			</div>
 			<div class="ea-buttons">
 				<div>
-					
-									<button class="switch-date-range-type button" value="setbyrange">
-									</button>
-									
-				</div>
-			</div>
-		</div>
-			<div class="ea-buttons">
-				<div>
-
-									<button class="switch-date-range-type button" value="setbyrange">
-									</button>
-									
+					<button class="switch-date-range-type button" value="setbyrange">
+					</button>
 				</div>
 			</div>
 		</div>
