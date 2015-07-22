@@ -64,6 +64,14 @@ public class SearchParameters {
 	private static final String COACH_NAME = "coachName";
 	private static final String WATCHER_NAME = "watcherName";
 	private static final String ODS_COACH_NAME = "odsCoachName";
+	
+	private static final String STUDENT_INTAKE_TERM_CODE = "studentIntakeTermCode";
+	private static final String STUDENT_INTAKE_TERM_NAME = "studentIntakeTermName";
+	private static final String STUDENT_INTAKE_TERM = "studentIntakeTerm";
+	private static final String STUDENT_INTAKE_START_DATE = "studentIntakeStartDate";
+	private static final String STUDENT_INTAKE_END_DATE = "studentIntakeEndDate";
+	
+	
 	private static final String TERM_CODE = "termCode";
 	private static final String TERM_NAME = "termName";
 	private static final String ROSTER_STATUS = "rosterStatus";
@@ -259,6 +267,17 @@ public class SearchParameters {
 		parameters.put(TERM, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermName());
 		parameters.put(TERM_NAME, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermName());
 		parameters.put(TERM_CODE, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermCode());
+		return parameters;
+	}
+	
+	static final Map<String, Object> addStudentIntakeDateTermToMap(final DateTerm dateTerm,
+			final Map<String, Object> parameters) {
+		
+		parameters.put(STUDENT_INTAKE_START_DATE, dateTerm.getStartDate() == null ? NOT_USED :dateTerm.startDateString());
+		parameters.put(STUDENT_INTAKE_END_DATE,  dateTerm.getEndDate() == null ? NOT_USED :dateTerm.endDateString());
+		parameters.put(STUDENT_INTAKE_TERM, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermName());
+		parameters.put(STUDENT_INTAKE_TERM_NAME, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermName());
+		parameters.put(STUDENT_INTAKE_TERM_CODE, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermCode());
 		return parameters;
 	}
 
@@ -472,6 +491,21 @@ public class SearchParameters {
 		
 		personSearchForm.setCreateDateFrom(dateTerm.getStartDate());
 		personSearchForm.setCreateDateTo(dateTerm.getEndDate());
+	}
+	
+	static final void addStudentIntakeDateRange(final Date studentIntakeCompleteDateFrom,
+			final Date studentIntakeCompleteDateTo,
+			final String studentIntakeTermCode,
+			final Map<String, Object> parameters,
+			final PersonSearchFormTO personSearchForm,
+			final TermService termService
+			
+			) throws ObjectNotFoundException{
+		DateTerm dateTerm = new DateTerm(studentIntakeCompleteDateFrom, studentIntakeCompleteDateTo, studentIntakeTermCode, termService);
+		addStudentIntakeDateTermToMap(dateTerm, parameters);
+		
+		personSearchForm.setStudentIntakeCompleteDateFrom(dateTerm.getStartDate());
+		personSearchForm.setStudentIntakeCompleteDateTo(dateTerm.getEndDate());
 	}
 	
 	static final void addReferenceLists(final List<UUID> studentTypeIds,

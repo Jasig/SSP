@@ -42,7 +42,6 @@ import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -52,10 +51,10 @@ import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 /**
  * CRUD methods for the Person model.
@@ -251,10 +250,46 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		return criteria.list();
 	}
 
+	/**
+	 * Retrieves a List of People, likely used by the Address Labels Report
+	 * 
+	 * @param specialServiceGroups
+	 *            Search criteria
+	 * @param sAndP
+	 *            Sorting and paging parameters.
+	 * @return List of People, filtered appropriately
+	 * @throws ObjectNotFoundException
+	 *             If any referenced data is not found.
+	 */
+	@SuppressWarnings(UNCHECKED)
+	public List<Person> getPeopleBySpecialServices(
+			final List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
+			throws ObjectNotFoundException {
+
+		final Criteria criteria = createCriteria(sAndP);
+
+		if (specialServiceGroups != null && !specialServiceGroups.isEmpty()) {
+			criteria.createAlias("specialServiceGroups",
+					"personSpecialServiceGroups")
+					.add(Restrictions
+							.in("personSpecialServiceGroups.specialServiceGroup.id",
+									specialServiceGroups));
+		}
+
+		// don't bring back any non-students, there will likely be a better way
+		// to do this later
+		criteria.add(Restrictions.isNotNull("studentType"));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		return criteria.list();
+	}
+	
 	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
 			final Collection<String> coachUsernames, final SortingAndPaging sAndP) {
 
+		if(CollectionUtils.isEmpty(coachUsernames))
+			return new PagingWrapper<CoachPersonLiteTO>(new ArrayList<CoachPersonLiteTO>());
 		return getCoachPersonsLiteByUsernames(coachUsernames, sAndP, null);
 
 	}
@@ -501,6 +536,16 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (personSearchTO.getCreateDateTo() != null) {
 			criteria.add(Restrictions.le("createdDate",
 					personSearchTO.getCreateDateTo()));
+		}
+		
+		if (personSearchTO.getStudentIntakeCompleteDateFrom() != null) {
+			criteria.add(Restrictions.ge("studentIntakeCompleteDate",
+					personSearchTO.getStudentIntakeCompleteDateFrom()));
+		}
+		
+		if (personSearchTO.getStudentIntakeCompleteDateTo() != null) {
+			criteria.add(Restrictions.le("studentIntakeCompleteDate",
+					personSearchTO.getStudentIntakeCompleteDateTo()));
 		}
 		
 		if (personSearchTO.getDisabilityIsNotNull() != null && personSearchTO.getDisabilityIsNotNull() == true) {

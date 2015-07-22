@@ -45,6 +45,7 @@ import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.JournalCaseNotesStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -267,6 +268,34 @@ public class JournalEntryDao
 			return  new PagingWrapper<JournalStepStudentReportTO>(sortReports.size(), sortReports);
 		}
 		return  new PagingWrapper<JournalStepStudentReportTO>(criteria.list().size(), (List<JournalStepStudentReportTO>)criteria.list());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public PagingWrapper<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(
+			JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria(sAndP);
+		
+		setPersonCriteria(criteria,personSearchForm);
+		
+		if (personSearchForm.getCreateDateFrom() != null) {
+			criteria.add(Restrictions.ge("createdDate",
+					personSearchForm.getCreateDateFrom()));
+		}
+
+		if (personSearchForm.getCreateDateTo() != null) {
+			criteria.add(Restrictions.le("createdDate",
+					personSearchForm.getCreateDateTo()));
+		}
+		
+		ProjectionList projections = Projections.projectionList();
+		addBasicStudentProperties( projections, criteria);
+		projections.add(Projections.groupProperty("person.createdDate").as("journalentry_createdDate")).add(Projections.countDistinct("id").as("journalentry_caseNoteEntries"));
+		
+		criteria.setProjection(projections);
+		criteria.setResultTransformer(
+				new NamespacedAliasToBeanResultTransformer(
+						JournalCaseNotesStudentReportTO.class, "journalentry_"));
+		return  new PagingWrapper<JournalCaseNotesStudentReportTO>(criteria.list().size(), (List<JournalCaseNotesStudentReportTO>)criteria.list());
 	}
 	
 private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){

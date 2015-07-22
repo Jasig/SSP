@@ -23,6 +23,13 @@ Ext.define('Ssp.store.WatchingStudentList', {
     inject: {
         apiProperties: 'apiProperties'
     },
+    sorters: [{
+        property: 'firstName',
+        direction: 'ASC'
+    }, {
+        property: 'lastName',
+        direction: 'ASC'
+    }],    
     constructor: function() {
         var me = this;
         Ext.apply(me, {

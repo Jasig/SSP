@@ -49,6 +49,10 @@ public class PersonSearchFormTO
 	private List<UUID> serviceReasonsIds;
 
 	private Date createDateFrom;
+	
+	private Date studentIntakeCompleteDateFrom;
+	
+	private Date studentIntakeCompleteDateTo;
 
 	private Date createDateTo;
 	
@@ -167,6 +171,24 @@ public class PersonSearchFormTO
 		this.createDateTo = createDateTo == null ? null : new Date(
 				createDateTo.getTime());
 	}
+
+	public Date getStudentIntakeCompleteDateFrom() {
+		return studentIntakeCompleteDateFrom == null ? null : new Date(studentIntakeCompleteDateFrom.getTime());
+	}
+
+	public void setStudentIntakeCompleteDateFrom(final Date studentIntakeCompleteDateFrom) {
+		this.studentIntakeCompleteDateFrom = studentIntakeCompleteDateFrom == null ? null : new Date(studentIntakeCompleteDateFrom.getTime());
+	}
+	
+	public Date getStudentIntakeCompleteDateTo() {
+		return studentIntakeCompleteDateTo == null ? null : new Date(studentIntakeCompleteDateTo.getTime());
+	}
+
+	public void setStudentIntakeCompleteDateTo(final Date studentIntakeCompleteDateTo) {
+		this.studentIntakeCompleteDateTo = studentIntakeCompleteDateTo == null ? null : new Date(studentIntakeCompleteDateTo.getTime());
+
+	}
+
 
 	public List<UUID> getStudentTypeIds() {
 		return studentTypeIds;

@@ -181,7 +181,7 @@ Ext.define('Ssp.view.Search', {
                     itemId: 'upTool',
                     handler: function(t){
                         var idx = 0;
-                        if (me.authenticatedPerson.hasAccess('CASELOAD_SEARCH')) {
+                        if (me.authenticatedPerson.hasAccess('STUDENT_SEARCH')) {
                             idx = 2; //user has two, second is search
                         }
                         var panel = Ext.ComponentQuery.query('#searchBar')[idx];

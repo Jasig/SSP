@@ -33,6 +33,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.JournalCaseNotesStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -111,6 +112,13 @@ public class JournalEntryServiceImpl
 	public PagingWrapper<JournalStepStudentReportTO> getJournalStepStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  
 			SortingAndPaging sAndP){
 		return dao.getJournalStepStudentReportTOsFromCriteria(personSearchForm,  
+				sAndP);
+	}
+	
+	@Override
+	public PagingWrapper<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  
+			SortingAndPaging sAndP){
+		return dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm,  
 				sAndP);
 	}
 }

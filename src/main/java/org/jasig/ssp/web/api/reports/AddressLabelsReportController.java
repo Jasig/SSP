@@ -21,8 +21,15 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -34,7 +41,12 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.*;
+import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.reference.ReferralSourceService;
+import org.jasig.ssp.service.reference.ServiceReasonService;
+import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -50,6 +62,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.google.common.collect.Maps;
 
 

@@ -601,6 +601,7 @@ var apiUrls = [
   {name: 'personNote', url: 'person/{id}/note'},
   {name: 'personEmailTask', url: 'person/{id}/task/email'},
   {name: 'personViewHistory', url: 'person/{id}/history/print'},
+  {name: 'personViewJournalHistory', url: 'person/{id}/journalhistory/print'},
   {name: 'personPrintTask', url: 'person/{id}/task/print'},
   {name: 'studentSearch', url: 'person/students/search'},
   {name: 'directoryPersonSearch', url: 'person/directoryperson/search'},

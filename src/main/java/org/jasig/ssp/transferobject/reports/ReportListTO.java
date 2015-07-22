@@ -37,6 +37,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("specialServicesForm","Special Services Report"));
 		if(accomodationPermission)
 			reports.add(new Pair<String,String>("disabilityServices","Disability Services Report"));
+		reports.add(new Pair<String,String>("studentChallenges","Student Challenges Report"));
 		reports.add(new Pair<String,String>(null,"- Early Alert Reports -"));
 		reports.add(new Pair<String,String>("earlyAlertCaseCounts","Early Alert Case Counts Report"));
         reports.add(new Pair<String,String>("earlyAlertCourseCounts","Early Alert Course Counts Report"));
@@ -47,6 +48,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("earlyAlertStudentOutreach","Early Alert Student Outreach Report"));
 		reports.add(new Pair<String,String>("earlyAlertStudentOutcome","Early Alert Student Outcome Report"));
 		reports.add(new Pair<String,String>(null,"- Journal/Task Reports -"));
+		reports.add(new Pair<String,String>("journalCaseNotes","Journal Case Note Counts Report"));
 		reports.add(new Pair<String,String>("journalSessionDetail","Journal Step Detail Report"));
 		reports.add(new Pair<String,String>(null, "- MAP Reports -"));
 		reports.add(new Pair<String,String>("numberCoursesInPlan","Number of Plans by Course Report"));
