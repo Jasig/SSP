@@ -548,6 +548,7 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("earlyAlert", MessageTemplatePreviewTOBuilder.createEarlyAlertMessageTemplateTO());
 		messageParams.put("termToRepresentEarlyAlert",configService.getByNameEmpty("term_to_represent_early_alert"));
 		messageParams.put("TermToRepresentEarlyAlert",configService.getByNameEmpty("term_to_represent_early_alert"));
+		messageParams.put("termForEarlyAlert",configService.getByNameEmpty("term_to_represent_early_alert"));
 		messageParams.put("linkToSSP",configService.getByNameEmpty("serverExternalPath"));
 		messageParams.put("applicationTitle",configService.getByNameEmpty("app_title"));
 		messageParams.put("institutionName",configService.getByNameEmpty("inst_name"));
@@ -571,6 +572,7 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("earlyAlert", MessageTemplatePreviewTOBuilder.createEarlyAlertMessageTemplateTO());
 		messageParams.put("termToRepresentEarlyAlert", configService.getByNameEmpty("term_to_represent_early_alert"));
 		messageParams.put("TermToRepresentEarlyAlert", configService.getByNameEmpty("term_to_represent_early_alert"));
+		messageParams.put("termForEarlyAlert",configService.getByNameEmpty("term_to_represent_early_alert"));
 		messageParams.put("linkToSSP", configService.getByNameEmpty("serverExternalPath"));
 		messageParams.put("applicationTitle", configService.getByNameEmpty("app_title"));
 		messageParams.put("institutionName", configService.getByNameEmpty("inst_name"));

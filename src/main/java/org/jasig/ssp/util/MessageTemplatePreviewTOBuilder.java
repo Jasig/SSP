@@ -38,10 +38,17 @@ public class MessageTemplatePreviewTOBuilder {
     public static Person createPerson(final String suffix, final boolean addCoach) {
         Person person = new Person();
         setSetters(person, suffix);
+        person.setStaffDetails(createPersonStaffDetails(suffix));
         if (addCoach) {
             person.setCoach(createPerson(suffix + "_Coach", false));
         }
         return person;
+    }
+
+    public static PersonStaffDetails createPersonStaffDetails(final String suffix) {
+        PersonStaffDetails personStaffDetails = new PersonStaffDetails();
+        setSetters(personStaffDetails, suffix);
+        return personStaffDetails;
     }
 
     public static List<TaskTO> createTaskTOList () {
@@ -128,7 +135,21 @@ public class MessageTemplatePreviewTOBuilder {
         taskMessageTemplateTO.setPerson(MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO("_person"));
         taskMessageTemplateTO.setCoach(MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO("_coach"));
         taskMessageTemplateTO.setCreator(MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO("_creator"));
+        taskMessageTemplateTO.setChallenge(createChallengeTO("_Challenge" + suffix));
+        taskMessageTemplateTO.setChallengeReferral(createChallengeReferralTO("_ChallengeRefferal" + suffix));
         return taskMessageTemplateTO;
+    }
+
+    public static ChallengeTO createChallengeTO(final String suffix) {
+        ChallengeTO challengeTO = new ChallengeTO();
+        setSetters(challengeTO, suffix);
+        return challengeTO;
+    }
+
+    public static ChallengeReferralTO createChallengeReferralTO(final String suffix) {
+        ChallengeReferralTO challengeReferralTO = new ChallengeReferralTO();
+        setSetters(challengeReferralTO, suffix);
+        return challengeReferralTO;
     }
 
     public static EarlyAlertMessageTemplateTO createEarlyAlertMessageTemplateTO() {

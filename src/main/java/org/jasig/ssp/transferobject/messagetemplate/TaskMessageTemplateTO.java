@@ -18,12 +18,11 @@
  */
 package org.jasig.ssp.transferobject.messagetemplate;
 
-import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Task;
-import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
 
 public class TaskMessageTemplateTO extends TaskTO {
 
@@ -39,6 +38,10 @@ public class TaskMessageTemplateTO extends TaskTO {
 	private CoachPersonLiteMessageTemplateTO coach;
 	
 	private CoachPersonLiteMessageTemplateTO creator;
+
+	private ChallengeTO challenge;
+
+	private ChallengeReferralTO challengeReferral;
 	
 	public TaskMessageTemplateTO() {
 	}
@@ -78,6 +81,22 @@ public class TaskMessageTemplateTO extends TaskTO {
 		this.creator = creator;
 	}
 
+	public ChallengeReferralTO getChallengeReferral() {
+		return challengeReferral;
+	}
+
+	public void setChallengeReferral(ChallengeReferralTO challengeReferralTO) {
+		this.challengeReferral = challengeReferralTO;
+	}
+
+	public ChallengeTO getChallenge() {
+		return challenge;
+	}
+
+	public void setChallenge(ChallengeTO challengeTO) {
+		this.challenge = challengeTO;
+	}
+
 	@Override
 	public final void from(Task model){
 		super.from(model);
@@ -85,6 +104,14 @@ public class TaskMessageTemplateTO extends TaskTO {
 		if(model.getPerson().getCoach() != null){
 			coach = new CoachPersonLiteMessageTemplateTO(model.getPerson().getCoach());
 		}
+		if (model.getChallenge() != null) {
+			setChallenge(new ChallengeTO(model.getChallenge()));
+		}
+
+		if (model.getChallengeReferral() != null) {
+			setChallengeReferral(new ChallengeReferralTO(model.getChallengeReferral()));
+		}
+
 	}
 
 }

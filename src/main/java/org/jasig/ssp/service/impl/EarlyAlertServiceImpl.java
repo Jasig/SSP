@@ -699,6 +699,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				configService.getByNameEmpty("term_to_represent_early_alert"));
 		templateParameters.put("TermToRepresentEarlyAlert",
 				configService.getByNameEmpty("term_to_represent_early_alert"));
+		templateParameters.put("termForEarlyAlert",
+				configService.getByNameEmpty("term_to_represent_early_alert"));
 		templateParameters.put("linkToSSP",
 				configService.getByNameEmpty("serverExternalPath"));
 		templateParameters.put("applicationTitle",

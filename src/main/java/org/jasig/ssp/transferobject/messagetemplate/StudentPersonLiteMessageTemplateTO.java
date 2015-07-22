@@ -38,6 +38,7 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 	private String addressLine2;
 	private String schoolId;
 	private String currentProgramStatusName;
+	private CoachPersonLiteTO coach;
 	
 
 	public StudentPersonLiteMessageTemplateTO() {
@@ -64,6 +65,9 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 		homePhone = person.getHomePhone();
 		state = person.getState();
 		currentProgramStatusName = person.getCurrentProgramStatusName();
+		if (person.getCoach()!=null) {
+			coach = new CoachPersonLiteTO(person.getCoach());
+		}
 		
 	}
 
@@ -184,4 +188,11 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 		this.currentProgramStatusName = currentProgramStatusName;
 	}
 
+	public CoachPersonLiteTO getCoach() {
+		return coach;
+	}
+
+	public void setCoach(CoachPersonLiteTO coach) {
+		this.coach = coach;
+	}
 }
