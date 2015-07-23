@@ -81,6 +81,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 				   dock: 'top',
 				items: [{
 					xtype: 'combobox',
+					id: 'sourceCoachBoxId',
 					name: 'sourceCoachBox',
 					itemId: 'sourceCoachBox',
 					fieldLabel: 'Currently Assigned To',
@@ -104,7 +105,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 				columnWidth: 0.5,
 				itemId: 'sourceProgramStatusBox',
 				name: 'sourceProgramStatusBox',
-	        		mode: 'local',
+				id: 'sourceProgramStatusBoxId',
+        		mode: 'local',
 				editable: false,
 				allowBlank: true
 			   }]
@@ -123,7 +125,13 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_ALL_BUTTON'),
      		                   action: 'addAll',
      		                   itemId: 'addAllButton'
-     		               }]
+     		               }, '-', {
+							   text: 'Reset',
+							   xtype: 'button',
+							   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_ALL_BUTTON'),
+							   action: 'reset',
+							   itemId: 'resetButton'
+						   }]
      		           }]    	
     	});
     	

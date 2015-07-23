@@ -42,7 +42,10 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 		},
 		'addButton': {
 			click: 'onAddClick'
-		},		
+		},
+		'resetButton': {
+			click: 'onResetClick'
+		},
 		'sourceCoachBox': {
 				change: 'onCoachChange'
 
@@ -55,7 +58,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 		var me=this;
 		me.coachesStore.load();
 		me.store.removeAll();
-	     me.formUtils.reconfigureGridPanel( me.getView(), me.store);
+	    me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 		return me.callParent(arguments);
     },
      onCoachChange: function(combobox, newValue,oldValue,eOpts) {
@@ -65,16 +68,15 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     		me.getView().setLoading(false);
     	}
     	var failure = function(){
-	     	Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
+	     	Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.');
     	}
     	me.coachId = newValue;
 
 	if (me.coachId == null && me.programStatusId == null){
-		Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
 		me.getView().setLoading(false);
 	}
 	else {
-	    	me.caseloadService.getCaseloadById(me.coachId, me.programStatusId, me.store, {success: success, failure: failure, scope: me});
+	   	me.caseloadService.getCaseloadById(me.coachId, me.programStatusId, me.store, {success: success, failure: failure, scope: me});
 		me.formUtils.reconfigureGridPanel( me.getView(), me.store);
 	}
      },   
@@ -93,7 +95,6 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 
 
 		if (me.coachId == null && me.programStatusId == null){
-			Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.'); 
 			me.getView().setLoading(false);
 		}
 		else {
@@ -126,5 +127,22 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 		{
 	     	   Ext.Msg.alert('SSP Error', 'Please select a student or students to add.'); 
 		}
-	}
+	},
+    onResetClick: function(button){
+		var me=this;
+
+		me.coachId = null;
+		me.programStatusId = null;
+
+		var sourceCoachBox = Ext.getCmp('sourceCoachBoxId');
+		sourceCoachBox.setValue(null);
+		sourceCoachBox.applyEmptyText();
+
+		var sourceProgramStatusBox = Ext.getCmp('sourceProgramStatusBoxId');
+		sourceProgramStatusBox.setValue(null);
+		sourceProgramStatusBox.applyEmptyText();
+
+		me.store.removeAll();
+		me.reassignCaseloadStore.removeAll();
+    }
 });
