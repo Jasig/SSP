@@ -28,6 +28,7 @@ import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.transferobject.reports.MapStatusReportOwnerAndCoachInfo;
@@ -45,6 +46,7 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 			List<Term> allTerms,
 			MapStatusReportPerson planAndPersonInfo,
 			Collection<ExternalSubstitutableCourse> allSubstitutableCourses,
+            Collection<ExternalStudentTranscriptNonCourseEntity> nonCourseEntities,
 			List<ExternalStudentTranscriptCourse> transcript,
 			boolean termBound, 
 			boolean useSubstitutableCourses);

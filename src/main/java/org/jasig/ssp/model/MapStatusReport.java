@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -33,17 +32,13 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 import org.jasig.ssp.model.external.PlanStatus;
-import org.springframework.context.annotation.Lazy;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -51,7 +46,8 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	
 	private static final long serialVersionUID = -246347869310612338L;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "report", orphanRemoval=true)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<MapStatusReportCourseDetails> courseDetails = new ArrayList<MapStatusReportCourseDetails>(0);
 	
@@ -63,6 +59,10 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "report", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<MapStatusReportSubstitutionDetails> substitutionDetails = new ArrayList<MapStatusReportSubstitutionDetails>(0);
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", orphanRemoval=true)
+    @Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+    private List<MapStatusReportOverrideDetails> overrideDetails = new ArrayList<>(0);
 	
 	@NotNull
 	@ManyToOne()
@@ -92,7 +92,9 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	@Column
 	private int planRatioDemerits;
 	
-	public MapStatusReport(UUID id) {
+
+
+    public MapStatusReport(UUID id) {
 		super();
 		setId(id);
 	}
@@ -100,6 +102,7 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 	public MapStatusReport() {
 		super();
 	}
+
 
 	public Person getPerson() {
 		return person;
@@ -191,5 +194,11 @@ public class MapStatusReport extends AbstractAuditable implements PersonAssocAud
 		this.planRatioDemerits = planRatioDemerits;
 	}
 
+    public List<MapStatusReportOverrideDetails> getOverrideDetails () {
+        return overrideDetails;
+    }
 
+    public void setOverrideDetails (List<MapStatusReportOverrideDetails> overrideDetails) {
+        this.overrideDetails = overrideDetails;
+    }
 }

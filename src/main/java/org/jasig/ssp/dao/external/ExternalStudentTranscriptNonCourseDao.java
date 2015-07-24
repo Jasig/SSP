@@ -22,22 +22,29 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 
 @Repository
-public class ExternalStudentTranscriptNonCourseDao extends
-		AbstractExternalDataDao<ExternalStudentTranscriptNonCourseEntity> {
+public class ExternalStudentTranscriptNonCourseDao extends AbstractExternalDataDao<ExternalStudentTranscriptNonCourseEntity> {
 
-	public ExternalStudentTranscriptNonCourseDao ()
-	{
+	public ExternalStudentTranscriptNonCourseDao () {
 		super(ExternalStudentTranscriptNonCourseEntity.class);
 	}
 
-	
+
+    /**
+     * No sorting and paging
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<ExternalStudentTranscriptNonCourseEntity> getAllNonCourseTranscripts() {
+        String getAllSql = " from org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity ";
+        return createHqlQuery(getAllSql).list();
+    }
+
 	@SuppressWarnings("unchecked")
-	public List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolId(String schoolId){
+	public List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolId(String schoolId) {
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("schoolId", schoolId));
 		return (List<ExternalStudentTranscriptNonCourseEntity>)criteria.list();
@@ -45,7 +52,7 @@ public class ExternalStudentTranscriptNonCourseDao extends
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode){
+	public List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode) {
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("schoolId", schoolId));
 		criteria.add(Restrictions.eq("termCode", termCode));

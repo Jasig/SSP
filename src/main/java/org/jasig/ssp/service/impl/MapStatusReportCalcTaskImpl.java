@@ -29,16 +29,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-
 import com.google.common.collect.Lists;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
-import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.MapStatusReportService;
@@ -46,6 +44,7 @@ import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptNonCourseEntityService;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -82,6 +81,9 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	@Autowired 
 	private transient ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
 
+    @Autowired
+    private transient ExternalStudentTranscriptNonCourseEntityService externalStudentTranscriptNonCourseEntityService;
+
 	@Autowired
 	private transient ExternalPersonDao dao;
 
@@ -93,6 +95,8 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	
 	@Autowired
 	protected transient MessageTemplateService  messageTemplateService;
+
+
 
 	public Class<Void> getBatchExecReturnType() {
 		return Void.TYPE;
@@ -107,12 +111,13 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			LOGGER.info("Abandoning map status report calculation because of thread interruption");
 			return;
 		}
-		if(!Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim()))
-		{
+
+        if (!Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim())) {
 			LOGGER.info("Map Plan Status Report calculation will not execute because the property calculate_map_plan_status is set to false");
 			return;			
 		}
-		LOGGER.info("BEGIN : MAPSTATUS REPORT ");
+
+        LOGGER.info("BEGIN : MAPSTATUS REPORT ");
 		
 		MapStatusReportSummary summary = new MapStatusReportSummary();
 		summary.setStartTime(Calendar.getInstance());
@@ -123,6 +128,9 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		final boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
 		final Collection<ExternalSubstitutableCourse> allSubstitutableCourses =
 				useSubstitutableCourses ? mapStatusReportService.getAllSubstitutableCourses() : Lists.<ExternalSubstitutableCourse>newArrayList();
+
+        final Collection<ExternalStudentTranscriptNonCourseEntity> nonCourseEntities =
+                                            externalStudentTranscriptNonCourseEntityService.getAllNonCourseTranscripts();
 		
 		//Load up our configs
 		final Set<String> gradesSet = mapStatusReportService.getPassingGrades();
@@ -149,18 +157,18 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 				return;
 			}
 			
-			LOGGER.info("MAP STATUS REPORT CALCULATION STARTING FOR: "+planIdPersonIdPair.getSchoolId());
+			LOGGER.info("MAP STATUS REPORT CALCULATION STARTING FOR: " + planIdPersonIdPair.getSchoolId());
 
 			if (batchExecutor == null) {
 				evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm,
-						allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
+						allTerms, planIdPersonIdPair, allSubstitutableCourses,nonCourseEntities,termBound,useSubstitutableCourses);
 			} else {
 				try {
 					batchExecutor.exec(new Callable<Void>() {
 						@Override
 						public Void call() throws Exception {
 							evaluatePlan(gradesSet, additionalCriteriaSet, cutoffTerm,
-									allTerms, planIdPersonIdPair, allSubstitutableCourses,termBound,useSubstitutableCourses);
+									allTerms, planIdPersonIdPair, allSubstitutableCourses,nonCourseEntities,termBound,useSubstitutableCourses);
 							return null;
 						}
 					});
@@ -175,12 +183,12 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		}
 		summary.setEndTime(Calendar.getInstance());
 		summary.setStudentsInScope(allActivePlans.size());
-		
-		
+
+
 		sendReportEmail(summary);
 		sendOffPlanEmailsToCoaches();
-		
-		
+
+
 		LOGGER.info("MAPSTATUS REPORT RUNTIME: "+(summary.getEndTime().getTimeInMillis() - summary.getStartTime().getTimeInMillis())+" ms.");
 		LOGGER.info("END : MAPSTATUS REPORT ");
 
@@ -224,7 +232,8 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 				statusesByOwnerOrCoachOrWatcher.put(coachId, newPlanStatusContainerForOffPlanEmailsToCoaches());
 			}
 		}
-		for (MapStatusReportOwnerAndCoachInfo mapStatusReportOwnerAndCoachInfo : distinctWatchers) {
+
+        for (MapStatusReportOwnerAndCoachInfo mapStatusReportOwnerAndCoachInfo : distinctWatchers) {
 			final UUID watcherId = mapStatusReportOwnerAndCoachInfo.getWatcherId();
 			ownerIds.add(watcherId);
 			if ( !(statusesByOwnerOrCoachOrWatcher.containsKey(watcherId)) ) {
@@ -232,12 +241,15 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			}
 				
 		}
+
 		for ( UUID ownerId : ownerIds ) {
-			final List<MapStatusReportPerson> offPlanPlansForOwner = mapStatusReportService.getOffPlanPlansForOwner(new Person(ownerId));
+
+            final List<MapStatusReportPerson> offPlanPlansForOwner = mapStatusReportService.getOffPlanPlansForOwner(new Person(ownerId));
 //			if ( offPlanPlansForOwner == null || offPlanPlansForOwner.isEmpty() ) {
 //				continue;
 //			}
-			for (MapStatusReportPerson status : offPlanPlansForOwner) {
+
+            for (MapStatusReportPerson status : offPlanPlansForOwner) {
 				final UUID planCoachId = status.getCoachId();
 				final boolean sameOwnerAndCoach = ownerId.equals(planCoachId);
 				final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForOwner = statusesByOwnerOrCoachOrWatcher.get(ownerId);
@@ -264,21 +276,21 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 					}
 				}
 			}
-				final List<MapStatusReportPerson> offPlanPlansForWatcher = mapStatusReportService.getOffPlanPlansForWatcher(new Person(ownerId));
-				for (MapStatusReportPerson mapStatusReportPerson : offPlanPlansForWatcher) {
-					//If watcher is was already owner/coach of a student, it has already been added
-					final boolean isOwnerOrCoach = ownerId.equals(mapStatusReportPerson.getOwnerId()) || ownerId.equals(mapStatusReportPerson.getCoachId());
-					if(!isOwnerOrCoach)
-					{
-						final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForPerson = statusesByOwnerOrCoachOrWatcher.get(ownerId);
-						List<MapStatusReportPerson> watcherPlans = statusesForPerson.get(PersonToPlanRelationship.WATCHER_ONLY);
-						watcherPlans.add(mapStatusReportPerson);
-						
-					}
 
-					
-				}
+            final List<MapStatusReportPerson> offPlanPlansForWatcher = mapStatusReportService.getOffPlanPlansForWatcher(new Person(ownerId));
+            for (MapStatusReportPerson mapStatusReportPerson : offPlanPlansForWatcher) {
+                //If watcher is was already owner/coach of a student, it has already been added
+                final boolean isOwnerOrCoach = ownerId.equals(mapStatusReportPerson.getOwnerId()) || ownerId.equals(mapStatusReportPerson.getCoachId());
+                if(!isOwnerOrCoach)
+                {
+                    final Map<PersonToPlanRelationship, List<MapStatusReportPerson>> statusesForPerson = statusesByOwnerOrCoachOrWatcher.get(ownerId);
+                    List<MapStatusReportPerson> watcherPlans = statusesForPerson.get(PersonToPlanRelationship.WATCHER_ONLY);
+                    watcherPlans.add(mapStatusReportPerson);
 
+                }
+
+
+            }
 		}
 
 		final MapStatusReportPersonNameComparator sorter = new MapStatusReportPersonNameComparator();
@@ -315,7 +327,6 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 				LOGGER.error("Failed to send MAP status report to owner or coach {} at address {}",
 						new Object[] {sendToPersonId, sendToEmailAddress, e});
 			}
-
 		}
 	}
 
@@ -366,17 +377,16 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 	private void sendReportEmail(MapStatusReportSummary summary) 
 	{
 		boolean sendEmail = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_send_report_email").trim().toLowerCase());
-		if(sendEmail)
-		{
+		if (sendEmail) {
 			List<MapStatusReportSummaryDetail> details = mapStatusReportService.getSummaryDetails();
 			for (MapStatusReportSummaryDetail mapStatusReportSummaryDetail : details) {
 				LOGGER.info("MAPSTATUSREPORT SUMMARY: "+ mapStatusReportSummaryDetail.getPlanStatus()+" COUNT: "+mapStatusReportSummaryDetail.getCount());
 			}
 			summary.setSummaryDetails(details);
-			SubjectAndBody mapStatusEmail = messageTemplateService.createMapStatusReportEmail(summary);
+
+            SubjectAndBody mapStatusEmail = messageTemplateService.createMapStatusReportEmail(summary);
 			String mapEmail = configService.getByNameEmpty("map_plan_status_email").trim();
-			if(!StringUtils.isEmpty(mapEmail))
-			{
+			if (!StringUtils.isEmpty(mapEmail)) {
 				try {
 					messageService.createMessage(mapEmail, null, mapStatusEmail);
 				} catch (ObjectNotFoundException e) {
@@ -388,10 +398,10 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 
 	private void evaluatePlan(Set<String> gradesSet, Set<String> criteriaSet,
 			Term cutoffTerm,  List<Term> allTerms,
-			MapStatusReportPerson planIdPersonIdPair, Collection<ExternalSubstitutableCourse> allSubstitutableCourses, boolean termBound, boolean useSubstitutableCourses) 
+			MapStatusReportPerson planIdPersonIdPair, Collection<ExternalSubstitutableCourse> allSubstitutableCourses, Collection<ExternalStudentTranscriptNonCourseEntity> allNonCourseEntities, boolean termBound, boolean useSubstitutableCourses)
 	{ 
 		List<ExternalStudentTranscriptCourse> transcript = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(planIdPersonIdPair.getSchoolId());
-		final MapStatusReport report = mapStatusReportService.evaluatePlan(gradesSet, criteriaSet, cutoffTerm, allTerms, planIdPersonIdPair,allSubstitutableCourses,transcript,termBound,useSubstitutableCourses);
+		final MapStatusReport report = mapStatusReportService.evaluatePlan(gradesSet, criteriaSet, cutoffTerm, allTerms, planIdPersonIdPair,allSubstitutableCourses,allNonCourseEntities,transcript,termBound,useSubstitutableCourses);
 		try {
 			//Any new writes to this task should be included here
 			withTransaction.withNewTransaction(new Callable<MapStatusReport>() {
@@ -406,21 +416,19 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 		}
 	}
 
-
-
 	private void sortTerms(List<Term> allTerms) {
 		Collections.sort(allTerms, new Comparator<Term>() {
 
 			@Override
 			public int compare(Term o1, Term o2) {
-				if(o1.getStartDate().before(o2.getStartDate()))
-					return -1;
-				if(o1.getStartDate().after(o2.getStartDate()))
-					return 1;	
-				//Hopefully this isnt ever the case
-				if(o1.getStartDate().equals(o2.getStartDate()))
-					return 0;	
-				return 0;
+            if(o1.getStartDate().before(o2.getStartDate()))
+                return -1;
+            if(o1.getStartDate().after(o2.getStartDate()))
+                return 1;
+            //Hopefully this isnt ever the case
+            if(o1.getStartDate().equals(o2.getStartDate()))
+                return 0;
+            return 0;
 			}
 		});
 	}
