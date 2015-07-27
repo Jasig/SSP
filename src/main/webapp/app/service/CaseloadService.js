@@ -21,10 +21,11 @@ Ext.define('Ssp.service.CaseloadService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController'
+    	appEventsController: 'appEventsController',
+    	configStore: 'configurationOptionsUnpagedStore'
     },
     initComponent: function() {
-		return this.callParent( arguments );
+    	return this.callParent( arguments );
     },
     
 
@@ -163,6 +164,10 @@ Ext.define('Ssp.service.CaseloadService', {
 		{
 			activeParams['programStatusId'] = programStatusId;
 		}
+		
+    	me.personTableType = me.configStore.getConfigByName('my_caseload_person_table_type').trim();
+
+		activeParams['personTableType'] = me.personTableType;
 		
 		activeParams['status'] = 'ACTIVE';
 		

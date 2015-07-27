@@ -217,7 +217,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 	@Override
 	@Transactional
 	public PagingWrapper<PersonSearchResult2> caseLoadFor(
-			final ProgramStatus programStatus, @NotNull final Person coach,
+			final ProgramStatus programStatus, 
+			@NotNull final Person coach,
+			@NotNull final String personTableType,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
 		PersonSearchRequest form = new PersonSearchRequest();
@@ -230,8 +232,8 @@ public class PersonSearchServiceImpl implements PersonSearchService {
         if (programStatus != null) {
             form.setProgramStatus(Lists.newArrayList(programStatus));
         }
-
-		form.setPersonTableType(PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
+        
+		form.setPersonTableType(personTableType);
 		form.setSortAndPage(sAndP);
 		return searchPersonDirectory(form);
 	}
