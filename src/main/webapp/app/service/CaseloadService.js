@@ -36,18 +36,6 @@ Ext.define('Ssp.service.CaseloadService', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
     	return baseUrl;
     },
-    
-    getPersonTableType: function() {
-	    var me=this;
-    	me.configStore.clearFilter();
-    	me.configStore.load({
-    		extraParams: {
-            limit: "-1"
-        	} 
-    	});
-	
-    	return me.configStore.getConfigByName('my_caseload_person_table_type').trim();
-	},
 
     getBaseUrlForIdCaseload: function(id, programStatusId){
 		var me=this;
@@ -178,7 +166,8 @@ Ext.define('Ssp.service.CaseloadService', {
 			activeParams['programStatusId'] = programStatusId;
 		}
 
-		activeParams['personTableType'] = me.getPersonTableType();
+		var personTableType = me.configStore.getConfigByName('my_caseload_person_table_type');
+		activeParams['personTableType'] = personTableType;
 		
 		activeParams['status'] = 'ACTIVE';
 		
