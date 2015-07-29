@@ -28,6 +28,7 @@
 
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+<<<<<<< HEAD
 
     <changeSet id="rcreate table map_status_report_override_details" author="paul.spaude">
 
@@ -80,3 +81,31 @@
     </changeSet>
 
 </databaseChangeLog>
+=======
+    <changeSet author="jim.stanley" id='Add config value for my caseload person table type'>
+    	<preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from config where name='my_caseload_person_table_type'</sqlCheck>
+        </preConditions>
+        <insert tableName="config">
+            <column name="id" value="06e2351b-5d4d-4f94-84ca-05cade557bd8" />
+            <column name="name" value="my_caseload_person_table_type" />
+            
+            <column name="description"
+                value="Use this to set the types of students displayed in My Caseload view. Allowed values: SSP_ONLY, ANYWHERE or EXTERNAL_DATA_ONLY." />
+            <column name="value">SSP_ONLY</column>
+            <column name="default_value" value="SSP_ONLY" /> 
+            <column name="created_date" valueDate="2015-07-27T12:00:00" />
+            <column name="modified_date" valueDate="2015-07-27T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="18004" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='06e2351b-5d4d-4f94-84ca-05cade557bd8'</where>
+            </delete>
+        </rollback>
+      </changeSet>
+</databaseChangeLog>
+>>>>>>> cc6cf8034c016c5cf7c283c30230cd8611e5f7e0

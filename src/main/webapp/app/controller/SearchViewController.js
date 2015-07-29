@@ -390,10 +390,15 @@ Ext.define('Ssp.controller.SearchViewController', {
                 me.displayWatchList();
             } else {
                 if ( me.authenticatedPerson.hasAccess('CASELOAD_FILTERS') ) {
-                    me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
-                    // default caseload to Active students if no program status is defined
-                    me.getCaseload(true);
-                    me.displayCaseload();
+					if( me.preferences.get('SEARCH_GRID_VIEW_TYPE') != me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD) {
+	                    me.preferences.set('SEARCH_GRID_VIEW_TYPE', me.SEARCH_GRID_VIEW_TYPE_IS_CASELOAD);
+	                    // default caseload to Active students if no program status is defined
+	                    me.getCaseload(true);
+						me.displayCaseload();
+					} else {
+						me.loadCaseload();
+					}
+                    
                 } else {
                     me.search();
                     me.displaySearch(forceSearchFormDisplay);
@@ -1435,6 +1440,11 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me=this;
 		me.preferences.set('SEARCH_GRID_VIEW_TYPE',1);
 		me.setGridView();
+		me.loadCaseload();
+	},
+	
+	loadCaseload: function() {
+		var me=this;
 		me.getView().setLoading( true );
 		me.caseloadService.getCaseload(
 			me.translateSelectedStatusToSearchableStatus(),
@@ -1445,6 +1455,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 				scope: me
 			});
 	},
+
     getCaseloadSuccess: function( r, scope) {
     	var me=scope;
     	if(me.getSearchGridPager) {
@@ -1492,8 +1503,14 @@ Ext.define('Ssp.controller.SearchViewController', {
 
     onUpdateSearchStoreRecord:function(params) {
     	var me = this;
-    	var record = me.searchStore.findRecord("schoolId", params.person.get("schoolId"), 0, false, false, true);
-    	record.set("id", params.person.get("id"));
+		
+		/* view is set to caseload always on return, not sure why this is work around so caseload and search are test, SSP-3096*/
+		var record = me.caseloadStore.findRecord("schoolId", params.person.get("schoolId"), 0, false, false, true);
+		
+		if(record == null) {
+			record = me.searchStore.findRecord("schoolId", params.person.get("schoolId"), 0, false, false, true);
+    	}
+		record.set("id", params.person.get("id"));
     	record.set("firstName", params.person.get("firstName"));
     	record.set("middleName", params.person.get("middleName"));
     	record.set("lastName", params.person.get("lastName"));
@@ -1520,6 +1537,3 @@ Ext.define('Ssp.controller.SearchViewController', {
 		me.appEventsController.getApplication().fireEvent("onPersonSearchSuccess");
 	}
 });
-
-
-

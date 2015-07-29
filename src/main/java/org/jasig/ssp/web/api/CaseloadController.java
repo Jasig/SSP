@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
+import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -82,6 +83,7 @@ public class CaseloadController extends AbstractBaseController {
 	public @ResponseBody
 	PagedResponse<PersonSearchResult2TO> myCaseload(
 			final @RequestParam(required = false) UUID programStatusId,
+			final @RequestParam(required = false, defaultValue=PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY) String personTableType,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -95,8 +97,10 @@ public class CaseloadController extends AbstractBaseController {
 		}
 		
 		final PagingWrapper<PersonSearchResult2> caseload = service.caseLoadFor(
-				programStatus, securityService.currentUser().getPerson(),
-				 buildSortAndPage( limit,  start,  sort,  sortDirection));
+				programStatus, 
+				securityService.currentUser().getPerson(),
+				personTableType,
+				buildSortAndPage( limit,  start,  sort,  sortDirection));
 
 		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));
@@ -129,6 +133,7 @@ public class CaseloadController extends AbstractBaseController {
 			@PathVariable final UUID personId,
 			final @RequestParam(required = false) UUID programStatusId,
 			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false, defaultValue=PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY) String personTableType,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
@@ -142,8 +147,10 @@ public class CaseloadController extends AbstractBaseController {
 		
 
 		final PagingWrapper<PersonSearchResult2> caseload = service.caseLoadFor(
-				programStatus, personService.get(personId),
-				 buildSortAndPage( limit,  start,  sort,  sortDirection));
+				programStatus, 
+				personService.get(personId),
+				personTableType,
+				buildSortAndPage( limit,  start,  sort,  sortDirection));
 
 		return new PagedResponse<PersonSearchResult2TO>(true, caseload.getResults(),
 				factory.asTOList(caseload.getRows()));

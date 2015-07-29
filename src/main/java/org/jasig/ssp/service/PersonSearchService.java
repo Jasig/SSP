@@ -107,7 +107,9 @@ public interface PersonSearchService {
 	 * @throws ValidationException 
 	 */
 	PagingWrapper<PersonSearchResult2> caseLoadFor(ProgramStatus programStatus,
-			Person coach, SortingAndPaging sAndP)
+			Person coach, 
+			String personTableType,
+			SortingAndPaging sAndP)
 			throws ObjectNotFoundException;
 
 	/**

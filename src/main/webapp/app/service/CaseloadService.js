@@ -21,10 +21,12 @@ Ext.define('Ssp.service.CaseloadService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	appEventsController: 'appEventsController'
+    	appEventsController: 'appEventsController',
+    	configStore: 'configurationOptionsUnpagedStore'
     },
     initComponent: function() {
-		return this.callParent( arguments );
+    	
+    	return this.callParent( arguments );
     },
     
 
@@ -34,7 +36,7 @@ Ext.define('Ssp.service.CaseloadService', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('personCaseload') );
     	return baseUrl;
     },
-    
+
     getBaseUrlForIdCaseload: function(id, programStatusId){
 		var me=this;
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('directoryPersonSearch') );
@@ -163,6 +165,9 @@ Ext.define('Ssp.service.CaseloadService', {
 		{
 			activeParams['programStatusId'] = programStatusId;
 		}
+
+		var personTableType = me.configStore.getConfigByName('my_caseload_person_table_type');
+		activeParams['personTableType'] = personTableType;
 		
 		activeParams['status'] = 'ACTIVE';
 		
