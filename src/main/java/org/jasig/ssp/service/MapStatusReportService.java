@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportOverrideDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
@@ -70,6 +71,8 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 	List<MapStatusReportTermDetails> getAllTermDetailsForPerson(Person person);
 
 	List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(Person person);
+
+	List<MapStatusReportOverrideDetails> getAllOverrideDetailsForPerson(Person person);
 
 	void deleteAllOldReportsForStudent(UUID personId);
 

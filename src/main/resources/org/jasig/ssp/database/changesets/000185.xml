@@ -37,7 +37,7 @@
 			</column>
 			<column name="report_id" type="uuid" >
 				<constraints nullable="false"
-					foreignKeyName="msrca_report_id"
+					foreignKeyName="msr_b_report_id"
 					references="map_status_report(id)" />
 			</column>
 			<column name="term_code" type="${nvarchar.type}(25)" >
@@ -59,12 +59,12 @@
 			<column name="modified_date" type="datetime" />
 			<column name="created_by" type="uuid">
 				<constraints nullable="false"
-					foreignKeyName="map_status_report_a_cr_by_person_id"
+					foreignKeyName="map_status_report_b_cr_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="modified_by" type="uuid">
 				<constraints nullable="true"
-					foreignKeyName="map_status_report_a_modified_by_person_id"
+					foreignKeyName="map_status_report_b_modified_by_person_id"
 					references="person(id)" />
 			</column>
 			<column name="object_status" type="int">

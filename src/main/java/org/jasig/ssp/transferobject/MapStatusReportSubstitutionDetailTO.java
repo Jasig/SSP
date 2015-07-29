@@ -18,7 +18,9 @@
  */
 package org.jasig.ssp.transferobject;
 
+import org.jasig.ssp.model.MapStatusReportOverrideDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
+import org.jasig.ssp.model.SubstitutionCode;
 
 /**
  */
@@ -62,11 +64,24 @@ AbstractAuditableTO<MapStatusReportSubstitutionDetails> implements TransferObjec
 		this.setSubstitutionCode(model.getSubstitutionCode().getDisplayText());
 		this.setSubstitutionNote(model.getSubstitutionNote());
 	}
-	
+
+	public MapStatusReportSubstitutionDetailTO(MapStatusReportOverrideDetails model) {
+		super();
+		this.setTermCode(model.getTermCode());
+		this.setCourseCode(model.getTargetFormattedCourse());
+		this.setFormattedCourse(model.getTargetFormattedCourse());
+		this.setSubstitutedCourseCode(model.getNonCourseCode());
+		this.setSubstitutedFormattedCourse(model.getNonCourseCode());
+		this.setSubstitutedTermCode(model.getTermCode());
+		this.setSubstitutionCode(SubstitutionCode.OVERRIDE_COURSE.getDisplayText());
+		this.setSubstitutionNote(model.getOverrideNote());
+	}
+
 
 	public void from(MapStatusReportSubstitutionDetails model) {
 		super.from(model);
 	}
+
 	public String getTermCode() {
 		return termCode;
 	}

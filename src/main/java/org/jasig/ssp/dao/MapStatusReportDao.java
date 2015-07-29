@@ -26,6 +26,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportOverrideDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
@@ -111,7 +112,14 @@ public class MapStatusReportDao  extends AbstractPersonAssocAuditableCrudDao<Map
 		String query = "select msrsd from MapStatusReportSubstitutionDetails msrsd, MapStatusReport msr where msrsd.report = msr and msr.person = :person";
 		return createHqlQuery(query).setEntity("person", person).list();
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List<MapStatusReportOverrideDetails> getAllOverrideDetailsForPerson(
+			Person person) {
+		String query = "select msrsd from MapStatusReportOverrideDetails msrsd, MapStatusReport msr where msrsd.report = msr and msr.person = :person";
+		return createHqlQuery(query).setEntity("person", person).list();
+	}
+
 	public void deleteAllOldReportsForPerson(UUID personId) {
 		Collection<MapStatusReport> allForPersonId = getAllForPersonId(personId, null).getRows();
 		for (MapStatusReport mapStatusReport : allForPersonId) {

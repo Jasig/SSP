@@ -326,7 +326,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
             }
 		}
 
-        anomalies = anomalies + reportOverrideDetails.size();
+//        anomalies = anomalies + reportOverrideDetails.size();
 
 		report.setPlanRatioDemerits(anomalies);
 		report.setTotalPlanCourses(totalPlanCoursesInScope);
@@ -424,22 +424,22 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
                 matchedNonCourseOverride = findTranscriptCourseMatchOverrideCourse(mapPlanStatusReportCourse, allNonCourseEntities);
                 if (matchedNonCourseOverride != null) {
                     //TODO? matchedTranscriptCourse == mantchedNonCourseOverride?
-                    reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse, mapPlanStatusReportCourse, SubstitutionCode.OVERRIDE_COURSE, report));
-                }
+					reportOverrideDetails.add(createOverrideEntry(matchedNonCourseOverride, mapPlanStatusReportCourse, report));
+                } else {
 
-
-				//Second try to find term unbounded match
-				matchedTranscriptCourse = findTranscriptCourseMatch(mapPlanStatusReportCourse, transcript, criteriaSet);
-				if (matchedTranscriptCourse != null) {
-					//If we find a transcript match, it must have a passing grade before we log it
-					if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
-						//If we find a term unbounded match, create an substitution entry
-						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.TERM,report));
+					//Second try to find term unbounded match
+					matchedTranscriptCourse = findTranscriptCourseMatch(mapPlanStatusReportCourse, transcript, criteriaSet);
+					if (matchedTranscriptCourse != null) {
+						//If we find a transcript match, it must have a passing grade before we log it
+						if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
+							//If we find a term unbounded match, create an substitution entry
+							reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse, mapPlanStatusReportCourse, SubstitutionCode.TERM, report));
+						}
 					}
 				}
 			}
 
-			if (matchedTranscriptCourse == null) {
+			if (matchedTranscriptCourse == null && matchedNonCourseOverride == null) {
 				//Third try to find a substitutable course
 				matchedTranscriptCourse = findTranscriptCourseMatchSubstitutableCourse(mapPlanStatusReportCourse, transcript, criteriaSet, allSubstitutableCourses, planAndPersonInfo);
 				if (matchedTranscriptCourse != null) {
@@ -476,6 +476,22 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		detail.setReport(report);
 
         return detail;
+	}
+
+	private MapStatusReportOverrideDetails createOverrideEntry(
+			ExternalStudentTranscriptNonCourseEntity matchedTranscriptNonCourse,
+			MapPlanStatusReportCourse mapPlanStatusReportCourse,
+			MapStatusReport report) {
+
+		MapStatusReportOverrideDetails detail = new MapStatusReportOverrideDetails();
+		detail.setNonCourseCode(matchedTranscriptNonCourse.getNonCourseCode());
+		detail.setTermCode(mapPlanStatusReportCourse.getTermCode());
+		detail.setTargetFormattedCourse(matchedTranscriptNonCourse.getTargetFormattedCourse());
+		detail.setDescription(matchedTranscriptNonCourse.getDescription());
+		detail.setOverrideNote(" ");
+		detail.setReport(report);
+
+		return detail;
 	}
 
 	private ExternalStudentTranscriptCourse findTranscriptCourseMatchSubstitutableCourse(
@@ -625,7 +641,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
         return null;
     }
-	
+
 	private Map<String, List<ExternalStudentTranscriptCourse>> organizeTranscriptCourseByTerm(List<ExternalStudentTranscriptCourse> transcriptsBySchoolId) {
 		Map<String, List<ExternalStudentTranscriptCourse>> transcriptCoursesByTerm = new HashMap<String,List<ExternalStudentTranscriptCourse>>();
 
@@ -767,6 +783,13 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	public List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(
 			Person person) {
 		return dao.getAllSubstitutionDetailsForPerson(person);
+
+	}
+
+	@Override
+	public List<MapStatusReportOverrideDetails> getAllOverrideDetailsForPerson(
+			Person person) {
+		return dao.getAllOverrideDetailsForPerson(person);
 
 	}
 
