@@ -312,7 +312,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         var transferHours = 0;
         var transcript = new Ssp.model.Transcript(transcriptFullResponse);
         var terms = transcript.get('terms');
-        
+
         if (terms) {
             Ext.Array.each(terms, function(term){
                 var courseTranscript = Ext.create('Ssp.model.CourseTranscript', term);
@@ -334,20 +334,35 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                     }
                     courseTranscripts.push(courseTranscript);
                 }
-                
-                if (courseTranscripts.length > 0) {
-                    me.courseTranscriptsStore.loadData(courseTranscripts);
-                    me.courseTranscriptsStore.sort([{
-                        property: 'termStartDate',
-                        direction: 'DESC'
-                    }, {
-                        property: 'formattedCourse',
-                        direction: 'ASC'
-                    }]);
-                }
             });
         }
-        
+        var nonCourseItems = transcript.get('nonCourseEntities');
+        if (nonCourseItems) {
+            Ext.Array.each(nonCourseItems, function(nonCourse) {
+                var courseForNonCourseDisplay = Ext.create('Ssp.model.CourseTranscript', nonCourse);
+                var termIndexNonCourse = me.termsStore.getCurrentAndFutureTermsStore(true).findExact("code", courseForNonCourseDisplay.get("termCode"));
+
+                if (termIndexNonCourse < 0) {
+                    var nonTIndex = me.termsStore.findExact("code", courseForNonCourseDisplay.get("termCode"));
+                    var nonCourseTerm = me.termsStore.getAt(nonTIndex);
+                    courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
+                }
+
+                courseForNonCourseDisplay.set("title", 'NonCourse: ' + courseForNonCourseDisplay.get('title'));
+                courseForNonCourseDisplay.set("formattedCourse", 'Overrides: ' + nonCourse.targetFormattedCourse);
+                courseTranscripts.push(courseForNonCourseDisplay);
+            });
+        }
+        if (courseTranscripts.length > 0) {
+            me.courseTranscriptsStore.loadData(courseTranscripts);
+            me.courseTranscriptsStore.sort([{
+                property: 'termStartDate',
+                direction: 'DESC'
+            }, {
+                property: 'formattedCourse',
+                direction: 'ASC'
+            }]);
+        }
         if (transferHours > 0) {
             me.getTransferHrsField().setValue((transferHours / 100).toFixed(2));
         }
