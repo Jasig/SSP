@@ -24,10 +24,12 @@ import java.util.Set;
 import java.util.UUID;
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportOverrideDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
 import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.transferobject.reports.MapStatusReportOwnerAndCoachInfo;
@@ -45,6 +47,7 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 			List<Term> allTerms,
 			MapStatusReportPerson planAndPersonInfo,
 			Collection<ExternalSubstitutableCourse> allSubstitutableCourses,
+            Collection<ExternalStudentTranscriptNonCourseEntity> nonCourseEntities,
 			List<ExternalStudentTranscriptCourse> transcript,
 			boolean termBound, 
 			boolean useSubstitutableCourses);
@@ -68,6 +71,8 @@ public interface MapStatusReportService extends PersonAssocAuditableService<MapS
 	List<MapStatusReportTermDetails> getAllTermDetailsForPerson(Person person);
 
 	List<MapStatusReportSubstitutionDetails> getAllSubstitutionDetailsForPerson(Person person);
+
+	List<MapStatusReportOverrideDetails> getAllOverrideDetailsForPerson(Person person);
 
 	void deleteAllOldReportsForStudent(UUID personId);
 

@@ -46,7 +46,12 @@ public class ExternalStudentTranscriptNonCourseEntityServiceImpl extends
 	}
 
 
-	@Override
+    @Override
+    public List<ExternalStudentTranscriptNonCourseEntity> getAllNonCourseTranscripts () {
+        return dao.getAllNonCourseTranscripts();
+    }
+
+    @Override
 	public List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolId(
 			String schoolId) {
 		return dao.getNonCourseTranscriptsBySchoolId(schoolId);

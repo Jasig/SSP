@@ -16,9 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/**
- * 
- */
 package org.jasig.ssp.model.external;
 
 /**
@@ -29,12 +26,12 @@ public enum PlanStatus {
 	ON("On Plan"),
 	OFF("Off Plan"),
 	ON_TRACK_SUBSTITUTION("On Track Substitution"),
-	ON_TRACK_SEQUENCE("On Track Sequence");
+	ON_TRACK_SEQUENCE("On Track Sequence"),
+    ON_TRACK_OVERRIDE("On Track Override");
 	
 	private String displayName;
 
-	private PlanStatus(String displayName)
-	{
+	private PlanStatus(String displayName) {
 		this.setDisplayName(displayName);
 	}
 

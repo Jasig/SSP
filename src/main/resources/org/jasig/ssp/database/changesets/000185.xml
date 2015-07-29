@@ -20,26 +20,26 @@
 
 -->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
     <changeSet author="jim.stanley" id='Add config value for my caseload person table type'>
-    	<preConditions onFail="MARK_RAN">
+        <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">select count(*) from config where name='my_caseload_person_table_type'</sqlCheck>
         </preConditions>
         <insert tableName="config">
             <column name="id" value="06e2351b-5d4d-4f94-84ca-05cade557bd8" />
             <column name="name" value="my_caseload_person_table_type" />
-            
+
             <column name="description"
-                value="Use this to set the types of students displayed in My Caseload view. Allowed values: SSP_ONLY, ANYWHERE or EXTERNAL_DATA_ONLY." />
+                    value="Use this to set the types of students displayed in My Caseload view. Allowed values: SSP_ONLY, ANYWHERE or EXTERNAL_DATA_ONLY." />
             <column name="value">SSP_ONLY</column>
-            <column name="default_value" value="SSP_ONLY" /> 
+            <column name="default_value" value="SSP_ONLY" />
             <column name="created_date" valueDate="2015-07-27T12:00:00" />
             <column name="modified_date" valueDate="2015-07-27T12:00:00" />
             <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -52,5 +52,5 @@
                 <where>id='06e2351b-5d4d-4f94-84ca-05cade557bd8'</where>
             </delete>
         </rollback>
-      </changeSet>
+    </changeSet>
 </databaseChangeLog>

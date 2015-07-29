@@ -23,7 +23,8 @@ import java.util.List;
 
 public interface ExternalStudentTranscriptNonCourseEntityService extends
 		ExternalDataService<ExternalStudentTranscriptNonCourseEntity> {
-	
+
+    List<ExternalStudentTranscriptNonCourseEntity> getAllNonCourseTranscripts();
 	List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolId (String schoolId);
 	List<ExternalStudentTranscriptNonCourseEntity> getNonCourseTranscriptsBySchoolIdAndTermCode (String schoolId, String termCode);
 }

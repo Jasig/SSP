@@ -34,6 +34,7 @@ import javax.validation.Valid;
 
 import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportOverrideDetails;
 import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.MapStatusReportTermDetails;
 import org.jasig.ssp.model.ObjectStatus;
@@ -123,7 +124,7 @@ public class MapStatusReportController  extends AbstractBaseController {
 	/**
 	 * Retrieves the specified list from persistent storage.
 	 * 
-	 * @param id
+	 * @param personId
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
@@ -214,11 +215,22 @@ public class MapStatusReportController  extends AbstractBaseController {
 
 		List<MapStatusReportSubstitutionDetailTO> resultTO = new ArrayList<MapStatusReportSubstitutionDetailTO>();
 		assertStandardMapReadApiAuthorization(request);
-		
-		List<MapStatusReportSubstitutionDetails> result = mapStatusReportService.getAllSubstitutionDetailsForPerson(new Person(personId));
-		Collections.sort(result, new Comparator<MapStatusReportSubstitutionDetails>() {
+
+		Person student = new Person(personId);
+
+		List<MapStatusReportSubstitutionDetails> substitutionDetails = mapStatusReportService.getAllSubstitutionDetailsForPerson(student);
+		List<MapStatusReportOverrideDetails> overrideDetails = mapStatusReportService.getAllOverrideDetailsForPerson(student);
+
+		for (MapStatusReportSubstitutionDetails substitutionDetail : substitutionDetails) {
+			resultTO.add(new MapStatusReportSubstitutionDetailTO(substitutionDetail));
+		}
+		for (MapStatusReportOverrideDetails overrideDetail : overrideDetails) {
+			resultTO.add(new MapStatusReportSubstitutionDetailTO(overrideDetail));
+		}
+
+		Collections.sort(resultTO, new Comparator<MapStatusReportSubstitutionDetailTO>() {
 			@Override
-			public int compare(MapStatusReportSubstitutionDetails o1, MapStatusReportSubstitutionDetails o2) {
+			public int compare(MapStatusReportSubstitutionDetailTO o1, MapStatusReportSubstitutionDetailTO o2) {
 				Term o1Term, o2Term;
 				try {
 					 o1Term = termService.getByCode(o1.getTermCode());
@@ -230,9 +242,6 @@ public class MapStatusReportController  extends AbstractBaseController {
 				return o1Term.getStartDate().compareTo(o2Term.getStartDate());
 			}
 		});	
-		for (MapStatusReportSubstitutionDetails mapStatusReportCourseDetails : result) {
-			resultTO.add(new MapStatusReportSubstitutionDetailTO(mapStatusReportCourseDetails));
-		}
 		return resultTO;
 	}	
 	

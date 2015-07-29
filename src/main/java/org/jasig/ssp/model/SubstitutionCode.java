@@ -19,7 +19,7 @@
 package org.jasig.ssp.model;
 
 public enum SubstitutionCode {
-TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course");
+TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course"), OVERRIDE_COURSE("Overridden Course");
 
 private String displayText;
 
