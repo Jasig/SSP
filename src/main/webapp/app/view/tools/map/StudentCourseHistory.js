@@ -38,7 +38,10 @@ Ext.define('Ssp.view.tools.map.StudentCourseHistory', {
                 xtype: 'gridcolumn',
                 dataIndex: 'termCode',
                 text: 'Term',
-                flex: 0.10
+                flex: 0.10,
+                getSortParam: function() {
+                      return 'termStartDate';
+                }
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'formattedCourse',

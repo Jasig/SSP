@@ -190,7 +190,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedCourseCode',
-					                text: 'Transcript Course Course',
+					                text: 'Transcript Course Code',
 					                flex: 0.27
 					            }, {
 					                xtype: 'gridcolumn',
