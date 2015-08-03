@@ -127,7 +127,14 @@ Ext.define('Ssp.controller.admin.cda.CDAListViewController', {
     },
 
     resetEditForm: function() {
-	var me = this;
-        me.getEditFormView().getForm().reset();
-    }
+    	var me = this;
+
+    	var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
+            model.populateFromGenericObject(null);
+    	me.store.load();
+    	
+    	var view = me.getEditFormView();
+    	view.loadRecord(model);
+
+        }
 });

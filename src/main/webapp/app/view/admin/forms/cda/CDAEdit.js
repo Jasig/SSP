@@ -74,14 +74,14 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                     xtype: 'button',
                     hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
                     action: 'save',
-                    formBind: true,
+                    //formBind: true,
                     itemId: 'saveButton'
                 }, {
-                    text: 'Create New',
+                    text: 'Clear',
                     xtype: 'button',
                     hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
                     action: 'reset',
-                    formBind: true,
+                    //formBind: true,
                     itemId: 'resetButton'
                 }, {
                     xtype: 'label',
