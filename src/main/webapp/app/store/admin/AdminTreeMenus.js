@@ -278,7 +278,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     text: 'Confidentiality Disclosure Agreement',
                     title: 'Confidentiality Disclosure Agreement',
                     store: '',
-                    form: 'ConfidentialityDisclosureAgreementAdmin',
+                    form: 'CDAAdmin',
                     leaf: true
                 }, {
                     text: 'Education Goals',

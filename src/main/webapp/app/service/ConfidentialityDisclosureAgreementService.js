@@ -46,7 +46,7 @@ Ext.define('Ssp.service.ConfidentialityDisclosureAgreementService', {
 	    };
 		
 		id = jsonData.id;
-
+        jsonData.objectStatus="ACTIVE";
 		// save
 		if (id=="")
 		{				
@@ -64,6 +64,34 @@ Ext.define('Ssp.service.ConfidentialityDisclosureAgreementService', {
     			url: url+"/"+id,
     			method: 'PUT',
     			jsonData: jsonData,
+    			successFunc: success,
+    			failureFunc: failure,
+    			scope: me
+    		});	
+		}
+    },
+    
+    setEnabled: function( id, callbacks ){
+		var me=this;
+		var url = me.getBaseUrl();
+	    var success = function( response, view ){
+	    	var r = Ext.decode(response.responseText);
+			callbacks.success( r, callbacks.scope );
+	    };
+
+	    var failure = function( response ){
+	    	me.apiProperties.handleError( response );	    	
+	    	callbacks.failure( response, callbacks.scope );
+	    };
+		
+		// save
+		if (id!="")
+		{	
+			// update
+    		me.apiProperties.makeRequest({
+    			url: url+"/"+id+"/setenabled",
+    			method: 'PUT',
+    			//jsonData: jsonData,
     			successFunc: success,
     			failureFunc: failure,
     			scope: me

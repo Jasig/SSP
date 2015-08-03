@@ -137,11 +137,7 @@ var ssp = ssp || {};
 			$.getJSON(url, function(data) {
 				requests--;
 				
-				$.each(data.rows, function(i, row) {
-					$.each(data.rows, function(i, row) {
-						$(container).html(row.text);
-					});
-				});
+				$(container).html(row.data);
 				
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
@@ -265,7 +261,7 @@ var ssp = ssp || {};
 			loadHomeDepartmentInput("/ssp/api/1/personStaffDetails/homeDepartments/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('homeDepartmentGroup'))
 			loadTextForm(
-					"/ssp/api/1/reference/confidentialityDisclosureAgreement/?sort=name&start=0&limit=-1&sortDirection=ASC",
+					"/ssp/api/1/reference/confidentialityDisclosureAgreement/getlivecda",
 					that.locate('confidentialityAgreementFormContent'));
 			
 			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search?sort=name&start=0&limit=-1&sortDirection=ASC", that

@@ -143,6 +143,9 @@ Ext.require([
     'Ssp.view.admin.AdminForms',
     'Ssp.view.admin.forms.AbstractReferenceAdmin',
     'Ssp.view.admin.forms.ConfidentialityDisclosureAgreementAdmin',
+    'Ssp.view.admin.forms.cda.CDAAdmin',
+    'Ssp.view.admin.forms.cda.CDAEdit',
+    'Ssp.view.admin.forms.cda.CDAList',
 	
 	//MAP Views
     'Ssp.view.tools.map.MAP',

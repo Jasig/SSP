@@ -39,6 +39,22 @@ public class ConfidentialityDisclosureAgreementTO extends
 	 * Optional, null allowed, max length 64000 characters.
 	 */
 	private String text;
+	
+	/**
+	 * Is this the currently enabled CDA (there should only be one in the db that is enabled)
+	 * 
+	 * Optional, null allowed, max length 64000 characters.
+	 */
+	private boolean enabled;
+	
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	/**
 	 * Empty constructor
@@ -49,9 +65,11 @@ public class ConfidentialityDisclosureAgreementTO extends
 
 	public ConfidentialityDisclosureAgreementTO(final UUID id,
 			@NotNull final String name, final String description,
-			@NotNull final String text) {
+			@NotNull final String text,
+			final boolean isEnabled) {
 		super(id, name, description);
 		this.text = text;
+		this.enabled = isEnabled;
 	}
 
 	public ConfidentialityDisclosureAgreementTO(
@@ -64,8 +82,9 @@ public class ConfidentialityDisclosureAgreementTO extends
 	public final void from(final ConfidentialityDisclosureAgreement model) {
 		super.from(model);
 		text = model.getText();
+		enabled = model.isEnabled();
 	}
-
+ 
 	public String getText() {
 		return text;
 	}

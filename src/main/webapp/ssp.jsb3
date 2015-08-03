@@ -2045,6 +2045,21 @@
                     "path": "/app/view/admin/forms/"
                 },
                 {
+                    "clsName": "Ssp.view.admin.forms.cda.CDAAdmin",
+                    "name": "CDAAdmin.js",
+                    "path": "/app/view/admin/forms/cda"
+                },     
+                {
+                    "clsName": "Ssp.view.admin.forms.cda.CDAEdit",
+                    "name": "CDAEdit.js",
+                    "path": "/app/view/admin/forms/cda"
+                }, 
+                {
+                    "clsName": "Ssp.view.admin.forms.cda.CDAList",
+                    "name": "CDAList.js",
+                    "path": "/app/view/admin/forms/cda"
+                },          
+                {
                     "clsName": "Ssp.view.admin.forms.crg.ChallengeAdmin",
                     "name": "ChallengeAdmin.js",
                     "path": "/app/view/admin/forms/crg/"

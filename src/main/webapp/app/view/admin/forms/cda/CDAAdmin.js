@@ -16,38 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.ConfidentialityDisclosureAgreement', {
-    extend: 'Ssp.model.reference.AbstractReference',
-    mixins: [ 'Deft.mixin.Injectable' ],
-    inject: {
-    	apiProperties: 'apiProperties'
-    },    
-    fields: [{name:'text',type:'string'},{name:'enabled',type:'boolean'}],
+Ext.define('Ssp.view.admin.forms.cda.CDAAdmin', {
+    extend: 'Ext.container.Container',
+    alias: 'widget.cdaadmin',
+    id: 'CDAAdmin',
+    title: 'Confidentiality Agreement Forms',
+    mixins: ['Deft.mixin.Injectable',
+        'Deft.mixin.Controllable'
+    ],
 
-	constructor: function(){
-		Ext.apply(this.getProxy(), 
-				{ 
-			url: this.apiProperties.createUrl( this.apiProperties.getItemUrl('confidentialityDisclosureAgreement') )
-			    }
-		);
-		return this.callParent(arguments);
-	}, 	
-	
-	proxy: {
-		type: 'rest',
-		url: '',
-		actionMethods: {
-			create: "POST", 
-			read: "GET", 
-			update: "PUT",
-			destroy: "DELETE"
-		},
-		reader: {
-			type: 'json'
-		},
-	    writer: {
-	        type: 'json',
-	        successProperty: 'success'
-	    }
-	}
+    controller: 'Ssp.controller.admin.cda.CDAListViewController',
+    height: '100%',
+    width: '100%',
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    initComponent: function() {
+        Ext.apply(this, {
+            items: [{
+                xtype: 'cdalist',
+                flex: 1,
+                width: '40%'
+            }, {
+                xtype: 'cdaedit',
+                flex: 1,
+                width: '60%'
+            }]
+        });
+        return this.callParent(arguments);
+    }
 });
