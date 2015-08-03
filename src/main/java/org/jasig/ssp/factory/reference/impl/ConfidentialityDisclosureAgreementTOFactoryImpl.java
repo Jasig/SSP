@@ -57,6 +57,7 @@ public class ConfidentialityDisclosureAgreementTOFactoryImpl
 			throws ObjectNotFoundException {
 		final ConfidentialityDisclosureAgreement model = super.from(tObject);
 		model.setText(tObject.getText());
+		model.setEnabled(tObject.isEnabled());
 		return model;
 	}
 }

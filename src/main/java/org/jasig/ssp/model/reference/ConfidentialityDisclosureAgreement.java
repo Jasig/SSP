@@ -49,6 +49,17 @@ public class ConfidentialityDisclosureAgreement
 	@Size(max = 64000)
 	private String text;
 
+	
+	private boolean enabled;
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	/**
 	 * Constructor
 	 */

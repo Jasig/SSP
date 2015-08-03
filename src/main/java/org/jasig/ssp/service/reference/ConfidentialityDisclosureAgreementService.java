@@ -18,9 +18,22 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.util.UUID;
+
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.jasig.ssp.service.ReferenceService;
+import org.jasig.ssp.transferobject.reference.ConfidentialityDisclosureAgreementTO;
 
 public interface ConfidentialityDisclosureAgreementService extends
 		ReferenceService<ConfidentialityDisclosureAgreement> {
+	
+	/**
+	 * Sets all CDAs as disabled, then set's the CDA with 'id' as enabled
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public int setEnabled(UUID id);
+
+	public ConfidentialityDisclosureAgreementTO getLive();
 }

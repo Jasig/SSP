@@ -114,6 +114,51 @@ public class ConfidentialityDisclosureAgreementController
 			throws ValidationException, ObjectNotFoundException {
 		return super.save(id, obj);
 	}
+	
+	
+	/**
+	 * Persist any changes to the specified instance.
+	 *
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 */
+	
+	@RequestMapping(value = "/{id}/setenabled", method = RequestMethod.PUT)
+	public @ResponseBody int setEnabled(@PathVariable final UUID id)
+			throws ValidationException, ObjectNotFoundException {
+		
+		return service.setEnabled(id);
+	}	
+	
+	
+	/**
+	 * Persist any changes to the specified instance.
+	 *
+	 * @param id
+	 *            Explicit id to the instance to persist.
+	 * @param obj
+	 *            Full instance to persist.
+	 * @return The update data object instance.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If the specified id is null.
+	 */
+	
+	@RequestMapping(value = "/getlivecda", method = RequestMethod.GET)
+	public @ResponseBody ConfidentialityDisclosureAgreementTO getLiveCDA()
+			throws ValidationException, ObjectNotFoundException {
+		
+		return service.getLive();
+	}	
+		
 
 	/**
 	 * Marks the specified data instance with a status of

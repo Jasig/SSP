@@ -18,12 +18,17 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import java.util.UUID;
+
 import org.jasig.ssp.dao.reference.ConfidentialityDisclosureAgreementDao;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
 import org.jasig.ssp.service.reference.ConfidentialityDisclosureAgreementService;
+import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.reference.ConfidentialityDisclosureAgreementTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 @Transactional
@@ -41,5 +46,18 @@ public class ConfidentialityDisclosureAgreementServiceImpl extends
 	@Override
 	protected ConfidentialityDisclosureAgreementDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public int setEnabled(UUID id) {
+		return getDao().setEnabled(id);
+		//return 0;
+	}
+
+	@Override
+	public @ResponseBody
+	ConfidentialityDisclosureAgreementTO getLive() {
+		// TODO Auto-generated method stub
+		return getDao().getLiveCDA();
 	}
 }

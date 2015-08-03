@@ -18,14 +18,25 @@
  */
 package org.jasig.ssp.dao.reference;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.ConfidentialityDisclosureAgreement;
+import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
+import org.jasig.ssp.transferobject.reference.ConfidentialityDisclosureAgreementTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+
+import com.google.common.collect.Lists;
 
 /**
  * Data access class for the ConfidentialityDisclosureAgreement reference
@@ -53,4 +64,29 @@ public class ConfidentialityDisclosureAgreementDao extends
 
 		return super.getAll(sp);
 	}
+	
+	public int setEnabled(final UUID id) {
+		
+		//remove existing CDAs
+		String sqlremove = "update ConfidentialityDisclosureAgreement set enabled = FALSE";
+		createHqlQuery( sqlremove ).executeUpdate(); 
+		
+		String sqlupdate = "update ConfidentialityDisclosureAgreement set enabled = TRUE where id = :id";
+		return createHqlQuery( sqlupdate ).setParameter("id", id).executeUpdate();		
+	}
+
+	public ConfidentialityDisclosureAgreementTO getLiveCDA() {
+		Criteria criteria = createCriteria();		
+		criteria.add(Restrictions.eq("enabled", true));
+		
+		List results = criteria.list();
+		if(results.size() <=0) return null;		
+		ConfidentialityDisclosureAgreementTO cdaTO = new ConfidentialityDisclosureAgreementTO((ConfidentialityDisclosureAgreement)(results.get(0)));
+		return cdaTO;
+	}
+	
+	
+	
+	
+	
 }
