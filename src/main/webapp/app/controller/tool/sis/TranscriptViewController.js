@@ -92,8 +92,10 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
                     if (termIndexNonCourse < 0) {
                         var nonTIndex = me.termsStore.findExact("code", courseForNonCourseDisplay.get("termCode"));
                         var nonCourseTerm = me.termsStore.getAt(nonTIndex);
-                        courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
+                    } else {
+                        var nonCourseTerm = me.termsStore.getCurrentAndFutureTermsStore(true).getAt(termIndexNonCourse);
                     }
+                    courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
 
                     courseForNonCourseDisplay.set("title", 'NonCourse: ' + courseForNonCourseDisplay.get('title'));
                     courseForNonCourseDisplay.set("formattedCourse", 'Overrides: ' + nonCourse.targetFormattedCourse);
