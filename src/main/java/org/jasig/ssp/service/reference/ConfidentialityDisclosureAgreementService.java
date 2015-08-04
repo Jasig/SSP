@@ -36,4 +36,6 @@ public interface ConfidentialityDisclosureAgreementService extends
 	public int setEnabled(UUID id);
 
 	public ConfidentialityDisclosureAgreementTO getLive();
+	
+	//public ConfidentialityDisclosureAgreementTO saveWithActive(ConfidentialityDisclosureAgreementTO t);
 }

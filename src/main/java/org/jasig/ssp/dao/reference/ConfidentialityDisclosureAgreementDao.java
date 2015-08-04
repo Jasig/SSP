@@ -24,6 +24,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
@@ -66,13 +67,32 @@ public class ConfidentialityDisclosureAgreementDao extends
 	}
 	
 	public int setEnabled(final UUID id) {
+			
+		String sqlupdate = "update ConfidentialityDisclosureAgreement set enabled = TRUE where id = :id";
+		int t =  createHqlQuery( sqlupdate ).setParameter("id", id).executeUpdate();		
 		
 		//remove existing CDAs
-		String sqlremove = "update ConfidentialityDisclosureAgreement set enabled = FALSE";
-		createHqlQuery( sqlremove ).executeUpdate(); 
+		String sqlremove = "update ConfidentialityDisclosureAgreement set enabled = FALSE where id != :id";
+		createHqlQuery( sqlremove ).setParameter("id", id).executeUpdate();
 		
-		String sqlupdate = "update ConfidentialityDisclosureAgreement set enabled = TRUE where id = :id";
-		return createHqlQuery( sqlupdate ).setParameter("id", id).executeUpdate();		
+		return t;
+	}
+	
+	@Override
+	public ConfidentialityDisclosureAgreement save(ConfidentialityDisclosureAgreement t) {
+		final Session session = sessionFactory.getCurrentSession();
+		if (t.getId() == null) {
+			session.saveOrUpdate(t);
+			session.flush(); // make sure constraint violations are checked now			
+		}
+		
+		if(t.isEnabled()) {
+			//remove existing CDAs
+			String sqlremove = "update ConfidentialityDisclosureAgreement set enabled = FALSE where id != :id";
+			createHqlQuery( sqlremove ).setParameter("id", t.getId()).executeUpdate();
+		}
+		
+		return t; 
 	}
 
 	public ConfidentialityDisclosureAgreementTO getLiveCDA() {

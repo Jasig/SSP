@@ -23,7 +23,7 @@ Ext.define(
         name: 'cdaListPanel',
         itemid: 'cdaListPanel',
         alias: 'widget.cdalist',
-        title: 'MAP Templates Admin (Select checkboxes to Activate/DeActivate)',
+        title: 'Confidentiality Agreement Forms (Active is currently printed for Students)',
         mixins: ['Deft.mixin.Injectable',
             'Deft.mixin.Controllable'
         ],
@@ -55,7 +55,7 @@ Ext.define(
                             name: 'isCDAEnabled',
                             id: 'isCDAEnabled',
                             xtype: 'checkcolumn',
-                            text: 'Enabled',
+                            text: 'Active',
                             width: 55,
                             dataIndex: 'enabled',
                             inputValue: 'ACTIVE',
@@ -63,10 +63,10 @@ Ext.define(
                             sortable: true,
                             renderer: function(value) {
                                 if (value) {
-				    return 'Live';
+				    return 'Yes';
                                 }
 				else {
-				    return '<input type="checkbox"/>';
+				    return 'No';
 				}
                             }
                         }, {
@@ -79,7 +79,15 @@ Ext.define(
                             width: 200,
                             dataIndex: 'description',
                             sortable: true
-                        }
+                        }, {
+                icon:'some_icon.png',
+                tooltip : 'Delete',
+                handler : function (grid, rowIndex, colIndex, item, e, record) {
+                    this.fireEvent('deleteRecord', this, record);
+                },
+                scope : me
+            }
+
                     ],
 
                     dockedItems: [{

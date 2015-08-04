@@ -60,4 +60,11 @@ public class ConfidentialityDisclosureAgreementServiceImpl extends
 		// TODO Auto-generated method stub
 		return getDao().getLiveCDA();
 	}
+
+	@Override
+	public ConfidentialityDisclosureAgreement save(ConfidentialityDisclosureAgreement t) {
+		// TODO Auto-generated method stub
+		
+		return getDao().save(t);
+	}
 }

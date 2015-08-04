@@ -43,6 +43,16 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
             },
             defaultType: 'displayfield',
             items: [{
+            xtype      : 'fieldcontainer',
+            fieldLabel : 'Active',
+            defaultType: 'checkboxfield',
+            items: [
+                {
+//                    boxLabel  : '',
+                    name      : 'enabled',
+                }
+            ]
+        },{
                 fieldLabel: 'Name',
                 xtype: 'textfield',
                 disabled: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_FIELDS'),
