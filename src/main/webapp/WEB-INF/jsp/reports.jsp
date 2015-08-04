@@ -2571,14 +2571,14 @@
 					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="studentChallengesCreateDateFrom">
 				</div>
 				<div class="ea-label">
-					<span>Student Added From (inclusive)::</span>
+					<span>Student Added From (inclusive):</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
 					<input class="input-calendar-type" type="textbox" name="createDateTo" id="studentChallengesCreateDateTo">
 				</div>
 				<div class="ea-label">
-					<span>Student Added To (exclusive)::</span>
+					<span>Student Added To (exclusive):</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
@@ -2611,10 +2611,10 @@
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="studentIntakeCompleteDateTo" id="studentChallengesStudentIntakeCompleteDateFrom">
+					<input class="input-calendar-type" type="textbox" name="studentIntakeCompleteDateTo" id="studentChallengesStudentIntakeCompleteDateTo">
 				</div>
 				<div class="ea-label">
-					<span>Student Intake Completed To (exclusive)::</span>
+					<span>Student Intake Completed To (exclusive):</span>
 				</div>
 				<div class="ea-clear"></div>
 			</div>
