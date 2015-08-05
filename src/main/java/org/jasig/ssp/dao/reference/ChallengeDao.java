@@ -101,7 +101,8 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	@SuppressWarnings(UNCHECKED)
 	public List<Challenge> searchByQuery(final String query, boolean selfHelpGuide) {
 		String selfHelpGuideString = selfHelpGuide ? "and showInSelfHelpGuide = true" : "";
-		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
+		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus "
+								  + "and ccr.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
 		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id " + selfHelpGuideString + " and objectStatus = :objectStatus) order by c.name"; // NOPMD
 
 		if (!StringUtils.isNotBlank(query)) {
@@ -127,7 +128,8 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 
 	@SuppressWarnings(UNCHECKED)
 	public List<Challenge> searchByQueryNoSelfHelpGuide(final String query) {
-		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
+		final String beginningHql = "select distinct c from Challenge c inner join c.challengeChallengeReferrals ccr where c.objectStatus = :objectStatus "
+								  + "and ccr.objectStatus = :objectStatus and c.showInSelfHelpSearch = true "; // NOPMD
 		final String endHql = " and exists (from ChallengeReferral where id = ccr.challengeReferral.id  and objectStatus = :objectStatus) order by c.name"; // NOPMD
 
 		if (!StringUtils.isNotBlank(query)) {
