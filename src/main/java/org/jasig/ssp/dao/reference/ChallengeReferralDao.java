@@ -66,10 +66,13 @@ public class ChallengeReferralDao extends
 								+ "inner join cr.challengeChallengeReferrals ccr " // NOPMD
 								+ "where cr.showInSelfHelpGuide = true " // NOPMD
 								+ "and ccr.challenge.id = ? "
+								+ "and ccr.objectStatus = ? "
 								+ "and cr.objectStatus = ? "
 								+ "order by cr.name")
 				.setParameter(0, challengeId)
-				.setParameter(1, ObjectStatus.ACTIVE).setMaxResults(100).list();
+				.setParameter(1, ObjectStatus.ACTIVE)
+				.setParameter(2, ObjectStatus.ACTIVE)
+				.setMaxResults(100).list();
 	}
 
 	@SuppressWarnings(UNCHECKED)
@@ -89,14 +92,16 @@ public class ChallengeReferralDao extends
 								+ "where cr.showInSelfHelpGuide = true "
 								+ "and c.showInSelfHelpSearch = true "
 								+ "and ccr.challenge.id = ? "
+								+ "and ccr.objectStatus = ? "
 								+ "and cr.objectStatus = ? "
 								+ "and (upper(cr.name) like ? "
 								+ "or upper(cr.publicDescription) like ?) "
 								+ "order by cr.name")
 				.setParameter(0, challengeId)
 				.setParameter(1, ObjectStatus.ACTIVE)
-				.setParameter(2, wildcardQuery)
-				.setParameter(3, wildcardQuery).setMaxResults(100).list();
+				.setParameter(2, ObjectStatus.ACTIVE)
+				.setParameter(3, wildcardQuery)
+				.setParameter(4, wildcardQuery).setMaxResults(100).list();
 	}
 
 	public long countByChallengeIdNotOnActiveTaskList(final UUID challengeId,
@@ -112,6 +117,7 @@ public class ChallengeReferralDao extends
 								+ "where "
 								+ "ccr.challenge.id = :challengeId "
 								+ selfHelpGuideString
+								+ "and ccr.objectStatus = :objectStatus "
 								+ "and cr.objectStatus = :objectStatus "
 								+ "and not exists (from Task "
 								+ "where challengeReferral.id = cr.id "
@@ -143,6 +149,7 @@ public class ChallengeReferralDao extends
 								+ "where "
 								+ "ccr.challenge.id = :challengeId "
 								+ selfHelpGuideString
+								+ "and ccr.objectStatus = :objectStatus "
 								+ "and cr.objectStatus = :objectStatus "
 								+ "and not exists " + "(from Task "
 								+ "where challengeReferral.id = cr.id "
@@ -202,7 +209,7 @@ public class ChallengeReferralDao extends
 		}
 		ObjectStatus objectStatus = searchForm.getSortAndPage() != null && 
 				searchForm.getSortAndPage().getStatus() != null ? searchForm.getSortAndPage().getStatus() : ObjectStatus.ACTIVE;
-		
+
 		challenge.setParameter("objectStatus", objectStatus);
 	    categoryChallenge.setParameter("objectStatus", objectStatus);
 	    challengeReferral.setParameter("objectStatus", objectStatus);
@@ -317,6 +324,7 @@ public class ChallengeReferralDao extends
 		baseQuery(statement);
 		statement.append("where cc.challenge.id = c.id and cc.category.id = ct.id ");
 		statement.append("and ccr.challenge.id = c.id and ccr.challengeReferral.id = cr.id ");
+		statement.append("and ccr.objectStatus = :objectStatus ");
 		statement.append("and cr.objectStatus = :objectStatus ");
 		statement.append("and cc.objectStatus = :objectStatus ");
 		statement.append("and c.objectStatus = :objectStatus ");
@@ -349,6 +357,7 @@ public class ChallengeReferralDao extends
 		statement.append("ChallengeReferral as cr, ");
 		statement.append("Challenge as c ");
 		statement.append("where ccr.challenge.id = c.id and ccr.challengeReferral.id = cr.id ");
+		statement.append("and ccr.objectStatus = :objectStatus ");
 		statement.append("and cr.objectStatus = :objectStatus ");
 		statement.append("and c.objectStatus = :objectStatus ");
 		if(searchForm.getChallengeId() != null){
