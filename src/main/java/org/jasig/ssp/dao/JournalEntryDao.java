@@ -285,7 +285,7 @@ public class JournalEntryDao
 		List<UUID> personUUIDS = personDao.getStudentUUIDs(personSearchForm);
 		
 		if(CollectionUtils.isEmpty(personUUIDS)){
-			return new PagingWrapper<JournalCaseNotesStudentReportTO>(0, new ArrayList<JournalCaseNotesStudentReportTO>());
+			return new ArrayList<JournalCaseNotesStudentReportTO>();
 		}
 		
 		final Criteria criteria = createCriteria(sAndP);
