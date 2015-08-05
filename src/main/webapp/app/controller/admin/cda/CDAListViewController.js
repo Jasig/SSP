@@ -23,118 +23,87 @@ Ext.define('Ssp.controller.admin.cda.CDAListViewController', {
         apiProperties: 'apiProperties',
         formUtils: 'formRendererUtils',
         store: 'confidentialityDisclosureAgreementsStore',
-        service: 'confidentialityDisclosureAgreementService'
+        service: 'confidentialityDisclosureAgreementService',
+        authenticatedPerson: 'authenticatedPerson'
     },
 
     control: {
-	'isCDAEnabled': {
+        'isCDAEnabled': {
             listeners: {
-            	checkChange: 'onEnabledCheckChange'
+       //         checkChange: 'onEnabledCheckChange'
             }
         },
         'cdaListPanel': {
             itemdblclick: 'doubleClick'
         },
-        'saveButton': {
-            click: 'save'
+        'addButton': {
+            click: 'addEditForm'
         },
-	'resetButton': {
-	    click: 'resetEditForm'
-	},
-
-        saveSuccessMessage: '#saveSuccessMessage'
     },
 
     init: function() {
         this.store.load({
             scope: this,
-            callback: this.loadConfidentialityDisclosureAgreementResult
         });
 
         return this.callParent(arguments);
     },
 
-    getEditFormView: function() {
-	return Ext.getCmp("cdaeditform");
-    },
 
-    loadConfidentialityDisclosureAgreementResult: function(cda) {   
-        var me = this;     
-        var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
-        model.populateFromGenericObject(cda);
-	
-	var view = me.getEditFormView();
-	view.loadRecord(model);
-    },
-
-
-    save: function(button) {
-        var record, id, jsonData;
-        var me = this;
-
-	var view = me.getEditFormView();
-        view.setLoading(false);
-
-        if (view.getForm().isValid()) {           
-            view.getForm().updateRecord();
-            record = view.getRecord();
-            id = record.get('id');
-            jsonData = record.data;
-
-            view.setLoading(true);
-
-            me.service.save(jsonData, {
-                success: me.saveSuccess,
-                failure: me.saveFailure,
-                scope: me
-            });
-        } else {
-            Ext.Msg.alert('SSP Error', 'There are errors highlighted in red');
-        }
-    },
-
-    saveSuccess: function(r, scope) {    	
-        var me = scope;
-        var view = me.getEditFormView();
-        view.setLoading(false);
-	
-
-	//reload the form
-	me.store.load();
-        me.formUtils.displaySaveSuccessMessage(me.getSaveSuccessMessage());
-    },
-
-    saveFailure: function(response, scope) {
-        var me = scope;
-        var view = me.getEditFormView();
-        view.setLoading(false);
-        me.getView().setLoading(false);
-    },
 
     //CDAListView double click event
     doubleClick: function(grid, record, item, index, e, eOpts) {
-        this.loadConfidentialityDisclosureAgreementResult(record.data);
+        var me = this;
+        
+        var popWindow = Ext.create('Ssp.view.admin.forms.cda.CDAEdit', {
+            floating: true,
+            centered: true,
+            modal: true,
+            width: 500,
+            height: 500,
+            closable: true,
+            defaultType: 'textfield',
+            bodyPadding: 10,
+            renderTo: Ext.getBody(),
+        });
+
+        popWindow.loadRecord(record);
+        popWindow.show();
     },
 
     //Make a CDA live
-    onEnabledCheckChange: function(column, rowIndex, checked, eOpts){       	
+    /*
+     * i'm removing this, it's usable, but maybe too much functionality,
+     * may as well set true from the detail pain of CDAEdit
+    onEnabledCheckChange: function(column, rowIndex, checked, eOpts) {
         var me = this;
         me.service.setEnabled(this.store.getAt(rowIndex).data.id, {
             success: me.saveSuccess,
             failure: me.saveFailure,
             scope: me
         });
-    },
+    },*/
 
-    resetEditForm: function() {
-    	var me = this;
+    addEditForm: function() {
+        var me = this;
 
-    	var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
-            model.populateFromGenericObject(null);
-    	me.store.load();
-    	
-    	var view = me.getEditFormView();
-    	view.loadRecord(model);
+        var model = new Ssp.model.reference.ConfidentialityDisclosureAgreement();
+        model.populateFromGenericObject(null);
+        me.store.load();
 
-        }
+        var popWindow = Ext.create('Ssp.view.admin.forms.cda.CDAEdit', {
+            floating: true,
+            centered: true,
+            modal: true,
+            width: 500,
+            height: 500,
+            closable: true,
+            defaultType: 'textfield',
+            bodyPadding: 10,
+            renderTo: Ext.getBody(),
+        });
+
+        popWindow.loadRecord(model);
+        popWindow.show();
+    }
 });

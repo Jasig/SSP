@@ -38,11 +38,8 @@ Ext.define('Ssp.view.admin.forms.cda.CDAAdmin', {
                 xtype: 'cdalist',
                 flex: 1,
                 width: '40%'
-            }, {
-                xtype: 'cdaedit',
-                flex: 1,
-                width: '60%'
-            }]
+            }
+            ]
         });
         return this.callParent(arguments);
     }

@@ -50,7 +50,6 @@ Ext.define(
                     enableDragDrop: false,
                     cls: 'configgrid',
                     columns: [
-
                         {
                             name: 'isCDAEnabled',
                             id: 'isCDAEnabled',
@@ -63,11 +62,10 @@ Ext.define(
                             sortable: true,
                             renderer: function(value) {
                                 if (value) {
-				    return 'Yes';
+                                    return 'Yes';
+                                } else {
+                                    return 'No';
                                 }
-				else {
-				    return 'No';
-				}
                             }
                         }, {
                             text: 'Name',
@@ -80,22 +78,34 @@ Ext.define(
                             dataIndex: 'description',
                             sortable: true
                         }, {
-                icon:'some_icon.png',
-                tooltip : 'Delete',
-                handler : function (grid, rowIndex, colIndex, item, e, record) {
-                    this.fireEvent('deleteRecord', this, record);
-                },
-                scope : me
-            }
+                            icon: 'some_icon.png',
+                            tooltip: 'Delete',
+                            handler: function(grid, rowIndex, colIndex, item, e, record) {
+                                this.fireEvent('deleteRecord', this, record);
+                            },
+                            scope: me
+                        }
 
                     ],
 
                     dockedItems: [{
-                        xtype: 'pagingtoolbar',
-                        dock: 'bottom',
-                        displayInfo: true,
-                        pageSize: me.apiProperties
-                            .getPagingSize()
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            text: 'Add',
+                            iconCls: 'icon-add',
+                            xtype: 'button',
+                            hidden: !me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_ADD_BUTTON'),
+                            action: 'add',
+                            itemId: 'addButton'
+                        }, '-', ]
+                    }, {
+                        xtype: 'toolbar',
+                        dock: 'top',
+                        items: [{
+                            xtype: 'label',
+                            text: 'Double-click to edit an item.'
+                        }]
                     }]
                 });
 
