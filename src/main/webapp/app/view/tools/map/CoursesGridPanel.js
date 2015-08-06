@@ -27,21 +27,22 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 				columnRendererUtils : 'columnRendererUtils'
 		},
 
-	    width: 290,
-	    height: 500,
+	    width: 300,
+	    height: '100%',
 	    border: 0,
+        autoScroll: true,
 	    title: 'All Courses',
 	    hideHeaders: false,
 	    columnLines: false,
-        scroll: true,
 		itemId: 'coursesGrid',
 	    initComponent: function(){
 	        var me = this;
 	        Ext.apply(me, {
 	            			store: this.store,
-	            	        scroll: true,
-	            		    height: 500,
-	            			viewConfig: {
+						    width: 300,
+	            		    height: '100%',
+							flex: 20,
+            				viewConfig: {
 	            				loadMask: false
 	            			},
 	                        columns: [{
