@@ -97,6 +97,15 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                     itemId: 'saveButton',
                     //handler: this.savett
 
+                },'-',{
+                    text: 'Cancel',
+                    xtype: 'button',
+                    hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
+                    action: 'Cancel',
+                    //formBind: true,
+                    itemId: 'cancelButton',
+                    //handler: this.savett
+
                 }, {
                     xtype: 'label',
                     html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
