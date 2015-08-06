@@ -20,6 +20,7 @@ import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
+import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +64,8 @@ public class JournalReportParameters {
 			final List<UUID> studentTypeIds,
 			final List<UUID> serviceReasonIds,
 			final List<UUID> journalStepDetailIds,
-			final Date createDateFrom,
-			final Date createDateTo,
+			final Date createJounalEntryDateFrom,
+			final Date createJournalEntryDateTo,
 			final String termCode,
 			final String homeDepartment) throws ObjectNotFoundException{
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
@@ -80,8 +81,8 @@ public class JournalReportParameters {
 				referralSourcesService,
 				serviceReasonService);
 		
-		SearchParameters.addDateRange(createDateFrom, 
-				createDateTo, 
+		SearchParameters.addDateRange(createJounalEntryDateFrom, 
+				createJournalEntryDateTo, 
 				termCode, 
 				parameters, 
 				personSearchForm, 
@@ -114,6 +115,21 @@ public class JournalReportParameters {
 		personSearchForm.setJournalStepDetailIds(cleanJournalStepDetailIds);
 		
 		personSearchForm.setHasStepDetails(hasStepDetails);
+	}
+	
+	static final void addJournalEntryDateRange(final Date createDateFrom,
+			final Date createDateTo,
+			final String termCode,
+			final Map<String, Object> parameters,
+			final JournalStepSearchFormTO personSearchForm,
+			final TermService termService
+			
+			) throws ObjectNotFoundException{
+		DateTerm dateTerm = new DateTerm(createDateFrom, createDateTo, termCode, termService);
+		SearchParameters.addDateTermToMap(dateTerm, parameters);
+		
+		personSearchForm.setJournalCreateDateFrom(dateTerm.getStartDate());
+		personSearchForm.setJournalCreateDateTo(dateTerm.getEndDate());
 	}
 
 }

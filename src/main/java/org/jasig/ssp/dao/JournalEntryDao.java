@@ -193,12 +193,12 @@ public class JournalEntryDao
 		
 		if (personSearchForm.getCreateDateFrom() != null) {
 			criteria.add(Restrictions.ge("createdDate",
-					personSearchForm.getCreateDateFrom()));
+					personSearchForm.getJournalCreateDateFrom()));
 		}
 
 		if (personSearchForm.getCreateDateTo() != null) {
 			criteria.add(Restrictions.le("createdDate",
-					personSearchForm.getCreateDateTo()));
+					personSearchForm.getJournalCreateDateTo()));
 		}
 
 		if (personSearchForm.getGetStepDetails()) {
@@ -276,11 +276,6 @@ public class JournalEntryDao
 	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(
 			JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) {
 		
-		Date createdDateFrom = personSearchForm.getCreateDateFrom();
-		Date createdDateTo = personSearchForm.getCreateDateTo();
-		
-		personSearchForm.setCreateDateFrom(null);
-		personSearchForm.setCreateDateTo(null);
 		
 		List<UUID> personUUIDS = personDao.getStudentUUIDs(personSearchForm);
 		
@@ -290,22 +285,23 @@ public class JournalEntryDao
 		
 		final Criteria criteria = createCriteria(sAndP);
 		
-		if (createdDateFrom!= null) {
+		if (personSearchForm.getJournalCreateDateFrom()!= null) {
 			criteria.add(Restrictions.ge("createdDate",
-					createdDateFrom));
+					personSearchForm.getJournalCreateDateFrom()));
 		}
 
-		if (createdDateTo != null) {
+		if (personSearchForm.getJournalCreateDateTo() != null) {
 			criteria.add(Restrictions.le("createdDate",
-					createdDateTo));
+					personSearchForm.getJournalCreateDateTo()));
 		}
 		
 		criteria.createAlias("person","person");
 		criteria.add(Restrictions.in("person.id", personUUIDS));
 		
 		ProjectionList projections = Projections.projectionList();
-		criteria.createAlias("person.specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
+		
 		criteria.createAlias("person.coach", "coach", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
 		projections.add(Projections.groupProperty("programStatus.name").as("journalentry_programStatusName"));
@@ -317,14 +313,6 @@ public class JournalEntryDao
 		projections.add(Projections.groupProperty("person.lastName").as("journalentry_lastName"));
 		projections.add(Projections.groupProperty("person.schoolId").as("journalentry_schoolId"));
 		projections.add(Projections.groupProperty("person.primaryEmailAddress").as("journalentry_primaryEmailAddress"));
-		projections.add(Projections.groupProperty("person.secondaryEmailAddress").as("journalentry_secondaryEmailAddress"));
-		projections.add(Projections.groupProperty("person.cellPhone").as("journalentry_cellPhone"));
-		projections.add(Projections.groupProperty("person.homePhone").as("journalentry_homePhone"));
-		projections.add(Projections.groupProperty("person.addressLine1").as("journalentry_addressLine1"));
-		projections.add(Projections.groupProperty("person.addressLine2").as("journalentry_addressLine2"));
-		projections.add(Projections.groupProperty("person.city").as("journalentry_city"));
-		projections.add(Projections.groupProperty("person.state").as("journalentry_state"));
-		projections.add(Projections.groupProperty("person.zipCode").as("journalentry_zipCode"));
 		projections.add(Projections.groupProperty("person.id").as("journalentry_id"));
 		
 		projections.add(Projections.groupProperty("person.createdDate").as("journalentry_createdDate")).add(Projections.countDistinct("id").as("journalentry_caseNoteEntries"));

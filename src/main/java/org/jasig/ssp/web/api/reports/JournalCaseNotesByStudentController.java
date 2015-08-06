@@ -64,8 +64,8 @@ public class JournalCaseNotesByStudentController extends ReportBaseController<Jo
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
-			final @RequestParam(required = false) Date createDateFrom,
-			final @RequestParam(required = false) Date createDateTo,
+			final @RequestParam(required = false) Date createJournalEntryDateFrom,
+			final @RequestParam(required = false) Date createJournalEntryDateTo,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) String homeDepartment,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
@@ -84,8 +84,8 @@ public class JournalCaseNotesByStudentController extends ReportBaseController<Jo
 				studentTypeIds,
 				serviceReasonIds,
 				null,
-				createDateFrom,
-				createDateTo,
+				createJournalEntryDateFrom,
+				createJournalEntryDateTo,
 				termCode,
 				homeDepartment);
 		final List<JournalCaseNotesStudentReportTO> reports = (List<JournalCaseNotesStudentReportTO>)

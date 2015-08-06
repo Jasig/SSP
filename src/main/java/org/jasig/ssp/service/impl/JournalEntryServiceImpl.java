@@ -19,6 +19,8 @@
 package org.jasig.ssp.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.JournalEntryDetail;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -124,26 +127,51 @@ public class JournalEntryServiceImpl
 				sAndP);
 	}
 	
-	@Override
-	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{
-		 List<JournalCaseNotesStudentReportTO> personsWithJournalEntries = dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm, sAndP);
-		 Map<String, JournalCaseNotesStudentReportTO> map = new HashMap<String, JournalCaseNotesStudentReportTO>();
-		 for(JournalCaseNotesStudentReportTO entry:personsWithJournalEntries){
-			 map.put(entry.getSchoolId(), entry);
-		 }
-		 personSearchForm.setCreateDateFrom(null);
-		 personSearchForm.setCreateDateTo(null);
+ 	@Override
+ 	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{
+ 		 List<JournalCaseNotesStudentReportTO> personsWithJournalEntries = dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm, sAndP);
+ 		 Map<String, JournalCaseNotesStudentReportTO> map = new HashMap<String, JournalCaseNotesStudentReportTO>();
+ 		 for(JournalCaseNotesStudentReportTO entry:personsWithJournalEntries){
+ 			 map.put(entry.getSchoolId(), entry);
+ 		 }
 		 SortingAndPaging personSAndP = SortingAndPaging.createForSingleSortAll(ObjectStatus.ACTIVE, "lastName", "DESC") ;
-		 PagingWrapper<BaseStudentReportTO> persons = personDao.getStudentReportTOs(personSearchForm, personSAndP);
-		 List<JournalCaseNotesStudentReportTO> personsNoEntry = new ArrayList<JournalCaseNotesStudentReportTO>();
-		
-		 for(BaseStudentReportTO person:persons){
-			 if(!map.containsKey(person.getSchoolId()) && person.getCoachLastName() != null){
-				 JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
-				 personsNoEntry.add(entry);
-			}
-		 }
-		 personsWithJournalEntries.addAll(personsNoEntry);
-		 return personsWithJournalEntries;
+		 
+ 		 PagingWrapper<BaseStudentReportTO> persons = personDao.getStudentReportTOs(personSearchForm, personSAndP);
+ 		
+ 		 for(BaseStudentReportTO person:persons){
+			 if(!map.containsKey(person.getSchoolId()) && person.getCoachSchoolId() != null){
+ 				 JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
+				 personsWithJournalEntries.add(entry);
+				 map.put(entry.getSchoolId(), entry);
+ 			}
+ 		 }
+		 sortByStudentName(personsWithJournalEntries);
+ 		 return personsWithJournalEntries;
+ 	}
+ 		 
+	private static void sortByStudentName(List<JournalCaseNotesStudentReportTO> toSort) {
+		Collections.sort(toSort,  new Comparator<JournalCaseNotesStudentReportTO>() {
+	        public int compare(JournalCaseNotesStudentReportTO p1, JournalCaseNotesStudentReportTO p2) {
+	        	
+	        	int value = p1.getLastName().compareToIgnoreCase(
+	     	                    p2.getLastName());
+	        	if(value != 0)
+	        		return value;
+	        	
+	        	value = p1.getFirstName().compareToIgnoreCase(
+ 	                    p2.getFirstName());
+		       if(value != 0)
+        		 return value;
+		       if(p1.getMiddleName() == null && p2.getMiddleName() == null)
+		    	   return 0;
+		       if(p1.getMiddleName() == null)
+		    	   return -1;
+		       if(p2.getMiddleName() == null)
+		    	   return 1;
+		       return p1.getMiddleName().compareToIgnoreCase(
+	                    p2.getMiddleName());
+	        }
+	    });
 	}
+
 }

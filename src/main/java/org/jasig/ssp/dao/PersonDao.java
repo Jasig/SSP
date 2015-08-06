@@ -605,7 +605,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids);
 		do {
 			final Criteria criteria = createCriteria();
-					
+								
 			final ProjectionList projections = Projections.projectionList();
 		
 			criteria.setProjection(projections);
@@ -725,6 +725,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("id").as("id"));
 		
 		criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		

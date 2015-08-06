@@ -28,11 +28,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import com.google.common.collect.Sets;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.*;
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptTerm;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
@@ -40,6 +45,8 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+
+import com.google.common.collect.Sets;
 
 
 public class BaseStudentReportTO implements Serializable {
@@ -348,11 +355,13 @@ public class BaseStudentReportTO implements Serializable {
 	}
 	
 	public void setProgramStatusExpirationDate(Date programStatusExpirationDate) {
-		this.programStatusExpirationDate = programStatusExpirationDate;
+		this.programStatusExpirationDate = programStatusExpirationDate == null ? null : new Date(
+				programStatusExpirationDate.getTime());
 	}
 		
 	public Date getProgramStatusExpirationDate(){
-		return programStatusExpirationDate;
+		return programStatusExpirationDate == null ? null : new Date(
+				programStatusExpirationDate.getTime());
 	}
 	
 	public void setProgramStatusId(UUID programStatusId) {
@@ -902,11 +911,13 @@ public class BaseStudentReportTO implements Serializable {
 	}
 	
 	public Date getCreatedDate() {
-		return createdDate;
+		return createdDate == null ? null : new Date(
+				createdDate.getTime());
 	}
 	
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
 	}
 
 }

@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +34,10 @@ public class JournalStepSearchFormTO extends PersonSearchFormTO {
 	
 	private Boolean hasStepDetails;
 	
+	private Date journalCreateDateFrom;
+	
+	private Date journalCreateDateTo;
+
 	/**
 	 * 
 	 */
@@ -63,7 +68,6 @@ public class JournalStepSearchFormTO extends PersonSearchFormTO {
 		return hasStepDetails;
 	}
 
-
 	/**
 	 * @param hasStep the hasStep to set
 	 */
@@ -71,6 +75,24 @@ public class JournalStepSearchFormTO extends PersonSearchFormTO {
 		this.hasStepDetails = hasStep;
 	}
 
-	
+	public Date getJournalCreateDateFrom() {
+		return journalCreateDateFrom == null ? null : new Date(
+				journalCreateDateFrom.getTime());
+	}
+
+	public void setJournalCreateDateFrom(Date journalCreateDateFrom) {
+		this.journalCreateDateFrom = journalCreateDateFrom == null ? null : new Date(
+				journalCreateDateFrom.getTime());
+	}
+
+	public Date getJournalCreateDateTo() {
+		return journalCreateDateTo == null ? null : new Date(
+				journalCreateDateTo.getTime());
+	}
+
+	public void setJournalCreateDateTo(Date journalCreateDateTo) {
+		this.journalCreateDateTo = journalCreateDateTo == null ? null : new Date(
+				journalCreateDateTo.getTime());
+	}
 
 }
