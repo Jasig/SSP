@@ -250,6 +250,15 @@ public class SearchParameters {
 		addUUIDToMap(PROGRAM_STATUS_NAME, NOT_USED, programStatus, parameters,
 				(ReferenceService) programStatusService);
 	}
+	
+	@SuppressWarnings("rawtypes")
+	static final void addCampusToMap(final UUID campusId,
+			final Map<String, Object> parameters,
+			final CampusService campusService)
+			throws ObjectNotFoundException {
+		addUUIDToMap(CAMPUS_NAME, NOT_USED, campusId, parameters,
+				(ReferenceService) campusService);
+	}
 
 	static final Map<String, Object> addDateTermToMap(final DateTerm dateTerm,
 			final Map<String, Object> parameters) {

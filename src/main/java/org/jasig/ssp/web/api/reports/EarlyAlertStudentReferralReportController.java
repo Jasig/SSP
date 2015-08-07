@@ -30,28 +30,24 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRException;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTerm;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +92,8 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 	protected transient EarlyAlertService earlyAlertService;
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
+	@Autowired
+	protected transient CampusService campusService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -117,7 +115,8 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String homeDepartment,
-			final @RequestParam(required = false) UUID coachId,		
+			final @RequestParam(required = false) UUID coachId,	
+			final @RequestParam(required = false) UUID earlyAlertCampusId,
 			final @RequestParam(required = false) UUID watcherId,			
 			final @RequestParam(required = false) UUID programStatus,
 			final @RequestParam(required = false) UUID earlyAlertReferralId,
@@ -151,17 +150,19 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		searchForm.setRosterStatus(rosterStatus);
 		searchForm.setHomeDepartment(homeDepartment);
 		searchForm.setWatcher(watcherTO);
+		
+		EarlyAlertStudentSearchTO earlyAlertStudentSearchTO = new EarlyAlertStudentSearchTO(searchForm,
+				termDate.getTermCodeNullPossible(), termDate.getStartDate(), termDate.getEndDate(),
+				responseCreateDateFrom, responseCreateDateTo);
+		
+		earlyAlertStudentSearchTO.setCampusId(earlyAlertCampusId);
+		
+		earlyAlertStudentSearchTO.setReferralIds(Arrays.asList(earlyAlertReferralId));
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
 		final List<EarlyAlertStudentReportTO> peopleInfo = earlyAlertResponseService.getPeopleByEarlyAlertReferralIds(
-				Arrays.asList(earlyAlertReferralId),
-                termDate.getTermCodeNullPossible(),
-				termDate.getStartDate(), 
-				termDate.getEndDate(),
-                responseCreateDateFrom,
-                responseCreateDateTo,
-				searchForm, 
+				earlyAlertStudentSearchTO,
 				SearchParameters.getReportPersonSortingAndPagingAll(status));
 
 		final Map<String, Object> parameters = Maps.newHashMap();
@@ -176,6 +177,7 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 		SearchParameters.addEarlyAlertReferralToMap(earlyAlertReferralId, parameters, earlyAlertReferralsService);
 		List<EarlyAlertStudentReportTO> processedPeople = processReports(peopleInfo);
 		SearchParameters.addStudentCount(processedPeople, parameters);
+		SearchParameters.addCampusToMap(earlyAlertCampusId, parameters, campusService);
 		renderReport( response,  parameters, processedPeople,  REPORT_URL,
 				 reportType, REPORT_FILE_TITLE);
 	}

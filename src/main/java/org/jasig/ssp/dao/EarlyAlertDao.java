@@ -272,6 +272,11 @@ public class EarlyAlertDao extends
 		if (criteriaTO.getEndDate() != null) {
 			query.add(Restrictions.le("createdDate", criteriaTO.getEndDate()));
 		}
+		
+		if (criteriaTO.getCampusId() != null) {
+			query.createAlias("campus", "campus");
+			query.add(Restrictions.eq("campus.id", criteriaTO.getCampusId()));
+		}
 
 		query.setProjection(null);
 

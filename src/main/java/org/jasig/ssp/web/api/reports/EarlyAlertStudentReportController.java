@@ -41,6 +41,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
@@ -103,6 +104,8 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
 	protected transient EarlyAlertService earlyAlertService;
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
+	@Autowired
+	protected transient CampusService campusService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -124,6 +127,7 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String homeDepartment,
+			final @RequestParam(required = false) UUID campusId,	
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) UUID watcherId,			
 			final @RequestParam(required = false) UUID programStatus,
@@ -183,6 +187,9 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
                 dateTerm.getStartDate(),
                 dateTerm.getEndDate());
 
+		searchForm.setCampusId(campusId);
+		
+		SearchParameters.addCampusToMap(campusId, parameters, campusService);
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building

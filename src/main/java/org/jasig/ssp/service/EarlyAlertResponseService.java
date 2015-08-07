@@ -104,26 +104,20 @@ public interface EarlyAlertResponseService
 	 * Gets a list of {@link Person} objects based on the specified criteria and
 	 * {@link Early Alert Referral} identifiers.
 	 * 
-	 * @param earlyAlertReferralIds
-	 *            list of {@link EarlyAlertReferral} early alert referral identifiers
+	 * @param earlyAlertStudentSearchTO
+	 *            list of {@link EarlyAlertStudentSearchTO} early alert student search transfer object
 	 *          
 	 * @param addressLabelSearchTO
 	 *            set of standard search criteria see peopleFromCriteria
 	 * @param createForSingleSort
-	 * @return A list of {@link Person} objects based on the specified criteria
+	 * @return A list of {@link EarlyAlertStudentReportTO} objects based on the specified criteria
 	 *         and special service groups.
 	 * @throws ObjectNotFoundException
 	 *             If any of the special service groups could not be found.
 	 */
 	List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
-			final List<UUID> earlyAlertReferralIds,
-			final String alertTermCode,
-            final Date alertCreateDateFrom,
-			final Date alertCreateDateTo,
-            final Date responseCreateDateFrom,
-            final Date responseCreateDateTo,
-			final PersonSearchFormTO addressLabelSearchTO,
-			final SortingAndPaging sAndP)throws ObjectNotFoundException;
+			EarlyAlertStudentSearchTO earlyAlertStudentSearchTO,
+			final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	/**
 	 * Get count of all early alerts which have one or more responses.  No selection criteria other than earlyAlertId
