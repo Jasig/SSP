@@ -525,13 +525,10 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	}
 	
 	@Override
-	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
-			List<UUID> earlyAlertReferralIds, final String alertTermCode, final Date alertCreateDateFrom,final Date alertCreateDateTo,
-            final Date responseCreateDateFrom,final Date responseCreateDateTo, PersonSearchFormTO addressLabelSearchTO, SortingAndPaging sAndP)
+	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(EarlyAlertStudentSearchTO earlyAlertStudentSearchTO, SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 		
-		return dao.getPeopleByEarlyAlertReferralIds(earlyAlertReferralIds, alertTermCode, alertCreateDateFrom, alertCreateDateTo,
-                responseCreateDateFrom, responseCreateDateTo, addressLabelSearchTO, sAndP);
+		return dao.getPeopleByEarlyAlertReferralIds(earlyAlertStudentSearchTO, sAndP);
 	}
 	
 	@Override

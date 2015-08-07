@@ -1036,6 +1036,17 @@
 	<form action="/ssp/api/1/report/earlyalertstudent" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertStudentReportCampusName" name="campusId" class="input-campus-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -1201,6 +1212,16 @@
 	<h1>Early Alert Student Referral Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudentreferral" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+				<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertReferralReportCampusName" name="earlyAlertCampusId" class="input-campus-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
 		
 		<!-- Home Department -->
 		<div class="ea-input">
@@ -1506,6 +1527,18 @@
 	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutreachOutcomeType" name="outcomeType" value="earlyAlertOutreachIds"/>
+		
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertOutreachReportCampusName" name="earlyAlertCampusId" class="input-campus-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutreachHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -1708,6 +1741,17 @@
 	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
 		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutcomeOutcomeType"  name="outcomeType" value="earlyAlertOutcome"/>
+		<!-- Campus -->
+		<div class="ea-input">
+			<select id="earlyAlertOutcomeReportCampusName" name="earlyAlertCampusId" class="input-campus-group">
+				<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
+		
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="earlyAlertStudentOutcomeHomeDepartment" name="homeDepartment" class="input-home-department-group">

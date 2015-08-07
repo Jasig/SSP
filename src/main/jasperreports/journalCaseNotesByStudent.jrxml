@@ -7,7 +7,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="323"/>
 	<property name="ireport.y" value="106"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
@@ -32,7 +32,7 @@
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
 	<field name="coachLastName" class="java.lang.String">
-		<fieldDescription><![CDATA[primaryEmailAddress]]></fieldDescription>
+		<fieldDescription><![CDATA[coachLastName]]></fieldDescription>
 	</field>
 	<field name="hasCaseNotes" class="java.lang.Boolean"/>
 	<field name="caseNoteEntries" class="java.lang.Long"/>

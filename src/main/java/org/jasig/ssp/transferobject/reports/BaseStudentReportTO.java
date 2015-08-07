@@ -28,11 +28,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import com.google.common.collect.Sets;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.*;
+import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
+import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.model.external.ExternalStudentTranscript;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptTerm;
+import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
@@ -40,6 +45,8 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+
+import com.google.common.collect.Sets;
 
 
 public class BaseStudentReportTO implements Serializable {
@@ -124,6 +131,7 @@ public class BaseStudentReportTO implements Serializable {
 	private BigDecimal lastTermGradePointAverage;
 	private String lastTermRegistered;
 	private String financialAidStatus;
+	private Date createdDate;
 	
 	private Person person;
 	
@@ -347,11 +355,13 @@ public class BaseStudentReportTO implements Serializable {
 	}
 	
 	public void setProgramStatusExpirationDate(Date programStatusExpirationDate) {
-		this.programStatusExpirationDate = programStatusExpirationDate;
+		this.programStatusExpirationDate = programStatusExpirationDate == null ? null : new Date(
+				programStatusExpirationDate.getTime());
 	}
 		
 	public Date getProgramStatusExpirationDate(){
-		return programStatusExpirationDate;
+		return programStatusExpirationDate == null ? null : new Date(
+				programStatusExpirationDate.getTime());
 	}
 	
 	public void setProgramStatusId(UUID programStatusId) {
@@ -500,6 +510,13 @@ public class BaseStudentReportTO implements Serializable {
 		setStudentTypeCode(person.getStudentType().getCode());
 
 		normalize();
+		setCreatedDate(person.getCreatedDate());
+		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
+		setProgramStatusName(getCurrentProgramStatusName());
+		if(getStudentTypeName().equals(ILP))
+			setIsIlp(true);
+		else
+			setIsIlp(false);
 	}
 	
 	public void setPerson(BaseStudentReportTO person) {
@@ -538,6 +555,12 @@ public class BaseStudentReportTO implements Serializable {
 		setSpecialServiceGroupName(person.getSpecialServiceGroupName());
 		setSpecialServiceGroupAssocObjectStatus(person.getSpecialServiceGroupAssocObjectStatus());
 		setRegistrationStatus(person.getRegistrationStatus());
+		setCreatedDate(person.getCreatedDate());
+		setProgramStatusName(person.getProgramStatusName());
+		if(getStudentTypeName().equals(ILP))
+			setIsIlp(true);
+		else
+			setIsIlp(false);
 
 		normalize();
 	}
@@ -886,4 +909,15 @@ public class BaseStudentReportTO implements Serializable {
 			this.academicProgramNames = academicProgramsNames.toString();
 		}
 	}
+	
+	public Date getCreatedDate() {
+		return createdDate == null ? null : new Date(
+				createdDate.getTime());
+	}
+	
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate == null ? null : new Date(
+				createdDate.getTime());
+	}
+
 }

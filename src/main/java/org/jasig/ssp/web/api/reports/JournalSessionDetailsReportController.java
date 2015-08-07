@@ -92,8 +92,8 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) List<UUID> journalStepDetailIds,
-			final @RequestParam(required = false) Date createDateFrom,
-			final @RequestParam(required = false) Date createDateTo,
+			final @RequestParam(required = false) Date createJounalEntryDateFrom,
+			final @RequestParam(required = false) Date createJournalEntryDateTo,
 			final @RequestParam(required = false) String termCode,
             final @RequestParam(required = false) String actualStartTerm,
 			final @RequestParam(required = false) String homeDepartment,
@@ -112,8 +112,8 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				studentTypeIds,
 				serviceReasonIds,
 				journalStepDetailIds,
-				createDateFrom,
-				createDateTo,
+				createJounalEntryDateFrom,
+				createJournalEntryDateTo,
 				termCode,
 				homeDepartment);
 		

@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -40,6 +42,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
@@ -65,6 +68,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -127,6 +131,9 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	
 	@Autowired
 	private transient SpecialServiceGroupService ssgService;
+	
+	@Autowired
+	private transient CampusService campusService;
 
 	// @Autowired
 	// private transient PersonTOFactory factory;
@@ -149,6 +156,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) String rosterStatus,
 			final @RequestParam(required = false) String homeDepartment,
+			final @RequestParam(required = false) UUID earlyAlertCampusId,	
 			final @RequestParam(required = false) UUID coachId,	
 			final @RequestParam(required = false) UUID watcherId,	
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
@@ -226,6 +234,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		
+		searchForm.setCampusId(earlyAlertCampusId);
+		
 		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
 		sortFields.add(new Pair<String, SortDirection>("name", SortDirection.ASC));
 		
@@ -257,6 +267,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
         SearchParameters.addResponseDateRangeToMap(responseCreateDateFrom, responseCreateDateTo, parameters);
 		
 		parameters.put(OUTCOME_TOTALS, outcomeTotals);
+		
+		SearchParameters.addCampusToMap(earlyAlertCampusId, parameters, campusService);
 		
 		
 		

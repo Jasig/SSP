@@ -31,7 +31,6 @@ import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.reports.SearchParameters;
 
 /**
  * JournalEntry service
@@ -47,6 +46,5 @@ public interface JournalEntryService
 	
 	public PagingWrapper<JournalStepStudentReportTO> getJournalStepStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  SortingAndPaging sAndP);
 
-	public PagingWrapper<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm,  
-			SortingAndPaging sAndP);
+	public List<JournalCaseNotesStudentReportTO>  getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP)  throws ObjectNotFoundException;
 }

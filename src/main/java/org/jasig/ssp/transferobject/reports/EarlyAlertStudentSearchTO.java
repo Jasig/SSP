@@ -45,7 +45,11 @@ public class EarlyAlertStudentSearchTO
 	
 	private PersonSearchFormTO addressLabelSearchTO;
 	
+	private UUID campusId;
+	
 	private List<UUID> outcomeIds;
+	
+	private List<UUID> referralIds;
 
 	public EarlyAlertStudentSearchTO(final PersonSearchFormTO addressLabelSearchTO,
 								final String termCode, final Date startDate, final Date endDate) {
@@ -135,6 +139,22 @@ public class EarlyAlertStudentSearchTO
 	 */
 	public void setOutcomeIds(List<UUID> outcomeIds) {
 		this.outcomeIds = outcomeIds;
+	}
+
+	public UUID getCampusId() {
+		return campusId;
+	}
+
+	public void setCampusId(UUID campusId) {
+		this.campusId = campusId;
+	}
+
+	public List<UUID> getReferralIds() {
+		return referralIds;
+	}
+
+	public void setReferralIds(List<UUID> referralIds) {
+		this.referralIds = referralIds;
 	}
 
 }

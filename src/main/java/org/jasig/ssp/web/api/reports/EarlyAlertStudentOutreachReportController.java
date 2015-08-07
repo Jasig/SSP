@@ -40,6 +40,7 @@ import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
@@ -67,6 +68,7 @@ import com.google.common.collect.Maps;
  */
 @Controller
 @RequestMapping("/1/report/earlyalertstudentoutreach")
+@Deprecated
 public class EarlyAlertStudentOutreachReportController extends ReportBaseController<EarlyAlertStudentOutreachReportTO> {
 
 	private static final String REPORT_URL = "/reports/earlyAlertStudentOutreachReport.jasper";
@@ -92,6 +94,9 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 	protected transient EarlyAlertService earlyAlertService;
 	@Autowired
 	protected transient EarlyAlertResponseService earlyAlertResponseService;
+	
+	@Autowired
+	protected transient CampusService campusService;
 
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
@@ -112,6 +117,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
 			final @RequestParam(required = false) List<UUID> earlyAlertOutcomes,
 			final @RequestParam(required = false) String termCode,
 			final @RequestParam(required = false) String homeDepartment,
+			final @RequestParam(required = false) UUID campusId,
             final @RequestParam(required = false) Date responseCreateDateFrom,
             final @RequestParam(required = false) Date responseCreateDateTo,
             final @RequestParam(required = false) String alertTermCode,
@@ -146,7 +152,7 @@ public class EarlyAlertStudentOutreachReportController extends ReportBaseControl
         SearchParameters.addResponseDateRangeToMap(responseCreateDateFrom, responseCreateDateTo, parameters);
         SearchParameters.addHomeDepartmentToMap(homeDepartment, parameters);
 
-
+        SearchParameters.addCampusToMap(campusId, parameters, campusService);
 		renderReport(response,  parameters, outreachOutcomes,  REPORT_URL, reportType, REPORT_FILE_TITLE);
 	}
 

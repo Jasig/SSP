@@ -466,16 +466,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
 					personSearchTO.getHomeDepartment()));
 		}
-		
+		criteria.createAlias("programStatuses",
+				"personProgramStatuses");
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 		if (personSearchTO.getProgramStatus() != null) {
-			criteria.createAlias("programStatuses",
-					"personProgramStatuses");
-			// Not filtering on object status here b/c throughout the app it's just a filter on expiry
 			criteria.add(Restrictions
-							.eq("personProgramStatuses.programStatus.id",
-									personSearchTO
-											.getProgramStatus()));
-			criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
+					.eq("personProgramStatuses.programStatus.id",
+							personSearchTO
+									.getProgramStatus()));
 		}
 		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
@@ -607,15 +605,14 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids);
 		do {
 			final Criteria criteria = createCriteria();
-					
+								
 			final ProjectionList projections = Projections.projectionList();
-			
-			criteria.setProjection(projections);
 		
-			addBasicStudentProperties(projections, criteria, sAndP.getStatus());
-			
-			criteria.setResultTransformer(new AliasToBeanResultTransformer(BaseStudentReportTO.class));
+			criteria.setProjection(projections);
 
+			addBasicStudentProperties(projections, criteria, sAndP.getStatus());
+
+			criteria.setResultTransformer(new AliasToBeanResultTransformer(BaseStudentReportTO.class));
             processor.process(criteria, "id");
 			
 		} while(processor.moreToProcess());
@@ -724,9 +721,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		projections.add(Projections.groupProperty("zipCode").as("zipCode"));
 		projections.add(Projections.groupProperty("actualStartTerm").as("actualStartTerm"));
 		projections.add(Projections.groupProperty("actualStartYear").as("actualStartYear"));
+		projections.add(Projections.groupProperty("createdDate").as("createdDate"));
 		projections.add(Projections.groupProperty("id").as("id"));
 		
 		criteria.createAlias("programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
 		criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups", JoinType.LEFT_OUTER_JOIN);
 		criteria.createAlias("personSpecialServiceGroups.specialServiceGroup", "specialServiceGroup", JoinType.LEFT_OUTER_JOIN);
 		
