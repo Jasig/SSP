@@ -26,6 +26,6 @@ Ext.define('Ssp.model.StudentActivity', {
       
         constructor: function(){
         	this.callParent(arguments);
-        	this.data.activityDateFormatted = Ext.util.Format.date( this.get('activityDate'),'m/d/Y');
+        	this.data.activityDateFormatted = Ext.util.Format.date( new Date(Ext.util.Format.date(this.get('activityDate'), 'c')),'m/d/Y');
         }
 });
