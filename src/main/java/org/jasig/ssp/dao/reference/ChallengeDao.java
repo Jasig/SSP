@@ -19,8 +19,10 @@
 package org.jasig.ssp.dao.reference;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -35,6 +37,7 @@ import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.reference.Challenge;
+import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -254,8 +257,20 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 				processor.process(criteria, "id");
 			}while(processor.moreToProcess());
-			
-			return processor.getSortedAndPagedResults();
+
+			PagingWrapper<Challenge> challenges = processor.getSortedAndPagedResults();
+			for (Challenge challenge : challenges) {
+				Set<ChallengeChallengeReferral> newChallengeChallengeReferrals = new HashSet<>();
+				for (ChallengeChallengeReferral challengeChallengeReferral : challenge.getChallengeChallengeReferrals()) {
+					if (sp.getStatus()  == null || sp.getStatus().equals(ObjectStatus.ALL) ||
+							(challengeChallengeReferral.getObjectStatus() == sp.getStatus() && challengeChallengeReferral.getChallengeReferral().getObjectStatus() == sp.getStatus())) {
+						newChallengeChallengeReferrals.add(challengeChallengeReferral);
+					}
+				}
+				challenge.setChallengeChallengeReferrals(newChallengeChallengeReferrals);
+			}
+
+			return challenges;
 		}
 		return new PagingWrapper<Challenge>(0,new ArrayList<Challenge>());
 	}
