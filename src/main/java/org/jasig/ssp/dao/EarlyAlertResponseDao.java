@@ -54,6 +54,7 @@ import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 /**
  * EarlyAlertResponse data access methods
@@ -400,6 +401,11 @@ public class EarlyAlertResponseDao extends
         if (searchForm.getResponseDateTo() != null) {
             criteria.add(Restrictions.le("createdDate", searchForm.getResponseDateTo()));
         }
+        
+        if (searchForm.getCampusId() != null) {
+        	criteria.createAlias("earlyAlert.campus", "eaCampus");
+        	criteria.add(Restrictions.eq("eaCampus.id", searchForm.getCampusId()));
+        }
 
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
 
@@ -418,13 +424,7 @@ public class EarlyAlertResponseDao extends
 	
 	@SuppressWarnings(UNCHECKED)
 	public List<EarlyAlertStudentReportTO> getPeopleByEarlyAlertReferralIds(
-			final List<UUID> earlyAlertReferralIds, 
-			final String alertTermCode,
-            final Date alertCreateDateFrom,
-			final Date alertCreateDateTo,
-            final Date responseCreateDateFrom,
-            final Date responseCreateDateTo,
-			final PersonSearchFormTO personSearchForm,
+			EarlyAlertStudentSearchTO searchForm,
 			final SortingAndPaging sAndP)
 			throws ObjectNotFoundException {
 
@@ -432,37 +432,42 @@ public class EarlyAlertResponseDao extends
         criteria.createAlias("earlyAlertReferralIds", "earlyAlertReferral");
         criteria.createAlias("earlyAlert", "earlyAlert");
 
-        if (alertTermCode != null) {
-            criteria.add(Restrictions.eq("earlyAlert.courseTermCode", alertTermCode));
+        if(searchForm.getTermCode() != null) {
+            criteria.add(Restrictions.eq("earlyAlert.courseTermCode", searchForm.getTermCode()));
+        }
+        
+        if(searchForm.getCampusId() != null) {
+        	 criteria.createAlias("earlyAlert.campus", "campus");
+            criteria.add(Restrictions.eq("campus.id", searchForm.getCampusId()));
         }
 
-        if(alertCreateDateFrom != null) {
-            criteria.add(Restrictions.ge("earlyAlert.createdDate", alertCreateDateFrom));
+        if(searchForm.getStartDate() != null) {
+            criteria.add(Restrictions.ge("earlyAlert.createdDate", searchForm.getStartDate()));
         }
 
-        if(alertCreateDateTo != null) {
-            criteria.add(Restrictions.le("earlyAlert.createdDate", alertCreateDateTo));
+        if(searchForm.getEndDate() != null) {
+            criteria.add(Restrictions.le("earlyAlert.createdDate", searchForm.getEndDate()));
         }
 		
-		if(responseCreateDateFrom != null) {
-            criteria.add(Restrictions.ge("createdDate", responseCreateDateFrom));
+		if(searchForm.getResponseDateFrom() != null) {
+            criteria.add(Restrictions.ge("createdDate", searchForm.getResponseDateFrom()));
         }
 
-		if(responseCreateDateTo != null) {
-            criteria.add(Restrictions.le("createdDate", responseCreateDateTo));
+		if(searchForm.getResponseDateTo() != null) {
+            criteria.add(Restrictions.le("createdDate", searchForm.getResponseDateTo()));
         }
 
-		if (earlyAlertReferralIds != null) {
+		if (!CollectionUtils.isEmpty(searchForm.getReferralIds())) {
 			// EarlyAlertResponse->EarlyAlertReferral not modeled as an operational
 			// join type, so no filtering on object status since for a direct
 			// operational->reference association, the status of the reference type
 			// does not matter
 			criteria 
-				.add(Restrictions.in("earlyAlertReferral.id",earlyAlertReferralIds));
+				.add(Restrictions.in("earlyAlertReferral.id", searchForm.getReferralIds()));
 		}
 
 		Criteria personCriteria = criteria.createAlias("earlyAlert.person", "person");
-
+		PersonSearchFormTO personSearchForm = searchForm.getAddressLabelSearchTO();
 		setPersonCriteria(personCriteria, personSearchForm);
 		
 		List<UUID> ids = criteria.setProjection(Projections.distinct(Projections.property("id"))).list();
