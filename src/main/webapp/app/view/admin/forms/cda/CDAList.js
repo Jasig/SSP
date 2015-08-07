@@ -77,13 +77,6 @@ Ext.define(
                             width: 200,
                             dataIndex: 'description',
                             sortable: true
-                        }, {
-                            icon: 'some_icon.png',
-                            tooltip: 'Delete',
-                            handler: function(grid, rowIndex, colIndex, item, e, record) {
-                                this.fireEvent('deleteRecord', this, record);
-                            },
-                            scope: me
                         }
 
                     ],

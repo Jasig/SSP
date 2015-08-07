@@ -31,6 +31,11 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
         'saveButton': {
             click: 'save'
         },
+        
+		'cancelButton': {
+            click: 'closeWindow'
+        },
+        
 
         saveSuccessMessage: '#saveSuccessMessage'
     },
@@ -79,6 +84,14 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
             Ext.Msg.alert('SSP Error', 'There are errors highlighted in red');
         }
     },
+    
+    closeWindow: function() {
+		//Get the active window
+		var win = Ext.WindowManager.getActive();
+		if (win) {
+		win.close();
+		}
+	},
 
     saveSuccess: function(r, scope) {
         var me = scope;
@@ -89,6 +102,7 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
         //reload the form
         me.store.load();
         me.formUtils.displaySaveSuccessMessage(me.getSaveSuccessMessage());
+        me.closeWindow();
     },
 
     saveFailure: function(response, scope) {
