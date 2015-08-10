@@ -23,8 +23,12 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO.CoachPersonLiteTONameComparator;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 
 public class RecentActivityTO {
 	
@@ -39,9 +43,14 @@ public class RecentActivityTO {
 	public static final RecentActivityTOActivityDateComparator RECENT_ACTIVITY_TO_DATE_COMPARATOR =
 			new RecentActivityTOActivityDateComparator();
 	
-	private String coachName;	
+	private String coachName;
+
 	private String activity;
+
+	@JsonSerialize(using = DateOnlySerializer.class)
+	@JsonDeserialize(using = DateOnlyDeserializer.class)
 	private Date activityDate;
+
 	private UUID coachId;
 	/**
 	 * @param coachName
