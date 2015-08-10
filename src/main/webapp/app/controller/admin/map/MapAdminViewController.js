@@ -47,7 +47,15 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
             listeners: {
             	checkChange: 'onCheckChange'
             }
-        }
+        },
+    
+	    programCodeNameColumn: {
+	        selector: '#programCodeNameColumn',
+	        renderer: function(value) {
+			    var text = 'TEST';
+			    return text;
+			} 
+	    }
         
     },
     init: function() {    	
@@ -129,6 +137,23 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     
     onLoadCompleteSuccess: function(response, t) {
     	var me = t;
-    	Ext.getCmp('templatePanel').getStore().load();
+    	//Ext.getCmp('templatePanel').getStore().load();
+    	
+    	
+    	var grid = Ext.getCmp("templatePanel");
+    	var params = {};
+    	var me = this;
+		me.setParam(params, Ext.getCmp('program'), 'programCode');
+    	me.setParam(params, Ext.getCmp('department'), 'departmentCode');
+    	me.setParam(params, Ext.getCmp('division'), 'divisionCode');
+    	me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
+		params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
+    	grid.store.on('load', me.onLoadComplete, this, {single: true});
+    	grid.store.load({params: params});
+    },
+    setParam: function(params, field, fieldName){
+    	if(field.getValue() && field.getValue().length > 0)
+    		params[fieldName] = field.getValue();
     }
+    
 });

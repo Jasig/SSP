@@ -35,7 +35,8 @@ Ext.define(
 					inject : {
 						apiProperties : 'apiProperties',
 						authenticatedPerson : 'authenticatedPerson',
-						columnRendererUtils : 'columnRendererUtils'
+						columnRendererUtils : 'columnRendererUtils',
+						programsStore: 'programsStore'
 					},
 					height : '100%',
 					width : '100%',
@@ -86,10 +87,23 @@ Ext.define(
 														sortable : true
 													},
 													{
-														text : 'Program Code',
+														text : 'Program Name',
 														width : 200,
 														dataIndex : 'programCode',
-														sortable : true
+														id : 'programCodeNameColumn',
+														name: 'programCodeNameColumn',
+														sortable : true,
+												        renderer: function(value) {
+												        	var text = '';
+												        	var index = this.programsStore.findExact('code',value);
+												        	if (index != -1){												        		
+												        		var record = this.programsStore.getAt(index);
+												        		text = record.get('name');
+												        	}
+														    
+														    return text;
+														} 
+														
 													},
 													{
 														text : 'Date/ Time',
