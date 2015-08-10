@@ -243,13 +243,6 @@ divisionsStore: 'divisionsStore'
      		              {
      		               xtype: 'toolbar',
      		               items: [{
-     		                   text: 'Save',
-     		                   xtype: 'button',
-     		                   //hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
-     		                   action: 'save',
-     		                   formBind: true,
-     		                   itemId: 'saveButton'
-     		               },{
 		        	    	xtype: 'label',
 		        	    	html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
 		        	    	itemId: 'saveSuccessMessage',
