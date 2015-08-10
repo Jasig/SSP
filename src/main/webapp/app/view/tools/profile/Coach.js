@@ -128,6 +128,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                                 fieldLabel: 'Date',
                                 name: 'coachLastServiceDate',
                                 itemId: 'coachLastServiceDate',
+                                renderer: Ext.util.Format.dateRenderer('m/d/Y'),
                                 labelWidth: 35,
                                 labelSeperator: false
 

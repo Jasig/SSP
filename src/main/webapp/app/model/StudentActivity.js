@@ -21,11 +21,9 @@ Ext.define('Ssp.model.StudentActivity', {
     fields: [{name: 'activity', type: 'string'},       
         {name: 'coachNameLastFirst', type: 'string'},
         {name: 'coachId', type: 'string'},
-        {name: 'activityDateFormatted', type: 'string'},
         {name: 'activityDate', type: 'date', dateFormat: 'time'}],
       
         constructor: function(){
         	this.callParent(arguments);
-        	this.data.activityDateFormatted = Ext.util.Format.date( new Date(Ext.util.Format.date(this.get('activityDate'), 'c')),'m/d/Y');
         }
 });

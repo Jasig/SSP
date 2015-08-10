@@ -42,8 +42,9 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
 				flex: 1
             }, {
             
-                dataIndex: 'activityDateFormatted',
+                dataIndex: 'activityDate',
                 text: 'Date',
+                renderer: Ext.util.Format.dateRenderer('m/d/Y'),
 				flex: 1
             }]
         });
