@@ -138,7 +138,7 @@ public class JournalEntryServiceImpl
  		 if(persons == null) {
  			 return personsWithJournalEntries;
  		 }
- 		 for(BaseStudentReportTO person:persons.getRows()){
+ 		 for(BaseStudentReportTO person:persons){
 			 if(!map.containsKey(person.getSchoolId()) && person.getCoachSchoolId() != null){
  				 JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
 				 personsWithJournalEntries.add(entry);
