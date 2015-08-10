@@ -24,6 +24,9 @@ Ext.define('Ssp.store.external.Departments', {
     	apiProperties: 'apiProperties'
     },
    
+    sortOnLoad: true,
+    remoteSort: false,
+    
     constructor: function(){
 		var me = this;
 		
