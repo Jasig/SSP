@@ -169,7 +169,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		me.studentActivitiesStore.loadData(r);
 		var activity = me.studentActivitiesStore.getCoachLastActivity(me.person.getCoachId());
 		if(activity){
-			serviceDate.setValue(activity.get('activityDateFormatted'));
+			serviceDate.setValue(activity.get('activityDate'));
 			lastService.setValue(activity.get('activity'));
 		}else{
 			serviceDate.setValue("");

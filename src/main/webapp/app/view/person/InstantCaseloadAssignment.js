@@ -24,7 +24,7 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
     inject: {
         model: 'currentPerson'
     },
-    height: 400,
+    height: 450,
     width: 325,
     modal: true,
 	
