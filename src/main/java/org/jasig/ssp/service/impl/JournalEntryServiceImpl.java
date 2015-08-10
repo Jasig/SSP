@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -33,19 +32,17 @@ import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.JournalEntryDetail;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.reference.ChallengeReferralSearchResult;
 import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
 import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
-import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.JournalCaseNotesStudentReportTO;
 import org.jasig.ssp.transferobject.reports.JournalStepSearchFormTO;
 import org.jasig.ssp.transferobject.reports.JournalStepStudentReportTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +135,10 @@ public class JournalEntryServiceImpl
 		 
  		 PagingWrapper<BaseStudentReportTO> persons = personDao.getStudentReportTOs(personSearchForm, personSAndP);
  		
- 		 for(BaseStudentReportTO person:persons){
+ 		 if(persons == null) {
+ 			 return personsWithJournalEntries;
+ 		 }
+ 		 for(BaseStudentReportTO person:persons.getRows()){
 			 if(!map.containsKey(person.getSchoolId()) && person.getCoachSchoolId() != null){
  				 JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
 				 personsWithJournalEntries.add(entry);
