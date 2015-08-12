@@ -191,12 +191,12 @@ public class JournalEntryDao
 
 		setPersonCriteria(criteria,personSearchForm);
 		
-		if (personSearchForm.getCreateDateFrom() != null) {
+		if (personSearchForm.getJournalCreateDateFrom() != null) {
 			criteria.add(Restrictions.ge("createdDate",
 					personSearchForm.getJournalCreateDateFrom()));
 		}
 
-		if (personSearchForm.getCreateDateTo() != null) {
+		if (personSearchForm.getJournalCreateDateTo() != null) {
 			criteria.add(Restrictions.le("createdDate",
 					personSearchForm.getJournalCreateDateTo()));
 		}

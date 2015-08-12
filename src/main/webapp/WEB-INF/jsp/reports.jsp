@@ -2852,7 +2852,7 @@
                         <div class="ea-date-range">
                                 <!-- Date From -->
                                 <div class="ea-input">
-                                        <input class="input-calendar-type" type="textbox" name="createDateFrom" id="journalSessionDetailCreateDateFrom">
+                                        <input class="input-calendar-type" type="textbox" name="createJournalEntryDateFrom" id="journalSessionDetailCreateDateFrom">
                                 </div>
                                 <div class="ea-label">
                                         <span>Start Date (inclusive)::</span>
@@ -2860,7 +2860,7 @@
                                 <div class="ea-clear"></div>
                                 <!-- Date To -->
                                 <div class="ea-input">
-                                        <input class="input-calendar-type" type="textbox" name="createDateTo" id="journalSessionDetailCreateDateTo">
+                                        <input class="input-calendar-type" type="textbox" name="createJournalEntryDateTo" id="journalSessionDetailCreateDateTo">
                                 </div>
                                 <div class="ea-label">
                                         <span>End Date (exclusive)::</span>
@@ -3216,14 +3216,14 @@
 			<div class="ea-date-range">
 				<!-- Date From -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateFrom" id="journalCaseNotesCreateDateFrom">
+					<input class="input-calendar-type" type="textbox" name="createJournalEntryDateFrom" id="journalCaseNotesCreateDateFrom">
 				</div>
 				<div class="ea-label">
 					<span>Start Date (inclusive)::</span>
 				</div>
 				<div class="ea-clear"></div><!-- Date To -->
 				<div class="ea-input">
-					<input class="input-calendar-type" type="textbox" name="createDateTo" id="journalCaseNotesCreateDateTo">
+					<input class="input-calendar-type" type="textbox" name="createJournalEntryDateTo" id="journalCaseNotesCreateDateTo">
 				</div>
 				<div class="ea-label">
 					<span>End Date (exclusive)::</span>

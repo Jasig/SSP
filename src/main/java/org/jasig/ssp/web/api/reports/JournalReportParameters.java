@@ -81,7 +81,7 @@ public class JournalReportParameters {
 				referralSourcesService,
 				serviceReasonService);
 		
-		SearchParameters.addDateRange(createJounalEntryDateFrom, 
+		addJournalEntryDateRange(createJounalEntryDateFrom, 
 				createJournalEntryDateTo, 
 				termCode, 
 				parameters, 
