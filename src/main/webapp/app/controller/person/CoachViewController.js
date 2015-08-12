@@ -44,25 +44,23 @@ Ext.define('Ssp.controller.person.CoachViewController', {
                 change: 'onCoachComboChange',
                 select: 'onCoachComboSelect'
             }
-        },
-    	view: {
-    		afterlayout: {
-    			fn: 'onAfterLayout',
-    			single: true
-    		}
-    	}
+        }
     },
     
     init: function(){
         var me = this;
+        me.appEventsController.loadMaskOn();
         me.coachesStore.clearFilter(true);
         me.missingCoach = null;
+        me.initializeCoaches();
+        
         return this.callParent(arguments);
     },
     
-    onAfterLayout: function(){
+    initializeCoaches: function(){
 		var me = this;
-    	 me.coachesStore.load(function(records, operation, success){
+		
+    	me.coachesStore.load(function(records, operation, success){
              if (!success) {
                  Ext.Msg.alert('Error', 'Unable to load Coaches. Please see your system administrator for assistance.');
              }
@@ -80,15 +78,17 @@ Ext.define('Ssp.controller.person.CoachViewController', {
                          me.lookupMissingCoach(currentCoachId, me.afterMissingCoachLookup, me);
                      }
                      else {
-                         me.getCoachCombo().setValue(currentCoachId);
+                    	 if (typeof me.getCoachCombo === "function") { 
+                    		 me.getCoachCombo().setValue(currentCoachId);
+                    	 }
                      }
                  }
              }
+             me.appEventsController.loadMaskOff();
          });
-         
-         var getExtDataCoachValue = 'true';
- 		var getExtUnsetDataCoachValue = 'true';
- 		
+    	
+        var getExtDataCoachValue = 'true';
+ 		var getExtUnsetDataCoachValue = 'true';		
          
          me.configStore.each(function(rec){
          
@@ -107,8 +107,6 @@ Ext.define('Ssp.controller.person.CoachViewController', {
             
              
          });
-       
- 		
  		
          if (getExtDataCoachValue == 'false' && getExtUnsetDataCoachValue == 'false') {
              me.getCoachCombo().setFieldLabel(me.configStore.getConfigByName('coachFieldLabel') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);

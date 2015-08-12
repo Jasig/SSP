@@ -63,7 +63,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		
 		//Loading store here for coach, student_type, and appointment combos due to timing issue between separate controllers
 		me.studentTypesStore.addListener("load", me.onStoreLoaded, me, {single:true});
-		me.getView().setLoading(true);
+		me.appEventsController.assignEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});
+		//me.getView().setLoading(true);
 		me.studentTypesStore.load(); 
 		
 		return this.callParent(arguments);
@@ -71,7 +72,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 
 	onStoreLoaded: function(){
 		var me = this;
-		me.getView().setLoading(false);
+		//me.getView().setLoading(false);
 		var id = me.personLite.get('id');
 		me.panelKids = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
@@ -93,7 +94,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		// load the person record and init the view
 		if (id.length > 0)
 		{
-			me.getView().setLoading( true );
+			//me.getView().setLoading( true );
 			
 	    	me.personService.get( id, {success:me.getPersonSuccess, 
 	    									  failure:me.getPersonFailure, 
@@ -101,11 +102,9 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		}else{
 			me.initForms();
 			me.updateTitle();
-			
 		}
 		
 		me.appEventsController.assignEvent({eventName: 'studentNameChange', callBackFunc: this.onPersonNameChange, scope: this}); 
-		me.appEventsController.assignEvent({eventName: 'goToDifferentTabinCaseload', callBackFunc: this.onGoToDifferentTabinCaseload, scope: this});
 	},
 
 	resetAppointmentModels: function() {
@@ -146,7 +145,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     getPersonSuccess: function( r, scope ){
 		var me=scope;
     	var person = new Ssp.model.Person();
-		me.getView().setLoading( false );
+		//me.getView().setLoading( false );
     	me.person.data = person.data;
     	me.person.populateFromGenericObject(r);
 		me.getCurrentAppointment();
@@ -157,7 +156,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     getPersonFailure: function( response, scope ){
     	var me=scope;  	
-    	me.getView().setLoading( false );
+    	//me.getView().setLoading( false );
     },
 	
 	onGoToDifferentTabinCaseload: function(args){
@@ -195,7 +194,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     	if (personId != null)
 		{
 			
-			me.getView().setLoading( true );
+			//me.getView().setLoading( true );
 		    me.appointmentService.getCurrentAppointment( personId, {success:me.getAppointmentSuccess, 
 			    						                             failure:me.getAppointmentFailure, 
 			    						                             scope: me} );
@@ -206,13 +205,13 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     getAppointmentSuccess: function( r, scope ){
 		var me=scope;	
-		me.getView().setLoading( false );
+		//me.getView().setLoading( false );
 		me.initForms();
     },
     
     getAppointmentFailure: function( response, scope ){
     	var me=scope;   	
-    	me.getView().setLoading( false );
+    	//me.getView().setLoading( false );
     },    
     
     onPersonNameChange: function(){
