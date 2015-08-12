@@ -3241,8 +3241,8 @@
 		<!-- output type -->
 		<div class="ea-input">
 			<label><span>pdf</span></label><input type="radio" name="reportType"
-				value="pdf" /><br /> <label><span>csv</span></label><input
-				type="radio" name="reportType" value="csv" checked />
+				value="pdf" checked /><br /> <label><span>csv</span></label><input
+				type="radio" name="reportType" value="csv" />
 		</div> 
 
 		<div class="ea-label">

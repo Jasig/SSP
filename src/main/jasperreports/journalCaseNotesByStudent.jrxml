@@ -27,7 +27,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="323"/>
+	<property name="ireport.x" value="694"/>
 	<property name="ireport.y" value="106"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
@@ -221,21 +221,21 @@
 			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="93" y="3" width="152" height="12" uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{firstName} == null ? "" : $F{firstName}.concat( $F{middleName} == null ? "" : " " +  $F{middleName}).concat(" ").concat($F{lastName} == null ? "" : $F{lastName} ))]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="15" y="3" width="78" height="12" uuid="dc91cd22-3c43-404a-b445-c02cd090c250"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="337" y="3" width="122" height="12" uuid="8bef58a2-cca0-4694-9796-487168a3b195"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{coachFirstName} == null ? "" : $F{coachFirstName}).concat(" ").concat($F{coachLastName} == null ? "" : $F{coachLastName})]]></textFieldExpression>
@@ -257,6 +257,7 @@
 			</textField>
 			<textField>
 				<reportElement x="245" y="3" width="92" height="12" uuid="505b2b35-2a32-4ba4-91ce-6f20bdbbb3e8"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[($F{programStatusName} == null ? "" : $F{programStatusName})]]></textFieldExpression>
 			</textField>
 		</band>
