@@ -221,42 +221,50 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="93" y="4" width="152" height="16" uuid="26f7be38-ce84-4162-9fe0-4843db2fe8b9"/>
 				<textElement textAlignment="Left">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{firstName} == null ? "" : $F{firstName}.concat( $F{middleName} == null ? "" : " " +  $F{middleName}).concat(" ").concat($F{lastName} == null ? "" : $F{lastName} ))]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="15" y="4" width="78" height="16" uuid="dc91cd22-3c43-404a-b445-c02cd090c250"/>
 				<textElement textAlignment="Left">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="337" y="4" width="122" height="16" uuid="8bef58a2-cca0-4694-9796-487168a3b195"/>
 				<textElement textAlignment="Left">
-					<font size="8"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{coachFirstName} == null ? "" : $F{coachFirstName}).concat(" ").concat($F{coachLastName} == null ? "" : $F{coachLastName})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="525" y="4" width="107" height="16" uuid="45e03c53-aae8-4b4f-956c-e6c267c8fccc"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{caseNoteEntries} == null ?  new Long(0L) : $F{caseNoteEntries}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="632" y="4" width="83" height="16" uuid="3b3a64ca-c6f1-4bb1-b9b7-7216480dd492"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{createdDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="459" y="4" width="66" height="16" uuid="06263141-db6f-4d00-968b-888a644603e0"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="false"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{caseNoteEntries} > 0L ?  "Y" : "N"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="245" y="4" width="92" height="16" uuid="505b2b35-2a32-4ba4-91ce-6f20bdbbb3e8"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
 				<textFieldExpression><![CDATA[($F{programStatusName} == null ? "" : $F{programStatusName})]]></textFieldExpression>
 			</textField>
 		</band>
