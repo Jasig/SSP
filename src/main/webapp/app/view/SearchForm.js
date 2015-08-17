@@ -41,22 +41,15 @@ Ext.define('Ssp.view.SearchForm',{
     },
     collapsible: true,
 	hideCollapseTool: true,
+	border: 0,
+    padding: '0 14px 0 0',
 	header: false,
 	layout: {
         type: 'vbox',
         align: 'stretch'
     },    
     width: '100%',
-    // The autoScroll and scroll are a very hopeful prophylatic in the event the entire form can't be seen, but in
-    // reality they don't seem to work properly at all. When the vertical resolution is sub-768 you *do* get a vertical
-    // scrollbar, but the bottom of the form will never scroll entirely into view. Not sure what about our component
-    // structure and layout causes that but when this form is displayed (stacked on top of the search result grid
-    // panel, either its height is somehow not taken into account when figuring out what content is overflowing, or
-    // that overflow calculation is relative to a container which is not the overall app Viewport. Might be a mix
-    // of both... you can definitely see that the total search tab height is taller than the Viewport in small vertical
-    // resolutions because the grid's spinner will appear *below* what I think of as the Viewport's bottom border.
     height: '100%',
-    autoScroll: true,
     scroll: 'vertical',
 	listeners: {
 	      afterlayout: function() {

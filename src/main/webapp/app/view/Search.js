@@ -53,6 +53,7 @@ Ext.define('Ssp.view.Search', {
             },  
             {
                 xtype: 'toolbar',
+                padding: '0 14px 0 0',
                 dock: 'top',
                 // enableOverlow is really what we want, but just doesn't work in our current Ext.js version:
                 // http://www.sencha.com/forum/showthread.php?269044-Combo-Selection-Event-and-Button-Click-Event-not-firing-inside-overflow-toolbar
@@ -195,7 +196,7 @@ Ext.define('Ssp.view.Search', {
                         }
                     }
                 }, {
-                
+
                     text: 'Search',
                     tooltip: 'Search for Student',
                     xtype: 'button',
