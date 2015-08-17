@@ -136,37 +136,39 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 	onSaveTemplateCompleteSuccess: function(serviceResponses){
 	    var me = this;
 	    me.getMapPlanServiceSuccess(serviceResponses, true,true);
-	    Ext.Msg.alert('Your changes have been saved.'); 
+		me.appEventsController.getApplication().fireEvent("doAfterSaveSuccess");
 	},
 	onSaveTemplateCompleteFailure: function(serviceResponses){
 		var me = this;
 		me.appEventsController.getApplication().fireEvent("onAfterPlanSave");
-	},  
+		me.appEventsController.getApplication().fireEvent("doAfterSaveFailure");
+	},
 	save: function(saveAs) {
 		var me = this;
 		var callbacks = new Object();
-		 var serviceResponses = {
+		var serviceResponses = {
             failures: {},
             successes: {},
             responseCnt: 0,
             expectedResponseCnt: 1
         }
-    callbacks.success = me.newServiceSuccessHandler('map', me.onSaveCompleteSuccess, serviceResponses);
-    callbacks.failure = me.newServiceFailureHandler('map', me.onSaveCompleteFailure, serviceResponses);
-    callbacks.scope = me;
-	me.appEventsController.getApplication().fireEvent("onBeforePlanSave");
-    me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan, saveAs);
-  },	
+    	callbacks.success = me.newServiceSuccessHandler('map', me.onSaveCompleteSuccess, serviceResponses);
+    	callbacks.failure = me.newServiceFailureHandler('map', me.onSaveCompleteFailure, serviceResponses);
+    	callbacks.scope = me;
+		me.appEventsController.getApplication().fireEvent("onBeforePlanSave");
+    	me.mapPlanService.save(me.semesterStores, callbacks, me.currentMapPlan, saveAs);
+    },
 	onSaveCompleteSuccess: function(serviceResponses){
 		var me = this;
 		me.getMapPlanServiceSuccess(serviceResponses);
 		me.currentMapPlan.setIsTemplate(false);
 		me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
-		Ext.Msg.alert('Your changes have been saved.'); 
+		me.appEventsController.getApplication().fireEvent("doAfterSaveSuccess");
 	},
 	onSaveCompleteFailure: function(serviceResponses){
 		var me = this;
-	},	
+		me.appEventsController.getApplication().fireEvent("doAfterSaveFailure");
+	},
   
     getMapPlanServiceSuccess: function(serviceResponses, isTemplate, fromSave) {
         var me = this;
@@ -273,6 +275,6 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
             if ( callback ) {
                 callback.apply(me, [ serviceResponses ]);
             }
-        };    
+        };
     }
 });

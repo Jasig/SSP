@@ -55,7 +55,12 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		me.programsStore.load();
 		
 		me.checkForContactInfo();
-		
+
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+   		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+
 
 		return me.callParent(arguments);
     },
@@ -93,17 +98,30 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 	
     onCancelClick: function(){
     	me = this;
+    	me.doCloseWindow(false)
+    },
+
+    doCloseWindow: function(saving) {
     	me.getView().close();
 		if(me.getView().viewToClose){
 			me.getView().viewToClose.close();
-		}else if(me.getView().loaderDialogEventName){
+		}else if (!saving) {
+			me.doNavigation();
+			me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+			me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+		}
+    },
+
+    doNavigation: function() {
+        me = this;
+        if(me.getView().loaderDialogEventName){
 			if(me.getView().loaderDialogEventName === 'doToolsNav')
-			{	
-				me.getView().navController.loadTool(me.getView().secondaryNavInfo);				
+			{
+				me.getView().navController.loadTool(me.getView().secondaryNavInfo);
 			} else
 			if(me.getView().loaderDialogEventName === 'doPersonNav')
 			{
-		        me.appEventsController.getApplication().fireEvent('loadPerson');  
+				me.appEventsController.getApplication().fireEvent('loadPerson');
 			}
 			else
 			{
@@ -111,10 +129,24 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			}
 		}
     },
-    
+
+	doAfterSaveSuccess: function() {
+		me = this;
+		Ext.Msg.alert('Save', 'Your changes have been saved.', function (btn) {me.doNavigation()}, me);
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+	},
+
+	doAfterSaveFailure: function() {
+		me = this;
+		me.doNavigation();
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+	},
+
     onSaveClick: function(){
     	me = this;
-	
+
     	var form =  me.getView().query('form')[0].getForm();
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
     	if(!nameField || nameField == '')
@@ -122,9 +154,9 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     		Ext.Msg.alert('Error','Please give the plan a name.');
     		return;
     	}
-    	
+
 		var validateResult = me.formUtils.validateForms( form );
-		
+
 		if ( validateResult.valid )	{
 			form.updateRecord(me.currentMapPlan);
 			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].checked) ? 'ACTIVE' : 'INACTIVE');
@@ -134,7 +166,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 			me.currentMapPlan.setIsTemplate(false);
 			me.mapEventUtils.save(me.getView().saveAs,me.getView().secondaryNavInfo,me.getView().navController);
-			me.onCancelClick();
+			me.doCloseWindow(true);
 		}
 		else{
 			me.formUtils.displayErrors( validateResult.fields );

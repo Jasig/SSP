@@ -61,7 +61,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			me.getVisibilityField().setDisabled(false);
 		}
 		
-	
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+   		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+   		me.appEventsController.assignEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 
 		return me.callParent(arguments);
     },
@@ -87,26 +90,54 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			});
 		}
 	},
-    onCancelClick: function(){
-    	me = this;
-    	me.getView().close();
+
+	onCancelClick: function(){
+		me = this;
+		me.doCloseWindow(false)
+	},
+
+	doCloseWindow: function(saving) {
+		me.getView().close();
 		if(me.getView().viewToClose){
 			me.getView().viewToClose.close();
-		}else if(me.getView().loaderDialogEventName){
+		}else if (!saving) {
+			me.doNavigation();
+			me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+			me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+		}
+	},
+	doNavigation: function() {
+		me = this;
+		if(me.getView().loaderDialogEventName){
 			if(me.getView().loaderDialogEventName === 'doToolsNav')
-			{	
-				me.getView().navController.loadTool(me.getView().secondaryNavInfo);				
+			{
+				me.getView().navController.loadTool(me.getView().secondaryNavInfo);
 			} else
 			if(me.getView().loaderDialogEventName === 'doPersonNav')
 			{
-		        me.appEventsController.getApplication().fireEvent('loadPerson');  
+				me.appEventsController.getApplication().fireEvent('loadPerson');
 			}
 			else
 			{
 				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status,me.getView().actionOnPersonId);
 			}
 		}
-    },    
+	},
+
+	doAfterSaveSuccess: function() {
+		me = this;
+		Ext.Msg.alert('Save', 'Your changes have been saved.', function (btn) {me.doNavigation()}, me);
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+	},
+
+	doAfterSaveFailure: function() {
+		me = this;
+		me.doNavigation();
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+	},
+
     onSaveClick:function(){
     	me = this;
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
@@ -186,7 +217,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	}else if(btnId == 'no'){
     		return;
     	}
-    	me.onCancelClick();
+    	me.doCloseWindow(true);
     },
     
     resetForm: function() {

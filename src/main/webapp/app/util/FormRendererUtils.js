@@ -21,6 +21,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
         appEventsController: 'appEventsController',
+        authenticatedPerson: 'authenticatedPerson',
         errorsStore: 'errorsStore'
     },
 	config: {
@@ -589,15 +590,27 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		var comp = null;
 		var store = null;
 		var view = Ext.ComponentQuery.query(containerAlias.toLowerCase())[0];
-		
-		if (view.items.length > 0 && removeExisting==true)			
+
+		if (view.items.length > 0 && removeExisting==true && compAlias.toLowerCase() !== 'emailstudent')
 			view.removeAll();
 
-		// create the new widget
-		comp =  Ext.widget(compAlias.toLowerCase(), args);	
-		// add to the container
-		view.add( comp );
-		
+		if (compAlias.toLowerCase() === 'emailstudent'){
+			if ( me.authenticatedPerson.hasAccess(compAlias.toUpperCase() + '_TOOL') ) {
+				if ( me.emailStudentPopup ) {
+					me.emailStudentPopup.destroy();
+				}
+				me.emailStudentPopup = Ext.create('Ssp.view.EmailStudentView');
+				me.emailStudentPopup.show();
+			} else {
+				me.authenticatedPerson.showUnauthorizedAccessAlert();
+			}
+		} else {
+			// create the new widget
+			comp =  Ext.widget(compAlias.toLowerCase(), args);
+			// add to the container
+			view.add( comp );
+		}
+
 		return comp;
 	},
 
