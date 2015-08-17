@@ -407,7 +407,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				if(matchedTranscriptCourse != null)
 				{
 					//If we find a transcript match, it must have a passing grade before we log it
-					if(gradesSet.contains(matchedTranscriptCourse.getGrade().trim()))
+					if(StringUtils.isNotBlank(matchedTranscriptCourse.getGrade()) && gradesSet.contains(matchedTranscriptCourse.getGrade().trim()))
 					{
 						//If we find a term unbounded match, create an substitution entry
 						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.TERM,report));
@@ -422,7 +422,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				if(matchedTranscriptCourse != null)
 				{
 					//If we find a transcript match, it must have a passing grade before we log it
-					if(gradesSet.contains(matchedTranscriptCourse.getGrade().trim()))
+					if(StringUtils.isNotBlank(matchedTranscriptCourse.getGrade()) && gradesSet.contains(matchedTranscriptCourse.getGrade().trim()))
 					{
 						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
 					}
@@ -521,7 +521,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		}
 		else
 		//If the grade in the transcript is not a configured 'passing grade', that's an anomaly
-		if(!passingGradesSet.contains(matchedTranscriptCourse.getGrade().trim().toUpperCase()))
+		if(StringUtils.isBlank(matchedTranscriptCourse.getGrade()) || !passingGradesSet.contains(matchedTranscriptCourse.getGrade().trim().toUpperCase()))
 		{
 			if(term.getEndDate().after(new Date()))
 			{
@@ -637,7 +637,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	public Set<String> getAdditionalCriteria() {
 		Set<String> additionalCriteriaSet = new HashSet<String>();
 		String additionalMatchingCriteriaString = configService.getByNameEmpty("map_plan_status_addition_course_matching_criteria");
-		if(!StringUtils.isEmpty(additionalMatchingCriteriaString.trim()))
+		if(additionalMatchingCriteriaString != null && !StringUtils.isEmpty(additionalMatchingCriteriaString.trim()))
 		{
 			String[] criteria = additionalMatchingCriteriaString.split(",");
 			for (String string : criteria) {
@@ -759,7 +759,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		boolean useSubstitutableCourses = Boolean.parseBoolean(configService.getByNameEmpty("map_plan_status_use_substitutable_courses").trim());
 		
 
-		//Lets figure out our cutoff term
+		//Lets figure out our cutoff term 
 		Term cutoffTerm = deriveCuttoffTerm();
 		
 		//Lightweight query to avoid the potential 'kitchen sink' we would pull out if we fetched the Plan object
