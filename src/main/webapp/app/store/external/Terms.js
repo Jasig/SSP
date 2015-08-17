@@ -111,34 +111,34 @@ Ext.define('Ssp.store.external.Terms', {
         var endIndex = me.findBy(me.isCurrentTerm);
         if(endIndex == -1)
         	endIndex = me.getCount();
-        
-        var startReportYear = me.getAt(endIndex).get("reportYear");
-        if (maximum !== null && maximum !== undefined) {
-            startIndex = me.findExact('reportYear', startReportYear + maximum);
-            if (startIndex == -1) 
-                startIndex = 0;
+        if (me.getAt(endIndex)) {
+	        var startReportYear = me.getAt(endIndex).get("reportYear");
+	        if (maximum !== null && maximum !== undefined) {
+	            startIndex = me.findExact('reportYear', startReportYear + maximum);
+	            if (startIndex == -1) 
+	                startIndex = 0;
+	        }
+	        
+	        // No specific call to find the last that meets criteria or to pull indexes
+	        // This will find the first term (chronologically in the same school year as the currentTerm
+	        if (minimum !== null && minimum !== undefined ) {
+	        	var index = me.findExact('reportYear', startReportYear + minimum);
+	        	var gindex = index;
+	        	var count = 0;
+	        	while(index != -1){
+	        		index = me.findExact('reportYear', startReportYear + minimum, ++index);
+	        		if(index != -1){
+	        			gindex = index;
+	        		}
+	        		if(++count >= 10)
+	        			break;
+	        	}
+	            if (gindex == -1)
+	            	endIndex = me.getCount();
+	            else
+	            	endIndex = gindex;
+	        }
         }
-        
-        // No specific call to find the last that meets criteria or to pull indexes
-        // This will find the first term (chronologically in the same school year as the currentTerm
-        if (minimum !== null && minimum !== undefined ) {
-        	var index = me.findExact('reportYear', startReportYear + minimum);
-        	var gindex = index;
-        	var count = 0;
-        	while(index != -1){
-        		index = me.findExact('reportYear', startReportYear + minimum, ++index);
-        		if(index != -1){
-        			gindex = index;
-        		}
-        		if(++count >= 10)
-        			break;
-        	}
-            if (gindex == -1)
-            	endIndex = me.getCount();
-            else
-            	endIndex = gindex;
-        }
-        
         return me.getRange(startIndex, endIndex);
     },
     
