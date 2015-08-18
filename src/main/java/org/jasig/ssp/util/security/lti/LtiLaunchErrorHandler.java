@@ -64,7 +64,6 @@ public class LtiLaunchErrorHandler extends OAuthProcessingFilterEntryPoint {
 
 	private static final String LTI_LAUNCH_PRESENTATION_RETURN_URL = "lti_launch_presentation_return_url";
 	private static final String LTI_ERROR_MSG = "lti_errormsg";
-	private static final String LIVE_LAUNCH_URI_PATH_FRAGMENT = "/lti/launch/live";
 	private static final String TEST_LAUNCH_URI_PATH_FRAGMENT = "/lti/launch/test";
 
 	@Override
