@@ -88,7 +88,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EvaluatedSuccessIndicatorServiceImpl.class);
-    private static final int DECIMAL_SCALE = 2;
+    private static final int DECIMAL_SCALE = 49;
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
     private static final Function<String, String> LOWER_CASER = new Function<String, String>() {
         @Override
@@ -502,10 +502,10 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             return ((BigDecimal) metric);
         }
         if ( metric instanceof Number ) {
-            return BigDecimal.valueOf(((Number)metric).doubleValue()).setScale(DECIMAL_SCALE);
+            return BigDecimal.valueOf(((Number)metric).doubleValue());
         }
         if ( metric instanceof String ) {
-            return new BigDecimal((String)metric).setScale(DECIMAL_SCALE);
+            return new BigDecimal((String)metric);
         }
         if ( metric instanceof Ratio ) {
             return ((Ratio)metric).ratio();
