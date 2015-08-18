@@ -18,6 +18,15 @@
  */
 package org.jasig.ssp.service.security.lti.impl;
 
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasig.portal.api.sso.SsoPersonLookupService;
 import org.jasig.portal.api.sso.SsoTicket;
@@ -39,7 +48,6 @@ import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.impl.PersonAttributesSearchException;
-import org.jasig.ssp.service.impl.UPortalPersonAttributesService;
 import org.jasig.ssp.service.security.lti.ConsumerDetailsDisabledException;
 import org.jasig.ssp.service.security.lti.ConsumerDetailsNotFoundException;
 import org.jasig.ssp.service.security.lti.LtiConsumerService;
@@ -56,12 +64,6 @@ import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service("ltiConsumerService")
 @Transactional
@@ -90,6 +92,9 @@ public class LtiConsumerServiceImpl extends
 	private String sharedSsoSecret;
 
 	private static String SSP_ROSTER_CLASS_IDENTIFIER = "sectionCode";
+	
+	@Value("#{configProperties.ssp_lti_consumer_parameter_values_converter_script}")
+	String sectionCodeConversionScript;
 
 	@Override
 	protected LtiConsumerDao getDao() {
@@ -218,6 +223,7 @@ public class LtiConsumerServiceImpl extends
 
 		final Map<String, String> convertor = getParametersConversions(client);
 		final Map<String, String> parameters = launchRequest.getParameters();
+		
 		final Map<String, String> convertedParameters = new HashMap<String, String>();
 		for (String key : parameters.keySet()) {
 			if (convertor != null && convertor.containsKey(key)) {
@@ -227,7 +233,8 @@ public class LtiConsumerServiceImpl extends
 				convertedParameters.put(key, parameters.get(key));
 			}
 		}
-		launchRequest.setParameters(convertedParameters);
+		Map<String, String> parametersConvertValues = convertParameterValues(convertedParameters);
+		launchRequest.setParameters(parametersConvertValues);
 
 		final String requestUserUserName = findUser(launchRequest, client);
 		final String targetLaunchUrl = buildLaunchUrl(launchRequest, requestUserUserName);
@@ -345,5 +352,16 @@ public class LtiConsumerServiceImpl extends
 				SSP_ROSTER_CLASS_IDENTIFIER);
 		return conversions;
 	}
-
+	
+	private Map<String, String> convertParameterValues(Map<String,String> map) {
+		if(StringUtils.isNotBlank(sectionCodeConversionScript)) {
+			   Binding binding = new Binding();
+			   binding.setVariable("ltiParameters", map);
+			   GroovyShell shell = new GroovyShell(binding);
+			   shell.evaluate(sectionCodeConversionScript);
+			   
+			   return map;
+		}
+		return map;
+	}
 }
