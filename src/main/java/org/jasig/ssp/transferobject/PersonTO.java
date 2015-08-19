@@ -173,6 +173,8 @@ public class PersonTO // NOPMD
 	private Integer actionPlanTaskOpenCount = new Integer(0);
 	private Integer actionPlanTaskClosedCount = new Integer(0);
 	private Date lastActionPlanCompletedDate;
+
+	private Date confidentialityDisclosureAgreementSignedDate;
 	
 
 	/**
@@ -339,6 +341,15 @@ public class PersonTO // NOPMD
 				}
 			}
 		}
+		
+		
+		
+		if ((model.getConfidentialityDisclosureAgreements() != null)
+				&& !(model.getConfidentialityDisclosureAgreements().isEmpty())) {
+			//should only be one, so we'll place the first one there.			
+			setConfidentialityDisclosureAgreementSignedDate(model.getConfidentialityDisclosureAgreements().iterator().next().getModifiedDate());
+		}
+		
 
 		if ((null == model.getCurrentRegistrationStatus())
 				|| (model.getCurrentRegistrationStatus()
@@ -653,6 +664,13 @@ public class PersonTO // NOPMD
 		Date timestamp = getStudentIntakeCompleteDate();
 		return timestamp == null ? null : DateTimeUtils.midnightOn(timestamp);
 	}
+	
+	@JsonProperty
+	@JsonSerialize(using = DateOnlySerializer.class)
+	public Date getFormattedCDACompleteDate() {
+		Date timestamp = this.getConfidentialityDisclosureAgreementSignedDate();
+		return timestamp == null ? null : DateTimeUtils.midnightOn(timestamp);
+	}
 
 	public Boolean getAbilityToBenefit() {
 		return abilityToBenefit;
@@ -948,6 +966,15 @@ public class PersonTO // NOPMD
 	 */
 	public void setLastActionPlanCompletedDate(Date lastActionPlanCompletedDate) {
 		this.lastActionPlanCompletedDate = lastActionPlanCompletedDate;
+	}
+
+	public Date getConfidentialityDisclosureAgreementSignedDate() {
+		return confidentialityDisclosureAgreementSignedDate;
+	}
+
+	public void setConfidentialityDisclosureAgreementSignedDate(
+			Date confidentialityDisclosureAgreementSignedDate) {
+		this.confidentialityDisclosureAgreementSignedDate = confidentialityDisclosureAgreementSignedDate;
 	}
 
 

@@ -1785,7 +1785,7 @@ public class StudentIntakeFormManager { // NOPMD
 		agreeQuestion.setLabel(studentConfidentialityDisclosureAgreementService
 				.latestAgreement().getText());
 		agreeQuestion.setRequired(true);
-		agreeQuestion.setValidationExpression("isChecked()");
+		//agreeQuestion.setValidationExpression("isChecked()");
 		agreeQuestion.setType(FORM_TYPE_AGREEMENT);
 
 		confidentialitySectionQuestions.add(agreeQuestion);
