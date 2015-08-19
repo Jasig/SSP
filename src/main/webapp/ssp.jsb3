@@ -830,6 +830,11 @@
                     "path": "/app/service/"
                 },
                 {
+                    "clsName": "Ssp.service.PersonCoachHistoryService",
+                    "name": "PersonCoachHistoryService.js",
+                    "path": "/app/service/"
+                }, 
+                {
                     "clsName": "Ssp.service.PlacementService",
                     "name": "PlacementService.js",
                     "path": "/app/service/"
@@ -1520,6 +1525,26 @@
                     "path": "/app/controller/admin/crg/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.cda.CDAEditViewController",
+                    "name": "CDAEditViewController.js",
+                    "path": "/app/controller/admin/cda/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.cda.CDAListViewController",
+                    "name": "CDAListViewController.js",
+                    "path": "/app/controller/admin/cda/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.map.LoadTemplateViewController",
+                    "name": "LoadTemplateViewController.js",
+                    "path": "/app/controller/admin/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.map.MapAdminViewController",
+                    "name": "MapAdminViewController.js",
+                    "path": "/app/controller/admin/map/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.map.MapStatusReportController",
                     "name": "MapStatusReportController.js",
                     "path": "/app/controller/tool/map/"
@@ -2047,17 +2072,17 @@
                 {
                     "clsName": "Ssp.view.admin.forms.cda.CDAAdmin",
                     "name": "CDAAdmin.js",
-                    "path": "/app/view/admin/forms/cda"
+                    "path": "/app/view/admin/forms/cda/"
                 },     
                 {
                     "clsName": "Ssp.view.admin.forms.cda.CDAEdit",
                     "name": "CDAEdit.js",
-                    "path": "/app/view/admin/forms/cda"
+                    "path": "/app/view/admin/forms/cda/"
                 }, 
                 {
                     "clsName": "Ssp.view.admin.forms.cda.CDAList",
                     "name": "CDAList.js",
-                    "path": "/app/view/admin/forms/cda"
+                    "path": "/app/view/admin/forms/cda/"
                 },          
                 {
                     "clsName": "Ssp.view.admin.forms.crg.ChallengeAdmin",
@@ -3029,6 +3054,21 @@
                     "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuide",
                     "name": "EditSelfHelpGuide.js",
                     "path": "/app/view/admin/forms/shg/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.map.MapTemplatesAdmin",
+                    "name": "MapTemplatesAdmin.js",
+                    "path": "/app/view/admin/forms/map/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.map.MapTemplatesFilterAdmin",
+                    "name": "MapTemplatesFilterAdmin.js",
+                    "path": "/app/view/admin/forms/map/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.map.MapTemplatesListAdmin",
+                    "name": "MapTemplatesListAdmin.js",
+                    "path": "/app/view/admin/forms/map/"
                 },
                 {
                     "clsName": "Ssp.view.admin.forms.shg.EditSelfHelpGuideAvailableChallengesAdmin",
