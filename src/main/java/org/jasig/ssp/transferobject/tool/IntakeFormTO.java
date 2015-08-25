@@ -18,12 +18,14 @@
  */
 package org.jasig.ssp.transferobject.tool;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.jasig.ssp.model.PersonCompletedItem;
+import org.jasig.ssp.model.PersonConfidentialityDisclosureAgreement;
 import org.jasig.ssp.model.tool.IntakeForm;
 import org.jasig.ssp.transferobject.PersonChallengeTO;
 import org.jasig.ssp.transferobject.PersonDemographicsTO;
@@ -65,6 +67,7 @@ public class IntakeFormTO implements TransferObject<IntakeForm> { // NOPMD
 	private List<PersonCompletedItemTO> personChecklist;
 
 	private Map<String, Object> referenceData;
+	
 
 	public IntakeFormTO() {
 		super();
@@ -128,7 +131,14 @@ public class IntakeFormTO implements TransferObject<IntakeForm> { // NOPMD
 			personChallenges = PersonChallengeTO.toTOList(model
 					.getPerson().getChallenges());
 		}
+
+		
+		
 	}
+
+
+
+	
 
 	public PersonTO getPerson() {
 		return person;

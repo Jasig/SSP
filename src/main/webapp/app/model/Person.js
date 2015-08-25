@@ -59,6 +59,7 @@ Ext.define('Ssp.model.Person', {
     		 {name: 'serviceReasons', type: 'auto'},
     		 {name: 'studentIntakeCompleteDate', type: 'date', dateFormat: 'time'},
     		 {name: 'formattedStudentIntakeCompleteDate', type: 'date', dateFormat: 'c'},
+    		 {name: 'formattedCDACompleteDate', type: 'date', dateFormat: 'c'},
     		 {name: 'currentProgramStatusName', type: 'auto'},
     		 {name: 'programStatusChangeReasonName', type: 'auto'},
     		 {name: 'residencyCounty', type: 'string'},
