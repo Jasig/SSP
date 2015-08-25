@@ -18,18 +18,24 @@
  */
 package org.jasig.mygps.web;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.mail.SendFailedException;
 
 import org.jasig.mygps.model.transferobject.MessageTO;
+import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
-import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.JournalSource;
+import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.MessageService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;
@@ -55,6 +61,15 @@ public class MyGpsMessageController extends AbstractBaseController {
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
+
+	@Autowired
+	private transient JournalEntryService journalEntryService;
+
+	@Autowired
+	private transient ConfidentialityLevelService confidentialityLevelService;
+
+	@Autowired
+	private transient JournalSourceService journalSourceService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MyGpsMessageController.class);
@@ -83,6 +98,14 @@ public class MyGpsMessageController extends AbstractBaseController {
 		
 		messageService.createMessage(coach, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
 				.toArray(new String[watcherAddresses.size()])), subjAndBody);
+
+		JournalEntry journalEntry = new JournalEntry();
+		journalEntry.setPerson(student);
+		journalEntry.setConfidentialityLevel(confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
+		journalEntry.setComment("Student contacted the assigned coach from MyGPS.");
+		journalEntry.setEntryDate(new Date());
+		journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
+		journalEntryService.save(journalEntry);
 
 		return true;
 	}
