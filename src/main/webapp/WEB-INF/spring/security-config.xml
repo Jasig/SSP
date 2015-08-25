@@ -25,9 +25,15 @@
 	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
 	xmlns:oauth1="http://www.springframework.org/schema/security/oauth"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 		http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/util	  http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		 http://www.springframework.org/schema/tx  
+        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/aop  
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		http://www.springframework.org/schema/security/oauth2	http://www.springframework.org/schema/security/spring-security-oauth2.xsd
 		http://www.springframework.org/schema/security/oauth http://www.springframework.org/schema/security/spring-security-oauth.xsd">
 
@@ -119,6 +125,19 @@
 	<beans:bean id="oauth2PhysicalTokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore">
 		<beans:constructor-arg ref="sspDataSource" />
 	</beans:bean>
+	
+	
+	<tx:advice id="oauthTXAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" isolation="REPEATABLE_READ"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="oauthTokenServiceOperations"
+                      expression="execution(* org.springframework.security.oauth2.provider.token.DefaultTokenServices.*(..))"/>
+        <aop:advisor advice-ref="oauthTXAdvice" pointcut-ref="oauthTokenServiceOperations"/>
+    </aop:config>
 
 	<beans:alias name="transactionalOAuth2TokenStore" alias="oauth2TokenStore" />
 
