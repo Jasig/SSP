@@ -147,6 +147,7 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
                 "LAST",
                 "FIRST",
                 "COURSE",
+                "TITLE",
                 "INSTRUCTOR",
                 "REASONS"
         };
@@ -163,6 +164,7 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
                 reportResultElement.getLastName(),
                 reportResultElement.getFirstName(),
                 reportResultElement.getCourseName(),
+                reportResultElement.getCourseTitle(),
                 reportResultElement.getFacultyName(),
                 csvHelper.formatLong(reportResultElement.getTotalReasonsReported())
         });
