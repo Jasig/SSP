@@ -108,6 +108,14 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     ]
                     }
                 },
+				{
+                    tooltip: 'Cancel',
+                    text: '<u>Cancel</u>',
+                    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
+                    height: 22,
+                    xtype: 'button',
+                    itemId: 'cancelMapButton'
+                },
                 {
                     xtype: 'tbspacer',
                     flex: 0.05

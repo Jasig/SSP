@@ -31,7 +31,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         configStore: 'configurationOptionsUnpagedStore',
 		semesterStores: 'currentSemesterStores',
 		authenticatedPerson: 'authenticatedPerson'
-			
+
     },
 
     control: {
@@ -148,6 +148,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
            listeners: {
               click: 'oncreateNewMapPlanButton'
            }
+        },
+		'cancelMapButton':{
+           selector: '#cancelMapButton',
+           listeners: {
+              click: 'onCancelMapButtonClick'
+           }
         }
     },
     resetForm: function() {
@@ -180,7 +186,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.assignEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
 		me.appEventsController.assignEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
 		me.appEventsController.assignEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
-	
+
 		return this.callParent(arguments);
     },    
 
@@ -212,7 +218,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
-				    me.semesterStores = {};					
+				    me.semesterStores = {};
 					toolsViewController.loadTool(toolsRecord.get('toolType'));
 				}
 			});	
@@ -775,9 +781,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.mapEventUtils.createNewMapPlan();
 		}
     },
-    
+
     planDataChangedNewMap:function(buttonId){
-		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
 			me.onSavePlanRequest({loaderDialogEventName:'onCreateNewMapPlan'});
 		}else{
@@ -785,7 +790,21 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.mapEventUtils.createNewMapPlan();
 		}
 	},
-	
+
+ 	onCancelMapButtonClick: function(button){
+ 		var me=this;
+        Ext.MessageBox.confirm("Cancel", "Are you sure you want to cancel?", me.confirmCancel, me);
+ 	},
+
+ 	confirmCancel: function (buttonId) {
+		var me = this;
+ 		if (buttonId == "on" || buttonId == 'yes') {
+		    me.currentMapPlan.dirty = false;
+		    me.semesterStores = {};
+        	me.formUtils.loadDisplay('tools', 'map', true, {});
+        }
+ 	},
+
 	templateDataChangedNewMap:function(buttonId){
 		var me = this;
 		if(buttonId == "on" || buttonId == "yes"){
@@ -861,7 +880,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.appEventsController.removeEvent({eventName: 'loadTemplateDialog', callBackFunc: me.loadTemplateDialog, scope: me});
 		me.appEventsController.removeEvent({eventName: 'loadPlanDialog', callBackFunc: me.loadPlanDialog, scope: me});
 		me.appEventsController.removeEvent({eventName: 'onUpdateSaveOption', callBackFunc: me.onUpdateSaveOption, scope: me});
-		
+
 
 		
 		if(me.faPopUp != null && !me.faPopUp.isDestroyed)
