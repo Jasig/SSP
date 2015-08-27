@@ -240,7 +240,8 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 		sortFields.add(new Pair<String, SortDirection>("name", SortDirection.ASC));
 		
 		List<Pair<String,Long>> outcomeTotals = null;
-		SortingAndPaging sAndP = new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
+		
+		SortingAndPaging sAndP = new SortingAndPaging(status == null ? ObjectStatus.ALL:status, null, null, sortFields, null, SortDirection.ASC);
 		if(outcomeType.equals(EARLY_ALERT_OUTCOME)){
 			outcomeTotals = getOutcomes(cleanOutcomeIds,  searchForm, sAndP);
 		}else if(outcomeType.equals(EARLY_ALERT_OUTREACH)){
