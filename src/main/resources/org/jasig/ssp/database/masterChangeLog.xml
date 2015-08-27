@@ -280,4 +280,6 @@
 	<include file="org/jasig/ssp/database/integrationchangesets/i000062.xml" />
         <!-- Intenionally skipping to i000064.xml for 2.5.x -->
 	<include file="org/jasig/ssp/database/integrationchangesets/i000064.xml" />
+	<!-- Intenionally skipping to i000067.xml for 2.5.x -->
+	<include file="org/jasig/ssp/database/integrationchangesets/i000067.xml" />
 </databaseChangeLog>
