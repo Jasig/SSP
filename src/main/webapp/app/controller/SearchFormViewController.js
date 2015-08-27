@@ -607,7 +607,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 		Ext.Msg.confirm({
 			title:'Confirm',
-			msg: count + " student/s will be exported. Continue?",
+			msg: count + " user/s will be exported. <span style=\";font-weight: bold\">Continue</span> ?",
 			buttons: Ext.Msg.OKCANCEL,
 			fn: me.newOnExportConfirm(criteria),
 			scope: me
@@ -625,7 +625,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 		Ext.Msg.confirm({
 			title:'Confirm',
-			msg: count + " student/s will be custom exported. Continue?",
+			msg: count + " user/s will be custom exported. <span style=\";font-weight: bold\">Continue</span> ?",
 			buttons: Ext.Msg.OKCANCEL,
 			fn: me.newOnCustomExportConfirm(criteria),
 			scope: me
@@ -653,7 +653,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		} else {
 			Ext.Msg.confirm({
 				title:'Confirm',
-				msg: count + " student/s will be emailed. Continue?",
+				msg: count + " users/s will be emailed. <span style=\";font-weight: bold\">Continue</span> ?",
 				buttons: Ext.Msg.OKCANCEL,
 				fn: me.newOnBulkEmailConfirm(criteria),
 				scope: me
@@ -679,12 +679,13 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			Ext.Msg.alert('Too Few Search Results','Cannot change Program Status on an empty search result.');
 			return;
 		}
-		var msg = count + " user/s will be considered for transition to the '" + programStatusName + "' status. Users " +
-			"already having that status and users who haven't already been created will be unaffected. Continue?";
+		var msg = "<p>ATTENTION: " + count + " users have been selected for consideration to transition to '" + programStatusName + "' status. Actual number MAY BE LESS. </p><p>Selected students " +
+			"already with '" + programStatusName + "' status and selected students who are not currently activated (typically unassigned) and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
 		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
-			msg = count + " user/s will be considered for transition to the '" + programStatusName + "' status. Users " +
-				"already having that status and the Reason selected in the next dialog will be unaffected, as will users " +
-				"who haven't already been created. Continue?";
+			msg = "<p>ATTENTION: " + count + " users have been selected for consideration to transition to '" + programStatusName + "' status with a bulk reason" + 
+			    " (see next dialog).<p> <p> Actual number MAY BE LESS. </p><p>Selected users " +
+				" with '" + programStatusName + "'  status, and selected users who are not currently activated (typically unassigned)" + 
+				" and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
 		}
 		Ext.Msg.confirm({
 			title:'Confirm',
@@ -713,8 +714,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			Ext.Msg.alert('Too Few Search Results','Cannot ' + watchActionName + ' an empty caseload/watchlist/search result.');
 			return;
 		}
-		var msg = count + " user/s will be considered for " + watchActionName + ". Users " +
-			"who haven't already been created will be unaffected. Continue?";
+		var msg = "<p>ATTENTION: " + count + " selected users will be considered for " + watchActionName + 
+	        ". Actual number MAY BE LESS.</p><p>(Selected users " +
+			"who are not currently activated (typically unassigned) will be excluded from this action.)</p><p style=\"text-align:center;font-weight: bold\"><br/>Continue ?</p>";
 		Ext.Msg.confirm({
 			title:'Confirm',
 			msg: msg,
