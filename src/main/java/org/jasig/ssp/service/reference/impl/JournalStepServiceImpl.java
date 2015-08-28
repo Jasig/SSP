@@ -113,8 +113,10 @@ public class JournalStepServiceImpl extends
 			if(order >= sortOrder )
 			{
 				journalStepJournalStepDetail.setSortOrder(order + 1);
-				journalStepJournalStepDetailDao.save(journalStepJournalStepDetail);
+			} else {
+				journalStepJournalStepDetail.setSortOrder(order);
 			}
+			journalStepJournalStepDetailDao.save(journalStepJournalStepDetail);
 			order++;
 		}
 		
