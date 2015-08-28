@@ -73,7 +73,9 @@ public class JournalStepDetailServiceImpl extends
 		for (JournalStepJournalStepDetail journalStepJournalStepDetail : journalStepJournalStepDetails) {
 			if(sAndP.getStatus() == null || journalStepJournalStepDetail.getObjectStatus().equals(sAndP.getStatus()))
 			{
-				details.add(journalStepJournalStepDetail.getJournalStepDetail());
+				JournalStepDetail journalStepDetail = journalStepJournalStepDetail.getJournalStepDetail();
+				journalStepDetail.setSortOrder(journalStepJournalStepDetail.getSortOrder());
+				details.add(journalStepDetail);
 			}
 		}
 		return new PagingWrapper<JournalStepDetail>(details);

@@ -306,6 +306,7 @@ Ext.define('Ssp.controller.tool.journal.TrackTreeViewController', {
         Ext.Array.each(unique, function(assoc, index) {
             if ( assoc.objectStatus === "ACTIVE" || me.isSelectedJournalStepJournalDetailAssociation(assoc) ) {
 				var journalDetail = me.journalDetailNodeItemFromStepAssociation(assoc);
+				journalDetail.sortOrder = assoc.sortOrder;
 				journalDetail.extraObsoleteText = '';
 				if(assoc.objectStatus !== "ACTIVE"){
 					journalDetail.associatedToStep = false;
