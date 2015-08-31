@@ -1205,7 +1205,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		} else {
 			Ext.Msg.confirm({
 				title:'Confirm',
-			msg: count + " users/s will be emailed. <span style=\";font-weight: bold\">Continue</span> ?",
+			msg: count + " users/s will be emailed. If a Journal Entry is selected when composing the email, the actual number MAY BE LESS. (Selected users who are not currently activated (typically unassigned) will be excluded from the Journal Entry creation.) <br/><br/><span style=\";font-weight: bold\">Continue</span> ?",
 				buttons: Ext.Msg.OKCANCEL,
 				fn: me.onBulkEmailConfirm,
 				scope: me
