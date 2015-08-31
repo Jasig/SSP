@@ -157,7 +157,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 		appTitle = normalizeAppTitle(appTitle);
 		fileName.append(appTitle+"_");
 		fileName.append(string);
-		fileName.append(now.get(Calendar.MONTH));
+		fileName.append(now.get(Calendar.MONTH) + 1); //Calendar is based on 0 so need to add one to obtain correct month
 		fileName.append(now.get(Calendar.DAY_OF_MONTH));
 		fileName.append(now.get(Calendar.YEAR)+"_");
 		fileName.append(now.get(Calendar.HOUR));
