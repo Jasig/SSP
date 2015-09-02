@@ -44,7 +44,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         academicProgramsField: '#academicPrograms',
         mapNameField: '#mapName',
         advisorField: '#advisor',
-        
+        homeCampusField: '#homeCampus',
+
 		'serviceReasonEdit': {
             click: 'onServiceReasonEditButtonClick'
         },
@@ -186,6 +187,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             var studentTypeField = me.getStudentTypeField();
             var programStatusField = me.getProgramStatusField();
             var programStatusReasonField = me.getProgramStatusReasonField();
+            var homeCampusField = me.getHomeCampusField();
 
             // load general student record
             me.getView().loadRecord(me.person);
@@ -206,6 +208,12 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
             // programStatusField.setFieldLabel('');
             // programStatusField.setValue('<span style="color:#15428B">Status:  </span>' + me.handleNull(me.person.getProgramStatusName()));
             programStatusField.setValue(me.handleNull(me.person.getProgramStatusName()));
+
+	        if (me.person.getHomeCampusName() == null || me.person.getHomeCampusName() == "") {
+	            homeCampusField.hide();
+	        } else {
+                homeCampusField.setValue(me.handleNull(me.person.getHomeCampusName()));
+	        }
 
             if (me.person.getProgramStatusChangeReasonName()) {
                 me.updateProgramStatusReasonField(me.person.getProgramStatusChangeReasonName());

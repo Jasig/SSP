@@ -38,6 +38,7 @@ public class CampusTO extends AbstractReferenceTO<Campus>
 		implements TransferObject<Campus> {
 
 	private UUID earlyAlertCoordinatorId;
+	private String code;
 
 	/**
 	 * Empty constructor
@@ -78,9 +79,10 @@ public class CampusTO extends AbstractReferenceTO<Campus>
 	 */
 	public CampusTO(@NotNull final UUID id, @NotNull final String name,
 			final String description,
-			@NotNull final UUID earlyAlertCoordinatorId) {
+			@NotNull final UUID earlyAlertCoordinatorId, final String code) {
 		super(id, name, description);
 		this.earlyAlertCoordinatorId = earlyAlertCoordinatorId;
+		this.code = code;
 	}
 
 	/**
@@ -107,6 +109,7 @@ public class CampusTO extends AbstractReferenceTO<Campus>
 
 		super.from(model);
 		earlyAlertCoordinatorId = model.getEarlyAlertCoordinatorId();
+		code = model.getCode();
 	}
 
 	/**
@@ -128,6 +131,21 @@ public class CampusTO extends AbstractReferenceTO<Campus>
 		}
 
 		this.earlyAlertCoordinatorId = earlyAlertCoordinatorId;
+	}
+
+	/**
+	 * @return the campus code
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code
+	 * 				the campus code to set
+	 */
+	public void setCode(final String code) {
+		this.code = code;
 	}
 
 	/**

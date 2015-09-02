@@ -38,6 +38,7 @@ import org.jasig.ssp.model.PersonServiceReason;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.ReferralSource;
 import org.jasig.ssp.model.reference.ServiceReason;
@@ -175,7 +176,9 @@ public class PersonTO // NOPMD
 	private Date lastActionPlanCompletedDate;
 
 	private Date confidentialityDisclosureAgreementSignedDate;
-	
+
+	private ReferenceLiteTO<Campus> homeCampus;
+
 
 	/**
 	 * Empty constructor
@@ -267,6 +270,8 @@ public class PersonTO // NOPMD
 		studentIntakeRequestDate = model.getStudentIntakeRequestDate();
 		studentType = model.getStudentType() == null ? null
 				: new ReferenceLiteTO<StudentType>(model.getStudentType());
+		homeCampus = model.getHomeCampus() == null ? null
+				: new ReferenceLiteTO<Campus>(model.getHomeCampus());
 
 		if ((null != model.getSpecialServiceGroups())
 				&& !(model.getSpecialServiceGroups().isEmpty())) {
@@ -729,6 +734,15 @@ public class PersonTO // NOPMD
 	public void setStudentType(
 			final ReferenceLiteTO<StudentType> studentType) {
 		this.studentType = studentType;
+	}
+
+	public ReferenceLiteTO<Campus> getHomeCampus() {
+		return homeCampus;
+	}
+
+	public void setHomeCampus(
+			final ReferenceLiteTO<Campus> homeCampus) {
+		this.homeCampus = homeCampus;
 	}
 
 	public List<ReferenceLiteTO<SpecialServiceGroup>> getSpecialServiceGroups() {

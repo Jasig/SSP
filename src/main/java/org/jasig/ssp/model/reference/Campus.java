@@ -25,6 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -47,6 +48,10 @@ public class Campus extends AbstractReference implements Auditable {
 	@Type(type = "uuid-custom")
 	@NotNull
 	private UUID earlyAlertCoordinatorId;
+
+	@Column(nullable = true, length = 10)
+	@Size(max = 10)
+	private String code;
 
 	/**
 	 * Constructor
@@ -77,12 +82,15 @@ public class Campus extends AbstractReference implements Auditable {
 	 *            Description; max 64000 characters
 	 * @param earlyAlertCoordinatorId
 	 *            Early Alert Coordinator
+	 * @param code
+	 *            Code; max 10 characters
 	 */
 	public Campus(@NotNull final UUID id, @NotNull final String name,
 			final String description,
-			@NotNull final UUID earlyAlertCoordinatorId) {
+			@NotNull final UUID earlyAlertCoordinatorId, final String code) {
 		super(id, name, description);
 		this.earlyAlertCoordinatorId = earlyAlertCoordinatorId;
+		this.code = code;
 	}
 
 	/**
@@ -99,6 +107,14 @@ public class Campus extends AbstractReference implements Auditable {
 	public void setEarlyAlertCoordinatorId(
 			@NotNull final UUID earlyAlertCoordinatorId) {
 		this.earlyAlertCoordinatorId = earlyAlertCoordinatorId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	/**

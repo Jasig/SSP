@@ -27,6 +27,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.external.ExternalPerson;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.Ethnicity;
 import org.jasig.ssp.model.reference.Genders;
 import org.jasig.ssp.model.reference.MaritalStatus;
@@ -36,6 +37,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PersonStaffDetailsService;
 import org.jasig.ssp.service.external.ExternalPersonService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EthnicityService;
 import org.jasig.ssp.service.reference.RaceService;
@@ -81,7 +83,9 @@ public class ExternalPersonServiceImpl
 	@Autowired
 	private transient StudentTypeService studentTypeService;
 
-	
+	@Autowired
+	private transient CampusService campusService;
+
 	@Override
 	public ExternalPerson getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
@@ -263,6 +267,8 @@ public class ExternalPersonServiceImpl
 		setCoachForPerson(person, externalPerson.getCoachSchoolId());
 		
 		setStudentTypeForPerson(person, externalPerson.getStudentType());
+
+		setHomeCampusForPerson(person, externalPerson.getCampusCode());
 
 		if ((StringUtils.isBlank(externalPerson.getDepartmentName())
 				&& StringUtils.isBlank(externalPerson.getOfficeHours())
@@ -504,6 +510,44 @@ public class ExternalPersonServiceImpl
 					+ "available in system. ", e);
 			return null;
 		}				
+	}
+
+	private void setHomeCampusForPerson(final Person person, final String externalCampusCode)
+	{
+		if (person.getHomeCampus() == null) {
+			if (externalCampusCode != null && !externalCampusCode.trim().isEmpty()) {
+				LOGGER.debug("Assigning campus_code '{}' to person " +
+						"schoolId '{}'", externalCampusCode, person.getSchoolId());
+				person.setHomeCampus(getInternalCampus(externalCampusCode));
+			}
+		} else {
+			if (externalCampusCode == null || externalCampusCode.trim().isEmpty()) {
+				LOGGER.debug("Assigning a null Campus to person schoolId '{}'", person.getSchoolId());
+				person.setHomeCampus(null);
+			} else if (!externalCampusCode.equals(person.getHomeCampus().getCode())) {
+				Campus campus = getInternalCampus(externalCampusCode);
+				if ( campus == null ) {
+					// lookup problem already logged
+					LOGGER.debug("Campus with name '{}' does not exist so "
+									+ "skipping home_campus assignment for person schoolId '{}'",
+							externalCampusCode, person.getSchoolId());
+				} else {
+					LOGGER.debug("Assigning campus_code '{}' to person " +
+							"schoolId '{}'", externalCampusCode, person.getSchoolId());
+					person.setHomeCampus(campus);
+				}
+			}// else equals, so ignore
+		}
+	}
+
+	private Campus getInternalCampus(final String campusCode) {
+		try {
+			return campusService.getByCode(campusCode);
+		} catch (final ObjectNotFoundException e) {
+			LOGGER.warn("Campus_code " + campusCode +" referenced in external table not "
+					+ "available in system. ", e);
+			return null;
+		}
 	}
 
 	@Override

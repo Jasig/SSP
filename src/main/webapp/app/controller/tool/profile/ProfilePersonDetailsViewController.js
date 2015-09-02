@@ -65,6 +65,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         advisorField: '#advisor',
         mapLastUpdatedField: '#mapLastUpdated',
         mapProjectedField: '#mapProjected',
+        homeCampusField: '#homeCampus',
         
         cumTermGrid: '#cumTermGrid',
         
@@ -531,6 +532,11 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
        		var advisor = new Ssp.model.Person();
        		advisor.populateFromGenericObject(personResponse);
 	        me.getAdvisorField().setValue(advisor.getFullName());
+	        if (me.person.getHomeCampusName() == null || me.person.getHomeCampusName() == "") {
+	            me.getHomeCampusField().hide();
+	        } else {
+	            me.getHomeCampusField().setValue(me.handleNull(me.person.getHomeCampusName()));
+	        }
 		}
     },
 

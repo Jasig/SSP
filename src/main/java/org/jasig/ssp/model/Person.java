@@ -50,6 +50,7 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.model.tool.PersonTool;
 import com.google.common.collect.Lists;
@@ -660,6 +661,11 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	private StudentType studentType;
 
 	@Nullable
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "campus_id", nullable = true)
+	private Campus homeCampus;
+
+	@Nullable
 	@OneToMany(mappedBy = DATABASE_TABLE_NAME)
 	@Cascade(value = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.SAVE_UPDATE })
@@ -1206,6 +1212,14 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 
 	public void setStudentType(final StudentType studentType) {
 		this.studentType = studentType;
+	}
+
+	public Campus getHomeCampus() {
+		return homeCampus;
+	}
+
+	public void setHomeCampus(final Campus homeCampus) {
+		this.homeCampus = homeCampus;
 	}
 
 	public Set<PersonProgramStatus> getProgramStatuses() {

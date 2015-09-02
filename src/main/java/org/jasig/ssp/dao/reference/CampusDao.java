@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.Campus;
 import org.springframework.stereotype.Repository;
@@ -38,4 +40,12 @@ public class CampusDao extends AbstractReferenceAuditableCrudDao<Campus>
 	public CampusDao() {
 		super(Campus.class);
 	}
+
+	public Campus getByCode(final String code) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("code", code));
+		return (Campus) query.uniqueResult();
+	}
+
+
 }

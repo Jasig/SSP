@@ -134,6 +134,11 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         name: 'intendedProgramAtAdmit',
                         labelAlign: 'top'
                     }, {
+                        fieldLabel: 'Home Campus',
+                        name: 'homeCampus',
+                        itemId: 'homeCampus',
+                        labelWidth: 85
+                    }, {
                         fieldLabel: 'Start Term',
                         name: 'actualStartTerm',
                         itemId: 'actualStartTerm',

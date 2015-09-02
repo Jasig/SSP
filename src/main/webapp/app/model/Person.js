@@ -72,7 +72,8 @@ Ext.define('Ssp.model.Person', {
              {name: 'gender', type: 'string'},
              {name: 'actionPlanTaskOpenCount', type: 'int'},
              {name: 'actionPlanTaskClosedCount', type: 'int'},
-             {name: 'lastActionPlanCompletedDate', type: 'date', dateFormat: 'time'}
+             {name: 'lastActionPlanCompletedDate', type: 'date', dateFormat: 'time'},
+       		 {name: 'homeCampus',type:'auto'}
              ],
              
              
@@ -169,7 +170,12 @@ Ext.define('Ssp.model.Person', {
     		me.set('studentType',null);
     	}
     },
-    
+
+    getHomeCampusName: function(){
+    	var homeCampus = this.get('homeCampus');
+    	return ((homeCampus != null)? homeCampus.name : "");
+    },
+
     getPhotoUrl: function(){
     	var url =  this.get('photoUrl')   	
     	if(url == null || url == "") 	
@@ -245,6 +251,10 @@ Ext.define('Ssp.model.Person', {
 		{
 			jsonData.studentType = null;
 		}
+		if (jsonData.homeCampus == "")
+		{
+			jsonData.homeCampus = null;
+		}
 		
 		if ( jsonData.coach == "")
 		{
@@ -296,5 +306,6 @@ Ext.define('Ssp.model.Person', {
     	me.set('photoUrl', jsonData.photoUrl);
         me.set('coach', jsonData.coach);
         me.set('studentType', jsonData.studentType);
+        me.set('homeCampus', jsonData.homeCampus);
     }
 });

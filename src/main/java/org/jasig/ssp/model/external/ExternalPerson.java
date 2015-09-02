@@ -149,7 +149,11 @@ public class ExternalPerson extends AbstractExternalData implements
 	@Column(length = 10, name = "race_code")
 	@Size(max = 10)
 	private String race_code;
-	
+
+	@Column(length = 10, name = "campus_code")
+	@Size(max = 10)
+	private String campusCode;
+
 	public String getSchoolId() {
 		return schoolId;
 	}
@@ -425,4 +429,12 @@ public class ExternalPerson extends AbstractExternalData implements
     public void setPhotoUrl(final String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+	public String getCampusCode() {
+		return campusCode;
+	}
+
+	public void setCampusCode(String campusCode) {
+		this.campusCode = campusCode;
+	}
 }

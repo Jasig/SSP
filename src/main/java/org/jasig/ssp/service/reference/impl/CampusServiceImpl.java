@@ -20,10 +20,12 @@ package org.jasig.ssp.service.reference.impl;
 
 import org.jasig.ssp.dao.reference.CampusDao;
 import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.CampusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import javax.validation.constraints.NotNull;
 
 /**
  * Campus service implementation
@@ -52,5 +54,11 @@ public class CampusServiceImpl extends
 	@Override
 	protected CampusDao getDao() {
 		return dao;
+	}
+
+	@Override
+	public Campus getByCode(@NotNull final String code)
+			throws ObjectNotFoundException {
+		return this.dao.getByCode(code);
 	}
 }

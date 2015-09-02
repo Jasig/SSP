@@ -94,6 +94,11 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     labelWidth: 45,
                     maxHeight: 32
                 }, {
+                    fieldLabel: 'Home Campus',
+                    name: 'homeCampus',
+                    itemId: 'homeCampus',
+                    labelWidth: 85
+                }, {
                     fieldLabel: 'Plan',
                     name: 'mapName',
                     itemId: 'mapName',
