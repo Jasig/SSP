@@ -32,7 +32,7 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
         store: 'campusesAllStore'
     },
     height: '100%',
-	width: '100%',
+	width: '90%',
 	layout: 'fit',
     initComponent: function(){
         var me=this;
@@ -63,19 +63,21 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
 	                        dataIndex: 'objectStatus',
 							defaultValue: true,
 	                        renderer: me.columnRendererUtils.renderObjectStatus,
-	                        flex: 0.10,
 	                        field: {
 	                            xtype: 'oscheckbox'
 	                        }
-	                    },
-						  
+	                      },
 						  { header: 'Name',  
     		                  dataIndex: 'name',
-    		                  flex: 50 },
-    		                { header: 'Description',
-    		                  dataIndex: 'description', 
-    		                  flex: 50
-    		                }
+    		                  flex: .95
+    		              },
+    		              { header: 'Description',
+    		                  dataIndex: 'description',
+    		                  flex: .95
+    		              },
+    		              { header: 'Campus Code',
+    		                  dataIndex: 'code'
+    		              }
     		           ],
     		        
     		           dockedItems: [

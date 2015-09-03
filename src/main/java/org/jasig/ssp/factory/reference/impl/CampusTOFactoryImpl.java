@@ -64,6 +64,7 @@ public class CampusTOFactoryImpl extends
 		final Campus model = super.from(tObject);
 
 		model.setEarlyAlertCoordinatorId(tObject.getEarlyAlertCoordinatorId());
+		model.setCode(tObject.getCode());
 
 		return model;
 	}

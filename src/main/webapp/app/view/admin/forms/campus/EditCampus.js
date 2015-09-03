@@ -43,6 +43,13 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
                     fieldLabel: 'Description',
                     anchor: '100%',
                     name: 'description'
+				},{
+                    xtype: 'textfield',
+                    fieldLabel: 'Code',
+                    name: 'code',
+					maxLength: 10,
+                    allowBlank: true,
+                    required: false
                 },{
 			        xtype: 'combobox',
 			        name: 'earlyAlertCoordinatorId',
@@ -56,8 +63,7 @@ Ext.define('Ssp.view.admin.forms.campus.EditCampus',{
 			        queryMode: 'local',
 			        allowBlank: false,
 			        width: 300
-				},
-				{
+                },{
                     xtype: 'oscheckbox',
                     fieldLabel: 'Active',
                     name: 'objectStatus'
