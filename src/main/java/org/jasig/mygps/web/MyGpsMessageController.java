@@ -102,7 +102,12 @@ public class MyGpsMessageController extends AbstractBaseController {
 		JournalEntry journalEntry = new JournalEntry();
 		journalEntry.setPerson(student);
 		journalEntry.setConfidentialityLevel(confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
-		journalEntry.setComment("Student contacted the assigned coach from MyGPS.");
+		StringBuilder comment = new StringBuilder("Student contacted the assigned coach from MyGPS.")
+				.append("<br/>Subject: ")
+				.append(messageTO.getSubject())
+				.append("<br/>Message: ")
+				.append(messageTO.getMessage());
+		journalEntry.setComment(comment.toString());
 		journalEntry.setEntryDate(new Date());
 		journalEntry.setJournalSource(journalSourceService.get(JournalSource.JOURNALSOURCE_EMAIL_ID));
 		journalEntryService.save(journalEntry);
