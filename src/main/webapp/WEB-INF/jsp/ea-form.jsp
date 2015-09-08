@@ -92,6 +92,17 @@
       </div>
       <div class="ea-clear"></div>
 
+      <!-- Faculty ID -->
+      <div class="ea-input">
+        <span class="field-facultyid"></span>
+      </div>
+      <div class="ea-required">&nbsp;</div>
+      <div class="ea-label">
+        <span><spring:message code="Faculty"/>:</span>
+      </div>
+      <div class="ea-clear"></div>
+
+
       <!-- Student -->
       <div class="ea-input">
         <span class="field-student"></span>
@@ -370,8 +381,10 @@
                 termName:     '${courseTermName}',
                 sectionCode:  '${course.sectionCode}',
                 studentId:    '${studentId}',
-                enrollmentStatusCode: '${enrollment.statusCode}'
+                enrollmentStatusCode: '${enrollment.statusCode}',
+		        facultyid: '${facultyId}'
             },
+
             statusMappingConfigName: 'status_code_mappings'
         };
         ssp.EarlyAlertForm('#${n}earlyAlert', options);

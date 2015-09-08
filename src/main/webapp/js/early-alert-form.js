@@ -44,6 +44,7 @@ var ssp = ssp || {};
             alertForm:               '.alert-form',
             course:                  '.field-course',
             term:                    '.field-term',
+	    facultyid:               '.field-facultyid',
             student:                 '.field-student',
             enrollmentStatus:        '.field-enrollment-status',
             netId:                   '.field-net-id',
@@ -245,6 +246,8 @@ var ssp = ssp || {};
                 courseTitle: options.parameters.courseTitle,
                 courseTermCode: options.parameters.termCode,
                 courseSectionCode: options.parameters.sectionCode,
+                facultySchoolId: options.parameters.facultyid,
+                enrollmentStatus: options.parameters.enrollmentStatusCode,
                 emailCC: $(selectors.emailCc).val(),
                 campusId: $(selectors.campus).val(),
                 earlyAlertReasonIds: [], // Set below...
@@ -261,7 +264,7 @@ var ssp = ssp || {};
             	postData.earlyAlertSuggestionIds.push( $(this).val() );
             });
             
-            
+            alert('about to submit: ' + options.urls.submit.replace('STUDENTID', options.parameters.studentId));
             
             // Submit the alert
             $.ajax({
@@ -277,6 +280,7 @@ var ssp = ssp || {};
                     showError(jqXHR.status + ': ' + errorThrown, response.message);
                 },
                 success: function(data, textStatus, jqXHR) {
+
                 	// Return to the roster screen, with a message
                     var url = options.urls.done.replace('STUDENTNAME', escape(studentName));
                     url = url.replace('CONFIRMED_ID', escape(data.id));
@@ -310,6 +314,9 @@ var ssp = ssp || {};
 
         // term
         $(selectors.term).text(options.parameters.termName);
+
+	// term
+        $(selectors.facultyid).text(options.parameters.facultyid + 'test');
 
         // student
         $(selectors.student).text(studentName);

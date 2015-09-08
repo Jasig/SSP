@@ -26,6 +26,7 @@
     <portlet:param name="formattedCourse" value="FORMATTEDCOURSE"/>
     <portlet:param name="sectionCode" value="SECTIONCODE"/>
     <portlet:param name="termCode" value="TERMCODE"/>
+    <portlet:param name="facultySchoolId" value="FACULTYID"/>
 </portlet:renderURL>
 
 <c:set var="n"><portlet:namespace/></c:set>
@@ -64,6 +65,8 @@
       <p><spring:message code="alert.sent.prefix"/> <strong><c:out value="${studentName}"/></strong> <spring:message code="alert.sent.suffix"/></p>
     </div>
   </div>
+
+
 
   <!-- Portlet Titlebar -->
   <div class="fl-widget-titlebar titlebar portlet-titlebar" role="sectionhead">
@@ -133,16 +136,19 @@
               <th id="${n}middleName" class="flc-pager-sort-header"><a rsf:id="middleName" title="Click to sort" href="javascript:;"><spring:message code="middle.name"/></a></th>
               <th id="${n}lastName" class="flc-pager-sort-header"><a rsf:id="lastName" title="Click to sort" href="javascript:;"><spring:message code="last.name"/></a></th>
               <th id="${n}status" class="flc-pager-sort-header"><a rsf:id="status" title="Click to sort" href="javascript:;"><spring:message code="status"/></a></th>
-              
+	      <th id="${n}facultySchoolId" class="flc-pager-sort-header"><a rsf:id="facultySchoolId" title="Click to sort" href="javascript:;">Faculty Id</a></th>
+
             </tr>
           </thead>
           <tbody class="roster-body">
             <tr rsf:id="row:">
-               <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId"></td>
+              <td headers="${n}schoolId" rsf:id="schoolId" class="schoolId"></td>
               <td headers="${n}firstName" rsf:id="firstName"></td>
               <td headers="${n}middleName" rsf:id="middleName"></td>
               <td headers="${n}lastName" rsf:id="lastName"></td>
               <td headers="${n}status" rsf:id="status"></td>
+	      <td headers="${n}facultySchoolId" rsf:id="facultySchoolId" class="facultySchoolId"></td>
+
              
             </tr>
           </tbody>

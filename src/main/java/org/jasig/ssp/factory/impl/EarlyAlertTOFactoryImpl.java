@@ -88,6 +88,8 @@ public class EarlyAlertTOFactoryImpl extends
 			throws ObjectNotFoundException {
 		final EarlyAlert model = super.from(tObject);
 
+		model.setEnrollmentStatus(tObject.getEnrollmentStatus());
+		model.setFacultySchoolId(tObject.getFacultySchoolId());
 		model.setCourseName(tObject.getCourseName());
 		model.setCourseTitle(tObject.getCourseTitle());
 		model.setCourseTermCode(tObject.getCourseTermCode());

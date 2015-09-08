@@ -59,6 +59,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @RequestMapping("VIEW")
 public final class EarlyAlertPortletController {
 	
+	private static final String KEY_FACULTY_ID = "facultyId";
 	private static final String KEY_STUDENT_ID = "studentId";
 	private static final String KEY_COURSE = "course";
 	private static final String KEY_ENROLLMENT = "enrollment";
@@ -92,6 +93,9 @@ public final class EarlyAlertPortletController {
 		if(isConfirmed(req))
 			model.put("studentName", org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(req.getParameter("studentName")));
 			
+		Person user = (Person)model.get("user");
+		model.put("facultySchoolId", user.getId());
+		
 		return new ModelAndView("ea-roster", model);
 	}
 	
@@ -172,6 +176,7 @@ public final class EarlyAlertPortletController {
 
 	@RenderMapping(params = "action=enterAlert")
 	public ModelAndView showForm(final PortletRequest req, 
+			@RequestParam(required = false) final String facultySchoolId,
 			@RequestParam(required = false) final String schoolId, 
 			@RequestParam(required = false) final String formattedCourse,
 			@RequestParam(required = false) final String studentUserName, 
@@ -299,6 +304,7 @@ public final class EarlyAlertPortletController {
 		form.setSortAndPage(buildSortAndPage(-1,  0));
 		PagedResponse<EarlyAlertSearchResultTO> results = earlyAlertService.searchEarlyAlert(form);
 		
+		model.put(KEY_FACULTY_ID, facultySchoolId);
 		model.put(KEY_STUDENT_ID, student.getId());  // Student UUID
 		model.put(KEY_COURSE, course);
 		model.put(KEY_ENROLLMENT, enrollment);

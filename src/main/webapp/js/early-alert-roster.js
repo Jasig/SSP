@@ -174,7 +174,8 @@ var ssp = ssp || {};
                     { key: 'middleName', valuebinding: '*.middleName', sortable: true },
                     { key: 'lastName', valuebinding: '*.lastName', sortable: true },
                     { key: 'status', valuebinding: '*.statusName', sortable: true },
-                    { key: 'schoolId', valuebinding: '*.schoolId', sortable: true }
+                    { key: 'schoolId', valuebinding: '*.schoolId', sortable: true },
+		            { key: 'facultySchoolId', valuebinding: '*.facultySchoolId', sortable: true }
                 ],
                 bodyRenderer: {
                     type: 'fluid.pager.selfRender',
@@ -198,8 +199,10 @@ var ssp = ssp || {};
             // Click event for selecting a student
             $(container + ' ' + that.options.selectors.rosterTable + ' tbody tr').live('click', function() {
                 var schoolId = $(this).find('.schoolId').text();
+		var facultySchoolId = $(this).find('.facultySchoolId').text();
+
                 var selectedRosterIds = getSelectedRosterIds();
-                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', selectedRosterIds.termCode).replace('SECTIONCODE', selectedRosterIds.sectionCode);
+                var alertFormUrl = options.urls.enterAlert.replace('SCHOOLID', schoolId).replace('FORMATTEDCOURSE', selectedRosterIds.formattedCourse).replace('TERMCODE', 			selectedRosterIds.termCode).replace('SECTIONCODE', selectedRosterIds.sectionCode).replace('FACULTYID', facultySchoolId);
                 window.location = alertFormUrl;
             });
         } else {

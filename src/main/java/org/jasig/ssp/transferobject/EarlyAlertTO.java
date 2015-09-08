@@ -45,7 +45,13 @@ import com.google.common.collect.Sets;
 public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 		TransferObject<EarlyAlert>, Serializable {
 
+
+
 	private static final long serialVersionUID = -3197180145189755870L;
+
+	private String enrollmentStatus;
+	
+	private String facultySchoolId;
 
 	private String courseName;
 
@@ -111,7 +117,9 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 	@Override
 	public void from(final EarlyAlert earlyAlert) {
 		super.from(earlyAlert);
-
+ 
+		enrollmentStatus = earlyAlert.getEnrollmentStatus();
+		facultySchoolId = earlyAlert.getFacultySchoolId();
 		courseName = earlyAlert.getCourseName();
 		courseTitle = earlyAlert.getCourseTitle();
 		courseTermCode = earlyAlert.getCourseTermCode();
@@ -439,5 +447,21 @@ public class EarlyAlertTO extends AbstractAuditableTO<EarlyAlert> implements
 
 	public void setLastResponseDate(Date lastResponseDate) {
 		this.lastResponseDate = lastResponseDate;
+	}
+	
+	public String getFacultySchoolId() {
+		return facultySchoolId;
+	}
+
+	public void setFacultySchoolId(String facultySchoolId) {
+		this.facultySchoolId = facultySchoolId;
+	}
+	
+	public String getEnrollmentStatus() {
+		return enrollmentStatus;
+	}
+
+	public void setEnrollmentStatus(String enrollmentStatus) {
+		this.enrollmentStatus = enrollmentStatus;
 	}
 }

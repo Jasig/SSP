@@ -83,6 +83,12 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
 	private String earlyAlertSuggestionOtherDescription;
+	
+	@Column(name = "faculty_school_id", nullable = true, length = 255)
+	private String facultySchoolId;
+	
+	@Column(name = "enrollment_status", nullable = true, length = 255)
+	private String enrollmentStatus;	
 
 	@Column(nullable = true, length = 64000)
 	@Size(max = 64000)
@@ -354,6 +360,9 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 		result *= hashField("person", person);
 		result *= hashField("closedDate", closedDate);
 		result *= hashField("closedById", closedBy == null ? null : closedBy.getId());
+		result *= hashField("facultySchoolId", facultySchoolId);
+		result *= hashField("enrollmentStatus", enrollmentStatus);
+	
 
 		return result;
 	}
@@ -373,5 +382,20 @@ public class EarlyAlert // NOPMD by jon.adams on 5/24/12 1:29 PM
 	public void setResponseDates(Date lastResponseDate) {
 		this.lastResponseDate = lastResponseDate;
 	}
-	
+
+	public String getFacultySchoolId() {
+		return facultySchoolId;
+	}
+
+	public void setFacultySchoolId(String facultySchoolId) {
+		this.facultySchoolId = facultySchoolId;
+	}
+
+	public String getEnrollmentStatus() {
+		return enrollmentStatus;
+	}
+
+	public void setEnrollmentStatus(String enrollmentStatus) {
+		this.enrollmentStatus = enrollmentStatus;
+	}
 }
