@@ -51,6 +51,7 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
 import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
+import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.StudentType;
 import org.jasig.ssp.security.SspUser;
@@ -67,9 +68,11 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.service.reference.EarlyAlertSuggestionService;
+import org.jasig.ssp.service.reference.EnrollmentStatusService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.service.reference.impl.EnrollmentStatusServiceImpl;
 import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
 import org.jasig.ssp.transferobject.EarlyAlertTO;
 import org.jasig.ssp.transferobject.PagedResponse;
@@ -141,6 +144,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	private transient EarlyAlertSearchResultTOFactory searchResultFactory;
 	@Autowired
 	private transient EarlyAlertResponseReminderRecipientsConfig earReminderRecipientConfig;
+	@Autowired
+	private transient EnrollmentStatusService enrollmentStatusService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -693,6 +698,19 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
 			}
 		}
+		
+		String statusCode = eaMTO.getEnrollmentStatus();
+		if(statusCode != null) {
+			EnrollmentStatus enrollmentStatus = enrollmentStatusService.getByCode(statusCode);
+			if(enrollmentStatus != null) {
+				
+				//if we have made it here... we can add the status!
+				templateParameters.put("enrollment", enrollmentStatus);
+			}
+		}
+		
+		
+		
 		
 		templateParameters.put("earlyAlert", eaMTO);
 		templateParameters.put("termToRepresentEarlyAlert",

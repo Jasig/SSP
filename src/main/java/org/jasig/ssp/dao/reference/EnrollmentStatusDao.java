@@ -19,6 +19,8 @@
 package org.jasig.ssp.dao.reference;
 
 import org.springframework.stereotype.Repository;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
@@ -50,5 +52,11 @@ public class EnrollmentStatusDao extends AbstractReferenceAuditableCrudDao<Enrol
 		}
 
 		return super.getAll(sp);
+	}
+	
+	public EnrollmentStatus getByCode(final String code) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("code", code));
+		return (EnrollmentStatus) query.uniqueResult();
 	}
 }

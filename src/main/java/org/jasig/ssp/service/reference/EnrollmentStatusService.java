@@ -22,4 +22,6 @@ import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.service.ReferenceService;
  
 public interface EnrollmentStatusService extends ReferenceService<EnrollmentStatus> {
+	
+	public EnrollmentStatus getByCode(String code); 
 }

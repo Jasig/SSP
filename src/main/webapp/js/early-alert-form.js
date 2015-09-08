@@ -264,7 +264,6 @@ var ssp = ssp || {};
             	postData.earlyAlertSuggestionIds.push( $(this).val() );
             });
             
-            alert('about to submit: ' + options.urls.submit.replace('STUDENTID', options.parameters.studentId));
             
             // Submit the alert
             $.ajax({

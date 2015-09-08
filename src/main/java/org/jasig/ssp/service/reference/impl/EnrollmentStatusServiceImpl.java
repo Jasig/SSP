@@ -42,4 +42,9 @@ public class EnrollmentStatusServiceImpl extends
 	protected EnrollmentStatusDao getDao() {
 		return dao;
 	}
+	
+	@Override
+	public EnrollmentStatus getByCode(String code) {
+		return dao.getByCode(code);
+	}
 }
