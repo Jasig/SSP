@@ -240,7 +240,8 @@ public class DirectoryPersonSearchDao  {
 				"dp.coachFirstName as person_coachFirstName, " +
 				"dp.coachLastName as person_coachLastName, " +
 				"dp.coachId as person_coachId, " +
-				"dp.photoUrl as person_photoUrl ");
+				"dp.photoUrl as person_photoUrl, " +
+				"dp.campusName as person_campusName");
 		return stringBuilder;
 	}
 
@@ -285,7 +286,8 @@ public class DirectoryPersonSearchDao  {
 				"dp.coachLastName as person_coachLastName, " +
 				"dp.coachId as person_coachId, " +
 				"dp.coachSchoolId as person_coachSchoolId, " +
-				"dp.photoUrl as person_photoUrl ");
+				"dp.photoUrl as person_photoUrl, " +
+				"dp.campusName as person_campusName");
 
 		return stringBuilder;
 	}

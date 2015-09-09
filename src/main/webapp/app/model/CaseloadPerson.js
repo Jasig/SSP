@@ -25,6 +25,7 @@ Ext.define('Ssp.model.CaseloadPerson', {
              {name:'middleName', type: 'string'},
              {name: 'birthDate', type: 'date', dateFormat: 'Y-m-d'},
              {name: 'studentTypeName', type: 'string'},
+             {name: 'campusName', type: 'string'},
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
              {name: 'numberEarlyAlertResponsesRequired', type: 'int'},
@@ -47,6 +48,10 @@ Ext.define('Ssp.model.CaseloadPerson', {
      },
      
      getStudentTypeName: function(){
-     	return ((this.get('studentTypeName') != null)? this.get('studentTypeName') : "");   	
+     	return ((this.get('studentTypeName') != null)? this.get('studentTypeName') : "");
+     },
+
+     getCampusName: function(){
+     	return ((this.get('campusName') != null)? this.get('campusName') : "");
      }
 });

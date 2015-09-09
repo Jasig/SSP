@@ -118,6 +118,8 @@ public class PersonSearchResultFull {
 
     private BigDecimal creditHoursEarned;
 
+    private String campusName;
+
     //Below added for CustomExport
     private String sapStatus;
 
@@ -489,6 +491,14 @@ public class PersonSearchResultFull {
 
     public void setSecondaryEmailAddress (String secondaryEmailAddress) {
         this.secondaryEmailAddress = secondaryEmailAddress;
+    }
+
+    public String getCampusName() {
+        return campusName;
+    }
+
+    public void setCampusName(String campusName) {
+        this.campusName = campusName;
     }
 
     //***End Directory Person getters/setters ***

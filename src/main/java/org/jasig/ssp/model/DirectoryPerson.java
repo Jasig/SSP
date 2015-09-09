@@ -449,7 +449,10 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
     @Nullable
     private String coachSchoolId;
 
-
+	@Nullable
+	@Column(length = 80, name = "campus_name")
+	@Size(max = 80)
+	private String campusName;
 
 	/**
 	 * Initialize a Person.
@@ -897,7 +900,14 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
         this.programGpa = programGpa;
     }
 
+	@Nullable
+	public String getCampusName() {
+		return campusName;
+	}
 
+	public void setCampusName(@Nullable String campusName) {
+		this.campusName = campusName;
+	}
 
 	protected int hashPrime() {
 		return 3;

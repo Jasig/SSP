@@ -1499,7 +1499,8 @@ Ext.define('Ssp.controller.SearchViewController', {
        		me.instantCaseload = Ext.create('Ssp.view.person.InstantCaseloadAssignment',{hidden:true,
        			schoolIdValue:record.get("schoolId"),
        			coachIdValue:record.get("coachId"),
-       			studentTypeNameValue:record.get("studentTypeName")});
+       			studentTypeNameValue:record.get("studentTypeName"),
+       			campusNameValue:record.get("campusName")});
         }
 		me.instantCaseload.show();
     },

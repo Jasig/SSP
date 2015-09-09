@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
         personLite: 'personLite',
         personService: 'personService',
      	formUtils: 'formRendererUtils',
-        configStore: 'configStore'
+        configStore: 'configStore',
+        campusesStore: 'campusesAllUnpagedStore'
     },
     control: {
     	retrieveFromExternalButton: {
@@ -81,7 +82,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     	workPhoneField: '#workPhone',
     	homePhoneField: '#homePhone',
     	primaryEmailAddressField: '#primaryEmailAddress',
-    	secondaryEmailAddressField: '#secondaryEmailAddress'
+    	secondaryEmailAddressField: '#secondaryEmailAddress',
+    	homeCampusField: '#campusCombo'
     },  
 	init: function() {
 		var me=this;
@@ -114,6 +116,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 				me.getWorkPhoneField().setDisabled(disabled);
 				me.getPrimaryEmailAddressField().setDisabled(disabled);
 				me.getSecondaryEmailAddressField().setDisabled(disabled);
+				me.getHomeCampusField().setDisabled(disabled);
 			}
 			
 			
@@ -129,7 +132,14 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 				me.getRetrieveFromExternalButton().setVisible(false);
 			}
 		}
-		
+
+		if(!me.getView().instantCaseloadAssignment){
+			me.campusesStore.clearFilter(true);
+			me.formUtils.applyAssociativeStoreFilter(me.campusesStore,me.person.getHomeCampusId());
+			me.getHomeCampusField().setValue(me.person.getHomeCampusId());
+			me.campusesStore.load({callback:me.afterCampusesStoreLoaded,scope:me,single:true})
+		}
+
 		me.appEventsController.assignEvent({
             eventName: 'onRetrieveFromExternal',
             callBackFunc: me.onRetrieveFromExternalClick,
@@ -138,11 +148,31 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 		
 		return me.callParent(arguments);
     },
-	
+
+	afterCampusesStoreLoaded: function() {
+        var me = this;
+        //Add a blank campus to the store
+		var blankCampus = new Ssp.model.reference.Campus();
+		blankCampus.data.id = null;
+		blankCampus.data.name = '';
+		blankCampus.data.objectStatus = 'ACTIVE';
+        var data = [];
+		data.push(blankCampus);
+		me.campusesStore.insert(0, data);
+		me.campusesStore.commitChanges();
+
+		if(me.getView().instantCaseloadAssignment){
+			var record = me.campusesStore.findRecord("name",me.getView().campusNameValue, 0, false, false, true);
+			if(record) {
+				me.formUtils.applyAssociativeStoreFilter(me.campusesStore,record.get("id"));
+				me.getHomeCampusField().setValue( record.get("id") );
+			}
+		}
+	},
 	
 	destroy: function(){
         var me = this;
-        
+		me.campusesStore.clearFilter(true);
         me.appEventsController.removeEvent({
             eventName: 'onRetrieveFromExternal',
             callBackFunc: me.onRetrieveFromExternalClick,
@@ -179,6 +209,7 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			me.getPrimaryEmailAddressField().setDisabled(disabled);
 			me.getSecondaryEmailAddressField().setDisabled(disabled);
 			me.getUsernameField().setDisabled(disabled);
+			me.getHomeCampusField().setDisabled(disabled);
 			
 			me.getRetrieveFromExternalButton().setVisible( false );
 			me.getHomePhoneField().setVisible( false );
@@ -260,8 +291,17 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 				model.populateFromExternalData( r );
 				me.person.data = model.data;
 				me.getView().loadRecord( me.person );
-				if(!me.getView().instantCaseloadAssignment)
+				if(!me.getView().instantCaseloadAssignment) {
 					me.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1});
+					me.afterCampusesStoreLoaded();
+				} else {
+					me.campusesStore.clearFilter(true);
+                	if(me.campusesStore.getTotalCount( ) == 0){
+                		me.campusesStore.load({callback:me.afterCampusesStoreLoaded,scope:me,single:true})
+                	}else{
+                		 me.afterCampusesStoreLoaded();
+                	}
+				}
 			}
 			//If we find an internal record, reload the screen in 'Edit' mode.
 			else

@@ -24,7 +24,8 @@ Ext.define('Ssp.view.person.EditPerson', {
     inject: {
         textStore: 'sspTextStore',
         configStore: 'configStore',
-		appEventsController: 'appEventsController'
+		appEventsController: 'appEventsController',
+        campusesStore: 'campusesAllUnpagedStore'
     },
 	padding: '0 0 0 10',
 	margin: '0 0 0 0',
@@ -147,6 +148,22 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: true,
                     itemId: 'primaryEmailAddress',
                     width: 250
+                }, {
+                    xtype: 'combobox',
+                    name: 'campusId',
+                    itemId: 'campusCombo',
+                    id: 'campusCombo',
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-campus'),
+                    emptyText: 'Select One',
+                    store: me.campusesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    mode: 'local',
+                    typeAhead: false,
+                    editable: false,
+                    queryMode: 'local',
+                    allowBlank: true,
+					width: 250
                 }, {
                     fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
                     name: 'secondaryEmailAddress',

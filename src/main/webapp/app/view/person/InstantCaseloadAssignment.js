@@ -24,7 +24,7 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
     inject: {
         model: 'currentPerson'
     },
-    height: 450,
+    height: 500,
     width: 325,
     modal: true,
 	
@@ -46,7 +46,8 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
 				instantCaseloadAssignment:true,
 				schoolIdValue: me.schoolIdValue,
 				coachIdValue:me.coachIdValue,
-				studentTypeNameValue:me.studentTypeNameValue
+				studentTypeNameValue:me.studentTypeNameValue,
+				campusNameValue:me.campusNameValue
 			}],
             dockedItems: [{
                 xtype: 'toolbar',

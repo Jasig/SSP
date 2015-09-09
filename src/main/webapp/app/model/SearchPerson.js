@@ -32,6 +32,7 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'birthDate', type: 'date', dateFormat: 'Y-m-d'},
              {name: 'actualStartTerm', type: 'string'},
              {name: 'studentTypeName', type: 'string'},
+             {name: 'campusName', type: 'string'},
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
              {name: 'numberEarlyAlertResponsesRequired', type: 'int'},
@@ -71,8 +72,12 @@ Ext.define('Ssp.model.SearchPerson', {
 		}
       	return ((lastName) ? lastName + ", " + firstName : "");
      },
-     
+
      getStudentTypeName: function(){
-      	return ((this.get('studentTypeName') != null)? this.get('studentTypeName') : "");   	
-      }
+      	return ((this.get('studentTypeName') != null)? this.get('studentTypeName') : "");
+     },
+
+     getCampusName: function(){
+      	return ((this.get('campusName') != null)? this.get('campusName') : "");
+     }
 });

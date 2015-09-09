@@ -75,6 +75,8 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 	private String photoUrl;
 
 	private String currentProgramStatusName;
+
+	private String campusName;
 					
 
 	public PersonSearchResult2TO(final PersonSearchResult2 record) {
@@ -106,6 +108,7 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 		setPhotoUrl(model.getPhotoUrl());
 		setCurrentProgramStatusName(model.getCurrentProgramStatusName());
 		setNumberEarlyAlertResponsesRequired(model.getNumberEarlyAlertResponsesRequired());
+		setCampusName(model.getCampusName());
 	}
 
 	public UUID getPersonId() {
@@ -256,5 +259,13 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 	public void setNumberEarlyAlertResponsesRequired(
 			int numberEarlyAlertResponsesRequired) {
 		this.numberEarlyAlertResponsesRequired = numberEarlyAlertResponsesRequired;
+	}
+
+	public String getCampusName() {
+		return campusName;
+	}
+
+	public void setCampusName(String campusName) {
+		this.campusName = campusName;
 	}
 }

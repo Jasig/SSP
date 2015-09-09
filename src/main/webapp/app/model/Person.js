@@ -171,9 +171,25 @@ Ext.define('Ssp.model.Person', {
     	}
     },
 
+    getHomeCampusId: function(){
+    	var me=this;
+    	var homeCampus = me.get('homeCampus');
+    	return ((homeCampus != null)? homeCampus.id : "");
+    },
+
     getHomeCampusName: function(){
-    	var homeCampus = this.get('homeCampus');
+    	var me=this;
+    	var homeCampus = me.get('homeCampus');
     	return ((homeCampus != null)? homeCampus.name : "");
+    },
+
+    setHomeCampusId: function (value) {
+    	var me=this;
+    	if (value) {
+    		me.set('homeCampus', {"id":value});
+    	} else {
+			me.set('homeCampus', null);
+    	}
     },
 
     getPhotoUrl: function(){

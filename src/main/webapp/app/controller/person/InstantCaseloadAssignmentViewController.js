@@ -138,6 +138,11 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
 			//set coach and student type
 			model.setCoachId( coachID );
 			model.setStudentTypeId( studentTypeID );
+
+			//set homeCampus
+			var homeCampusId = personForm.findField('campusId').getValue();
+			model.setHomeCampusId(homeCampusId);
+
 			// update the appointment
 			appointmentForm.updateRecord();
 			
@@ -146,8 +151,8 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
 			
 			// ensure props are null if necessary
 			jsonData = model.setPropsNullForSave( model.data );
-			
-			me.personService.save( jsonData, 
+
+			me.personService.save( jsonData,
 	    			               {success:me.savePersonSuccess, 
 				                    failure:me.savePersonFailure,
 				                    statusCode: {

@@ -26,6 +26,7 @@ import org.jasig.ssp.factory.PersonReferralSourceTOFactory;
 import org.jasig.ssp.factory.PersonServiceReasonTOFactory;
 import org.jasig.ssp.factory.PersonSpecialServiceGroupTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
+import org.jasig.ssp.factory.reference.CampusTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -66,6 +67,9 @@ public class PersonTOFactoryImpl extends
 
 	@Autowired
 	private transient PersonServiceReasonTOFactory personServiceReasonTOFactory;
+
+	@Autowired
+	private transient CampusTOFactory campusTOFactory;
 
 	@Override
 	protected PersonDao getDao() {
@@ -138,6 +142,9 @@ public class PersonTOFactoryImpl extends
 			final Person person = personService.get(tObject.getId());
 			model.setProgramStatuses(person.getProgramStatuses());
 		}
+
+		model.setHomeCampus((tObject.getHomeCampus() == null)
+				|| (tObject.getHomeCampus().getId() == null) ? null : campusTOFactory.fromLite(tObject.getHomeCampus()));
 
 		return model;
 	}

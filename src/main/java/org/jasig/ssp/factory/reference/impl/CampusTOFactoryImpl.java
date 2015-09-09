@@ -26,6 +26,7 @@ import org.jasig.ssp.factory.reference.CampusTOFactory;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.CampusTO;
+import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +68,10 @@ public class CampusTOFactoryImpl extends
 		model.setCode(tObject.getCode());
 
 		return model;
+	}
+
+	@Override
+	public Campus fromLite(final ReferenceLiteTO<Campus> tObject) throws ObjectNotFoundException {
+		return getDao().get(tObject.getId());
 	}
 }

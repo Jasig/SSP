@@ -76,6 +76,7 @@ public class PersonSearchResult2 {
 
     private String actualStartTerm;
 
+	private String campusName;
 
 	public UUID getPersonId() {
 		return personId;
@@ -268,4 +269,12 @@ public class PersonSearchResult2 {
     public void setActualStartTerm (final String actualStartTerm) {
         this.actualStartTerm = actualStartTerm;
     }
+
+	public String getCampusName() {
+		return campusName;
+	}
+
+	public void setCampusName(String campusName) {
+		this.campusName = campusName;
+	}
 }

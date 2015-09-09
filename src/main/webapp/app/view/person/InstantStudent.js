@@ -31,7 +31,7 @@ Ext.define('Ssp.view.person.InstantStudent', {
     
     initComponent: function(){
         var me = this;
-        
+
         Ext.applyIf(me, {
             border: 0,
             bodyPadding: 0,
@@ -58,7 +58,8 @@ Ext.define('Ssp.view.person.InstantStudent', {
                         {
                             xtype: 'editperson',
                             instantCaseloadAssignment:me.instantCaseloadAssignment,
-                            schoolIdValue: me.schoolIdValue
+                            schoolIdValue: me.schoolIdValue,
+                            campusNameValue:me.campusNameValue
                         }
                     ]
                 },
