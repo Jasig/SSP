@@ -94,7 +94,7 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     labelWidth: 45,
                     maxHeight: 32
                 }, {
-                    fieldLabel: 'Home Campus',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus'),
                     name: 'homeCampus',
                     itemId: 'homeCampus',
                     labelWidth: 85

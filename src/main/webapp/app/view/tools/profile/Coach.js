@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.profile.Coach', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.profile.ProfileCoachViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -84,6 +85,11 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     }, {
                         xtype: 'tbspacer',
                         height: '10'
+					}, {
+						fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus'),
+						name: 'coachHomeCampusName',
+						itemId: 'coachHomeCampusName',
+						labelWidth: 85
                     }, {
                         fieldLabel: 'Department',
                         name: 'coachDepartmentName',

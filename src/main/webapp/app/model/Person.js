@@ -139,7 +139,12 @@ Ext.define('Ssp.model.Person', {
     	var coach = this.get('coach');
     	return ((coach != null)? coach.departmentName : "");   	
     },
-    
+
+    getCoachHomeCampusName: function(){
+     	var coach = this.get('coach');
+       	return ((coach != null)? coach.homeCampusName : "");
+    },
+
     getCoachPhotoUrl: function(){
     	var coach = this.get('coach');
     	var coachPhotoUrl = ((coach != null)? coach.photoUrl : "");   	

@@ -37,6 +37,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         phoneField: '#phoneField',
         officeField: '#officeField',
         emailAddressField: '#emailAddressField',
+        homeCampusField: '#homeCampusField',
         
         coachCombo: {
             selector: '#coachCombo',
@@ -125,6 +126,7 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         me.getPhoneField().hide();
         me.getEmailAddressField().hide();
         me.getOfficeField().hide();
+        me.getHomeCampusField().hide();
     },
     
     initForm: function(){
@@ -157,6 +159,12 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         me.getPhoneField().setValue(coach.get('workPhone'));
         me.getEmailAddressField().setValue(coach.get('primaryEmailAddress'));
         me.getOfficeField().setValue(coach.get('officeLocation'));
+        if (coach.get('homeCampusName') == null || coach.get('homeCampusName') == "") {
+            me.getHomeCampusField().hide();
+        } else {
+            me.getHomeCampusField().show();
+            me.getHomeCampusField().setValue(coach.get('homeCampusName'));
+        }
     },
     
     

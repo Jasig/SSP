@@ -258,7 +258,8 @@ public class PersonTO // NOPMD
 					coachPerson.getNullSafeOfficeLocation(),
 					coachPerson.getNullSafeDepartmentName(),
 					coachPerson.getWorkPhone(),
-					coachPerson.getPhotoUrl()
+					coachPerson.getPhotoUrl(),
+					coachPerson.getHomeCampus() != null ? coachPerson.getHomeCampus().getName() : null
 					);
 		}
 

@@ -43,7 +43,8 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
     	previousCoachDisplay: '#previousCoachDisplay',
 		previousCoachNameField: '#previousCoachName',
         previousCoachChangedByNameField: '#previousCoachChangedByName',
-        previousCoachChangeDateField: '#previousCoachChangeDate'
+        previousCoachChangeDateField: '#previousCoachChangeDate',
+        coachHomeCampusNameField: '#coachHomeCampusName'
     },
 
 	init: function() {
@@ -82,6 +83,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		var coachOfficeLocationField = me.getCoachOfficeLocationField();
 		var coachPrimaryEmailAddressField = me.getCoachPrimaryEmailAddressField();
 		var coachPhotoUrlField = me.getCoachPhotoUrlField();
+		var coachHomeCampusField = me.getCoachHomeCampusNameField();
 
 		var id= me.personLite.get('id');
 		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
@@ -100,6 +102,12 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		coachOfficeLocationField.setValue( me.person.getCoachOfficeLocation() );
 		coachPrimaryEmailAddressField.setValue( me.person.getCoachPrimaryEmailAddress() );
 		coachPhotoUrlField.setSrc( me.person.getCoachPhotoUrl() );
+
+		if (me.person.getCoachHomeCampusName() == null || me.person.getCoachHomeCampusName() == "") {
+			coachHomeCampusField.hide();
+		} else {
+			coachHomeCampusField.setValue(me.person.getCoachHomeCampusName());
+		}
 
 		me.coachHistoryService.getCurrentCoachChangeHistory( id, {
 			success: me.getCoachHistorySuccess,

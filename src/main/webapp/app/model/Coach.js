@@ -33,5 +33,6 @@ Ext.define('Ssp.model.Coach', {
              {name:'departmentName',type:'string'},
              {name: 'workPhone', type:'string'},
              {name: 'primaryEmailAddress', type:'string'},
-             {name: 'officeLocation', type:'string'} ]
+             {name: 'officeLocation', type:'string'},
+             {name: 'homeCampusName', type:'string'} ]
 });

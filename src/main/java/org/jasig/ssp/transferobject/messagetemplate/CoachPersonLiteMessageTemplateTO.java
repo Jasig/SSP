@@ -48,9 +48,9 @@ public class CoachPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 
 	public CoachPersonLiteMessageTemplateTO(UUID id, String firstName,
 			String lastName, String primaryEmailAddress, String officeLocation,
-			String departmentName, String workPhone, String photoUrl) {
+			String departmentName, String workPhone, String photoUrl, String homeCampusName) {
 		super(id, firstName, lastName, primaryEmailAddress, officeLocation,
-				departmentName, workPhone, photoUrl);
+				departmentName, workPhone, photoUrl, homeCampusName);
 		
 	}
 

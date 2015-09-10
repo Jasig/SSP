@@ -316,7 +316,9 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			}else{
 				criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 			}
-			
+
+			criteria.createAlias("homeCampus", "campus", JoinType.LEFT_OUTER_JOIN);
+
 			criteria.setProjection(Projections.projectionList()
 							.add(Projections.property("id").as("person_id"))
 							.add(Projections.property("firstName").as("person_firstName"))
@@ -325,7 +327,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.add(Projections.property("workPhone").as("person_workPhone"))
 							.add(Projections.property("photoUrl").as("person_photoUrl"))
 							.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
-							.add(Projections.property("personStaffDetails.officeLocation").as("person_officeLocation")))
+							.add(Projections.property("personStaffDetails.officeLocation").as("person_officeLocation"))
+							.add(Projections.property("campus.name").as("person_homeCampusName")))
 					.setResultTransformer(
 							new NamespacedAliasToBeanResultTransformer(
 									CoachPersonLiteTO.class, "person_"));
@@ -399,6 +402,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 		}
 
+		criteria.createAlias("homeCampus", "campus", JoinType.LEFT_OUTER_JOIN);
+
 		// item count
 		Long totalRows = 0L;
 		if ((sAndP != null) && sAndP.isPaged()) {
@@ -413,7 +418,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Projections.property("lastName").as("person_lastName"))
 					.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
 					.add(Projections.property("workPhone").as("person_workPhone"))
-					.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName")))
+					.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
+					.add(Projections.property("campus.Name").as("person_homeCampusName")))
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
 								CoachPersonLiteTO.class, "person_"));

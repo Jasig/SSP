@@ -132,6 +132,8 @@ public class CoachPersonLiteTO implements Serializable {
 	private String officeLocation;
 
 	private String departmentName;
+
+	private String homeCampusName;
 	
 	private String photoUrl;
 
@@ -165,7 +167,8 @@ public class CoachPersonLiteTO implements Serializable {
 			final String officeLocation,
 			final String departmentName,
 			final String workPhone,
-			final String photoUrl) {
+			final String photoUrl,
+		 	final String homeCampusName) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -174,6 +177,7 @@ public class CoachPersonLiteTO implements Serializable {
 		this.departmentName = departmentName;
 		this.workPhone = workPhone;
 		this.photoUrl = photoUrl;
+		this.homeCampusName = homeCampusName;
 	}
 
 	/**
@@ -200,6 +204,7 @@ public class CoachPersonLiteTO implements Serializable {
 		}
 		// officeLocation = null; // TODO: load data from external source
 		// departmentName = null; // TODO: load data from external source
+		homeCampusName = person.getHomeCampus() != null ? person.getHomeCampus().getName() : null;
 	}
 	
 	public CoachPersonLiteTO(@NotNull final AuditPerson person) {
@@ -319,6 +324,14 @@ public class CoachPersonLiteTO implements Serializable {
 		this.departmentName = departmentName;
 	}
 
+	public String getHomeCampusName() {
+		return homeCampusName;
+	}
+
+	public void setHomeCampusName(String homeCampusName) {
+		this.homeCampusName = homeCampusName;
+	}
+
 	/**
 	 * Not <code>equals()</code> because the convention seems to be to
 	 * not do that for TO classes.
@@ -333,6 +346,8 @@ public class CoachPersonLiteTO implements Serializable {
 		CoachPersonLiteTO that = (CoachPersonLiteTO) o;
 
 		if (departmentName != null ? !departmentName.equals(that.departmentName) : that.departmentName != null)
+			return false;
+		if (homeCampusName != null ? !homeCampusName.equals(that.homeCampusName) : that.homeCampusName != null)
 			return false;
 		if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
 			return false;
@@ -367,6 +382,7 @@ public class CoachPersonLiteTO implements Serializable {
 				", workPhone='" + workPhone + '\'' +
 				", officeLocation='" + officeLocation + '\'' +
 				", departmentName='" + departmentName + '\'' +
+				", homeCampusName='" + homeCampusName + '\'' +
 				'}';
 	}
 

@@ -24,7 +24,8 @@ Ext.define('Ssp.view.person.Coach', {
     controller: 'Ssp.controller.person.CoachViewController',
     inject: {
     	coachesStore: 'coachesStore',
-        configStore: 'configStore'
+        configStore: 'configStore',
+        textStore: 'sspTextStore'
     },
 	width: '100%',
 	padding: '0 0 0 0',
@@ -82,6 +83,13 @@ Ext.define('Ssp.view.person.Coach', {
 				        fieldLabel: 'Email',
 				        itemId: 'emailAddressField',
 				        name: 'coachEmailAddress',
+						width: 300,
+						disabled: true
+					}, {
+						fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus'),
+						name: 'coachHomeCampus',
+						itemId: 'homeCampusField',
+						labelWidth: 85,
 						width: 300,
 						disabled: true
 				    },{
