@@ -30,7 +30,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
         searchService: 'searchService',
         coachesStore: 'coachesStore',
         configStore: 'configurationOptionsUnpagedStore',
-        searchStore: 'directoryPersonSearchStore'
+        searchStore: 'directoryPersonSearchStore',
+        campusesStore: 'campusesAllUnpagedStore'
     },
     control: {
     	view: {
@@ -123,12 +124,20 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		},
 		'schoolId': {
 			specialkey: "specialKeyPressed"
+		},
+		'homeCampus':{
+			specialkey: "specialKeyPressed"
 		}
     },
 
 	init: function() {
 		var me=this;    	
 		me.coachesStore.clearFilter(true);
+
+		me.campusesStore.clearFilter(true);
+		me.formUtils.applyAssociativeStoreFilter(me.campusesStore);
+		me.campusesStore.load();
+
 		return me.callParent(arguments);
     },
 
@@ -158,6 +167,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
         me.clear();
         me.searchStore.removeAll();
+
+		me.campusesStore.clearFilter(true);
 
 	   	return me.callParent( arguments );
     },
@@ -261,6 +272,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.dateFieldValueFromName('birthDate'),
 				me.getView().query('combobox[name=actualStartTerm]')[0].value,
 				me.getView().query('combobox[name=personTableType]')[0].value,
+				me.getView().query('combobox[name=homeCampus]')[0].value,
 				{
 				success: me.searchSuccess,
 				failure: me.searchFailure,
@@ -874,7 +886,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				myPlans: me.getView().query('checkbox[name=myPlans]')[0].value,
 				myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,
 				birthDate: me.dateFieldValueFromName('birthDate'),
-				personTableType: me.getView().query('combobox[name=personTableType]')[0].value
+				personTableType: me.getView().query('combobox[name=personTableType]')[0].value,
+				homeCampus: me.getView().query('combobox[name=homeCampus]')[0].value
 			}
 
 			me.searchService.searchCountWithParams(criteria,

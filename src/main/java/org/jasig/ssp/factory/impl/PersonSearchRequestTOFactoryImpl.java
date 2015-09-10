@@ -23,12 +23,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import org.jasig.ssp.dao.PersonDao;
+import org.jasig.ssp.dao.reference.CampusDao;
 import org.jasig.ssp.dao.reference.ProgramStatusDao;
 import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
 import org.jasig.ssp.factory.AbstractTOFactory;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -52,7 +54,10 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 	
 	@Autowired
 	private ProgramStatusDao programStatusDao;
-	
+
+	@Autowired
+	private CampusDao campusDao;
+
 	@Autowired
 	private SpecialServiceGroupDao specialServiceGroupDao;
 	
@@ -98,7 +103,16 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			}
 			model.setProgramStatus(programStatus);
 		}
-		
+
+		if (to.getHomeCampus() != null) {
+			//cycle through each programstatus
+			ArrayList<Campus> homeCampus = new ArrayList<Campus>();
+			for (UUID campusId : to.getHomeCampus()) {
+				homeCampus.add(getCampusDao().get(campusId));
+			}
+			model.setHomeCampus(homeCampus);
+		}
+
 		if (to.getSpecialServiceGroup() != null) {
 			
 			ArrayList<SpecialServiceGroup> specialServiceGroupList = new ArrayList<SpecialServiceGroup>();
@@ -134,7 +148,11 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 	public ProgramStatusDao getProgramStatusDao() {
 		return programStatusDao;
 	}
-	
+
+	public CampusDao getCampusDao() {
+		return campusDao;
+	}
+
 	public SpecialServiceGroupDao getSpecialServiceGroupDao() {
 		return specialServiceGroupDao;
 	}
@@ -152,7 +170,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
             BigDecimal programGpaMin, BigDecimal programGpaMax,
             Boolean currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,
-			Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType , SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+			Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType, String homeCampus, SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
@@ -190,6 +208,9 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
         to.setActualStartTerms(actualStartTerm);
 		to.setPersonTableTypes(personTableType);
 		to.setSortAndPage(sortAndPage);
+		//comma separated set of UUIDs as a String
+		to.setHomeCampuses(homeCampus);
+
 		return from(to);
 	}
 	

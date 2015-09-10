@@ -346,7 +346,10 @@ public class DirectoryPersonSearchDao  {
 		
 		//watchList
 		buildWatchList(personSearchRequest,filterTracker, stringBuilder);
-		
+
+		// homeCampus
+		buildHomeCampus(personSearchRequest, filterTracker, stringBuilder);
+
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
 	}
 	
@@ -496,7 +499,20 @@ public class DirectoryPersonSearchDao  {
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
         return (CollectionUtils.isNotEmpty(personSearchRequest.getProgramStatus()));
 	}
-	
+
+	private void buildHomeCampus(PersonSearchRequest personSearchRequest,
+									FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if(hasHomeCampus(personSearchRequest))
+		{
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" dp.campusName in (:homeCampusName) ");
+		}
+	}
+
+	private boolean hasHomeCampus(PersonSearchRequest personSearchRequest) {
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getHomeCampus()));
+	}
+
 	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest){
 		return StringUtils.isNotBlank(personSearchRequest.getPersonTableType());
 	}
@@ -688,6 +704,10 @@ public class DirectoryPersonSearchDao  {
 		if(hasProgramStatus(personSearchRequest))
 		{
 			params.put("programStatusName", personSearchRequest.getProgramStatusNames());
+		}
+
+		if(hasHomeCampus(personSearchRequest)) {
+			params.put("homeCampusName", personSearchRequest.getHomeCampusNames());
 		}
 		
 		if(hasSpecialServiceGroup(personSearchRequest))

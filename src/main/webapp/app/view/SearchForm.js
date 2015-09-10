@@ -37,7 +37,8 @@ Ext.define('Ssp.view.SearchForm',{
         configStore: 'configurationOptionsUnpagedStore',
         specialServiceGroupsActiveUnpagedStore: 'specialServiceGroupsActiveUnpagedStore',
         textStore:'sspTextStore',
-        termsStore: 'termsStore'
+        termsStore: 'termsStore',
+        campusesStore: 'campusesAllUnpagedStore'
     },
     collapsible: true,
 	hideCollapseTool: true,
@@ -233,6 +234,18 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    editable: false
 		   		    //tpl: comboTPLDisplayValueDisplay
                 }]
+			}, {
+				xtype: 'combobox',
+				multiSelect: true,
+			    fieldLabel: (me.textStore.getValueByCode('ssp.label.home-campus') ? me.textStore.getValueByCode('ssp.label.home-campus') : "Home Campus"),
+				emptyText: 'Select ' + (me.textStore.getValueByCode('ssp.label.home-campus') ? me.textStore.getValueByCode('ssp.label.home-campus') : "Home Campus"),
+				store: me.campusesStore,
+				valueField: 'id',
+				displayField: 'name',
+				width:100,
+				itemId: 'homeCampus',
+				name: 'homeCampus',
+				editable: false
 			}, {
 				xtype: 'combobox',
 				multiSelect: true,

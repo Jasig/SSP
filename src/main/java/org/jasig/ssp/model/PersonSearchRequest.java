@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
@@ -126,8 +127,7 @@ public class PersonSearchRequest {
 	
 	private SortingAndPaging sortAndPage;
 
-
-
+	private List<Campus> homeCampus;
 
     public PersonSearchRequest() {
 		super();
@@ -174,6 +174,33 @@ public class PersonSearchRequest {
         }
 	}
 
+	public List<Campus> getHomeCampus() {
+		return homeCampus;
+	}
+
+	public List<String> getHomeCampusNames() {
+		ArrayList<String> retVal = new ArrayList<String>();
+		for(Campus ps: homeCampus) {
+			retVal.add(ps.getName());
+		}
+
+		return retVal;
+	}
+
+
+	public void setHomeCampus(List<Campus> homeCampus) {
+		if (CollectionUtils.isNotEmpty(homeCampus)) {
+			this.homeCampus = homeCampus;
+		}
+	}
+
+	public void setHomeCampus(Campus homeCampus) {
+		if (homeCampus != null) {
+			ArrayList<Campus> psList = new ArrayList<Campus>();
+			psList.add(homeCampus);
+			this.homeCampus = psList;
+		}
+	}
 
 	public List<SpecialServiceGroup> getSpecialServiceGroup() {
 		return specialServiceGroup;

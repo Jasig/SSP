@@ -92,7 +92,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 	
 	private SortingAndPaging sortAndPage;
 
-
+	private List<UUID> homeCampus;
 
 	
 	public String getSchoolId() {
@@ -162,6 +162,27 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		}
 	}
 
+	public List<UUID> getHomeCampus() {
+		return homeCampus;
+	}
+
+	public void setHomeCampus(List<UUID> homeCampus) {
+		if (CollectionUtils.isNotEmpty(homeCampus)) {
+			this.homeCampus = homeCampus;
+		}
+	}
+
+	//comma separated string of homeCampusids
+	public void setHomeCampuses(String homeCampuses) {
+		if (StringUtils.isNotBlank(homeCampuses)) {
+			List<String> items = Arrays.asList(homeCampuses.split("\\s*,\\s*"));
+			ArrayList<UUID> homeCampusIds = new ArrayList<UUID>();
+			for (String item: items) {
+				homeCampusIds.add(UUID.fromString(item));
+			}
+			this.homeCampus = homeCampusIds;
+		}
+	}
 	public List<UUID> getCoachId() {
 		return coachId;
 	}
