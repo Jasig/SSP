@@ -179,6 +179,17 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Home Campus -->
+		<div class="ea-input">
+			<select class="input-home-campus-group" id="homeCampusIds" name="homeCampusIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Home Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
+
 		<!-- Date Range Description -->
 		<div class="ea-input">
 		</div>
@@ -392,6 +403,16 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Home Campus -->
+		<div class="ea-input">
+			<select class="input-home-campus-group" id="homeCampusIds" name="homeCampusIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Home Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Date Range Description -->
 		<div class="ea-input">
@@ -660,6 +681,17 @@
 		</div>
 		<div class="ea-label">
 			<span>Special Service Groups:</span>
+		</div>
+		<div class="ea-clear"></div>
+
+		<!-- Home Campus -->
+		<div class="ea-input">
+			<select class="input-home-campus-group" id="homeCampusIds" name="homeCampusIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Home Campus:</span>
 		</div>
 		<div class="ea-clear"></div>
 
@@ -2587,6 +2619,16 @@
 		</div>
 		<div class="ea-clear"></div>
 
+		<!-- Home Campus -->
+		<div class="ea-input">
+			<select class="input-home-campus-group" id="homeCampusIds" name="homeCampusIds" multiple="multiple">
+			<option value="">${not_applicable}</option>
+			</select>
+		</div>
+		<div class="ea-label">
+			<span>Home Campus:</span>
+		</div>
+		<div class="ea-clear"></div>
 
 		<!-- Date Range Description -->
 		<div class="ea-input">

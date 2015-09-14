@@ -13,6 +13,7 @@ public class StudentChallengesTO {
 	String challengeName;
 	String coachLastName;
 	String coachFirstName;
+	String homeCampusName;
 	
 	
 	public UUID getId() {
@@ -70,5 +71,13 @@ public class StudentChallengesTO {
 	}
 	public void setChallengeName(String challengeName) {
 		this.challengeName = challengeName;
+	}
+
+	public String getHomeCampusName() {
+		return homeCampusName;
+	}
+
+	public void setHomeCampusName(String homeCampusName) {
+		this.homeCampusName = homeCampusName;
 	}
 }

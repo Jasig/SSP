@@ -220,6 +220,8 @@ var ssp = ssp || {};
 					.locate('programStatusGroup'));
 			loadGroupInput("/ssp/api/1/reference/studentType/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('studentTypeGroup'));
+			loadGroupInput("/ssp/api/1/reference/campus/?sort=name&start=0&limit=-1&sortDirection=ASC", that
+					.locate('homeCampusGroup'));
 			loadGroupInput("/ssp/api/1/reference/specialServiceGroup/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('specialServiceGroup'));
 			loadGroupInput("/ssp/api/1/reference/referralSource/?sort=name&start=0&limit=-1&sortDirection=ASC", that
@@ -465,6 +467,7 @@ var ssp = ssp || {};
 							disabilityServices : '.disability-services-report',
 							programStatusGroup : '.input-program-status-group',
 							studentTypeGroup : '.input-student-type-group',
+							homeCampusGroup : '.input-home-campus-group',
 							specialServiceGroup : '.input-special-service-group',
 							serviceReasonGroup: '.input-service-reason-group',
 							referralSourceGroup : '.input-referral-source-group',

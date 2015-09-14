@@ -98,6 +98,8 @@ public class BaseStudentReportTO implements Serializable {
     private String singlePhoneNumberForReport;
 	private String studentTypeName;
 	private String studentTypeCode;
+	private String homeCampusName;
+	private String homeCampusCode;
 	private Integer registrationStatus;
 	private CoachPersonLiteTO coach;
 	
@@ -508,6 +510,8 @@ public class BaseStudentReportTO implements Serializable {
 		setCoach(new CoachPersonLiteTO(person.getCoach()));
 		setStudentTypeName(person.getStudentType().getName());
 		setStudentTypeCode(person.getStudentType().getCode());
+		setHomeCampusName(person.getHomeCampus().getName());
+		setHomeCampusCode(person.getHomeCampus().getCode());
 
 		normalize();
 		setCreatedDate(person.getCreatedDate());
@@ -533,7 +537,7 @@ public class BaseStudentReportTO implements Serializable {
 		setZipCode(person.getZipCode());
 		setHomePhone(person.getHomePhone());
 		setCellPhone(person.getCellPhone());
-        setWorkPhone(person.getWorkPhone());
+		setWorkPhone(person.getWorkPhone());
         setAlternatePhone(person.getAlternatePhone());
 		setSchoolId(person.getSchoolId());
 		setCoachFirstName(person.getCoachFirstName());
@@ -545,6 +549,8 @@ public class BaseStudentReportTO implements Serializable {
 		setWatchers(person.getWatchers());
 		setStudentTypeName(person.getStudentTypeName());
 		setStudentTypeCode(person.getStudentTypeCode());
+		setHomeCampusName(person.getHomeCampusName());
+		setHomeCampusCode(person.getHomeCampusCode());
 		setCurrentProgramStatusCode(person.getCurrentProgramStatusCode());
 		setCurrentProgramStatusName(person.getCurrentProgramStatusName());
 		setCurrentProgramStatusId(person.getCurrentProgramStatusId());
@@ -920,4 +926,19 @@ public class BaseStudentReportTO implements Serializable {
 				createdDate.getTime());
 	}
 
+	public String getHomeCampusCode() {
+		return homeCampusCode;
+	}
+
+	public void setHomeCampusCode(String homeCampusCode) {
+		this.homeCampusCode = homeCampusCode;
+	}
+
+	public String getHomeCampusName() {
+		return homeCampusName;
+	}
+
+	public void setHomeCampusName(String homeCampusName) {
+		this.homeCampusName = homeCampusName;
+	}
 }

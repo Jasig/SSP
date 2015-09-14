@@ -41,6 +41,7 @@ import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
@@ -114,6 +115,9 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 	@Autowired
     protected transient ConfigService configurationService;
 
+	@Autowired
+	protected transient CampusService campusService;
+
 	@InitBinder
 	public void initBinder(final WebDataBinder binder) {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat(DEFAULT_DATE_FORMAT,
@@ -135,6 +139,7 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> homeCampusIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) Integer anticipatedStartYear,
 			final @RequestParam(required = false) String anticipatedStartTerm,
@@ -155,12 +160,14 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 
 		SearchParameters.addReferenceLists(studentTypeIds,
+				homeCampusIds,
 				specialServiceGroupIds,
 				referralSourcesIds,
 				serviceReasonIds,
 				parameters,
 				personSearchForm,
 				studentTypeService,
+				campusService,
 				ssgService,
 				referralSourcesService,
 				serviceReasonService);

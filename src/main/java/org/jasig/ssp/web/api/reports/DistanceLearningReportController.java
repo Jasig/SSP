@@ -118,13 +118,15 @@ public class DistanceLearningReportController extends ReportBaseController<BaseS
 		
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				null,
 				specialServiceGroupIds, 
 				null,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				null,
 				ssgService, 
 				null,
 				serviceReasonService);

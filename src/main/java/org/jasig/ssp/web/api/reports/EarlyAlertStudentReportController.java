@@ -154,13 +154,15 @@ public class EarlyAlertStudentReportController extends ReportBaseController<Earl
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 	
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				null,
 				specialServiceGroupIds, 
 				null,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				null,
 				ssgService, 
 				null,
 				serviceReasonService);

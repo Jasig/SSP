@@ -35,6 +35,7 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
@@ -83,6 +84,8 @@ public class SpecialServicesReportController extends ReportBaseController<BaseSt
 	protected transient ServiceReasonService serviceReasonService;	
 	@Autowired
 	private transient StudentTypeService studentTypeService;
+	@Autowired
+	protected transient CampusService campusService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
@@ -92,6 +95,7 @@ public class SpecialServicesReportController extends ReportBaseController<BaseSt
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> homeCampusIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false, defaultValue = DEFAULT_REPORT_TYPE) String reportType)
 			throws ObjectNotFoundException, IOException {
@@ -99,13 +103,15 @@ public class SpecialServicesReportController extends ReportBaseController<BaseSt
 		final Map<String, Object> parameters = Maps.newHashMap();
 		final PersonSearchFormTO personSearchForm = new PersonSearchFormTO();
 		
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				homeCampusIds,
 				specialServiceGroupIds, 
 				null,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				campusService,
 				ssgService, 
 				null,
 				serviceReasonService);

@@ -145,13 +145,15 @@ public class DisabilityServicesReportController extends ReportBaseController<Dis
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addOdsCoach(odsCoachId, parameters, personSearchForm, personService, personTOFactory);
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				null,
 				specialServiceGroupIds, 
 				referralSourcesIds,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				null,
 				ssgService, 
 				referralSourcesService,
 				serviceReasonService);

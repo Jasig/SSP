@@ -145,13 +145,15 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				null,
 				specialServiceGroupIds, 
 				null,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				null,
 				ssgService, 
 				null,
 				serviceReasonService);

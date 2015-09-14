@@ -229,7 +229,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	/**
 	 * Retrieves a List of People, likely used by the Address Labels Report
 	 * 
-	 * @param addressLabelSearchTO
+	 * @param personSearchFormTO
 	 *            Search criteria
 	 * @param sAndP
 	 *            Sorting and paging parameters
@@ -532,6 +532,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					personSearchTO.getStudentTypeIds()));
 		}
 
+		if (personSearchTO.getHomeCampusIds() != null) {
+			criteria.add(Restrictions.in("homeCampus.id",
+					personSearchTO.getHomeCampusIds()));
+		}
+
 		if (personSearchTO.getCreateDateFrom() != null) {
 			criteria.add(Restrictions.ge("createdDate",
 					personSearchTO.getCreateDateFrom()));
@@ -607,7 +612,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		if (ids.size() == 0) {
             return null;
         }
-		
+
 		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids);
 		do {
 			final Criteria criteria = createCriteria();
@@ -749,6 +754,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as("studentTypeName"));
 		projections.add(Projections.groupProperty("studentType.code").as("studentTypeCode"));
+
+		// Join to Student Type
+		criteria.createAlias("homeCampus", "campus", JoinType.LEFT_OUTER_JOIN);
+		// add StudentTypeName Column
+		projections.add(Projections.groupProperty("campus.name").as("homeCampusName"));
+		projections.add(Projections.groupProperty("campus.code").as("homeCampusCode"));
 
 		criteria.createAlias("coach", "c");
 		criteria.createAlias("watchers", "watcher", JoinType.LEFT_OUTER_JOIN);

@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
@@ -7,9 +27,9 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="141"/>
-	<property name="ireport.y" value="20"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -47,6 +67,7 @@
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="studentTypeNames" class="java.lang.String"/>
+	<parameter name="homeCampusNames" class="java.lang.String"/>
 	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
 	<parameter name="studentIntakeStartDate" class="java.lang.String"/>
 	<parameter name="studentIntakeEndDate" class="java.lang.String"/>
@@ -65,6 +86,9 @@
 	</field>
 	<field name="studentType" class="java.lang.String">
 		<fieldDescription><![CDATA[studentType]]></fieldDescription>
+	</field>
+	<field name="homeCampusName" class="java.lang.String">
+		<fieldDescription><![CDATA[homeCampusName]]></fieldDescription>
 	</field>
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
@@ -113,144 +137,155 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="165" splitType="Stretch">
+		<band height="179" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="2" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement mode="Transparent" x="1" y="2" width="123" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="2" width="154" height="16" uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7"/>
+				<reportElement mode="Transparent" x="128" y="2" width="154" height="16" uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7"/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="18" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement mode="Transparent" x="1" y="18" width="123" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Home Department:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="18" width="119" height="16" uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec"/>
+				<reportElement mode="Transparent" x="128" y="18" width="119" height="16" uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec"/>
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="34" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement mode="Transparent" x="1" y="34" width="123" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Coach:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="34" width="100" height="16" uuid="7addf57b-228e-402f-84d4-d875bcb42603"/>
+				<reportElement mode="Transparent" x="128" y="34" width="100" height="16" uuid="7addf57b-228e-402f-84d4-d875bcb42603"/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="246" y="18" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement mode="Transparent" x="247" y="18" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<text><![CDATA[Watcher:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="376" y="17" width="100" height="16" isPrintWhenDetailOverflows="true" uuid="7addf57b-228e-402f-84d4-d875bcb42603"/>
+				<reportElement positionType="Float" mode="Transparent" x="376" y="17" width="100" height="16" isPrintWhenDetailOverflows="true" uuid="7addf57b-228e-402f-84d4-d875bcb42603"/>
 				<textFieldExpression><![CDATA[$P{watcherName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="68" width="100" height="16" uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b"/>
+				<reportElement mode="Transparent" x="1" y="66" width="123" height="16" uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="68" width="441" height="16" uuid="85310786-589b-44e8-944a-2f6361cc98ef"/>
+				<reportElement mode="Transparent" x="128" y="66" width="440" height="16" uuid="85310786-589b-44e8-944a-2f6361cc98ef"/>
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="49" width="100" height="16" uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b"/>
+				<reportElement mode="Transparent" x="1" y="50" width="123" height="16" uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Start Term/Year]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="49" width="85" height="16" uuid="85310786-589b-44e8-944a-2f6361cc98ef"/>
+				<reportElement mode="Transparent" x="128" y="50" width="85" height="16" uuid="85310786-589b-44e8-944a-2f6361cc98ef"/>
 				<textFieldExpression><![CDATA[$P{anticipatedStartTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="82" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement mode="Transparent" x="1" y="82" width="123" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Student Type:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="1" y="98" width="123" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Home Campus:]]></text>
+			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement mode="Opaque" x="127" y="82" width="219" height="16" uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d"/>
+				<reportElement mode="Transparent" x="128" y="82" width="440" height="16" uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d"/>
 				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="128" y="98" width="440" height="16" uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d"/>
+				<textFieldExpression><![CDATA[$P{homeCampusNames}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="98" width="123" height="16" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
+				<reportElement mode="Transparent" x="1" y="114" width="123" height="16" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="98" width="441" height="16" uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72"/>
+				<reportElement mode="Transparent" x="128" y="114" width="440" height="16" uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72"/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="114" width="123" height="16" uuid="5f1b46f5-a916-4f4a-b0a1-6bdd2cf265a9"/>
+				<reportElement mode="Transparent" x="1" y="130" width="123" height="16" uuid="5f1b46f5-a916-4f4a-b0a1-6bdd2cf265a9"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Referral Source:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="114" width="441" height="16" uuid="acb5d97c-744c-4734-a98d-a800ceceff3d"/>
+				<reportElement mode="Transparent" x="128" y="130" width="440" height="16" uuid="acb5d97c-744c-4734-a98d-a800ceceff3d"/>
 				<textFieldExpression><![CDATA[$P{referralSourceNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="127" y="146" width="122" height="16" uuid="e49d816d-3764-4980-94ba-2b9e63b689da"/>
+				<reportElement mode="Transparent" x="128" y="162" width="122" height="16" uuid="e49d816d-3764-4980-94ba-2b9e63b689da"/>
 				<textFieldExpression><![CDATA[$P{studentCount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="148" width="100" height="16" uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b"/>
+				<reportElement mode="Transparent" x="1" y="162" width="123" height="16" uuid="90e4fa8d-5631-47ef-b9b1-de98b568c27b"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Challenge Count:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="246" y="34" width="130" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
+				<reportElement mode="Transparent" x="246" y="34" width="130" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
 				<text><![CDATA[Student Start Range:]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="376" y="33" width="96" height="15" uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3"/>
+				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="376" y="33" width="96" height="15" uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3"/>
 				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="472" y="33" width="96" height="15" uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e"/>
+				<reportElement mode="Transparent" x="472" y="33" width="96" height="15" uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e"/>
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="130" width="109" height="16" uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b"/>
+				<reportElement mode="Transparent" x="1" y="146" width="123" height="16" uuid="f65ee9a2-e184-47ba-9307-15ff81cbc57b"/>
 				<text><![CDATA[Service Reasons:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="127" y="130" width="441" height="16" uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a"/>
+				<reportElement mode="Transparent" x="128" y="146" width="440" height="16" uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a"/>
 				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="246" y="49" width="130" height="15" uuid="aa3ba0e0-e4b8-4ae7-aa71-39284b559a3f"/>
+				<reportElement mode="Transparent" x="246" y="49" width="130" height="15" uuid="aa3ba0e0-e4b8-4ae7-aa71-39284b559a3f"/>
 				<text><![CDATA[Intake Completion Range:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="376" y="49" width="96" height="15" uuid="d537502c-8a89-445f-84d3-9a6a78c31a3d"/>
+				<reportElement mode="Transparent" x="376" y="49" width="96" height="15" uuid="d537502c-8a89-445f-84d3-9a6a78c31a3d"/>
 				<textFieldExpression><![CDATA[$P{studentIntakeStartDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="472" y="48" width="96" height="16" uuid="d30bb55e-3f15-424e-aafe-72959cc7cba6"/>
+				<reportElement mode="Transparent" x="472" y="48" width="96" height="16" uuid="d30bb55e-3f15-424e-aafe-72959cc7cba6"/>
 				<textFieldExpression><![CDATA[$P{studentIntakeEndDate}]]></textFieldExpression>
 			</textField>
 			<componentElement>
@@ -305,7 +340,7 @@ data.JRBeanCollectionDataSource($P{challengeTotals})]]></dataSourceExpression>
 				<reportElement x="1" y="0" width="751" height="35" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="1" y="0" width="751" height="35" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
+				<reportElement x="1" y="1" width="751" height="35" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -317,29 +352,33 @@ data.JRBeanCollectionDataSource($P{challengeTotals})]]></dataSourceExpression>
 		<band height="17">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 			<staticText>
-				<reportElement x="109" y="2" width="103" height="14" uuid="059905e9-3138-4272-bf5b-8bf35c568e8f"/>
+				<reportElement x="110" y="2" width="100" height="14" uuid="059905e9-3138-4272-bf5b-8bf35c568e8f"/>
 				<text><![CDATA[First Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="212" y="3" width="107" height="14" uuid="26fe1108-7744-4b96-a677-b30639e0c802"/>
+				<reportElement x="210" y="2" width="100" height="14" uuid="26fe1108-7744-4b96-a677-b30639e0c802"/>
 				<text><![CDATA[Last Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="12" y="2" width="97" height="14" isPrintWhenDetailOverflows="true" uuid="6636fbe4-4e9c-46dd-b19b-92de4b640aaf"/>
+				<reportElement x="10" y="2" width="100" height="14" isPrintWhenDetailOverflows="true" uuid="6636fbe4-4e9c-46dd-b19b-92de4b640aaf"/>
 				<text><![CDATA[School Id]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="319" y="3" width="113" height="14" uuid="62b15612-3320-4aa8-94e8-4da5cb7d1c3a"/>
+				<reportElement x="310" y="2" width="125" height="14" uuid="62b15612-3320-4aa8-94e8-4da5cb7d1c3a"/>
 				<text><![CDATA[Student Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="432" y="0" width="202" height="16" uuid="a526a8b2-8f59-4917-8c8c-89cb7c74c6ef"/>
+				<reportElement x="435" y="2" width="125" height="14" uuid="62b15612-3320-4aa8-94e8-4da5cb7d1c3a"/>
+				<text><![CDATA[Home Campus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="2" width="185" height="14" uuid="a526a8b2-8f59-4917-8c8c-89cb7c74c6ef"/>
 				<text><![CDATA[Coach Name]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="17" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<rectangle>
 				<reportElement stretchType="RelativeToBandHeight" x="1" y="0" width="751" height="15" backcolor="#E4E4E4" uuid="a76e38f2-da61-4583-b2ed-d9dd61c44c14">
 					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
@@ -349,23 +388,27 @@ data.JRBeanCollectionDataSource($P{challengeTotals})]]></dataSourceExpression>
 				</graphicElement>
 			</rectangle>
 			<textField isBlankWhenNull="true">
-				<reportElement x="109" y="0" width="100" height="13" uuid="a4dd7e89-1ba4-4ece-830b-39a37c3f75c7"/>
+				<reportElement x="110" y="1" width="100" height="14" uuid="a4dd7e89-1ba4-4ece-830b-39a37c3f75c7"/>
 				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="212" y="0" width="87" height="13" uuid="a865ae7b-0acf-4261-a029-1fd1041286c9"/>
+				<reportElement x="210" y="1" width="100" height="14" uuid="a865ae7b-0acf-4261-a029-1fd1041286c9"/>
 				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="299" y="0" width="133" height="13" uuid="bcab1e79-ea00-41c5-b169-b27733a28eac"/>
+				<reportElement x="310" y="1" width="125" height="14" uuid="bcab1e79-ea00-41c5-b169-b27733a28eac"/>
 				<textFieldExpression><![CDATA[$F{studentType}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="9" y="0" width="97" height="15" uuid="0f943df7-8529-491e-b451-c85354fa7717"/>
+				<reportElement x="435" y="1" width="125" height="14" uuid="bcab1e79-ea00-41c5-b169-b27733a28eac"/>
+				<textFieldExpression><![CDATA[$F{homeCampusName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10" y="1" width="100" height="14" uuid="0f943df7-8529-491e-b451-c85354fa7717"/>
 				<textFieldExpression><![CDATA[$F{schoolId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="432" y="2" width="176" height="13" uuid="42d6633a-75d7-49c2-8796-7bb62ca9d329"/>
+				<reportElement x="560" y="1" width="185" height="14" uuid="42d6633a-75d7-49c2-8796-7bb62ca9d329"/>
 				<textFieldExpression><![CDATA[$F{coachName}]]></textFieldExpression>
 			</textField>
 		</band>

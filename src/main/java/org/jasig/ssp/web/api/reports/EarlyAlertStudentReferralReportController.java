@@ -145,7 +145,7 @@ public class EarlyAlertStudentReferralReportController extends ReportBaseControl
 				coachTO,
 				programStatus, null, null, null, null,
 				null, null,
-				null);
+				null, null);
 		
 		searchForm.setRosterStatus(rosterStatus);
 		searchForm.setHomeDepartment(homeDepartment);

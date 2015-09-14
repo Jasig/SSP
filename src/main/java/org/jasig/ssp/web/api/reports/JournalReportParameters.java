@@ -70,13 +70,15 @@ public class JournalReportParameters {
 			final String homeDepartment) throws ObjectNotFoundException{
 		SearchParameters.addCoach(coachId, parameters, personSearchForm, personService, personTOFactory);
 		
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				null,
 				specialServiceGroupIds, 
 				null,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				null,
 				ssgService, 
 				referralSourcesService,
 				serviceReasonService);

@@ -38,6 +38,7 @@ import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.*;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -114,6 +115,10 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 	@Autowired
 	protected transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
 
+	@Autowired
+	protected transient CampusService campusService;
+
+
 	// @Autowired
 	// private transient PersonTOFactory factory;
 
@@ -138,6 +143,7 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> homeCampusIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
@@ -156,13 +162,15 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 		
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				homeCampusIds,
 				specialServiceGroupIds, 
 				referralSourcesIds,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				campusService,
 				ssgService, 
 				referralSourcesService,
 				serviceReasonService);

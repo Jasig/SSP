@@ -45,7 +45,9 @@ public class PersonSearchFormTO
 	private Integer anticipatedStartYear;
 
 	private List<UUID> studentTypeIds;
-	
+
+	private List<UUID> homeCampusIds;
+
 	private List<UUID> serviceReasonsIds;
 
 	private Date createDateFrom;
@@ -130,7 +132,8 @@ public class PersonSearchFormTO
 								final String anticipatedStartTerm,
 								final Integer anticipatedStartYear,
 								final List<UUID> studentTypeIds,
-								final Date createDateFrom, final Date createDateTo) {
+								final Date createDateFrom, final Date createDateTo,
+							  	final List<UUID> homeCampusIds) {
 		super();
 		this.coach = coach;
 		this.programStatus = programStatus;
@@ -143,6 +146,7 @@ public class PersonSearchFormTO
 				createDateFrom.getTime());
 		this.createDateTo = createDateTo == null ? null : new Date(
 				createDateTo.getTime());
+		this.homeCampusIds = homeCampusIds;
 	}
 
 	public UUID getProgramStatus() {
@@ -196,6 +200,14 @@ public class PersonSearchFormTO
 
 	public void setStudentTypeIds(final List<UUID> studentTypeIds) {
 		this.studentTypeIds = studentTypeIds;
+	}
+
+	public List<UUID> getHomeCampusIds() {
+		return homeCampusIds;
+	}
+
+	public void setHomeCampusIds(final List<UUID> homeCampusIds) {
+		this.homeCampusIds = homeCampusIds;
 	}
 
 

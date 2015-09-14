@@ -58,7 +58,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import com.google.common.collect.Lists;
 
 public class SearchParameters {
-	
+
 	static final String NOT_USED = "Not Used";
 	static final String ALL = "ALL";
 	private static final String COACH_NAME = "coachName";
@@ -84,6 +84,7 @@ public class SearchParameters {
 	private static final String SEPCIAL_SERVICE_GROUP_NAMES = "specialServiceGroupNames";
 	private static final String SERVICE_REASON_NAMES = "serviceReasonGroupNames";
 	private static final String STUDENT_TYPE_NAMES = "studentTypeNames";
+	private static final String HOME_CAMPUS_NAMES = "homeCampusNames";
 	private static final String EARLY_ALERT_OUTCOME_NAMES = "earlyAlertOutcomeNames";
 	private static final String PROGRAM_STATUS_NAME = "programStatusName";
 	private static final String REPORT_DATE = "reportDate";
@@ -226,7 +227,16 @@ public class SearchParameters {
 		addUUIDSToMap(STUDENT_TYPE_NAMES, NOT_USED, studentTypeIds, parameters,
 				(ReferenceService)studentTypeService);
 	}
-	
+
+	@SuppressWarnings("rawtypes")
+	static final void addHomeCampusesToMap(final List<UUID> homeCampusIds,
+										   final Map<String, Object> parameters,
+										   CampusService campusService)
+			throws ObjectNotFoundException {
+		addUUIDSToMap(HOME_CAMPUS_NAMES, NOT_USED, homeCampusIds, parameters,
+				(ReferenceService)campusService);
+	}
+
 	static final void addHomeDepartmentToMap(final String homeDepartment, final Map<String, Object> parameters){
 		if(homeDepartment == null || homeDepartment.length() <= 0)
 			parameters.put(HOME_DEPARTMENT_NAME, NOT_USED);
@@ -518,12 +528,14 @@ public class SearchParameters {
 	}
 	
 	static final void addReferenceLists(final List<UUID> studentTypeIds,
+			final List<UUID> homeCampusIds,
 			final List<UUID> specialServiceGroupIds,
 			final List<UUID> referralSourcesIds,
 			final List<UUID> serviceReasonIds,
 			final Map<String, Object> parameters,
 			final PersonSearchFormTO personSearchForm,
 			final StudentTypeService studentTypeService,
+			final CampusService campusService,
 			final SpecialServiceGroupService ssgService,
 			final ReferralSourceService referralSourcesService,
 			final ServiceReasonService serviceReasonService
@@ -531,10 +543,12 @@ public class SearchParameters {
 		
 		List<UUID> cleanSpecialServiceGroupIds = cleanUUIDListOfNulls(specialServiceGroupIds);
 		List<UUID> cleanStudentTypeIds = cleanUUIDListOfNulls(studentTypeIds);
+		List<UUID> cleanHomeCampusIds = cleanUUIDListOfNulls(homeCampusIds);
 		List<UUID> cleanReferralSourcesIds = cleanUUIDListOfNulls(referralSourcesIds);
 		List<UUID> cleanserviceReasonIds = cleanUUIDListOfNulls(serviceReasonIds);
-		
+
 		addStudentTypesToMap(cleanStudentTypeIds, parameters, studentTypeService);
+		addHomeCampusesToMap(cleanHomeCampusIds, parameters, campusService);
 		addSpecialGroupsNamesToMap(cleanSpecialServiceGroupIds, parameters, ssgService);
 		addReferralSourcesToMap(cleanReferralSourcesIds, parameters, referralSourcesService);	
 		addServiceReasonToMap(cleanserviceReasonIds, parameters, serviceReasonService);
@@ -543,6 +557,7 @@ public class SearchParameters {
 		personSearchForm.setStudentTypeIds(cleanStudentTypeIds);
 		personSearchForm.setReferralSourcesIds(cleanReferralSourcesIds);
 		personSearchForm.setServiceReasonsIds(cleanserviceReasonIds);
+		personSearchForm.setHomeCampusIds(cleanHomeCampusIds);
 	}
 	
 	static final void addReferenceTypes(final UUID programStatus, 

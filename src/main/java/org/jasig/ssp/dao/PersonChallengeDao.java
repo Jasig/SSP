@@ -70,6 +70,7 @@ public class PersonChallengeDao extends
 		criteria.createAlias("p.coach", "coach");
 		criteria.createAlias("p.studentType", "studentType");
 		criteria.createAlias("challenge", "c");
+		criteria.createAlias("p.homeCampus", "homeCampus");
 		criteria.add(Restrictions.in("p.id", ids));
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 		
@@ -83,6 +84,7 @@ public class PersonChallengeDao extends
 		projections.add(Projections.groupProperty("studentType.name").as("studentType"));
 		projections.add(Projections.groupProperty("coach.firstName").as("coachFirstName"));
 		projections.add(Projections.groupProperty("coach.lastName").as("coachLastName"));
+		projections.add(Projections.groupProperty("homeCampus.name").as("homeCampusName"));
 		criteria.setProjection(projections);
 		criteria.addOrder(Order.asc("challengeName"));
 		criteria.addOrder(Order.asc("lastName"));

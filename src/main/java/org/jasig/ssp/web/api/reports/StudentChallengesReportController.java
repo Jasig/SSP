@@ -22,6 +22,7 @@ import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptTermService;
 import org.jasig.ssp.service.external.RegistrationStatusByTermService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -96,6 +97,9 @@ public class StudentChallengesReportController extends ReportBaseController<Stud
 	@Autowired
 	protected transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
 
+	@Autowired
+	protected transient CampusService campusService;
+
 	// @Autowired
 	// private transient PersonTOFactory factory;
 
@@ -120,6 +124,7 @@ public class StudentChallengesReportController extends ReportBaseController<Stud
 			final @RequestParam(required = false) List<UUID> specialServiceGroupIds,
 			final @RequestParam(required = false) List<UUID> referralSourcesIds,
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
+			final @RequestParam(required = false) List<UUID> homeCampusIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) Date createDateFrom,
 			final @RequestParam(required = false) Date createDateTo,
@@ -143,13 +148,15 @@ public class StudentChallengesReportController extends ReportBaseController<Stud
 		
 		SearchParameters.addWatcher(watcherId, parameters, personSearchForm, personService, personTOFactory);
 
-		SearchParameters.addReferenceLists(studentTypeIds, 
+		SearchParameters.addReferenceLists(studentTypeIds,
+				homeCampusIds,
 				specialServiceGroupIds, 
 				referralSourcesIds,
 				serviceReasonIds,
 				parameters, 
 				personSearchForm, 
-				studentTypeService, 
+				studentTypeService,
+				campusService,
 				ssgService, 
 				referralSourcesService,
 				serviceReasonService);
