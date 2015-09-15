@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
+import org.jasig.ssp.transferobject.reference.CampusTO;
 
 public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 
@@ -38,6 +39,7 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 	private String addressLine2;
 	private String schoolId;
 	private String currentProgramStatusName;
+	private CampusTO homeCampus;
 	private CoachPersonLiteTO coach;
 	
 
@@ -68,7 +70,7 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 		if (person.getCoach()!=null) {
 			coach = new CoachPersonLiteTO(person.getCoach());
 		}
-		
+		homeCampus = new CampusTO(person.getHomeCampus());
 	}
 
 	public String getSecondaryEmailAddress() {
@@ -194,5 +196,13 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 
 	public void setCoach(CoachPersonLiteTO coach) {
 		this.coach = coach;
+	}
+
+	public CampusTO getHomeCampus() {
+		return homeCampus;
+	}
+
+	public void setHomeCampus(CampusTO homeCampus) {
+		this.homeCampus = homeCampus;
 	}
 }

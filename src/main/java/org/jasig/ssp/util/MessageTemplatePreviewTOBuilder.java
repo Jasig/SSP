@@ -2,6 +2,7 @@ package org.jasig.ssp.util;
 
 import com.google.common.collect.Maps;
 import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.Term;
@@ -42,7 +43,14 @@ public class MessageTemplatePreviewTOBuilder {
         if (addCoach) {
             person.setCoach(createPerson(suffix + "_Coach", false));
         }
+        person.setHomeCampus(createCampus(suffix + "_HomeCampus"));
         return person;
+    }
+
+    public static Campus createCampus(final String suffix) {
+        Campus campus = new Campus();
+        setSetters(campus, suffix);
+        return campus;
     }
 
     public static PersonStaffDetails createPersonStaffDetails(final String suffix) {
