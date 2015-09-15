@@ -25,7 +25,7 @@ import org.jasig.ssp.model.PersonSearchResult2;
 
 public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearchResult2> {
 
-	private static String[] colHeaders = new String[17];
+	private static String[] colHeaders = new String[18];
 	
 	private static String COL_PERSON_ID = "PERSON_ID";
 	private static String COL_SCHOOL_ID = "SCHOOL_ID";
@@ -44,6 +44,7 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 	private static String COL_COACH_LAST_NAME = "COACH_LAST_NAME";
 	private static String COL_CURRENT_PROGRAM_STATUS = "CURRENT_PROGRAM_STATUS";
 	private static String COL_START_TERM = "START_TERM";
+	private static String COL_HOME_CAMPUS = "HOME_CAMPUS";
 	
 	static {
 		colHeaders[0] = COL_PERSON_ID;
@@ -63,6 +64,8 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 		colHeaders[14] = COL_COACH_LAST_NAME;
 		colHeaders[15] = COL_CURRENT_PROGRAM_STATUS;
 		colHeaders[16] = COL_START_TERM;
+		colHeaders[17] = COL_HOME_CAMPUS;
+
 	}
 
 	public CaseloadCsvWriterHelper(PrintWriter writer) {
@@ -93,7 +96,8 @@ public class CaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearc
 			model.getCoachFirstName(),
 			model.getCoachLastName(),
 			model.getCurrentProgramStatusName(),
-			model.getActualStartTerm()
+			model.getActualStartTerm(),
+			model.getCampusName()
 		});
 	}
 

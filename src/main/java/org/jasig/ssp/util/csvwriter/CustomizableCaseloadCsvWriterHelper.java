@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearchResultFull> {
 
-	private static String[] colHeaders = new String[55];
+	private static String[] colHeaders = new String[56];
 
 	private static String COL_PERSON_ID = "PERSON_ID";
 	private static String COL_SCHOOL_ID = "SCHOOL_ID";
@@ -85,8 +85,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
     private static String COL_LAST_REVISED_BY = "LAST_REVISED_BY";
     private static String COL_LAST_REVISED_DATE = "LAST_REVISED_DATE";
     private static String COL_FINANCIAL_AID_GPA = "FINANCIAL_AID_GPA";
-
-
+    private static String COL_HOME_CAMPUS = "HOME_CAMPUS";
 
     static {
 		colHeaders[0] = COL_PERSON_ID;
@@ -144,6 +143,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
         colHeaders[52] = COL_LAST_REVISED_BY;
         colHeaders[53] = COL_LAST_REVISED_DATE;
         colHeaders[54] = COL_FINANCIAL_AID_GPA;
+        colHeaders[55] = COL_HOME_CAMPUS;
 	}
 
     private final Map<Integer, Boolean> customOptions;
@@ -172,6 +172,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
             columns.add(colHeaders[18]);
             columns.add(colHeaders[19]);
             columns.add(colHeaders[20]);
+            columns.add(colHeaders[55]); //homecampus
 
 
             if ( customOptions.get(0) ) {
@@ -271,6 +272,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
         bodyRowsToReturn.add(model.getCoachSchoolId());
         bodyRowsToReturn.add(model.getCoachFirstName());
         bodyRowsToReturn.add(model.getCoachLastName());
+        bodyRowsToReturn.add(model.getCampusName());
 
 
         if ( customOptions.get(0) ) {
