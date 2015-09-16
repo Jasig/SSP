@@ -585,7 +585,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	saveStudentIntakeSuccess: function(r, scope, newSaveFlag) {
 		var me=scope;
 
-		me.getView().setLoading( false );
+		me.getView().setLoading( false ); 
 		
 		if( r.success ) {
 			me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.studentIntake.data.person});
