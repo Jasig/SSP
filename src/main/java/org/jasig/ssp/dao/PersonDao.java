@@ -419,7 +419,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Projections.property("primaryEmailAddress").as("person_primaryEmailAddress"))
 					.add(Projections.property("workPhone").as("person_workPhone"))
 					.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
-					.add(Projections.property("campus.Name").as("person_homeCampusName")))
+					.add(Projections.property("campus.name").as("person_homeCampusName")))
 				.setResultTransformer(
 						new NamespacedAliasToBeanResultTransformer(
 								CoachPersonLiteTO.class, "person_"));
