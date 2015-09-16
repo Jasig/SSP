@@ -588,6 +588,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 		me.getView().setLoading( false );
 		
 		if( r.success ) {
+			me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.studentIntake.data.person});
 			me.formUtils.displaySaveSuccessMessage( me.getSaveSuccessMessage() );
 	        me.appEventsController.getApplication().fireEvent('loadIntake');  
 		}								
