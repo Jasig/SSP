@@ -86,7 +86,7 @@
 <div class="hideable-form generalStudent-form" style="display:none">
 	<h1>General Student Report</h1>
 	<form action="/ssp/api/1/report/AddressLabels/" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 		
 		
 		<!-- Home Department -->
@@ -309,7 +309,7 @@
 <div class="hideable-form counselor-case-management-report" style="display:none">
 	<h1>Counselor Case Management Report</h1>
 	<form action="/ssp/api/1/report/pretransitioned" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
 		<div class="ea-input">
@@ -513,7 +513,7 @@
 <div class="hideable-form caseload-activity-report" style="display:none">
 	<h1>Caseload Activity Report</h1>
 	<form action="/ssp/api/1/report/caseloadactivity" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Assigned Coach -->
 		<div class="ea-input">
@@ -719,7 +719,7 @@
 <div class="hideable-form caseLoad-form" style="display:none">
 	<h1>Current Caseload Statuses Report</h1>
 	<form action="/ssp/api/1/report/Caseload/" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="currentCaseloadStatusHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -817,7 +817,7 @@
 <div class="hideable-form early-alert-case-counts-report" style="display:none">
 	<h1>Early Alert Case Counts Report</h1>
 	<form action="/ssp/api/1/report/earlyalertcasecounts" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Campus -->
 		<div class="ea-input">
@@ -879,7 +879,7 @@
 <div class="hideable-form early-alert-course-counts-report" style="display:none">
 	<h1>Early Alert Course Counts Report</h1>
 	<form action="/ssp/api/1/report/earlyalertcoursecounts" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Campus -->
 		<div class="ea-input">
@@ -973,7 +973,7 @@
 <div class="hideable-form early-alert-reason-counts-report" style="display:none">
 	<h1>Early Alert Reason Counts Report</h1>
 	<form action="/ssp/api/1/report/earlyalertreasoncounts" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Campus -->
 		<div class="ea-input">
@@ -1066,7 +1066,7 @@
 <div class="hideable-form early-alert-student-report" style="display:none">
 	<h1>Early Alert Student Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudent" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Campus -->
 		<div class="ea-input">
@@ -1243,7 +1243,7 @@
 <div class="hideable-form early-alert-student-referral-report" style="display:none">
 	<h1>Early Alert Student Referral Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudentreferral" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 				<!-- Campus -->
 		<div class="ea-input">
 			<select id="earlyAlertReferralReportCampusName" name="earlyAlertCampusId" class="input-campus-group">
@@ -1421,7 +1421,7 @@
 <div class="hideable-form early-alert-student-progress-report" style="display:none">
 	<h1>Early Alert Student Progress Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudentprogress" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Home Department -->
 		<div class="ea-input">
@@ -1557,7 +1557,7 @@
 <div class="hideable-form early-alert-student-outreach-report" style="display:none">
 	<h1>Early Alert Student Outreach Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutreachOutcomeType" name="outcomeType" value="earlyAlertOutreachIds"/>
 		
 		<!-- Campus -->
@@ -1771,7 +1771,7 @@
 <div class="hideable-form early-alert-student-outcome-report" style="display:none">
 	<h1>Early Alert Student Outcome Report</h1>
 	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutcomeOutcomeType"  name="outcomeType" value="earlyAlertOutcome"/>
 		<!-- Campus -->
 		<div class="ea-input">
@@ -1986,7 +1986,7 @@
 <div class="hideable-form early-alert-class-report" style="display:none">
 	<h1>Early Alert Class Report</h1>
 	<form action="/ssp/api/1/report/earlyalertclass" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Campus -->
 		<div class="ea-input">
@@ -2046,7 +2046,7 @@
 <div class="hideable-form disability-services-report" style="display:none">
 	<h1>Disability Services Report</h1>
 	<form action="/ssp/api/1/report/disabilityservices/" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
 		<div class="ea-input">
@@ -2289,7 +2289,7 @@
 <div class="hideable-form disability-accomodation-report" style="display:none">
 	<h1>Disability Services Report</h1>
 	<form action="/ssp/api/1/report/disabilityservices/" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
 		<div class="ea-input">
@@ -2525,7 +2525,7 @@
 <div class="hideable-form student-challenges-report" style="display:none">
 	<h1>Student Challenges Report</h1>
 	<form action="/ssp/api/1/report/studentchallengesreport" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
 		<!-- Home Department -->
 		<div class="ea-input">
@@ -2758,7 +2758,7 @@
 <div class="hideable-form journal-session-detail-report" style="display:none">
 	<h1>Journal Step Detail Report</h1>
 	<form action="/ssp/api/1/report/journalsessiondetail" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="journalSessionDetailHomeDepartment" name="homeDepartment" class="input-home-department-group">
@@ -2938,7 +2938,7 @@
 <div class="hideable-form number-courses-in-plan-report" style="display:none">
 	<h1>Number Of Plans by Course Report</h1>
 	<form action="/ssp/api/1/report/map/numbercourses" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Subject Abbreviations -->
 		<div class="ea-input">
@@ -3023,7 +3023,7 @@
 <div class="hideable-form number-plans-by-owner-report" style="display:none">
 	<h1>Number Of Plans By Owner Report</h1>
 	<form action="/ssp/api/1/report/map/numberplansbyowner" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Date Range Description -->
 		<div class="ea-input">
@@ -3093,7 +3093,7 @@
 <div class="hideable-form number-students-by-status-report" style="display:none">
 	<h1>Number Of Students By Status Report</h1>
 	<form action="/ssp/api/1/report/map/numberstudentsbystatus" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		
 		<!-- Subject Abbreviations -->
 		<div class="ea-input">
@@ -3166,7 +3166,7 @@
 <div class="hideable-form journal-case-notes-by-student-report" style="display:none">
 	<h1>Journal Session Details Report</h1>
 	<form action="/ssp/api/1/report/journalcasenotesbystudent" method="get"
-		target="_top" onSubmit="return validateForm(this);" class="alert-form">	
+		target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 		<!-- Home Department -->
 		<div class="ea-input">
 			<select id="journalCaseNotesHomeDepartment" name="homeDepartment" class="input-home-department-group">

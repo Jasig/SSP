@@ -213,10 +213,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         var me=this;
         var personId = me.person.get('id');
         var personViewHistoryUrl = (me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewHistory')).replace('{id}',personId);
-        me.apiProperties.getReporter().load({
-            url:personViewHistoryUrl,
-            params: ""
-        });
+        me.apiProperties.getReporter().loadBlankReport(personViewHistoryUrl);
     },
 	updateWatchLink: function(args) {
 		var me = this;

@@ -105,10 +105,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
         var me=this;
         var personId = me.personLite.get('id');
         var personJournalViewHistoryUrl = (me.apiProperties.getAPIContext() + me.apiProperties.getItemUrl('personViewJournalHistory')).replace('{id}',personId);
-        me.apiProperties.getReporter().load({
-            url:personJournalViewHistoryUrl,
-            params: ""
-        });
+        me.apiProperties.getReporter().loadBlankReport(personJournalViewHistoryUrl);
     },
  
     getAllJournalEntriesSuccess: function( r, scope ) {
