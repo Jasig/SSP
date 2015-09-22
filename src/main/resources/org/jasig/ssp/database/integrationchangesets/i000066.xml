@@ -54,10 +54,10 @@
             <column name="non_course_code" type="${nvarchar.type}(50)">
                 <constraints nullable="false" />
             </column>
-			<column name="title" type="${nvarchar.type}(2500)">
+			<column name="title" type="${nvarchar.type}(100)">
 				<constraints nullable="true" />
 			</column>
-			<column name="description" type="${nvarchar.type}(100)">
+			<column name="description" type="${nvarchar.type}(2500)">
 				<constraints nullable="true" />
 			</column>
 			<column name="grade" type="${nvarchar.type}(10)">
