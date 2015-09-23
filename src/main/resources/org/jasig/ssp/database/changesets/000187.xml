@@ -39,4 +39,11 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="Set all CDAs to false if null" author="paul.spaude">
+        <update tableName="confidentiality_disclosure_agreement">
+            <column name="enabled" type="boolean" defaultValueBoolean="false" valueBoolean="false" />
+            <where>enabled IS null</where>
+        </update>
+    </changeSet>
+
 </databaseChangeLog>
