@@ -70,7 +70,9 @@ public class StudentPersonLiteMessageTemplateTO extends CoachPersonLiteTO {
 		if (person.getCoach()!=null) {
 			coach = new CoachPersonLiteTO(person.getCoach());
 		}
-		homeCampus = new CampusTO(person.getHomeCampus());
+		if (person.getHomeCampus() != null) {
+			homeCampus = new CampusTO(person.getHomeCampus());
+		}
 	}
 
 	public String getSecondaryEmailAddress() {
