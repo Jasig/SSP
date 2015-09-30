@@ -27,9 +27,13 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
     inject: {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
-programsStore: 'programsStore',
-departmentsStore: 'departmentsStore',
-divisionsStore: 'divisionsStore'
+		programsStore: 'programsStore',
+		departmentsStore: 'departmentsStore',
+		divisionsStore: 'divisionsStore',
+        catalogYearsStore: 'catalogYearsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsStore',
+        textStore: 'sspTextStore'
+
     },
 	initComponent: function() {
 		var me=this;
@@ -176,42 +180,110 @@ divisionsStore: 'divisionsStore'
 										        cls: 'mapClearSearchIcon',
 										        xtype: 'button',
 										        itemId: 'divisionCancel'
-										    	}]
+															}]
 										},{
-								    	xtype: 'fieldset',
-								    	border: 0,
-								    	title: '',
-								    	margin: '0 0 0 0',
-								    	padding: '0 0 0 5',
-								    	layout: 'hbox',
-								    	defaults: {
-								        		anchor: '100%'
-								    			},
-								    	items: [{
-							        		xtype: 'combobox',
-							        		name: 'objectStatusFilter',
-							        		id: 'objectStatusFilter',
-							        		fieldLabel: 'Status',
-											labelWidth:80,
-							        		emptyText: 'Filter by Status',
-											store: Ext.create('Ext.data.Store', {
-											    fields: ['value', 'name'],
-											    	data : [
-												        	{"value":"ALL","name":"ALL"},
-												        	{"value":"ACTIVE","name":"ACTIVE"},
-												        	{"value":"INACTIVE","name":"INACTIVE"}
-												    	]
-											}),
-							        		valueField: 'name',
-							        		displayField: 'name',
-											defaultValue: "ALL",
-											value:'ALL',
-							        		mode: 'local',
-							        		queryMode: 'local',
-							        		allowBlank: false,
-							        		itemId: 'objectStatusFilter',
-							        		width: 290
-							    			}]
+											xtype: 'fieldset',
+											border: 0,
+											title: '',
+											margin: '0 0 0 0',
+											padding: '0 0 0 5',
+											layout: 'hbox',
+											defaults: {
+												anchor: '100%'
+												},
+											items: [{
+												xtype: 'combobox',
+												name: 'catalogYear',
+												store: me.catalogYearsStore,
+												fieldLabel: 'Catalog Year',
+												labelWidth:80,
+												emptyText: 'Filter by Catalog Year',
+												valueField: 'code',
+												displayField: 'name',
+												mode: 'local',
+												queryMode: 'local',
+												allowBlank: true,
+												itemId: 'catalogYear',
+												width: 260
+												}, {
+												tooltip: 'Reset to All Catalog Years',
+												text: '',
+												width: 23,
+												height: 25,
+												name: 'catalogYearCancel',
+												cls: 'mapClearSearchIcon',
+												xtype: 'button',
+												itemId: 'catalogYearCancel'
+												}]
+										},{
+											xtype: 'fieldset',
+											border: 0,
+											title: '',
+											margin: '0 0 0 0',
+											padding: '0 0 0 5',
+											layout: 'hbox',
+											defaults: {
+												anchor: '100%'
+												},
+											items: [{
+												xtype: 'combobox',
+												name: 'mapTemplateTag',
+												store: me.mapTemplateTagsStore,
+												fieldLabel: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+												labelWidth:80,
+												emptyText: 'Filter by ' + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+												valueField: 'id',
+												displayField: 'name',
+												mode: 'local',
+												queryMode: 'local',
+												allowBlank: true,
+												itemId: 'mapTemplateTag',
+												width: 260
+												}, {
+												tooltip: 'Reset to All '  + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tags"),
+												text: '',
+												width: 23,
+												height: 25,
+												name: 'mapTemplateTagCancel',
+												cls: 'mapClearSearchIcon',
+												xtype: 'button',
+												itemId: 'mapTemplateTagCancel'
+												}]
+										},{
+											xtype: 'fieldset',
+											border: 0,
+											title: '',
+											margin: '0 0 0 0',
+											padding: '0 0 0 5',
+											layout: 'hbox',
+											defaults: {
+													anchor: '100%'
+													},
+											items: [{
+												xtype: 'combobox',
+												name: 'objectStatusFilter',
+												id: 'objectStatusFilter',
+												fieldLabel: 'Status',
+												labelWidth:80,
+												emptyText: 'Filter by Status',
+												store: Ext.create('Ext.data.Store', {
+													fields: ['value', 'name'],
+														data : [
+																{"value":"ALL","name":"ALL"},
+																{"value":"ACTIVE","name":"ACTIVE"},
+																{"value":"INACTIVE","name":"INACTIVE"}
+															]
+												}),
+												valueField: 'name',
+												displayField: 'name',
+												defaultValue: "ALL",
+												value:'ALL',
+												mode: 'local',
+												queryMode: 'local',
+												allowBlank: false,
+												itemId: 'objectStatusFilter',
+												width: 290
+												}]
 										},
 										{
 			                            xtype: 'fieldset',

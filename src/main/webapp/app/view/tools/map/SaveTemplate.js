@@ -27,7 +27,9 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         departmentsStore: 'departmentsStore',
         authenticatedPerson: 'authenticatedPerson',
         divisionsStore: 'divisionsStore',
-        catalogYearsStore: 'catalogYearsStore'
+        catalogYearsStore: 'catalogYearsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsStore',
+        textStore: 'sspTextStore'
     },
     height: 580,
     width: 850,
@@ -253,7 +255,20 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 			        allowBlank:true,
                 			        xtype: 'textareafield',
 									maxLength: 2000
-                			    }
+                			    },{
+									xtype: 'combobox',
+									name: 'mapTemplateTagId',
+									itemId: 'mapTemplateTagId',
+									store: me.mapTemplateTagsStore,
+									fieldLabel: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+									emptyText: 'Specific ' + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+									valueField: 'id',
+									displayField: 'name',
+									mode: 'local',
+									typeAhead: true,
+									allowBlank: true
+								}
+
             			    ]
                     
                     }

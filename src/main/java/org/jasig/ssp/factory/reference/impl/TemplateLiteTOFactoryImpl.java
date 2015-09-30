@@ -20,12 +20,15 @@ package org.jasig.ssp.factory.reference.impl;
 
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.reference.MapTemplateTagTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
+import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +41,9 @@ public class TemplateLiteTOFactoryImpl extends AbstractAuditableTOFactory<Templa
 	public TemplateLiteTOFactoryImpl() {
 		super(TemplateLiteTO.class, Template.class);
 	}
+
+	@Autowired
+	private MapTemplateTagTOFactory mapTemplateTagTOFactory;
 
 	@Autowired
 	private transient TemplateDao dao;
@@ -73,9 +79,20 @@ public class TemplateLiteTOFactoryImpl extends AbstractAuditableTOFactory<Templa
 		else
 			model.setIsPrivate(false);
 		model.setVisibility(tObject.getVisibility());
-		model.setProgramCode(tObject.getProgramCode());		
+		model.setProgramCode(tObject.getProgramCode());
+		MapTemplateTagTO mapTemplateTagTO = tObject.getMapTemplateTag();
+		if (mapTemplateTagTO!=null) {
+			model.setMapTemplateTag(getMapTemplateTagTOFactory().from(tObject.getMapTemplateTag()));
+		}
 	return model;
 	}
-		
+
+	public MapTemplateTagTOFactory getMapTemplateTagTOFactory() {
+		return mapTemplateTagTOFactory;
+	}
+
+	public void setMapTemplateTagTOFactory(MapTemplateTagTOFactory mapTemplateTagTOFactory) {
+		this.mapTemplateTagTOFactory = mapTemplateTagTOFactory;
+	}
 
 }

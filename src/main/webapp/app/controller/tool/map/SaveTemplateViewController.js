@@ -29,6 +29,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	mapEventUtils: 'mapEventUtils',
         divisionsStore: 'divisionsStore',
         catalogYearsStore: 'catalogYearsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsStore',
 		contactPersonStore: 'contactPersonStore'
     },
     
@@ -42,7 +43,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		'cancelButton': {
 			click: 'onCancelClick'
 		},
-		visibilityField: '#visibility'
+		visibilityField: '#visibility',
+		mapTemplateTagField: '#mapTemplateTagId'
+
 	},
 	init: function() {
 		var me=this;
@@ -50,10 +53,20 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.departmentsStore.addListener("load", me.onShow,me, {single:true});
 		me.divisionsStore.addListener("load", me.onShow, me, {single:true});
 		me.catalogYearsStore.addListener("load", me.onShow, me, {single:true});
+		me.mapTemplateTagsStore.addListener("load", me.onShow, me, {single:true});
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
 		me.catalogYearsStore.load();
+
+		me.mapTemplateTagsStore.clearFilter(true);
+		if (me.currentMapPlan.get('mapTemplateTag')) {
+			var mapTemplateTagId = me.currentMapPlan.get('mapTemplateTag').id;
+			me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,mapTemplateTagId);
+       		me.getMapTemplateTagField().setValue(mapTemplateTagId);
+		}
+       	me.mapTemplateTagsStore.load({callback:me.afterMapTemplateTagStoreLoaded,scope:me,single:true})
+
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getVisibilityField().setValue('PRIVATE');
 			me.getVisibilityField().setDisabled(true);
@@ -68,7 +81,28 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 
 		return me.callParent(arguments);
     },
-	
+
+	afterMapTemplateTagStoreLoaded: function() {
+            var me = this;
+            //Add a blank map template tag to the store
+    		var mapTemplateTag = new Ssp.model.reference.MapTemplateTag();
+    		mapTemplateTag.data.id = null;
+    		mapTemplateTag.data.name = '';
+    		mapTemplateTag.data.objectStatus = 'ACTIVE';
+            var data = [];
+    		data.push(mapTemplateTag);
+    		me.mapTemplateTagsStore.insert(0, data);
+    		me.mapTemplateTagsStore.commitChanges();
+
+			if (me.currentMapPlan.get('mapTemplateTag')) {
+				var record = me.mapTemplateTagsStore.findRecord("id",me.currentMapPlan.get('mapTemplateTag').id, 0, false, false, true);
+				if(record) {
+					me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,record.get("id"));
+					me.getMapTemplateTagField().setValue( record.get("id") );
+				}
+   			}
+    	},
+
 	checkEmpty: function(str){
     	return !str || !/[^\s]+/.test(str);
 	},
@@ -207,11 +241,16 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			if(me.currentMapPlan.get('visibility') == 'PRIVATE'){
 				me.currentMapPlan.set('isPrivate', true);
 			}
-			
+
 			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
 			if(!me.currentMapPlan.get('isTemplate')){
 				me.currentMapPlan.set('id', '');
 				me.currentMapPlan.setIsTemplate(true);
+			} else {
+       			var mapTemplateTagId = me.getView().query('combobox[name="mapTemplateTagId"]')[0].getValue();
+	   			var record = me.mapTemplateTagsStore.findRecord('id',mapTemplateTagId, 0, false, false, true);
+
+   				me.currentMapPlan.set('mapTemplateTag', record);
 			}
 	    	me.mapEventUtils.saveTemplate(me.getView().saveAs);
     	}else if(btnId == 'no'){
@@ -263,6 +302,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.departmentsStore.removeListener("load", me.onShow,me, {single:true});
 		me.divisionsStore.removeListener("load", me.onShow, me, {single:true});
 		me.catalogYearsStore.removeListener("load", me.onShow, me, {single:true});
+		me.mapTemplateTagsStore.removeListener("load", me.onShow, me, {single:true});
 	    return me.callParent( arguments );
 	}
 });

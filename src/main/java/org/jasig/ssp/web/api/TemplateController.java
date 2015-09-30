@@ -105,8 +105,15 @@ public class TemplateController  extends AbstractBaseController {
 	/**
 	 * Retrieves the specified list from persistent storage.
 	 * 
-	 * @param id
-	 *            The specific id to use to lookup the associated data.
+	 * @param visibility
+	 * @param objectStatus
+	 * @param divisionCode
+	 * @param programCode
+	 * @param departmentCode
+	 * @param catalogYearCode
+	 * @param mapTemplateTagId
+	 * @param name
+	 *
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
@@ -122,11 +129,13 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode,
 			final @RequestParam(required = false) String departmentCode,
+			final @RequestParam(required = false) String catalogYearCode,
+			final @RequestParam(required = false) UUID mapTemplateTagId,
 			final @RequestParam(required = false) String name) throws ObjectNotFoundException,
 			ValidationException {
 		
 		TemplateSearchTO searchTO = new TemplateSearchTO(visibility,  objectStatus,
-															divisionCode,  programCode,  departmentCode, name);
+															divisionCode,  programCode,  departmentCode, catalogYearCode, mapTemplateTagId, name);
 		validateAccessForGet(searchTO);
 		final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
@@ -174,9 +183,16 @@ public class TemplateController  extends AbstractBaseController {
  
 	/**
 	 * Retrieves the specified list from persistent storage.  
-	 * 
-	 * @param id
-	 *            The specific id to use to lookup the associated data.
+	 *
+	 * @param visibility
+	 * @param objectStatus
+	 * @param divisionCode
+	 * @param programCode
+	 * @param departmentCode
+	 * @param catalogYearCode
+	 * @param mapTemplateTagId
+	 * @param name
+	 *
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
@@ -192,11 +208,13 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) String divisionCode,
 			final @RequestParam(required = false) String programCode,
 			final @RequestParam(required = false) String departmentCode,
+			final @RequestParam(required = false) String catalogYearCode,
+			final @RequestParam(required = false) UUID mapTemplateTagId,
 			final @RequestParam(required = false) String name) throws ObjectNotFoundException,
 			ValidationException {
 		
 		TemplateSearchTO searchTO = new TemplateSearchTO(visibility, objectStatus,
-				divisionCode,  programCode,  departmentCode, name);
+				divisionCode,  programCode,  departmentCode, catalogYearCode, mapTemplateTagId, name);
 		
 		validateAccessForGet(searchTO);
 		final PagingWrapper<Template> data = getService().getAll(
@@ -301,8 +319,8 @@ public class TemplateController  extends AbstractBaseController {
 	 * <p>
 	 *
 	 * 
-	 * @param obj
-	 *            instance to print.
+	 * @param planOutputDataTO
+	 *
 	 * @return html text strem
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
@@ -326,8 +344,8 @@ public class TemplateController  extends AbstractBaseController {
 	 * <p>
 	 *
 	 * 
-	 * @param obj
-	 *            instance to print.
+	 * @param planOutputDataTO
+	 *
 	 * @return html text strem
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
@@ -436,9 +454,7 @@ public class TemplateController  extends AbstractBaseController {
 	/**
 	 * Validate the plan instance.
 	 * 
-	 * @param id
-	 *            Explicit id to the instance to persist.
-	 * @param obj
+	 * @param plan
 	 *            Full instance of plan object.
 	 * @return The validated data object instance.
 	 * @throws ObjectNotFoundException

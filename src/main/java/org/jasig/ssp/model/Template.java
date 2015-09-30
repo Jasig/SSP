@@ -21,6 +21,7 @@ package org.jasig.ssp.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,6 +29,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -35,6 +38,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.jasig.ssp.model.reference.MapTemplateTag;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -67,6 +71,12 @@ public class Template extends AbstractPlan implements Cloneable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<TermNote> termNotes = new ArrayList<TermNote>(0);
+
+	@Nullable
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "map_template_tag_id", nullable = true)
+	private MapTemplateTag mapTemplateTag;
+
 
 	public String getDivisionCode() {
 		return divisionCode;
@@ -108,6 +118,15 @@ public class Template extends AbstractPlan implements Cloneable{
 		this.planCourses = planCourses;
 	}
 
+	@Nullable
+	public MapTemplateTag getMapTemplateTag() {
+		return mapTemplateTag;
+	}
+
+	public void setMapTemplateTag(@Nullable MapTemplateTag mapTemplateTag) {
+		this.mapTemplateTag = mapTemplateTag;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Template clonePlan() throws CloneNotSupportedException {
@@ -140,6 +159,7 @@ public class Template extends AbstractPlan implements Cloneable{
 			termNoteClone.setTemplate(clone);
 			clone.getTermNotes().add(termNoteClone);
 		}
+		clone.setMapTemplateTag(this.getMapTemplateTag().clone());
 		return clone;
 	}
 

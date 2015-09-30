@@ -22,6 +22,10 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
     inject: {
     	colorsAllUnpagedStore: 'colorsAllUnpagedStore',
 		confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
+        programsStore: 'programsStore',
+        departmentsStore: 'departmentsStore',
+        divisionsStore: 'divisionsStore',
+        catalogYearsStore: 'catalogYearsStore',
 		formUtils: 'formRendererUtils'
     },
     
@@ -353,5 +357,17 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 			return  "Auth";
 		if(record.get('visibility') == 'ANONYMOUS')
 			return  "Anon";
+	},
+	renderNameForCodeInStore: function(value, store) {
+		var name = value;
+		if (value!=null && store!=null) {
+			store.clearFilter(true);
+			var record = store.findRecord('code', value, 0, false, false, true);
+			if (record!=null) {
+				name = record.get('name');
+			}
+		}
+		return name;
 	}
+
 });

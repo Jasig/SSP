@@ -27,6 +27,7 @@ import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TermNote;
+import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
 
 /**
  */
@@ -40,7 +41,9 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	
 	private MapTemplateVisibility visibility;
 	
-	private List<TemplateCourseTO> planCourses = new ArrayList<TemplateCourseTO>(); 
+	private List<TemplateCourseTO> planCourses = new ArrayList<TemplateCourseTO>();
+
+	private MapTemplateTagTO mapTemplateTag;
 	
 	
 	public TemplateTO(Template model) {
@@ -71,6 +74,9 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		for (TermNote termNote : termNotes) {
 			TermNoteTO termNoteTO = new TermNoteTO(termNote);
 			this.getTermNotes().add(termNoteTO);
+		}
+		if (model.getMapTemplateTag()!=null) {
+			this.setMapTemplateTag(new MapTemplateTagTO(model.getMapTemplateTag()));
 		}
 	}
 
@@ -130,4 +136,11 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		this.visibility = visibility;
 	}
 
+	public MapTemplateTagTO getMapTemplateTag() {
+		return mapTemplateTag;
+	}
+
+	public void setMapTemplateTag(MapTemplateTagTO mapTemplateTag) {
+		this.mapTemplateTag = mapTemplateTag;
+	}
 }

@@ -26,9 +26,12 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
         divisionsStore: 'divisionsStore',
-        store: 'planTemplatesSummaryStore'
+        catalogYearsStore: 'catalogYearsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsStore',
+        store: 'planTemplatesSummaryStore',
+        textStore: 'sspTextStore'
     },
-    height: 500,
+    height: 600,
     width: 900,
     resizable: true,
     modal: true,
@@ -198,6 +201,74 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'divisionCancel'
 							    	}]
 							},{
+							    xtype: 'fieldset',
+							    border: 0,
+							    title: '',
+							    margin: '0 0 0 0',
+							    padding: '0 0 0 5',
+							    layout: 'hbox',
+							    defaults: {
+							        anchor: '100%'
+							    	},
+							    items: [{
+							        xtype: 'combobox',
+							        name: 'catalogYear',
+							        store: me.catalogYearsStore,
+							        fieldLabel: 'Catalog Year',
+									labelWidth:80,
+							        emptyText: 'Filter by Catalog Year',
+							        valueField: 'code',
+							        displayField: 'name',
+							        mode: 'local',
+							        queryMode: 'local',
+							        allowBlank: true,
+							        itemId: 'catalogYear',
+							        width: 260
+							    	}, {
+							        tooltip: 'Reset to All Catalog Years',
+							        text: '',
+							        width: 23,
+							        height: 25,
+							        name: 'catalogYearCancel',
+							        cls: 'mapClearSearchIcon',
+							        xtype: 'button',
+							        itemId: 'catalogYearCancel'
+							    	}]
+							},{
+							    xtype: 'fieldset',
+							    border: 0,
+							    title: '',
+							    margin: '0 0 0 0',
+							    padding: '0 0 0 5',
+							    layout: 'hbox',
+							    defaults: {
+							        anchor: '100%'
+							    	},
+							    items: [{
+							        xtype: 'combobox',
+							        name: 'mapTemplateTag',
+							        store: me.mapTemplateTagsStore,
+							        fieldLabel: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+									labelWidth:80,
+							        emptyText: 'Filter by ' + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+							        valueField: 'id',
+							        displayField: 'name',
+							        mode: 'local',
+							        queryMode: 'local',
+							        allowBlank: true,
+							        itemId: 'mapTemplateTag',
+							        width: 260
+							    	}, {
+							        tooltip: 'Reset to All '  + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tags"),
+							        text: '',
+							        width: 23,
+							        height: 25,
+							        name: 'mapTemplateTagCancel',
+							        cls: 'mapClearSearchIcon',
+							        xtype: 'button',
+							        itemId: 'mapTemplateTagCancel'
+							    	}]
+							},{
 						    xtype: 'fieldset',
 						    border: 0,
 						    title: '',
@@ -341,7 +412,43 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
              sortable: true,
              dataIndex: 'ownerName'
              
-         }
+         }, {
+		    text: 'Program',
+		    width: 200,
+		    sortable: true,
+		    dataIndex: 'programCode',
+		    renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.programsStore);}
+		 }, {
+			 text: 'Department',
+			 width: 200,
+			 sortable: true,
+			 dataIndex: 'departmentCode',
+			 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.departmentsStore);}
+
+		 }, {
+		     text: 'Division',
+		     width: 200,
+		     sortable: true,
+		     dataIndex: 'divisionCode',
+             renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.divisionsStore);}
+
+	     }, {
+			 text: 'Catalog Year',
+			 width: 85,
+			 sortable: true,
+			 dataIndex: 'catalogYearCode',
+   			 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.catalogYearsStore);}
+
+	     }, {
+			 text: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+			 width: 200,
+			 sortable: true,
+			 renderer: function(value, metadata, record) {
+			 				if (record != null && record.get('mapTemplateTag') != null) {
+			 					return record.get('mapTemplateTag').name;
+			 				}
+			 			}
+		 }
          ]}]
         });
         

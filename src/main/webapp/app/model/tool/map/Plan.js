@@ -65,7 +65,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 					data = (data && !Ext.isArray(data) ) ? [data] : data;
     	       		return data;
     	       	}
-            }
+            },
+            {name:'mapTemplateTag', type:'auto'}
 	],
 			
 	hasMany:[{model: 'Ssp.model.tool.map.PlanCourse',
@@ -199,6 +200,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.dirty = false;
 		me.planStatus = null;
 		me.planStatusDetails = null;
+		me.set('mapTemplateTag', null);
 	},
 			
 	loadFromServer : function(objectData){
@@ -272,6 +274,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
+			simpleData.mapTemplateTag = me.get('mapTemplateTag').getData();
 		}else{
 			simpleData.personId = me.get('personId');
 		}

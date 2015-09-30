@@ -30,6 +30,8 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
 		programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
     	mapEventUtils: 'mapEventUtils',
+        catalogYearsStore: 'catalogYearsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsStore',
         divisionsStore: 'divisionsStore'
     },
     
@@ -80,6 +82,30 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
             click: 'onDivisionCancelClick'
            }
         },
+         'catalogYear':{
+           selector: '#catalogYear',
+           listeners: {
+            select: 'onCatalogYearSelect'
+           }
+        },
+         'mapTemplateTag':{
+           selector: '#mapTemplateTag',
+           listeners: {
+            select: 'onMapTemplateTagSelect'
+           }
+        },
+        'catalogYearCancel':{
+           selector: '#catalogYearCancel',
+           listeners: {
+            click: 'onCatalogYearCancelClick'
+           }
+        },
+        'mapTemplateTagCancel':{
+           selector: '#mapTemplateTagCancel',
+           listeners: {
+            click: 'onMapTemplateTagCancelCancelClick'
+           }
+        },
 		'objectStatusFilter':{
             selector: '#objectStatusFilter',
             hidden: false,
@@ -102,6 +128,10 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
 	    	me.departmentsStore.load();
 		if(me.divisionsStore.getTotalCount() < 1)
 	    	me.divisionsStore.load();
+	    if(me.catalogYearsStore.getTotalCount() < 1)
+	        me.catalogYearsStore.load();
+	    if(me.mapTemplateTagsStore.getTotalCount() < 1)
+	        me.mapTemplateTagsStore.load();
 	    me.store.addListener("load", me.onStoreLoaded, me);
 		return me.callParent(arguments);
     },
@@ -174,6 +204,26 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         me.handleSelect(me);
     },
     
+    onCatalogYearSelect: function(){
+        var me=this;
+		me.handleSelect(me);
+    },
+    onCatalogYearCancelClick: function(button){
+        var me=this;
+        me.getCatalogYear().setValue("");
+        me.handleSelect(me);
+    },
+
+    onMapTemplateTagSelect: function(){
+        var me=this;
+		me.handleSelect(me);
+    },
+    onMapTemplateTagCancelCancelClick: function(button){
+        var me=this;
+        me.getMapTemplateTag().setValue("");
+        me.handleSelect(me);
+    },
+
     ontemplateNameKeyUp: function(){
         var me=this;
 		me.handleSelect(me);
@@ -187,6 +237,8 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     	me.setParam(params, Ext.getCmp('department'), 'departmentCode');
     	me.setParam(params, Ext.getCmp('division'), 'divisionCode');
     	me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
+    	me.setParam(params, me.getCatalogYear(), 'catalogYearCode');
+    	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
 		params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
     	grid.store.on('load', me.onLoadComplete, this, {single: true});
     	grid.store.load({params: params});

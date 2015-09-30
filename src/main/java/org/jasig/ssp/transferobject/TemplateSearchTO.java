@@ -21,6 +21,8 @@ package org.jasig.ssp.transferobject;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.ObjectStatus;
 
+import java.util.UUID;
+
 public class TemplateSearchTO {
 
 	private MapTemplateVisibility visibility;
@@ -28,6 +30,8 @@ public class TemplateSearchTO {
 	private String divisionCode;
 	private String programCode;
 	private String departmentCode;
+	private String catalogYearCode;
+	private UUID mapTemplateTagId;
 	private String name;
 	
 	public TemplateSearchTO() {
@@ -35,13 +39,15 @@ public class TemplateSearchTO {
 	}
 
 	public TemplateSearchTO(MapTemplateVisibility visibility, ObjectStatus objectStatus,
-			String divisionCode, String programCode, String departmentCode, String name) {
+			String divisionCode, String programCode, String departmentCode, String catalogYearCode, UUID mapTemplateTagId, String name) {
 		super();
 		this.visibility = visibility;
 		this.objectStatus = objectStatus;
 		this.divisionCode = divisionCode;
 		this.programCode = programCode;
 		this.departmentCode = departmentCode;
+		this.catalogYearCode = catalogYearCode;
+		this.mapTemplateTagId = mapTemplateTagId;
 		this.name = name;
 	}
 
@@ -86,7 +92,23 @@ public class TemplateSearchTO {
 	public void setDepartmentCode(String departmentCode) {
 		this.departmentCode = departmentCode;
 	}
-	
+
+	public String getCatalogYearCode() {
+		return catalogYearCode;
+	}
+
+	public void setCatalogYearCode(String catalogYearCode) {
+		this.catalogYearCode = catalogYearCode;
+	}
+
+	public UUID getMapTemplateTagId() {
+		return mapTemplateTagId;
+	}
+
+	public void setMapTemplateTagId(UUID mapTemplateTagId) {
+		this.mapTemplateTagId = mapTemplateTagId;
+	}
+
 	public String getName() {
 		return name;
 	}

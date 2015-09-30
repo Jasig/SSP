@@ -26,7 +26,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
         confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
-       	authenticatedPerson: 'authenticatedPerson'
+       	authenticatedPerson: 'authenticatedPerson',
+        textStore: 'sspTextStore'
     },
     autoLoad: false,
     constructor: function(){
@@ -1101,8 +1102,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
 					form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
-                    text: 'Tags',
-                    title: 'Tag Management',
+                    text: 'Course Tags',
+                    title: 'Course Tag Management',
                     store: 'tags',
                     viewConfig: {
                         markDirty: false
@@ -1139,9 +1140,17 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     },
                     form: 'AbstractReferenceAdmin',
                     leaf: true
-                },
-                
-                {
+                }, {
+                    text: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+                    title: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag") + ' Management',
+                    store: 'mapTemplateTagsAll',
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false,
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                },{
                     text: 'Template Status',
                     title: 'Template Status Manager',
                     store: 'planTemplatesSummary',

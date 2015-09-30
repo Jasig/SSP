@@ -36,7 +36,11 @@ Ext.define(
 						apiProperties : 'apiProperties',
 						authenticatedPerson : 'authenticatedPerson',
 						columnRendererUtils : 'columnRendererUtils',
-						programsStore: 'programsStore'
+						programsStore: 'programsStore',
+						departmentsStore: 'departmentsStore',
+						divisionsStore: 'divisionsStore',
+						catalogYearsStore: 'catalogYearsStore',
+                        textStore: 'sspTextStore'
 					},
 					height : '100%',
 					width : '100%',
@@ -104,8 +108,36 @@ Ext.define(
 														    return text;
 														} 
 														
-													},
-													{
+													}, {
+														 text: 'Department',
+														 width: 200,
+														 sortable: true,
+														 dataIndex: 'departmentCode',
+														 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.departmentsStore);}
+
+													}, {
+														 text: 'Division',
+														 width: 200,
+														 sortable: true,
+														 dataIndex: 'divisionCode',
+														 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.divisionsStore);}
+
+													}, {
+														 text: 'Catalog Year',
+														 width: 85,
+														 sortable: true,
+														 dataIndex: 'catalogYearCode',
+														 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.catalogYearsStore);}
+													}, {
+														 text: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+														 width: 200,
+														 sortable: true,
+														 renderer: function(value, metadata, record) {
+																		if (record != null && record.get('mapTemplateTag') != null) {
+																			return record.get('mapTemplateTag').name;
+																		}
+																	}
+													},{
 														text : 'Date/ Time',
 														width : 125,
 														dataIndex : 'modifiedDate',
@@ -119,7 +151,8 @@ Ext.define(
 														sortable : true,
 														dataIndex : 'ownerName'
 
-													} ],
+													 }
+													],
 
 											dockedItems : [
 													{

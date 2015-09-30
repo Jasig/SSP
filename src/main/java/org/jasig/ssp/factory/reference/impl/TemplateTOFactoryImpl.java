@@ -23,17 +23,20 @@ import java.util.UUID;
 
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.reference.MapTemplateTagTOFactory;
 import org.jasig.ssp.factory.reference.TemplateCourseTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
 import org.jasig.ssp.factory.reference.TermNoteTOFactory;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TermNote;
+import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
+import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +62,9 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 	
 	@Autowired
 	private TermNoteTOFactory termNoteTOFactory;	
-	
+
+	@Autowired
+	private MapTemplateTagTOFactory mapTemplateTagTOFactory;
 	
 	@Override
 	protected TemplateDao getDao() {
@@ -112,6 +117,10 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 			noteModel.setTemplate(model);
 			model.getTermNotes().add(noteModel);
 		}
+		MapTemplateTagTO mapTemplateTagTO = tObject.getMapTemplateTag();
+		if (mapTemplateTagTO!=null) {
+			model.setMapTemplateTag(getMapTemplateTagTOFactory().from(tObject.getMapTemplateTag()));
+		}
 		return model;
 	}
 
@@ -129,5 +138,13 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 
 	public void setTermNoteTOFactory(TermNoteTOFactory termNoteTOFactory) {
 		this.termNoteTOFactory = termNoteTOFactory;
+	}
+
+	public MapTemplateTagTOFactory getMapTemplateTagTOFactory() {
+		return mapTemplateTagTOFactory;
+	}
+
+	public void setMapTemplateTagTOFactory(MapTemplateTagTOFactory mapTemplateTagTOFactory) {
+		this.mapTemplateTagTOFactory = mapTemplateTagTOFactory;
 	}
 }

@@ -26,6 +26,7 @@ import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TermNote;
+import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
 
 /**
  * TO for /summary API call.  In early phases of development this will not hold a lot of meaningful data.
@@ -43,6 +44,8 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 	private Boolean isPrivate;
 	
 	private MapTemplateVisibility visibility;
+
+	private MapTemplateTagTO mapTemplateTag;
 	
 	/**
 	 * Empty constructor.
@@ -66,6 +69,9 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
 		this.setProgramCode(model.getProgramCode());
+		if (model.getMapTemplateTag()!=null) {
+			this.setMapTemplateTag(new MapTemplateTagTO(model.getMapTemplateTag()));
+		}
 	}
 	
 	@Override
@@ -103,4 +109,11 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 		this.visibility = visibility;
 	}
 
+	public MapTemplateTagTO getMapTemplateTag() {
+		return mapTemplateTag;
+	}
+
+	public void setMapTemplateTag(MapTemplateTagTO mapTemplateTag) {
+		this.mapTemplateTag = mapTemplateTag;
+	}
 }

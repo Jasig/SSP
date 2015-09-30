@@ -452,6 +452,7 @@ Ext.require([
     'Ssp.store.reference.StudentTypes',
 	'Ssp.store.reference.Tags',
 	'Ssp.store.reference.FacetedTags',
+	'Ssp.store.reference.MapTemplateTags',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
@@ -639,6 +640,7 @@ var apiUrls = [
   {name: 'division', url: 'reference/division/all'},
   {name: 'catalogYear', url: 'reference/catalogYear/all'},
   {name: 'tag', url: 'reference/tag'},
+  {name: 'mapTemplateTag', url: 'reference/mapTemplateTag'},
   {name: 'facetedtag', url: 'reference/tag/facet'},
   {name: 'futureTerms', url: 'reference/term/future'},
   {name: 'termsfaceted', url: 'reference/term/facet'},
@@ -1821,6 +1823,15 @@ Ext.onReady(function(){
 							});
 						},
 						singleton: true
+					},
+					mapTemplateTagsStore: 'Ssp.store.reference.MapTemplateTags',
+					mapTemplateTagsAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.MapTemplateTags', {
+							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
 					},
 					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',

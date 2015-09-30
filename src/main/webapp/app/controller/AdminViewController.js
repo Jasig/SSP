@@ -75,6 +75,7 @@ Ext.define('Ssp.controller.AdminViewController', {
         studentStatusesAllStore: 'studentStatusesAllStore',
         studentTypesStore: 'studentTypesAllStore',
 		tagsStore: 'tagsStore',
+		mapTemplateTagsAllStore: 'mapTemplateTagsAllStore',
 		textStore: 'textStore',
     	veteranStatusesAllStore: 'veteranStatusesAllStore'
     },

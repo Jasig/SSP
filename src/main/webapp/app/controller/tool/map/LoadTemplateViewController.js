@@ -30,6 +30,8 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
     	mapEventUtils: 'mapEventUtils',
+        catalogYearsStore: 'catalogYearsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsStore',
         divisionsStore: 'divisionsStore'
     },
     
@@ -60,6 +62,20 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
            }
         },
 
+         'catalogYear':{
+           selector: '#catalogYear',
+           listeners: {
+            select: 'onCatalogYearSelect'
+           }
+        },
+
+         'mapTemplateTag':{
+           selector: '#mapTemplateTag',
+           listeners: {
+            select: 'onMapTemplateTagSelect'
+           }
+        },
+
         'programCancel':{
             selector: '#programCancel',
             hidden: true,
@@ -83,6 +99,21 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
             click: 'onDivisionCancelClick'
            }
         },
+
+        'catalogYearCancel':{
+           selector: '#catalogYearCancel',
+           listeners: {
+            click: 'onCatalogYearCancelClick'
+           }
+        },
+
+        'mapTemplateTagCancel':{
+           selector: '#mapTemplateTagCancel',
+           listeners: {
+            click: 'onMapTemplateTagCancelCancelClick'
+           }
+        },
+
 		'objectStatusFilter':{
             selector: '#objectStatusFilter',
             hidden: false,
@@ -115,6 +146,10 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	    	me.departmentsStore.load();
 		if(me.divisionsStore.getTotalCount() < 1)
 	    	me.divisionsStore.load();
+	    if(me.catalogYearsStore.getTotalCount() < 1)
+	        me.catalogYearsStore.load();
+	    if(me.mapTemplateTagsStore.getTotalCount() < 1)
+	        me.mapTemplateTagsStore.load();
 	    me.store.addListener("load", me.onStoreLoaded, me);
 		return me.callParent(arguments);
     },
@@ -223,19 +258,41 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     onDivisionSelect: function(){
         var me=this;
 		me.handleSelect(me);
-    },   
+    },
     
     onDivisionCancelClick: function(button){
         var me=this;
         me.getDivision().setValue("");
         me.handleSelect(me);
     },
-    
+
+    onCatalogYearSelect: function(){
+        var me=this;
+		me.handleSelect(me);
+    },
+    onCatalogYearCancelClick: function(button){
+        var me=this;
+        me.getCatalogYear().setValue("");
+        me.handleSelect(me);
+    },
+
+    onMapTemplateTagSelect: function(){
+        var me=this;
+		me.handleSelect(me);
+    },
+    onMapTemplateTagCancelCancelClick: function(button){
+        var me=this;
+        me.getMapTemplateTag().setValue("");
+        me.handleSelect(me);
+    },
+
     handleSelect: function(me){
     	var params = {};
     	me.setParam(params, me.getProgram(), 'programCode');
     	me.setParam(params, me.getDepartment(), 'departmentCode');
     	me.setParam(params, me.getDivision(), 'divisionCode');
+    	me.setParam(params, me.getCatalogYear(), 'catalogYearCode');
+    	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
 		params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
     	me.store.on('load', me.onLoadComplete, this, {single: true});
     	me.store.load({params: params});

@@ -82,6 +82,14 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 				{
 					criteria.add(Restrictions.eq("departmentCode", searchTO.getDepartmentCode()));
 				}
+				if(!StringUtils.isEmpty(searchTO.getCatalogYearCode()))
+				{
+					criteria.add(Restrictions.eq("catalogYearCode", searchTO.getCatalogYearCode()));
+				}
+				if(searchTO.getMapTemplateTagId()!=null)
+				{
+					criteria.add(Restrictions.eq("mapTemplateTag.id", searchTO.getMapTemplateTagId()));
+				}
 				if(!StringUtils.isEmpty(searchTO.getName()))
 				{
 					criteria.add(Restrictions.like("name", "%" + searchTO.getName() + "%"));
