@@ -166,16 +166,6 @@ Ext.define(
 														dataIndex : 'ownerName'
 
 													 }
-													],
-
-											dockedItems : [
-													{
-														xtype : 'pagingtoolbar',
-														dock : 'bottom',
-														displayInfo : true,
-														pageSize : me.apiProperties
-																.getPagingSize()
-													}
 													]
 										});
 
