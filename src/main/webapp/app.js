@@ -1824,7 +1824,14 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					mapTemplateTagsStore: 'Ssp.store.reference.MapTemplateTags',
+					mapTemplateTagsStore: {
+                        fn: function(){
+                            return Ext.create('Ssp.store.reference.MapTemplateTags', {
+                                 extraParams: {status: "ACTIVE"}
+                             });
+                        },
+                        singleton: true
+                    },
 					mapTemplateTagsAllStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.MapTemplateTags', {

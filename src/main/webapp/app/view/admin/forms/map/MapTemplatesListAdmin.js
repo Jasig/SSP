@@ -132,11 +132,25 @@ Ext.define(
 														 text: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
 														 width: 200,
 														 sortable: true,
+														 dataIndex: 'mapTemplateTag',
 														 renderer: function(value, metadata, record) {
 																		if (record != null && record.get('mapTemplateTag') != null) {
 																			return record.get('mapTemplateTag').name;
 																		}
-																	}
+																	},
+                                                         doSort: function(state) {
+																	var ds = this.up('grid').getStore();
+																	var field = this.getSortParam();
+																	ds.sort({
+																		 property: field,
+																		 direction: state,
+																		 sorterFn: function(v1, v2){
+																			  	v1 = (v1.get('mapTemplateTag') ? v1.get('mapTemplateTag').name : '');
+																			  	v2 = (v2.get('mapTemplateTag') ? v2.get('mapTemplateTag').name : '');
+ 																			  	return v1.localeCompare(v2);
+																			  }
+																	 });
+																}
 													},{
 														text : 'Date/ Time',
 														width : 125,

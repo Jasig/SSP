@@ -29,7 +29,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	mapEventUtils: 'mapEventUtils',
         divisionsStore: 'divisionsStore',
         catalogYearsStore: 'catalogYearsStore',
-        mapTemplateTagsStore: 'mapTemplateTagsStore',
+        mapTemplateTagsStore: 'mapTemplateTagsAllStore',
 		contactPersonStore: 'contactPersonStore'
     },
     
@@ -60,11 +60,6 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.catalogYearsStore.load();
 
 		me.mapTemplateTagsStore.clearFilter(true);
-		if (me.currentMapPlan.get('mapTemplateTag')) {
-			var mapTemplateTagId = me.currentMapPlan.get('mapTemplateTag').id;
-			me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,mapTemplateTagId);
-       		me.getMapTemplateTagField().setValue(mapTemplateTagId);
-		}
        	me.mapTemplateTagsStore.load({callback:me.afterMapTemplateTagStoreLoaded,scope:me,single:true})
 
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
@@ -93,14 +88,6 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     		data.push(mapTemplateTag);
     		me.mapTemplateTagsStore.insert(0, data);
     		me.mapTemplateTagsStore.commitChanges();
-
-			if (me.currentMapPlan.get('mapTemplateTag')) {
-				var record = me.mapTemplateTagsStore.findRecord("id",me.currentMapPlan.get('mapTemplateTag').id, 0, false, false, true);
-				if(record) {
-					me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,record.get("id"));
-					me.getMapTemplateTagField().setValue( record.get("id") );
-				}
-   			}
     	},
 
 	checkEmpty: function(str){
@@ -285,6 +272,14 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    		me.getVisibilityField().setValue('AUTHENTICATED');
 	    }
 		me.checkForContactInfo();
+
+		if (me.currentMapPlan.get('mapTemplateTag')) {
+			var mapTemplateTagId = me.currentMapPlan.get('mapTemplateTag').id;
+			me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,mapTemplateTagId);
+			me.getMapTemplateTagField().setValue(mapTemplateTagId);
+		} else {
+			me.formUtils.applyActiveOnlyFilter(me.mapTemplateTagsStore);
+		}
     },
 
 	setCheckBox: function(query, fieldName){
