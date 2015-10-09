@@ -267,14 +267,15 @@ Ext.define('Ssp.controller.SearchViewController', {
     },
 
     onTabChange: function(tabPanel, newCard, oldCard, eOpts) {
-    	
+    	//alert('tab is changing');
     	//set the 'make default tab' text
+    	var me = this;
 		var activeTabIndex = tabPanel.items.findIndex('id', newCard.id);		               					
 		if(activeTabIndex == defaultTabLabel.index) {
-			Ext.getCmp('defaultTabLabel').setText('Default Search Tab');
+			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.default-search-tab'));
 		}
 		else {		
-			Ext.getCmp('defaultTabLabel').setText('Click to Make Default');		
+			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.click-to-make-default'));		
 		}		   
     	
         var me = this;
@@ -577,11 +578,11 @@ Ext.define('Ssp.controller.SearchViewController', {
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 0.5},
 	              { sortable: sortableColumns, header: coachIdAlias, dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
-	              { sortable: sortableColumns, header: 'Type', dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.type'), dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
 				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: me.getIsExpanded() ? 0.5:1},
-				  { sortable: sortableColumns, header: 'Email', dataIndex: 'primaryEmailAddress', flex: 0.8},
-	              { sortable: sortableColumns, header: 'Status', dataIndex: 'currentProgramStatusName', flex: 0.2},
-	              { sortable: sortableColumns, header: 'Alerts', dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
+				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.email'), dataIndex: 'primaryEmailAddress', flex: 0.8},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.status'), dataIndex: 'currentProgramStatusName', flex: 0.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.alerts'), dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
 	              ];
 
 		grid.getView().getRowClass = function(row, index) {

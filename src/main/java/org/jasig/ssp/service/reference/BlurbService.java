@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.service.reference;
 
+import java.util.List;
+
 import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -26,4 +28,5 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 public interface BlurbService extends ReferenceService<Blurb> {
 
 	PagingWrapper<Blurb> getAll(SortingAndPaging sAndP, String code);
+	List<Blurb> getByLanguageCode(String langCode);
 }

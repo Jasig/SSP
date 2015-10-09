@@ -40,6 +40,9 @@ public final class SspPortletController {
 	@Value("#{configProperties.ssp_set_develop_mode_on}")
 	private boolean developModeOn = false;
 	
+	@Value("#{configProperties.defaultLanguage}")
+	private String defaultLanguage = "eng";
+	
 	@Autowired
 	private ServerService serverService;
 	
@@ -48,6 +51,7 @@ public final class SspPortletController {
 		Map<String,Object> model = new HashMap<String,Object>();
 		model.put("useMinified", sspMainUseMinifiedJs);
 		model.put("developModeOn", developModeOn);
+		model.put("defaultLanguage", defaultLanguage);
 		
 		try{
 			String build = "/versioned/" + serverService.getVersionProfile().get("buildDate").toString();

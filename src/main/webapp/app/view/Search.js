@@ -25,7 +25,8 @@ Ext.define('Ssp.view.Search', {
         authenticatedPerson: 'authenticatedPerson',
         caseloadActionsStore: 'caseloadActionsStore',
         columnRendererUtils: 'columnRendererUtils',
-        programStatusesStore: 'caseloadFilterProgramStatusesStore'
+        programStatusesStore: 'caseloadFilterProgramStatusesStore',
+        textStore:'sspTextStore'
     },
     initComponent: function(){
         var me = this;
@@ -197,7 +198,7 @@ Ext.define('Ssp.view.Search', {
                     }
                 }, {
 
-                    text: 'Search',
+                    text: me.textStore.getValueByCode('ssp.label.search'),
                     tooltip: 'Search for Student',
                     xtype: 'button',
                     type: 'search',
@@ -207,7 +208,7 @@ Ext.define('Ssp.view.Search', {
                     hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH')
                 }, {
                     tooltip: 'Reset',
-                    text: 'Reset',
+                    text: me.textStore.getValueByCode('ssp.label.reset'),
                     type: 'refresh',
                     xtype: 'button',
                     itemId: 'resetStudentSearchButton',

@@ -32,6 +32,8 @@ public class BlurbTO extends AbstractReferenceTO<Blurb>
 	
 	private String value;
 	
+	private String lang;
+	
 	public BlurbTO() {
 		super();
 	}
@@ -46,6 +48,7 @@ public class BlurbTO extends AbstractReferenceTO<Blurb>
 		super.from(model);
 		setCode(model.getCode());
 		setValue(model.getValue());
+		setLang(model.getLang());
 	};
 	
 	public static List<BlurbTO> toTOList(
@@ -71,5 +74,13 @@ public class BlurbTO extends AbstractReferenceTO<Blurb>
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 }

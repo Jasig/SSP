@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="Add Language Code To Blurb" author="steve.cody">
+        <addColumn tableName="blurb">
+            <column name="lang" type="${nvarchar.type}(3)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="blurb" columnName="lang" />
+        </rollback>
+    </changeSet>   
+    
+    <!--  adding language code now... we really need to ADD a unique language code key -->
+    <changeSet id="dropUniqueConstraint-example" author="steve.cody">
+    	<dropUniqueConstraint tableName="blurb"
+				constraintName="blurb_code_unq" />
+	    <addUniqueConstraint 
+            columnNames="code, lang"
+            constraintName="blurb_code_lang_unq"            
+            tableName="blurb"/>
+            
+        <update tableName="blurb">
+			<column name="lang">eng</column>			
+		</update>    
+	</changeSet>
+	
+	<changeSet id="insert.new.Language.blurbs" author="steve.cody">
+		<insert tableName="blurb">
+     <column name="id" value="6e9d6416-b45a-d8fd-be71-b8590662bea3"/>
+     <column name="name" value="Label for main tool"/>
+     <column name="code" value="ssp.label.tools.main"/>
+     <column name="value" value="Main"/>     <column name="description" value="tools main description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="6ca1f211-036b-2fd2-e5f5-d9f79e1efbdb"/>
+     <column name="name" value="Label for main tool"/>
+     <column name="code" value="ssp.label.tools.main"/>
+     <column name="value" value="Principal"/>     <column name="description" value="tools main description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="993780ea-b5c1-d830-b4c6-445351f0e8b7"/>
+     <column name="name" value="Label for main tool"/>
+     <column name="code" value="ssp.label.tools.main"/>
+     <column name="value" value="Primordial"/>     <column name="description" value="tools main description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="ead15227-06e2-75f5-e964-7f75c75618b5"/>
+     <column name="name" value="Label for main tool"/>
+     <column name="code" value="ssp.label.tools.main"/>
+     <column name="value" value="Príomh"/>     <column name="description" value="tools main description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="e9ba2d01-8f6d-1f9f-5e38-16fa48d6516f"/>
+     <column name="name" value="Label for intake tool"/>
+     <column name="code" value="ssp.label.tools.intake"/>
+     <column name="value" value="Intake"/>     <column name="description" value="tools Intake description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="b339dd10-84a6-c328-0a73-0d0663a80339"/>
+     <column name="name" value="Label for intake tool"/>
+     <column name="code" value="ssp.label.tools.intake"/>
+     <column name="value" value="Matriculación"/>     <column name="description" value="tools Intake description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="8f889949-ca11-b83a-05b3-6bd2b7a04f2d"/>
+     <column name="name" value="Label for intake tool"/>
+     <column name="code" value="ssp.label.tools.intake"/>
+     <column name="value" value="Immatriculation"/>     <column name="description" value="tools Intake description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="786cd154-8c0b-e1bc-ce65-9f8f8fbef78b"/>
+     <column name="name" value="Label for intake tool"/>
+     <column name="code" value="ssp.label.tools.intake"/>
+     <column name="value" value="Máithreánach"/>     <column name="description" value="tools Intake description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="a50d4b9a-8ed5-80ab-c87d-8b135685ba1a"/>
+     <column name="name" value="Label for action plan tool"/>
+     <column name="code" value="ssp.label.tools.actionplan"/>
+     <column name="value" value="Action Plan"/>     <column name="description" value="tools ap description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="7d794536-4be4-6a13-7888-6e2215783c0a"/>
+     <column name="name" value="Label for action plan tool"/>
+     <column name="code" value="ssp.label.tools.actionplan"/>
+     <column name="value" value="Plan de Accion"/>     <column name="description" value="tools ap description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="1f5234bb-819d-d77b-b22e-e809df2f1296"/>
+     <column name="name" value="Label for action plan tool"/>
+     <column name="code" value="ssp.label.tools.actionplan"/>
+     <column name="value" value="Plan d'action"/>     <column name="description" value="tools ap description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="207ec3d7-f9ac-e5eb-0275-6dee73e62d9b"/>
+     <column name="name" value="Label for action plan tool"/>
+     <column name="code" value="ssp.label.tools.actionplan"/>
+     <column name="value" value="Plean Gníomhaíochta"/>     <column name="description" value="tools ap description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="581edf03-7a45-233f-f1c9-3ffac2cfff0b"/>
+     <column name="name" value="Label for journal tool"/>
+     <column name="code" value="ssp.label.tools.journal"/>
+     <column name="value" value="Journal"/>     <column name="description" value="tools journal description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="5aa3193e-3c62-7bfc-db54-af7b42f0c37f"/>
+     <column name="name" value="Label for journal tool"/>
+     <column name="code" value="ssp.label.tools.journal"/>
+     <column name="value" value="Diario"/>     <column name="description" value="tools journal description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="13140291-e74e-c0cf-5336-c7be65e85dcb"/>
+     <column name="name" value="Label for journal tool"/>
+     <column name="code" value="ssp.label.tools.journal"/>
+     <column name="value" value="Journal"/>     <column name="description" value="tools journal description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="adb9227b-052b-0abc-1625-cc188e9a542b"/>
+     <column name="name" value="Label for journal tool"/>
+     <column name="code" value="ssp.label.tools.journal"/>
+     <column name="value" value="Dialann"/>     <column name="description" value="tools journal description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="0a6d9887-8986-4db7-bbfb-f546681a8ff0"/>
+     <column name="name" value="Label for earlyalert tool"/>
+     <column name="code" value="ssp.label.tools.earlyalert"/>
+     <column name="value" value="Early Alert"/>     <column name="description" value="tools EA description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="0b6d9887-8986-4dc7-cbfb-f546681a8ff0"/>
+     <column name="name" value="Label for earlyalert tool"/>
+     <column name="code" value="ssp.label.tools.earlyalert"/>
+     <column name="value" value="Advertencia Temprana"/>     <column name="description" value="tools EA description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="0c6d9887-8986-4dd7-dbfb-f546681a8ff0"/>
+     <column name="name" value="Label for earlyalert tool"/>
+     <column name="code" value="ssp.label.tools.earlyalert"/>
+     <column name="value" value="Alerte Précoce"/>     <column name="description" value="tools EA description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="0d6d9887-8986-4de7-ebfb-f546681a8ff0"/>
+     <column name="name" value="Label for earlyalert tool"/>
+     <column name="code" value="ssp.label.tools.earlyalert"/>
+     <column name="value" value="Rabhadh Luath"/>     <column name="description" value="tools EA description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="077d9897-8986-4db7-bbfb-f546681a8ff2"/>
+     <column name="name" value="Label for map tool"/>
+     <column name="code" value="ssp.label.tools.map"/>
+     <column name="value" value="Map"/>     <column name="description" value="ssp.label.tools map description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="077d9897-8996-4dc7-cbfb-f646681b8ff2"/>
+     <column name="name" value="Label for map tool"/>
+     <column name="code" value="ssp.label.tools.map"/>
+     <column name="value" value="Mapa"/>     <column name="description" value="ssp.label.tools map description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="077d9897-89a6-4dd7-dbfb-f746681c8ff2"/>
+     <column name="name" value="Label for map tool"/>
+     <column name="code" value="ssp.label.tools.map"/>
+     <column name="value" value="Carte"/>     <column name="description" value="ssp.label.tools map description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="077d9897-89b6-4de7-ebfb-f846681d8ff2"/>
+     <column name="name" value="Label for map tool"/>
+     <column name="code" value="ssp.label.tools.map"/>
+     <column name="value" value="Líne"/>     <column name="description" value="ssp.label.tools map description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="008d98a7-8986-4db7-bbfb-f546681a8af0"/>
+     <column name="name" value="Label for emailstudent tool"/>
+     <column name="code" value="ssp.label.tools.emailstudent"/>
+     <column name="value" value="Email Student"/>     <column name="description" value="tools emailstudent description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="008d98a7-8986-4dc7-cbfb-f546681a8af0"/>
+     <column name="name" value="Label for emailstudent tool"/>
+     <column name="code" value="ssp.label.tools.emailstudent"/>
+     <column name="value" value="Email Estudiantes"/>     <column name="description" value="tools emailstudent description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="008d98a7-8986-4dd7-dbfb-f546681a8af0"/>
+     <column name="name" value="Label for emailstudent tool"/>
+     <column name="code" value="ssp.label.tools.emailstudent"/>
+     <column name="value" value="Email étudiant"/>     <column name="description" value="tools emailstudent description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="008d98a7-8986-4de7-ebfb-f546681a8af0"/>
+     <column name="name" value="Label for emailstudent tool"/>
+     <column name="code" value="ssp.label.tools.emailstudent"/>
+     <column name="value" value="Ríomhphost Mac Léinn"/>     <column name="description" value="tools emailstudent description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00ad982a-8986-4db7-bbfb-f546681a8ff0"/>
+     <column name="name" value="Label for Documents tool"/>
+     <column name="code" value="ssp.label.tools.documents"/>
+     <column name="value" value="Documents"/>     <column name="description" value="tools Documents description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00ad982a-8986-4dc7-cbfb-f546681a8ff0"/>
+     <column name="name" value="Label for Documents tool"/>
+     <column name="code" value="ssp.label.tools.documents"/>
+     <column name="value" value="Documentos"/>     <column name="description" value="tools Documents description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00ad982a-8986-4dd7-dbfb-f546681a8ff0"/>
+     <column name="name" value="Label for Documents tool"/>
+     <column name="code" value="ssp.label.tools.documents"/>
+     <column name="value" value="Documents"/>     <column name="description" value="tools Documents description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00ad982a-8986-4de7-ebfb-f546681a8ff0"/>
+     <column name="name" value="Label for Documents tool"/>
+     <column name="code" value="ssp.label.tools.documents"/>
+     <column name="value" value="Doiciméid"/>     <column name="description" value="tools Documents description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00bd9a37-8986-4db7-bbfb-f546681a8ff0"/>
+     <column name="name" value="Label for notes tool"/>
+     <column name="code" value="ssp.label.tools.notes"/>
+     <column name="value" value="Notes"/>     <column name="description" value="tools notes description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00bd9a37-8986-4dc7-cbfb-f546681a8ff0"/>
+     <column name="name" value="Label for notes tool"/>
+     <column name="code" value="ssp.label.tools.notes"/>
+     <column name="value" value="Notas"/>     <column name="description" value="tools notes description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="spa"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00bd9a37-8986-4dd7-dbfb-f546681a8ff0"/>
+     <column name="name" value="Label for notes tool"/>
+     <column name="code" value="ssp.label.tools.notes"/>
+     <column name="value" value="Remarques"/>     <column name="description" value="tools notes description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="fre"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="00bd9a37-8986-4de7-ebfb-f546681a8ff0"/>
+     <column name="name" value="Label for notes tool"/>
+     <column name="code" value="ssp.label.tools.notes"/>
+     <column name="value" value="Nótaí"/>     <column name="description" value="tools notes description"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+
+<!--  english -->
+<insert tableName="blurb">
+     <column name="id" value="fe943497-9a76-424f-bd32-2247694c7356"/>
+     <column name="name" value="Label for My Case Load Tab"/>
+     <column name="code" value="ssp.label.my-caseload"/>
+     <column name="value" value="My Caseload"/>     
+     <column name="description" value="My Caseload tab label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="92fcd339-7c24-4f36-abd7-d1dc81cf7655"/>
+     <column name="name" value="Label for My Watchlist Tab"/>
+     <column name="code" value="ssp.label.my-watchlist"/>
+     <column name="value" value="My Caseload"/>     
+     <column name="description" value="My Watchlist tab label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="4c3e09d3-4e94-4e39-9146-5ee5be3e0450"/>
+     <column name="name" value="Label for Search Tab"/>
+     <column name="code" value="ssp.label.search"/>
+     <column name="value" value="Search"/>     
+     <column name="description" value="Search tab label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="3ed16bb8-9567-4055-a6f5-6cf447d4e0a2"/>
+     <column name="name" value="Label for Tools"/>
+     <column name="code" value="ssp.label.tools"/>
+     <column name="value" value="Tools"/>     
+     <column name="description" value="Label for Tools"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="7818f414-72f3-4dcb-85b2-c2089df1b98f"/>
+     <column name="name" value="Select the default Search Tab"/>
+     <column name="code" value="ssp.label.default-search-tab"/>
+     <column name="value" value="Default Search Tab"/>     
+     <column name="description" value="Default Search Tab"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="578759fa-10f1-4468-8f4e-f7e14b0253d4"/>
+     <column name="name" value="click to make the default Search Tab"/>
+     <column name="code" value="ssp.label.click-to-make-default"/>
+     <column name="value" value="Click to Make Default"/>     
+     <column name="description" value="click to make the default Search Tab"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="094fc41c-796c-4139-b3fe-9eed2ee2ac95"/>
+     <column name="name" value="Student Type Label"/>
+     <column name="code" value="ssp.label.type"/>
+     <column name="value" value="Type"/>     
+     <column name="description" value="Student Type Label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="ab6b97bd-e481-4c88-9adf-fdb8499c80a2"/>
+     <column name="name" value="Student Email Label"/>
+     <column name="code" value="ssp.label.email"/>
+     <column name="value" value="email"/>     
+     <column name="description" value="Student email Label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="c4a01522-1dc8-4365-8b6b-04084a7b79af"/>
+     <column name="name" value="Student Status Label"/>
+     <column name="code" value="ssp.label.status"/>
+     <column name="value" value="Status"/>     
+     <column name="description" value="Student Status Label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="6e257eed-90cd-4972-8335-677fbc2b4841"/>
+     <column name="name" value="Alerts word"/>
+     <column name="code" value="ssp.label.alerts"/>
+     <column name="value" value="Status"/>     
+     <column name="description" value="Alerts Word"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="a3aa6cac-de3c-4ee5-b2af-6004d74b7d69"/>
+     <column name="name" value="Search word"/>
+     <column name="code" value="ssp.label.search"/>
+     <column name="value" value="Search"/>     
+     <column name="description" value="Search Word"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="22842b21-8d3c-4dba-933c-f1644f9806e3"/>
+     <column name="name" value="Reset word"/>
+     <column name="code" value="ssp.label.reset"/>
+     <column name="value" value="Reset"/>     
+     <column name="description" value="reset Word"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+
+
+
+
+
+
+
+
+
+<!-- gla -->
+<insert tableName="blurb">
+     <column name="id" value="e385154d-d69f-469c-bf83-a8108be75298"/>
+     <column name="name" value="Label for My Case Load Tab"/>
+     <column name="code" value="ssp.label.my-caseload"/>
+     <column name="value" value="mo Riar Cásanna"/>     
+     <column name="description" value="My Caseload tab label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="ee11eae8-e5b7-4017-8ce2-43d0176642ab"/>
+     <column name="name" value="Label for My Watchlist Tab"/>
+     <column name="code" value="ssp.label.my-watchlist"/>
+     <column name="value" value="Mo Watch Liosta"/>     
+     <column name="description" value="My Watchlist tab label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+
+<insert tableName="blurb">
+     <column name="id" value="8ea00ec9-dea8-4778-bc8c-92654227e37b"/>
+     <column name="name" value="Label for Search Tab"/>
+     <column name="code" value="ssp.label.search"/>
+     <column name="value" value="cuardaigh"/>     
+     <column name="description" value="Search tab label"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="e54dceae-315c-4227-b60f-82883b29a823"/>
+     <column name="name" value="Label for Tools"/>
+     <column name="code" value="ssp.label.tools"/>
+     <column name="value" value="Uirlisí"/>     
+     <column name="description" value="Label for Tools"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="18e11bd4-bcf3-4864-99b2-d5f1a144e8db"/>
+     <column name="name" value="Select the default Search Tab"/>
+     <column name="code" value="ssp.label.default-search-tab"/>
+     <column name="value" value="Réamhshocrú Cuardaigh Tab"/>     
+     <column name="description" value="Default Search Tab"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="d614ea11-2956-4f85-a87a-81729fe1d2ef"/>
+     <column name="name" value="click to make the default Search Tab"/>
+     <column name="code" value="ssp.label.click-to-make-default"/>
+     <column name="value" value="Roghnaigh Réamhshocrú a Dhéanamh"/>     
+     <column name="description" value="click to make the default Search Tab"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="gla"/>
+</insert>
+
+
+<!--  -->
+
+
+
+
+
+
+
+	</changeSet>
+	
+	
+    
+</databaseChangeLog>

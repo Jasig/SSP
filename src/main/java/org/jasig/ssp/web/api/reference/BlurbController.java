@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.web.api.reference;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -31,12 +33,14 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.reference.BlurbTO;
+import org.jasig.ssp.transferobject.reference.CampusTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +54,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/1/blurb")
 public class BlurbController {
 
+	@Value("#{configProperties.per_coach_sync_transactions}")
+	private String defaultLanguage = "eng";
+	
 	@Autowired
 	protected transient BlurbService service;
 
@@ -72,8 +79,8 @@ public class BlurbController {
 	 */
 	protected static final Logger LOGGER = LoggerFactory
 			.getLogger(BlurbController.class);	
-	@RequestMapping(method = RequestMethod.GET)
 	
+	@RequestMapping(method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<BlurbTO> getAll(
@@ -92,7 +99,36 @@ public class BlurbController {
 		return new PagedResponse<BlurbTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
 
+	} 
+	
+	
+	
+	//@RequestMapping(value = "/{langCode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code", method = RequestMethod.GET)
+	//@RequestMapping(method = RequestMethod.GET)
+	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
+	public @ResponseBody
+	List<BlurbTO> getAllByLanguage(
+			final @RequestParam(required = false) String langCode) {
+		List<Blurb> blurbList = getService().getByLanguageCode(langCode);
+		List<BlurbTO> blurbTOList = new ArrayList<BlurbTO>();
+		for(Blurb b:  blurbList) {
+			try {
+				blurbTOList.add(this.instantiateTO(b));
+			} catch (ValidationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return blurbTOList;
 	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * Persist any changes to the specified instance.
 	 * 

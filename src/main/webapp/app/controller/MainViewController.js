@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 Ext.define('Ssp.controller.MainViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -25,7 +26,8 @@ Ext.define('Ssp.controller.MainViewController', {
 		personService: 'personService',
 		authenticatedPerson: 'authenticatedPerson',
 		contactPersonStore: 'contactPersonStore',
-        configStore: 'configStore'
+        configStore: 'configStore',
+        textStore: 'sspTextStore'
 
     },
     config: {
@@ -41,22 +43,35 @@ Ext.define('Ssp.controller.MainViewController', {
 		}
 	},
 	
+	
+	
+	
 	init: function() {
 		var me=this;
-		me.configStore.load();
-		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-		me.displayStudentRecordView();
-		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
-	
-		me.personService.get( me.authenticatedPerson.get('id'), {
-				success: me.getContactPersonSuccess,
-				failure: me.getContactPersonFailure,
-				scope: me			
+		//);
+		me.textStore.load( function (){
+		
+			me.configStore.load(function (){
+				me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+				me.displayStudentRecordView();
+				me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
+				me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
+			
+				me.personService.get( me.authenticatedPerson.get('id'), {
+						success: me.getContactPersonSuccess,
+						failure: me.getContactPersonFailure,
+						scope: me			
+					});
+				
+				/*var mainForm = Ext.ComponentQuery.query('mainview')[0];
+				studentViewNav
+				programGpaField.setText( me.textStore.getValueByCode('ssp.label.program-gpa'));
+				programGpaField.setText( me.textStore.getValueByCode('ssp.label.program-gpa'));*/
+				
+				return this.callParent(arguments);
 			});
-			
-			
-		return this.callParent(arguments);
+		
+		});
     },
 
     destroy: function() {

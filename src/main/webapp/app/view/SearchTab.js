@@ -22,7 +22,8 @@ Ext.define('Ssp.view.SearchTab', {
     mixins: ['Deft.mixin.Injectable'],
     inject: {
         authenticatedPerson: 'authenticatedPerson',
-        appEventsController: 'appEventsController'
+        appEventsController: 'appEventsController',
+        textStore:'sspTextStore'
     },
   	initComponent: function() {
    		var me = this;
@@ -63,7 +64,7 @@ Ext.define('Ssp.view.SearchTab', {
                     },
                      tbar: [{ 
                     	xtype: 'label', 
-                    	text: 'Default Search Tab', 
+                    	text: me.textStore.getValueByCode('ssp.label.default-search-tab'), 
                     	id : 'defaultTabLabel',
                     	listeners: { 
                     		element: 'el', 
@@ -74,25 +75,25 @@ Ext.define('Ssp.view.SearchTab', {
 								var activeTab = Ext.getCmp('searchTabPanel').getActiveTab();
 								var activeTabIndex = Ext.getCmp('searchTabPanel').items.findIndex('id', activeTab.id);		               					
 		               			Ext.util.Cookies.set('defaultTabIndex', activeTabIndex); 
-		               			Ext.getCmp('defaultTabLabel').setText('Default Search Tab');
+		               			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.default-search-tab'));
 		               			defaultTabLabel.index = activeTabIndex;		               			
                				} 
                     	} 
                     }],
                     items: [{
-                        title: 'My Caseload',
+                        title: me.textStore.getValueByCode('ssp.label.my-caseload'),
                         hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0, tabPanelAccessor: tabPanelAccessor}]
                     },{
-                        title: 'My Watch List',
+                        title: me.textStore.getValueByCode('ssp.label.my-watchlist'),
                         border: 0,
                         hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1, tabPanelAccessor: tabPanelAccessor}]
                     },{
-                        title: 'Search',
+                        title: me.textStore.getValueByCode('ssp.label.search'),
                         hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
                         border: 0,
                         layout: 'fit',

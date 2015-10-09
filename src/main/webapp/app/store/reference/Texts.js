@@ -21,16 +21,31 @@ Ext.define('Ssp.store.reference.Texts', {
     model: 'Ssp.model.reference.Text',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('blurb'),
-    		autoLoad: true,extraParams: this.extraParams});
+    	
+    	var url = this.apiProperties.getItemUrl('blurb') + "/code?langCode=" + Ext.util.Cookies.get('defaultLangCode');
+		
+		Ext.apply(this.getProxy(),{url: this.getProxy().url + url,
+    		autoLoad: true,extraParams: []});
     },
-    getValueByCode:function(code)
+    getValueByCode:function(code, defaultVal)
     {
     	var me=this;
     	var index = me.findExact('code',code);
-    	if(index >= 0)
-    	 return me.getAt(index).get('value');
-    	return null;
+    	if(index >= 0){
+    		return me.getAt(index).get('value');	
+    	}    	 
+    	else if (defaultVal != null){
+    		return defaultVal;
+    	}
+    	else{
+    		return code;	
+    	}    	
     }
+    
+    /*load: function()
+    {
+    	alert('special load');
+    	this.callParent();
+    }*/
 
 });

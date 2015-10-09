@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
@@ -47,8 +49,18 @@ public class BlurbDao extends AbstractReferenceAuditableCrudDao<Blurb>
 			code = code.replace('*', '%');
 			Criteria criteria = createCriteria();
 			criteria.add(Restrictions.like("code", code));
+			//query.add(Restrictions.eq("lang", languageCode));
 			sAndP.addAll(criteria);
 		}
 		return super.getAll(sAndP);
+	}
+	
+	public List<Blurb> getAllbyLangCode(
+			String langCode) {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("lang", langCode));
+		
+		return (List<Blurb>)query.list();
+		
 	}
 }

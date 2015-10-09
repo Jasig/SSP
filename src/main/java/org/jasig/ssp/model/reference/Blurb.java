@@ -52,6 +52,11 @@ public class Blurb
 	@NotNull
 	@NotEmpty
 	private String value;
+	
+	@Column(name="lang", nullable = true, length = 3)
+	@NotNull
+	@NotEmpty
+	private String lang;	
 
 	/**
 	 * Constructor
@@ -83,6 +88,15 @@ public class Blurb
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	public String getLang() {
+		return value;
+	}
+
+
+	public void setLang(String LangCode) {
+		this.lang = value;
 	}
 
 

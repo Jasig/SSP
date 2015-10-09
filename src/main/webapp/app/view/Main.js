@@ -16,48 +16,93 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+languages = [
+    ['eng', 'English', 'ascii'],
+    ['spa', 'Spanish/Latin American'],
+    ['fre', 'France (France)'],
+    ['gla', 'Gaelic/Irish'],
+    ['NOTHING', 'FOR DEV']
+];
+
+/* Language chooser combobox  */
+var store1 = Ext.create('Ext.data.ArrayStore', {
+    fields: ['code', 'language'],
+    data: languages // from languages.js
+});
+
+
 Ext.define('Ssp.view.Main', {
-	extend: 'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
     alias: 'widget.mainview',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
+    mixins: ['Deft.mixin.Injectable',
+        'Deft.mixin.Controllable'
+    ],
     inject: {
-    	authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        textStore: 'sspTextStore'
     },
     controller: 'Ssp.controller.MainViewController',
-    initComponent: function(){
-    	var me=this;
-    	Ext.apply(me,
-		    			{
-		    	    layout: {
-		    	    	type: 'hbox',
-		    	    	align: 'stretch'
-		    	    },
+    initComponent: function() {
+        var me = this;
 
-		    	    dockedItems: {
-		    	        xtype: 'toolbar',
-		    	        items: [{
-		    			            xtype: 'button',
-		    			            text: 'Students',
-		    			            hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
-		    			            itemId: 'studentViewNav',
-		    			            action: 'displayStudentRecord'
-		    			        }, {
-		    			            xtype: 'button',
-		    			            text: 'Admin',
-		    			            hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
-		    			            itemId: 'adminViewNav',
-		    			            action: 'displayAdmin'
-		    			        },{
-			       		        	xtype: 'tbspacer',
-			       		        	flex: 1
-			       		        },{
-	    		    	    	  id: 'report',
-	    		    	    	  xtype: 'sspreport'
-	    		    	    	}]
-		    	    }    		
-    			});
-    	
-    	return me.callParent(arguments);
+        me.textStore.load();
+
+
+        Ext.apply(me, {
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+
+            dockedItems: {
+                xtype: 'toolbar',
+                items: [{
+                    xtype: 'button',
+                    text: me.textStore.getValueByCode('ssp.label.students'),
+                    hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
+                    itemId: 'studentViewNav',
+                    action: 'displayStudentRecord'
+                }, {
+                    xtype: 'button',
+                    text: me.textStore.getValueByCode('ssp.label.admin'),
+                    hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
+                    itemId: 'adminViewNav',
+                    action: 'displayAdmin'
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                }, {
+                    id: 'report',
+                    xtype: 'sspreport'
+                }, {
+                    xtype: 'tbspacer',
+                    flex: 1
+                }, {
+                    xtype: 'combo',
+                    displayField: 'language',
+                    valueField: 'code',                   
+                    store: Ext.create('Ext.data.ArrayStore', {
+                        fields: ['code', 'language'],
+                        data: languages
+                    }),
+                    listeners: {
+
+                        select: function(cb, record) {
+                            Ext.util.Cookies.set('defaultLangCode', cb.getValue());
+                            //me.textStore.load();
+                            window.location.reload();
+                        },
+						render: function() {			        		        
+							var val = Ext.util.Cookies.get('defaultLangCode');
+							this.setValue(val);
+						}
+                    }
+                }]
+            }
+        });
+
+
+
+        return me.callParent(arguments);
     }
 });
