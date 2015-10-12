@@ -518,20 +518,6 @@
 </insert>
 
 <insert tableName="blurb">
-     <column name="id" value="4c3e09d3-4e94-4e39-9146-5ee5be3e0450"/>
-     <column name="name" value="Label for Search Tab"/>
-     <column name="code" value="ssp.label.search"/>
-     <column name="value" value="Search"/>     
-     <column name="description" value="Search tab label"/>
-     <column name="created_date" value="2015-01-01 00:00:00"/>
-     <column name="modified_date" value="2015-01-01 00:00:00"/>
-     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
-     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
-     <column name="object_status" value="1"/>
-     <column name="lang" value="eng"/>
-</insert>
-
-<insert tableName="blurb">
      <column name="id" value="3ed16bb8-9567-4055-a6f5-6cf447d4e0a2"/>
      <column name="name" value="Label for Tools"/>
      <column name="code" value="ssp.label.tools"/>
