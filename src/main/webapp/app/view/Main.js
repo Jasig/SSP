@@ -45,10 +45,11 @@ Ext.define('Ssp.view.Main', {
     initComponent: function() {
         var me = this;
 
-        me.textStore.load(
-        	callback: function(records, operation, success) {
-            	alert(records.length);
-        	});
+        me.textStore.load();
+	me.textStore.on('load', function(records, operation, success) {            		
+		Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students'));
+		Ext.getCmp('adminViewNav').setText(me.textStore.getValueByCode('ssp.label.admin'));
+	});
 
 
         Ext.apply(me, {
@@ -64,12 +65,14 @@ Ext.define('Ssp.view.Main', {
                     text: me.textStore.getValueByCode('ssp.label.students'),
                     hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
                     itemId: 'studentViewNav',
+		    id: 'studentViewNav',
                     action: 'displayStudentRecord'
                 }, {
                     xtype: 'button',
                     text: me.textStore.getValueByCode('ssp.label.admin'),
                     hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
                     itemId: 'adminViewNav',
+		    id: 'adminViewNav',
                     action: 'displayAdmin'
                 }, {
                     xtype: 'tbspacer',
