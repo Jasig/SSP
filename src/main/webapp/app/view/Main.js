@@ -45,7 +45,10 @@ Ext.define('Ssp.view.Main', {
     initComponent: function() {
         var me = this;
 
-        me.textStore.load();
+        me.textStore.load(
+        	callback: function(records, operation, success) {
+            	alert(records.length);
+        	});
 
 
         Ext.apply(me, {

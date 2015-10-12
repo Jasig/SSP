@@ -643,7 +643,32 @@
      <column name="lang" value="eng"/>
 </insert>
 
-
+<insert tableName="blurb">
+     <column name="id" value="00dd984a-8987-4db7-bbfb-f536681a8ff0"/>
+     <column name="name" value="Label for Student(s)"/>
+     <column name="code" value="ssp.label.students"/>
+     <column name="value" value="Students"/>     
+     <column name="description" value="What we call Students"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
+<insert tableName="blurb">
+     <column name="id" value="9f99deb3-7f62-42f9-a18e-8f25c4a496d6"/>
+     <column name="name" value="Label for Admin screen"/>
+     <column name="code" value="ssp.label.admin"/>
+     <column name="value" value="Admin"/>     
+     <column name="description" value="Label for Admin screen"/>
+     <column name="created_date" value="2015-01-01 00:00:00"/>
+     <column name="modified_date" value="2015-01-01 00:00:00"/>
+     <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41"/>
+     <column name="object_status" value="1"/>
+     <column name="lang" value="eng"/>
+</insert>
 
 
 
@@ -732,6 +757,8 @@
      <column name="object_status" value="1"/>
      <column name="lang" value="gla"/>
 </insert>
+
+
 
 
 <!--  -->
