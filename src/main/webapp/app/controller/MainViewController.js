@@ -48,30 +48,26 @@ Ext.define('Ssp.controller.MainViewController', {
 	
 	init: function() {
 		var me=this;
-		//);
-		me.textStore.load( function (){
+		me.textStore.load();
+		me.textStore.on('load', function(records, operation, success) {            		
+			Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students'));
+			Ext.getCmp('adminViewNav').setText(me.textStore.getValueByCode('ssp.label.admin'));
+		});
 		
-			me.configStore.load(function (){
-				me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-				me.displayStudentRecordView();
-				me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
-				me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
-			
-				me.personService.get( me.authenticatedPerson.get('id'), {
-						success: me.getContactPersonSuccess,
-						failure: me.getContactPersonFailure,
-						scope: me			
-					});
-				
-				/*var mainForm = Ext.ComponentQuery.query('mainview')[0];
-				studentViewNav
-				programGpaField.setText( me.textStore.getValueByCode('ssp.label.program-gpa'));
-				programGpaField.setText( me.textStore.getValueByCode('ssp.label.program-gpa'));*/
-				
-				return this.callParent(arguments);
+		me.configStore.load();
+		
+		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+		me.displayStudentRecordView();
+		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
+		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
+	
+		me.personService.get( me.authenticatedPerson.get('id'), {
+				success: me.getContactPersonSuccess,
+				failure: me.getContactPersonFailure,
+				scope: me			
 			});
 		
-		});
+		return this.callParent(arguments);
     },
 
     destroy: function() {

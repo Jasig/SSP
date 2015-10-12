@@ -66,7 +66,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	init: function() {
 		var me=this;	
 		
-		me.textStore.load();
+		//We should assume now that the textStore has been loaded
+		//not my favorite solution, but it works for now.
+		//me.textStore.load();
+		
 		// Load the views dynamically
 		// otherwise duplicate id's will be registered
 		// on cancel

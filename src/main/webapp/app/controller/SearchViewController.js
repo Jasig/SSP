@@ -137,7 +137,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 		};
 		if (me.textStore.getTotalCount() == 0) {
 			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
-			me.textStore.load();
+			//me.textStore.load();
 		} else {
 			me.onTextStoreLoad();
 		};

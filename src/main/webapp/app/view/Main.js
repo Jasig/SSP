@@ -45,13 +45,6 @@ Ext.define('Ssp.view.Main', {
     initComponent: function() {
         var me = this;
 
-        me.textStore.load();
-	me.textStore.on('load', function(records, operation, success) {            		
-		Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students'));
-		Ext.getCmp('adminViewNav').setText(me.textStore.getValueByCode('ssp.label.admin'));
-	});
-
-
         Ext.apply(me, {
             layout: {
                 type: 'hbox',

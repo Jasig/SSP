@@ -31,42 +31,31 @@ Ext.define('Ssp.store.Tools', {
         var me=this;
         me.callParent( arguments );
 
-        me.textStore.load( function (){
-        	var sspTools = [
-        	                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.main'), toolType: "profile", active: true },
-        	                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.intake'), toolType: "studentintake", active: true },
-        	                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.actionplan'), toolType: "actionplan", active: true },
-        	                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.journal'), toolType: "journal", active: true },
-        	                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.earlyalert'), toolType: "earlyalert", active: true },
-        	                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.map'), toolType: "map", active: true },
-        	                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.emailstudent'), toolType: "emailstudent", active: true },
-        	                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.acommodation'), toolType: "accommodation", active: true },
-        	                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.documents'), toolType: "documents", active: true },
-        	    	        { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.notes'), toolType: "personnotes", active: true },
-        	                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.caseloadassign'), toolType: "toolcaseloadreassignment", active: true },
-        	    			
-        	                /*
-        	                { group:'rc1', name: "", toolType: "earlyalert", active: false },
-        	                { group:'rc1', name: "----------------", toolType: "earlyalert", active: false },
-        	                { group:'rc1', name: "Config Link", toolType: "earlyalert", active: false },
-        	                { group:'rc1', name: "Program Viewer", toolType: "earlyalert", active: false },
-        	                { group:'rc1', name: "MAP Help", toolType: "earlyalert", active: false }
-
-
-        	                
-        	                 { group:'rc1', name: "SIS", toolType: "StudentInformationSystem", active: true },
-        	                 { group:'rc1', name: "Displaced Workers", toolType: "DisplacedWorker", active: false },
-        	                 { group:'rc1', name: "Student Success", toolType: "StudentSuccess", active: false }
-        	                 */
-        	            ];
-
-        	            // set the model
-        	            me.loadData( me.applySecurity( sspTools ) );
-        	}        
-        );
-
+        if (me.textStore.getTotalCount() == 0) {
+			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
+			//me.textStore.load();
+		} else {
+			me.onTextStoreLoad();
+		};
         return me;
+    },
+    onTextStoreLoad:function() {
+    	var sspTools = [
+                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.main'), toolType: "profile", active: true },
+                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.intake'), toolType: "studentintake", active: true },
+                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.actionplan'), toolType: "actionplan", active: true },
+                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.journal'), toolType: "journal", active: true },
+                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.earlyalert'), toolType: "earlyalert", active: true },
+                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.map'), toolType: "map", active: true },
+                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.emailstudent'), toolType: "emailstudent", active: true },
+                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.acommodation'), toolType: "accommodation", active: true },
+                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.documents'), toolType: "documents", active: true },
+    	        { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.notes'), toolType: "personnotes", active: true },
+                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.caseloadassign'), toolType: "toolcaseloadreassignment", active: true },
+            ];
 
+            // set the model
+            me.loadData( me.applySecurity( sspTools ) );
     },
     
     applySecurity: function( tools ){
