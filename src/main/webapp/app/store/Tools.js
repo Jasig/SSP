@@ -34,6 +34,7 @@ Ext.define('Ssp.store.Tools', {
         if (me.textStore.getTotalCount() == 0) {
 			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			//me.textStore.load();
+			//test
 		} else {
 			me.onTextStoreLoad();
 		};
