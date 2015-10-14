@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.sis.TranscriptViewController',
     inject: {
-        store: 'courseTranscriptsStore'
+        store: 'courseTranscriptsStore',
+        textStore: 'sspTextStore'
     },
 	width: '100%',
 	height: '100%',
@@ -37,7 +38,7 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
             columns: [{
                 xtype: 'gridcolumn',
                 dataIndex: 'termCode',
-                text: 'Term',
+                text: me.textStore.getValueByCode('ssp.label.main.financial.term-code', 'Term'),
                 flex: 0.10,
                 getSortParam: function() {
                         return 'termStartDate';
@@ -45,29 +46,29 @@ Ext.define('Ssp.view.tools.profile.Transcript', {
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'formattedCourse',
-                text: 'Course',
+                text: me.textStore.getValueByCode('ssp.label.main.financial.formatted-course', 'Course'),
                 flex: 0.15
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'title',
-                text: 'Course Title',
+                text: me.textStore.getValueByCode('ssp.label.main.financial.course-title','Course Title'),
                 flex: 0.30
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'creditEarned',
-                text: 'Cr Hrs',
+                text: me.textStore.getValueByCode('ssp.label.main.financial.credit-earned','Cr Hrs'),
                 renderer: Ssp.util.Util.fixedWidthFloatRenderer,
                 flex: 0.10
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'grade',
-                text: 'Grade',
+                text: me.textStore.getValueByCode('ssp.label.main.financial.grade','Grade'),
                 sortable: 'false',
                 flex: 0.20
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'creditType',
-                text: 'Credit Type',
+                text: me.textStore.getValueByCode('ssp.label.main.financial.credit-type','Credit Type'),
                 flex: 0.20
             }],
             viewConfig: {

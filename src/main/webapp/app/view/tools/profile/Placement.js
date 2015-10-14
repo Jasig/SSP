@@ -27,7 +27,8 @@ Ext.define('Ssp.view.tools.profile.Placement', {
     controller: 'Ssp.controller.tool.profile.PlacementViewController',
     autoScroll: true,
     inject: {
-        store: 'placementStore'
+        store: 'placementStore',
+        textStore: 'sspTextStore'
     },
     initComponent: function() {
         var me = this;
@@ -37,13 +38,14 @@ Ext.define('Ssp.view.tools.profile.Placement', {
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'type',
-                    text: 'Type',
+                    text: me.textStore.getValueByCode('ssp.label.main.placement.type', 'Type'),
 					flex: 1,
 				    
 					renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 						var me = this;
 						if((record.data.hasDetails == true) ){
-							return '<a title="Click to get more detailed information about test results from Smarter Measure." target="_test_results" href="'+record.get("testProviderLink")+'">'+value+'</a>';
+						    var title = me.textStore.getValueByCode('ssp.tooltip.main.placement.test-results-from-smarter-measure', 'Click to get more detailed information about test results from Smarter Measure');
+							return '<a title="' + title + '" target="_test_results" href="'+record.get("testProviderLink")+'">'+value+'</a>';
 						}
 			             return value;
 			         }
@@ -51,25 +53,25 @@ Ext.define('Ssp.view.tools.profile.Placement', {
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'score',
-                    text: 'Score',
+                    text: me.textStore.getValueByCode('ssp.label.main.placement.score', 'Score'),
 					flex: 1
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'status',
-                    text: 'Status',
+                    text: me.textStore.getValueByCode('ssp.label.main.placement.status', 'Status'),
 					flex: 1
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'takenDate',
-                    text: 'Date',
+                    text: me.textStore.getValueByCode('ssp.label.main.placement.taken-date', 'Date'),
 					renderer: Ext.util.Format.dateRenderer('m/d/Y'),
 					flex: 1
                 },{
                     xtype: 'gridcolumn',
                     dataIndex: 'outcome',
-                    text: 'Outcome',
+                    text: me.textStore.getValueByCode('ssp.label.main.placement.outcome', 'Outcome'),
 					flex: 1
                 }
             ],

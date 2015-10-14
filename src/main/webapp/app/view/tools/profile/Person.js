@@ -63,48 +63,48 @@ Ext.define('Ssp.view.tools.profile.Person', {
                     renderer: me.renderWithToolTip
                 },
                 items: [{
-                    fieldLabel: '',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.email', ''),
                     hideLabel: true,
                     name: 'primaryEmailAddressField',
                     itemId: 'primaryEmailAddressField'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.dob', 'DOB'),
                     name: 'birthDate',
                     itemId: 'birthDate',
                     labelWidth: 30
                 }, {
-                    fieldLabel: 'Type',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.student-type', 'Type'),
                     name: 'studentType',
                     itemId: 'studentType',
                     labelWidth: 32
                 }, {
-                    fieldLabel: 'Status',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.program-status', 'Status'),
                     name: 'programStatus',
                     itemId: 'programStatus',
                     labelWidth: 45
                 }, {
-                    fieldLabel: 'Status Reason',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.program-status-reason', 'Status Reason'),
                     name: 'programStatusReason',
                     itemId: 'programStatusReason',
                     hidden: true
                 }, {
-                    fieldLabel: 'Program',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.academic-program', 'Program'),
                     name: 'academicPrograms',
                     itemId: 'academicPrograms',
                     labelWidth: 45,
                     maxHeight: 32
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus', 'Home Campus'),
                     name: 'homeCampus',
                     itemId: 'homeCampus',
                     labelWidth: 85
                 }, {
-                    fieldLabel: 'Plan',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.map-plan', 'Plan'),
                     name: 'mapName',
                     itemId: 'mapName',
                     labelWidth: 32
                 }, {
-                    fieldLabel: 'Plan By',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.main.dashboard.advisor', 'Plan By'),
                     name: 'advisor',
                     itemId: 'advisor',
                     labelWidth: 45

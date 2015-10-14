@@ -32,7 +32,7 @@ Ext.define('Ssp.view.SearchTab', {
         };
    		Ext.apply(me, {
             submitEmptyText: false,
-            title: 'Students',
+            title: me.textStore.getValueByCode('ssp.label.students', 'Students'),
             collapsible: true,
             collapseDirection: 'left',
             listeners: {
@@ -64,7 +64,7 @@ Ext.define('Ssp.view.SearchTab', {
                     },
                      tbar: [{ 
                     	xtype: 'label', 
-                    	text: me.textStore.getValueByCode('ssp.label.default-search-tab'), 
+                    	text: me.textStore.getValueByCode('ssp.label.default-search-tab', 'Default Search Tab'),
                     	id : 'defaultTabLabel',
                     	listeners: { 
                     		element: 'el', 
@@ -75,25 +75,25 @@ Ext.define('Ssp.view.SearchTab', {
 								var activeTab = Ext.getCmp('searchTabPanel').getActiveTab();
 								var activeTabIndex = Ext.getCmp('searchTabPanel').items.findIndex('id', activeTab.id);		               					
 		               			Ext.util.Cookies.set('defaultTabIndex', activeTabIndex); 
-		               			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.default-search-tab'));
+		               			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.default-search-tab', 'Default Search Tab'));
 		               			defaultTabLabel.index = activeTabIndex;		               			
                				} 
                     	} 
                     }],
                     items: [{
-                        title: me.textStore.getValueByCode('ssp.label.my-caseload'),
+                        title: me.textStore.getValueByCode('ssp.label.my-caseload', 'My Caseload'),
                         hidden: !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH'),
                         border: 0,
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'myCaseload', isActiveTab: me.defaultActiveTabIndex() === 0, tabPanelAccessor: tabPanelAccessor}]
                     },{
-                        title: me.textStore.getValueByCode('ssp.label.my-watchlist'),
+                        title: me.textStore.getValueByCode('ssp.label.my-watchlist', 'My Watch List'),
                         border: 0,
                         hidden: !me.authenticatedPerson.hasAccess('WATCHLIST_TOOL'),
                         layout: 'fit',
                         items: [{xtype: 'search', tabContext: me.hasOnlySearch() ? 'search' : 'watchList', isActiveTab: me.defaultActiveTabIndex() === 1, tabPanelAccessor: tabPanelAccessor}]
                     },{
-                        title: me.textStore.getValueByCode('ssp.label.search'),
+                        title: me.textStore.getValueByCode('ssp.label.search', 'Search'),
                         hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH'),
                         border: 0,
                         layout: 'fit',

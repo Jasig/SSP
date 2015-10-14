@@ -176,21 +176,6 @@ Ext.define('Ssp.controller.SearchViewController', {
     onTextStoreLoad:function() {
     	var me = this;
     	var index = !me.authenticatedPerson.hasAccess('CASELOAD_SEARCH') ? 0 : 2;
-    	var searchForm = Ext.ComponentQuery.query('searchForm')[index];
-    	if ( searchForm ) {
-            var birthDateField = searchForm.query('datefield[itemId=birthDate]')[0]; //TODO: Refactor out or a better textStore loading sequence
-            if ( birthDateField ) {
-                birthDateField.setFieldLabel( me.textStore.getValueByCode('ssp.label.dob') + ':' );
-            }
-            var localGpaField = searchForm.query('label[itemId=localGpa]')[0];
-            if ( localGpaField ) {
-            	localGpaField.setText( me.textStore.getValueByCode('ssp.label.local-gpa'));
-            }
-            var programGpaField = searchForm.query('label[itemId=programGpa]')[0];
-            if ( programGpaField ) {
-            	programGpaField.setText( me.textStore.getValueByCode('ssp.label.program-gpa'));
-            }
-        }
     	me.setGridView();
     },
 
@@ -272,10 +257,10 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var me = this;
 		var activeTabIndex = tabPanel.items.findIndex('id', newCard.id);		               					
 		if(activeTabIndex == defaultTabLabel.index) {
-			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.default-search-tab'));
+			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.default-search-tab', 'Default Search Tab'));
 		}
 		else {		
-			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.click-to-make-default'));		
+			Ext.getCmp('defaultTabLabel').setText(me.textStore.getValueByCode('ssp.label.click-to-make-default', 'Click to Make Default'));
 		}		   
     	
         var me = this;
@@ -543,8 +528,6 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var grid = me.getView();
 		var store;
 		var sortableColumns = true;
-		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
-		var coachIdAlias = me.configStore.getConfigByName('coachFieldLabel');
 		if ( me.getIsCaseload() ) {
 				store = me.caseloadStore;
 		} else {
@@ -573,16 +556,16 @@ Ext.define('Ssp.controller.SearchViewController', {
         }
 
 		columns = [
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name'), dataIndex: 'firstName', flex: 1 },
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? 0.4:0.2},
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name'), dataIndex: 'lastName', flex: 1},
-				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 0.5},
-	              { sortable: sortableColumns, header: coachIdAlias, dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.type'), dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
-				  { sortable: sortableColumns, header: studentIdAlias, dataIndex: 'schoolId', flex: me.getIsExpanded() ? 0.5:1},
-				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.email'), dataIndex: 'primaryEmailAddress', flex: 0.8},
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.status'), dataIndex: 'currentProgramStatusName', flex: 0.2},
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.alerts'), dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.first-name', 'First Name'), dataIndex: 'firstName', flex: 1 },
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.middle-name', 'Middle Name'), dataIndex: 'middleName', flex: me.getIsExpanded() ? 0.4:0.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name', 'Last Name'), dataIndex: 'lastName', flex: 1},
+				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob', 'DOB'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 0.5},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.coach-name', 'Coach'), dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.student-type', 'Type'), dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
+				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'), dataIndex: 'schoolId', flex: me.getIsExpanded() ? 0.5:1},
+				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.email', 'Email'), dataIndex: 'primaryEmailAddress', flex: 0.8},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.program-status', 'Status'), dataIndex: 'currentProgramStatusName', flex: 0.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.number-of-early-alerts', 'Alerts'), dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
 	              ];
 
 		grid.getView().getRowClass = function(row, index) {

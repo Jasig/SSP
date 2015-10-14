@@ -20,6 +20,9 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
     extend: 'Ext.Container',
     alias: 'widget.evaluatedsuccessindicatorgroups',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        textStore: 'sspTextStore'
+    },
     controller: 'Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsController',
 
     initComponent: function(){
@@ -28,7 +31,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
             margin: '20 0 0 0',
             items: [{
                 xtype: 'fieldset',
-                title: 'Student Indicators',
+                title: me.textStore.getValueByCode('ssp.label.main.dashboard.success-indicators','Student Indicators'),
                 flex: 1,
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
@@ -42,7 +45,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 width: 10
             }, {
                 xtype: 'fieldset',
-                title: 'Intervention Indicators',
+                title: me.textStore.getValueByCode('ssp.label.main.dashboard.intervention-indicators', 'Intervention Indicators'),
                 flex: 1,
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
@@ -56,7 +59,7 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 width: 10
             }, {
                 xtype: 'fieldset',
-                title: 'Risk Indicators',
+                title: me.textStore.getValueByCode('ssp.label.main.dashboard.risk-indicators', 'Risk Indicators'),
                 flex: 1,
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',

@@ -63,7 +63,7 @@ Ext.define('Ssp.view.tools.profile.Financial', {
                 width: '100%',
                 items: [{
                     xtype: 'fieldset',
-                    title: 'Financial Aid and Loan Information',
+                    title: me.textStore.getValueByCode('ssp.label.main.financial.financial-aid-and-loan-information', 'Financial Aid and Loan Information'),
                     flex: 5,
                     width: '100%',
                     layout: 'anchor',
@@ -75,52 +75,52 @@ Ext.define('Ssp.view.tools.profile.Financial', {
                     },
                     defaultType: 'displayfield',
                     items: [{
-                        fieldLabel: 'Balance',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.balance-owed', 'Balance'),
                         name: 'balanceOwed',
                         itemId: 'balanceOwed',
 						labelWidth: 60
                     }, {
-                        fieldLabel: 'FA GPA',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.financial-gpa', 'FA GPA'),
                         name: 'financialAidGpa',
                         itemId: 'financialAidGpa',
 						labelWidth: 55
                     }, {
-                        fieldLabel: 'FAFSA',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.fafsa-date', 'FAFSA'),
                         name: 'fafsaDate',
                         itemId: 'fafsaDate',
 						labelWidth: 50
                     }, {
-                        fieldLabel: 'FA File',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.financial-aid-file-status', 'FA File'),
                         name: 'financialAidFileStatusDetails',
                         itemId: 'financialAidFileStatusDetails',
 						labelWidth: 50
                     }, {
-                        fieldLabel: 'FA Amount',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.financial-aid-remaining', 'FA Amount'),
                         name: 'financialAidRemaining',
                         itemId: 'financialAidRemaining',
 						labelWidth: 75
                     }, {
-                        fieldLabel: 'FA Remaining Terms',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.financial-aid-terms-left', 'FA Remaining Terms'),
                         name: 'termsLeft',
                         itemId: 'termsLeft',
 						labelWidth: 130
                     }, {
-                        fieldLabel: 'Institutional Loan Amount',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.institutional-loan-amount', 'Institutional Loan Amount'),
                         name: 'institutionalLoanAmount',
                         itemId: 'institutionalLoanAmount',
 						labelWidth: 150
                     }, {
-                        fieldLabel: 'Loan Amount',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.original-loan-amount', 'Loan Amount'),
                         name: 'originalLoanAmount',
                         itemId: 'originalLoanAmount',
 						labelWidth: 80
                     }, {
-                        fieldLabel: 'SAP Code',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.sap-status-code', 'SAP Code'),
                         name: 'sapStatusCode',
                         itemId: 'sapStatusCode',
 						labelWidth: 70
                     }, {
-                        fieldLabel: 'SAP Description',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.financial.sap-status-description', 'SAP Description'),
                         name: 'sapStatusDescription',
                         itemId: 'sapStatusDescription'
                     }]
@@ -129,7 +129,7 @@ Ext.define('Ssp.view.tools.profile.Financial', {
                     width: 20
                 }, {
                     xtype: 'fieldset',
-                    title: 'Financial Aid Awarded',
+                    title: me.textStore.getValueByCode('ssp.label.main.financial.financial-aid-awarded', 'Financial Aid Awarded'),
                     flex: 4,
                     width: '100%',
                     padding: '6 10 10 10',
@@ -144,12 +144,12 @@ Ext.define('Ssp.view.tools.profile.Financial', {
 			 			markDirty: false,
 			            columns: [{
 			            	xtype: 'gridcolumn',
-			                text: 'Term',
+			                text: me.textStore.getValueByCode('ssp.label.main.financial.term-code', 'Term'),
 			                dataIndex: 'termCode',
 			                flex: 1
 			            },{
 			            	xtype: 'gridcolumn',
-			            	text: 'Accepted',
+			            	text: me.textStore.getValueByCode('ssp.label.main.financial.accepted', 'Accepted'),
 			                dataIndex: 'acceptedLong',
 			                flex: 1
 			            }]
@@ -165,7 +165,7 @@ Ext.define('Ssp.view.tools.profile.Financial', {
                 width: '100%',
                 items: [{
                     xtype: 'fieldset',
-                    title: 'Financial Aid File Status',
+                    title: me.textStore.getValueByCode('ssp.label.main.financial.financial-aid-file-status', 'Financial Aid File Status'),
                     width: '100%',
                     padding: '6 10 10 10',
                     items: [{
@@ -179,22 +179,22 @@ Ext.define('Ssp.view.tools.profile.Financial', {
 			 			markDirty: false,
 			            columns: [{
 			            	xtype: 'gridcolumn',
-			                text: 'File Code',
+			                text: me.textStore.getValueByCode('ssp.label.main.financial.file-code', 'File Code'),
 			                dataIndex: 'code',
 			                width: 100
 			            },{
 			            	xtype: 'gridcolumn',
-			            	text: 'File Name',
+			            	text: me.textStore.getValueByCode('ssp.label.main.financial.file-name', 'File Name'),
 			                dataIndex: 'name',
 			                flex: 1
 			            },{
 			            	xtype: 'gridcolumn',
-			            	text: 'File Description',
+			            	text: me.textStore.getValueByCode('ssp.label.main.financial.file-description', 'File Description'),
 			                dataIndex: 'description',
 			                flex: 2
 			            },{
 			            	xtype: 'gridcolumn',
-			                text: 'File Status',
+			                text: me.textStore.getValueByCode('ssp.label.main.financial.file-status', 'File Status'),
 			                dataIndex: 'status',
 			                flex: 1
 			            }]

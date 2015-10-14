@@ -54,7 +54,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                 columnWidth: 0.6,
                 items: [{
                     xtype: 'fieldset',
-                    title: 'Demographic and Academic',
+                    title: me.textStore.getValueByCode('ssp.label.main.details.demographic-and-academic', 'Demographic and Academic'),
                     anchor: '100%',
                     flex: 1,
                     layout: 'anchor',
@@ -66,97 +66,97 @@ Ext.define('Ssp.view.tools.profile.Details', {
                     },
                     defaultType: 'displayfield',
                     items: [{
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.gender'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.gender', 'Gender'),
                         name: 'gender',
                         itemId: 'gender',
                         labelWidth: 50
                     }, {
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.marital-status'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.marital-status', 'Marital Status'),
                         name: 'maritalStatus',
                         itemId: 'maritalStatus',
                         labelWidth: 84
                     }, {
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.ethnicity'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.ethnicity', 'Ethnicity'),
                         name: 'ethnicity',
                         itemId: 'ethnicity',
                         labelWidth: 55
                     }, {
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.race'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.race', 'Race'),
                         name: 'race',
                         itemId: 'race',
                         labelWidth: 35
                     }, {
-                        fieldLabel: 'Residency',
+                        fieldLabel:  me.textStore.getValueByCode('ssp.label.residency', 'Residency'),
                         name: 'residencyCounty',
                         itemId: 'residencyCounty',
                         labelWidth: 64
                     }, {
-                        fieldLabel: 'F1',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.f1-status', 'F1'),
                         name: 'f1Status',
                         itemId: 'f1Status',
                         labelWidth: 24
                     }, {
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.local-gpa'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.local-gpa', 'Local GPA'),
                         name: 'localGPA',
                         itemId: 'localGPA',
                         labelWidth: 84,
                         hidden: true
                     }, {
-                        fieldLabel: me.textStore.getValueByCode('ssp.label.program-gpa'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.program-gpa', 'Program GPA'),
                         name: 'programGPA',
                         itemId: 'programGPA',
                         labelWidth: 84,
                         hidden: true
                     }, {
-                         fieldLabel: me.textStore.getValueByCode('ssp.label.career-decision-status'),
+                         fieldLabel: me.textStore.getValueByCode('ssp.label.career-decision-status', 'Career Decision'),
                          name: 'careerStatus',
                          itemId: 'careerStatus',
                          labelWidth: 84,
                          hidden: true
                     }, {
-                        fieldLabel: 'Standing',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.academic-standing', 'Standing'),
                         name: 'academicStanding',
                         itemId: 'academicStanding',
                         labelWidth: 57
                     }, {
-                        fieldLabel: 'Restrictions',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.current-restrictions', 'Restrictions'),
                         name: 'currentRestrictions',
                         itemId: 'currentRestrictions',
                         labelWidth: 72
                     }, {
-                        fieldLabel: 'Academic Program',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.academic-program', 'Academic Program'),
                         name: 'academicPrograms',
                         itemId: 'academicPrograms',
                         labelAlign: 'top'
                     }, {
-                        fieldLabel: 'Intended Program',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.intended-program-at-admit', 'Intended Program'),
                         itemId: 'intendedProgramAtAdmit',
                         name: 'intendedProgramAtAdmit',
                         labelAlign: 'top'
                     }, {
-                        fieldLabel: 'Home Campus',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus', 'Home Campus'),
                         name: 'homeCampus',
                         itemId: 'homeCampus',
                         labelWidth: 85
                     }, {
-                        fieldLabel: 'Start Term',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.actual-start-term', 'Start Term'),
                         name: 'actualStartTerm',
                         itemId: 'actualStartTerm',
                         labelWidth: 65
                     }, {
-                        fieldLabel: 'Anticipated Start Term',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.anticipated-start-term', 'Anticipated Start Term'),
                         name: 'anticipatedStartTerm',
                         itemId: 'anticipatedStartTerm',
                         labelWidth: 130
                     }, {
-                        fieldLabel: 'Transfer Hours',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.transfer-hours', 'Transfer Hours'),
                         name: 'transferHrs',
                         itemId: 'transferHrs',
                         labelWidth: 87
                     }]
                 }, {
                     xtype: 'fieldset',
-                    title: 'MAP',
+                    title: me.textStore.getValueByCode('ssp.label.main.details.map', 'MAP'),
                     anchor: '100%',
             		padding: '0 10 10 10',
                     flex: 1,
@@ -178,7 +178,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             xtype: 'tbspacer',
                             flex: 1
                         }, {
-                            tooltip: 'Email MAP',
+                            tooltip: me.textStore.getValueByCode('ssp.tooltip.email-map', 'Email MAP'),
                             text: '',
                             width: 30,
                             height: 30,
@@ -187,7 +187,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             itemId: 'emailPlanButton',
                             hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_EMAIL_BUTTON')
                         }, {
-                            tooltip: 'Print MAP',
+                            tooltip: me.textStore.getValueByCode('ssp.tooltip.print-map', 'Print MAP'),
                             text: '',
                             width: 30,
                             height: 30,
@@ -197,37 +197,37 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON')
                         }]
                     }, {
-                        fieldLabel: 'Plan Program',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.plan-program', 'Plan Program'),
                         name: 'planProgram',
                         itemId: 'planProgram',
                         labelWidth: 85
                     }, {
-                        fieldLabel: 'Plan Catalog Year',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.plan-catalog-year', 'Plan Catalog Year'),
                         name: 'planCatalogYear',
                         itemId: 'planCatalogYear',
                         labelWidth: 105
                     }, {
-                        fieldLabel: 'Plan Status',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.plan-status', 'Plan Status'),
                         itemId: 'onPlan',
                         name: 'onPlan',
                         labelWidth: 75
                     }, {
-                        fieldLabel: 'Plan Name',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.map-plan-name', 'Plan Name'),
                         name: 'mapName',
                         itemId: 'mapName',
                         labelWidth: 75
                     }, {
-                        fieldLabel: 'Plan Owner',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.advisor', 'Plan Owner'),
                         name: 'advisor',
                         itemId: 'advisor',
                         labelWidth: 75
                     }, {
-                        fieldLabel: 'Plan Updated',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.map-last-updated', 'Plan Updated'),
                         name: 'mapLastUpdated',
                         itemId: 'mapLastUpdated',
                         labelWidth: 85
                     }, {
-                        fieldLabel: 'Plan Ends',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.details.map-projected', 'Plan Ends'),
                         name: 'mapProjected',
                         itemId: 'mapProjected',
                         labelWidth: 65
@@ -238,7 +238,7 @@ Ext.define('Ssp.view.tools.profile.Details', {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: 'Cumulative and Term Activity',
+                title: me.textStore.getValueByCode('ssp.label.main.details.cumulative-and-term-activity', 'Cumulative and Term Activity'),
                 flex: 5,
             	padding: '6 10 10 10',
                 columnWidth: 0.4,
@@ -256,16 +256,16 @@ Ext.define('Ssp.view.tools.profile.Details', {
                         
                         },
                         items: [{
-                            text: 'Completion',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.total-credit-completion-rate', 'Completion'),
                             dataIndex: 'totalCreditCompletionRate'
                         }, {
-                            text: 'Attempted',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.total-credit-hours-attempted', 'Attempted'),
                             dataIndex: 'totalCreditHoursAttempted'
                         }, {
-                            text: 'Earned',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.total-credit-hours-earned', 'Earned'),
                             dataIndex: 'totalCreditHoursEarned'
                         }, {
-                            text: 'GPA',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.total-gpa', 'GPA'),
                             dataIndex: 'totalGradePointAverage'
                         }]
                     }
@@ -289,25 +289,25 @@ Ext.define('Ssp.view.tools.profile.Details', {
                             draggable: false
                         },
                         items: [{
-                            text: 'Term',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.term-code', 'Term'),
                             dataIndex: 'termCode'
                         }, {
-                            text: 'Attempted',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.credit-hours-attempted', 'Attempted'),
                             dataIndex: 'creditHoursAttempted',
                             xtype: 'gridcolumn',
                             renderer: Ssp.util.Util.fixedWidthFloatRenderer
                         }, {
-                            text: 'Earned',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.credit-hours-earned', 'Earned'),
                             dataIndex: 'creditHoursEarned',
                             xtype: 'gridcolumn',
                             renderer: Ssp.util.Util.fixedWidthFloatRenderer
                         }, {
-                            text: 'GPA',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.gpa', 'GPA'),
                             dataIndex: 'gradePointAverage',
                             xtype: 'gridcolumn',
                             renderer: Ssp.util.Util.fixedWidthFloatRenderer
                         }, {
-                            text: 'Paid',
+                            text: me.textStore.getValueByCode('ssp.label.main.details.tuition-paid', 'Paid'),
                             dataIndex: 'tuitionPaid'
                         }]
                     }

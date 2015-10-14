@@ -259,9 +259,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         
         if (gpa) {
 			me.getAcademicStandingField().setFieldLabel('');
-            me.getAcademicStandingField().setValue('<span style="color:#15428B">Standing:  </span>' + me.handleNull(gpa.academicStanding));
+            me.getAcademicStandingField().setValue('<span style="color:#15428B">' + me.textStore.getValueByCode('ssp.label.academic-standing', 'Standing') + ':  </span>' + me.handleNull(gpa.academicStanding));
 			me.getCurrentRestrictionsField().setFieldLabel('');
-			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">Restrictions:  </span>' + me.handleNull(gpa.currentRestrictions));
+			me.getCurrentRestrictionsField().setValue('<span style="color:#15428B">' + me.textStore.getValueByCode('ssp.label.current-restrictions', 'Restrictions') + ':  </span>' + me.handleNull(gpa.currentRestrictions));
 
             if (gpa.localGpa) {
                 var gpaLocalFormatted = Ext.util.Format.number(me.handleNull(gpa.localGpa), '0.00');

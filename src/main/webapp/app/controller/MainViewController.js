@@ -50,8 +50,8 @@ Ext.define('Ssp.controller.MainViewController', {
 		var me=this;
 		me.textStore.load();
 		me.textStore.on('load', function(records, operation, success) {            		
-			Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students'));
-			Ext.getCmp('adminViewNav').setText(me.textStore.getValueByCode('ssp.label.admin'));
+			Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students', 'Students'));
+			Ext.getCmp('adminViewNav').setText(me.textStore.getValueByCode('ssp.label.admin', 'Admin'));
 		});
 		
 		me.configStore.load();

@@ -21,14 +21,15 @@ Ext.define('Ssp.view.tools.profile.ServiceReasons', {
     alias: 'widget.profileservicereasons',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        store: 'profileServiceReasonsStore'
+        store: 'profileServiceReasonsStore',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            title: 'Service Reasons',
+            title: me.textStore.getValueByCode('ssp.label.main.dashboard.service-reasons', 'Service Reasons'),
             hideHeaders: true,
             autoScroll: true,
             queryMode: 'local',

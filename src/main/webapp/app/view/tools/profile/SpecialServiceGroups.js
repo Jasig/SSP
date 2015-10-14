@@ -21,14 +21,15 @@ Ext.define('Ssp.view.tools.profile.SpecialServiceGroups', {
     alias: 'widget.profilespecialservicegroups',
     mixins: ['Deft.mixin.Injectable'],
     inject: {
-        store: 'profileSpecialServiceGroupsStore'
+        store: 'profileSpecialServiceGroupsStore',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            title: 'Service Groups',
+            title: me.textStore.getValueByCode('ssp.label.main.dashboard.service-groups', 'Service Groups'),
             hideHeaders: true,
             queryMode:'local',
             store: me.store,

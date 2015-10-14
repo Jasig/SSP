@@ -66,21 +66,16 @@ public class BlurbServiceImpl extends
 			throw new org.jasig.ssp.web.api.validation.ValidationException("You can't edit a blurb's code or name.");
 		}
 		return super.save(obj);
-	};
+	}
 	@Override
 	public PagingWrapper<Blurb> getAll(
 			SortingAndPaging sAndP, String code) {
-		return dao.getAll(sAndP,code);
+		return dao.getAll(sAndP, code, null);
 	}
-	
-	@Override 
-	public List<Blurb> getByLanguageCode( 
-			String langCode) {
-		if(null == langCode || langCode.length() <=0)
-		{
-			langCode = defaultLanguage;
-		}
-		
-		return dao.getAllbyLangCode(langCode);
+	@Override
+	public PagingWrapper<Blurb> getAll(
+			SortingAndPaging sAndP, String code, String langCode) {
+		return dao.getAll(sAndP,code,langCode);
 	}
+
 }

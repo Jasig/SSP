@@ -22,10 +22,15 @@ Ext.define('Ssp.store.reference.Texts', {
     constructor: function(){
     	this.callParent(arguments);
     	
-    	var url = this.apiProperties.getItemUrl('blurb') + "/code?langCode=" + Ext.util.Cookies.get('defaultLangCode');
+    	var url = this.apiProperties.getItemUrl('blurb');
 		
 		Ext.apply(this.getProxy(),{url: this.getProxy().url + url,
-    		autoLoad: true,extraParams: []});
+    			autoLoad: true,
+    			extraParams : {
+					langCode: Ext.util.Cookies.get('defaultLangCode'),
+					limit: '-1'
+				}
+    		});
     },
     getValueByCode:function(code, defaultVal)
     {
@@ -35,7 +40,7 @@ Ext.define('Ssp.store.reference.Texts', {
     		return me.getAt(index).get('value');	
     	}    	 
     	else if (defaultVal != null){
-    		return defaultVal;
+    		return '{' + defaultVal + '}';
     	}
     	else{
     		return code;	

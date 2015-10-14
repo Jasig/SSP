@@ -61,7 +61,7 @@ Ext.define('Ssp.view.Search', {
                 // enableOverflow: true,
                 overflowX: 'hidden',
                 items: [{
-                    tooltip: 'Add Student',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.add-student', 'Add Student'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -70,7 +70,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'button',
                     itemId: 'addPersonButton'
                 }, {
-                    tooltip: 'Edit Student',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.edit-student', 'Edit Student'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -82,7 +82,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'tbspacer',
                     flex: 0.5
                 }, {
-                    tooltip: 'Set Student to Active status',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-active', 'Set Student to Active status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -92,7 +92,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'active',
                     itemId: 'setActiveStatusButton'
                 }, {
-                    tooltip: 'Set Student to Transitioned status',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-transitioned', 'Set Student to Transitioned status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -102,7 +102,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'transition',
                     itemId: 'setTransitionStatusButton'
                 }, {
-                    tooltip: 'Set Student to Non-Participating status',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-non-participating', 'Set Student to Non-Participating status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -112,7 +112,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'non-participating',
                     itemId: 'setNonParticipatingStatusButton'
                 }, {
-                    tooltip: 'Set Student to No-Show status',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-no-show', 'Set Student to No-Show status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -122,7 +122,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'no-show',
                     itemId: 'setNoShowStatusButton'
                 }, {
-                    tooltip: 'Set Student to Inactive',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-inactive', 'Set Student to Inactive'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -138,7 +138,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
                     fieldLabel: '',
-                    emptyText: 'Bulk Action',
+                    emptyText: me.textStore.getValueByCode('ssp.bulk-action.empty-text', 'Bulk Action'),
                     store: me.caseloadActionsStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -198,7 +198,7 @@ Ext.define('Ssp.view.Search', {
                     }
                 }, {
 
-                    text: me.textStore.getValueByCode('ssp.label.search'),
+                    text: me.textStore.getValueByCode('ssp.label.search', 'Search'),
                     tooltip: 'Search for Student',
                     xtype: 'button',
                     type: 'search',
@@ -208,7 +208,7 @@ Ext.define('Ssp.view.Search', {
                     hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH')
                 }, {
                     tooltip: 'Reset',
-                    text: me.textStore.getValueByCode('ssp.label.reset'),
+                    text: me.textStore.getValueByCode('ssp.label.reset', 'Reset'),
                     type: 'refresh',
                     xtype: 'button',
                     itemId: 'resetStudentSearchButton',

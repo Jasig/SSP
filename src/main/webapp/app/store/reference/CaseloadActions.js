@@ -21,7 +21,8 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
     model: 'Ssp.model.reference.AbstractReference',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        textStore:'sspTextStore'
     },
     constructor: function(){
         var me=this;
@@ -34,31 +35,31 @@ Ext.define('Ssp.store.reference.CaseloadActions', {
         var me = this;
         if(me.getCount() < 1) {
             if(me.authenticatedPerson.hasAnyBulkExportPermissions()) {
-                me.add({id: "EXPORT", name: "Export to CSV"});
+                me.add({id: "EXPORT", name: me.textStore.getValueByCode('ssp.bulk-action.export-to-csv','Export to CSV')});
             }
             if(me.authenticatedPerson.hasAccess('BULK_EMAIL_ACTION')) {
-                me.add({id: "EMAIL", name: "Send Email"});
+                me.add({id: "EMAIL", name: me.textStore.getValueByCode('ssp.bulk-action.send-email', 'Send Email')});
             }
             if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
-                me.add({id: "PROGRAM_STATUS_ACTIVE", name: "Set 'Active' Status"});
+                me.add({id: "PROGRAM_STATUS_ACTIVE", name: me.textStore.getValueByCode('ssp.bulk-action.set-active-status',"Set 'Active' Status")});
             }
             if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
-                me.add({id: "PROGRAM_STATUS_INACTIVE", name: "Set 'Inactive' Status"});
+                me.add({id: "PROGRAM_STATUS_INACTIVE", name: me.textStore.getValueByCode('ssp.bulk-action.set-inactive-status', "Set 'Inactive' Status")});
             }
             if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
-                me.add({id: "PROGRAM_STATUS_NON_PARTICIPATING", name: "Set 'Non-Participating' Status"});
+                me.add({id: "PROGRAM_STATUS_NON_PARTICIPATING", name: me.textStore.getValueByCode('ssp.bulk-action.set-non-participating-status', "Set 'Non-participating' Status")});
             }
             if(me.authenticatedPerson.hasAccess('BULK_PROGRAM_STATUS_ACTION')) {
-                me.add({id: "PROGRAM_STATUS_NO_SHOW", name: "Set 'No-Show' Status"});
+                me.add({id: "PROGRAM_STATUS_NO_SHOW", name: me.textStore.getValueByCode('ssp.bulk-action.set-no-show-status', "Set 'No-Show' Status")});
             }
             if(me.authenticatedPerson.hasAccess('BULK_WATCH_ACTION')) {
-                me.add({id: "WATCH", name: "Watch"});
+                me.add({id: "WATCH", name: me.textStore.getValueByCode('ssp.bulk-action.watch','Watch')});
             }
             if(me.authenticatedPerson.hasAccess('BULK_WATCH_ACTION')) {
-                me.add({id: "UNWATCH", name: "Unwatch"});
+                me.add({id: "UNWATCH", name: me.textStore.getValueByCode('ssp.bulk-action.unwatch','Unwatch')});
             }
             if (me.authenticatedPerson.hasAccess('EXPORT_CUSTOMIZABLE_SEARCH_TO_CSV_ACTION')) {
-                me.add({id: "CUSTOM_EXPORT", name: "Custom Export to CSV"});
+                me.add({id: "CUSTOM_EXPORT", name: me.textStore.getValueByCode('ssp.bulk-action.custom-export-to-csv','Custom Export to CSV')});
             }
         }
         return me;

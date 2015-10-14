@@ -21,7 +21,8 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
 	alias : 'widget.profilereferralsources',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-    	store: 'profileReferralSourcesStore'
+    	store: 'profileReferralSourcesStore',
+    	textStore: 'sspTextStore'
     },
 	width: '100%',
 	height: '100%',
@@ -32,7 +33,7 @@ Ext.define('Ssp.view.tools.profile.ReferralSources', {
 			        hideHeaders: true,
 			        autoScroll: true,
 			        queryMode: 'local',
-			        title: 'Referral Sources',
+			        title:  me.textStore.getValueByCode('ssp.label.main.dashboard.referral-sources', 'Referral Sources'),
 		            store: me.store,
 		            tools: [{
 		                xtype: 'button',

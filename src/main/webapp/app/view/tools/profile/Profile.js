@@ -20,12 +20,15 @@ Ext.define("Ssp.view.tools.profile.Profile", {
     extend: "Ext.form.Panel",
     alias: "widget.profile",
     mixins: [ "Deft.mixin.Injectable", "Deft.mixin.Controllable" ],
+    inject: {
+        textStore: 'sspTextStore'
+    },
     controller: "Ssp.controller.tool.profile.ProfileToolViewController",
     width: "100%",
     height: "100%",
     initComponent: function() {
-        var a = this;
-        Ext.apply(a, {
+        var me = this;
+        Ext.apply(me, {
             layout: "fit",
             title: "Profile",
             padding: 0,
@@ -37,55 +40,55 @@ Ext.define("Ssp.view.tools.profile.Profile", {
                 activeTab: 0,
                 itemId: "profileTabs",
                 items: [ {
-                    title: "Dashboard",
+                    title: me.textStore.getValueByCode('ssp.label.main.dashboard', 'Dashboard'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profiledashboard"
                     } ]
                 }, {
-                    title: "Details",
+                    title: me.textStore.getValueByCode('ssp.label.main.details', 'Details'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profiledetails"
                     } ]
                 }, {
-                    title: "Financial",
+                    title: me.textStore.getValueByCode('ssp.label.main.financial', 'Financial'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profilefinancial"
                     } ]
                 }, {
-                    title: "Transcript",
+                    title: me.textStore.getValueByCode('ssp.label.main.transcript', 'Transcript'),
                     autoScroll: true,
                     items: [ {
                         xtype: "transcript"
                     } ]
                 }, {
-                    title: "Placement",
+                    title: me.textStore.getValueByCode('ssp.label.main.placement', 'Placement'),
                     autoScroll: true,
                     items: [ {
                         xtype: "placement"
                     } ]
                 }, {
-                    title: "Contact",
+                    title: me.textStore.getValueByCode('ssp.label.main.contact', 'Contact'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profilecontact"
                     } ]
                 }, {
-                    title: "Coach",
+                    title: me.textStore.getValueByCode('ssp.label.main.coach', 'Coach'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profilecoach"
                     } ]
                 }, {
-                    title: "Watchers",
+                    title: me.textStore.getValueByCode('ssp.label.main.watchers', 'Watchers'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profilewatchers"
                     } ]
                 }, {
-                    title: "Schedule",
+                    title: me.textStore.getValueByCode('ssp.label.main.schedule', 'Schedule'),
                     autoScroll: true,
                     items: [ {
                         xtype: "profileschedule"
@@ -93,6 +96,6 @@ Ext.define("Ssp.view.tools.profile.Profile", {
                 } ]
             }) ]
         });
-        return a.callParent(arguments);
+        return me.callParent(arguments);
     }
 });

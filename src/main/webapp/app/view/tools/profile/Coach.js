@@ -60,7 +60,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     flex: 0.30,
                     items: [{
                     
-                        fieldLabel: 'Assigned Coach',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.assigned-coach','Assigned Coach'),
                         name: 'coachName',
                         labelWidth: 95,
                         itemId: 'coachName',
@@ -71,13 +71,13 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         xtype: 'tbspacer',
                         height: '10'
                     }, {
-                        fieldLabel: 'Phone',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.work-phone','Phone'),
                         name: 'coachWorkPhone',
                         itemId: 'coachWorkPhone',
                         labelWidth: 40,
 						flex: 1
                     }, {
-                        fieldLabel: 'Email',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.email','Email'),
                         name: 'coachPrimaryEmailAddress',
                         labelWidth: 40,
                         itemId: 'coachPrimaryEmailAddress',
@@ -86,17 +86,17 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         xtype: 'tbspacer',
                         height: '10'
 					}, {
-						fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus'),
+						fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus','Home Campus'),
 						name: 'coachHomeCampusName',
 						itemId: 'coachHomeCampusName',
 						labelWidth: 85
                     }, {
-                        fieldLabel: 'Department',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.department-name','Department'),
                         name: 'coachDepartmentName',
                         labelWidth: 70,
                         itemId: 'coachDepartmentName'
                     }, {
-                        fieldLabel: 'Office',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.office-location','Office'),
                         name: 'coachOfficeLocation',
                         labelWidth: 40,
                         itemId: 'coachOfficeLocation',
@@ -122,7 +122,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     items: [{
                             xtype: 'fieldset',
                             border: 1,
-                            title: 'Most recent activity of this coach with the record',
+                            title: me.textStore.getValueByCode('ssp.label.main.coach.most-recent-activity','Most recent activity of this coach with the record'),
                             cls: 'makeTitleBold',
                             defaultType: 'displayfield',
                             defaults: {
@@ -131,7 +131,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                             flex: 0.50,
                             padding: '0 5 5 5',
                             items: [{
-                                fieldLabel: 'Date',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.last-service-date','Date'),
                                 name: 'coachLastServiceDate',
                                 itemId: 'coachLastServiceDate',
                                 renderer: Ext.util.Format.dateRenderer('m/d/Y'),
@@ -142,7 +142,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                                 xtype: 'tbspacer',
                                 height: '10'
                             }, {
-                                fieldLabel: 'Last Service Provided',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.last-service-provided','Last Service Provided'),
                                 name: 'coachLastServiceProvided',
                                 itemId: 'coachLastServiceProvided',
                                 labelAlign: 'top',
@@ -156,7 +156,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     }, {
                         xtype: 'fieldset',
                         border: 1,
-                        title: 'Previous Coach Information',
+                        title: me.textStore.getValueByCode('ssp.label.main.coach.previous-coach-information','Previous Coach Information'),
                         itemId: 'previousCoachDisplay',
                         hidden: true,
                         cls: 'makeTitleBold',
@@ -167,19 +167,19 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                         flex: 0.50,
                         padding: '0 5 5 5',
                         items: [{
-                            fieldLabel: 'Last Coach',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.previous-coach-name','Last Coach'),
                             labelWidth: 75,
                             name: 'previousCoachName',
                             itemId: 'previousCoachName',
                             hidden: true
                         }, {
-                            fieldLabel: 'Changed By',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.previous-coach-changed-by-name','Changed By'),
                             labelWidth: 75,
                             name: 'previousCoachChangedByName',
                             itemId: 'previousCoachChangedByName',
                             hidden: true
                         }, {
-                            fieldLabel: 'Changed On',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.main.coach.previous-coach-change-date','Changed On'),
                             labelWidth: 75,
                             name: 'previousCoachChangeDate',
                             itemId: 'previousCoachChangeDate',

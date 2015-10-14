@@ -27,7 +27,8 @@ Ext.define("Ssp.view.tools.profile.Watchers", {
     autoScroll: true,
     sortableColumns: true,
     inject: {
-        store: 'watchStudentListStore'
+        store: 'watchStudentListStore',
+        textStore: 'sspTextStore'
     },
     initComponent: function() {
         var me = this;
@@ -37,15 +38,15 @@ Ext.define("Ssp.view.tools.profile.Watchers", {
             xtype: "gridcolumn",
             columns: [{
                 dataIndex: "firstName",
-                text: "First Name",
+                text: me.textStore.getValueByCode('ssp.label.main.watchers.first-name',"First Name"),
                 flex: 1
             }, {
                 dataIndex: "lastName",
-                text: "Last Name",
+                text: me.textStore.getValueByCode('ssp.label.main.watchers.last-name',"Last Name"),
                 flex: 1
             }, {
                 dataIndex: "primaryEmailAddress",
-                text: "Email",
+                text: me.textStore.getValueByCode('ssp.label.main.watchers.last-name',"Email"),
                 flex: 1
             }]
         });

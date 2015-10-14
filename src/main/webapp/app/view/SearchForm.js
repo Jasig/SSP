@@ -84,13 +84,13 @@ Ext.define('Ssp.view.SearchForm',{
 				// which makes the form scroll vertically on small resolutions, but something is wrong with visibility
 				// calculations and you then can't scroll the entire form into view (as discussed at length above)
                    xtype: 'checkboxfield',
-			       fieldLabel: 'My Plans',
+			       fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-plans', 'My Plans'),
 			       name: 'myPlans',
 			       itemId: 'myPlans',
 			       labelWidth: 60
 			    }, {
 			        xtype: 'checkboxfield',
-			        fieldLabel: 'My Watches', // not 'My Watch List' b/c this is slightly shorter and less likely to wrap
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-watches', 'My Watches'),
 			        name: 'myWatchList',
 				    itemId: 'myWatchList',
 				    enableKeyEvents:true,
@@ -98,7 +98,7 @@ Ext.define('Ssp.view.SearchForm',{
 				    labelAlign: 'right'
 			    }, {
 			        xtype: 'checkboxfield',
-			        fieldLabel: 'My Caseload',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-caseload', 'My Caseload'),
 			        name: 'myCaseload',
 				    itemId: 'myCaseload',
 				    enableKeyEvents:true,
@@ -107,8 +107,8 @@ Ext.define('Ssp.view.SearchForm',{
 			    }]
 			}, {
 				xtype: 'textfield',
-				fieldLabel: 'School ID',
-				emptyText: 'Enter School ID (Exact)',
+				fieldLabel: me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.student-id', 'Enter School ID (Exact)'),
 				width: 100,
 				name: 'schoolId',
 				itemId: 'schoolId',
@@ -123,8 +123,8 @@ Ext.define('Ssp.view.SearchForm',{
                 border: false,
                 items: [{
 					xtype: 'textfield',
-					fieldLabel: 'First',
-					emptyText: 'Enter All or Part of First Name',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.first-name', 'First'),
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.first-name', 'Enter All or Part of First Name'),
 					columnWidth: 0.5,
 					name: 'firstName',
 					enableKeyEvents:true,
@@ -143,8 +143,8 @@ Ext.define('Ssp.view.SearchForm',{
 					}
 				}, {
 					xtype: 'textfield',
-					fieldLabel: 'Last',
-					emptyText: 'Enter All or Part of Last Name ',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.last-name', 'Last'),
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.last-name', 'Enter All or Part of Last Name'),
 					columnWidth: 0.5,
 					labelWidth:50,
 					name: 'lastName',
@@ -171,10 +171,10 @@ Ext.define('Ssp.view.SearchForm',{
 	        
 				        {					
 					xtype: 'combobox',
-					fieldLabel: 'Student Exists In',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.student-exists-in', 'Student Exists In'),
 					store: me.personTableTypesStore,
 					valueField: 'code',
-					emptyText: 'Anywhere',
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.student-exists-in', 'Anywhere'),
 					displayField: 'displayValue',
 					columnWidth: 0.5,
 					itemId: 'personTableType',
@@ -191,9 +191,8 @@ Ext.define('Ssp.view.SearchForm',{
 					columnWidth: 0.5,
 				    labelAlign: 'right',
 				    labelWidth: 50,
-				    labelSeparator: '',
-				    emptyText: 'mm/dd/yyyy',
-				    fieldLabel: (me.textStore.getValueByCode('ssp.label.dob') ? me.textStore.getValueByCode('ssp.label.dob') : "DOB") + ":",
+				    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.dob', 'mm/dd/yyyy'),
+				    fieldLabel: me.textStore.getValueByCode('ssp.label.dob', 'DOB'),
 				    name: 'birthDate',
 				    itemId: 'birthDate',
 				    onExpand: function() {
@@ -209,8 +208,8 @@ Ext.define('Ssp.view.SearchForm',{
 			            {
 		   		    xtype: 'combobox',
 		   		    multiSelect: true,
-                    fieldLabel: 'Program Status',
-                    emptyText: 'Select Status',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.search.program-status', 'Program Status'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.program-status', 'Select Status'),
 		   		    store: me.programStatusesStore,
    		   		    valueField: 'id',
 		   		    displayField: 'name',
@@ -221,8 +220,8 @@ Ext.define('Ssp.view.SearchForm',{
                     //tpl: comboTPLNameDisplay
                 }, {
 		   		    xtype: 'combobox',
-                    fieldLabel: 'Registered',
-		   		    emptyText: 'Any',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.search.registered', 'Registered'),
+		   		    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.registered', 'Any'),
 					columnWidth: 0.5,
 	                itemId: 'currentlyRegistered',
                     name: 'currentlyRegistered',
@@ -237,8 +236,8 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				xtype: 'combobox',
 				multiSelect: true,
-			    fieldLabel: (me.textStore.getValueByCode('ssp.label.home-campus') ? me.textStore.getValueByCode('ssp.label.home-campus') : "Home Campus"),
-				emptyText: 'Select ' + (me.textStore.getValueByCode('ssp.label.home-campus') ? me.textStore.getValueByCode('ssp.label.home-campus') : "Home Campus"),
+			    fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus','Home Campus'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.home-campus', 'Select Home Campus'),
 				store: me.campusesStore,
 				valueField: 'id',
 				displayField: 'name',
@@ -249,8 +248,8 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				xtype: 'combobox',
 				multiSelect: true,
-				fieldLabel: 'Special Service Group',
-				emptyText: 'Select Special Service Group',
+				fieldLabel: me.textStore.getValueByCode('ssp.label.search.special-service-group', 'Special Service Group'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.special-service-group', 'Select Special Service Group'),
 				store: me.specialServiceGroupsActiveUnpagedStore,
 				valueField: 'id',
 				displayField: 'name',
@@ -262,8 +261,8 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				xtype: 'combobox',
 				multiSelect: true,
-				fieldLabel: 'Start Term',
-				emptyText: 'Select Start Term',
+				fieldLabel: me.textStore.getValueByCode('ssp.label.search.start-term', 'Start Term'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.start-term', 'Select Start Term'),
 				store: me.termsStore,
 				valueField: 'code',
 				displayField: 'name',
@@ -276,8 +275,8 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				xtype: 'combobox',
 				multiSelect: true,
-				fieldLabel: 'Declared Major',
-				emptyText: 'Select Major',
+				fieldLabel: me.textStore.getValueByCode('ssp.label.search.declared-major','Declared Major'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.declared-major', 'Select Major'),
 				width:100,
 				itemId: 'declaredMajor',
 				name: 'declaredMajor',
@@ -289,9 +288,9 @@ Ext.define('Ssp.view.SearchForm',{
 				//tpl: comboTPLNameDisplay
 			}, {
 				xtype: 'combobox',
-				fieldLabel: 'Assigned Coach',
+				fieldLabel: me.textStore.getValueByCode('ssp.label.search.assigned-coach', 'Assigned Coach'),
 				multiSelect: true,
-				emptyText: 'Select Coach',
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.assigned-coach', 'Select Coach'),
 				width: 100,
 				name: 'coachId',
 				itemId: 'coachId',
@@ -306,8 +305,8 @@ Ext.define('Ssp.view.SearchForm',{
 				border: false,
 				items: [{
 					xtype: 'combobox',
-					fieldLabel: 'Early Alert Status',
-					emptyText: 'Any',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.early-alert-status', 'Early Alert Status'),
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.early-alert-status', 'Any'),
 					columnWidth: 0.5,
 					name: 'earlyAlertResponseLate',
 					itemId: 'earlyAlertResponseLate',
@@ -318,11 +317,11 @@ Ext.define('Ssp.view.SearchForm',{
 					//tpl: comboTPLDisplayValueDisplay
 				}, {
 					xtype: 'combobox',
-					fieldLabel: 'FA SAP Status',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.fa-sap-status', 'FA SAP Status'),
 					columnWidth: 0.5,
 					labelWidth:100,
 					labelAlign:'right',
-					emptyText: 'Any',
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.fa-sap-status', 'Any'),
 					name: 'financialAidSapStatusCode',
 					itemId: 'financialAidSapStatusCode',
 					store: me.sapStatusesStore,
@@ -337,9 +336,9 @@ Ext.define('Ssp.view.SearchForm',{
 				border: false,
 				items: [{
 					xtype: 'combobox',
-					fieldLabel: 'Plan Status',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-status','Plan Status'),
 					columnWidth: 0.5,
-					emptyText: 'Any',
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.plan-status', 'Any'),
 					name: 'planStatus',
 					itemId: 'planStatus',
 					store: me.planStatusStore,
@@ -349,9 +348,9 @@ Ext.define('Ssp.view.SearchForm',{
 					//tpl: comboTPLDisplayValueDisplay
 				}, {
 					xtype: 'combobox',
-					fieldLabel: 'Plan Exists',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-exists', 'Plan Exists'),
 					columnWidth: 0.5,
-					emptyText: 'Any',
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.plan-exists', 'Any'),
 					name: 'planExists',
 					itemId: 'planExists',
 					labelAlign: 'right',
@@ -376,7 +375,7 @@ Ext.define('Ssp.view.SearchForm',{
                 	width: 105,
                 	items: [{
 						xtype: 'label',
-						text: 'Hours Earned',
+						text: me.textStore.getValueByCode('ssp.label.search.hours-earned', 'Hours Earned'),
 						style: 'display:inline-block;text-align:center;color:#15428B',
 						padding: '0 0 5 25',
 						width: 105 // no relative column widths b/c you really want all three cols always close together
@@ -390,7 +389,7 @@ Ext.define('Ssp.view.SearchForm',{
 						width: 95, // no relative column widths b/c you really want all three cols always close together
 						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
 						labelAlign: 'right',
-						fieldLabel: 'High',
+						fieldLabel: me.textStore.getValueByCode('ssp.label.search.high','High'),
 						name: 'hoursEarnedMax',
 						itemId: 'hoursEarnedMax',
 						enableKeyEvents:true
@@ -404,7 +403,7 @@ Ext.define('Ssp.view.SearchForm',{
 						labelWidth: 30, // no relative column widths b/c you really want all three cols always close together
 						width: 95, // no relative column widths b/c you really want all three cols always close together
 						labelAlign: 'right',
-						fieldLabel: 'Low',
+						fieldLabel: me.textStore.getValueByCode('ssp.label.search.low','Low'),
 						name: 'hoursEarnedMin',
 						enableKeyEvents:true,
 						itemId: 'hoursEarnedMin'
@@ -417,7 +416,7 @@ Ext.define('Ssp.view.SearchForm',{
 				    width: 75,
 					items: [{
 					   xtype: 'label',
-					   text: 'GPA',
+					   text: me.textStore.getValueByCode('ssp.label.search.gpa', 'GPA'),
 					   style: 'display:inline-block;text-align:center;color:#15428B',
                        padding: '0 0 5 0',
 					   width: 65 // no relative column widths b/c you really want all three cols always close together
@@ -454,7 +453,7 @@ Ext.define('Ssp.view.SearchForm',{
 					width: 70,
 					items: [{
 					   xtype: 'label',
-					   text: 'Local GPA',
+					   text: me.textStore.getValueByCode('ssp.label.local-gpa', 'Local GPA'),
 					   itemId: 'localGpa',
 					   style: 'display:inline-block;text-align:center;color:#15428B',
 					   padding: '0 0 5 0',
@@ -494,7 +493,7 @@ Ext.define('Ssp.view.SearchForm',{
 					items: [{
 					   xtype: 'label',
 					   itemId: 'programGpa',
-					   text: 'Program GPA',
+					   text: me.textStore.getValueByCode('ssp.label.program-gpa','Program GPA'),
 					   style: 'display:inline-block;text-align:center;color:#15428B',
                        padding: '0 0 5 0',
 					   width: 75 // no relative column widths b/c you really want all three cols always close together

@@ -62,19 +62,19 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 1,
                         cls: 'ssp-form',
-                        title: 'Mailing Address',
+                        title: me.textStore.getValueByCode('ssp.label.main.contact.mailing-address','Mailing Address'),
                         defaultType: 'displayfield',
                         defaults: {
                             anchor: '100%'
                         },
                         flex: 0.40,
                         items: [{
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.non-local'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.non-local', 'Non Local'),
                             name: 'nonLocalAddress',
                             labelWidth: 80,
                             renderer: me.columnRendererUtils.renderFriendlyBoolean
                         }, {
-                            fieldLabel: 'Address',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.address','Address'),
                             height: '60',
                             name: 'address',
                             labelWidth: 80,
@@ -91,19 +91,19 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             anchor: '100%'
                         },
                         items: [{
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.home-phone','Home Phone'),
                             name: 'homePhone'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.cell-phone'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.cell-phone','Cell Phone'),
                             name: 'cellPhone'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.work-phone'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.work-phone','Work Phone'),
                             name: 'workPhone'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone','Alternate Phone'),
                             name: 'alternatePhone'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.school-email'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.school-email', 'School Email'),
                             name: 'primaryEmailAddress',
                             itemId: 'primaryEmailAddress',
                             listeners: {
@@ -114,10 +114,10 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                                 }
                             }
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email', 'Alternate Email'),
                             name: 'secondaryEmailAddress'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.dob'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.dob', 'DOB'),
                             name: 'birthDate',
                             itemId: 'birthDate',
                             height: '60'
@@ -149,28 +149,28 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         xtype: 'fieldset',
                         border: 1,
                         cls: 'ssp-form',
-                        title: 'Alternate Address',
+                        title: me.textStore.getValueByCode('ssp.label.main.contact.alternate-address','Alternate Address'),
                         
                         defaultType: 'displayfield',
                         defaults: {
                             anchor: '100%'
                         },
-                        
+
                         items: [{
                             xtype: 'button',
                             itemId: 'editButton',
                             name: 'editButton',
-                            text: 'Edit',
+                            text: me.textStore.getValueByCode('ssp.label.main.contact.alternate-address.edit','Edit'),
                             anchor: '33%',
                             buttonAlign: 'right',
                             action: 'edit'
                         }, {
-                            fieldLabel: me.textStore.getValueByCode('ssp.label.alt-in-use'),
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.alt-in-use','In Use'),
                             name: 'alternateAddressInUse',
                             labelWidth: 80,
                             itemId: 'alternateAddressInUse'
                         }, {
-                            fieldLabel: 'Address',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.address','Address'),
                             name: 'alternateAddress',
                             labelWidth: 80,
                             height: '60',

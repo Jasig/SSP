@@ -89,44 +89,19 @@ public class BlurbController {
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
-			final @RequestParam(required = false) String sortDirection) {
+			final @RequestParam(required = false) String sortDirection,
+			final @RequestParam(required = false) String langCode) {
  
 		
 		final PagingWrapper<Blurb> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
 						ObjectStatus.ALL, start,
-						limit, sort, sortDirection, "code"),code);
-		return new PagedResponse<BlurbTO>(true, data.getResults(), getFactory()
+						limit, sort, sortDirection, "code"),code, langCode);
+		return new PagedResponse<>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));
 
 	} 
-	
-	
-	
-	//@RequestMapping(value = "/{langCode}", method = RequestMethod.GET)
-	@RequestMapping(value = "/code", method = RequestMethod.GET)
-	//@RequestMapping(method = RequestMethod.GET)
-	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
-	public @ResponseBody
-	List<BlurbTO> getAllByLanguage(
-			final @RequestParam(required = false) String langCode) {
-		List<Blurb> blurbList = getService().getByLanguageCode(langCode);
-		List<BlurbTO> blurbTOList = new ArrayList<BlurbTO>();
-		for(Blurb b:  blurbList) {
-			try {
-				blurbTOList.add(this.instantiateTO(b));
-			} catch (ValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		return blurbTOList;
-	}
-	
-	
-	
-	
+
 	
 	
 	/**

@@ -20,62 +20,63 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.profilecurrentschedule',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        store: 'currentScheduleStore',
+        textStore: 'sspTextStore'
+    },
     controller: 'Ssp.controller.tool.profile.CurrentScheduleViewController',
     width: '100%',
     height: '100%',
 	minHeight: 615,
     autoScroll: true,
-	title: 'Current Schedule',
-    inject: {
-        store: 'currentScheduleStore'
-    },
     initComponent: function(){
         var me = this;
         Ext.applyIf(me, {
             //store: me.store,
             xtype: 'gridcolumn',
+          	title: this.textStore.getValueByCode('ssp.label.main.current-schedule.title','Current Schedule'),
             columns: [
 			{
                 dataIndex: 'termCode',
-                text: 'Term',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.term-code','Term'),
                 flex: 0.10
             }, {
                 dataIndex: 'formattedCourse',
-                text: 'Course',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.formatted-course','Course'),
 				flex: 0.14
             }, 
 			{
                 dataIndex: 'sectionNumber',
-                text: 'Section',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.section-number','Section'),
 				flex: 0.10
             },  
 			{
             
                 dataIndex: 'title',
-                text: 'Course Title',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.course-title','Course Title'),
 				flex: 0.25
             },
 			{
                 xtype: 'numbercolumn',
                 dataIndex: 'creditEarned',
-                text: 'Cr Hrs',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.credit-earned','Cr Hrs'),
                 format: '0.00',
 				flex: 0.07
             },
 			{
             
                 dataIndex: 'facultyName',
-                text: 'Instructor',
+                text: this.textStore.getValueByCode('ssp.label.main.current-schedule.faculty-name','Instructor'),
                 flex: 0.20
             }, {
             
                 dataIndex: 'statusCode',
-                text: 'Status',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.status-code','Status'),
                 flex: 0.07
             }, {
             
                 dataIndex: 'audited',
-                text: 'Audited',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.audited','Audited'),
                 flex: 0.07
             }
 			],

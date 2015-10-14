@@ -41,18 +41,19 @@ Ext.define('Ssp.store.Tools', {
         return me;
     },
     onTextStoreLoad:function() {
+    	var me=this;
     	var sspTools = [
-                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.main'), toolType: "profile", active: true },
-                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.intake'), toolType: "studentintake", active: true },
-                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.actionplan'), toolType: "actionplan", active: true },
-                { group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.journal'), toolType: "journal", active: true },
-                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.earlyalert'), toolType: "earlyalert", active: true },
-                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.map'), toolType: "map", active: true },
-                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.emailstudent'), toolType: "emailstudent", active: true },
-                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.acommodation'), toolType: "accommodation", active: true },
-                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.documents'), toolType: "documents", active: true },
-    	        { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.notes'), toolType: "personnotes", active: true },
-                { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.caseloadassign'), toolType: "toolcaseloadreassignment", active: true },
+				{ group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.main', 'Main'), toolType: "profile", active: true },
+				{ group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.intake', 'Intake'), toolType: "studentintake", active: true },
+				{ group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.actionplan', 'Action Plan'), toolType: "actionplan", active: true },
+				{ group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.journal', 'Journal'), toolType: "journal", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.earlyalert', 'Early Alert'), toolType: "earlyalert", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.map', 'MAP'), toolType: "map", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.emailstudent', 'Email Student'), toolType: "emailstudent", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.acommodation', 'Accommodation'), toolType: "accommodation", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.documents', 'Documents'), toolType: "documents", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.notes', 'Notes'), toolType: "personnotes", active: true },
+				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.caseloadassign', 'Caseload Reassign'), toolType: "toolcaseloadreassignment", active: true },
             ];
 
             // set the model

@@ -19,11 +19,13 @@
 Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.recentsspactivity',
-    mixins: ['Deft.mixin.Controllable'],
+    mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        textStore: 'sspTextStore'
+    },
     controller: 'Ssp.controller.tool.profile.ProfileRecentStudentActivityViewController',
     width: '100%',
     height: '100%',
-    title: 'Recent SSP Activity for this Student',
     autoScroll: true,
 	sortableColumns: true,
     initComponent: function(){
@@ -31,19 +33,19 @@ Ext.define('Ssp.view.tools.profile.RecentSSPActivity', {
         Ext.applyIf(me, {
 			queryMode:'local',
             xtype: 'gridcolumn',
-			
+			title: me.textStore.getValueByCode('ssp.label.recent-activity.title','Recent SSP Activity for this Student'),
             columns: [{
                 dataIndex: 'coachNameLastFirst',
-                text: 'Coach',
+                text: me.textStore.getValueByCode('ssp.label.recent-activity.coach','Coach'),
 				flex: 1
             }, {
                 dataIndex: 'activity',
-                text: 'Service',
+                text: me.textStore.getValueByCode('ssp.label.recent-activity.activity','Service'),
 				flex: 1
             }, {
             
                 dataIndex: 'activityDate',
-                text: 'Date',
+                text: me.textStore.getValueByCode('ssp.label.recent-activity.activity-date','Date'),
                 renderer: Ext.util.Format.dateRenderer('m/d/Y'),
 				flex: 1
             }]

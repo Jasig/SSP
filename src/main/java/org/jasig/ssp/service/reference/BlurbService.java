@@ -28,5 +28,5 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 public interface BlurbService extends ReferenceService<Blurb> {
 
 	PagingWrapper<Blurb> getAll(SortingAndPaging sAndP, String code);
-	List<Blurb> getByLanguageCode(String langCode);
+	PagingWrapper<Blurb> getAll(SortingAndPaging sAndP, String code, String langCode);
 }

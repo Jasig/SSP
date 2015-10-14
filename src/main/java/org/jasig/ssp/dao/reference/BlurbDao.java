@@ -42,25 +42,19 @@ public class BlurbDao extends AbstractReferenceAuditableCrudDao<Blurb>
 	}
 	
 	public PagingWrapper<Blurb> getAll(
-			final SortingAndPaging sAndP, String code) {
+			final SortingAndPaging sAndP, String code, String langCode) {
 
-		if( code != null)
-		{
+		Criteria criteria = createCriteria();
+		if (code != null) {
 			code = code.replace('*', '%');
-			Criteria criteria = createCriteria();
 			criteria.add(Restrictions.like("code", code));
-			//query.add(Restrictions.eq("lang", languageCode));
-			sAndP.addAll(criteria);
 		}
-		return super.getAll(sAndP);
+		if (langCode != null) {
+			criteria.add(Restrictions.eq("lang", langCode));
+		}
+		sAndP.addAll(criteria);
+		return super.processCriteriaWithStatusSortingAndPaging(criteria,
+				sAndP);
 	}
 	
-	public List<Blurb> getAllbyLangCode(
-			String langCode) {
-		final Criteria query = createCriteria();
-		query.add(Restrictions.eq("lang", langCode));
-		
-		return (List<Blurb>)query.list();
-		
-	}
 }

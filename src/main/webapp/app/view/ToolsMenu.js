@@ -45,7 +45,7 @@ Ext.define('Ssp.view.ToolsMenu', {
             }],
 
             columns: [{
-                header: me.textStore.getValueByCode('ssp.label.tools'),
+                header: me.textStore.getValueByCode('ssp.label.tools', 'Tools'),
                 dataIndex: "name",
                 sortable: false,
                 menuDisabled: true,

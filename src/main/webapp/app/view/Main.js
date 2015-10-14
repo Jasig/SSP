@@ -55,14 +55,14 @@ Ext.define('Ssp.view.Main', {
                 xtype: 'toolbar',
                 items: [{
                     xtype: 'button',
-                    text: me.textStore.getValueByCode('ssp.label.students'),
+                    text: me.textStore.getValueByCode('ssp.label.students', 'Students'),
                     hidden: !me.authenticatedPerson.hasAccess('STUDENTS_NAVIGATION_BUTTON'),
                     itemId: 'studentViewNav',
 		    id: 'studentViewNav',
                     action: 'displayStudentRecord'
                 }, {
                     xtype: 'button',
-                    text: me.textStore.getValueByCode('ssp.label.admin'),
+                    text: me.textStore.getValueByCode('ssp.label.admin', 'Admin'),
                     hidden: !me.authenticatedPerson.hasAccess('ADMIN_NAVIGATION_BUTTON'),
                     itemId: 'adminViewNav',
 		    id: 'adminViewNav',
