@@ -86,25 +86,25 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                         }
                     }
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.first-name'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.first-name', 'First Name'),
                     name: 'firstName',
                     itemId: 'firstName',
                     maxLength: 50,
                     allowBlank: false
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.middle-name'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.middle-name', 'Middle Name'),
                     name: 'middleName',
                     itemId: 'middleName',
                     maxLength: 50,
                     allowBlank: true
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.last-name'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.last-name', 'Last Name'),
                     name: 'lastName',
                     itemId: 'lastName',
                     maxLength: 50,
                     allowBlank: false
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.configStore.getConfigByName('studentIdAlias'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'),
                     name: 'schoolId',
                     minLength: 0,
                     maxLength: 7,
@@ -112,42 +112,42 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                     allowBlank: false
                 }, {
                     xtype: 'datefield',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.dob'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.dob', 'DOB'),
                     itemId: 'birthDate',
                     altFormats: 'm/d/Y|m-d-Y',
                     invalidText: '{0} is not a valid date - it must be in the format: 06/02/2012 or 06-02-2012',
                     name: 'birthDate',
                     allowBlank: false
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-phone'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-phone', 'Home Phone'),
                     name: 'homePhone',
                     emptyText: 'xxx-xxx-xxxx',
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'homePhone'
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.work-phone'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.work-phone', 'Work Phone'),
                     name: 'workPhone',
                     emptyText: 'xxx-xxx-xxxx',
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'workPhone'
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.cell-phone'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.cell-phone', 'Cell Phone'),
                     name: 'cellPhone',
                     emptyText: 'xxx-xxx-xxxx',
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'cellPhone'
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.school-email'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.school-email', 'School Email'),
                     name: 'primaryEmailAddress',
                     vtype: 'email',
                     maxLength: 100,
                     allowBlank: true,
                     itemId: 'primaryEmailAddress'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email', 'Alternate Email'),
                     name: 'secondaryEmailAddress',
                     vtype: 'email',
                     maxLength: 100,
@@ -158,23 +158,23 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                     fieldLabel: 'CURRENT ADDRESS'
                 }, {
                     xtype: 'displayfield',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.non-local'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.non-local', 'Non Local'),
                     name: 'nonLocalAddress',
                     renderer: me.columnRendererUtils.renderFriendlyBoolean
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.address-1'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.address-1', 'Address Line 1'),
                     name: 'addressLine1',
                     maxLength: 50,
                     allowBlank: true,
                     itemId: 'addressLine1'
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.address-2'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.address-2', 'Address Line 2'),
                     name: 'addressLine2',
                     maxLength: 50,
                     allowBlank: true,
                     itemId: 'addressLine2'
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.city'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.city', 'City'),
                     name: 'city',
                     maxLength: 50,
                     allowBlank: true,
@@ -182,7 +182,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                 }, {
                     xtype: 'combobox',
                     name: 'state',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.state'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.state', 'State'),
                     emptyText: 'Select a State',
                     store: me.statesStore,
                     valueField: 'code',
@@ -199,7 +199,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                         }
                     }
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.zip'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.zip', 'Zip Code'),
                     name: 'zipCode',
                     maxLength: 10,
                     allowBlank: true,
@@ -208,7 +208,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                     xtype: 'displayfield',
                     fieldLabel: 'ALTERNATE PHONE'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone', 'Alternate Phone'),
                     name: 'alternatePhone',
                     emptyText: 'xxx-xxx-xxxx',
                     maxLength: 25,
@@ -219,22 +219,22 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                     fieldLabel: 'ALTERNATE ADDRESS'
                 }, {
                     xtype: 'checkbox',
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.alt-in-use'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.alt-in-use', 'In Use'),
                     name: 'alternateAddressInUse'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.address-1'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.address-1', 'Address Line 1'),
                     name: 'alternateAddressLine1',
                     maxLength: 50,
                     allowBlank: true,
                     itemId: 'alternateAddressLine1'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.address-2'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.address-2', 'Address Line 2'),
                     name: 'alternateAddressLine2',
                     maxLength: 50,
                     allowBlank: true,
                     itemId: 'alternateAddressLine2'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.city'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.city', 'City'),
                     name: 'alternateAddressCity',
                     maxLength: 50,
                     allowBlank: true,
@@ -242,7 +242,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                 }, {
                     xtype: 'combobox',
                     name: 'alternateAddressState',
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.state'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.state', 'State'),
                     emptyText: 'Select a State',
                     store: me.statesStore,
                     valueField: 'code',
@@ -259,13 +259,13 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                         }
                     }
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.zip'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.zip', 'Zip Code'),
                     name: 'alternateAddressZipCode',
                     maxLength: 10,
                     allowBlank: true,
                     itemId: 'alternateAddressZipCode'
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.country'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.country', 'Country'),
                     name: 'alternateAddressCountry',
                     allowBlank: true,
                     itemId: 'alternateAddressCountry',

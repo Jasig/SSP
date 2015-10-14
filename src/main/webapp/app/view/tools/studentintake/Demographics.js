@@ -74,7 +74,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				       items: [{
 				        xtype: 'combobox',
 				        name: 'maritalStatusId',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.marital-status'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.marital-status', 'Marital Status'),
 				        emptyText: 'Select One',
 				        store: me.maritalStatusesStore,
 				        valueField: 'id',
@@ -94,7 +94,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 				        xtype: 'combobox',
 				        name: 'ethnicityId',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.ethnicity'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.ethnicity', 'Ethnicity'),
 				        emptyText: 'Select One',
 				        store: me.ethnicitiesStore,
 				        valueField: 'id',
@@ -114,7 +114,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 						xtype: 'combobox',
 				        name: 'raceId',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.race'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.race', 'Race'),
 				        emptyText: 'Select One',
 				        store: me.racesStore,
 				        valueField: 'id',
@@ -134,7 +134,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 				        xtype: 'combobox',
 				        name: 'gender',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.gender'),
+				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.gender', 'Gender'),
 				        emptyText: 'Select One',
 				        store: me.gendersStore,
 				        valueField: 'code',
@@ -154,7 +154,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        xtype: 'combobox',
 				        itemId: 'citizenship',
 				        name: 'citizenshipId',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.citizenship'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.citizenship', 'Citizenship'),
 				        emptyText: 'Select One',
 				        store: me.citizenshipsStore,
 				        valueField: 'id',
@@ -173,14 +173,14 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 						}
 						
 					},{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.country-citizenship'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.country-citizenship', 'Country of Citizenship'),
 				        itemId: 'countryOfCitizenship',
 				        name: 'countryOfCitizenship',
 						maxLength: 50
 				    },{
 				        xtype: 'combobox',
 				        name: 'militaryAffiliationId',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.military-affiliation'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.military-affiliation', 'Military Affiliation'),
 				        emptyText: 'Select One',
 				        store: me.militaryAffiliationsStore,
 				        valueField: 'id',
@@ -200,7 +200,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 				        xtype: 'combobox',
 				        name: 'veteranStatusId',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.veteran-status'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.veteran-status', 'Veteran Status'),
 				        emptyText: 'Select One',
 				        store: me.veteranStatusesStore,
 				        valueField: 'id',
@@ -219,7 +219,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 						}
 					},{
 				        xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.primary-caregiver'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.primary-caregiver', 'Are you a Primary Caregiver?'),
 				        columns: 1,
 				        items: [
 				            {boxLabel: "Yes", itemId: 'primaryCaregiverCheckOn', name: "primaryCaregiver", inputValue:"true"},
@@ -227,17 +227,17 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				    },{
 				        xtype: 'numberfield',
 				        name: 'numberOfChildren',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.number-children'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.number-children', 'If you have Children, How Many?'),
 				        value: 0,
 				        minValue: 0,
 				        maxValue: 50
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.children-ages'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.children-ages', 'Ages? Separate each age with a comma. (1,5,12)'),
 				        name: 'childAges',
 						maxLength : 50
 				    },{
 				        xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.childcare-needed'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.childcare-needed', 'Childcare Needed?'),
 				        itemId: 'childcareNeeded',
 				        columns: 1,
 				        items: [
@@ -247,7 +247,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        xtype: 'combobox',
 				        itemId: 'childcareArrangement',
 				        name: 'childCareArrangementId',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.childcare-arrangements'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.childcare-arrangements', 'If yes, what are your childcare arrangements?'),
 				        emptyText: 'Select One',
 				        store: me.childCareArrangementsStore,
 				        valueField: 'id',
@@ -267,20 +267,20 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 				        xtype: "radiogroup",
 				        itemId: 'isEmployed',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.employed'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.employed', 'Are you employed?'),
 				        columns: 1,
 				        items: [
 				            {boxLabel: "Yes", itemId: 'employedCheckOn', name: "employed", inputValue:"true"},
 				            {boxLabel: "No", itemId: 'employedCheckOff', name: "employed", inputValue:"false"}]
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.place-of-employment'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.place-of-employment', 'Place of Employment'),
 				        itemId: 'placeOfEmployment',
 				        name: 'placeOfEmployment'
 				    },{
 				        xtype: 'combobox',
 				        name: 'shift',
 				        itemId: 'shift',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.shift'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.shift', 'Shift'),
 				        emptyText: 'Select One',
 				        store: me.employmentShiftsStore,
 				        valueField: 'code',
@@ -298,11 +298,11 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 							}
 						}
 					},{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.wage'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.wage', 'Wage'),
 				        itemId: 'wage',
 				        name: 'wage'
 				    },{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.total-hours-worked'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.total-hours-worked', 'Total Hours worked weekly attending school'),
 				        itemId: 'totalHoursWorkedPerWeek',
 				        name: 'totalHoursWorkedPerWeek',
 				        maxLength: 10

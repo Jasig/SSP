@@ -60,7 +60,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 					},
 					items: [{
 						name: 'schoolId',
-						fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.configStore.getConfigByName('studentIdAlias'),
+						fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.student-id'),
 						minLength: 7,
 						maxLength: 7,
 						itemId: 'studentId',

@@ -66,7 +66,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        xtype: 'combobox',
 				        name: 'studentStatusId',
 				        itemId: 'studentStatusCombo',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.student-status'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.student-status', 'Student Status'),
 				        emptyText: 'Select One',
 				        store: me.studentStatusesStore,
 				        valueField: 'id',
@@ -85,7 +85,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 						}
 					},{
 				        xtype: 'radiogroup',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.parents-college'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.parents-college', 'Have your parents obtained a college degree?'),
 				        columns: 1,
 				        itemId: "collegeDegreeForParents",
 				        items: [
@@ -93,7 +93,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: "No", itemId: "collegeDegreeForParentsCheckOff", name: "collegeDegreeForParents", inputValue:false}]
 				    },{
 				        xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.special-needs'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.special-needs', 'Special needs or require special accomodation?'),
 				        columns: 1,
 				        itemId: "specialNeeds",
 				        items: [
@@ -101,7 +101,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				            {boxLabel: "No", itemId: "specialNeedsCheckOff", name: "specialNeeds", inputValue:"n"}]
 				    },{
 				        xtype: 'radiogroup',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.typical-grade'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.typical-grade', 'What grade did you typically earn at your highest level of education?'),
 				        columns: 1,
 				        items: [
 				            {boxLabel: 'A', name: 'gradeTypicallyEarned', inputValue: "1"},

@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         person: 'currentPerson',
         authenticatedPerson: 'authenticatedPerson',
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
-        configStore: 'configStore'
+        configStore: 'configStore',
+        textStore: 'sspTextStore'
 	},
 	
     control: {
@@ -97,9 +98,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
         var me = this;
         me.person.watchId = id;
         if ( id ) {
-            me.getWatchStudentButton().setText('Un-Watch Student');
+            me.getWatchStudentButton().setText(me.textStore.getValueByCode('ssp.label.unwatch-student', 'Un-Watch Student'));
         } else {
-            me.getWatchStudentButton().setText('Watch Student');
+            me.getWatchStudentButton().setText(me.textStore.getValueByCode('ssp.label.watch-student', 'Watch Student'));
         }
 
         if ( isChanged ) {
@@ -251,8 +252,9 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
             var schoolId = args.person.get('schoolId');
             var fullName = args.person.getFullName();
             var coachName = args.person.getCoachFullName();
-            var fullTitle = fullName + '  -   ID#: ' + schoolId;
-            var title = fullName + '          ' + '  -   ID#: ' + schoolId + '         ';
+            var schoolIdLabelShort = me.textStore.getValueByCode('ssp.label.school-id.short', 'ID#');
+            var fullTitle = fullName + '  -   ' + schoolIdLabelShort + ': ' + schoolId;
+            var title = fullName + '          ' + '  -   ' + schoolIdLabelShort + ': ' + schoolId + '         ';
 
             var phoneNumberDisplayOrder = me.configStore.getConfigByName('phone_display_order');
             var phoneNumbers = [];
@@ -308,7 +310,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
             }
 
 			if (me.getEmailCoachButton()) {
-	        	me.getEmailCoachButton().setText('Coach: ' + coachName);
+	        	me.getEmailCoachButton().setText(me.textStore.getValueByCode('ssp.label.coach-name', 'Coach') + ': ' + coachName);
             }
 
 		} else {

@@ -64,7 +64,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				       items: [{
 				            xtype: "radiogroup",
 				            id: 'StudentIntakeEducationGoalsRadioGroup',
-					        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.goal'),
+					        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.goal', 'Education/Career Goal'),
 				            allowBlank: true,
 				            columns: 1
 				        }]
@@ -77,12 +77,12 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			                anchor: "95%"
 			            },
 			       items: [{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.planned-major'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.planned-major', 'What is your planned major?'),
 				        name: 'plannedMajor',
 						maxLength: 50
 				    },{
 			            xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.sure-major'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.sure-major', 'How sure are you about your major?'),
 			            columns: 1,
 			            items: [
 			                {boxLabel: "Very Unsure", name: "howSureAboutMajor", inputValue: "1"},
@@ -93,19 +93,19 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			        		]
 			        },{
 				        xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.decided-occupation'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.decided-occupation', 'Have you decided on a career/occupation?'),
 				        columns: 1,
 				        itemId: 'careerDecided',
 				        items: [
 				            {boxLabel: "Yes", itemId: "careerDecidedCheckOn", name: "careerDecided", inputValue:"true"},
 				            {boxLabel: "No", itemId: "careerDecidedCheckOff", name: "careerDecided", inputValue:"false"}]
 					},{
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.planned-occupation'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.planned-occupation', 'What is your planned occupation?'),
 				        name: 'plannedOccupation',
 						maxLength: 50
 				    },{
 			            xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.sure-occupation'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.sure-occupation', 'How sure are you about your occupation?'),
 			            columns: 1,
 			            items: [
 			                {boxLabel: "Very Unsure", name: "howSureAboutOccupation", inputValue: "1"},
@@ -116,7 +116,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 			        		]
 			        },{
 				        xtype: 'radiogroup',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.confident-ability'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.confident-ability', 'Are you confident your abilities are compatible with the career field?'),
 				        columns: 1,
 				        itemId: 'confidentInAbilities',
 				        items: [
@@ -124,7 +124,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            {boxLabel: "No", itemId: "confidentInAbilitiesCheckOff", name: "confidentInAbilities", inputValue:"false"}]
 					},{
 				        xtype: "radiogroup",
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.additional-info'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.additional-info', 'Do you need additional information about which academic programs may lead to a future career?'),
 				        columns: 1,
 				        itemId: 'additionalAcademicProgramInformationNeeded',
 				        items: [
@@ -134,7 +134,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: 'combobox',
 				        name: 'registrationLoadId',
 				        itemId: 'fieldRegistrationLoadCombo',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.registration-load'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.registration-load', 'Registration Load'),
 				        emptyText: 'Select One',
 				        store: me.registrationLoadsStore,
 				        valueField: 'id',
@@ -147,7 +147,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: 'combobox',
 				        name: 'courseworkHoursId',
 				        itemId: 'courseWorkWeeklyHoursCombo',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.hours-coursework'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.hours-coursework', 'Hours per Week for Coursework'),
 				        emptyText: 'Select One',
 				        store: me.courseworkHoursStore,
 				        valueField: 'id',
@@ -160,7 +160,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				        xtype: 'combobox',
 				        name: 'anticipatedGraduationDateTermCode',
 				        itemId: 'anticipatedGraduationDateTermCodeCombo',
-				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.anticipated-graduation'),
+				        fieldLabel: me.textStore.getValueByCode('intake.tab5.label.anticipated-graduation', 'Anticipated Graduation Date?'),
 				        emptyText: 'Select One',
 				        valueField: 'code',
 				        displayField:'name',

@@ -50,7 +50,6 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 	init: function() {
 		var me=this;
 		
-		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
 		var id =  me.personLite.get('id');
 		me.getView().getForm().reset();
 		
@@ -86,8 +85,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileCoachViewController', {
 		var coachHomeCampusField = me.getCoachHomeCampusNameField();
 
 		var id= me.personLite.get('id');
-		var studentIdAlias = me.configStore.getConfigByName('studentIdAlias');
-		
+
 		// load the person data
 		me.person.populateFromGenericObject(r);		
 		

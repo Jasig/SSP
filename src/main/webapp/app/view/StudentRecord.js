@@ -22,7 +22,8 @@ Ext.define('Ssp.view.StudentRecord', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     inject: {
         authenticatedPerson: 'authenticatedPerson',
-        appEventsController: 'appEventsController'
+        appEventsController: 'appEventsController',
+        textStore: 'sspTextStore'
     },    
     controller: 'Ssp.controller.StudentRecordViewController',
     width: '100%',
@@ -54,8 +55,8 @@ Ext.define('Ssp.view.StudentRecord', {
             },
             tools: [
         	{
-                tooltip: 'Watch Student',
-                text: 'Watch/Unwatch',
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.watch-student', 'Watch / Un-Watch Student'),
+                text: '',
                 width: 105,
                 height: 20,
         		hidden: true,
@@ -75,8 +76,8 @@ Ext.define('Ssp.view.StudentRecord', {
             },
 			
 			{
-                tooltip: 'Coaching History',
-                text: 'Coaching History',
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.coaching-history', 'Coaching History'),
+                text: me.textStore.getValueByCode('ssp.label.coaching-history', 'Coaching History'),
                 width: 105,
                 height: 20,
                 xtype: 'button',
@@ -88,7 +89,7 @@ Ext.define('Ssp.view.StudentRecord', {
                 xtype: 'button',
                 itemId: 'studentRecordEditButton',
                 text: '',
-                tooltip: 'Edit Student',
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.edit-student', 'Edit Student'),
 				cls: "editPerson20Icon",
 				width: 23
             },
