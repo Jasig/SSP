@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
         personProgramStatusService: 'personProgramStatusService',
         currentPersonAppointment: 'currentPersonAppointment',
         studentTypesStore: 'studentTypesAllUnpagedStore',
-		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
+		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore',
+		textStore: 'sspTextStore'
     },
 	config: {
 		panelKids: null
@@ -88,7 +89,11 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     
     updateTitle: function(){
     	var me=this;
-    	me.getView().setTitle( 'Caseload Assignment ' + ((me.person.get('id') != "")?"Edit":"Add") + ' - ' + me.person.getFullName());
+    	var title = me.textStore.getValueByCode('ssp.label.instant-caseload-reassignment.add-title','Caseload Assignment Add - ');
+    	if (me.person.get('id') != "") {
+    		title = me.textStore.getValueByCode('ssp.label.instant-caseload-reassignment.edit-title','Caseload Assignment Edit - ');
+    	}
+    	me.getView().setTitle(title + me.person.getFullName());
     },
     
     onSaveClick: function(button){

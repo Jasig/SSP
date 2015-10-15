@@ -22,7 +22,8 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.CaseloadAssignmentViewController',
     inject: {
-        model: 'currentPerson'
+        model: 'currentPerson',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -30,7 +31,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
-            title: "Caseload Assignment",
+            title: " ",
             autoScroll: true,
             defaults: {
                 bodyStyle: 'padding:5px'
@@ -50,12 +51,12 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                 items: [{
                     xtype: 'button',
                     itemId: 'saveButton',
-                    text: 'Save'
+                    text: me.textStore.getValueByCode('ssp.label.save-button','Save')
                     
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
-                    text: 'Cancel'
+                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                 }]
             
             },  {
@@ -68,7 +69,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                 }, {
                     xtype: 'button',
                     itemId: 'printButton',
-                    tooltip: 'Print Appointment Form',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.caseload-assignment.print-button','Print Appointment Form'),
                     hidden: true,
                     width: 30,
                     height: 30,
@@ -77,7 +78,7 @@ Ext.define('Ssp.view.person.CaseloadAssignment', {
                     xtype: 'button',
                     itemId: 'emailButton',
                     hidden: true,
-                    tooltip: 'Email Appointment Form',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.caseload-assignment.email-button','Email Appointment Form'),
                     width: 30,
                     height: 30,
                     cls: 'emailIcon'

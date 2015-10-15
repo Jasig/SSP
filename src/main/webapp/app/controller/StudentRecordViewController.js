@@ -252,7 +252,7 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
             var schoolId = args.person.get('schoolId');
             var fullName = args.person.getFullName();
             var coachName = args.person.getCoachFullName();
-            var schoolIdLabelShort = me.textStore.getValueByCode('ssp.label.school-id.short', 'ID#');
+            var schoolIdLabelShort = me.textStore.getValueByCode('ssp.label.student-id-short', 'ID#');
             var fullTitle = fullName + '  -   ' + schoolIdLabelShort + ': ' + schoolId;
             var title = fullName + '          ' + '  -   ' + schoolIdLabelShort + ': ' + schoolId + '         ';
 

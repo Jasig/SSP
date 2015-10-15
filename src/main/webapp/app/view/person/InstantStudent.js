@@ -99,7 +99,7 @@ Ext.define('Ssp.view.person.InstantStudent', {
 						{
                     xtype: 'fieldset',
 					padding: '0 10 0 0',
-                    title: 'Student Intake',
+                    title: me.textStore.getValueByCode('ssp.label.edit-student.student-intake-title','Student Intake'),
                     hidden:true,
 					border: 0,
                     layout: {
@@ -108,18 +108,18 @@ Ext.define('Ssp.view.person.InstantStudent', {
                     items: [{
                         xtype: 'studentIntakeRequest'
                     },{
-                            fieldLabel: 'Student Intake Request Last Sent ',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.edit-student.student-intake-request-last-sent','Student Intake Request Last Sent'),
                             name: 'studentIntakeRequestDateInCaseload',
                             itemId: 'studentIntakeRequestDateInCaseload',
                             xtype: 'displayfield',
-                            labelWidth: 195,
+                            labelWidth: 210,
                             renderer: Ext.util.Format.dateRenderer('m/d/Y')
                         }, {
-                            fieldLabel: 'Student Intake Request Completed',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.edit-student.student-intake-request-completed','Student Intake Request Completed'),
                             name: 'studentIntakeCompleteDateInCaseload',
                             itemId: 'studentIntakeCompleteDateInCaseload',
                             xtype: 'displayfield',
-                            labelWidth: 195,
+                            labelWidth: 210,
                             value: 'test',
                             renderer: Ext.util.Format.dateRenderer('m/d/Y')
                         

@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
         personProgramStatusService: 'personProgramStatusService',
         currentPersonAppointment: 'currentPersonAppointment',
         studentTypesStore: 'studentTypesAllUnpagedStore',
-		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
+		configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore',
+		textStore: 'sspTextStore'
     },
 	config: {
 		panelKids: null
@@ -74,19 +75,19 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var me = this;
 		//me.getView().setLoading(false);
 		var id = me.personLite.get('id');
-		me.panelKids = [{ title: 'Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+		me.panelKids = [{ title: me.textStore.getValueByCode('ssp.label.caseload-assignment.student-title','Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY),
         	       autoScroll: true,
         		   items: [{xtype: 'student'}]
         		},{
-            		title: 'Service Groups',
+            		title: me.textStore.getValueByCode('ssp.label.caseload-assignment.service-group-title','Service Groups'),
             		autoScroll: true,
             		items: [{xtype: 'personspecialservicegroups'}]
         		},{
-            		title: 'Referral Sources',
+            		title: me.textStore.getValueByCode('ssp.label.caseload-assignment.referral-sources-title','Referral Sources'),
             		autoScroll: true,
             		items: [{xtype: 'personreferralsources'}]
         		},{
-            		title: 'Service Reasons',
+            		title: me.textStore.getValueByCode('ssp.label.caseload-assignment.service-reasons-title','Service Reasons'),
             		autoScroll: true,
             		items: [{xtype: 'personservicereasons'}]
         		}];
@@ -220,7 +221,11 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     updateTitle: function(){
     	var me=this;
-    	me.getView().setTitle( 'Caseload Assignment ' + ((me.person.get('id') != "")?"Edit":"Add") + ' - ' + me.person.getFullName());
+    	var title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.add-title','Caseload Assignment Add ');
+    	if (me.person.get('id') != "") {
+    		title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.edit-title','Caseload Assignment Edit - ');
+    	}
+    	me.getView().setTitle(title + me.person.getFullName());
     },
     
     onSaveClick: function(button){

@@ -22,7 +22,8 @@ Ext.define('Ssp.view.person.Appointment', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AppointmentViewController',
     inject: {
-        studentTypesStore: 'studentTypesAllUnpagedStore'
+        studentTypesStore: 'studentTypesAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
 	width: '100%',
 	padding: '0 0 0 0',
@@ -31,6 +32,7 @@ Ext.define('Ssp.view.person.Appointment', {
 	},
     initComponent: function(){
         var me = this;
+        var defaultSyncdLabel = '<span class="syncedField">(sync\'d)</span>  ';
         Ext.apply(me, {
             fieldDefaults: {
                 msgTarget: 'side',
@@ -53,8 +55,8 @@ Ext.define('Ssp.view.person.Appointment', {
                     name: 'studentTypeId',
                     itemId: 'studentTypeCombo',
                     id: 'studentTypeCombo',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + 'Student Type',
-                    emptyText: 'Select One',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.student-type','Student Type'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.appointment.student-type','Select One'),
                     store: me.studentTypesStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -66,7 +68,7 @@ Ext.define('Ssp.view.person.Appointment', {
 					width: 250
                 }, {
                     xtype: 'datefield',
-                    fieldLabel: 'Appointment Date',
+                    fieldLabel:  me.textStore.getValueByCode('ssp.label.appointment.date','Appointment Date'),
                     itemId: 'appointmentDateField',
                     altFormats: 'm/d/Y|m-d-Y',
                     invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
@@ -88,7 +90,7 @@ Ext.define('Ssp.view.person.Appointment', {
                         xtype: 'timefield',
                         name: 'startTime',
                         itemId: 'startTimeField',
-                        fieldLabel: 'Appointment Start',
+                        fieldLabel:  me.textStore.getValueByCode('ssp.label.appointment.start-time','Appointment Start'),
                         labelSeparator: "",
                         increment: 30,
                         typeAhead: false,
@@ -105,7 +107,7 @@ Ext.define('Ssp.view.person.Appointment', {
                         xtype: 'timefield',
                         name: 'endTime',
                         itemId: 'endTimeField',
-                        fieldLabel: '- End Times',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.appointment.end-time','- End Times'),
                         typeAhead: false,
                         allowBlank: me.instantCaseloadAssignment == true ? true:false,
                         increment: 30,

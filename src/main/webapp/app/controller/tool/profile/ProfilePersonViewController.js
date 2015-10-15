@@ -29,7 +29,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         profileServiceReasonsStore: 'profileServiceReasonsStore',
 		profileSpecialServiceGroupsStore: 'profileSpecialServiceGroupsStore',
 		formUtils: 'formRendererUtils',
-    //	textStore:'sspTextStore',
+    	textStore:'sspTextStore',
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan'
     },
@@ -320,7 +320,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me=this;
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:'Service Reasons'});
+		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:me.textStore.getValueByCode('ssp.label.caseload-assignment.service-reasons-title','Service Reasons')});
         
     },
     
@@ -328,7 +328,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me=this;
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:'Service Groups'});
+		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:me.textStore.getValueByCode('ssp.label.caseload-assignment.service-group-title','Service Groups')});
         
     },
     
@@ -336,7 +336,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var me=this;
         
         var comp = this.formUtils.loadDisplay('mainview', 'caseloadassignment', true, {flex:1}); 
-		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:'Referral Sources'});
+		me.appEventsController.getApplication().fireEvent('goToDifferentTabinCaseload',{panelTitle:me.textStore.getValueByCode('ssp.label.caseload-assignment.referral-sources-title','Referral Sources')});
         
     }
 });

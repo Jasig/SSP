@@ -36,6 +36,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 	},
     initComponent: function(){
         var me = this;
+        var defaultSyncdLabel = '<span class="syncedField">(sync\'d)</span>  ';
         Ext.apply(me, {
             border: 0,
 			padding: 0,
@@ -60,7 +61,7 @@ Ext.define('Ssp.view.person.EditPerson', {
 					},
 					items: [{
 						name: 'schoolId',
-						fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.student-id'),
+						fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'),
 						minLength: 7,
 						maxLength: 7,
 						itemId: 'studentId',
@@ -86,14 +87,14 @@ Ext.define('Ssp.view.person.EditPerson', {
 					},
 					{
 						xtype: 'button',
-						tooltip: 'Load record from external system (Possible loss of local changes if record is found)',
-						text: 'Find',
+						tooltip: me.textStore.getValueByCode('ssp.tooltip.edit-student.find-button','Load record from external system (Possible loss of local changes if record is found)'),
+						text: me.textStore.getValueByCode('ssp.label.find-button','Find'),
 						itemId: 'retrieveFromExternalButton',
 						margins: '22 0 0 10',
 						width: 50
 					}]
 				}, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + 'Username',
+                    fieldLabel:  me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.username','Username'),
                     name: 'username',
                     minLength: 1,
                     maxLength: 50,
@@ -101,7 +102,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: false,
                     width: 250
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.first-name'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.first-name','First Name'),
                     name: 'firstName',
                     itemId: 'firstName',
                     id: 'editPersonFirstName',
@@ -109,7 +110,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: false,
                     width: 250
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.middle-name'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.middle-name','Middle Name'),
                     name: 'middleName',
                     itemId: 'middleName',
                     id: 'editPersonMiddleName',
@@ -117,7 +118,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: true,
                     width: 250
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.last-name'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.last-name','Last Name'),
                     name: 'lastName',
                     itemId: 'lastName',
                     id: 'editPersonLastName',
@@ -125,23 +126,23 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: false,
                     width: 250
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-phone'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.home-phone','Home Phone'),
                     name: 'homePhone',
-                    emptyText: 'xxx-xxx-xxxx',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'homePhone',
                     width: 250
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.work-phone'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.work-phone','Work Phone'),
                     name: 'workPhone',
-                    emptyText: 'xxx-xxx-xxxx',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'workPhone',
                     width: 250
                 }, {
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.school-email'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.school-email','School Email'),
                     name: 'primaryEmailAddress',
                     vtype: 'email',
                     maxLength: 100,
@@ -153,8 +154,8 @@ Ext.define('Ssp.view.person.EditPerson', {
                     name: 'campusId',
                     itemId: 'campusCombo',
                     id: 'campusCombo',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-campus', 'Home Campus'),
-                    emptyText: 'Select One',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.home-campus', 'Home Campus'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.edit-student.home-campus','Select One'),
                     store: me.campusesStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -165,7 +166,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     allowBlank: true,
 					width: 250
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-email','Alternate Email'),
                     name: 'secondaryEmailAddress',
                     vtype: 'email',
                     maxLength: 100,
@@ -173,9 +174,9 @@ Ext.define('Ssp.view.person.EditPerson', {
                     itemId: 'secondaryEmailAddress',
                     width: 250
                 }, {
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone','Alternate Phone'),
                     name: 'alternatePhone',
-                    emptyText: 'xxx-xxx-xxxx',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'alternatePhone',

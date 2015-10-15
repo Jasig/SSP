@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
 	controller: 'Ssp.controller.tool.documents.UploadDocumentsViewController',
     inject: {
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
-    	model: 'currentStudentDocument'
+    	model: 'currentStudentDocument',
+    	textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -50,8 +51,9 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                     anchor: '95%'
                 },
                 items: [{
-                    fieldLabel: 'File',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.documents.file','File'),
                     xtype: 'fileuploadfield',
+                    buttonText: me.textStore.getValueByCode('ssp.label.browse-button','Browse...'),
                     name: 'file',
                     allowBlank: me.model.get('id'),
                     flex: 1,
@@ -60,7 +62,7 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 }]
             }, {
                 xtype: 'textfield',
-                fieldLabel: 'File',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.documents.file','File'),
                 name: 'fileName',
                 allowBlank: true,
                 disabled:true,
@@ -70,14 +72,14 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
             }, 
             {
                 xtype: 'textfield',
-                fieldLabel: 'Comment',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.documents.comment','Comment'),
                 name: 'comment',
                 allowBlank: true,
                 anchor: '95%',
                 padding: 5
             }, {
             
-                fieldLabel: 'Name',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.documents.name','Name'),
                 xtype: 'textfield',
                 name: 'name',
                 allowBlank: true,
@@ -87,8 +89,8 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 xtype: 'combobox',
                 itemId: 'confidentialityLevel',
                 name: 'confidentialityLevelId',
-                fieldLabel: 'Confidentiality Level',
-                emptyText: 'Select One',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.documents.confidentiality-level','Confidentiality Level'),
+                emptyText: me.textStore.getValueByCode('ssp.empty-text.documents.confidentiality-level','Select One'),
                 store: me.confidentialityLevelsStore,
                 valueField: 'id',
                 displayField: 'name',
@@ -107,11 +109,11 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                 items: [{
                     xtype: 'button',
                     itemId: 'saveButton',
-                    text: 'Save'
+                    text: me.textStore.getValueByCode('ssp.label.save-button','Save')
 					}, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
-                    text: 'Cancel'
+                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                 }]
             }]
         });

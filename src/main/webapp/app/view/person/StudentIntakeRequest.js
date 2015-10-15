@@ -21,7 +21,9 @@ Ext.define('Ssp.view.person.StudentIntakeRequest', {
     alias: 'widget.studentIntakeRequest',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.StudentIntakeRequestViewController',
-    
+    inject: {
+        textStore: 'sspTextStore'
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -43,7 +45,7 @@ Ext.define('Ssp.view.person.StudentIntakeRequest', {
                 },
                 items: [{
                     xtype: 'checkboxfield',
-                    boxLabel: 'Send Student Email Intake Request',
+                    boxLabel: me.textStore.getValueByCode('ssp.label.student-intake-request.send-student-email-intake-request','Send Student Email Intake Request'),
                     name: 'studentIntakeRequested',
                     itemId: 'studentIntakeRequestedField',
                     inputValue: true,
@@ -51,7 +53,7 @@ Ext.define('Ssp.view.person.StudentIntakeRequest', {
 					
                 }, {
                     //xtype: 'textfield',
-                    fieldLabel: 'Also Send Student Intake Request To Email',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.student-intake-request.also-send-student-intake-request-to-email','Also Send Student Intake Request To Email'),
                     name: 'intakeEmail',
                     itemId: 'intakeEmailField',
                     hidden: true,

@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
     	formUtils: 'formRendererUtils',
     	studentTypesStore: 'studentTypesAllUnpagedStore',
 		person: 'currentPerson',
-        configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore'
+        configurationOptionsUnpagedStore: 'configurationOptionsUnpagedStore',
+        textStore: 'sspTextStore'
     },
     control: {
     	appointmentDateField: '#appointmentDateField',
@@ -76,7 +77,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		
 		
 			 if (getStudentTypeSetFromExternalDataValue == 'false' && getStudentTypeUnSetFromExternalDataValue == 'false') {
-			 	me.getStudentTypeCombo().setFieldLabel('Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
+			 	me.getStudentTypeCombo().setFieldLabel(me.textStore.getValueByCode('ssp.label.student-type','Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY));
 			 }
 
 			 if(me.studentTypesStore.getTotalCount( ) == 0){

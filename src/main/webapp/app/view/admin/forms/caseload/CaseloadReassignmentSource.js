@@ -19,7 +19,6 @@
 Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.caseloadassignmentsource',
-	title: 'Assigned Students',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController',
@@ -28,7 +27,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
         programStatusesStore: 'programStatusesStore',
         authenticatedPerson: 'authenticatedPerson',
         allCoachesCurrentStore: 'allCoachesCurrentStore',
-        reassignCaseloadStore: 'reassignCaseloadStore'
+        reassignCaseloadStore: 'reassignCaseloadStore',
+        textStore: 'sspTextStore'
     },
 	height: '100%',
 	width: '100%',
@@ -47,10 +47,11 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     		      autoScroll: true,
     		      selType: 'rowmodel',
     		      multiSelect: true,   
-				  cls: 'configgrid', 		      
+				  title: me.textStore.getValueByCode('ssp.label.caseload-reassignment.assigned-students-title','Assigned Students'),
+				  cls: 'configgrid',
     		      columns: [
     		                { 
-      		                  header: 'School ID',  
+      		                  header: me.textStore.getValueByCode('ssp.label.student-id','Student ID'),
       		                  dataIndex: 'schoolId',
       		                  field: {
       		                      xtype: 'textfield'
@@ -58,7 +59,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
       		                  flex: 1
       		                },    		                
     		                { 
-    		                  header: 'Name',  
+    		                  header: me.textStore.getValueByCode('ssp.label.caseload-reassignment.name','Name'),
     		                  dataIndex: 'fullName',
     		                  field: {
       		                      xtype: 'textfield'
@@ -66,7 +67,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     		                  flex: 2
     		                },
     		                { 
-      		                  header: 'Student Type',  
+      		                  header: me.textStore.getValueByCode('ssp.label.caseload-reassignment.student-type','Student Type'),
       		                  dataIndex: 'studentTypeName',
       		                  field: {
       		                      xtype: 'textfield'
@@ -84,8 +85,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 					id: 'sourceCoachBoxId',
 					name: 'sourceCoachBox',
 					itemId: 'sourceCoachBox',
-					fieldLabel: 'Currently Assigned To',
-					emptyText: 'Select One',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.caseload-reassignment.currently-assigned-to','Currently Assigned To'),
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.caseload-reassignment.currently-assigned-to','Select One'),
 					store: me.allCoachesCurrentStore,
 					valueField: 'id',
 					displayField: 'fullName',
@@ -97,8 +98,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 			   {
 				xtype: 'combobox',
 				multiSelect: false,
-				fieldLabel: 'Program Status',
-				emptyText: 'Select Status',
+				fieldLabel: me.textStore.getValueByCode('ssp.label.caseload-reassignment.program-status','Program Status'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.caseload-reassignment.program-status','Select Status'),
 				store: me.programStatusesStore,
 				valueField: 'id',
 				displayField: 'name',
@@ -114,19 +115,19 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
      		              {
      		               xtype: 'toolbar',
      		               items: [{
-     		                   text: 'Add',
+     		                   text: me.textStore.getValueByCode('ssp.label.add-button','Add'),
      		                   xtype: 'button',
      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_BUTTON'),
      		                   action: 'add',
      		                   itemId: 'addButton'
      		               }, '-', {
-     		                   text: 'Add All',
+     		                   text: me.textStore.getValueByCode('ssp.label.add-all-button','Add All'),
      		                   xtype: 'button',
      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_ALL_BUTTON'),
      		                   action: 'addAll',
      		                   itemId: 'addAllButton'
      		               }, '-', {
-							   text: 'Reset',
+							   text: me.textStore.getValueByCode('ssp.label.reset-button','Reset'),
 							   xtype: 'button',
 							   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_ADD_ALL_BUTTON'),
 							   action: 'reset',

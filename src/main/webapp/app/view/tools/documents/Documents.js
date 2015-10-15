@@ -24,7 +24,8 @@ Ext.define('Ssp.view.tools.documents.Documents', {
     inject: {
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
-        model: 'currentStudentDocument'
+        model: 'currentStudentDocument',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -35,41 +36,41 @@ Ext.define('Ssp.view.tools.documents.Documents', {
             layout: {
                 type: 'fit'
             },
-            title: 'Documents Attached to the Student Record',
+            title: me.textStore.getValueByCode('ssp.label.documents.title','Documents Attached to the Student Record'),
             autoScroll: true,
             padding: 0,
             columns: [{
                         xtype: 'gridcolumn',
                         dataIndex: 'modifiedDate',
-                        text: 'Date',
+                        text: me.textStore.getValueByCode('ssp.label.documents.date','Date'),
                         flex: 0.10,
                         renderer: me.columnRendererUtils.renderModifiedByDate
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'name',
-                        text: 'Name',
+                        text: me.textStore.getValueByCode('ssp.label.documents.name','Name'),
                         flex: 0.20
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'fileName',
-                        text: 'File',
+                        text: me.textStore.getValueByCode('ssp.label.documents.file','File'),
                         flex: 0.20
                     }, {
                         xtype: 'gridcolumn',
                         dataIndex: 'author',
-                        text: 'Author',
+                        text: me.textStore.getValueByCode('ssp.label.documents.author','Author'),
                         flex: 0.10
                     }, 
 					{
 						xtype: 'gridcolumn',
 						dataIndex: 'confidentialityLevelName',
 	                	flex: 0.15,
-						header: 'Confidentiality'
+						header: me.textStore.getValueByCode('ssp.label.documents.confidentiality-level','Confidentiality Level')
                     },
 					{
                         xtype: 'gridcolumn',
                         dataIndex: 'comment',
-                        text: 'Comments',
+                        text: me.textStore.getValueByCode('ssp.label.documents.comments','Comments'),
                         sortable: 'false',
                         flex: 0.25
                     }],
@@ -77,33 +78,33 @@ Ext.define('Ssp.view.tools.documents.Documents', {
                 dock: 'top',
                 xtype: 'toolbar',
                 items: [{
-                    tooltip: 'Add a Document',
-                    width: 60,
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.documents.add-button','Add a Document'),
+                //    width: 60,
                     height: 30,
                     xtype: 'button',
                     itemId: 'addDocumentButton',
 	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_ADD_BUTTON'),
-                    text: 'Add'
-                }, {
+                    text: me.textStore.getValueByCode('ssp.label.add-button','Add')
+                }, '-', {
                     tooltip: 'Edit Document',
-                    text: 'Edit',
-                    width: 60,
+                    text: me.textStore.getValueByCode('ssp.label.edit-button','Edit'),
+                //    width: 60,
                     height: 30,
                     xtype: 'button',
 	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_EDIT_BUTTON'),
                     itemId: 'editDocumentButton'
-                }, {
+                }, '-', {
                     tooltip: 'Delete Document',
-                    text: 'Delete',
-                    width: 60,
+                    text: me.textStore.getValueByCode('ssp.label.delete-button','Delete'),
+                  //  width: 60,
                     height: 30,
                     xtype: 'button',
 	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_DELETE_BUTTON'),
                     itemId: 'deleteDocumentButton'
-                }, {
+                }, '-', {
                     tooltip: 'Download Document',
-                    text: 'Download',
-                    width: 60,
+                    text: me.textStore.getValueByCode('ssp.label.download-button','Download'),
+                 //   width: 60,
                     height: 30,
 	                hidden: !me.authenticatedPerson.hasAccess('DOCUMENTS_DOWNLOAD_BUTTON'),
                     xtype: 'button',

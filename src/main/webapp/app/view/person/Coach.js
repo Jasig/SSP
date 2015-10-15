@@ -34,7 +34,8 @@ Ext.define('Ssp.view.person.Coach', {
 	},
 	initComponent: function() {	
 		var me=this;
-		Ext.apply(me, 
+        var defaultSyncdLabel = '<span class="syncedField">(sync\'d)</span>  ';
+		Ext.apply(me,
 				{
 			    border: 0,
 			    fieldDefaults: {
@@ -55,8 +56,8 @@ Ext.define('Ssp.view.person.Coach', {
 				        xtype: 'combobox',
 				        name: 'coachId',
 				        itemId: 'coachCombo',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' +  me.configStore.getConfigByName('coachFieldLabel'),
-				        emptyText: 'Select One',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) +  me.textStore.getValueByCode('ssp.label.coach-name', 'Coach'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.person-coach.coach-name','Select One'),
 				        store: me.coachesStore,
 				        valueField: 'id',
 				        displayField: 'fullName',
@@ -68,32 +69,32 @@ Ext.define('Ssp.view.person.Coach', {
 				        editable: false,
 						width: 300
 					},{
-				        fieldLabel: 'Office',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.person-coach.office','Office'),
 				        itemId: 'officeField',
 				        name: 'coachOffice',
 						width: 300,
 						disabled: true
 				    },{
-				        fieldLabel: 'Phone',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.person-coach.phone','Phone'),
 				        itemId: 'phoneField',
 				        name: 'coachPhone',
 						width: 300,
 						disabled: true
 				    },{
-				        fieldLabel: 'Email',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.person-coach.email','Email'),
 				        itemId: 'emailAddressField',
 				        name: 'coachEmailAddress',
 						width: 300,
 						disabled: true
 					}, {
-						fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus'),
+						fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus','Home Campus'),
 						name: 'coachHomeCampus',
 						itemId: 'homeCampusField',
 						labelWidth: 85,
 						width: 300,
 						disabled: true
 				    },{
-				        fieldLabel: 'Department',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.person-coach.department','Department'),
 				        itemId: 'departmentField',
 				        name: 'coachDepartment',
 						width: 300,

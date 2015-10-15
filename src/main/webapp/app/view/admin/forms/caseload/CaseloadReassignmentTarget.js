@@ -19,7 +19,6 @@
 Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
 	extend: 'Ext.grid.Panel',
 	alias : 'widget.caseloadassignmenttarget',
-	title: 'Students to Re-Assign',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewController',
@@ -27,7 +26,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
         coachesStore: 'coachesStore',
-        reassignCaseloadStore: 'reassignCaseloadStore'
+        reassignCaseloadStore: 'reassignCaseloadStore',
+        textStore: 'sspTextStore'
     },
 	height: '100%',
 	width: '100%',
@@ -45,10 +45,11 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
 		          },
     		      autoScroll: true,
     		      selType: 'rowmodel',
-    		      multiSelect: true,    		      
+    		      multiSelect: true,
+				  title: me.textStore.getValueByCode('ssp.label.caseload-reassignment.students-to-reassign-title','Students to Reassign'),
     		      columns: [
        		                { 
-        		               header: 'School ID',  
+        		               header: me.textStore.getValueByCode('ssp.label.student-id','Student ID'),
         		               dataIndex: 'schoolId',
         		               field: {
         		                  xtype: 'textfield'
@@ -56,7 +57,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
         		               flex: 1
         		             },     		                
     		                { 
-    		                  header: 'Name',  
+    		                  header: me.textStore.getValueByCode('ssp.label.caseload-reassignment.name','Name'),
     		                  dataIndex: 'fullName',
     		                  field: {
         		                  xtype: 'textfield'
@@ -64,7 +65,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
     		                  flex: 2
     		                },
     		                { 
-      		                  header: 'Student Type',  
+      		                  header: me.textStore.getValueByCode('ssp.label.caseload-reassignment.student-type','Student Type'),
       		                  dataIndex: 'studentTypeName',
       		                  field: {
       		                      xtype: 'textfield'
@@ -80,8 +81,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
     	    		        		   		        xtype: 'combobox',
     	    		        		   		        name: 'targetCoachBox',
     	    		        		   		        itemId: 'targetCoachBox',
-    	    		        		   		        fieldLabel: 'Assign To Coach',
-    	    		        		   		        emptyText: 'Select One',
+    	    		        		   		        fieldLabel: me.textStore.getValueByCode('ssp.label.caseload-reassignment.assign-to-coach','Assign To Coach'),
+    	    		        		   		        emptyText: me.textStore.getValueByCode('ssp.empty-text.caseload-reassignment.assign-to-coach','Select One'),
     	    		        		   		        store: this.coachesStore,
     	    		        		   		        valueField: 'id',
     	    		        		   		        displayField: 'fullName',
@@ -94,14 +95,14 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
     	    		      		              {
     	    		      		               xtype: 'toolbar',
     	    		      		               items: [{
-    	    		      		                   text: 'Remove',
+    	    		      		                   text: me.textStore.getValueByCode('ssp.label.remove-button','Remove'),
     	    		      		                   xtype: 'button',
     	    		      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_REMOVE_BUTTON'),
     	    		      		                   action: 'remove',
     	    		      		                   itemId: 'removeButton'
     	    		      		               },
     	    		      		               {
-    	    		      		                   text: 'Save',
+    	    		      		                   text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
     	    		      		                   xtype: 'button',
     	    		      		                   hidden: !me.authenticatedPerson.hasAccess('CASELOAD_REASSIGNMENT_SAVE_BUTTON'),
     	    		      		                   action: 'save',

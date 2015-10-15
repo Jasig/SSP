@@ -41,7 +41,7 @@ Ext.define('Ssp.view.tools.profile.ServiceReasons', {
                 height: 20,
 				cls: 'editPencilIcon',
 				text:'',
-				tooltip: 'Edit'
+				tooltip: me.textStore.getValueByCode('ssp.tooltip.edit-pencil-icon','Edit')
             }],
             columns: [{
                 header: 'Reason',

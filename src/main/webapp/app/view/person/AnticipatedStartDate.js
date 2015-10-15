@@ -23,10 +23,12 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.person.AnticipatedStartDateViewController',
     inject: {
-		termsStore: 'termsStore'
+		termsStore: 'termsStore',
+		textStore: 'sspTextStore'
     },
 	
-	initComponent: function() {	
+	initComponent: function() {
+		var me = this;
 		var abilityToBenefit = Ext.create('Ext.data.Store', {
             fields: [{name: 'abilityToBenefit'},
 			{name: 'value'}],
@@ -49,7 +51,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        xtype: 'combobox',
 		        name: 'anticipatedStartTerm',
 		        itemId: 'anticipatedStartTerm',
-		        fieldLabel: 'Anticipated Start Term',
+		        fieldLabel: me.textStore.getValueByCode('ssp.label.edit-person.anticipated-start-term', 'Anticipated Start Term'),
 		        emptyText: 'Select One',
 		        store: this.termsStore.getCurrentAndFutureTermsStore(true),
 		        valueField: 'name',
@@ -65,7 +67,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 		        xtype: 'combobox',
 		        name: 'anticipatedStartYear',
 		        itemId: 'anticipatedStartYear',
-		        fieldLabel: 'Anticipated Start Year',
+		        fieldLabel: me.textStore.getValueByCode('ssp.label.edit-person.anticipated-start-year','Anticipated Start Year'),
 		        emptyText: 'Select One',
 		        store: this.termsStore.getCurrentAndFutureYearStore(true),
 		        valueField: 'reportYear',
@@ -81,7 +83,7 @@ Ext.define('Ssp.view.person.AnticipatedStartDate', {
 				xtype: 'combobox',
 		        name: 'abilityToBenefit',
 		        itemId: 'abilityToBenefit',
-		        fieldLabel: 'Ability to Benefit',
+		        fieldLabel: me.textStore.getValueByCode('ssp.label.edit-person.ability-to-benefit','Ability to Benefit'),
 		        //emptyText: 'Select One',
 		        store: abilityToBenefit,
 		        valueField: 'value',
