@@ -114,7 +114,7 @@ public class TemplateControllerIntegrationTest {
 				controller);
 
 		controller.create(createTemplate());
-		PagedResponse<TemplateLiteTO> result = controller.getSummary(null, null, null, null,null);
+		PagedResponse<TemplateLiteTO> result = controller.getSummary(null, null, null, null, null, null, null, null);
 
 		assertNotNull(
 				"Returned PersonTO from the controller should not have been null.",

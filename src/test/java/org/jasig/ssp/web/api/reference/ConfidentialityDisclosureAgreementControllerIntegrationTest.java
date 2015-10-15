@@ -70,6 +70,8 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 
 	private static final String TEST_STRING2 = "testString1";
 
+    private static final String TEST_STRING3 = "testString1";
+
 	/**
 	 * Setup the security service with the administrator for use by
 	 * {@link #testControllerCreateAndDelete()} that checks that the Auditable
@@ -154,7 +156,7 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 
 		// Check validation of 'no ID for create()'
 		final ConfidentialityDisclosureAgreementTO invalid = new ConfidentialityDisclosureAgreementTO(
-				UUID.randomUUID(), TEST_STRING1, TEST_STRING2, "");
+				UUID.randomUUID(), TEST_STRING1, TEST_STRING2, TEST_STRING3, true);
 		try {
 			controller.create(invalid);
 			fail("Calling create with an object with an ID should have thrown a validation excpetion."); // NOPMD
@@ -164,8 +166,7 @@ public class ConfidentialityDisclosureAgreementControllerIntegrationTest {
 
 		// Now create a valid ConfidentialityDisclosureAgreement
 		final ConfidentialityDisclosureAgreementTO obj = new ConfidentialityDisclosureAgreementTO(
-				null, TEST_STRING1,
-				TEST_STRING2, "some text");
+				null, TEST_STRING1, TEST_STRING2, "some text", false);
 		final ConfidentialityDisclosureAgreementTO saved = controller
 				.create(obj);
 

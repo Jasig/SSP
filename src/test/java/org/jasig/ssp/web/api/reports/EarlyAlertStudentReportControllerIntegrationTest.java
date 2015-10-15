@@ -60,6 +60,7 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 				ObjectStatus.ACTIVE,
 				null,//roster status
 				Stubs.HomeDepartmentFixture.MATHEMATICS.title(),
+                Stubs.HomeCampusFixture.NORTH.id(),
 				PersonFixture.COACH_1.id(),
 				null,
 				ProgramStatusFixture.ACTIVE.id(),
@@ -93,6 +94,7 @@ public class EarlyAlertStudentReportControllerIntegrationTest extends
 				null,
 				null,
 				null,
+                null,
 				null,
 				null,
 				null,
