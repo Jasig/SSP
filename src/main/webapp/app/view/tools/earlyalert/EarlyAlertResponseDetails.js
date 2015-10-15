@@ -76,7 +76,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
             dockedItems: [{
        		               xtype: 'toolbar',
        		               items: [{
-		       		                   text: 'Return to Early Alert Details',
+		       		                   text: me.textStore.getValueByCode('ssp.label.early-alert.return-to-details-button','Return to Early Alert Details'),
 		       		                   xtype: 'button',
 		       		                   itemId: 'finishButton'
 		       		               }]

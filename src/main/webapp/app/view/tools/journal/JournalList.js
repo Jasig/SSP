@@ -26,7 +26,8 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
         model: 'currentJournalEntry',
-        store: 'journalEntriesUnpagedStore'
+        store: 'journalEntriesUnpagedStore',
+        textStore: 'sspTextStore'
     },
     
     width: '100%',
@@ -52,34 +53,34 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
         var sm = Ext.create('Ext.selection.CheckboxModel');
         Ext.apply(me, {
             autoScroll: true,
-            title: 'Journal List',
+            title:  me.textStore.getValueByCode('ssp.label.journal.list-title', 'Journal List'),
             store: me.store,
             columns: [{
-                header: 'Modified Date',
+                header: me.textStore.getValueByCode('ssp.label.journal.modified-date','Modified Date'),
                 dataIndex: 'modifiedDate',
                 flex: 1,
                 renderer: me.columnRendererUtils.renderModifiedByDate
             }, {
-                header: 'Modified By',
+                header: me.textStore.getValueByCode('ssp.label.journal.modified-by','Modified By'),
                 dataIndex: 'journalModifiedBy',
                 flex: 1,
                 renderer: me.columnRendererUtils.renderJournalModifiedBy,
 				sortable: true
             }, {
-                header: 'Source',
+                header: me.textStore.getValueByCode('ssp.label.journal.source','Source'),
                 dataIndex: 'journalS',
                 flex: 1,
                 renderer: me.columnRendererUtils.renderJournalSourceName,
 				sortable: true
 			
             }, {
-                header: 'Confidentiality',
+                header: me.textStore.getValueByCode('ssp.label.journal.confidentiality-level','Confidentiality'),
                 dataIndex: 'journalCFlevel',
                 flex: 1,
                 renderer: me.columnRendererUtils.renderConfidentialityLevelName,
 				sortable: true
             }, {
-                header: 'Entry Date',
+                header: me.textStore.getValueByCode('ssp.label.journal.entry-date','Entry Date'),
                 dataIndex: 'entryDate',
                 flex: 1,
                 renderer: me.entryDateRenderer(),
@@ -94,7 +95,7 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
                
             
             }, {
-                header: 'Entered By',
+                header: me.textStore.getValueByCode('ssp.label.journal.entered-by','Entered By'),
                 dataIndex: 'journalCreatedBy',
                 flex: 1,
                 renderer: me.columnRendererUtils.renderJournalCreatedBy,
@@ -104,34 +105,34 @@ Ext.define('Ssp.view.tools.journal.JournalList', {
                 dock: 'top',
                 xtype: 'toolbar',
                 items: [{
-                    tooltip: 'Add Journal Note',
-                    text: 'Add',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.journal.add-button','Add Journal Note'),
+                    text: me.textStore.getValueByCode('ssp.label.add-button','Add'),
                     xtype: 'button',
                     hidden: !me.authenticatedPerson.hasAccess('ADD_JOURNAL_ENTRY_BUTTON'),
                     itemId: 'addButton'
                 }, 
 				{
-                    tooltip: 'Save Journal Note',
-                    text: 'Save',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.journal.save-button','Save Journal Note'),
+                    text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
                     xtype: 'button',
                     itemId: 'saveButton'
                 }, 
 				{
-					tooltip: 'Cancel Journal Changes Since Last Save',
-					text: 'Cancel',
+					tooltip: me.textStore.getValueByCode('ssp.tooltip.journal.cancel-button','Cancel Journal Changes Since Last Save'),
+					text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 					xtype: 'button',
 					itemId: 'cancelButton'
 				},
 				{
-                    tooltip: 'Delete Journal Note',
-                    text: 'Delete',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.journal.delete-button','Delete Journal Note'),
+                    text: me.textStore.getValueByCode('ssp.label.delete-button','Delete'),
                     xtype: 'button',
                     hidden: !me.authenticatedPerson.hasAccess('DELETE_JOURNAL_ENTRY_BUTTON'),
                     itemId: 'deleteButton'
                 },
                 {
-                    tooltip: 'Click to generate report of student\'s Journal History',
-                    text: 'Journal History',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.journal.history-link','Click to generate report of student\'s Journal History'),
+                    text: me.textStore.getValueByCode('ssp.label.journal.history-link','Journal History'),
                     width: 105,
                     height: 20,
                     xtype: 'button',

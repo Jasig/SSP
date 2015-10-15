@@ -153,7 +153,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                     name: 'campusId',
                     itemId: 'campusCombo',
                     id: 'campusCombo',
-                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-campus'),
+                    fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.home-campus', 'Home Campus'),
                     emptyText: 'Select One',
                     store: me.campusesStore,
                     valueField: 'id',

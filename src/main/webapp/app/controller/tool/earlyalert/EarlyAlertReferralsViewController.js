@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
     	earlyAlertResponse: 'currentEarlyAlertResponse',
     	service: 'earlyAlertReferralService',
         store: 'earlyAlertReferralsBindStore',
-        itemSelectorInitializer: 'itemSelectorInitializer'
+        itemSelectorInitializer: 'itemSelectorInitializer',
+        textStore: 'sspTextStore'
     },
 	init: function() {
 		var me=this;
@@ -50,7 +51,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertReferralsViewController', {
             me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), [], {
                 itemId: 'earlyAlertReferralsItemSelector',
                 name: 'earlyAlertReferrals',
-                fieldLabel: 'Department Referrals',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.department-referrals','Department Referrals'),
                 store: me.store
             });
 

@@ -25,7 +25,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
         confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
         journalSourcesStore: 'journalSourcesAllUnpagedStore',
         journalTracksAllUnpagedStore: 'journalTracksAllUnpagedStore',
-        model: 'currentJournalEntry'
+        model: 'currentJournalEntry',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -39,7 +40,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
             bodyPadding: 0,
             items: [{
                 xtype: 'label',
-                text: 'Journal Entry',
+                text: me.textStore.getValueByCode('ssp.label.journal.entry-title','Journal Entry'),
                 padding: '0 0 0 10',
                 style: 'font-weight: bold'
             }, {
@@ -65,7 +66,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     
                     items: [{
                         xtype: 'datefield',
-                        fieldLabel: 'Entry Date',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.journal.entry-date','Entry Date'),
                         itemId: 'entryDateField',
                         altFormats: 'm/d/Y|m-d-Y',
                         name: 'entryDate',
@@ -76,7 +77,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                             render: function(field){
                                 Ext.create('Ext.tip.ToolTip', {
                                     target: field.getEl(),
-                                    html: 'Use this to set the calendar date, in the institution\'s time zone, on which the journaled session actually occurred. The system will not attempt to convert this value to or from your current time zone.'
+                                    html: me.textStore.getValueByCode('ssp.tooltip.journal.entry-date','Use this to set the calendar date, in the institution\'s time zone, on which the journaled session actually occurred. The system will not attempt to convert this value to or from your current time zone.')
                                 });
                             }
                         }
@@ -84,7 +85,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         xtype: 'combobox',
                         itemId: 'confidentialityLevelCombo',
                         name: 'confidentialityLevelId',
-                        fieldLabel: 'Confidentiality Level',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.journal.confidentiality-level','Confidentiality Level'),
                         emptyText: 'Select One',
                         store: me.confidentialityLevelsAllUnpagedStore,
                         valueField: 'id',
@@ -98,7 +99,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         xtype: 'combobox',
                         itemId: 'journalSourceCombo',
                         name: 'journalSourceId',
-                        fieldLabel: 'Source',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.journal.source','Source'),
                         emptyText: 'Select One',
                         store: me.journalSourcesStore,
                         valueField: 'id',
@@ -111,7 +112,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     }, 
 					{
 		                xtype: 'fieldset',
-		                title: 'Comment (Optional)',
+		                title: me.textStore.getValueByCode('ssp.label.journal.comment','Comment (Optional)'),
 		                border: 1,
 						margin: '0 0 0 0',
 						padding: '0 0 0 0',
@@ -140,7 +141,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     flex: 0.65,
                     items: [{
                         xtype: 'label',
-                        text: 'Track-Step-Detail',
+                        text: me.textStore.getValueByCode('ssp.label.journal.track-step-detail-title','Track-Step-Detail'),
                         padding: '5 0 5 0',
 						style: 'color: blue'
                     }, {
@@ -159,8 +160,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                             xtype: 'combobox',
                             itemId: 'journalTrackCombo',
                             name: 'journalTrackId',
-                            fieldLabel: '',
-                            emptyText: 'Select One',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.journal.journal-track',''),
+                            emptyText: me.textStore.getValueByCode('ssp.emplty-text.journal.journal-track','Select One'),
                             store: me.journalTracksAllUnpagedStore,
                             valueField: 'id',
                             displayField: 'name',
@@ -173,8 +174,8 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                             xtype: 'tbspacer',
                             width: 10
                         }, {
-                            tooltip: 'Removes the assigned Journal Track and Session Details',
-                            text: 'Remove',
+                            tooltip: me.textStore.getValueByCode('ssp.tooltip.journal.remove-button','Removes the assigned Journal Track and Session Details'),
+                            text: me.textStore.getValueByCode('ssp.label.remove-button','Remove'),
                             xtype: 'button',
                             itemId: 'removeJournalTrackButton'
                         }]

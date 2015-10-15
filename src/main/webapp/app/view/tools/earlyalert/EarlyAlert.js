@@ -26,7 +26,8 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
         authenticatedPerson: 'authenticatedPerson',
         columnRendererUtils: 'columnRendererUtils',
         model: 'currentEarlyAlert',
-        treeStore: 'earlyAlertsTreeStore'
+        treeStore: 'earlyAlertsTreeStore',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -34,7 +35,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
         var me = this;
         Ext.apply(me, {
             autoScroll: true,
-            title: 'Early Alerts',
+            title: me.textStore.getValueByCode('ssp.label.early-alert.list-title','Early Alerts'),
             cls: 'early-alert-tree-panel',
             collapsible: false,
             useArrows: true,
@@ -44,36 +45,36 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlert', {
             singleExpand: true,
             
             columns: [{
-                text: 'Responses',
+                text: me.textStore.getValueByCode('ssp.label.early-alert.number-of-responses','Responses'),
                 flex: 0.5,
                 dataIndex: 'noOfResponses',
                 sortable: true
             }, {
-                text: 'Created By',
+                text: me.textStore.getValueByCode('ssp.label.early-alert.created-by','Created By'),
                 flex: 1,
                 dataIndex: 'createdBy',
                 renderer: me.columnRendererUtils.renderCreatedBy,
                 sortable: true
             }, {
-                text: 'Created Date',
+                text: me.textStore.getValueByCode('ssp.label.early-alert.created-date','Created Date'),
                 flex: 1,
                 dataIndex: 'createdDate',
                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
                 sortable: true
             }, {
-                text: 'Status',
+                text: me.textStore.getValueByCode('ssp.label.early-alert.status','Status'),
                 flex: 0.5,
                 sortable: true,
                 dataIndex: 'closedDate',
                 renderer: me.columnRendererUtils.renderEarlyAlertStatus
             },{
-                text: 'Last Response Date',
+                text: me.textStore.getValueByCode('ssp.label.early-alert.last-response-date','Last Response Date'),
                 flex: 1,
                 dataIndex: 'lastResponseDate',
                 renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
                 sortable: true
             } , {
-                text: 'Details',
+                text: me.textStore.getValueByCode('ssp.label.early-alert.display-details','Details'),
                 flex: 2,
                 sortable: true,
                 dataIndex: 'gridDisplayDetails'

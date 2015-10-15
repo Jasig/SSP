@@ -32,6 +32,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
     },
     initComponent: function(){
         var me = this;
+        var defaultInstructions = 'Fill-in the address(es), subject and message information below to send an email to the selected student. Optionally, a Journal Entry can be created to record the email content. Only the subject and message entered will be sent to the student. To email Action Plans and MAP plans, use those tools to email the content.';
         Ext.apply(me, {
             layout: {
                 anchor: '100%'
@@ -41,7 +42,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
             items: [{
                 xtype: 'label',
 				anchor: '100%',
-                text: 'Fill-in the address(es), subject and message information below to send an email to the selected student. Optionally, a Journal Entry can be created to record the email content. Only the subject and message entered will be sent to the student. To email Action Plans and MAP plans, use those tools to email the content.'
+                text: me.textStore.getValueByCode('ssp.label.email-student.instructions', defaultInstructions)
             }, {
                 xtype: 'tbspacer',
                 height: 10
@@ -60,7 +61,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     itemId: 'createJournalEntry',
                     labelSeparator: '',
                     hideLabel: true,
-                    boxLabel: 'Record this Email as a Journal Entry',
+                    boxLabel: me.textStore.getValueByCode('ssp.label.email-student.record-as-journal-entry', 'Record this Email as a Journal Entry'),
                     fieldLabel: 'text'
                 }, {
                     xtype: 'tbspacer',
@@ -69,7 +70,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     xtype: 'combobox',
                     itemId: 'confidentialityLevel',
                     name: 'confidentialityLevelId',
-                    fieldLabel: 'Confidentiality Level',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.email-student.confidentiality-level', 'Confidentiality Level'),
                     labelWidth: 125,
                     emptyText: 'Select One',
                     store: me.confidentialityLevelsStore,
@@ -101,7 +102,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     labelSeparator: '',
                     hideLabel: true,
                     disabled: !(me.getIsBulk()) && !me.person.get('primaryEmailAddress'),
-                    boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.school-email') + ' Address',
+                    boxLabel: me.textStore.getValueByCode('ssp.label.email-student.send-to-school-email-address', 'Send To School Email Address'),
                     fieldLabel: 'text'
                 }, {
                     xtype: 'tbspacer',
@@ -132,7 +133,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     labelSeparator: '',
                     hideLabel: true,
                     disabled: !(me.getIsBulk()) && !me.person.get('secondaryEmailAddress'),
-                    boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.alternate-email') + ' Address',
+                    boxLabel: me.textStore.getValueByCode('ssp.label.email-student.send-to-alternate-email-address', 'Send To Alternate Email Address'),
                     fieldLabel: 'text'
                 }, {
                     xtype: 'tbspacer',
@@ -156,7 +157,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 },
                 items: [{
                     xtype: 'displayfield',
-                    value: 'CC This email to additional recipients (comma separated)',
+                    value: me.textStore.getValueByCode('ssp.label.email-student.cc', 'CC This email to additional recipients (comma separated)'),
                     fieldStyle: 'color:black'
                 }, {
                     xtype: 'tbspacer',
@@ -174,7 +175,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 }]
             }, {
                 xtype: 'textfield',
-                fieldLabel: 'Subject',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.email-student.subject', 'Subject'),
                 name: 'emailSubject',
                 itemId: 'emailSubject',
                 allowBlank: false,
@@ -184,7 +185,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 xtype: 'ssphtmleditor',
                 name: 'emailBody',
                 allowBlank: false,
-                fieldLabel: 'Body',
+                fieldLabel: me.textStore.getValueByCode('ssp.label.email-student.body', 'Body'),
                 itemId: 'emailBody',
                 width: '100%',
                 labelWidth: 60,
@@ -196,12 +197,12 @@ Ext.define('Ssp.view.EmailStudentForm', {
                 items: [{
                     xtype: 'button',
                     itemId: 'saveButton',
-                    text: 'Save'
+                    text: me.textStore.getValueByCode('ssp.label.save-button', 'Save')
                 
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
-                    text: 'Cancel'
+                    text: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel')
                 }]
             
             }]

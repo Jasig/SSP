@@ -40,6 +40,7 @@ Ext.define('Ssp.store.reference.Texts', {
     		return me.getAt(index).get('value');	
     	}    	 
     	else if (defaultVal != null){
+//    		return defaultVal;
     		return '{' + defaultVal + '}';
     	}
     	else{

@@ -25,13 +25,14 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
     inject: {
         earlyAlert: 'currentEarlyAlert',
         outcomesStore: 'earlyAlertOutcomesAllUnpagedStore',
-        outreachesStore: 'earlyAlertOutreachesAllUnpagedStore'
+        outreachesStore: 'earlyAlertOutreachesAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     initComponent: function() {
         var me=this;
         Ext.applyIf(me, {
             autoScroll: true,
-            title: 'Early Alert Response',
+            title: me.textStore.getValueByCode('ssp.label.early-alert.response-title','Early Alert Response'),
             defaults:{
                 labelWidth: 200
             },
@@ -41,25 +42,25 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                            xtype: 'toolbar',
                            dock: 'top',
                            items: [{
-                                       text: 'Save',
+                                       text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
                                        xtype: 'button',
                                        action: 'save',
                                        itemId: 'saveButton'
                                    }, '-', {
-                                       text: 'Cancel',
+                                       text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
                                        xtype: 'button',
                                        action: 'cancel',
                                        itemId: 'cancelButton'
                                    }]
                        },{
                     xtype: 'displayfield',
-                    fieldLabel: 'Early Alert Course',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.course','Early Alert Course'),
                     value: me.earlyAlert.get('courseName') +  ' ' + me.earlyAlert.get('courseTitle')
                  },{
                      xtype: 'multiselect',
                      name: 'earlyAlertOutreachIds',
                      itemId: 'outreachList',
-                     fieldLabel: 'Outreach'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+                     fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.outreach','Outreach')+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
                      store: me.outreachesStore,
                      displayField: 'name',
  					queryMode: 'local',
@@ -73,8 +74,8 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     xtype: 'combobox',
                     itemId: 'outcomeCombo',
                     name: 'earlyAlertOutcomeId',
-                    fieldLabel: 'Outcome',
-                    emptyText: 'Select One',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.outcome','Outcome'),
+                    emptyText: me.textStore.getValueByCode('ssp.emtpy-text.early-alert.outcome','Select One'),
                     store: me.outcomesStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -88,17 +89,17 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     xtype: 'textfield',
                     itemId: 'otherOutcomeDescriptionText',
                     name: 'earlyAlertOutcomeOtherDescription',
-                    fieldLabel: 'Other Outcome Description',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.other-outcome-description','Other Outcome Description'),
                     anchor: '95%'
                 },{
                     xtype: 'textareafield',
-                    fieldLabel: 'Comment',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.comment','Comment'),
                     anchor: '95%',
                     name: 'comment',
                     allowBlank: false
                 },{
                     xtype: 'checkboxfield',
-                    fieldLabel: 'Closed',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.closed','Closed'),
                     name: 'closed',
                     itemId: 'closedField'
                 },{
@@ -111,12 +112,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
 			dockedItems: [{
                            xtype: 'toolbar',
                            items: [{
-                                       text: 'Return to Early Alert List',
+                                       text: me.textStore.getValueByCode('ssp.label.early-alert.return-to-list-button','Return to Early Alert List'),
                                        xtype: 'button',
                                      
                                        itemId: 'responseGotoEAListButton'
                                    }, '-', {
-                                       text: 'Return to Early Alert Details',
+                                       text: me.textStore.getValueByCode('ssp.label.early-alert.return-to-details-button','Return to Early Alert Details'),
                                        xtype: 'button',
                                       
                                        itemId: 'responseGotoEADetailsButton'
