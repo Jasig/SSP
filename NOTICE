@@ -70,6 +70,7 @@ This project includes:
   Apache Directory MINA ASN.1 Codec Shared under The Apache Software License, Version 2.0
   Apache Directory Protocol Ldap Shared under The Apache Software License, Version 2.0
   Apache Directory Protocol Ldap Shared Constants under The Apache Software License, Version 2.0
+  Apache Groovy under The Apache Software License, Version 2.0
   Apache MINA Core under Apache 2.0 License
   Apache Pluto Portlet Tag Library under The Apache Software License, Version 2.0
   Apache POI under The Apache Software License, Version 2.0
@@ -99,6 +100,7 @@ This project includes:
   ASM Core under BSD
   ASM Tree under BSD
   ASM Util under BSD
+  AspectJ weaver under Eclipse Public License - v 1.0
   Bean Validation API under Apache License, Version 2.0
   Bouncy Castle CMS and S/MIME API under Bouncy Castle Licence
   Bouncy Castle OpenPGP API under Bouncy Castle Licence
@@ -200,6 +202,7 @@ This project includes:
   Spock Framework - Core Module under The Apache Software License, Version 2.0
   Spock Framework - Spring Module under The Apache Software License, Version 2.0
   Spring AOP under The Apache Software License, Version 2.0
+  Spring Aspects under The Apache Software License, Version 2.0
   Spring Beans under The Apache Software License, Version 2.0
   Spring Context under The Apache Software License, Version 2.0
   Spring Context Support under The Apache Software License, Version 2.0
