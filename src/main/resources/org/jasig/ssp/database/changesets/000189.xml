@@ -18,17 +18,6 @@
     specific language governing permissions and limitations
     under the License.
 
-To be able to rerun, run the following:
-delete from DATABASECHANGELOG where FILENAME = 'org/jasig/ssp/database/changesets/000189.xml';
-delete from DATABASECHANGELOG where FILENAME = 'org/jasig/ssp/database/integrationchangesets/i000068.xml';
-alter table campus drop column code;
-alter table external_person drop column campus_code;
-alter table person drop column campus_id;
-alter table mv_directory_person drop column campus_name;
-alter table mv_directory_person_blue drop column campus_name;
-drop function GET_CAMPUS_ID_FROM_CODE;
-drop function GET_CAMPUS_NAME_FROM_ID;
-
 -->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
