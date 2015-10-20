@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
         programsStore: 'programsStore',
 		authenticatedPerson: 'authenticatedPerson',
     	mapEventUtils: 'mapEventUtils',
-		contactPersonStore: 'contactPersonStore'
+		contactPersonStore: 'contactPersonStore',
+		textStore: 'sspTextStore'
     },
 	control: {
 		view: {
@@ -132,7 +133,11 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 
 	doAfterSaveSuccess: function() {
 		me = this;
-		Ext.Msg.alert('Save', 'Your changes have been saved.', function (btn) {me.doNavigation()}, me);
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.save-plan.save-title','Save'),
+			me.textStore.getValueByCode('ssp.message.save-plan.save-body','Your changes have been saved.'),
+			function (btn) {me.doNavigation()}, me
+			);
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 	},
@@ -151,7 +156,10 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
     	if(!nameField || nameField == '')
     	{
-    		Ext.Msg.alert('Error','Please give the plan a name.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.save-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.save-plan.save-error','Please give the plan a name.')
+				);
     		return;
     	}
 

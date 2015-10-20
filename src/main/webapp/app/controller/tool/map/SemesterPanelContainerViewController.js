@@ -32,7 +32,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		semesterStores : 'currentSemesterStores',
         electiveStore: 'electivesAllUnpagedStore',
         configStore: 'configurationOptionsUnpagedStore',
-        colorStore: 'colorsAllUnpagedStore'
+        colorStore: 'colorsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     
 	control: {
@@ -404,7 +405,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	},
 	
 	onEmailComplete: function(responseText){
-		Ext.Msg.alert('SSP Email Service', responseText);
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Email Service'),
+			me.textStore.getValueByCode('ssp.message.semester-panel.email-complete',responseText)
+			);
 	},
 	
 	
@@ -490,8 +494,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		me.clonedMap.updatePlanCourses(me.semesterStores);
 		var terms = me.clonedMap.getTermCodes()
 		if(terms.length <= 0) {
-			Ext.Msg.alert('There are no courses to bump. Can not continue.');
-			return; 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.semester-panel.no-courses-to-bump','There are no courses to bump. Can not continue.')
+				);
+			return;
 		}
 		var maps = me.createBumpTermMap(args);
 		me.maps	= maps;
@@ -499,7 +505,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			return;
 		me.bumpCourses(maps, true);
 		if(maps.numberToRemoveNoTerm > 0){
-			Ext.Msg.alert("Move Plan Aborted", 'Can not move plan, some required terms do not exist. \n Please see administrator to add terms.');
+			defaultMsg = 'Can not move plan, some required terms do not exist. \n Please see administrator to add terms.';
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.semester-panel.move-plan-aborted-title','Move Plan Aborted'),
+				me.textStore.getValueByCode('ssp.message.semester-panel.move-plan-aborted-body',defaultMsg)
+				);
 		}else if(maps.numberToRemove > 0){
 			var message = 'Completing the move will overwrite ' + maps.numberToRemove + ' courses. Do you wish to?';
 			
@@ -597,7 +607,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	
 	createBumpTermMap: function(args){
 		if(args.endTermCode == args.startTermCode){
-			Ext.Msg.alert('No Bump Required', "Bump does not require change, Start Term and End Term the same.");
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.semester-panel.no-bump-required-title','No Bump Required'),
+				me.textStore.getValueByCode('ssp.message.semester-panel.move-plan-aborted-body','Bump does not require change, Start Term and End Term the same.')
+				);
 			return null;
 		}
 		var me = this;
@@ -605,7 +618,10 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var startTermIndex = me.termsStore.findExact('code', args.startTermCode);
 		var endTermIndex =  me.termsStore.findExact('code', args.endTermCode);
 		if(startTermIndex < 0 || endTermIndex < 0){
-				Ext.Msg.alert('Bump not allowed', "Terms to do not fall in allowed range of terms.");
+				Ext.Msg.alert(
+					me.textStore.getValueByCode('ssp.message.semester-panel.bump-not-allowed-title','No Bump Required'),
+					me.textStore.getValueByCode('ssp.message.semester-panel.bump-not-allowed-body','Terms to do not fall in allowed range of terms.')
+					);
 				return null;
 		}
 				

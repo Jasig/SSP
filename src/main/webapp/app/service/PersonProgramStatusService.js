@@ -21,7 +21,8 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	apiProperties: 'apiProperties',
-    	formUtils: 'formRendererUtils'
+    	formUtils: 'formRendererUtils',
+    	textStore: 'sspTextStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -103,7 +104,11 @@ Ext.define('Ssp.service.PersonProgramStatusService', {
         		});	
     		}     		
     	}else{
-    		Ext.Msg.alert('SSP Error', 'Error determining student to which to save a Program Status. Unable to save Program Status. See your system administrator for assistance.');
-    	}  	
+    		defaultMsg = 'Error determining student to which to save a Program Status. Unable to save Program Status. See your system administrator for assistance.';
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.person-program-status.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.person-program-status.save-error', defaultMsg)
+				);
+    	}
     }   
 });

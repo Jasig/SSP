@@ -32,22 +32,36 @@ Ext.define('Ssp.store.reference.Texts', {
 				}
     		});
     },
-    getValueByCode:function(code, defaultVal)
+    getValueByCode:function(code, defaultVal, data)
     {
+    return code;
     	var me=this;
     	var index = me.findExact('code',code);
+    	var str = '';
     	if(index >= 0){
-    		return me.getAt(index).get('value');	
-    	}    	 
+    		str = me.getAt(index).get('value');
+    	}
     	else if (defaultVal != null){
-//    		return defaultVal;
-    		return '{' + defaultVal + '}';
+//    		str = defaultVal;
+    		str = '{' + defaultVal + '}';
     	}
     	else{
-    		return code;	
-    	}    	
+    		str = code;
+    	}
+
+    	if (data!=null) {
+		   var output = str.replace(/%[^%]+%/g, function(match) {
+			   if (match in data) {
+				   return(data[match]);
+			   } else {
+				   return("");
+			   }
+		   });
+		   return(output);
+        }
+   		return str;
     }
-    
+
     /*load: function()
     {
     	alert('special load');

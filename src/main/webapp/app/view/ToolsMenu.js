@@ -65,7 +65,10 @@ Ext.define('Ssp.view.ToolsMenu', {
                         var panel = grid.up('panel');
                         //panel.toolId.data=rec.data.toolId;
                         panel.appEventsController.getApplication().fireEvent('addTool');
-                        Ext.Msg.alert('Attention', 'This feature is not yet active');
+                        Ext.Msg.alert(
+                            me.textStore.getValueByCode('ssp.message.tools-menu.attention-title','Attention'),
+                            me.textStore.getValueByCode('ssp.message.tools-menu.inactive-feature', 'This feature is not yet active.')
+                            );
                     },
                     scope: this
                 }]

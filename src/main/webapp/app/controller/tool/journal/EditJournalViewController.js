@@ -30,7 +30,8 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 		journalSourcesStore: 'journalSourcesAllUnpagedStore',
         model: 'currentJournalEntry',
         personLite: 'personLite',
-        util: 'util'
+        util: 'util',
+        textStore: 'sspTextStore'
     },
     config: {
         containerToLoadInto: 'editjournal',
@@ -202,13 +203,19 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
          // ensure all required fields are supplied
         if ( (!form.isValid()) || (!confidentialityValue) || (!sourceValue) ) {
             error = true;
-            Ext.Msg.alert('Error', 'Please complete the required items in your Journal Entry.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.journal.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.journal.required-items','Please complete the required items in your Journal Entry.')
+                );
         }
         
         // ensure a comment or journal track are supplied
         if ( (!comment) && (!trackValue) ) {
             error = true;
-            Ext.Msg.alert('Error', 'You are required to supply a Comment or Journal Track Details for a Journal Entry.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.journal.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.journal.comment-journal-track-required','You are required to supply a Comment or Journal Track Details for a Journal Entry.')
+                );
         }
         
         if ( error == false ) {				
@@ -226,7 +233,10 @@ Ext.define('Ssp.controller.tool.journal.EditJournalViewController', {
 					
             // if a journal track is selected then validate that the details are set         
             if ( trackValue && (record.data.journalEntryDetails.length == 0) ) {
-                Ext.Msg.alert('SSP Error', 'You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.');
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.journal.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.journal.select-associated-details','You have a Journal Track set in your entry. Please select the associated details for this Journal Entry.')
+                    );
             }
             else {
 				//store journal track

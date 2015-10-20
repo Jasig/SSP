@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
     	disabilityTypesStore: 'disabilityTypesStore',
         personLite: 'personLite',
         person: 'currentPerson',
-        service: 'accommodationService'
+        service: 'accommodationService',
+        textStore: 'sspTextStore'
     }, 
     config: {
     	accommodationForm: null
@@ -158,7 +159,10 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
     		me.accommodation.data = accommodationClass.getProxy().getReader().read( r ).records[0].data;
     		me.buildAccommodation( me.accommodation );
     	}else{
-    		Ext.Msg.alert('Error','There was an error loading the Accommodation form for this student.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.accommodation.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.accommodation.unable-to-load','There was an error loading the Accommodation form for this student.')
+				);
     	}
 	},
 	
@@ -444,7 +448,9 @@ Ext.define('Ssp.controller.tool.accommodation.AccommodationToolViewController', 
 		me.getView().setLoading( false );
 		
 		if( r.success ) {
-			Ext.Msg.alert('Your changes have been saved.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.accommodation.successful-save','Your changes have been saved.')
+				);
 			if ( newSaveFlag ) {
 				me.onCancelClick(); //rebuild view for new save to show date
 			}				

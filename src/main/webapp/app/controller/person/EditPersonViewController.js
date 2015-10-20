@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
         personService: 'personService',
      	formUtils: 'formRendererUtils',
         configStore: 'configStore',
-        campusesStore: 'campusesAllUnpagedStore'
+        campusesStore: 'campusesAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     control: {
     	retrieveFromExternalButton: {
@@ -275,7 +276,10 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
     			});
     		}
     	}else{
-    		Ext.Msg.alert('SSP Error','Please correct the errors in your form.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.edit-person.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.edit-person.form-errors','Please correct the errors in your form.')
+				);
     	}
     },
     
@@ -316,7 +320,10 @@ Ext.define('Ssp.controller.person.EditPersonViewController', {
 			}
 
 		}else{
-			Ext.Msg.alert('SSP Notification','There were no records found with the provided ID. Please try a different value.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.edit-person.notification-title','SSP Notification'),
+				me.textStore.getValueByCode('ssp.message.edit-person.no-records-found','There were no records found with the provided ID. Please try a different value.')
+				);
 		}
     },    
     getPersonSuccess: function( response, scope ){

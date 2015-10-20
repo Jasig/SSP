@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		person: 'currentPerson',
 		termsStore: 'termsStore',
 		formRendererUtils: 'formRendererUtils',
-		coursesStore: 'coursesStore'		
+		coursesStore: 'coursesStore',
+		textStore: 'sspTextStore'
 	},
 	
 	control:{
@@ -142,12 +143,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var record = grid.getSelectionModel().getSelection()[0];
 		if(!grid.editable && !me.currentMapPlan.get('isTemplate'))
 		{
-		 	Ext.Msg.alert('SSP Error', 'You cannot modify old terms.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.semester-panel.cannot-modify-old-terms','You cannot modify old terms.')
+				);
 		    return;
 		}
 		if(!record)
 		{
-			 	Ext.Msg.alert('SSP Error', 'Please select an item.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.semester-panel.select-item','Please select an item.')
+				);
 	    }
 		else
 		{

@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.EmailPlanController',
     inject: {
-        appEventsController: 'appEventsController'
+        appEventsController: 'appEventsController',
+        textStore: 'sspTextStore'
     },
     height: 425,
     width: 700,
@@ -176,7 +177,10 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                                     me.appEventsController.getApplication().fireEvent(me.emailEvent, record);
                                     me.close();
                                 } else {
-                                    Ext.Msg.alert('Error','Please correct the email address in this form.');
+                                    Ext.Msg.alert(
+                                        me.textStore.getValueByCode('ssp.message.email-plan.error-title','SSP Error'),
+                                        me.textStore.getValueByCode('ssp.message.email-plan.form-errors', 'Please correct the email address in this form.')
+                                        );
                                 }
                             },
                             scope: me

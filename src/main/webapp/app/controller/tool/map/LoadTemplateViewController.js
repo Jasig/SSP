@@ -32,7 +32,8 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     	mapEventUtils: 'mapEventUtils',
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsStore',
-        divisionsStore: 'divisionsStore'
+        divisionsStore: 'divisionsStore',
+        textStore: 'sspTextStore'
     },
     
 	control: {
@@ -218,8 +219,11 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
         	 me.mapEventUtils.loadTemplate(record.get('id'));
      	     me.getView().hide();
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
-     	   me.getView().setLoading(false);
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.load-template.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.load-template.select-item','Please select an item to edit.')
+				);
+     	    me.getView().setLoading(false);
         }    	
     },
 	onLoadCompleteFailure: function(serviceResponses){

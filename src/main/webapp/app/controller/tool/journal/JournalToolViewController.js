@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
         journalSourcesStore: 'journalSourcesAllUnpagedStore',
     	journalTracksStore: 'journalTracksAllUnpagedStore',
     	model: 'currentJournalEntry',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+    	textStore: 'sspTextStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -189,7 +190,10 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
 			this.model.data=record.data;
         	this.appEventsController.getApplication().fireEvent('deleteJournalEntry');
         } else {
-     	   Ext.Msg.alert('SSP Error', 'Please select a journal to delete.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.journal.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.journal.select-journal-delete','Please select a journal to delete.')
+				);
         }
     },
 	
@@ -232,7 +236,10 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
    		     scope: me
    		   });
         } else {
-     	   Ext.Msg.alert('SSP Error', 'Unable to delete Journal Entry.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.journal.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.journal.unable-to-delete','Unable to delete Journal Entry.')
+				);
         }
      },
      

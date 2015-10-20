@@ -404,8 +404,12 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     		me.person.populateFromGenericObject( r );
     		me.saveAppointment();
 		}else{
-			Ext.Msg.alert('Error','Error saving student record. Please see your administrator for additional details.');
-		}    	
+			var defaultMsg = 'Error saving student record. Please see your administrator for additional details.';
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-assignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-assignment.error-saving',defaultMsg)
+				);
+		}
     },
     
     savePersonFailure: function( response, scope ){
@@ -605,12 +609,15 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 				// would usually only happen if there's not a record on
 				// file with the proposed schoolID, but there is a record
 				// on file with the silently calculated username
-				Ext.Msg.alert("Form Save Error",
-					"Could not overwrite the existing record" +
-					" because the system might have found multiple" +
-					" conflicting records or detected it was at risk of" +
-					" updating the wrong record your edits. Please contact" +
-					" your system administrators.");
+				var defaultMsg = "Could not overwrite the existing record" +
+								 " because the system might have found multiple" +
+								 " conflicting records or detected it was at risk of" +
+								 " updating the wrong record your edits. Please contact" +
+								 " your system administrators.";
+				Ext.Msg.alert(
+					me.textStore.getValueByCode('ssp.message.caseload-assignment.could-not-overwrite-title','Form Save Error'),
+					me.textStore.getValueByCode('ssp.message.caseload-assignment.could-not-overwrite-saving',defaultMsg)
+					);
 				return false;
 			}
 		}
@@ -696,11 +703,17 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
  
     onPrintClick: function(button){
-		Ext.Msg.alert('Attention','This feature is not yet implemented');
-    },    
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-title','Attention'),
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-body','This feature is not yet implemented')
+			);
+    },
 
     onEmailClick: function(button){
-		Ext.Msg.alert('Attention','This feature is not yet implemented');
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-title','Attention'),
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-body','This feature is not yet implemented')
+			);
     },      
     
     loadStudentToolsView: function(){

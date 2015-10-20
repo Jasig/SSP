@@ -22,7 +22,8 @@ Ext.define('Ssp.service.AppointmentService', {
     inject: {
     	apiProperties: 'apiProperties',
     	appointment: 'currentAppointment',
-    	currentPersonAppointment: 'currentPersonAppointment'
+    	currentPersonAppointment: 'currentPersonAppointment',
+    	textStore: 'sspTextStore'
     },
     initComponent: function() {
 		return this.callParent( arguments );
@@ -122,7 +123,10 @@ Ext.define('Ssp.service.AppointmentService', {
         		});	
     		}     		
     	}else{
-    		Ext.Msg.alert('SSP Error', 'Error determining student to which to save an appointment. Unable to save to appointment.');
-    	}  	
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.appointment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.appointment.save-error','Error determining student to which to save an appointment. Unable to save to appointment.')
+				);
+    	}
     }
 });

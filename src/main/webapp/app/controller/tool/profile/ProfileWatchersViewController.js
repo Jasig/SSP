@@ -24,6 +24,7 @@ Ext.define('Ssp.controller.tool.profile.ProfileWatchersViewController', {
         service: 'transcriptService',
         personLite: 'personLite',
         store: 'watchStudentListStore',
+        textStore: 'sspTextStore'
     },
 
     //return the base url with the student id populated
@@ -37,7 +38,9 @@ Ext.define('Ssp.controller.tool.profile.ProfileWatchersViewController', {
         var me = this;
 
         me.getView().setLoading(true);
-        me.getView().setTitle('Current Watchers for ' + me.personLite.get('firstName'));
+        me.getView().setTitle(
+            me.textStore.getValueByCode('ssp.label.profile-watchers.initial','Current Watchers for %FIRST-NAME%', {'%FIRST-NAME%':me.personLite.get('firstName')})
+            );
         var personId = me.personLite.get('id');
 
         me.store.removeAll();
@@ -59,15 +62,21 @@ Ext.define('Ssp.controller.tool.profile.ProfileWatchersViewController', {
         if (success) {
             var count = me.store.getCount();
             if (count == 0) {
-                me.getView().setTitle('There are no current watchers for ' + me.personLite.get('firstName'));
+                me.getView().setTitle(
+                 me.textStore.getValueByCode('ssp.label.profile-watchers.none','There are no current watchers for %FIRST-NAME%', {"%FIRST-NAME%":me.personLite.get('firstName'),"%COUNT%":me.store.getCount()})
+                 )
             } else if (count == 1) {
-                me.getView().setTitle('There is one current watcher for ' + me.personLite.get('firstName'));
+                me.getView().setTitle(
+                 me.textStore.getValueByCode('ssp.label.profile-watchers.one','There is one current watcher for %FIRST-NAME%', {"%FIRST-NAME%":me.personLite.get('firstName'),"%COUNT%":me.store.getCount()})
+                 )
             } else {
-                me.getView().setTitle('There are ' + me.store.getCount() + ' current watchers for ' + me.personLite.get('firstName'));
+                me.getView().setTitle(
+                 me.textStore.getValueByCode('ssp.label.profile-watchers.one','There are %COUNT% current watchers for %FIRST-NAME%.', {"%FIRST-NAME%":me.personLite.get('firstName'),"%COUNT%":me.store.getCount()})
+                 )
             }
             me.getView().setLoading(false);
         } else {
-            Ext.Msg.alert("A system error has occurred while retrieving the list of watchers.");
+            Ext.Msg.alert(me.textStore.getValueByCode('ssp.message.profile-watchers.system-error',"A system error has occurred while retrieving the list of watchers."));
             me.getView().setLoading(false);
         }
     }

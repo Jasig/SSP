@@ -18,9 +18,13 @@
  */
 Ext.define('Ssp.model.AuthenticatedPerson', {
     extend: 'Ssp.model.AbstractBase',
+    mixins: [ 'Deft.mixin.Injectable'],
     config: {
     	unauthorizedAccessAlertTitle: 'Unauthorized Access',
     	unauthorizedAccessAlertMessage: 'You do not have permission to access this item. Please see your system administrator if you require access to this information!'    	
+    },
+    inject: {
+    	textStore: 'sspTextStore'
     },
     fields: [{name:'permissions', type:'auto', defaultValue: null},
     		 {name:'confidentialityLevels', type:'auto', defaultValue: null},
@@ -440,7 +444,11 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * Provides a warning if a user attempts to modify data that is critical to system operation.
      */
     showDeveloperRestrictedContentAlert: function(){
-		Ext.Msg.alert("WARNING", "Access to this information has been restricted due to the sensitive nature of the information and it's impact on the SSP System. Please see your system administrator if you need to make changes to this information." );
+		var defaultMsg = "Access to this information has been restricted due to the sensitive nature of the information and it's impact on the SSP System. Please see your system administrator if you need to make changes to this information.";
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.restricted-content.error-title','WARNING'),
+			me.textStore.getValueByCode('ssp.message.restricted-content.error-body',defaultMsg)
+			);
     },
     
     isDeveloperRestrictedContent: function( item ){

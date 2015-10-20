@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
         personLite: 'personLite',
     	apiProperties: 'apiProperties',
     	mapEventUtils: 'mapEventUtils',
-    	mapPlanService:'mapPlanService'
+    	mapPlanService:'mapPlanService',
+    	textStore: 'sspTextStore'
     },
 	control: {
     	'openButton': {
@@ -68,8 +69,11 @@ Ext.define('Ssp.controller.tool.map.LoadPlanViewController', {
      	     me.getView().hide();
 
         }else{
-           Ext.Msg.alert('SSP Error', 'Please select an item to edit.');
-        }    	
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.load-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.load-plan.select-item','Please select an item to edit.')
+				);
+        }
     },
 	
 	onItemDblClick: function(grid, record, item, index, e, eOpts) {

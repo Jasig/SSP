@@ -28,7 +28,8 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 		mapPlanService: 'mapPlanService',
 		currentMapPlan: 'currentMapPlan',
 		termsStore: 'termsStore',
-		authenticatedPerson: 'authenticatedPerson'
+		authenticatedPerson: 'authenticatedPerson',
+		textStore: 'sspTextStore'
     },
     
     control: {
@@ -237,7 +238,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	},
 	
 	onEmailComplete: function(responseText){
-		Ext.Msg.alert('SSP Email Service', responseText);
+		Ext.Msg.alert(me.textStore.getValueByCode('ssp.message.ssp-email-service.title','SSP Email Service'), responseText);
 	},
 	
 	onPrintCurrentMapPlan: function(metaData){

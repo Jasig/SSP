@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
     	formUtils: 'formRendererUtils',
     	model: 'currentGoal',
     	personLite: 'personLite',
-    	preferences: 'preferences'
+    	preferences: 'preferences',
+    	textStore: 'sspTextStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -106,7 +107,10 @@ Ext.define('Ssp.controller.tool.actionplan.EditGoalFormViewController', {
 	    		});    			
     		}
     	}else{
-    		Ext.Msg.alert('Error', 'Please correct the errors in your form before continuing.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.edit-goal.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.edit-goal.form-errors','Please correct the errors in your form before continuing.')
+				);
     	}
     },
     

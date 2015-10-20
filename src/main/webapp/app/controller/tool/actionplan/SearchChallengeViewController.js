@@ -32,7 +32,8 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
         searchChallengeReferralService: 'searchChallengeReferralService',
         store: 'addTasksStore',
         task: 'currentTask',
-		configStore: 'configStore'
+		configStore: 'configStore',
+		textStore: 'sspTextStore'
     },
     
     config: {
@@ -448,7 +449,11 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
 			
 			if (!isValid) {
 				me.getView().setLoading(false);
-				Ext.Msg.alert('SSP Error', 'There are errors in your task definitions: Confidentiality Level must be selected and a due date set. Tasks missing necessary data: ' + badTasks);
+				defaultMsg = 'There are errors in your task definitions: Confidentiality Level must be selected and a due date set. Tasks missing necessary data: %BAD-TASKS%';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.search-challenge.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.search-challenge.task-definition-errors',defaultMsg,{'%BAD-TASKS%':badTasks})
+                    );
 				return;
 			}
 			successFunc = function(response, view){
@@ -475,8 +480,11 @@ Ext.define('Ssp.controller.tool.actionplan.SearchChallengeViewController', {
 		else
 		{
 			me.getView().setLoading(false);
-			Ext.Msg.alert('SSP Error', 'Please first create a Task to save it');
-		} 
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.search-challenge.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.search-challenge.first-create-task','Please first create a Task to save it')
+                );
+		}
     },
     
     onCancelClick: function(button){

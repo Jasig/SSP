@@ -189,7 +189,10 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
     		me.studentIntake.data = studentIntakeClass.getProxy().getReader().read( r ).records[0].data;
     		me.buildStudentIntake( me.studentIntake );    		
     	}else{
-    		Ext.Msg.alert('Error','There was an error loading the Student Intake form for this student.');
+		    Ext.Msg.alert(
+			    me.textStore.getValueByCode('ssp.message.student-intake.error-title','SSP Error'),
+			    me.textStore.getValueByCode('ssp.message.student-intake.unable-to-load','There was an error loading the Student Intake form for this student.')
+			    );
     	}
 	},
 	

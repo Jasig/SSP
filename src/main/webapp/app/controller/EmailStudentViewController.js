@@ -24,7 +24,8 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
         formUtils: 'formRendererUtils',
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
         apiProperties: 'apiProperties',
-        person: 'currentPerson'
+        person: 'currentPerson',
+        textStore: 'sspTextStore'
     },
 
     control: {
@@ -79,7 +80,11 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
     	var form = view.getForm();
 
         if ( !(form.isValid()) ) {
-            Ext.Msg.alert('SSP Error','Please correct the highlighted errors before resubmitting the form.');
+            var defaultMsg = 'Please correct the highlighted errors before resubmitting the form.';
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.email-student.highlighted-errors',defaultMsg)
+                );
             return ;
         }
 
@@ -90,20 +95,36 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
             // primary or secondary mail for the current search/caseload/watch set. In non-bulk mode we're a little
             // bit more lenient.
             if(!record.get("sendToPrimaryEmail") && !record.get("sendToSecondaryEmail")) {
-                Ext.Msg.alert('SSP Error','Please select either primary or secondary email addresses for recipients.');
+                var defaultMsg = 'Please select either primary or secondary email addresses for recipients.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-student.enter-primary-secondary-email',defaultMsg)
+                    );
                 return;
             }
         } else {
             if(!record.get("sendToPrimaryEmail") && !record.get("sendToSecondaryEmail") && record.get("additionalEmail").trim() === "" ) {
-                Ext.Msg.alert('SSP Error','Please select or enter an email address for the recipient.');
+                var defaultMsg = 'Please select or enter an email address for the recipient.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-student.enter-recipient-email',defaultMsg)
+                    );
                 return;
             }
             if(record.get("sendToPrimaryEmail") && !record.get("primaryEmail") ) {
-                Ext.Msg.alert('SSP Error','Student does not have a primary email, please unselect that option.');
+                defaultMsg = 'Student does not have a primary email, please unselect that option.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-student.no-primary-email',defaultMsg)
+                    );
                 return;
             }
             if(record.get("sendToSecondaryEmail") && !record.get("secondaryEmail") ) {
-                Ext.Msg.alert('SSP Error','Student does not have a secondary email, please unselect that option.');
+                defaultMsg = 'Student does not have a secondary email, please unselect that option.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-student.no-secondary-email',defaultMsg)
+                    );
                 return;
             }
         }
@@ -125,7 +146,11 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
             }
             if (valid==false)
             {
-                Ext.Msg.alert('Error','One or more of the addresses you entered are invalid. Please correct the form and try again.');
+                var defaultMsg = 'One or more of the addresses you entered are invalid. Please correct the form and try again.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-student.invalid-email',defaultMsg)
+                    );
                 return;
             }
         }
@@ -162,33 +187,57 @@ Ext.define('Ssp.controller.EmailStudentViewController', {
             if ( resp && resp.responseText ) {
                 var rspTextStruct = Ext.decode(resp.responseText);
                 if ( rspTextStruct.message && rspTextStruct.message.indexOf("Person search parameters matched no records") > -1 ) {
-                    Ext.Msg.alert('SSP Error','No user records matched your current search criteria. <br/><br/>' +
-                        'Try pasting your message into another document to save it for later, canceling out of this ' +
-                        'form, and retrying with different search criteria.');
+                    var defaultMsg = 'No user records matched your current search criteria. <br/><br/>' +
+                                 'Try pasting your message into another document to save it for later, canceling out of this ' +
+                                 'form, and retrying with different search criteria.';
+                    Ext.Msg.alert(
+                        me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                        me.textStore.getValueByCode('ssp.message.email-student.no-records',defaultMsg)
+                        );
                     return;
                 } else if (rspTextStruct.message && rspTextStruct.message.indexOf("Too many person search results") > -1) {
-                    Ext.Msg.alert('SSP Error',rspTextStruct.message +
-                        ' <br/><br/> Try pasting your message into another document to save it for later, canceling ' +
-                        'out of this form, and retrying with different search criteria. ' +
-                        '<br/><br/> Or export this search result to CSV and use that document to generate email via a third' +
-                        'party application.');
+                    var defaultMsg = rspTextStruct.message +
+                                 ' <br/><br/> Try pasting your message into another document to save it for later, canceling ' +
+                                 'out of this form, and retrying with different search criteria. ' +
+                                 '<br/><br/> Or export this search result to CSV and use that document to generate email via a third' +
+                                 'party application.';
+                    Ext.Msg.alert(
+                        me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                        me.textStore.getValueByCode('ssp.message.email-student.too-many-results',defaultMsg)
+                        );
                     return;
                 } else {
-                    Ext.Msg.alert('SSP Error','There was an issue sending your email. Please contact your administrator');
+                    var defaultMsg = 'There was an issue sending your email. Please contact your administrator';
+                    Ext.Msg.alert(
+                        me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                        me.textStore.getValueByCode('ssp.message.email-student.error-sending',defaultMsg)
+                        );
                     return;
                 }
             } else {
-                Ext.Msg.alert('SSP Error','There was an issue sending your email. Please contact your administrator');
+                var defaultMsg = 'There was an issue sending your email. Please contact your administrator';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-student.error-sending',defaultMsg)
+                    );
             }
         }
         if ( isBulk ) {
             success = function() {
-                Ext.Msg.alert('Bulk Email Request Queued','Your bulk email request has been queued successfully. Bulk email is sent gradually. Please expect delivery to take somewhat longer than when emailing a single student.');
+                var defaultMsg = 'Your bulk email request has been queued successfully. Bulk email is sent gradually. Please expect delivery to take somewhat longer than when emailing a single student.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.bulk-email-queued-title','Bulk Email Request Queued'),
+                    me.textStore.getValueByCode('ssp.message.email-student.bulk-email-queued-message',defaultMsg)
+                    );
                 me.closeView();
             }
         } else {
             success = function() {
-                Ext.Msg.alert('Email Queued','Your email has been queued successfully. Please allow several minutes for delivery.');
+                var defaultMsg = 'Your email has been queued successfully. Please allow several minutes for delivery.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-student.email-queued-title','Email Queued'),
+                    me.textStore.getValueByCode('ssp.message.email-student.email-queued-message',defaultMsg)
+                    );
                 me.closeView();
             }
         }

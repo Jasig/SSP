@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
         goalsStore: 'goalsStore',
         strengthsStore: 'strengthsStore',
         store: 'tasksStore',
-        personLite: 'personLite'
+        personLite: 'personLite',
+        textStore: 'sspTextStore'
     },
     config: {
         personEmailTaskUrl: ''
@@ -68,25 +69,40 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
         
         
         if (!(emailForm.isValid())) {
-            Ext.Msg.alert('SSP Error', 'Please correct the highlighted errors before resubmitting the form.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.email-action-plan.correct-highlighted-errors','Please correct the highlighted errors before resubmitting the form.')
+				);
             return;
         }
         if (!emailAPToPrimary && !emailAPToSecondary && !emailAPToCoach && ccAPToAdditional === "") {
-            Ext.Msg.alert('SSP Error', 'Please select or enter an email address for the recipient.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.email-action-plan.select-recipient-email','Please select or enter an email address for the recipient.')
+				);
             return;
         }
         if (emailAPToPrimary && !primaryEmailAddress) {
-            Ext.Msg.alert('SSP Error', 'Student does not have a primary email, please unselect that option.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.email-action-plan.no-primary-email','Student does not have a primary email, please unselect that option.')
+				);
             return;
         }
         
         if (emailAPToSecondary && !secondaryEmailAddress) {
-            Ext.Msg.alert('SSP Error', 'Student does not have a secondary email, please unselect that option.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.email-action-plan.no-secondary-email','Student does not have a secondary email, please unselect that option.')
+				);
             return;
         }
         
         if (emailAPToCoach && !coachPrimaryEmailAddress) {
-            Ext.Msg.alert('SSP Error', 'Coach does not have a  email, please unselect that option.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.email-action-plan.no-coach-email','Coach does not have a email, please unselect that option.')
+				);
             return;
         }
         
@@ -110,7 +126,10 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
                 
             }
             if (valid == false) {
-                Ext.Msg.alert('Error', 'One or more of the addresses you entered are invalid. Please correct the form and try again.');
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-action-plan.invalid-email','One or more of the addresses you entered are invalid. Please correct the form and try again.')
+                    );
                 return;
             }
         }
@@ -179,11 +198,16 @@ Ext.define('Ssp.controller.tool.actionplan.EmailActionPlanController', {
             jsonData: jsonData,
             successFunc: function(){
                 Ext.ComponentQuery.query('.emailactionplan')[0].close();
-                Ext.Msg.alert('Success', 'The task list has been sent to the listed recipient(s).');
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-action-plan.sent-successful-title','Success'),
+                    me.textStore.getValueByCode('ssp.message.email-action-plan.sent-successful-body','The task list has been sent to the listed recipient(s).')
+                    );
             },
             failureFunc: function(){
-                Ext.Msg.alert('SSP Error', 'There was an issue sending your action plan email.  Please contact your administrator');
-                
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.email-action-plan.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.email-action-plan.error-sending','There was an issue sending your action plan email.  Please contact your administrator.')
+                    );
             }
         });
     },

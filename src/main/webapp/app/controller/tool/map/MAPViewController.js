@@ -30,8 +30,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         personLite: 'personLite',
         configStore: 'configurationOptionsUnpagedStore',
 		semesterStores: 'currentSemesterStores',
-		authenticatedPerson: 'authenticatedPerson'
-
+		authenticatedPerson: 'authenticatedPerson',
+		textStore: 'sspTextStore'
     },
 
     control: {
@@ -527,7 +527,12 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	onShowMapStatus: function(button){
 		var me=this;
 		if (!me.configStore.getConfigByName('calculate_map_plan_status')) {
-			Ext.Msg.alert('Plan Status for '+me.personLite.get('displayFullName')+'.','Plan Status: '+me.currentMapPlan.planStatus+'<br> Details: '+me.currentMapPlan.planStatusDetails);
+			defaultTitle = 'Plan Status for %FULL-NAME%.';
+			defaultMsg = 'Plan Status: %PLAN-STATUS%<br> Details: %PLAN-STATUS-DETAILS%';
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.load-template.plan-status-title',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails}),
+				me.textStore.getValueByCode('ssp.message.load-template.plan-status-body',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails})
+				);
 		} else {
 		   if (me.showMapStatusPopup == null || me.showMapStatusPopup.isDestroyed) {
 			  me.showMapStatusPopup = Ext.create('Ssp.view.tools.map.MapStatusReport',{hidden:true});
@@ -554,8 +559,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		me.currentMapPlan.updatePlanCourses(me.semesterStores);
 		var terms = me.currentMapPlan.getTermCodes()
 		if(terms.length <= 0) {
-			Ext.Msg.alert('Move Plan Impossible','There are no courses to bump. Can not continue.');
-			return; 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.map.move-plan-impossible-title','Move Plan Impossible'),
+				me.textStore.getValueByCode('ssp.message.map.move-plan-impossible-body','There are no courses to bump. Can not continue.')
+				);
+			return;
 		}
 		if(me.movePlanPopup == null || me.movePlanPopup.isDestroyed)
        		me.movePlanPopup = Ext.create('Ssp.view.tools.map.MovePlanDialog',{hidden:true});

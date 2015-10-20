@@ -32,7 +32,8 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 		authenticatedPerson: 'authenticatedPerson',
 		semesterStores : 'currentSemesterStores',
         electiveStore: 'electivesAllUnpagedStore',
-        colorStore: 'colorsAllUnpagedStore'
+        colorStore: 'colorsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
 	initComponent: function() {
 		return this.callParent( arguments );
@@ -115,7 +116,9 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 		var me = this;
 		me.currentMapPlan.dirty = false;
 		me.appEventsController.getApplication().fireEvent("onPlanLoad");
-		Ext.Msg.alert('The plan is ready for edit');
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.map.plan-ready-to-edit', 'The plan is ready for edit')
+			);
 	},
  
 	saveTemplate: function(saveAs) {

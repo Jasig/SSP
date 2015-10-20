@@ -43,6 +43,14 @@ Ext.define('Ssp.view.Search', {
                 itemId: 'searchGridPager',
                 dock: 'bottom',
                 displayInfo: true,
+                displayMsg: me.textStore.getValueByCode('ssp.label.paging.displayMsg','Displaying {0} - {1} of {2}'),
+                emptyMsg: me.textStore.getValueByCode('ssp.label.paging.emptyMsg','No data to display'),
+                beforePageText: me.textStore.getValueByCode('ssp.label.paging.beforePageText','Page'),
+                afterPageText: me.textStore.getValueByCode('ssp.label.paging.afterPageText','of {0}'),
+                firstText: me.textStore.getValueByCode('ssp.label.paging.firstText','First Page'),
+                prevText: me.textStore.getValueByCode('ssp.label.paging.prevText','Previous Page'),
+                nextText: me.textStore.getValueByCode('ssp.label.paging.nextText','Next Page'),
+                lastText: me.textStore.getValueByCode('ssp.label.paging.lastText','Last Page'),
                 listeners: {
                     afterrender: function(){
                         var a = Ext.query("button[data-qtip=Refresh]");
@@ -198,8 +206,8 @@ Ext.define('Ssp.view.Search', {
                     }
                 }, {
 
-                    text: me.textStore.getValueByCode('ssp.label.search', 'Search'),
-                    tooltip: 'Search for Student',
+                    text: me.textStore.getValueByCode('ssp.label.search-button', 'Search'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search-button','Search for Student'),
                     xtype: 'button',
                     type: 'search',
                     itemId: 'searchStudentButton',
@@ -207,8 +215,8 @@ Ext.define('Ssp.view.Search', {
                     align: 'left',
                     hidden: !me.authenticatedPerson.hasAccess('STUDENT_SEARCH')
                 }, {
-                    tooltip: 'Reset',
-                    text: me.textStore.getValueByCode('ssp.label.reset', 'Reset'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.reset-button','Reset'),
+                    text: me.textStore.getValueByCode('ssp.label.reset-button', 'Reset'),
                     type: 'refresh',
                     xtype: 'button',
                     itemId: 'resetStudentSearchButton',

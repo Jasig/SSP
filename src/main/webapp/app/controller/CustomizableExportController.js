@@ -20,7 +20,8 @@ Ext.define('Ssp.controller.CustomizableExportController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
-        exportService: 'exportService'
+        exportService: 'exportService',
+        textStore: 'sspTextStore'
     },
     control: {
         'exportButton': {
@@ -66,8 +67,11 @@ Ext.define('Ssp.controller.CustomizableExportController', {
     },
 
     errorMsg: function() {
-        Ext.Msg.alert('SSP Error','An error occurred in Custom Exportable Search. ' +
-        'Please refresh and try again, if this keeps occurring, contact your System Administrator.');
+        var defaultMsg = 'An error occurred in Custom Exportable Search. Please refresh and try again, if this keeps occurring, contact your System Administrator.';
+        Ext.Msg.alert(
+            me.textStore.getValueByCode('ssp.message.custom-export.error-title','SSP Error'),
+            me.textStore.getValueByCode('ssp.message.custom-export.error-body',defaultMsg)
+            );
     },
 
     closeView: function() {

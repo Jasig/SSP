@@ -30,7 +30,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
         divisionsStore: 'divisionsStore',
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsAllStore',
-		contactPersonStore: 'contactPersonStore'
+		contactPersonStore: 'contactPersonStore',
+		textStore: 'sspTextStore'
     },
     
 	control: {
@@ -147,7 +148,11 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 
 	doAfterSaveSuccess: function() {
 		me = this;
-		Ext.Msg.alert('Save', 'Your changes have been saved.', function (btn) {me.doNavigation()}, me);
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.save-template.save-title','Save'),
+			me.textStore.getValueByCode('ssp.message.save-template.save-successful','Your changes have been saved.'),
+			function (btn) {me.doNavigation()}, me
+			);
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 	},
@@ -165,7 +170,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		var form =  me.getView().query('form')[0].getForm();
     	if(!nameField || nameField == '')
     	{
-    		Ext.Msg.alert('Error','Please give the template a name.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.save-template.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.save-template.save-error','Please give the template a name.')
+				);
     		return;
     	}
     	var visibility = me.getVisibilityField().getValue();
@@ -174,7 +182,10 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			if (visibility != 'PRIVATE') {
 				if (!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')) {
 					me.getVisibilityField().setValue('PRIVATE');
-					Ext.Msg.alert('Error', 'You do not have permission to save a public template.');
+					Ext.Msg.alert(
+						me.textStore.getValueByCode('ssp.message.save-template.error-title','SSP Error'),
+						me.textStore.getValueByCode('ssp.message.save-template.no-permission','You do not have permission to save a public template.')
+						);
 					return;
 				}
 				else {

@@ -122,8 +122,12 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 
     fatalWatchUnWatchFailure: function(action) {
         var me = this;
-        Ext.Msg.alert('SSP Error','There was an issue procesing your ' + action + ' request. Please reload the page and ' +
-            'try again, or contact your system administrator');
+        var defaultMsg = 'There was an issue processing your %ACTION% request. Please reload the page and ' +
+                         'try again, or contact your system administrator.';
+        Ext.Msg.alert(
+            me.textStore.getValueByCode('ssp.message.student-record.watch-change-error-title','SSP Error'),
+            me.textStore.getValueByCode('ssp.message.student-record.watch-change-error-body',defaultMsg,{'%ACTION%':action})
+            );
         me.showByPermission(me.getWatchStudentButton(), me.authenticatedPerson.hasAccess('WATCHLIST_WATCH_BUTTON'));
         me.appEventsController.loadMaskOff();
     },

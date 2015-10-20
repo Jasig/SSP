@@ -22,7 +22,8 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
     inject: {
     	appEventsController: 'appEventsController',
     	personLite: 'personLite',
-    	personProgramStatusService: 'personProgramStatusService'
+    	personProgramStatusService: 'personProgramStatusService',
+    	textStore: 'sspTextStore'
     },
     control: {
 
@@ -59,13 +60,21 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 			var okCallback = me.getActionCallbacks() && me.getActionCallbacks().ok;
 			if ( !(okCallback) ) {
 				// programmer error
-				Ext.Msg.alert('SSP Error', 'Unable to process this status change. Please contact your system administrator');
+                var defaultMsg = 'Unable to process this program status change. Please contact your system administrator.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.program-status-change.error-message',defaultMsg)
+                    );
 				return false;
 			}
 		} else {
 			var personId = me.personLite.get('id');
 			if ( !(personId) ) {
-				Ext.Msg.alert('SSP Error','Please select a student for which to change status');
+                var defaultMsg = 'Please select a student for which to change status.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.program-status-change.select-a-student',defaultMsg)
+                    );
 				return false;
 			}
 		}
@@ -106,14 +115,26 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 							scope: me
 						});
 				}else{
-					Ext.Msg.alert('SSP Error','Please select a student for which to change status');
+					var defaultMsg = 'Please select a student for which to change program status.';
+					Ext.Msg.alert(
+						me.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
+						me.textStore.getValueByCode('ssp.message.program-status-change.select-a-student',defaultMsg)
+						);
 				}
 			} else {
 				// Programmer error, and should have been caught on init()
-				Ext.Msg.alert('SSP Error', 'Unable to process this status change. Please contact your system administrator');
+                var defaultMsg = 'Unable to process this program status change. Please contact your system administrator.';
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.program-status-change.error-message',defaultMsg)
+                    );
 			}
 		}else{
-			Ext.Msg.alert('SSP Error','Please correct the highlighted errors in the form');
+			var defaultMsg = 'Please correct the highlighted errors in the form.';
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.program-status-change.highlighted-errors-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.program-status-change.highlighted-errors-message',defaultMsg)
+				);
 		}
 	},
 
@@ -142,7 +163,11 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 
 	saveProgramStatusFailure: function( r, scope){
 		var me=scope;
-		Ext.Msg.alert('SSP Error','Failed to process program status change. Please contact your system administrator.');
+		var defaultMsg = 'Unable to process this program status change. Please contact your system administrator.';
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
+			me.textStore.getValueByCode('ssp.message.program-status-change.error-message',defaultMsg)
+			);
 		me.getView().setLoading( false );
 		me.close();
 	},

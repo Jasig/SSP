@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
         personLite: 'personLite',
         store: 'tasksStore',
         authenticatedPerson: 'authenticatedPerson',
-		confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+		confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+		textStore: 'sspTextStore'
     },
     
     config: {
@@ -188,7 +189,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
             });
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Unable to delete. No id was specified to delete.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.tasks.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.tasks.unable-to-delete-no-id','Unable to delete. No id was specified to delete.')
+                );
 			me.getView().setLoading(false);
         }
     },
@@ -211,7 +215,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
             });
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Unable to delete task.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.tasks.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.tasks.unable-to-delete','Unable to delete task.')
+                );
         }
     },
     

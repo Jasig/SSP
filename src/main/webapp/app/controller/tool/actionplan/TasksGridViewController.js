@@ -28,7 +28,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
         personLite: 'personLite',
         store: 'addTasksStore',
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
-		configStore: 'configStore'
+		configStore: 'configStore',
+		textStore: 'sspTextStore'
     },
 	
 	config: {
@@ -110,7 +111,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
             me.store.remove(record);
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Please select a task to delete.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.task-grid.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.task-grid.select-task-to-delete','Please select a task to delete.')
+                );
         }
         
         
@@ -208,7 +212,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
         var todayDateJSON = me.formUtils.toJSONStringifiableDate(new Date());
         var origDueDateJSON = me.formUtils.toJSONStringifiableDate(record.data.dueDate);
         if (origDueDateJSON['formattedStr'] < todayDateJSON['formattedStr']) {
-            Ext.Msg.alert('Error', 'The Target Date must be the current or a future date.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.task-grid.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.task-grid.target-date-error','The Target Date must be the current or a future date.')
+                );
             return;
         }
         

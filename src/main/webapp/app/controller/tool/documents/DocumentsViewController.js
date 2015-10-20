@@ -27,8 +27,8 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
     	store: 'studentDocumentsStore',
-    	model: 'currentStudentDocument'
-
+    	model: 'currentStudentDocument',
+		textStore: 'sspTextStore'
     },
     
 	config: {
@@ -77,12 +77,17 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
 		var record = me.getView().getSelectionModel().getSelection()[0];
 		var success = function()
 		{
-        	Ext.Msg.alert('Success', 'The Student Document has been deleted.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.documents.delete-successful-title','Success'),
+                me.textStore.getValueByCode('ssp.message.documents.delete-successful-body','The Student Document has been deleted.')
+                );
         	me.init();
         };
         var failure = function()
         {
-        	Ext.Msg.alert('Deleting document failed.  Please contact the system administrator.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.documents.delete-failed','Deleting document failed.  Please contact the system administrator.')
+                );
         };
         if(record)
         {
@@ -98,7 +103,10 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
         }
         else
         {
-      	   Ext.Msg.alert('SSP Error', 'Please select an item to delete.'); 
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.documents.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.documents.select-document-to-delete','Please select an item to delete.')
+                );
         }
     },
     onDownloadDocumentClick: function(button) {
@@ -123,8 +131,11 @@ Ext.define('Ssp.controller.tool.documents.DocumentsViewController', {
         	me.model.data=record.data;
         	var comp = me.formUtils.loadDisplay(me.getContainerToLoadInto(), me.getFormToDisplay(), true, {}); 
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to edit.'); 
-        }    
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.documents.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.documents.select-document-to-edit','Please select an item to edit.')
+                );
+        }
         },
     getBaseUrl: function(id){
 		var me=this;

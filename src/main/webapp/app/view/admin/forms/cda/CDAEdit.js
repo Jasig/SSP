@@ -141,7 +141,10 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                 scope: me
             });
         } else {
-            Ext.Msg.alert('SSP Error', 'There are errors highlighted in red');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.cda.error-title','Attention'),
+                me.textStore.getValueByCode('ssp.message.cda.errors-highlighted', 'There are errors highlighted in red.')
+                );
         }
     },
 

@@ -36,7 +36,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
         referralsStore: 'earlyAlertReferralsAllUnpagedStore',
         suggestionsStore: 'earlyAlertSuggestionsAllUnpagedStore',
         treeStore: 'earlyAlertsTreeStore',
-        util: 'util'
+        util: 'util',
+        textStore: 'sspTextStore'
         },
     config: {
         containerToLoadInto: 'tools',
@@ -88,7 +89,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                          me.getEarlyAlerts(); 
                   }
                   else {
-                      Ext.Msg.alert("Ssp Error","Failed to load referrals. See your system administrator for assitance.");
+                      Ext.Msg.alert(
+                          me.textStore.getValueByCode('ssp.message.early-alert.error-title','SSP Error'),
+                          me.textStore.getValueByCode('ssp.message.early-alert.load-referrals-failure','Failed to load referrals. See your system administrator for assistance.')
+                          );
                   }
              }
         });
@@ -229,7 +233,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertToolViewController', {
                 me.displayEarlyAlertResponseDetails();              
             }  */ 
         }else{
-            Ext.Msg.alert('Notification','Please select an item to view.');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.early-alert.notification-title','Notification'),
+                me.textStore.getValueByCode('ssp.message.early-alert.select-item','Please select an item to view.')
+                );
         }
     },
 

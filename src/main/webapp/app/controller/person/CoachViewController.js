@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.person.CoachViewController', {
         configStore: 'configStore',
         studentTypesStore: 'studentTypesAllUnpagedStore',
         formRendererUtils: 'formRendererUtils',
-        personService: 'personService'
+        personService: 'personService',
+        textStore: 'sspTextStore'
     },
     config: {
         inited: false
@@ -62,10 +63,13 @@ Ext.define('Ssp.controller.person.CoachViewController', {
 		var me = this;
 		
     	me.coachesStore.load(function(records, operation, success){
-             if (!success) {
-                 Ext.Msg.alert('Error', 'Unable to load Coaches. Please see your system administrator for assistance.');
-             }
-             else {
+            if (!success) {
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.coach.error-title','SSP Error'),
+                    me.textStore.getValueByCode('ssp.message.coach.unable-to-load','Unable to load Coaches. Please see your system administrator for assistance.')
+                    );
+            }
+            else {
                  // Make best effort at trying to find the
                  // associated coach and inject it into the view. Currently
                  // associated coach might not be in the store already, e.g. if he/she

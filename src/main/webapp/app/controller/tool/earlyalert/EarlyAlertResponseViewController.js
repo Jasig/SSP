@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
     	personLite: 'personLite',
 		authenticatedPerson: 'authenticatedPerson',
 		treeStore: 'earlyAlertsTreeStore',
-		util: 'util'
+		util: 'util',
+		textStore: 'sspTextStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -211,7 +212,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 				scope: me
 			});				
 		}else{
-			Ext.Msg.alert('Error','Please correct the indicated errors in this form.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.early-alert.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.early-alert.form-errors','Please correct the indicated errors in this form.')
+				);
 		}
 	},
 	

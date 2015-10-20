@@ -39,7 +39,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         courseTranscriptsStore: 'courseTranscriptsStore',
         termsStore: 'termsStore',
         termTranscriptsStore: 'termTranscriptsStore',
-        careerDecisionStatusesStore: 'careerDecisionStatusesAllStore'
+        careerDecisionStatusesStore: 'careerDecisionStatusesAllStore',
+        textStore: 'sspTextStore'
     },
     
     control: {
@@ -136,7 +137,10 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             if (me.termsStore.getTotalCount() <= 0) {
                 me.termsStore.load(function(records, operation, success) {
                    if (!success) {
-                       Ext.Msg.alert('Error', 'Unable to load Terms. Please see your system administrator for assistance.');
+                       Ext.Msg.alert(
+                           me.textStore.getValueByCode('ssp.message.profile-person-details.error-title','SSP Error'),
+                           me.textStore.getValueByCode('ssp.message.profile-person-details.unable-to-load','Unable to load Terms. Please see your system administrator for assistance.')
+                           );
                    } else {
                        me.fireOnTermsLoad(serviceResponses);
                    }

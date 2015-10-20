@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
     	formUtils: 'formRendererUtils',
     	person: 'currentPerson',
     	model: 'currentStudentDocument',
-    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+    	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+    	textStore: 'sspTextStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -69,17 +70,23 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
             {
                 url: url,
                 method : 'POST',
-                waitMsg: 'Uploading Student Document...',
+                waitMsg: me.textStore.getValueByCode('ssp.message.upload-documents.wait-message','Uploading Student Document...'),
                 success: function (fp, o) 
                 {
-                    	Ext.Msg.alert('Success', 'File uploaded successfully');
-                    	me.displayMain();
+					Ext.Msg.alert(
+						me.textStore.getValueByCode('ssp.message.upload-documents.success-title','Success'),
+						me.textStore.getValueByCode('ssp.message.upload-documents.upload-successful','File uploaded successfully.')
+						);
+                   	me.displayMain();
                 },
                 failure: function (fp,o)
                 {
                 	if(o.result.message)
                 	{
-                		Ext.Msg.alert('Error',o.result.message);
+						Ext.Msg.alert(
+							me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
+							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure',o.result.message)
+							);
                 		return;
                 	}
                 	if(o.result.exception && o.result.exception.match('MaxUploadSizeExceededException'))
@@ -91,12 +98,19 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 		startPos = o.result.exception.indexOf('(',endPos) +1;
                 		endPos = o.result.exception.indexOf(')',startPos);
                 		var size = Math.round(o.result.exception.substring(startPos,endPos)/1000)
-                		Ext.Msg.alert('Error','The file you are trying to upload is too large.  Max file size is '+size+'kb');
+                		defaultMsg = 'The file you are trying to upload is too large.  Max file size is %MAX-SIZE%kb';
+						Ext.Msg.alert(
+							me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
+							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure',defaultMsg, {'%MAX-SIZE%':size})
+							);
                 		return;
                 	}
                 	if(o.result.exception)
                 	{
-                		Ext.Msg.alert('Error','There has been an error uploading your file.  Please contact the system administrator.');
+						Ext.Msg.alert(
+							me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
+							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure','There has been an error uploading your file.  Please contact the system administrator.')
+							);
                 		return;
                 	}                	
                 }
@@ -106,13 +120,19 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
 		{
 			var success = function ()
 			{
-            	Ext.Msg.alert('Success', 'Document information updated successfully');
-            	me.displayMain();	
+				Ext.Msg.alert(
+					me.textStore.getValueByCode('ssp.message.upload-documents.success-title','Success'),
+					me.textStore.getValueByCode('ssp.message.upload-documents.update-successful','Document information updated successfully')
+					);
+            	me.displayMain();
             };
             var failure = function()
             {
-            	Ext.Msg.alert('Updating document failed.  Please contact the system administrator.');
-            };		
+				Ext.Msg.alert(
+					me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
+					me.textStore.getValueByCode('ssp.message.upload-documents.update-failure','Updating document failed.  Please contact the system administrator.')
+					);
+            };
             me.getView().getForm().updateRecord();
 			// update
     		me.apiProperties.makeRequest({

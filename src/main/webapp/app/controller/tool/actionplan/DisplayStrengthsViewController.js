@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
         store: 'strengthsStore',
         apiProperties: 'apiProperties',
         confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
-        appEventsController: 'appEventsController'
+        appEventsController: 'appEventsController',
+        textStore: 'sspTextStore'
     },
     
     control: {
@@ -241,7 +242,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
             });
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Unable to delete strength.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.strengths.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.strengths.unable-to-delete-strength','Unable to delete strength.')
+				);
         }
     },
     
@@ -268,7 +272,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
             this.appEventsController.getApplication().fireEvent('deleteStrength');
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Please select a strength to delete.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.strengths.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.strengths.select-strength','Please select a strength to delete.')
+				);
         }
     }
     

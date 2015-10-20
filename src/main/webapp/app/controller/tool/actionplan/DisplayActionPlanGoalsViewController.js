@@ -28,7 +28,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
         personLite: 'personLite',
         preferences: 'preferences',
         store: 'goalsStore',
-        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     
     control: {
@@ -234,7 +235,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
             });
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Unable to delete goal.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.action-plans.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.action-plans.unable-to-delete-goal','Unable to delete goal.')
+				);
         }
     },
     
@@ -261,7 +265,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
             this.appEventsController.getApplication().fireEvent('deleteGoal');
         }
         else {
-            Ext.Msg.alert('SSP Error', 'Please select a goal to delete.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.action-plans.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.action-plans.select-goal','Please select a goal to delete.')
+				);
         }
     }
 });

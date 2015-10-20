@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     	confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
     	formUtils: 'formRendererUtils',
     	model: 'currentTask',
-    	personLite: 'personLite'
+    	personLite: 'personLite',
+    	textStore: 'sspTextStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -122,7 +123,10 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			model.data.dueDate = me.formUtils.toJSONStringifiableDate( model.data.dueDate );
 			if (id == "") {
 				if (origDueDateJSON['formattedStr'] < todayDateJSON['formattedStr']) {
-					Ext.Msg.alert('Error', 'The Target Date must be the current or a future date.');
+					Ext.Msg.alert(
+						me.textStore.getValueByCode('ssp.message.add-tasks.error-title','SSP Error'),
+						me.textStore.getValueByCode('ssp.message.add-tasks.target-date-error','The Target Date must be the current or a future date.')
+						);
 					return;
 				}
 			}
@@ -173,7 +177,10 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 	    		});    			
     		}
     	}else{
-    		Ext.Msg.alert('Error', 'Please correct the errors in your form before continuing.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.view-add-tasks.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.view-add-tasks.form-errors','Please correct the errors in your form before continuing.')
+				);
     	}
     },
 
