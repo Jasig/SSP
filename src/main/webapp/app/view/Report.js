@@ -66,7 +66,7 @@ Ext.define('Ssp.view.Report',{
 	  			  //Ext.Msg.alert('Notification','Please download your report.');
 	  		},
 			failure: function(response, options) {
-				Ext.Msg.alert('Notification',response.responseText);
+				Ext.Msg.alert(me.textStore.getValueByCode('ssp.message.reports.notification-title','Notification'),response.responseText);
 	  	    },
 			scope: me
 		},me);

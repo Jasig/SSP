@@ -137,7 +137,11 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 			}
 		}
 		if(eventsFound)
-			Ext.MessageBox.alert("Objects Not Removed", errorMessage + " <br><b>Please notify developers.</b>");
+			var defaultMsg = "%ERROR-MESSAGE% <br><b>Please notify developers.</b>";
+			Ext.MessageBox.alert(
+				me.textStore.getValueByCode('ssp.message.app-events.objects-not-removed-title','Objects Not Removed'),
+				me.textStore.getValueByCode('ssp.message.app-events.objects-not-removed-body', defaultMsg, {'%ERROR-MESSAGE%':errorMessage})
+				);
 	},
 
 	
@@ -145,14 +149,19 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 		var errorMessage = this.eventsDestroyed(this.events[view.id], view.id);
 		delete this.events[view.id];
 		if(errorMessage){
-			Ext.MessageBox.alert("Uncleaned Events", errorMessage + "You may continue. <br><b>Please notify developers.</b>");
+			var defaultMsg = "%ERROR-MESSAGE% You may continue. <br><b>Please notify developers.</b>";
+			Ext.MessageBox.alert(
+				me.textStore.getValueByCode('ssp.message.app-events.uncleaned-events-title','Uncleaned Events'),
+				me.textStore.getValueByCode('ssp.message.app-events.uncleaned-events-body', defaultMsg, {'%ERROR-MESSAGE%':errorMessage})
+				);
 		}
 	},
 	
 	eventsDestroyed: function(objEvents, objectId){
 		var errorMessage= false;
 		if(objEvents && objEvents.length > 0){
-			errorMessage = "Object: " + objectId + " did not clean all events. <br> Events that needed to be cleaned:<br>";
+			var defaultMsg = "Object: %OBJECT-ID% did not clean all events. <br> Events that needed to be cleaned:<br>";
+			errorMessage = me.textStore.getValueByCode('ssp.message.app-events.error-message', defaultMsg, {'%OBJECT-ID%':errorMessage});
 			for(var i = 0; i < objEvents.length; i++){
 				var args = objEvents[i];
 				errorMessage += "&nbsp;&nbsp;&nbsp;&nbsp;" + args.eventName + "<br>" ;
