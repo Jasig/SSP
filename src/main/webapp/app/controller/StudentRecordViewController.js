@@ -162,41 +162,47 @@ Ext.define('Ssp.controller.StudentRecordViewController', {
 
 		var url = me.getBaseUrl(me.authenticatedPerson.get('id'));
 	    if (!(me.person.watchId)) {
-			Ext.MessageBox.confirm('Watch Student', 'Are you sure you want to watch this student?', function(btn){
-				if (btn === 'yes') {
-		    		me.getWatchStudentButton().hide();
-		    		me.appEventsController.loadMaskOn();
-		    		me.apiProperties.makeRequest({
-		    			url: url, 
-		    			method: 'POST',
-		    			jsonData: watchStudent.data,
-		    			successFunc: me.successWatch,
-		    			failureFunc: me.failureWatch,
-		    			scope: me
-		    		});	
-				} else if (btn === 'no') {
-				   return;
-				}
-			});	
+			Ext.MessageBox.confirm(
+			    me.textStore.getValueByCode('ssp.message.student-record.confirm-watch-student-title','Watch Student'),
+			    me.textStore.getValueByCode('ssp.message.student-record.confirm-watch-student-body','Are you sure you want to watch this student?'),
+			    function(btn){
+                    if (btn === 'yes') {
+                        me.getWatchStudentButton().hide();
+                        me.appEventsController.loadMaskOn();
+                        me.apiProperties.makeRequest({
+                            url: url,
+                            method: 'POST',
+                            jsonData: watchStudent.data,
+                            successFunc: me.successWatch,
+                            failureFunc: me.failureWatch,
+                            scope: me
+                        });
+                    } else if (btn === 'no') {
+                       return;
+                    }
+                });
 
 	    } else {
-			Ext.MessageBox.confirm('Un-Watch Student', 'Are you sure you want to stop watching this student?', function(btn){
-				if (btn === 'yes') {
-			   	   	me.getWatchStudentButton().hide();
-			   	   	me.appEventsController.loadMaskOn();
-			   	   	watchStudent.set('id',me.person.watchId);
-		    		me.apiProperties.makeRequest({
-		    			url: url+'/'+watchStudent.get('id'), 
-		    			method: 'DELETE',
-		    			jsonData: watchStudent.data,
-		    			successFunc: me.successUnWatch,
-		    			failureFunc: me.failureUnWatch,
-		    			scope: me
-		    		});	
-				} else if(btn === 'no') {
-				   return;
-				}
-			});
+			Ext.MessageBox.confirm(
+			    me.textStore.getValueByCode('ssp.message.student-record.confirm-unwatch-student-title','Un-Watch Student'),
+			    me.textStore.getValueByCode('ssp.message.student-record.confirm-unwatch-student-body','Are you sure you want to stop watching this student?'),
+			    function(btn){
+                    if (btn === 'yes') {
+                        me.getWatchStudentButton().hide();
+                        me.appEventsController.loadMaskOn();
+                        watchStudent.set('id',me.person.watchId);
+                        me.apiProperties.makeRequest({
+                            url: url+'/'+watchStudent.get('id'),
+                            method: 'DELETE',
+                            jsonData: watchStudent.data,
+                            successFunc: me.successUnWatch,
+                            failureFunc: me.failureUnWatch,
+                            scope: me
+                        });
+                    } else if(btn === 'no') {
+                       return;
+                    }
+                });
 	    }
     },	   
 	onStudentRecordEditButtonClick: function(button){

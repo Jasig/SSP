@@ -224,13 +224,13 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
  
     deleteConfirmation: function() {
         var me=this;
-    	var message = 'You are about to delete a Journal Entry. Would you like to continue?';
+    	var defaultMsg = 'You are about to delete a Journal Entry. Would you like to continue?';
     	var model = me.model;
         if ( model.get('id') ) 
         {
            Ext.Msg.confirm({
-   		     title:'Delete Journal Entry?',
-   		     msg: message,
+   		     title: me.textStore.getValueByCode('ssp.message.journal.confirm-delete-title','Delete Journal Entry?'),
+   		     msg: me.textStore.getValueByCode('ssp.message.journal.confirm-delete-body',defaultMsg),
    		     buttons: Ext.Msg.YESNO,
    		     fn: me.deleteJournalEntry,
    		     scope: me

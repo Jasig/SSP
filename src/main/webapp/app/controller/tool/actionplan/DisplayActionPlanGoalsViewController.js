@@ -226,9 +226,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     
     deleteConfirmation: function(){
         if (this.model.get('id') != "") {
+            var defaultMsg = 'You are about to delete the goal: "%NAME%". Would you like to continue?';
             Ext.Msg.confirm({
-                title: 'Delete Goal?',
-                msg: 'You are about to delete the goal: "' + this.model.get('name') + '". Would you like to continue?',
+                title: me.textStore.getValueByCode('ssp.message.action-plans.confirm-delete-title','Delete Goal?'),
+                msg: me.textStore.getValueByCode('ssp.message.action-plans.confirm-delete-body',defaultMsg, {'%NAME%':this.model.get('name')}),
                 buttons: Ext.Msg.YESNO,
                 fn: this.deleteGoal,
                 scope: this

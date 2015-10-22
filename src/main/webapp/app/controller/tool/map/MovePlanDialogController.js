@@ -25,7 +25,8 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		termsStore:'termsStore',
 		currentMapPlan: 'currentMapPlan',
         configStore: 'configurationOptionsUnpagedStore',
-		semesterStores : 'currentSemesterStores'
+		semesterStores : 'currentSemesterStores',
+		textStore: 'sspTextStore'
     },
     control: {
     	termCodeToBumpField: '#termCodeToBump',
@@ -119,10 +120,10 @@ Ext.define('Ssp.controller.tool.map.MovePlanDialogController', {
 		me.bumpParams = {startTermCode:startTermCode, endTermCode:endTermCode, action:action};
 		if(action == 'removeTerm' && me.currentMapPlan.hasCourse(startTermCode)){
 			var startTerm = me.currentAndFutureTermsStore.findRecord('code', startTermCode, 0, false, false, true);
-			var message = startTerm.get('name') + ' has courses. Are you sure you want to delete it?'
+			var defaultMsg = '%NAME% has courses. Are you sure you want to delete it?'
 			Ext.Msg.confirm({
-       		     title:'Delete Term With Courses?',
-       		     msg: message,
+       		     title: me.textStore.getValueByCode('ssp.message.move-plan.confirm-delete-title','Delete Term With Courses?'),
+       		     msg: me.textStore.getValueByCode('ssp.message.move-plan.confirm-delete-body',defaultMsg,{'%NAME%':startTerm.get('name')}),
        		     buttons: Ext.Msg.YESNO,
        		     fn: me.movePlan,
        		     scope: me

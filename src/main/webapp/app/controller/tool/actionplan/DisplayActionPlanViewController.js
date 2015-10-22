@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
         goalsStore: 'goalsStore',
         strengthsStore: 'strengthsStore',
         personLite: 'personLite',
-        store: 'tasksStore'
+        store: 'tasksStore',
+        textStore: 'sspTextStore'
     },
     
     config: {
@@ -137,7 +138,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
         var msg = me.getTaskGoalCountNotificationMessage();
         if (msg.length > 0) {
             Ext.Msg.confirm({
-                title: ' Would you like to continue emailing?',
+                title: me.textStore.getValueByCode('ssp.message.action-plans.confirm-email-title','Would you like to continue emailing?'),
                 msg: msg,
                 buttons: Ext.Msg.YESNO,
                 fn: me.emailTasksConfirm,
@@ -173,7 +174,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
         var msg = me.getTaskGoalCountNotificationMessage();
         if (msg.length > 0) {
             Ext.Msg.confirm({
-                title: ' Would you like to continue printing??',
+                title: me.textStore.getValueByCode('ssp.message.action-plans.confirm-print-title','Would you like to continue printing?'),
                 msg: msg,
                 buttons: Ext.Msg.YESNO,
                 fn: me.printTasksConfirm,
@@ -239,11 +240,13 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanViewController', {
         // printing
         var notificationMsg = "";
         if (me.store.getCount() < 1) {
-            notificationMsg += "This student has " + me.store.getCount() + " assigned tasks.";
+            var defaultMsg = "This student has %COUNT% assigned tasks.";
+            notificationMsg += me.textStore.getValueByCode('ssp.message.action-plans.confirm-assigned-tasks-count',defaultMsg,{'%COUNT%':me.store.getCount()})
         }
         
         if (me.goalsStore.getCount() < 1) {
-            notificationMsg += "This student has " + me.goalsStore.getCount() + " assigned goals.";
+            var defaultMsg = "This student has %COUNT% assigned goals.";
+            notificationMsg += me.textStore.getValueByCode('ssp.message.action-plans.confirm-assigned-goals-count',defaultMsg,{'%COUNT%':me.goalsStore.getCount()})
         }
         
         return notificationMsg;

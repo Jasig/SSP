@@ -17,13 +17,18 @@
  * under the License.
  */
 Ext.define('Ssp.store.reference.Texts', {
-    extend: 'Ssp.store.reference.AbstractReferences',
+//    extend: 'Ssp.store.reference.AbstractReferences',   Even though this is store is a reference, it cannot extend AbstractReferences due to a circular reference with apiProperties
+	extend: 'Ext.data.Store',
     model: 'Ssp.model.reference.Text',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	apiUrlStore: 'apiUrlStore'
+    },
     constructor: function(){
     	this.callParent(arguments);
-    	
-    	var url = this.apiProperties.getItemUrl('blurb');
-		
+
+    	var url = this.getItemUrl('blurb');
+
 		Ext.apply(this.getProxy(),{url: this.getProxy().url + url,
     			autoLoad: true,
     			extraParams : {
@@ -34,7 +39,6 @@ Ext.define('Ssp.store.reference.Texts', {
     },
     getValueByCode:function(code, defaultVal, data)
     {
-    return code;
     	var me=this;
     	var index = me.findExact('code',code);
     	var str = '';
@@ -60,12 +64,20 @@ Ext.define('Ssp.store.reference.Texts', {
 		   return(output);
         }
    		return str;
-    }
-
-    /*load: function()
-    {
-    	alert('special load');
-    	this.callParent();
-    }*/
-
+    },
+	/*
+	 * Returns the base url of an item in the system.
+	 * @itemName - the name of the item to locate.
+	 * 	the returned item is returned by name from the apiUrlStore.
+	 */
+	getItemUrl: function( itemName ){
+		var index = this.apiUrlStore.findExact('name', itemName);
+		if(index == undefined || index < 0 )
+			return "";
+		var record = this.apiUrlStore.getAt(index);
+		var url = "";
+		if (record != null)
+			url = record.get('url');
+		return url;
+	},
 });

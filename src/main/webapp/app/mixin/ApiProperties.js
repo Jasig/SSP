@@ -24,7 +24,8 @@ Ext.define('Ssp.mixin.ApiProperties', {
     	baseApiUrl: ''
     },
     inject: {
-    	apiUrlStore: 'apiUrlStore' 
+    	apiUrlStore: 'apiUrlStore',
+    	textStore: 'sspTextStore'
     },
     statics: {
     	getBaseApiUrl: function(){
@@ -161,14 +162,15 @@ Ext.define('Ssp.mixin.ApiProperties', {
 	
 	handleError: function( response ) {
 		var me=this;
-		var msg = 'Status Error: ' + response.status + ' - ' + response.statusText;
+		var msg = me.textStore.getValueByCode('ssp.message.error-body','Status Error: %RESPONSE-STATUS% - %RESPONSE-STATUS-TEXT%',{'%RESPONSE-STATUS%':response.status,'%RESPONSE-STATUS-TEXT%':response.statusText});
 		var r;
 
 		if (response.status==403)
 		{
 			Ext.Msg.confirm({
-	   		     title:'Access Denied Error',
-	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+	   		     title: me.textStore.getValueByCode('ssp.message.error-access-denied-title','Access Denied Error'),
+	   		     msg: me.textStore.getValueByCode('ssp.message.error-access-denied-body',
+	   		     		"It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?"),
 	   		     buttons: Ext.Msg.YESNO,
 	   		     fn: function( btnId ){
 	   		    	if (btnId=="yes")
@@ -187,7 +189,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 		// Handle call not found result
 		if (response.status==404 || response.status==405 || response.status==400)
 		{
-			Ext.Msg.alert('SSP Error', msg);
+		    Ext.Msg.alert(
+			    me.textStore.getValueByCode('ssp.message.error-title','SSP Error'),
+			    msg
+			    );
 		}
 
 		if ( response.status==500 )
@@ -202,11 +207,16 @@ Ext.define('Ssp.mixin.ApiProperties', {
 					{
 						if ( r.message != "")
 						{
-							msg = msg + " " + r.message;
-							Ext.Msg.alert('SSP Error', msg);							
+							Ext.Msg.alert(
+								me.textStore.getValueByCode('ssp.message.error-title','SSP Error'),
+								me.textStore.getValueByCode('ssp.message.500-error-body',msg + ' %MESSAGE%',{'%MESSAGE%':r.message})
+								);
 						}
 					}else{
-						Ext.Msg.alert('Internal Server Error - 500', 'Unable to determine the source of this error. See logs for additional details.');
+						Ext.Msg.alert(
+							me.textStore.getValueByCode('ssp.message.500-error-title','Internal Server Error - 500'),
+							me.textStore.getValueByCode('ssp.message.500-error-no-message','Unable to determine the source of this error. See logs for additional details.')
+							);
 					}
 				}
 			}
@@ -225,7 +235,10 @@ Ext.define('Ssp.mixin.ApiProperties', {
 						if ( r.message != "")
 						{
 							msg = msg + " " + r.message;
-							Ext.Msg.alert('SSP Error', msg);							
+							Ext.Msg.alert(
+								me.textStore.getValueByCode('ssp.message.error-title','SSP Error'),
+								me.textStore.getValueByCode('ssp.message.200-error-body',msg + ' %MESSAGE%',{'%MESSAGE%':r.message})
+								);
 						}
 					}
 				}

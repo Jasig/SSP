@@ -199,7 +199,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 		
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -230,7 +233,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -265,7 +271,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -296,7 +305,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -326,7 +338,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	onPersonToolbarEdit: function(studentRecordViewController){
 		var me = this;
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -358,7 +373,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -388,7 +406,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	onAdminNav: function(mainViewController){
 		var me = this;
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -418,7 +439,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	onStudentsNav: function(mainViewController){
 		var me = this;
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -449,7 +473,10 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
 
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
-			Ext.MessageBox.confirm('Unsaved MAP Data', 'You have unsaved MAP data, do you wish to save it?', function(btn){
+			Ext.MessageBox.confirm(
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				function(btn){
 				if(btn === 'yes'){
 					if ( me.currentMapPlan.get('isTemplate') ) {
 						// Cleanup template popups b/c not sure if they can be reused and if
@@ -530,8 +557,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			defaultTitle = 'Plan Status for %FULL-NAME%.';
 			defaultMsg = 'Plan Status: %PLAN-STATUS%<br> Details: %PLAN-STATUS-DETAILS%';
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.load-template.plan-status-title',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails}),
-				me.textStore.getValueByCode('ssp.message.load-template.plan-status-body',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails})
+				me.textStore.getValueByCode('ssp.message.map.plan-status-title',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails}),
+				me.textStore.getValueByCode('ssp.message.map.plan-status-body',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails})
 				);
 		} else {
 		   if (me.showMapStatusPopup == null || me.showMapStatusPopup.isDestroyed) {
@@ -597,11 +624,19 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
     	if(me.currentMapPlan.isDirty(me.semesterStores)){
 			if(me.currentMapPlan.get("isTemplate")){
-				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedLoadingPlans, me);
+				Ext.Msg.confirm(
+					me.textStore.getValueByCode('ssp.message.map.confirm-template-change-title',"Template Has Changed!"),
+					me.textStore.getValueByCode('ssp.message.map.confirm-template-change-body',"It appears the template has been altered. Do you wish to save your changes?"),
+					me.templateDataChangedLoadingPlans,
+					me);
 				
 			}
 			else
-				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedLoadingPlans, me);
+				Ext.Msg.confirm(
+					me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title',"Map Plan Has Changed!"),
+					me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-body',"It appears the MAP plan has been altered. Do you wish to save your changes?"),
+					me.planDataChangedLoadingPlans,
+					me);
 		}else{
 			me.loadPlanDialog()
 		}
@@ -677,11 +712,19 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
     	var me = this;
     	if(me.currentMapPlan.isDirty(me.semesterStores)){
 			if(me.currentMapPlan.get("isTemplate")){
-				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedLoadingTemplate, me);
-				
+				Ext.Msg.confirm(
+					me.textStore.getValueByCode('ssp.message.map.confirm-template-change-title',"Template Has Changed!"),
+					me.textStore.getValueByCode('ssp.message.map.confirm-template-change-body',"It appears the template has been altered. Do you wish to save your changes?"),
+					me.templateDataChangedLoadingTemplate,
+					me);
+
 			}
 			else
-				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedLoadingTemplate, me);
+				Ext.Msg.confirm(
+					me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title',"Map Plan Has Changed!"),
+					me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-body',"It appears the MAP plan has been altered. Do you wish to save your changes?"),
+					me.planDataChangedLoadingTemplate,
+					me);
 		}else{
 			me.loadTemplateDialog()
 		}
@@ -779,11 +822,19 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		var me = this;
     	if(me.currentMapPlan.isDirty(me.semesterStores)){
 			if(me.currentMapPlan.get("isTemplate")){
-				Ext.Msg.confirm("Template Has Changed!", "It appears the template has been altered. Do you wish to save your changes?", me.templateDataChangedNewMap, me);
+				Ext.Msg.confirm(
+					me.textStore.getValueByCode('ssp.message.map.confirm-template-change-title',"Template Has Changed!"),
+					me.textStore.getValueByCode('ssp.message.map.confirm-template-change-body',"It appears the template has been altered. Do you wish to save your changes?"),
+					me.templateDataChangedNewMap,
+					me);
 				
 			}
 			else
-				Ext.Msg.confirm("Map Plan Has Changed!", "It appears the MAP plan has been altered. Do you wish to save your changes?", me.planDataChangedNewMap, me);
+				Ext.Msg.confirm(
+					me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title',"Map Plan Has Changed!"),
+					me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-body',"It appears the MAP plan has been altered. Do you wish to save your changes?"),
+					me.planDataChangedNewMap,
+					me);
 		}else{
 			me.appEventsController.getApplication().fireEvent("onBeforePlanLoad");
 			me.mapEventUtils.createNewMapPlan();
@@ -801,7 +852,11 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
  	onCancelMapButtonClick: function(button){
  		var me=this;
-        Ext.MessageBox.confirm("Cancel", "Are you sure you want to cancel?", me.confirmCancel, me);
+        Ext.MessageBox.confirm(
+			me.textStore.getValueByCode('ssp.message.map.confirm-cancel-title','Cancel'),
+			me.textStore.getValueByCode('ssp.message.map.confirm-cancel-body','Are you sure you want to cancel?'),
+        	me.confirmCancel,
+        	me);
  	},
 
  	confirmCancel: function (buttonId) {

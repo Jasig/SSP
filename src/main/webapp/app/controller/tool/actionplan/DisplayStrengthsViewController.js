@@ -233,9 +233,10 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
     
     deleteConfirmation: function(){
         if (this.model.get('id') != "") {
+            var defaultMsg = 'You are about to delete the strength: "%NAME%". Would you like to continue?';
             Ext.Msg.confirm({
-                title: 'Delete Strength?',
-                msg: 'You are about to delete the strength: "' + this.model.get('name') + '". Would you like to continue?',
+                title: me.textStore.getValueByCode('ssp.message.strengths.confirm-delete-title','Delete Strength?'),
+                msg: me.textStore.getValueByCode('ssp.message.strengths.confirm-delete-body',defaultMsg,{'%NAME%':this.model.get('name')}),
                 buttons: Ext.Msg.YESNO,
                 fn: this.deleteStrength,
                 scope: this

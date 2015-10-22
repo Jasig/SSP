@@ -511,18 +511,18 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 				me.textStore.getValueByCode('ssp.message.semester-panel.move-plan-aborted-body',defaultMsg)
 				);
 		}else if(maps.numberToRemove > 0){
-			var message = 'Completing the move will overwrite ' + maps.numberToRemove + ' courses. Do you wish to?';
+			var message = 'Completing the move will overwrite %COUNT% courses. Do you wish to?';
 			
 			var messageBox = Ext.Msg.confirm({
-       		     title:'Delete Courses ?',
-       		     msg: message,
+       		     title: me.textStore.getValueByCode('ssp.message.semester-panel.confirm-delete-title','Delete Courses ?'),
+       		     msg: me.textStore.getValueByCode('ssp.message.semester-panel.confirm-delete-body',message,{'%COUNT%':maps.numberToRemove}),
        		     buttons: Ext.Msg.YESNOCANCEL,
        		     fn: me.completeBump,
        		     scope: me
        		});
-			messageBox.msgButtons['yes'].setText("Overwrite Courses");
-		    messageBox.msgButtons['no'].setText("Append Courses");
-		    messageBox.msgButtons['cancel'].setText("Cancel");
+			messageBox.msgButtons['yes'].setText(me.textStore.getValueByCode('ssp.message.semester-panel.confirm-yes-button-text',"Overwrite Courses"));
+		    messageBox.msgButtons['no'].setText(me.textStore.getValueByCode('ssp.message.semester-panel.confirm-no-button-text',"Append Courses"));
+		    messageBox.msgButtons['cancel'].setText(me.textStore.getValueByCode('ssp.message.semester-panel.confirm-cancel-button-text',"Cancel"));
 		}else
 			me.completeBump('yes');
 	},
@@ -566,10 +566,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    	me.onValidateAccept('ok');
 		else{
 			var validationResponse = me.clonedMap.getPlanValidation();
+			var defaultMsg = "%MESSAGE%\n Do you wish to continue with the move?"
 			if(!validationResponse.valid){
 				Ext.Msg.confirm({
-       		     	title:'Invalid Courses',
-       		     	msg: validationResponse.message + "\n Do you wish to continue with the move?",
+       		     	title: me.textStore.getValueByCode('ssp.message.save-template.confirm-validation-title','Invalid Courses'),
+       		     	msg: me.textStore.getValueByCode('ssp.message.save-template.confirm-validation-body',defaultMsg,{'%MESSAGE%':validationResponse.message}),
        		     	buttons: Ext.Msg.OKCANCEL,
        		     	fn: me.onValidateAccept,
        		     	scope: me
@@ -583,8 +584,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		
 		me.getView().setLoading(false);
 		Ext.Msg.confirm({
-  		     title:'Server Error On Validation',
-  		     msg: "Server Error unable to validate. Should continue?",
+  		     title: me.textStore.getValueByCode('ssp.message.save-template.confirm-validation-failure-title','Server Error On Validation'),
+  		     msg: me.textStore.getValueByCode('ssp.message.save-template.confirm-validation-failure-body',"Server Error unable to validate. Should continue?"),
   		     buttons: Ext.Msg.OKCANCEL,
   		     fn: me.onValidateAccept,
   		     scope: me

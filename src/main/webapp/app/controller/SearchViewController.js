@@ -1210,15 +1210,15 @@ Ext.define('Ssp.controller.SearchViewController', {
 	},
 	promptWithExportCount: function(count) {
 		var me = this;
-		var message;
+		var defaultMsg = "%COUNT% user/s will be exported. <span style=\";font-weight: bold\">Continue</span> ?";
 		count = parseInt(count);
 		// loadMaskOff() copy/pasted in all prompt*() functions to try to delay that dismissal as long
 		// as possible... let all 'background' lookup and computation complete before we re-engage the UI
 		me.appEventsController.loadMaskOff();
 
 		Ext.Msg.confirm({
-			title:'Confirm',
-			msg: count + " user/s will be exported. <span style=\";font-weight: bold\">Continue</span> ?",
+			title: me.textStore.getValueByCode('ssp.message.search.confirm-title','Confirm'),
+			msg: me.textStore.getValueByCode('ssp.message.search.confirm-export-count',defaultMsg,{'%COUNT%':count}),
 			buttons: Ext.Msg.OKCANCEL,
 			fn: me.onExportConfirm,
 			scope: me
@@ -1251,7 +1251,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 			var defaultMsg = '%COUNT% users/s will be emailed. If a Journal Entry is selected when composing the email, the actual number MAY BE LESS. (Selected users who are not currently activated (typically unassigned) will be excluded from the Journal Entry creation.) <br/><br/><span style=\";font-weight: bold\">Continue</span>?';
 			Ext.Msg.confirm({
 				title: me.textStore.getValueByCode('ssp.message.search.confirm-title','Confirm'),
-				msg: me.textStore.getValueByCode('ssp.message.search.confirm-email',defaultMsg,{'%COUNT%':count}),
+				msg: me.textStore.getValueByCode('ssp.message.search.confirm-email-count',defaultMsg,{'%COUNT%':count}),
 				buttons: Ext.Msg.OKCANCEL,
 				fn: me.onBulkEmailConfirm,
 				scope: me
@@ -1281,10 +1281,10 @@ Ext.define('Ssp.controller.SearchViewController', {
 				);
 			return;
 		}
-		var msg = "<p>ATTENTION: " + count + " users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status. Actual number MAY BE LESS. </p><p>Selected students " +
+		var defaultMsg = "<p>ATTENTION: " + count + " users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status. Actual number MAY BE LESS. </p><p>Selected students " +
 			"already with '%PROGRAM-STATUS-NAME%' status and selected students who are not currently activated (typically unassigned) and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
 		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
-			msg = "<p>ATTENTION: %COUNT% users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status with a bulk reason" +
+			defaultMsg = "<p>ATTENTION: %COUNT% users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status with a bulk reason" +
 			    " (see next dialog).<p> <p> Actual number MAY BE LESS. </p><p>Selected users " +
 				" with '%PROGRAM-STATUS-NAME%'  status, and selected users who are not currently activated (typically unassigned)" +
 				" and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
@@ -1292,7 +1292,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 
 		Ext.Msg.confirm({
 			title: me.textStore.getValueByCode('ssp.message.search.confirm-title','Confirm'),
-			msg: me.textStore.getValueByCode('ssp.message.search.confirm-bulk-program-status-change-count',msg,{'%COUNT%':count,'%PROGRAM-STATUS-NAME%':programStatusName}),
+			msg: me.textStore.getValueByCode('ssp.message.search.confirm-bulk-program-status-change-count',defaultMsg,{'%COUNT%':count,'%PROGRAM-STATUS-NAME%':programStatusName}),
 			buttons: Ext.Msg.OKCANCEL,
 			fn: me.newOnBulkProgramStatusChangeConfirm(action),
 			scope: me
@@ -1322,12 +1322,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 				);
 			return;
 		}
-		var msg = "<p>ATTENTION: %COUNT% selected users will be considered for %WATCH-ACTION-NAME%"
+		var defaultMsg = "<p>ATTENTION: %COUNT% selected users will be considered for %WATCH-ACTION-NAME%"
 	        ". Actual number MAY BE LESS.</p><p>(Selected users " +
 			"who are not currently activated (typically unassigned) will be excluded from this action.)</p><p style=\"text-align:center;font-weight: bold\"><br/>Continue ?</p>";
 		Ext.Msg.confirm({
 			title: me.textStore.getValueByCode('ssp.message.search.confirm-title','Confirm'),
-			msg: me.textStore.getValueByCode('ssp.message.search.watch-action-confirm-body',defaultMsg,{'%WATCH-ACTION-NAME%':watchActionName,'%COUNT%':count}),
+			msg: me.textStore.getValueByCode('ssp.message.search.confirm-watch-action',defaultMsg,{'%WATCH-ACTION-NAME%':watchActionName,'%COUNT%':count}),
 			buttons: Ext.Msg.OKCANCEL,
 			fn: me.newOnBulkWatchChangeConfirm(action),
 			scope: me

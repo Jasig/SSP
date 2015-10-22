@@ -133,8 +133,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			successFunc = function(response ,view){
 					model.data.dueDate = origDueDate;
 		    	   Ext.Msg.confirm({
-		    		     title:'Success',
-		    		     msg: 'The task was saved successfully. Would you like to create another task?',
+		    		     title:me.textStore.getValueByCode('ssp.message.add-tasks.confirm-success-title','Success'),
+		    		     msg: me.textStore.getValueByCode('ssp.message.add-tasks.confirm-success-body','The task was saved successfully. Would you like to create another task?'),
 		    		     buttons: Ext.Msg.YESNO,
 		    		     fn: me.createTaskConfirmResult,
 		    		     scope: me

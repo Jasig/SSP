@@ -198,16 +198,19 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
     
     deleteConfirmation: function(){
-        var message = 'You are about to delete the task: "' + this.model.get('name') + '". Would you like to continue?';
+        var message = me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-body',
+                            'You are about to delete the task: "%NAME%". Would you like to continue?',
+                            {'%NAME%':this.model.get('name')});
         var model = this.model;
         if (model.get('id') != "") {
             // test if this is a student task
             if (model.get('createdBy').id == this.personLite.get('id')) {
-                message = "WARNING: You are about to delete a task created by this student. Would you like to continue?";
+                message = me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-student-task-body',
+                                    'WARNING: You are about to delete a task created by this student. Would you like to continue?');
             }
-            
+
             Ext.Msg.confirm({
-                title: 'Delete Task?',
+                title: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-title','Delete Task?'),
                 msg: message,
                 buttons: Ext.Msg.YESNO,
                 fn: this.deleteTask,

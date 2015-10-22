@@ -193,25 +193,26 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 					var departmentCode = me.getView().query('combobox[name="departmentCode"]')[0].getValue();
 					var noProgramCode = (programCode == null || programCode.length <= 1);
 					var noDepartmentCode = (departmentCode == null || departmentCode.length <= 1);
-					
+					var message = "It is recommended that you save a public Template associated to a specific program and a department. " +
+									(noProgramCode ? "Program" : "") +
+									(noProgramCode && noDepartmentCode ? " and " : "") +
+									(noDepartmentCode ? "Department" : "") +
+									(noProgramCode && noDepartmentCode ? " are " : " is ") +
+									"not currently selected. Please select preferred option.";
+					var yesButtonText = "Save with No " + (noProgramCode ? "Program" : "")
+										+ (noProgramCode && noDepartmentCode ? "/" : "")
+										+ (noDepartmentCode ? "Department" : "");
 					if (noProgramCode || noDepartmentCode) {
 						var messageBox = Ext.Msg.confirm({
-							title: 'Save Template No Program/Department Selected',
-							msg: "It is recommended that you save a public Template associated to a specific program and a department. " +
-							(noProgramCode ? "Program" : "") +
-							(noProgramCode && noDepartmentCode ? " and " : "") +
-							(noDepartmentCode ? "Department" : "") +
-							(noProgramCode && noDepartmentCode ? " are " : " is ") +
-							"not currently selected. Please select preferred option.",
+							title: me.textStore.getValueByCode('ssp.message.save-template.confirm-save-title','Save Template No Program/Department Selected'),
+							msg: me.textStore.getValueByCode('ssp.message.save-template.confirm-save-body',message,{'%PROGRAM-CODE%':noProgramCode,'%DEPARTMENT-CODE%':noDepartmentCode}),
 							buttons: Ext.Msg.YESNOCANCEL,
 							fn: me.completeSave,
 							scope: me
 						});
-						messageBox.msgButtons['yes'].setText("Save with No " + (noProgramCode ? "Program" : "") +
-						(noProgramCode && noDepartmentCode ? "/" : "") +
-						(noDepartmentCode ? "Department" : ""));
-						messageBox.msgButtons['no'].setText("Return To Save Dialog");
-						messageBox.msgButtons['cancel'].setText("Cancel Save");
+						messageBox.msgButtons['yes'].setText(me.textStore.getValueByCode('ssp.message.save-template.confirm-yes-button-text',yesButtonText));
+						messageBox.msgButtons['no'].setText(me.textStore.getValueByCode('ssp.message.save-template.confirm-no-button-text',"Return To Save Dialog"));
+						messageBox.msgButtons['cancel'].setText(me.textStore.getValueByCode('ssp.message.save-template.confirm-cancel-button-text',"Cancel Save"));
 						return;
 					}
 				}

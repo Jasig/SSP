@@ -128,9 +128,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     },
     
     deleteAllConfirmation: function(){
+         var defaultMsg = 'You are about to delete all tasks in the task list. Would you like to continue?';
         Ext.Msg.confirm({
-            title: 'Delete Tasks?',
-            msg: 'You are about to delete all tasks in the task list. Would you like to continue?',
+            title: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-all-title','Delete Tasks?'),
+            msg: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-all-body',defaultMsg),
             buttons: Ext.Msg.YESNO,
             fn: this.deleteAllTasks,
             scope: this
@@ -147,10 +148,10 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     },
     
     deleteConfirmation: function(){
-    
+        var defaultMsg = 'You are about to delete the task in the task list: "%NAME%". Would you like to continue?';
         Ext.Msg.confirm({
-            title: 'Delete Task?',
-            msg: 'You are about to delete the task in the task list: "' + this.model.get('name') + '". Would you like to continue?',
+            title: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-title','Delete Task?'),
+            msg: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-body',defaultMsg,{'%NAME%':this.model.get('name')}),
             buttons: Ext.Msg.YESNO,
             fn: this.deleteTask,
             scope: this

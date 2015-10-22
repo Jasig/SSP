@@ -339,12 +339,15 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 				if (planCourse) {
 				    var invalidReasons = planCourse.invalidReasons;
                     if(!me.currentMapPlan.get("isValid") &&  invalidReasons != null && invalidReasons.length > 1 && courseOp.op === 'MOVE') {
-                        var message = " \n Are you sure you want to add the course? " +
-                            planCourse.formattedCourse +
-                            " generates the following concerns: " +
-                            invalidReasons;
+                        var defaultMsg = " \n Are you sure you want to add the course? %FORMATTED-COURSE% generates the following concerns: %INVALID-REASONS%";
                         awaitingUser = true;
-                        Ext.MessageBox.confirm("Adding Course Invalidates Plan", message, me.newOnConfirmInvalidCourseOp(courseOp), me);
+                        Ext.MessageBox.confirm(
+                        	me.textStore.getValueByCode('ssp.message.save-template.confirm-add-course-invalidate-title',"Adding Course Invalidates Plan"),
+                        	me.textStore.getValueByCode('ssp.message.save-template.confirm-add-course-invalidate-body',
+                        								defaultMsg,
+                        								{'%FORMATTED-COURSE%':planCourse.formattedCourse,'%INVALID-REASONS%':invalidReasons}),
+                        	me.newOnConfirmInvalidCourseOp(courseOp),
+                        	me);
                     } else {
                         // no user feedback needed, fall through to dirty flag and spinner mgmt
                     }
