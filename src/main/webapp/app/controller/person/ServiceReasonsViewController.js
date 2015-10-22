@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
         person: 'currentPerson',
         store: 'serviceReasonsAllUnpagedStore',
 		itemSelectorInitializer: 'itemSelectorInitializer',
-		service: 'serviceReasonsService'
+		service: 'serviceReasonsService',
+        textStore: 'sspTextStore'
     },
 	
 	init: function() {
@@ -49,12 +50,12 @@ Ext.define('Ssp.controller.person.ServiceReasonsViewController', {
         me.store.clearFilter(true);
         me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedServiceReasons);
 		
-		
-
+		var assigned = me.textStore.getValueByCode('ssp.message.service-reasons.assigned','Assigned to the Student');
+		var available = me.textStore.getValueByCode('ssp.message.service-reasons.available','Available Service Reasons');
         me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedServiceReasons, {
             itemId: 'serviceReasonsItemSelector',
             name: 'serviceReasons',
-            fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Service Reasons</div>',
+            fieldLabel: '<div style="float:right; width: 48%; ">' + assigned + '</div><div style="width: 50%;">' + available + '</div>',
 			labelAlign: 'top',
 			labelSeparator: ' ',
             store: me.store

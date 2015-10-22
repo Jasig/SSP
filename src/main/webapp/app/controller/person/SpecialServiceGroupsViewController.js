@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
     	person: 'currentPerson',
     	store: 'specialServiceGroupsAllUnpagedStore',
     	service: 'specialServiceGroupService',
-        itemSelectorInitializer: 'itemSelectorInitializer'        
+        itemSelectorInitializer: 'itemSelectorInitializer',
+        textStore: 'sspTextStore'
     },
 	init: function() {
 		var me=this;
@@ -48,12 +49,12 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
         me.store.clearFilter(true);
         me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedSpecialServiceGroups);
 		
-		
-
+		var assigned = me.textStore.getValueByCode('ssp.message.special-service-groups.assigned','Assigned to the Student');
+		var available = me.textStore.getValueByCode('ssp.message.special-service-groups.available','Available Service Groups');
         me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedSpecialServiceGroups, {
             itemId: 'specialServiceGroupsItemSelector',
             name: 'specialServiceGroups',
-            fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Service Groups</div>',
+            fieldLabel: '<div style="float:right; width: 48%; ">' + assigned + '</div><div style="width: 50%;">' + available + '</div>',
 			labelAlign: 'top',
 			labelSeparator: ' ',
             store: me.store

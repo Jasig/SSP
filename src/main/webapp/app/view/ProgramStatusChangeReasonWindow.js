@@ -24,11 +24,11 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
     controller: 'Ssp.controller.ProgramStatusChangeReasonWindowViewController',
     inject: {
     	personLite: 'personLite',
-    	store: 'programStatusChangeReasonsActiveUnpagedStore'
+    	store: 'programStatusChangeReasonsActiveUnpagedStore',
+    	textStore: 'sspTextStore'
     },
 	width: '100%',
 	height: '100%',
-	title: 'Please provide a reason the student will no longer be participating:',
 	config: {
 		actionCallbacks: null,
 		isBulk: false
@@ -39,6 +39,7 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
     			   {
 				    modal: true, 
 		    		layout: 'anchor',
+					title: this.textStore.getValueByCode('ssp.label.program-status-change-reason.title','Please provide a reason the student will no longer be participating:'),
     				items: [
 					// tbspacer ensures a little bit of breathing room at the top of the form.
 					// not sure why exactly, but if the student name displayfield is hidden
@@ -58,8 +59,8 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
     			        xtype: 'combobox',
     			        itemId: 'programStatusChangeReasonCombo',
     			        name: 'programStatusChangeReasonId',
-    			        fieldLabel: 'Reason',
-    			        emptyText: 'Select One',
+    			        fieldLabel: me.textStore.getValueByCode('ssp.label.program-status-change-reason.reason','Reason'),
+    			        emptyText: me.textStore.getValueByCode('ssp.empty-text.program-status-change-reason.reason','Select One'),
     			        store: me.store,
     			        valueField: 'id',
     			        displayField: 'name',
@@ -72,12 +73,12 @@ Ext.define('Ssp.view.ProgramStatusChangeReasonWindow', {
     		               xtype: 'toolbar',
     		               dock: 'bottom',
     		               items: [{
-		       		                   text: 'Save',
+		       		                   text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
 		       		                   xtype: 'button',
 		       		                   action: 'save',
 		       		                   itemId: 'saveButton'
 		       		               }, '-', {
-		       		                   text: 'Cancel',
+		       		                   text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 		       		                   xtype: 'button',
 		       		                   action: 'cancel',
 		       		                   itemId: 'cancelButton'

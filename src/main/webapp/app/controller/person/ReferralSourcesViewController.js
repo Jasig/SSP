@@ -26,7 +26,8 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
     	person: 'currentPerson',
         store: 'referralSourcesAllUnpagedStore',
         service: 'referralSourceService',
-        itemSelectorInitializer: 'itemSelectorInitializer'
+        itemSelectorInitializer: 'itemSelectorInitializer',
+        textStore: 'sspTextStore'
     },
 	init: function() {
 		var me=this;
@@ -49,10 +50,12 @@ Ext.define('Ssp.controller.person.ReferralSourcesViewController', {
         me.store.clearFilter(true);
         me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedReferralSources);
 
+		var assigned = me.textStore.getValueByCode('ssp.message.referral-sources.assigned','Assigned to the Student');
+		var available = me.textStore.getValueByCode('ssp.message.referral-sources.available','Available Referral Sources');
         me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedReferralSources, {
             itemId: 'referralSourcesItemSelector',
             name: 'referralSources',
-			fieldLabel: '<div style="float:right; width: 48%; ">Assigned to the Student</div><div style="width: 50%;">Available Referral Sources</div>',
+			fieldLabel: '<div style="float:right; width: 48%; ">' + assigned + '</div><div style="width: 50%;">' + available + '</div>',
 			labelAlign: 'top',
 			labelSeparator: ' ',
             store: me.store
