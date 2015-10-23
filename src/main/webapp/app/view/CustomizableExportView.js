@@ -19,15 +19,17 @@
 Ext.define('Ssp.view.CustomizableExportView', {
     extend: 'Ext.window.Window',
     alias: 'widget.customizableexportview',
-    mixins: ['Deft.mixin.Controllable'],
+    mixins: ['Deft.mixin.Injectable','Deft.mixin.Controllable'],
     controller: 'Ssp.controller.CustomizableExportController',
+    inject: {
+    	textStore: 'sspTextStore'
+    },
     config: {
         bulkCriteria: null
     },
     height: 300,
     width: 700,
     resizable: true,
-    title: 'Custom Export to CSV',
     initComponent: function() {
         var me = this;
             Ext.apply(me, {
@@ -35,6 +37,7 @@ Ext.define('Ssp.view.CustomizableExportView', {
                 align: 'stretch',
                 type: 'vbox'
             },
+            title: this.textStore.getValueByCode('ssp.label.custom-export.title','Custom Export to CSV'),
             defaults: {
                 border: 'false',
                 fieldLabel: ''
@@ -43,7 +46,8 @@ Ext.define('Ssp.view.CustomizableExportView', {
             bodyPadding: 8,
             items: [{
                 xtype: 'label',
-                text: 'Select items below to be included in the export file along with the mandatory student name/id fields and hit Export when done.'
+                text: this.textStore.getValueByCode('ssp.label.custom-export.select-items-below',
+                            'Select items below to be included in the export file along with the mandatory student name/id fields and hit Export when done.')
             }, {
                 xtype: 'checkboxgroup',    //TODO refactor possibly dynamic push checkboxes and labels
 				columns: 3,
@@ -58,88 +62,89 @@ Ext.define('Ssp.view.CustomizableExportView', {
                     xtype: 'checkbox',   //TODO Slave these to existing blurbs or create new?
                     name: 'address',
                     itemId: 'address',
-                    boxLabel: 'Address'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.address','Address')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'alternate',
                     name: 'alternateContact',
-                    boxLabel: 'Alternate Contact Information'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.alt-contact-information','Alternate Contact Information')
                 }, {
                     xtype: 'checkbox',
                     name: 'sspStatus',
                     itemId: 'sspstatus',
-                    boxLabel: 'SSP Status'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.ssp-status','SSP Status')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'demographics',
                     name: 'demographics',
                     hidden: true,
-                    boxLabel: 'Demographics'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.demographics','Demographics')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'degree',
                     name: 'academicProgram',
-                    boxLabel: 'Academic Program'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.academic-program','Academic Program')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'gpa',
                     name: 'academicGpa',
-                    boxLabel: 'Academic GPA'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.academic-gpa','Academic GPA')
                 }, {
                     xtype: 'checkbox',
                     name: 'academicStanding',
                     itemId: 'academicStanding',
-                    boxLabel: 'Academic Standing'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.academic-standing','Academic Standing')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'department',
                     name: 'department',
-                    boxLabel: 'Department'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.department','Department')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'serviceReasons',
                     name: 'serviceReasons',
-                    boxLabel: 'Service Reasons'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.service-reasons','Service Reasons')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'referralSources',
                     name: 'referralSources',
-                    boxLabel: 'Referral Sources'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.referral-sources','Referral Sources')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'specialServiceGroups',
                     name: 'specialServiceGroups',
-                    boxLabel: 'Special Service Groups'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.special-service-groups','Special Service Groups')
                 }, {
                     xtype: 'checkbox',
                     name: 'sapStatus',
                     itemId: 'sapStatus',
-                    boxLabel: 'SAP Status'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.sap-status','SAP Status')
                 }, {
                     xtype: 'checkbox',
                     name: 'startTermYear',
                     itemId: 'startTermYear',
-                    boxLabel: 'Start Term/Year'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.start-term-year','Start Term/Year')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'faCompletionRate',
                     name: 'faCompletionRate',
-                    boxLabel: 'FA Completion Rate',
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.fa-completion-rate','FA Completion Rate'),
                     hidden: true
                 }, {
                     xtype: 'checkbox',
                     itemId: 'mapInfo',
                     name: 'mapInfo',
-                    boxLabel: 'MAP Information'
+                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.map-information','MAP Information')
                 }, {
                      xtype: 'checkbox',
                      name: 'extra',
                      itemId: 'extra',
-                     boxLabel: 'Misc. Student Info from Search'
+                     boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.miscellaneous','Misc. Student Info from Search')
                 }]
             }, {
                 xtype: 'label',
-                text: 'Please include only those fields which are necessary as the report will run slower with more students and/or options selected.'
+                text: this.textStore.getValueByCode('ssp.label.custom-export.please-include-only',
+                            'Please include only those fields which are necessary as the report will run slower with more students and/or options selected.')
             }],
             dockedItems: [{
                 xtype: 'toolbar',
@@ -147,12 +152,12 @@ Ext.define('Ssp.view.CustomizableExportView', {
                 items: [{
                     xtype: 'button',
                     itemId: 'exportButton',
-                    text: 'Export'
+                    text: this.textStore.getValueByCode('ssp.label.export-button','Export')
 
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
-                    text: 'Cancel'
+                    text: this.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                 }]
 
             }]

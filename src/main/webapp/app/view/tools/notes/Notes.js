@@ -22,16 +22,16 @@ Ext.define('Ssp.view.tools.notes.Notes', {
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
    inject: {
-       store: 'personNotesStore'
+       store: 'personNotesStore',
+       textStore: 'sspTextStore'
     },
     minHeight: '400',
     width: '98%',
     height: '100%',
     controller: 'Ssp.controller.tool.notes.NotesViewController',
     autoScroll: true,
-	title: 'Notes and Communication to Student',
 	renderDate: function(val, metaData, record) {
-		    return Ext.util.Format.date( record.get('dateNoteTaken'),'m/d/Y');		
+		    return Ext.util.Format.date( record.get('dateNoteTaken'),'m/d/Y');
 	},
 	columnWrap: function(val, metaData, record){
 	    return '<div style="white-space:normal !important;">'+ val +'</div>';
@@ -41,36 +41,37 @@ Ext.define('Ssp.view.tools.notes.Notes', {
 
         Ext.applyIf(me, {
             store: me.store,
+            title: me.textStore.getValueByCode('ssp.label.notes.name','Notes and Communication to Student'),
             columns: [
 				{
 					xtype: 'gridcolumn',
 				    dataIndex: 'dateNoteTaken',
-				    text: 'Date',
+				    text: me.textStore.getValueByCode('ssp.label.notes.date','Date'),
 				    flex: 0.08,
 					renderer: me.renderDate
 				},
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'noteType',
-                    text: 'Type',
+                    text: me.textStore.getValueByCode('ssp.label.notes.type','Type'),
                     flex: 0.12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'author',
-                    text: 'Author',
+                    text: me.textStore.getValueByCode('ssp.label.notes.author','Author'),
                     flex: 0.12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'department',
-                    text: 'Department',
+                    text: me.textStore.getValueByCode('ssp.label.notes.department','Department'),
                     flex: 0.12
                 },
                 {
                     xtype: 'gridcolumn',
                     dataIndex: 'note',
-                    text: 'Note',
+                    text: me.textStore.getValueByCode('ssp.label.notes.note','Note'),
 					sortable: 'false',
                     flex: 0.50,
 					renderer: me.columnWrap
