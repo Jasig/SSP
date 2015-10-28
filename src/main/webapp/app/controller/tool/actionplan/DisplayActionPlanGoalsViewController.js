@@ -225,6 +225,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     
     
     deleteConfirmation: function(){
+        var me=this;
         if (this.model.get('id') != "") {
             var defaultMsg = 'You are about to delete the goal: "%NAME%". Would you like to continue?';
             Ext.Msg.confirm({
@@ -258,6 +259,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayActionPlanGoalsViewController'
     },
     
     onDeleteGoalClick: function(button){
+        var me=this;
         var grid, record;
         grid = button.up('grid');
         record = grid.getView().getSelectionModel().getSelection()[0];

@@ -22,26 +22,27 @@ Ext.define('Ssp.view.ErrorWindow', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
     	columnRendererUtils: 'columnRendererUtils',
-    	store: 'errorsStore'
+    	store: 'errorsStore',
+    	textStore: 'sspTextStore'
     },
 	width: '100%',
 	height: '100%',
-	title: 'Error! Please correct the errors listed below:',
     initComponent: function(){
     	var me=this;
     	Ext.apply(me,
     			   {
 				    modal: true, 
 		    		layout: 'fit',
+					title: me.textStore.getValueByCode('ssp.label.error-window.title','Error! Please correct the errors listed below:'),
     				items: [{
     			        xtype: 'grid',
     			        border: false,
-    			        columns:[{ header: 'Error', 
+    			        columns:[{ header: me.textStore.getValueByCode('ssp.label.error-window.error','Error'),
 		 				           dataIndex: 'label',
 						           sortable: false,
 						           menuDisabled: true,
 						           flex:0.25
-						         },{ header: 'Message', 
+						         },{ header: me.textStore.getValueByCode('ssp.label.error-window.messsage','Message'),
 						           dataIndex: 'errorMessage',
 						           renderer: me.columnRendererUtils.renderErrorMessage,
 						           sortable: false,
@@ -52,7 +53,7 @@ Ext.define('Ssp.view.ErrorWindow', {
     			    }],
     			    bbar: [
     			           { xtype: 'button', 
-    			        	 text: 'OK', 
+    			        	 text: me.textStore.getValueByCode('ssp.label.ok-button','OK'),
     			        	 itemId: 'closeButton', 
     			        	 handler: function() {
     			        		 me.close();

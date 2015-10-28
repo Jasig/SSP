@@ -72,7 +72,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     name: 'confidentialityLevelId',
                     fieldLabel: me.textStore.getValueByCode('ssp.label.email-student.confidentiality-level', 'Confidentiality Level'),
                     labelWidth: 125,
-                    emptyText: 'Select One',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.email-student.confidentiality-level','Select One'),
                     store: me.confidentialityLevelsStore,
                     valueField: 'id',
                     displayField: 'name',

@@ -128,7 +128,8 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     },
     
     deleteAllConfirmation: function(){
-         var defaultMsg = 'You are about to delete all tasks in the task list. Would you like to continue?';
+        var me=this;
+        var defaultMsg = 'You are about to delete all tasks in the task list. Would you like to continue?';
         Ext.Msg.confirm({
             title: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-all-title','Delete Tasks?'),
             msg: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-all-body',defaultMsg),
@@ -148,6 +149,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksGridViewController', {
     },
     
     deleteConfirmation: function(){
+        var me=this;
         var defaultMsg = 'You are about to delete the task in the task list: "%NAME%". Would you like to continue?';
         Ext.Msg.confirm({
             title: me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-title','Delete Task?'),

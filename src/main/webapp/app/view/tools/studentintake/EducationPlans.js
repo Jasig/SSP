@@ -67,7 +67,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationPlans', {
 				        name: 'studentStatusId',
 				        itemId: 'studentStatusCombo',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab3.label.student-status', 'Student Status'),
-				        emptyText: 'Select One',
+				        emptyText: me.textStore.getValueByCode('intake.tab3.empty-text.student-status', 'Select One'),
 				        store: me.studentStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',

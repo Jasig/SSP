@@ -165,8 +165,8 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 		var me=scope;
 		var defaultMsg = 'Unable to process this program status change. Please contact your system administrator.';
 		Ext.Msg.alert(
-			me.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
-			me.textStore.getValueByCode('ssp.message.program-status-change.error-message',defaultMsg)
+			this.textStore.getValueByCode('ssp.message.program-status-change.error-title','SSP Error'),
+			this.textStore.getValueByCode('ssp.message.program-status-change.error-message',defaultMsg)
 			);
 		me.getView().setLoading( false );
 		me.close();

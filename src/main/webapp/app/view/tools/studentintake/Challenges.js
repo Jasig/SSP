@@ -18,8 +18,13 @@
  */
 Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	extend: 'Ext.form.Panel',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
 	alias: 'widget.studentintakechallenges',
 	id : 'StudentIntakeChallenges',
+    inject: {
+        textStore:'sspTextStore'
+    },
     width: '100%',
     height: '100%',
 	minHeight: 1000,
@@ -40,7 +45,7 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
 				    dockedItems: [{
 			       	    xtype: 'toolbar',
 					    items: [{
-	  		                   text: 'Check All',
+	  		                   text: me.textStore.getValueByCode('ssp.label.check-all-button','Check All'),
 	  		                   xtype: 'button',
 	  		                   width: 75,
 	  		                   itemId: 'checkButton',
@@ -51,7 +56,7 @@ Ext.define('Ssp.view.tools.studentintake.Challenges', {
 	  		                   		})
 					    }}, 
 	 		            {
-	  	  		                   text: 'Clear All',
+	  	  		                   text: me.textStore.getValueByCode('ssp.label.clear-all-button','Clear All'),
 	  	  		                   xtype: 'button',
 	  	  		                   width: 75,
 	  	  		                   itemId: 'clearButton',

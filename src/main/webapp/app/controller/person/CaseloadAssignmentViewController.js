@@ -703,6 +703,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
  
     onPrintClick: function(button){
+   		var me=this;
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-title','Attention'),
 			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-body','This feature is not yet implemented')
@@ -710,6 +711,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     },
 
     onEmailClick: function(button){
+    	var me=this;
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-title','Attention'),
 			me.textStore.getValueByCode('ssp.message.caseload-assignment.feature-not-implemented-body','This feature is not yet implemented')

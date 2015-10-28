@@ -23,14 +23,15 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 	alias: 'widget.studentintakeeducationlevels',
 	id : 'StudentIntakeEducationLevels',
     inject: {
-        textStore:'textStore'
+        textStore:'sspTextStore'
     },	
     width: '100%',
     height: '100%',
 	minHeight: 1000,
 	minWidth: 600,
 	style: 'padding: 0px 5px 5px 10px',
-	initComponent: function() {	
+	initComponent: function() {
+		var me=this;
 		Ext.apply(this, 
 				{
 					autoScroll: true,
@@ -44,7 +45,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 				    dockedItems: [{
 			       	    xtype: 'toolbar',
 					    items: [{
-	  		                   text: 'Check All',
+	  		                   text: me.textStore.getValueByCode('ssp.label.check-all-button','Check All'),
 	  		                   xtype: 'button',
 	  		                   width: 75,
 	  		                   itemId: 'checkButton',
@@ -55,7 +56,7 @@ Ext.define('Ssp.view.tools.studentintake.EducationLevels', {
 	  		                   		})
 					    }}, 
 	 		            {
-	  	  		                   text: 'Clear All',
+	  	  		                   text: me.textStore.getValueByCode('ssp.label.clear-all-button','Clear All'),
 	  	  		                   xtype: 'button',
 	  	  		                   width: 75,
 	  	  		                   itemId: 'clearButton',

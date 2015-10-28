@@ -198,6 +198,7 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
     
     deleteConfirmation: function(){
+        var me=this;
         var message = me.textStore.getValueByCode('ssp.message.tasks.confirm-delete-body',
                             'You are about to delete the task: "%NAME%". Would you like to continue?',
                             {'%NAME%':this.model.get('name')});

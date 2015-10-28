@@ -238,6 +238,7 @@ Ext.define('Ssp.controller.tool.profile.AcademicProgramViewController', {
 	},
 	
 	onEmailComplete: function(responseText){
+	    var me=this;
 		Ext.Msg.alert(me.textStore.getValueByCode('ssp.message.ssp-email-service.title','SSP Email Service'), responseText);
 	},
 	

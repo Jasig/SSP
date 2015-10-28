@@ -41,7 +41,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                 {
                     xtype: 'form',
                     bodyPadding: 10,
-                    title: 'Email Action Plan',
+                    title: me.textStore.getValueByCode('ssp.label.action-plan.email-title','Email Action Plan'),
 					itemId: 'emailAPForm',
                     dockedItems: [
                         {
@@ -50,12 +50,12 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                             items: [
                                 {
                                     xtype: 'button',
-                                    text: 'Send',
+                                    text: me.textStore.getValueByCode('ssp.label.send-button','Send'),
 									itemId: 'emailActionPlanButton'
                                 },
                                 {
                                     xtype: 'button',
-                                    text: 'Cancel',
+                                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 									 listeners: {
             		                    	click:function(){
             		                    		me = this;
@@ -79,7 +79,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
 							xtype: 'checkboxfield',
 							anchor: '100%',
 							fieldLabel: '',
-							boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.school-email'),
+							boxLabel: me.textStore.getValueByCode('ssp.label.action-plan.send-to-school-email','Send To School Email'),
 							disabled: !me.person.get('primaryEmailAddress'),
 							itemId: 'emailAPToPrimary'
 						},
@@ -106,7 +106,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                             xtype: 'checkboxfield',
                             anchor: '100%',
                             fieldLabel: '',
-                            boxLabel: 'Send To ' + me.textStore.getValueByCode('ssp.label.alternate-email'),
+                            boxLabel: me.textStore.getValueByCode('ssp.label.action-plan.send-to-alternate-email','Send To Alternate Email'),
 							itemId: 'emailAPToSecondary',
 							disabled: !me.person.get('secondaryEmailAddress')
                         },
@@ -133,7 +133,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
                             xtype: 'checkboxfield',
                             anchor: '100%',
                             fieldLabel: '',
-                            boxLabel: 'Send To ' + me.configStore.getConfigByName('coachFieldLabel') ,
+                            boxLabel: me.textStore.getValueByCode('ssp.label.action-plan.send-to-coach-email','Send To Coach Email') ,
 							disabled: !me.person.getCoachPrimaryEmailAddress(),
 							itemId: 'emailAPToCoach'
                         }
@@ -151,7 +151,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailActionPlan', {
 					},{
                             xtype: 'textfield',
                             anchor: '100%',
-                            fieldLabel: 'CC This email to additional recipients(comma separated)',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.cc-to-additional-recipients','CC This email to additional recipients(comma separated)'),
                             labelAlign: 'top',
 							itemId: 'ccAPToAdditional',
 							padding: '30 0 0 0'

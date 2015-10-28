@@ -67,6 +67,7 @@ Ext.define('Ssp.controller.CustomizableExportController', {
     },
 
     errorMsg: function() {
+    	var me=this;
         var defaultMsg = 'An error occurred in Custom Exportable Search. Please refresh and try again, if this keeps occurring, contact your System Administrator.';
         Ext.Msg.alert(
             me.textStore.getValueByCode('ssp.message.custom-export.error-title','SSP Error'),

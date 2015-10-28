@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
     	model: 'currentChallengeReferral',
     	reassignCaseloadStore: 'reassignCaseloadStore',
         caseloadStore: 'reassignCaseloadStagingStore',
-    	appEventsController: 'appEventsController'
+    	appEventsController: 'appEventsController',
+    	textStore: 'sspTextStore'
     },
     config: {
     	containerToLoadInto: 'adminforms',
@@ -65,7 +66,10 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
         	me.reassignCaseloadStore.remove(me.getView().getSelectionModel().getSelection());
     		me.formUtils.reconfigureGridPanel( me.getView(), me.reassignCaseloadStore);
         }else{
-     	   Ext.Msg.alert('SSP Error', 'Please select an item to remove.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.select-item-to-remove','Please select an item to remove.')
+				);
         }
 	},
     onSave: function(button) {
@@ -75,12 +79,18 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
     	var coachId = this.getView().query('combobox')[0].getValue();
     	if(!coachId)
     	{
-      	   Ext.Msg.alert('SSP Error', 'Please select a target coach.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.select-target-coach','Please select a target coach.')
+				);
       	   return;
     	}
     	if(me.reassignCaseloadStore.getCount() < 1)
     	{
-       	   Ext.Msg.alert('SSP Error', 'Please select a students to reassign.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.select-students-to-reassign','Please select a student to reassign.')
+				);
       	   return;
     	}
     	var reassignmentRequest = new Ssp.model.tool.caseload.CaseloadReassignmentRequest();
@@ -94,12 +104,20 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentTargetViewControll
     	jsonData = reassignmentRequest.data;
     	var success = function(){
     		var me=this;
-    	    Ext.Msg.alert(me.reassignCaseloadStore.getCount()+' student(s) have been updated.'); 
+    		var defaultMsg = '%COUNT% student(s) have been updated.';
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.students-updated',defaultMsg,{'%COUNT%':me.reassignCaseloadStore.getCount()})
+				);
 
     		me.displayMain();
     	};
     	var failure = function(){
-       	   Ext.Msg.alert('SSP Error', 'There was an error while trying to save.'); 
+    		var me=this;
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-saving','There was an error while trying to save.')
+				);
     	};
     	
 		me.apiProperties.makeRequest({

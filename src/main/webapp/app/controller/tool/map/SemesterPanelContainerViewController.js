@@ -405,6 +405,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	},
 	
 	onEmailComplete: function(responseText){
+	    var me=this;
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Email Service'),
 			me.textStore.getValueByCode('ssp.message.semester-panel.email-complete',responseText)
@@ -607,6 +608,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	},
 	
 	createBumpTermMap: function(args){
+	    var me=this;
 		if(args.endTermCode == args.startTermCode){
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.semester-panel.no-bump-required-title','No Bump Required'),

@@ -45,7 +45,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 	style: 'padding: 0px 5px 5px 10px',
 	initComponent: function() {	
 		var me=this;
-		Ext.apply(me, 
+        var defaultSyncdLabel = '<span class="syncedField">(sync\'d)</span>  ';
+		Ext.apply(me,
 				{
 					autoScroll: true,
 				    layout: {
@@ -74,8 +75,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				       items: [{
 				        xtype: 'combobox',
 				        name: 'maritalStatusId',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.marital-status', 'Marital Status'),
-				        emptyText: 'Select One',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.marital-status', 'Marital Status'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.marital-status','Select One'),
 				        store: me.maritalStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -94,8 +95,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 				        xtype: 'combobox',
 				        name: 'ethnicityId',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.ethnicity', 'Ethnicity'),
-				        emptyText: 'Select One',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.ethnicity', 'Ethnicity'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.ethnicity','Select One'),
 				        store: me.ethnicitiesStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -114,8 +115,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 						xtype: 'combobox',
 				        name: 'raceId',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.race', 'Race'),
-				        emptyText: 'Select One',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.race', 'Race'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.race','Select One'),
 				        store: me.racesStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -134,8 +135,8 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 					},{
 				        xtype: 'combobox',
 				        name: 'gender',
-				        fieldLabel: '<span class="syncedField">(sync\'d)</span>  ' + me.textStore.getValueByCode('ssp.label.gender', 'Gender'),
-				        emptyText: 'Select One',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.gender', 'Gender'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.gender','Select One'),
 				        store: me.gendersStore,
 				        valueField: 'code',
 				        displayField: 'title',
@@ -155,7 +156,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        itemId: 'citizenship',
 				        name: 'citizenshipId',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.citizenship', 'Citizenship'),
-				        emptyText: 'Select One',
+				        emptyText: me.textStore.getValueByCode('intake.tab2.empty-text.citizenship','Select One'),
 				        store: me.citizenshipsStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -181,7 +182,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        xtype: 'combobox',
 				        name: 'militaryAffiliationId',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.military-affiliation', 'Military Affiliation'),
-				        emptyText: 'Select One',
+				        emptyText: me.textStore.getValueByCode('intake.tab2.empty-text.military-affiliation','Select One'),
 				        store: me.militaryAffiliationsStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -201,7 +202,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        xtype: 'combobox',
 				        name: 'veteranStatusId',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.veteran-status', 'Veteran Status'),
-				        emptyText: 'Select One',
+				        emptyText: me.textStore.getValueByCode('intake.tab2.empty-text.veteran-status','Select One'),
 				        store: me.veteranStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -248,7 +249,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        itemId: 'childcareArrangement',
 				        name: 'childCareArrangementId',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.childcare-arrangements', 'If yes, what are your childcare arrangements?'),
-				        emptyText: 'Select One',
+				        emptyText: me.textStore.getValueByCode('intake.tab2.empty-text.childcare-arrangements','Select One'),
 				        store: me.childCareArrangementsStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -281,7 +282,7 @@ Ext.define('Ssp.view.tools.studentintake.Demographics', {
 				        name: 'shift',
 				        itemId: 'shift',
 				        fieldLabel: me.textStore.getValueByCode('intake.tab2.label.shift', 'Shift'),
-				        emptyText: 'Select One',
+				        emptyText: me.textStore.getValueByCode('intake.tab2.empty-text.shift','Select One'),
 				        store: me.employmentShiftsStore,
 				        valueField: 'code',
 				        displayField: 'title',

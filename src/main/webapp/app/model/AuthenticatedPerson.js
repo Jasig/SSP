@@ -444,6 +444,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * Provides a warning if a user attempts to modify data that is critical to system operation.
      */
     showDeveloperRestrictedContentAlert: function(){
+        var me=this;
 		var defaultMsg = "Access to this information has been restricted due to the sensitive nature of the information and it's impact on the SSP System. Please see your system administrator if you need to make changes to this information.";
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.restricted-content.error-title','WARNING'),

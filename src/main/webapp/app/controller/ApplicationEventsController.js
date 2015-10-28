@@ -123,6 +123,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	},
 	
 	alertObjectCountIncreasing: function(previousObjectCount, currentObjectCount){
+		var me=this;
 		var errorMessage = "Object Count Is Increasing. Prevous count:" + previousObjectCount + "Current Count:" + currentObjectCount;
 		var eventsFound = false;
 		for (var key in this.events) {
@@ -146,6 +147,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 
 	
 	onObjectDestroyed: function(view){
+		var me=this;
 		var errorMessage = this.eventsDestroyed(this.events[view.id], view.id);
 		delete this.events[view.id];
 		if(errorMessage){
@@ -158,6 +160,7 @@ Ext.define('Ssp.controller.ApplicationEventsController', {
 	},
 	
 	eventsDestroyed: function(objEvents, objectId){
+		var me=this;
 		var errorMessage= false;
 		if(objEvents && objEvents.length > 0){
 			var defaultMsg = "Object: %OBJECT-ID% did not clean all events. <br> Events that needed to be cleaned:<br>";

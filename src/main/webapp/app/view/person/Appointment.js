@@ -71,7 +71,7 @@ Ext.define('Ssp.view.person.Appointment', {
                     fieldLabel:  me.textStore.getValueByCode('ssp.label.appointment.date','Appointment Date'),
                     itemId: 'appointmentDateField',
                     altFormats: 'm/d/Y|m-d-Y',
-                    invalidText: '{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012',
+                    invalidText: me.textStore.getValueByCode('ssp.invalid-text.appointment.date','{0} is not a valid date - it must be in the format: 06/21/2012 or 06-21-2012'),
                     name: 'appointmentDate',
                     allowBlank: me.instantCaseloadAssignment == true ? true:false,
                     showToday: false,

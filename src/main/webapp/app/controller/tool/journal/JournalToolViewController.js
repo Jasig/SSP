@@ -183,6 +183,7 @@ Ext.define('Ssp.controller.tool.journal.JournalToolViewController', {
     },
     	
 	onDeleteClick: function( button ) {
+	    var me=this;
     	var grid, record;
 		grid = button.up('grid');
 		record = grid.getView().getSelectionModel().getSelection()[0];

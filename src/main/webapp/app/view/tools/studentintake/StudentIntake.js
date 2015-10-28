@@ -24,9 +24,9 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
     controller: 'Ssp.controller.tool.studentintake.StudentIntakeToolViewController',
     inject: {
     	authenticatedPerson: 'authenticatedPerson',
-        store: 'studentsStore'
+        store: 'studentsStore',
+        textStore: 'sspTextStore'
     },
-	title: 'Intake',	
 	width: '100%',
 	height: '100%',   
 	initComponent: function() {
@@ -34,6 +34,7 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 		Ext.apply(me, 
 				{
 		    		store: me.store,
+					title: me.textStore.getValueByCode('ssp.label.student-intake.title','Intake'),
 		    		layout: 'fit',
 		    		padding: 0,
 		    		border: 0,
@@ -45,14 +46,14 @@ Ext.define('Ssp.view.tools.studentintake.StudentIntake', {
 					        items: [{
 					        	     xtype: 'button', 
 					        	     itemId: 'saveButton', 
-					        	     text:'Save', 
+					        	     text:me.textStore.getValueByCode('ssp.label.save-button','Save'),
 					        	     action: 'save',
 					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_SAVE_BUTTON')
 					        	    },
 					                {
 					        	     xtype: 'button', 
 					        	     itemId: 'cancelButton', 
-					        	     text:'Cancel', 
+					        	     text:me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 					        	     action: 'reset',
 					        	     hidden: !me.authenticatedPerson.hasAccess('STUDENT_INTAKE_CANCEL_BUTTON')
 					        	    },

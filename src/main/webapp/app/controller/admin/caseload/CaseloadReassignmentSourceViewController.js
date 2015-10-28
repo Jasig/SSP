@@ -29,7 +29,8 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     	formUtils: 'formRendererUtils',
         coachesStore: 'allCoachesCurrentStore',
         reassignCaseloadStore: 'reassignCaseloadStore',
-    	appEventsController: 'appEventsController'
+    	appEventsController: 'appEventsController',
+    	textStore: 'sspTextStore'
         
     },
     config: {
@@ -68,7 +69,10 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
     		me.getView().setLoading(false);
     	}
     	var failure = function(){
-	     	Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-loading','There was an issue in loading assigned students for this coach.')
+				);
     	}
     	me.coachId = newValue;
 
@@ -90,7 +94,10 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 			me.getView().setLoading(false);
 		}
 		var failure = function(){
-			Ext.Msg.alert('SSP Error', 'There was an issue in loading assigned students for this coach.');
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-loading','There was an issue in loading assigned students for this coach.')
+				);
 		}
 
 
@@ -125,7 +132,10 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewControll
 		}
 		else
 		{
-	     	   Ext.Msg.alert('SSP Error', 'Please select a student or students to add.'); 
+			Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-reassignment.select-student-to-add','Please select a student or students to add.')
+				);
 		}
 	},
     onResetClick: function(button){

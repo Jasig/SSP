@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.actionplan.EmailAndPrintActionPlan', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.EmailAndPrintActionPlanViewController',
 	inject: {
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        textStore: 'sspTextStore'
     },
     height: 35,
     width: 200,
@@ -40,7 +41,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailAndPrintActionPlan', {
 					width: '30'
 			},
 			{
-                    tooltip: 'Email Action Plan',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.action-plan.email-plan','Email Action Plan'),
                     text: '',
                     width: 30,
                     height: 30,
@@ -53,7 +54,7 @@ Ext.define('Ssp.view.tools.actionplan.EmailAndPrintActionPlan', {
 					xtype: 'tbspacer',
 					width: '100'
 				},{
-                    tooltip: 'Print Action Plan',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.action-plan.print-plan','Print Action Plan'),
                     text: '',
                     width: 30,
                     height: 30,
