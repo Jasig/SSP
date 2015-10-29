@@ -57,11 +57,8 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     text: 'Cancel'
                 }]
             }],
-           items: [
-				
-				{
+           items: [{
                 xtype: 'form',
-                flex: 1,
                 border: 0,
                 frame: false,
 				title: "Filters",
@@ -376,7 +373,8 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
          xtype: 'gridpanel',
          title: '',
          id: 'allPlansTemplateGridPanel',
-         width: 555,
+         width: '90%',
+         flex: 1,
          height: '100%',
          border: true,
          autoScroll: true,
