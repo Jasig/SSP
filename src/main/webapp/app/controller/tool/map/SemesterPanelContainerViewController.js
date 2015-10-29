@@ -408,7 +408,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 	    var me=this;
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Email Service'),
-			me.textStore.getValueByCode('ssp.message.semester-panel.email-complete',responseText)
+			me.textStore.getValueByCode('ssp.message.semester-panel.email-complete','%RESPONSE-TEXT%',{'%RESPONSE-TEXT%':responseText})
 			);
 	},
 	
@@ -622,7 +622,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 		var endTermIndex =  me.termsStore.findExact('code', args.endTermCode);
 		if(startTermIndex < 0 || endTermIndex < 0){
 				Ext.Msg.alert(
-					me.textStore.getValueByCode('ssp.message.semester-panel.bump-not-allowed-title','No Bump Required'),
+					me.textStore.getValueByCode('ssp.message.semester-panel.bump-not-allowed-title','Bump not allowed'),
 					me.textStore.getValueByCode('ssp.message.semester-panel.bump-not-allowed-body','Terms to do not fall in allowed range of terms.')
 					);
 				return null;

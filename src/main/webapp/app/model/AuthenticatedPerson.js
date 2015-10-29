@@ -437,7 +437,10 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * Provides an unauthorized access alert message.
      */
     showUnauthorizedAccessAlert: function(){
-    	Ext.Msg.alert(this.getUnauthorizedAccessAlertTitle(), this.getUnauthorizedAccessAlertMessage() );
+    	Ext.Msg.alert(
+    			me.textStore.getValueByCode('ssp.message.unauthorized.error-title',this.getUnauthorizedAccessAlertTitle()),
+    			me.textStore.getValueByCode('ssp.message.unauthorized.error-body',this.getUnauthorizedAccessAlertMessage())
+    		);
     },
     
     /**

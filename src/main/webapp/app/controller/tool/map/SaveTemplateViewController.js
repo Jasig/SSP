@@ -205,7 +205,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 					if (noProgramCode || noDepartmentCode) {
 						var messageBox = Ext.Msg.confirm({
 							title: me.textStore.getValueByCode('ssp.message.save-template.confirm-save-title','Save Template No Program/Department Selected'),
-							msg: me.textStore.getValueByCode('ssp.message.save-template.confirm-save-body',message,{'%PROGRAM-CODE%':noProgramCode,'%DEPARTMENT-CODE%':noDepartmentCode}),
+							msg: me.textStore.getValueByCode('ssp.message.save-template.confirm-save-body',message),
 							buttons: Ext.Msg.YESNOCANCEL,
 							fn: me.completeSave,
 							scope: me

@@ -136,7 +136,7 @@ Ext.define('Ssp.controller.tool.studentintake.StudentIntakeToolViewController', 
 	        height: '100%',
 	        activeTab: 0,
 			border: 0,
-	        items: [ { title: me.textStore.getValueByCode('intake.tab1.label', 'Person')+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
+	        items: [ { title: me.textStore.getValueByCode('intake.tab1.label', 'Person'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY),
 	        		   autoScroll: true,
 	        		   items: [{xtype: 'studentintakepersonal'}]
 	        		},{
