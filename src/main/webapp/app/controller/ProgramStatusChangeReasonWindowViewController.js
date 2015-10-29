@@ -132,7 +132,7 @@ Ext.define('Ssp.controller.ProgramStatusChangeReasonWindowViewController', {
 		}else{
 			var defaultMsg = 'Please correct the highlighted errors in the form.';
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.program-status-change.highlighted-errors-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.program-status-change.errors-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.program-status-change.highlighted-errors-message',defaultMsg)
 				);
 		}

@@ -338,14 +338,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			} else {
 				var defaultMsg = 'There was an issue processing your bulk program status change request. Please contact your system administrator.';
 				Ext.Msg.alert(
-					me.textStore.getValueByCode('ssp.message.search.bulk-program-status-change-error-title','SSP Error'),
+					me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 					me.textStore.getValueByCode('ssp.message.search.bulk-program-status-change-error-body',defaultMsg)
 					);
 			}
 		} else {
 			var defaultMsg = 'There was an issue processing your bulk program status change request. Please contact your system administrator.';
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.bulk-program-status-change-error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.bulk-program-status-change-error-body',defaultMsg)
 				);
 		}
@@ -454,14 +454,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 			} else {
 				var defaultMsg = 'There was an issue processing your bulk %DISPLAY-NAME% change request. Please contact your system administrator.';
 				Ext.Msg.alert(
-					me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-error-title','SSP Error'),
+					me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 					me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-error-body',defaultMsg,{'%DISPLAY-NAME%':displayName})
 					);
 			}
 		} else {
 			var defaultMsg = 'There was an issue processing your bulk %DISPLAY-NAME% change request. Please contact your system administrator.';
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-error-body',defaultMsg,{'%DISPLAY-NAME%':displayName})
 				);
 		}
@@ -476,8 +476,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var defaultMsg = 'Your bulk %DISPLAY-NAME% request has ' +
                      'been queued successfully. Bulk changes are processed gradually and may not be reflected immediately on-screen.';
 		Ext.Msg.alert(
-			me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-error-title','Bulk %DISPLAY-NAME% Request Queued',{'%DISPLAY-NAME%':displayName}),
-			me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-error-body',defaultMsg,{'%DISPLAY-NAME%':displayName})
+			me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-success-title','Bulk %DISPLAY-NAME% Request Queued',{'%DISPLAY-NAME%':displayName}),
+			me.textStore.getValueByCode('ssp.message.search.bulk-watch-change-success-body',defaultMsg,{'%DISPLAY-NAME%':displayName})
 			);
 	},
 
@@ -725,7 +725,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		me.appEventsController.loadMaskOff();
 		if ( programStatusName === null ) {
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.unrecognized-target-program-status-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.unrecognized-target-program-status-body','Unrecognized target Program Status.')
 				);
 			return;
@@ -737,17 +737,21 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				);
 			return;
 		}
-		var defaultMsg = "<p>ATTENTION: %COUNT% users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status. Actual number MAY BE LESS. </p><p>Selected students " +
-			"already with '%PROGRAM-STATUS-NAME%' status and selected students who are not currently activated (typically unassigned) and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
+		var confirmMsg = '';
 		if(action === 'PROGRAM_STATUS_NON_PARTICIPATING'){
-			defaultMsg = "<p>ATTENTION: %COUNT% users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status with a bulk reason" +
+			var defaultMsg = "<p>ATTENTION: %COUNT% users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status with a bulk reason" +
 			    " (see next dialog).<p> <p> Actual number MAY BE LESS. </p><p>Selected users " +
 				" with '%PROGRAM-STATUS-NAME%'  status, and selected users who are not currently activated (typically unassigned)" +
 				" and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
+			confirmMsg = me.textStore.getValueByCode('ssp.message.search.confirm-bulk-non-participating-program-status-change-count',defaultMsg,{'%COUNT%':count,'%PROGRAM-STATUS-NAME%':programStatusName})
+		} else {
+			var defaultMsg = "<p>ATTENTION: %COUNT% users have been selected for consideration to transition to '%PROGRAM-STATUS-NAME%' status. Actual number MAY BE LESS. </p><p>Selected students " +
+				"already with '%PROGRAM-STATUS-NAME%' status and selected students who are not currently activated (typically unassigned) and non-students will be excluded from this action.</p><p style=\"text-align:center;font-weight: bold\"><br/> Continue ?</p>";
+			confirmMsg = me.textStore.getValueByCode('ssp.message.search.confirm-bulk-program-status-change-count',defaultMsg,{'%COUNT%':count,'%PROGRAM-STATUS-NAME%':programStatusName});
 		}
 		Ext.Msg.confirm({
 			title: me.textStore.getValueByCode('ssp.message.search.confirm-title','Confirm'),
-			msg: me.textStore.getValueByCode('ssp.message.search.confirm-bulk-program-status-change-count',defaultMsg,{'%COUNT%':count,'%PROGRAM-STATUS-NAME%':programStatusName}),
+			msg: confirmMsg,
 			buttons: Ext.Msg.OKCANCEL,
 			fn: me.newOnBulkProgramStatusChangeConfirm(action, criteria),
 			scope: me
@@ -766,7 +770,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		me.appEventsController.loadMaskOff();
 		if ( watchActionName === null ) {
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.unrecognized-watch-action-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.unrecognized-watch-action-body','Unrecognized Watch action.')
 				);
 			return;
@@ -798,7 +802,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		var defaultMsg = 'Failed to look up the number of records which would be affected by the ' +
 						 'requested action. Retry or contact your system administrator';
 		Ext.Msg.alert(
-			me.textStore.getValueByCode('ssp.message.search.bulk-action-count-title','SSP Error'),
+			me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 			me.textStore.getValueByCode('ssp.message.search.bulk-action-count-body',defaultMsg)
 			);
 	},
@@ -888,7 +892,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 		if(!me.getView().getForm().isDirty()) {
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.no-filters-entered-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.no-filters-entered-body','Please enter some filter values.')
 				);
 
@@ -896,7 +900,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		}
 		if(!me.getView().getForm().isValid()){
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.filter-errors-highlighted-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.filter-errors-highlighted-body', 'One or more search filters are invalid. Problems have been highlighted.')
 				);
 			return;
@@ -919,7 +923,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 		if(valuesInvalid == true){
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.returns-no-values-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				message + me.textStore.getValueByCode('ssp.message.search.returns-no-values-body',"Search will return no values."));
 			return;
 		}
@@ -974,14 +978,14 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 
 		if (!me.getView().getForm().isDirty()) {
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.no-filters-entered-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.no-filters-entered-body','Please enter some filter values.')
 				);
 	     	return;
 		}
 		if(!me.getView().getForm().isValid()) {
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.filter-errors-highlighted-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.search.filter-errors-highlighted-body', 'One or more search filters are invalid. Problems have been highlighted.')
 				);
 			return;
@@ -1004,7 +1008,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		
 		if(valuesInvalid == true){
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.search.returns-no-values-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.search.error-title','SSP Error'),
 				message + me.textStore.getValueByCode('ssp.message.search.returns-no-values-body',"Search will return no values.")
 			);
 	     	return;
