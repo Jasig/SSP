@@ -85,7 +85,7 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 	{
 						Ext.Msg.alert(
 							me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
-							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure',o.result.message)
+							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure','%MESSAGE%', {'%MESSAGE%':o.result.message})
 							);
                 		return;
                 	}

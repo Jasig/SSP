@@ -561,7 +561,7 @@ Ext.define('Ssp.controller.SearchViewController', {
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.last-name', 'Last Name'), dataIndex: 'lastName', flex: 1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.dob', 'DOB'), dataIndex: 'birthDate', renderer: Ext.util.Format.dateRenderer('m/d/Y'), flex: 0.5},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.coach-name', 'Coach'), dataIndex: 'coach', renderer: me.columnRendererUtils.renderCoachName, flex: 1},
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.student-type', 'Type'), dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.search.student-type', 'Type'), dataIndex: 'studentType', renderer: me.columnRendererUtils.renderStudentType, flex: me.getIsExpanded() ? 0.5:0.2},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'), dataIndex: 'schoolId', flex: me.getIsExpanded() ? 0.5:1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.email', 'Email'), dataIndex: 'primaryEmailAddress', flex: 0.8},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.program-status', 'Status'), dataIndex: 'currentProgramStatusName', flex: 0.2},

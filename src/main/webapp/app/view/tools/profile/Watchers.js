@@ -38,15 +38,15 @@ Ext.define("Ssp.view.tools.profile.Watchers", {
             xtype: "gridcolumn",
             columns: [{
                 dataIndex: "firstName",
-                text: me.textStore.getValueByCode('ssp.label.main.watchers.first-name',"First Name"),
+                text: me.textStore.getValueByCode('ssp.label.first-name',"First Name"),
                 flex: 1
             }, {
                 dataIndex: "lastName",
-                text: me.textStore.getValueByCode('ssp.label.main.watchers.last-name',"Last Name"),
+                text: me.textStore.getValueByCode('ssp.label.last-name',"Last Name"),
                 flex: 1
             }, {
                 dataIndex: "primaryEmailAddress",
-                text: me.textStore.getValueByCode('ssp.label.main.watchers.last-name',"Email"),
+                text: me.textStore.getValueByCode('ssp.label.main.watchers.primary-email-address',"Email"),
                 flex: 1
             }]
         });

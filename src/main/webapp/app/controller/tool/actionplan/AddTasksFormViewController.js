@@ -124,8 +124,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			if (id == "") {
 				if (origDueDateJSON['formattedStr'] < todayDateJSON['formattedStr']) {
 					Ext.Msg.alert(
-						me.textStore.getValueByCode('ssp.message.add-tasks.error-title','SSP Error'),
-						me.textStore.getValueByCode('ssp.message.add-tasks.target-date-error','The Target Date must be the current or a future date.')
+						me.textStore.getValueByCode('ssp.message.tasks.error-title','SSP Error'),
+						me.textStore.getValueByCode('ssp.message.tasks.target-date-error','The Target Date must be the current or a future date.')
 						);
 					return;
 				}
@@ -133,8 +133,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
 			successFunc = function(response ,view){
 					model.data.dueDate = origDueDate;
 		    	   Ext.Msg.confirm({
-		    		     title:me.textStore.getValueByCode('ssp.message.add-tasks.confirm-success-title','Success'),
-		    		     msg: me.textStore.getValueByCode('ssp.message.add-tasks.confirm-success-body','The task was saved successfully. Would you like to create another task?'),
+		    		     title:me.textStore.getValueByCode('ssp.message.tasks.confirm-success-title','Success'),
+		    		     msg: me.textStore.getValueByCode('ssp.message.tasks.confirm-success-body','The task was saved successfully. Would you like to create another task?'),
 		    		     buttons: Ext.Msg.YESNO,
 		    		     fn: me.createTaskConfirmResult,
 		    		     scope: me
@@ -178,8 +178,8 @@ Ext.define('Ssp.controller.tool.actionplan.AddTasksFormViewController', {
     		}
     	}else{
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.view-add-tasks.error-title','SSP Error'),
-				me.textStore.getValueByCode('ssp.message.view-add-tasks.form-errors','Please correct the errors in your form before continuing.')
+				me.textStore.getValueByCode('ssp.message.tasks.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.tasks.form-errors','Please correct the errors in your form before continuing.')
 				);
     	}
     },

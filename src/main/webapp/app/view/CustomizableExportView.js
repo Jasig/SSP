@@ -62,7 +62,7 @@ Ext.define('Ssp.view.CustomizableExportView', {
                     xtype: 'checkbox',   //TODO Slave these to existing blurbs or create new?
                     name: 'address',
                     itemId: 'address',
-                    boxLabel: this.textStore.getValueByCode('ssp.label.custom-export.address','Address')
+                    boxLabel: this.textStore.getValueByCode('ssp.label.address','Address')
                 }, {
                     xtype: 'checkbox',
                     itemId: 'alternate',

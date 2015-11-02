@@ -521,9 +521,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
        		     fn: me.completeBump,
        		     scope: me
        		});
-			messageBox.msgButtons['yes'].setText(me.textStore.getValueByCode('ssp.message.semester-panel.confirm-yes-button-text',"Overwrite Courses"));
-		    messageBox.msgButtons['no'].setText(me.textStore.getValueByCode('ssp.message.semester-panel.confirm-no-button-text',"Append Courses"));
-		    messageBox.msgButtons['cancel'].setText(me.textStore.getValueByCode('ssp.message.semester-panel.confirm-cancel-button-text',"Cancel"));
+			messageBox.msgButtons['yes'].setText(me.textStore.getValueByCode('ssp.label.semester-panel.confirm-yes-button',"Overwrite Courses"));
+		    messageBox.msgButtons['no'].setText(me.textStore.getValueByCode('ssp.label.semester-panel.confirm-no-button',"Append Courses"));
+		    messageBox.msgButtons['cancel'].setText(me.textStore.getValueByCode('ssp.label.semester-panel.confirm-cancel-button',"Cancel"));
 		}else
 			me.completeBump('yes');
 	},

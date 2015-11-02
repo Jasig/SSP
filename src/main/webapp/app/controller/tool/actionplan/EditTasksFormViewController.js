@@ -127,8 +127,8 @@ Ext.define('Ssp.controller.tool.actionplan.EditTasksFormViewController', {
 			if (id == "") {
 				if (origDueDateJSON['formattedStr'] < todayDateJSON['formattedStr']) {
 					Ext.Msg.alert(
-						me.textStore.getValueByCode('ssp.message.edit-tasks.error-title','SSP Error'),
-						me.textStore.getValueByCode('ssp.message.edit-tasks.target-date-error','The Target Date must be the current or a future date.')
+						me.textStore.getValueByCode('ssp.message.tasks.error-title','SSP Error'),
+						me.textStore.getValueByCode('ssp.message.tasks.target-date-error','The Target Date must be the current or a future date.')
 						);
 					return;
 				}
@@ -164,8 +164,8 @@ Ext.define('Ssp.controller.tool.actionplan.EditTasksFormViewController', {
     		
     	}else{
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.edit-tasks.error-title','SSP Error'),
-				me.textStore.getValueByCode('ssp.message.edit-tasks.form-errors','Please correct the errors in your form before continuing.')
+				me.textStore.getValueByCode('ssp.message.tasks.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.tasks.form-errors','Please correct the errors in your form before continuing.')
 				);
     	}
     },

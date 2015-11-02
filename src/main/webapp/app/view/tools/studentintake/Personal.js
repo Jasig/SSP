@@ -122,21 +122,21 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                 }, {
                     fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.home-phone', 'Home Phone'),
                     name: 'homePhone',
-                    emptyText: me.textStore.getValueByCode('ssp.empty-text.home-phone','xxx-xxx-xxxx'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'homePhone'
                 }, {
                     fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.work-phone', 'Work Phone'),
                     name: 'workPhone',
-                    emptyText: me.textStore.getValueByCode('ssp.empty-text.work-phone','xxx-xxx-xxxx'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'workPhone'
                 }, {
                     fieldLabel: me.textStore.getValueByCode('ssp.label.syncd',defaultSyncdLabel) + me.textStore.getValueByCode('ssp.label.cell-phone', 'Cell Phone'),
                     name: 'cellPhone',
-                    emptyText: me.textStore.getValueByCode('ssp.empty-text.cell-phone','xxx-xxx-xxxx'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'cellPhone'
@@ -211,7 +211,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                 }, {
                     fieldLabel: me.textStore.getValueByCode('ssp.label.alternate-phone', 'Alternate Phone'),
                     name: 'alternatePhone',
-                    emptyText: me.textStore.getValueByCode('ssp.empty-text.alternate-phone','xxx-xxx-xxxx'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.phone','xxx-xxx-xxxx'),
                     maxLength: 25,
                     allowBlank: true,
                     itemId: 'alternatePhone'

@@ -74,7 +74,7 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
                 }, {
                     xtype: 'button',
                     itemId: 'printButton',
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.instant-caseload-assignment.print-button','Print Appointment Form'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.caseload-assignment.print-button','Print Appointment Form'),
                     hidden: true,
                     width: 30,
                     height: 30,
@@ -83,7 +83,7 @@ Ext.define('Ssp.view.person.InstantCaseloadAssignment', {
                     xtype: 'button',
                     itemId: 'emailButton',
                     hidden: true,
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.instant-caseload-assignment.email-button','Email Appointment Form'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.caseload-assignment.email-button','Email Appointment Form'),
                     width: 30,
                     height: 30,
                     cls: 'emailIcon'

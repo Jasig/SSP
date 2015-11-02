@@ -210,9 +210,9 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 							fn: me.completeSave,
 							scope: me
 						});
-						messageBox.msgButtons['yes'].setText(me.textStore.getValueByCode('ssp.message.save-template.confirm-yes-button-text',yesButtonText));
-						messageBox.msgButtons['no'].setText(me.textStore.getValueByCode('ssp.message.save-template.confirm-no-button-text',"Return To Save Dialog"));
-						messageBox.msgButtons['cancel'].setText(me.textStore.getValueByCode('ssp.message.save-template.confirm-cancel-button-text',"Cancel Save"));
+						messageBox.msgButtons['yes'].setText(me.textStore.getValueByCode('ssp.label.save-template.confirm-yes-button',yesButtonText));
+						messageBox.msgButtons['no'].setText(me.textStore.getValueByCode('ssp.label.save-template.confirm-no-button',"Return To Save Dialog"));
+						messageBox.msgButtons['cancel'].setText(me.textStore.getValueByCode('ssp.label.save-template.confirm-cancel-button',"Cancel Save"));
 						return;
 					}
 				}

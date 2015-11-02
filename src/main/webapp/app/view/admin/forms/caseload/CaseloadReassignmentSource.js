@@ -51,7 +51,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 				  cls: 'configgrid',
     		      columns: [
     		                { 
-      		                  header: me.textStore.getValueByCode('ssp.label.student-id','Student ID'),
+      		                  header: me.textStore.getValueByCode('ssp.label.student-id','Student Id'),
       		                  dataIndex: 'schoolId',
       		                  field: {
       		                      xtype: 'textfield'
@@ -67,7 +67,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
     		                  flex: 2
     		                },
     		                { 
-      		                  header: me.textStore.getValueByCode('ssp.label.caseload-reassignment.student-type','Student Type'),
+      		                  header: me.textStore.getValueByCode('ssp.label.student-type','Student Type'),
       		                  dataIndex: 'studentTypeName',
       		                  field: {
       		                      xtype: 'textfield'
@@ -98,8 +98,8 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentSource', {
 			   {
 				xtype: 'combobox',
 				multiSelect: false,
-				fieldLabel: me.textStore.getValueByCode('ssp.label.caseload-reassignment.program-status','Program Status'),
-				emptyText: me.textStore.getValueByCode('ssp.empty-text.caseload-reassignment.program-status','Select Status'),
+				fieldLabel: me.textStore.getValueByCode('ssp.label.program-status','Program Status'),
+				emptyText: me.textStore.getValueByCode('ssp.empty-text.program-status','Select Status'),
 				store: me.programStatusesStore,
 				valueField: 'id',
 				displayField: 'name',

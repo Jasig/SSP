@@ -69,7 +69,7 @@ Ext.define('Ssp.view.Search', {
                 // enableOverflow: true,
                 overflowX: 'hidden',
                 items: [{
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.add-student', 'Add Student'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.add-student', 'Add Student'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -90,7 +90,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'tbspacer',
                     flex: 0.5
                 }, {
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-active', 'Set Student to Active status'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.set-student-active', 'Set Student to Active status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -100,7 +100,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'active',
                     itemId: 'setActiveStatusButton'
                 }, {
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-transitioned', 'Set Student to Transitioned status'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.set-student-transitioned', 'Set Student to Transitioned status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -110,7 +110,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'transition',
                     itemId: 'setTransitionStatusButton'
                 }, {
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-non-participating', 'Set Student to Non-Participating status'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.set-student-non-participating', 'Set Student to Non-Participating status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -120,7 +120,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'non-participating',
                     itemId: 'setNonParticipatingStatusButton'
                 }, {
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-no-show', 'Set Student to No-Show status'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.set-student-no-show', 'Set Student to No-Show status'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -130,7 +130,7 @@ Ext.define('Ssp.view.Search', {
                     action: 'no-show',
                     itemId: 'setNoShowStatusButton'
                 }, {
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.set-student-inactive', 'Set Student to Inactive'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.set-student-inactive', 'Set Student to Inactive'),
                     text: '',
                     width: 25,
                     height: 25,
@@ -146,7 +146,7 @@ Ext.define('Ssp.view.Search', {
                     xtype: 'combobox',
                     itemId: 'caseloadActionCombo',
                     fieldLabel: '',
-                    emptyText: me.textStore.getValueByCode('ssp.empty-text.bulk-action', 'Bulk Action'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.bulk-action', 'Bulk Action'),
                     store: me.caseloadActionsStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -207,7 +207,7 @@ Ext.define('Ssp.view.Search', {
                 }, {
 
                     text: me.textStore.getValueByCode('ssp.label.search-button', 'Search'),
-                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search-button','Search for Student'),
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.search.search-button','Search for Student'),
                     xtype: 'button',
                     type: 'search',
                     itemId: 'searchStudentButton',

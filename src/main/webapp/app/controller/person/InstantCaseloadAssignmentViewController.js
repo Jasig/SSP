@@ -89,9 +89,9 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
     
     updateTitle: function(){
     	var me=this;
-    	var title = me.textStore.getValueByCode('ssp.label.instant-caseload-reassignment.add-title','Caseload Assignment Add - ');
+    	var title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.add-title','Caseload Assignment Add - ');
     	if (me.person.get('id') != "") {
-    		title = me.textStore.getValueByCode('ssp.label.instant-caseload-reassignment.edit-title','Caseload Assignment Edit - ');
+    		title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.edit-title','Caseload Assignment Edit - ');
     	}
     	me.getView().setTitle(title + me.person.getFullName());
     },
@@ -198,8 +198,8 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
 		}else{
 			me.getView().setLoading( false );
 			Ext.Msg.alert(
-				me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.error-title','SSP Error'),
-				me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.error-saving','Error saving student record. Please see your administrator for additional details.')
+				me.textStore.getValueByCode('ssp.message.caseload-assignment.error-title','SSP Error'),
+				me.textStore.getValueByCode('ssp.message.caseload-assignment.error-saving','Error saving student record. Please see your administrator for additional details.')
 				);
 		}
     },
@@ -407,8 +407,8 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
 								 " updating the wrong record your edits. Please contact" +
 								 " your system administrators.";
 				Ext.Msg.alert(
-					me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.could-not-overwrite-title','Form Save Error'),
-					me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.could-not-overwrite-saving',defaultMsg)
+					me.textStore.getValueByCode('ssp.message.caseload-assignment.could-not-overwrite-title','Form Save Error'),
+					me.textStore.getValueByCode('ssp.message.caseload-assignment.could-not-overwrite-saving',defaultMsg)
 					);
 				return false;
 			}
@@ -436,8 +436,8 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
         me.getView().setLoading( false );
 		var defaultMsg = 'Error saving student record. Please see your administrator for additional details.';
 		Ext.Msg.alert(
-			me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.error-title','SSP Error'),
-			me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.error-saving',defaultMsg)
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.error-title','SSP Error'),
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.error-saving',defaultMsg)
 			);
     },
 
@@ -479,8 +479,8 @@ Ext.define('Ssp.controller.person.InstantCaseloadAssignmentViewController', {
         me.getView().setLoading( false );
 		var defaultMsg = 'Error saving student record. Please see your administrator for additional details.';
 		Ext.Msg.alert(
-			me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.error-title','SSP Error'),
-			me.textStore.getValueByCode('ssp.message.instant-caseload-assignment.error-saving',defaultMsg)
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.error-title','SSP Error'),
+			me.textStore.getValueByCode('ssp.message.caseload-assignment.error-saving',defaultMsg)
 			);
     },
     

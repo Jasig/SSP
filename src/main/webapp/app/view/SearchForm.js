@@ -208,8 +208,8 @@ Ext.define('Ssp.view.SearchForm',{
 			            {
 		   		    xtype: 'combobox',
 		   		    multiSelect: true,
-                    fieldLabel: me.textStore.getValueByCode('ssp.label.search.program-status', 'Program Status'),
-                    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.program-status', 'Select Status'),
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.program-status', 'Program Status'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.program-status', 'Select Status'),
 		   		    store: me.programStatusesStore,
    		   		    valueField: 'id',
 		   		    displayField: 'name',

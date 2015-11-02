@@ -49,7 +49,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
 				  title: me.textStore.getValueByCode('ssp.label.caseload-reassignment.students-to-reassign-title','Students to Reassign'),
     		      columns: [
        		                { 
-        		               header: me.textStore.getValueByCode('ssp.label.student-id','Student ID'),
+        		               header: me.textStore.getValueByCode('ssp.label.student-id','Student Id'),
         		               dataIndex: 'schoolId',
         		               field: {
         		                  xtype: 'textfield'
@@ -65,7 +65,7 @@ Ext.define('Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget', {
     		                  flex: 2
     		                },
     		                { 
-      		                  header: me.textStore.getValueByCode('ssp.label.caseload-reassignment.student-type','Student Type'),
+      		                  header: me.textStore.getValueByCode('ssp.label.student-type','Student Type'),
       		                  dataIndex: 'studentTypeName',
       		                  field: {
       		                      xtype: 'textfield'

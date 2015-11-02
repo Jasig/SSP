@@ -75,7 +75,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
 		var me = this;
 		//me.getView().setLoading(false);
 		var id = me.personLite.get('id');
-		me.panelKids = [{ title: me.textStore.getValueByCode('ssp.label.caseload-assignment.student-title','Student'+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY),
+		me.panelKids = [{ title: me.textStore.getValueByCode('ssp.label.caseload-assignment.student-title','Student')+Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY,
         	       autoScroll: true,
         		   items: [{xtype: 'student'}]
         		},{
@@ -221,7 +221,7 @@ Ext.define('Ssp.controller.person.CaseloadAssignmentViewController', {
     
     updateTitle: function(){
     	var me=this;
-    	var title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.add-title','Caseload Assignment Add ');
+    	var title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.add-title','Caseload Assignment Add - ');
     	if (me.person.get('id') != "") {
     		title = me.textStore.getValueByCode('ssp.label.caseload-reassignment.edit-title','Caseload Assignment Edit - ');
     	}

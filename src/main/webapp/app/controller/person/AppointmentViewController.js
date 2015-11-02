@@ -77,7 +77,7 @@ Ext.define('Ssp.controller.person.AppointmentViewController', {
 		
 		
 			 if (getStudentTypeSetFromExternalDataValue == 'false' && getStudentTypeUnSetFromExternalDataValue == 'false') {
-			 	me.getStudentTypeCombo().setFieldLabel(me.textStore.getValueByCode('ssp.label.student-type','Student Type' +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY));
+			 	me.getStudentTypeCombo().setFieldLabel(me.textStore.getValueByCode('ssp.label.student-type','Student Type') +  Ssp.util.Constants.REQUIRED_ASTERISK_DISPLAY);
 			 }
 
 			 if(me.studentTypesStore.getTotalCount( ) == 0){
