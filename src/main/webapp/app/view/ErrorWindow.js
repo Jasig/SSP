@@ -42,7 +42,7 @@ Ext.define('Ssp.view.ErrorWindow', {
 						           sortable: false,
 						           menuDisabled: true,
 						           flex:0.25
-						         },{ header: me.textStore.getValueByCode('ssp.label.error-window.messsage','Message'),
+						         },{ header: me.textStore.getValueByCode('ssp.label.error-window.message','Message'),
 						           dataIndex: 'errorMessage',
 						           renderer: me.columnRendererUtils.renderErrorMessage,
 						           sortable: false,
