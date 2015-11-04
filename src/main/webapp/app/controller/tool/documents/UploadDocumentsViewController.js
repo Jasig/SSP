@@ -85,7 +85,7 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 	{
 						Ext.Msg.alert(
 							me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
-							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure','%MESSAGE%', {'%MESSAGE%':o.result.message})
+							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure-message','%MESSAGE%', {'%MESSAGE%':o.result.message})
 							);
                 		return;
                 	}
@@ -101,7 +101,7 @@ Ext.define('Ssp.controller.tool.documents.UploadDocumentsViewController', {
                 		defaultMsg = 'The file you are trying to upload is too large.  Max file size is %MAX-SIZE%kb';
 						Ext.Msg.alert(
 							me.textStore.getValueByCode('ssp.message.upload-documents.error-title','SSP Error'),
-							me.textStore.getValueByCode('ssp.message.upload-documents.upload-failure',defaultMsg, {'%MAX-SIZE%':size})
+							me.textStore.getValueByCode('ssp.message.upload-documents.size-exceeded-failure',defaultMsg, {'%MAX-SIZE%':size})
 							);
                 		return;
                 	}
