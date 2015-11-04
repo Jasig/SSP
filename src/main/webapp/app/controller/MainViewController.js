@@ -55,10 +55,7 @@ Ext.define('Ssp.controller.MainViewController', {
 
 			me.configStore.load();
 
-			me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
 			me.displayStudentRecordView();
-			me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});
-			me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});
 
 			me.personService.get( me.authenticatedPerson.get('id'), {
 					success: me.getContactPersonSuccess,
@@ -67,6 +64,10 @@ Ext.define('Ssp.controller.MainViewController', {
 				});
 		
 		});
+		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});
+
 		return this.callParent(arguments);
     },
 
