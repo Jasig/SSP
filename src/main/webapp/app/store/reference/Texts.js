@@ -25,17 +25,26 @@ Ext.define('Ssp.store.reference.Texts', {
     	apiUrlStore: 'apiUrlStore'
     },
     constructor: function(){
-    	this.callParent(arguments);
+    	me = this;
 
-    	var url = this.getItemUrl('blurb');
+    	var url = this.getItemUrl('blurb') + "?langCode=" + Ext.util.Cookies.get('defaultLangCode');
 
-		Ext.apply(this.getProxy(),{url: this.getProxy().url + url,
-    			autoLoad: true,
-    			extraParams : {
-					langCode: Ext.util.Cookies.get('defaultLangCode'),
-					limit: '-1'
-				}
-    		});
+		Ext.apply(me, {
+							proxy: me.getProxy(url),
+							autoLoad: true,
+							autoSync: false,
+							pageSize: -1,
+							params : {
+								page : 0,
+								start : 0,
+								limit : -1,
+							},
+							extraParams: {
+								langCode: Ext.util.Cookies.get('defaultLangCode')
+							}
+						}
+		);
+    	return me.callParent(arguments);
     },
     getValueByCode:function(code, defaultVal, data)
     {
@@ -80,4 +89,35 @@ Ext.define('Ssp.store.reference.Texts', {
 			url = record.get('url');
 		return url;
 	},
+	createUrl: function(value){
+		return Ssp.mixin.ApiProperties.getBaseApiUrl() + value;
+	},
+	getProxy: function(url){
+		me = this;
+		var proxyObj = {
+			type: 'rest',
+			url: me.createUrl(url),
+			async: true,
+			simpleSortMode: true,
+			directionParam:'sortDirection',
+			actionMethods: {
+				create: "POST",
+				read: "GET",
+				update: "PUT",
+				destroy: "DELETE"
+			},
+			reader: {
+				type: 'json',
+				root: 'rows',
+				totalProperty: 'results',
+				successProperty: 'success',
+				message: 'message'
+			},
+			writer: {
+				type: 'json',
+				successProperty: 'success'
+			}
+		};
+		return proxyObj;
+	}
 });

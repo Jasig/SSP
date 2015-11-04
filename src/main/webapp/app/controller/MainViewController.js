@@ -49,24 +49,24 @@ Ext.define('Ssp.controller.MainViewController', {
 	init: function() {
 		var me=this;
 		me.textStore.load();
-		me.textStore.on('load', function(records, operation, success) {            		
+		me.textStore.on('load', function(records, operation, success) {
 			Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students', 'Students'));
 			Ext.getCmp('adminViewNav').setText(me.textStore.getValueByCode('ssp.label.admin', 'Admin'));
+
+			me.configStore.load();
+
+			me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+			me.displayStudentRecordView();
+			me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});
+			me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});
+
+			me.personService.get( me.authenticatedPerson.get('id'), {
+					success: me.getContactPersonSuccess,
+					failure: me.getContactPersonFailure,
+					scope: me
+				});
+		
 		});
-		
-		me.configStore.load();
-		
-		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-		me.displayStudentRecordView();
-		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});	
-		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});	
-	
-		me.personService.get( me.authenticatedPerson.get('id'), {
-				success: me.getContactPersonSuccess,
-				failure: me.getContactPersonFailure,
-				scope: me			
-			});
-		
 		return this.callParent(arguments);
     },
 
