@@ -253,17 +253,18 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	//this method should fix ssp-3041 - Scody
 	private void updateFactultyNames(ExternalStudentRecordsTO recordTO) {		
 		List<ExternalStudentTranscriptCourseTO> courses = recordTO.getTerms();
-		for(ExternalStudentTranscriptCourseTO course:courses){
-			try{
-				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId(),false);
-				if(person != null)
-					course.setFacultyName(person.getFullName());
-			}catch(ObjectNotFoundException e)
-			{
-				course.setFacultyName("None Listed");
-				LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Faculty School_id: "+course.getFacultySchoolId()+" Student ID: "+course.getSchoolId()+" Course: "+course.getFormattedCourse());
+		if (courses!=null) {
+			for (ExternalStudentTranscriptCourseTO course : courses) {
+				try {
+					Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId(), false);
+					if (person != null)
+						course.setFacultyName(person.getFullName());
+				} catch (ObjectNotFoundException e) {
+					course.setFacultyName("None Listed");
+					LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Faculty School_id: " + course.getFacultySchoolId() + " Student ID: " + course.getSchoolId() + " Course: " + course.getFormattedCourse());
+				}
 			}
-		}			
+		}
 	}
 	
 	@RequestMapping(value = "/transcript/currentcourses", method = RequestMethod.GET)
