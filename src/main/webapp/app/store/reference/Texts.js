@@ -55,8 +55,8 @@ Ext.define('Ssp.store.reference.Texts', {
     		str = me.getAt(index).get('value');
     	}
     	else if (defaultVal != null){
-//    		str = defaultVal;
-    		str = '{' + defaultVal + '}';
+    		str = defaultVal;
+//    		str = '{' + defaultVal + '}';
     	}
     	else{
     		str = code;
