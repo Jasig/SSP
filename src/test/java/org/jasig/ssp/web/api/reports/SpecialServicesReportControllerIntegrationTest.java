@@ -51,6 +51,7 @@ public class SpecialServicesReportControllerIntegrationTest extends
 				null, 
 				Lists.newArrayList(SpecialServiceGroupFixture.ANOTHER_TEST_SSG.id()), 
 				Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
+                Lists.newArrayList(Stubs.HomeCampusFixture.WEST.id()),
 				Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 				"csv");
 
@@ -74,6 +75,7 @@ public class SpecialServicesReportControllerIntegrationTest extends
 		controller.getSpecialServices(response, 
 				null, 
 				null,
+                null,
 				null,
 				null,
 				"csv");;

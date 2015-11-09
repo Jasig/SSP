@@ -23,6 +23,17 @@
 ### To start...  
  *  developing, look at the documentation in doc/development.  
  *  installing, look at the documentation in doc/installation.  
+ 
+ Please refer to other documentation in [SSP Wiki Home] (https://wiki.jasig.org/display/SSP/Home) 
+and if a solution can't be found, the ssp email lists in [SSP Email Lists] (https://wiki.jasig.org/display/SSP/SSP+Email+Lists)
+
+#### Requirements                                                                
+*  JDK 1.7.X - Just a JRE may not be sufficient, a full JDK is recommended
+*  Servlet 2.5 Container - Tomcat 6.0 is recommended
+*  Maven 2.2.1 or later
+*  [SSP-Platform] (https://github.com/Jasig/SSP-Platform)
+
+SSP uses Maven for its project configuration and build system.
 
 #### Descriptions of files and directories at the root of this project:  
 [doc](SSP-Open-Source-Project/tree/master/doc/) - documentation that is relevant to business rules, development, and installation.
@@ -40,4 +51,8 @@
 
 .gitignore - files/directories for git to ignore  
 README - This document  
+
+
+
+
 

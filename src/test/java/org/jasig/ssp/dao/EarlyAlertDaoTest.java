@@ -153,8 +153,8 @@ public class EarlyAlertDaoTest {
 	}
 
 	/**
-	 * Test the {@link EarlyAlertDao#save(EarlyAlert)} and
-	 * {@link EarlyAlertDao#delete(EarlyAlert)} actions.
+	 * Test the {@link EarlyAlertDao #save(EarlyAlert)} and
+	 * {@link EarlyAlertDao #delete(EarlyAlert)} actions.
 	 * 
 	 * @throws ObjectNotFoundException
 	 *             If any referenced objects could not be found. Since this is a
@@ -398,7 +398,7 @@ public class EarlyAlertDaoTest {
 		final PersonSearchFormTO addressLabelSearchTO = new PersonSearchFormTO(
 				null,
 				null, null, null, null, null,
-				null, null,
+				null, null, null,
 				null);
 		
 		final EarlyAlertStudentSearchTO searchForm = new EarlyAlertStudentSearchTO(addressLabelSearchTO, null, startDate, endDate);

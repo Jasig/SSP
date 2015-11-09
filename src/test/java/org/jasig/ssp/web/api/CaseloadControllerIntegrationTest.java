@@ -93,7 +93,7 @@ public class CaseloadControllerIntegrationTest {
 
 	/**
 	 * Test that the
-	 * {@link CaseloadController#caseloadFor(UUID, UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * {@link CaseloadController #caseloadFor(UUID, UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action returns the correct validation errors when an invalid ID is sent.
 	 * 
 	 * @throws ValidationException
@@ -107,7 +107,7 @@ public class CaseloadControllerIntegrationTest {
 			ValidationException {
 		// arrange, act
 		controller
-				.caseloadFor(UUID.randomUUID(), null, null, 0, 10, null, null);
+				.caseloadFor(UUID.randomUUID(), null, null, null, 0, 10, null, null);
 
 		// assert
 		fail("Exception should have been thrown for missing person identifier.");
@@ -115,7 +115,7 @@ public class CaseloadControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link CaseloadController#caseloadFor(UUID, UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * {@link CaseloadController #caseloadFor(UUID, UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws ObjectNotFoundException
@@ -125,7 +125,7 @@ public class CaseloadControllerIntegrationTest {
 	@Test
 	public void testControllerCaseloadFor() throws ObjectNotFoundException, ValidationException {
 		final Collection<PersonSearchResult2TO> list = controller.caseloadFor(
-				ADVISOR_ID, null, ObjectStatus.ACTIVE, null, null, null, null)
+				ADVISOR_ID, null, ObjectStatus.ACTIVE, null, null, null, null, null)
 				.getRows();
 
 		assertEquals("List should have had 0 rows.", 2, list.size());
@@ -133,7 +133,7 @@ public class CaseloadControllerIntegrationTest {
 
 	/**
 	 * Test the
-	 * {@link CaseloadController#caseloadFor(UUID, UUID, ObjectStatus, Integer, Integer, String, String)}
+	 * {@link CaseloadController #caseloadFor(UUID, UUID, ObjectStatus, Integer, Integer, String, String)}
 	 * action.
 	 * 
 	 * @throws ObjectNotFoundException
@@ -146,7 +146,7 @@ public class CaseloadControllerIntegrationTest {
 		final PagedResponse<PersonSearchResult2TO> result = controller
 				.caseloadFor(ADVISOR_ID,
 						programStatusService.get(ProgramStatus.TRANSITIONED_ID)
-								.getId(), ObjectStatus.ACTIVE, null, null,
+								.getId(), ObjectStatus.ACTIVE, null, null, null,
 						null, null);
 		final Collection<PersonSearchResult2TO> list = result.getRows();
 

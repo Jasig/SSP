@@ -29,25 +29,15 @@
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-    <changeSet id="Add faculty_school_id to early_alert" author="steve.cody">
-        <addColumn tableName="early_alert">
-            <column name="faculty_school_id" type="${nvarchar.type}(255)">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
-        <rollback>
-            <dropColumn tableName="early_alert" columnName="faculty_school_id" />
-        </rollback>
-    </changeSet>
-
-    <changeSet id="Add enrollment_status to early_alert" author="steve.cody">
-        <addColumn tableName="early_alert">
-            <column name="enrollment_status" type="${nvarchar.type}(80)">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
-        <rollback>
-            <dropColumn tableName="early_alert" columnName="enrollment_status" />
-        </rollback>
+    <changeSet id="Update config desc for map cutoff term calc." author="paul.spaude">
+        <update tableName="config">
+            <column name="description"
+                    value="Map Status Report Config: The calculation cutoff term is the latest future term to be included in the matching logic.
+The term range for a given calculation will start with the oldest term for the student's planned courses up to the cutoff term.
+The term code set here must be a valid term from external_term.
+If blank, invalid, or it doesn't match term code in external_term, the term with the latest start date having a registration window overlapping the current date will be used.
+Or, if no terms have an open registration window, the current term will be used."></column>
+            <where>name = 'map_plan_status_cutoff_term_code'</where>
+        </update>
     </changeSet>
 </databaseChangeLog>

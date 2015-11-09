@@ -274,7 +274,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
-			simpleData.mapTemplateTag = me.get('mapTemplateTag').getData();
+			simpleData.mapTemplateTag = me.get('mapTemplateTag');
 		}else{
 			simpleData.personId = me.get('personId');
 		}
