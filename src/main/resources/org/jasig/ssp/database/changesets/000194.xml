@@ -29,10 +29,10 @@
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
-    <changeSet id="Expand temp_eligibility_description to 250 chars" author="michael.sultzaberger">
-        <modifyDataType tableName="person_disability" columnName="temp_eligibility_description" newDataType="${nvarchar.type}(250)" />
+    <changeSet id="Expand blurb table value column to 1000 chars" author="michael.sultzaberger">
+        <modifyDataType tableName="blurb" columnName="value" newDataType="${nvarchar.type}(1000)" />
         <rollback>
-            <modifyDataType tableName="person_disability" columnName="temp_eligibility_description" newDataType="${nvarchar.type}(50)" />
+            <modifyDataType tableName="blurb" columnName="value" newDataType="${nvarchar.type}(256)" />
         </rollback>
     </changeSet>
 
