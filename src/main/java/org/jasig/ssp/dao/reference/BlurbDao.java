@@ -52,7 +52,6 @@ public class BlurbDao extends AbstractReferenceAuditableCrudDao<Blurb>
 		if (langCode != null) {
 			criteria.add(Restrictions.eq("lang", langCode));
 		}
-		sAndP.addAll(criteria);
 		return super.processCriteriaWithStatusSortingAndPaging(criteria,
 				sAndP);
 	}
