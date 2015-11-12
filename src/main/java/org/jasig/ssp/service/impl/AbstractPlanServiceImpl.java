@@ -157,7 +157,7 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 		Map<String,Object> params = new HashMap<String,Object>();
 		String programCode = planOutput.getNonOutputTO().getProgramCode();
 		if (programCode != null && programCode.trim() != "") {
-			params.put("programName", externalProgramService.getByCode(programCode).getName());
+			params.put("programName", getExternalProgramName(programCode));
 		}
 		
 		SubjectAndBody subjectAndBody = messageTemplateService.createMapPlanFullOutput(student, owner, modifiedBy,
@@ -169,7 +169,15 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				params);
 		return subjectAndBody;
 	}
-	
+
+	protected String getExternalProgramName(String programCode) {
+		try {
+			return externalProgramService.getByCode(programCode).getName();
+		} catch (ObjectNotFoundException onfe) {
+			return programCode;
+		}
+	}
+
 	@Override
 	@Transactional(readOnly=true)
 	public TO validate(TO model) throws ObjectNotFoundException{
