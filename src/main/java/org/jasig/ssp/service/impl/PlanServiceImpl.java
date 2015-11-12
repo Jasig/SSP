@@ -224,7 +224,7 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 			Map<String,Object> params = new HashMap<String,Object>();
 			String programCode = outputPlan.getOutputPlan().getNonOutputTO().getProgramCode();
 			if (programCode != null && programCode.trim() != "") {
-				params.put("programName", externalProgramService.getByCode(programCode).getName());
+				params.put("programName", getExternalProgramName(programCode));
 			}
 
 		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, params);
