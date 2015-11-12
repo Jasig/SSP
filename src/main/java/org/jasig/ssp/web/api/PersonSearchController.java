@@ -357,7 +357,7 @@ public class PersonSearchController extends AbstractBaseController {
                 .createForSingleSortWithPaging(ObjectStatus.ALL, start, limit, sortConfigured, sortDirection, null);
 
         if (sortConfigured.equals("dp.coachLastName")) {
-			sortAndPage.prependSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
+			sortAndPage.appendSortField("dp.coachFirstName", SortDirection.getSortDirection(sortDirection));
 		}
 
 		return sortAndPage;
