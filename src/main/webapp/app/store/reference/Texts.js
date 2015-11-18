@@ -31,7 +31,7 @@ Ext.define('Ssp.store.reference.Texts', {
 
 		Ext.apply(me, {
 							proxy: me.getProxy(url),
-							autoLoad: true,
+							autoLoad: false,
 							autoSync: false,
 							pageSize: -1,
 							params : {

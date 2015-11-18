@@ -31,13 +31,8 @@ Ext.define('Ssp.store.Tools', {
         var me=this;
         me.callParent( arguments );
 
-        if (me.textStore.getTotalCount() == 0) {
-			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
-			//me.textStore.load();
-			//test
-		} else {
-			me.onTextStoreLoad();
-		};
+		me.onTextStoreLoad();
+
         return me;
     },
     onTextStoreLoad:function() {

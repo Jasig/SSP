@@ -135,16 +135,12 @@ Ext.define('Ssp.controller.SearchViewController', {
 				me.termsStore.addListener("load", me.onTermsStoreLoad, me);
 				me.termsStore.load();
 		};
-		if (me.textStore.getTotalCount() == 0) {
-			me.textStore.addListener("load", me.onTextStoreLoad, me, {single: true});
-			//me.textStore.load();
-		} else {
-			me.onTextStoreLoad();
-		};
 		if (me.configStore.getTotalCount() == 0) {
-			me.configStore.addListener("load", me.onTextStoreLoad, me, {single: true});
 			me.configStore.load();
 		};
+
+		me.onTextStoreLoad();
+
 		me.personLite.on('idchanged', me.personChanged, me);
 	   	// load program statuses
 		me.getProgramStatuses();

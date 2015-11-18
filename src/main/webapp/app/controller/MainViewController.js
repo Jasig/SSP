@@ -48,6 +48,10 @@ Ext.define('Ssp.controller.MainViewController', {
 	
 	init: function() {
 		var me=this;
+		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
+		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});
+		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});
+
 		me.textStore.load();
 		me.textStore.on('load', function(records, operation, success) {
 			Ext.getCmp('studentViewNav').setText(me.textStore.getValueByCode('ssp.label.students', 'Students'));
@@ -64,9 +68,6 @@ Ext.define('Ssp.controller.MainViewController', {
 				});
 		
 		});
-		me.appEventsController.assignEvent({eventName: 'displayStudentRecordView', callBackFunc: this.onDisplayStudentRecordView, scope: this});
-		me.appEventsController.assignEvent({eventName: 'doAdminNav', callBackFunc: me.displayAdminView, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doStudentsNav', callBackFunc: me.displayStudentRecordView, scope: me});
 
 		return this.callParent(arguments);
     },
