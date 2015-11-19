@@ -30,6 +30,8 @@ import org.jasig.ssp.service.ReferenceService;
 public interface ConfigService extends
 		ReferenceService<Config> {
 
+	public static final String DEFAULT_LANGUAGE = "default_language";
+
 	/**
 	 * Gets the specified configuration value, or return empty if not found.
 	 * 

@@ -77,7 +77,7 @@ public class BlurbServiceImpl extends
 	public PagingWrapper<Blurb> getAll(
 			SortingAndPaging sAndP, String code, String langCode) {
 		if (langCode==null) {
-			langCode = configService.getByNameNullOrDefaultValue("defaultLanguage");
+			langCode = configService.getByNameNullOrDefaultValue(ConfigService.DEFAULT_LANGUAGE);
 		}
 		if (langCode==null) {
 			langCode = "eng";
