@@ -54,9 +54,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/1/blurb")
 public class BlurbController {
 
-	@Value("#{configProperties.per_coach_sync_transactions}")
-	private String defaultLanguage = "eng";
-	
 	@Autowired
 	protected transient BlurbService service;
 

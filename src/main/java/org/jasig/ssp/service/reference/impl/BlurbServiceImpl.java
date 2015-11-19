@@ -25,6 +25,7 @@ import org.jasig.ssp.dao.reference.EnrollmentStatusDao;
 import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.service.reference.BlurbService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EnrollmentStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -39,11 +40,11 @@ public class BlurbServiceImpl extends
 		AbstractReferenceService<Blurb>
 		implements BlurbService {
 	
-	@Value("#{configProperties.defaultLanguage}")
-	private String defaultLanguage = "eng";
-
 	@Autowired
 	transient private BlurbDao dao;
+
+	@Autowired
+	transient private ConfigService configService;
 
 	protected void setDao(final BlurbDao dao) {
 		this.dao = dao;
@@ -75,6 +76,12 @@ public class BlurbServiceImpl extends
 	@Override
 	public PagingWrapper<Blurb> getAll(
 			SortingAndPaging sAndP, String code, String langCode) {
+		if (langCode==null) {
+			langCode = configService.getByNameNullOrDefaultValue("defaultLanguage");
+		}
+		if (langCode==null) {
+			langCode = "eng";
+		}
 		return dao.getAll(sAndP,code,langCode);
 	}
 

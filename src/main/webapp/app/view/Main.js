@@ -76,26 +76,26 @@ Ext.define('Ssp.view.Main', {
                 }, {
                     xtype: 'tbspacer',
                     flex: 1
-                }, {
-                    xtype: 'combo',
-                    displayField: 'language',
-                    valueField: 'code',                   
-                    store: Ext.create('Ext.data.ArrayStore', {
-                        fields: ['code', 'language'],
-                        data: languages
-                    }),
-                    listeners: {
-
-                        select: function(cb, record) {
-                            Ext.util.Cookies.set('defaultLangCode', cb.getValue());
-                            //me.textStore.load();
-                            window.location.reload();
-                        },
-						render: function() {			        		        
-							var val = Ext.util.Cookies.get('defaultLangCode');
-							this.setValue(val);
-						}
-                    }
+//                },{
+//                    xtype: 'combo',
+//                    displayField: 'language',
+//                    valueField: 'code',
+//                    store: Ext.create('Ext.data.ArrayStore', {
+//                        fields: ['code', 'language'],
+//                        data: languages
+//                    }),
+//                    listeners: {
+//
+//                        select: function(cb, record) {
+//                            Ext.util.Cookies.set('defaultLangCode', cb.getValue());
+//                            //me.textStore.load();
+//                            window.location.reload();
+//                        },
+//						render: function() {
+//							var val = Ext.util.Cookies.get('defaultLangCode');
+//							this.setValue(val);
+//						}
+//                    }
                 }]
             }
         });
