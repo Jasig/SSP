@@ -615,11 +615,6 @@
                     "path": "/app/model/util/"
                 },
                 {
-                    "clsName": "Ssp.model.Configuration",
-                    "name": "Configuration.js",
-                    "path": "/app/model/"
-                },
-                {
                     "clsName": "Ssp.model.CaseloadPerson",
                     "name": "CaseloadPerson.js",
                     "path": "/app/model/"

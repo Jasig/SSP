@@ -268,7 +268,6 @@ Ext.require([
     'Ssp.model.Preferences',
     'Ssp.model.FieldError',
     'Ssp.model.util.TreeRequest',
-    'Ssp.model.Configuration',
 	'Ssp.model.Person',
 	'Ssp.model.PersonAppointment',
 	'Ssp.model.Appointment',
@@ -692,12 +691,6 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					sspConfig: {
-				        fn: function(){
-				            return new Ssp.model.Configuration({});
-				        },
-				        singleton: true
-				    },
 					currentPerson: {
 				        fn: function(){
 				            return new Ssp.model.Person({id:""});
