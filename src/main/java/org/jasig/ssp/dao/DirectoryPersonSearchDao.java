@@ -18,16 +18,6 @@
  */
 package org.jasig.ssp.dao;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
-
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -37,7 +27,13 @@ import org.hibernate.ScrollableResults;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.PersonSearchResultFull;
+import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
+import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -55,6 +51,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 
 
 /**
@@ -895,13 +900,62 @@ public class DirectoryPersonSearchDao  {
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder, filterTracker);
-			if(personSearchRequest.getCurrentlyRegistered())
-			{
-				stringBuilder.append("dp.currentRegistrationStatus > 0");
-			} else {
-				stringBuilder.append(" (dp.currentRegistrationStatus is null or dp.currentRegistrationStatus <= 0) ");
+			boolean registeredCurrentTerm = false;
+			boolean notRegisteredCurrentTerm = false;
+			boolean registeredNextTerm = false;
+			boolean notRegisteredNextTerm = false;
+			for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered)) {
+					registeredCurrentTerm = true;
+				}
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_NOT_CURRENT_TERM.equals(currentlyRegistered)) {
+					notRegisteredCurrentTerm = true;
+				}
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_NEXT_TERM.equals(currentlyRegistered)) {
+					registeredNextTerm = true;
+				}
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_NOT_NEXT_TERM.equals(currentlyRegistered)) {
+					notRegisteredNextTerm = true;
+				}
+			}
+			if (registeredCurrentTerm || notRegisteredCurrentTerm) {
+				buildCurrentTerm(stringBuilder, registeredCurrentTerm, notRegisteredCurrentTerm);
+			}
+			if (registeredNextTerm || notRegisteredNextTerm) {
+				if (registeredCurrentTerm || notRegisteredCurrentTerm) {
+					stringBuilder.append(" and ");
+				}
+				buildNextTerm(stringBuilder, registeredNextTerm, notRegisteredNextTerm);
 			}
 		}
+	}
+
+	private void buildCurrentTerm(StringBuilder stringBuilder, boolean registeredCurrentTerm, boolean notRegisteredCurrentTerm) {
+		stringBuilder.append(" ( ");
+		if (registeredCurrentTerm) {
+			stringBuilder.append("dp.currentRegistrationStatus > 0");
+		}
+		if (notRegisteredCurrentTerm) {
+			if (registeredCurrentTerm) {
+				stringBuilder.append(" or ");
+			}
+			stringBuilder.append(" (dp.currentRegistrationStatus is null or dp.currentRegistrationStatus <= 0) ");
+		}
+		stringBuilder.append(" ) ");
+	}
+
+	private void buildNextTerm(StringBuilder stringBuilder, boolean registeredNextTerm, boolean notRegisteredNextTerm) {
+		stringBuilder.append(" ( ");
+		if (registeredNextTerm) {
+			stringBuilder.append("dp.nextTermRegistrationStatus > 0");
+		}
+		if (notRegisteredNextTerm) {
+			if (registeredNextTerm) {
+				stringBuilder.append(" or ");
+			}
+			stringBuilder.append(" (dp.nextTermRegistrationStatus is null or dp.nextTermRegistrationStatus <= 0) ");
+		}
+		stringBuilder.append(" ) ");
 	}
 
 	private void buildSchoolId(PersonSearchRequest personSearchRequest,

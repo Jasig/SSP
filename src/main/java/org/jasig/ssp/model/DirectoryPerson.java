@@ -18,13 +18,12 @@
  */
 package org.jasig.ssp.model; // NOPMD
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.jasig.ssp.model.external.AbstractExternalData;
+import org.jasig.ssp.model.external.ExternalData;
+
 import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -32,11 +31,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.jasig.ssp.model.external.AbstractExternalData;
-import org.jasig.ssp.model.external.ExternalData;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 
 @SuppressWarnings("serial")
@@ -403,6 +404,9 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	@Nullable
 	private Integer currentRegistrationStatus;
+
+	@Nullable
+	private Integer nextTermRegistrationStatus;
 
 	@Nullable
 	private Integer activeAlertsCount;
@@ -866,6 +870,15 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	public void setCurrentRegistrationStatus(
 			final Integer currentRegistrationStatus) {
 		this.currentRegistrationStatus = currentRegistrationStatus;
+	}
+
+	public Integer getNextTermRegistrationStatus() {
+		return nextTermRegistrationStatus;
+	}
+
+	public void setNextTermRegistrationStatus(
+			final Integer nextTermRegistrationStatus) {
+		this.nextTermRegistrationStatus = nextTermRegistrationStatus;
 	}
 
 	public Number getActiveAlertsCount() {

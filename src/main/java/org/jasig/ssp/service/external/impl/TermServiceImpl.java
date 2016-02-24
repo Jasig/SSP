@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.service.external.impl;
 
-import java.util.List;
-
 import org.jasig.ssp.dao.external.TermDao;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -27,6 +25,8 @@ import org.jasig.ssp.service.external.TermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Term service implementation
@@ -53,6 +53,11 @@ public class TermServiceImpl extends AbstractExternalReferenceDataService<Term>
 	@Override
 	public Term getCurrentTerm() throws ObjectNotFoundException {
 		return getDao().getCurrentTerm();
+	}
+
+	@Override
+	public Term getNextTerm() throws ObjectNotFoundException {
+		return getDao().getNextTerm(getCurrentTerm().getEndDate());
 	}
 
 	@Override

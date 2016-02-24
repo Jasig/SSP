@@ -951,7 +951,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				hoursEarnedMax: me.getView().query('numberfield[name=hoursEarnedMax]')[0].value,
 				gpaEarnedMin: me.getView().query('numberfield[name=gpaMin]')[0].value,
 				gpaEarnedMax: me.getView().query('numberfield[name=gpaMax]')[0].value,
-				currentlyRegistered: me.getView().query('combobox[name=currentlyRegistered]')[0].value == null ? null : new Boolean(me.getView().query('combobox[name=currentlyRegistered]')[0].value).toString(),
+				currentlyRegistered: me.getView().query('combobox[name=currentlyRegistered]')[0].value,
 				earlyAlertResponseLate: me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
 				planStatus: me.getView().query('combobox[name=planStatus]')[0].value,
 				planExists: me.getView().query('combobox[name=planExists]')[0].value,

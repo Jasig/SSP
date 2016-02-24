@@ -19,9 +19,7 @@
 package org.jasig.ssp.dao;
 
 
-import java.io.FileWriter;
-import java.util.*;
-import javax.validation.constraints.NotNull;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -32,7 +30,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.type.StringType;
-import org.jasig.ssp.model.DirectoryPerson;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
@@ -51,7 +48,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.google.common.collect.Lists;
+
+import javax.validation.constraints.NotNull;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 
 /**
@@ -184,22 +188,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	@SuppressWarnings("unchecked")
 	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
 	{
-		Term currentTerm;
 		FilterTracker filterTracker = new FilterTracker();
-		try
-		{
-			currentTerm = termService.getCurrentTerm();
-		}
-		//If there is no current term, lets degrade silently
-		catch(ObjectNotFoundException e)
-		{
-			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
-			currentTerm = new Term();
-			currentTerm.setName("CURRENT TERM NOT SET");
-			currentTerm.setStartDate(Calendar.getInstance().getTime());
-			currentTerm.setEndDate(Calendar.getInstance().getTime());
-			
-		}
+
 		StringBuilder stringBuilder = buildSelect();
 		
 		buildFrom(personSearchRequest,stringBuilder);
@@ -210,11 +200,48 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		Query query = createHqlQuery(stringBuilder.toString());
 		
-		addBindParams(personSearchRequest,query,currentTerm);
+		addBindParams(personSearchRequest, query, getCurrentTerm(), getNextTerm());
 		query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
 				PersonSearchResult2.class, "person_"));
 		return query.list();
 	}
+
+	private Term getCurrentTerm () {
+		Term term;
+		try
+		{
+			term = termService.getCurrentTerm();
+		}
+		//If there is no current term, lets degrade silently
+		catch(ObjectNotFoundException e)
+		{
+			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
+			term = new Term();
+			term.setName("CURRENT TERM NOT SET");
+			term.setStartDate(Calendar.getInstance().getTime());
+			term.setEndDate(Calendar.getInstance().getTime());
+		}
+		return term;
+	}
+
+	private Term getNextTerm () {
+		Term term;
+		try
+		{
+			term = termService.getNextTerm();
+		}
+		//If there is no next term, lets degrade silently
+		catch(ObjectNotFoundException e)
+		{
+			LOGGER.error("NEXT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
+			term = new Term();
+			term.setName("NEXT TERM NOT SET");
+			term.setStartDate(Calendar.getInstance().getTime());
+			term.setEndDate(Calendar.getInstance().getTime());
+		}
+		return term;
+	}
+
 	private StringBuilder buildSelect(){
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(" select distinct p.id as person_id, p.firstName as person_firstName, " +
@@ -236,7 +263,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
 		// + lastName
 		buildStudentIdOrName(personSearchRequest, filterTracker, stringBuilder);
-		
+
 		// currentlyRegistered 
 		buildCurrentlyRegistered(personSearchRequest, filterTracker,stringBuilder);
 		
@@ -377,7 +404,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 
 	private void addBindParams(PersonSearchRequest personSearchRequest,
-			Query query, Term currentTerm) 
+			Query query, Term currentTerm, Term nextTerm)
 	{
 		if(hasStudentId(personSearchRequest)) {
 			final String wildcardedStudentIdOrNameTerm = new StringBuilder("%")
@@ -542,7 +569,12 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
-			query.setString("currentTerm", currentTerm.getCode());
+			if (hasCurrentTerm(personSearchRequest)) {
+				query.setString("currentTerm", currentTerm.getCode());
+			}
+			if (hasNextTerm(personSearchRequest)) {
+				query.setString("nextTerm", nextTerm.getCode());
+			}
 		}
 		
 		if(hasMyPlans(personSearchRequest))
@@ -716,18 +748,67 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if(hasCurrentlyRegistered(personSearchRequest))
 		{
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if(personSearchRequest.getCurrentlyRegistered())
-			{
-				stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount > 0 ) ");
+			boolean registeredCurrentTerm = false;
+			boolean notRegisteredCurrentTerm = false;
+			boolean registeredNextTerm = false;
+			boolean notRegisteredNextTerm = false;
+			for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered)) {
+					registeredCurrentTerm = true;
+				}
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_NOT_CURRENT_TERM.equals(currentlyRegistered)) {
+					notRegisteredCurrentTerm = true;
+				}
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_NEXT_TERM.equals(currentlyRegistered)) {
+					registeredNextTerm = true;
+				}
+				if (PersonSearchRequest.CURRENTLY_REGISTERED_NOT_NEXT_TERM.equals(currentlyRegistered)) {
+					notRegisteredNextTerm = true;
+				}
 			}
-			else
-			{
-				stringBuilder.append(" not exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId )  or ");
-				stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount = 0)  ");
+
+			if (registeredCurrentTerm || notRegisteredCurrentTerm) {
+				buildCurrentTerm(stringBuilder, registeredCurrentTerm, notRegisteredCurrentTerm);
 			}
+			if (registeredNextTerm || notRegisteredNextTerm) {
+				if (registeredCurrentTerm || notRegisteredCurrentTerm) {
+					stringBuilder.append(" and ");
+				}
+				buildNextTerm(stringBuilder, registeredNextTerm, notRegisteredNextTerm);
+			}
+
 		}
 	}
 
+	private void buildCurrentTerm(StringBuilder stringBuilder, boolean registeredCurrentTerm, boolean notRegisteredCurrentTerm) {
+		stringBuilder.append(" ( ");
+		if (registeredCurrentTerm) {
+			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount > 0 ) ");
+		}
+		if (notRegisteredCurrentTerm) {
+			if (registeredCurrentTerm) {
+				stringBuilder.append(" or ");
+			}
+			stringBuilder.append(" (not exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId )  or ");
+			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount = 0))  ");
+		}
+		stringBuilder.append(" ) ");
+	}
+
+	private void buildNextTerm(StringBuilder stringBuilder, boolean registeredNextTerm, boolean notRegisteredNextTerm) {
+		stringBuilder.append(" ( ");
+		if (registeredNextTerm) {
+			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :nextTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount > 0 ) ");
+		}
+		if (notRegisteredNextTerm) {
+			if (registeredNextTerm) {
+				stringBuilder.append(" or ");
+			}
+			stringBuilder.append(" (not exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :nextTerm and rbt.schoolId = p.schoolId )  or ");
+			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :nextTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount = 0))  ");
+		}
+		stringBuilder.append(" ) ");
+	}
 
 	private void buildStudentIdOrName(PersonSearchRequest personSearchRequest,
 			FilterTracker filterTracker, StringBuilder stringBuilder) {
@@ -862,7 +943,26 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) 
 	{
-		return personSearchRequest.getCurrentlyRegistered() != null;
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getCurrentlyRegistered()));
+	}
+
+	private boolean hasCurrentTerm(PersonSearchRequest personSearchRequest)
+	{
+		for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+			if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered) || PersonSearchRequest.CURRENTLY_REGISTERED_NOT_CURRENT_TERM.equals(currentlyRegistered)){
+				return true;
+			}
+		}
+		return false;
+	}
+	private boolean hasNextTerm(PersonSearchRequest personSearchRequest)
+	{
+		for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+			if (PersonSearchRequest.CURRENTLY_REGISTERED_NEXT_TERM.equals(currentlyRegistered) || PersonSearchRequest.CURRENTLY_REGISTERED_NOT_NEXT_TERM.equals(currentlyRegistered)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 
@@ -892,69 +992,4 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			this.isFirstFilter = isFirstFilter;
 		}
 	}
-	
-	public List<PersonSearchResult2> directoryPersonSearch(PersonSearchRequest personSearchRequest)
-	{
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(DirectoryPerson.class);
-		if(personSearchRequest.getBirthDate() != null)
-		{
-			query.add(Restrictions.eq("birthDate", personSearchRequest.getBirthDate()));
-		}
-		
-		if(personSearchRequest.getCurrentlyRegistered() != null && personSearchRequest.getCurrentlyRegistered())
-		{
-			query.add(Restrictions.gt("currentRegistrationStatus", 0));
-		}
-		
-		if(hasDeclaredMajor(personSearchRequest) )
-		{
-			query.add(Restrictions.in("declaredMajor", personSearchRequest.getDeclaredMajor()));
-		}
-		
-		if(StringUtils.isNotBlank(personSearchRequest.getSchoolId()))
-		{
-			query.add(Restrictions.eq("schoolId", personSearchRequest.getSchoolId() + "%"));
-		}
-		
-		if(StringUtils.isNotBlank(personSearchRequest.getLastName()))
-		{
-			query.add(Restrictions.like("lastName", personSearchRequest.getLastName() + "%"));
-		}
-		
-		if(StringUtils.isNotBlank(personSearchRequest.getFirstName()))
-		{
-			query.add(Restrictions.like("firstName", personSearchRequest.getFirstName() + "%"));
-		}
-		
-		if(personSearchRequest.getCoach() != null)
-		{
-			//query.add(Restrictions.like("coach", personSearchRequest.getCoach()));
-			query.add(Restrictions.in("coach", personSearchRequest.getCoach()));
-		}
-		
-		if(personSearchRequest.getProgramStatus() != null)
-		{
-			query.add(Restrictions.in("programStatus", personSearchRequest.getProgramStatus()));
-		}
-		
-		if(StringUtils.isNotBlank(personSearchRequest.getPlanStatus()))
-		{
-			query.add(Restrictions.like("mapStatus", personSearchRequest.getPlanStatus()));
-		}
-		
-		
-		return null;
-	}
-	
-	/*
-	 * never used locally, candidate for deletion
-	private void buildDirectoryPersonFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
-	{
-		stringBuilder.append(" from PersonDirectory p ");
-		
-		if(personSearchRequest.getSpecialServiceGroup() != null && (personSearchRequest.getSpecialServiceGroup().size()>0)){
-			stringBuilder.append(" Person person ");
-		}
-	}
-	*/
 }

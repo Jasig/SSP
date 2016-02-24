@@ -31,8 +31,10 @@ Ext.define('Ssp.store.CurrentlyRegistered', {
     },
     load: function() {
         var me=this;
-        var values = [{ displayValue:'Registered', code: 'REGISTERED', booleanValue: true },
-                      { displayValue:'Not Registered', code: 'NOT_REGISTERED', booleanValue: false }
+        var values = [{ displayValue:'Registered Current Term', code: 'REGISTERED_CURRENT' },
+                      { displayValue:'Not Registered Current Term', code: 'NOT_REGISTERED_CURRENT' },
+                      { displayValue:'Registered Next Term', code: 'REGISTERED_NEXT' },
+                      { displayValue:'Not Registered Next Term', code: 'NOT_REGISTERED_NEXT' }
         ];
         // set the model
         me.loadData( values );

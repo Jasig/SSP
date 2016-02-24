@@ -18,10 +18,6 @@
  */
 package org.jasig.ssp.factory.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.reference.CampusDao;
 import org.jasig.ssp.dao.reference.ProgramStatusDao;
@@ -39,6 +35,11 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -168,7 +169,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, BigDecimal localGpaMin, BigDecimal localGpaMax,
             BigDecimal programGpaMin, BigDecimal programGpaMax,
-            Boolean currentlyRegistered,String earlyAlertResponseLate,
+            String currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,
 			Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType, String homeCampus, SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 
@@ -196,7 +197,8 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
         to.setLocalGpaMax(localGpaMax);
         to.setProgramGpaMin(programGpaMin);
         to.setProgramGpaMax(programGpaMax);
-		to.setCurrentlyRegistered(currentlyRegistered);
+		//comma separated set of currentlyRegistered values
+		to.setCurrentlyRegistereds(currentlyRegistered);
 		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
 		to.setSapStatusCodes(sapStatusCode);
 		to.setPlanStatus(planStatus);
@@ -220,7 +222,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String coachId, String declaredMajor, BigDecimal hoursEarnedMin,
 			BigDecimal hoursEarnedMax, BigDecimal gpaEarnedMin,
 			BigDecimal gpaEarnedMax, BigDecimal localGpaMin, BigDecimal localGpaMax,
-            BigDecimal programGpaMin, BigDecimal programGpaMax, Boolean currentlyRegistered,String earlyAlertResponseLate,
+            BigDecimal programGpaMin, BigDecimal programGpaMax, String currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,Boolean myWatchList,
 			Date birthDate, String actualStartTerm) throws ObjectNotFoundException {
 
@@ -248,7 +250,8 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
         to.setLocalGpaMax(localGpaMax);
         to.setProgramGpaMin(programGpaMin);
         to.setProgramGpaMax(programGpaMax);
-		to.setCurrentlyRegistered(currentlyRegistered);
+		//comma separated set of currentlyRegistered values
+		to.setCurrentlyRegistereds(currentlyRegistered);
 		to.setEarlyAlertResponseLate(earlyAlertResponseLate);
 		to.setSapStatusCodes(sapStatusCode);
 		to.setPlanStatus(planStatus);

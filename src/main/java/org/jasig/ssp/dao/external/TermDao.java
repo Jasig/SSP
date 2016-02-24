@@ -18,9 +18,6 @@
  */
 package org.jasig.ssp.dao.external;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -32,6 +29,9 @@ import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data access class for the Term reference entity.
@@ -56,6 +56,23 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 
 		if (term == null || term.isEmpty()) {
 			throw new ObjectNotFoundException("Current Term not Defined",
+					"Term");
+		} else {
+			return term.get(0);
+		}
+	}
+
+	public Term getNextTerm(java.util.Date termEndDate) throws ObjectNotFoundException {
+		final Criteria query = createCriteria();
+		query.add(Restrictions.ge("startDate", termEndDate));
+		query.addOrder(Order.asc("startDate"));
+		query.setMaxResults(1);
+
+		@SuppressWarnings("unchecked")
+		final List <Term> term = (List<Term>) query.list();
+
+		if (term == null || term.isEmpty()) {
+			throw new ObjectNotFoundException("Next Term not Defined for Date: " + termEndDate.toString(),
 					"Term");
 		} else {
 			return term.get(0);

@@ -18,11 +18,6 @@
  */
 package org.jasig.ssp.model;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,6 +27,12 @@ import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.PersonSearchController;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -66,9 +67,14 @@ public class PersonSearchRequest {
 	public static final String PERSON_TABLE_TYPE_SSP_ONLY = "SSP_ONLY";
 	
 	public static final String PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY = "EXTERNAL_DATA_ONLY";
-	
 
+	public static final String CURRENTLY_REGISTERED_CURRENT_TERM = "REGISTERED_CURRENT";
 
+	public static final String CURRENTLY_REGISTERED_NOT_CURRENT_TERM = "NOT_REGISTERED_CURRENT";
+
+	public static final String CURRENTLY_REGISTERED_NEXT_TERM = "REGISTERED_NEXT";
+
+	public static final String CURRENTLY_REGISTERED_NOT_NEXT_TERM = "NOT_REGISTERED_NEXT";
 
 	// id of the person
 	private String schoolId;
@@ -99,7 +105,7 @@ public class PersonSearchRequest {
 
     private BigDecimal programGpaMax;
 	
-	private Boolean currentlyRegistered;
+	private List<String> currentlyRegistered;
 	
 	private String earlyAlertResponseLate;
 	
@@ -305,13 +311,15 @@ public class PersonSearchRequest {
 	}
 
 
-	public Boolean getCurrentlyRegistered() {
+	public List<String> getCurrentlyRegistered() {
 		return currentlyRegistered;
 	}
 
 
-	public void setCurrentlyRegistered(Boolean currentlyRegistered) {
-		this.currentlyRegistered = currentlyRegistered;
+	public void setCurrentlyRegistered(List<String> currentlyRegistered) {
+		if (CollectionUtils.isNotEmpty(currentlyRegistered)) {
+			this.currentlyRegistered = currentlyRegistered;
+		}
 	}
 
 

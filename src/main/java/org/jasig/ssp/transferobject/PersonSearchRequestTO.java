@@ -18,18 +18,19 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -68,7 +69,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
     private BigDecimal programGpaMax;
 	
-	private Boolean currentlyRegistered;
+	private List<String> currentlyRegistered;
 	
 	private String earlyAlertResponseLate;
 	
@@ -251,12 +252,19 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.gpaEarnedMax = gpaEarnedMax;
 	}
 
-	public Boolean getCurrentlyRegistered() {
+	public List<String> getCurrentlyRegistered() {
 		return currentlyRegistered;
 	}
 
-	public void setCurrentlyRegistered(Boolean currentlyRegistered) {
+	public void setCurrentlyRegistered(List<String> currentlyRegistered) {
 		this.currentlyRegistered = currentlyRegistered;
+	}
+
+	public void setCurrentlyRegistereds(String currentlyRegistered) {
+		if (StringUtils.isNotBlank(currentlyRegistered)) {
+			List<String> items = Arrays.asList(currentlyRegistered.split("\\s*,\\s*"));
+			this.currentlyRegistered = items;
+		}
 	}
 
 	public String getEarlyAlertResponseLate() {

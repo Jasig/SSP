@@ -220,6 +220,7 @@ Ext.define('Ssp.view.SearchForm',{
                     //tpl: comboTPLNameDisplay
                 }, {
 		   		    xtype: 'combobox',
+    				multiSelect: true,
                     fieldLabel: me.textStore.getValueByCode('ssp.label.search.registered', 'Registered'),
 		   		    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.registered', 'Any'),
 					columnWidth: 0.5,
@@ -228,7 +229,7 @@ Ext.define('Ssp.view.SearchForm',{
 					labelAlign: 'right',
 					labelWidth:80,
                     store: me.currentlyRegisteredStore,
-   		   		    valueField: 'booleanValue',
+   		   		    valueField: 'code',
 		   		    displayField: 'displayValue',
 		   		    editable: false
 		   		    //tpl: comboTPLDisplayValueDisplay
