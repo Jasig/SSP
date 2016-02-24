@@ -558,7 +558,7 @@ END;
             early_alert_response_current_count = subquery.early_alert_response_current_count,
             current_registration_status = subquery.current_registration_status,
             campus_name =               subquery.campus_name,
-            next_term_registration_status = subquery.next_term_registration_status,
+            next_term_registration_status = subquery.next_term_registration_status
             FROM (SELECT    vpd.id,
                 vpd.object_status,
                 vpd.person_id,
