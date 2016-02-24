@@ -30,7 +30,8 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		authenticatedPerson: 'authenticatedPerson',
 		treeStore: 'earlyAlertsTreeStore',
 		util: 'util',
-		textStore: 'sspTextStore'
+		textStore: 'sspTextStore',
+		configStore: 'configurationOptionsUnpagedStore'
     },
     config: {
     	containerToLoadInto: 'tools',
@@ -83,6 +84,7 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 		me.filterEarlyAlertOutcomesAndOutreaches();		
 		var closed = (me.earlyAlert.get('closedById') == "" || me.earlyAlert.get('closedById') == null) ? false:true;
 		me.model.set("closed",closed);
+		me.model.set("sendCreatorEmail", me.configStore.getConfigByName('ear_send_faculty_email_default_value'));
 		me.getView().getForm().loadRecord(me.model);
 		
 		me.showHideOtherOutcomeDescription();
@@ -201,10 +203,10 @@ Ext.define('Ssp.controller.tool.earlyalert.EarlyAlertResponseViewController', {
 			}else{
 				me.earlyAlert.set( 'closedById', null);
 			}
-			
+
 			// jsonData for the response
 			jsonData = record.data;
-			
+
 			me.getView().setLoading(true);
 			me.earlyAlertResponseService.save(personId, earlyAlertId, jsonData, {
 				success: me.closeEarlyAlertSuccess,

@@ -24,7 +24,8 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponseDetails',{
     controller: 'Ssp.controller.tool.earlyalert.EarlyAlertResponseDetailsViewController',
     inject: {
     	selectedOutreachesStore: 'earlyAlertResponseDetailsOutreachesStore',
-    	selectedReferralsStore: 'earlyAlertResponseDetailsReferralsStore'
+    	selectedReferralsStore: 'earlyAlertResponseDetailsReferralsStore',
+    	textStore: 'sspTextStore'
     },
     title: 'Early Alert Response Details',
 	initComponent: function() {

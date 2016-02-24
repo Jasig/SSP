@@ -18,18 +18,17 @@
  */
 package org.jasig.ssp.transferobject;
 
+import com.google.common.collect.Sets;
+import org.jasig.ssp.model.EarlyAlertResponse;
+import org.jasig.ssp.model.reference.EarlyAlertOutreach;
+import org.jasig.ssp.model.reference.EarlyAlertReferral;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import org.jasig.ssp.model.EarlyAlertResponse;
-import org.jasig.ssp.model.reference.EarlyAlertOutreach;
-import org.jasig.ssp.model.reference.EarlyAlertReferral;
-
-import com.google.common.collect.Sets;
 
 /**
  * Early Alert transfer object
@@ -56,6 +55,8 @@ public class EarlyAlertResponseTO
 	private Set<UUID> earlyAlertReferralIds;
 	
 	private boolean closed;
+
+	private boolean sendCreatorEmail;
 
 	/**
 	 * Empty constructor
@@ -232,4 +233,13 @@ public class EarlyAlertResponseTO
 	public void setClosed(boolean closed) {
 		this.closed = closed;
 	}
+
+	public boolean isSendCreatorEmail() {
+		return sendCreatorEmail;
+	}
+
+	public void setSendCreatorEmail(boolean sendCreatorEmail) {
+		this.sendCreatorEmail = sendCreatorEmail;
+	}
+
 }

@@ -18,17 +18,6 @@
  */
 package org.jasig.ssp.service.impl; // NOPMD
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.mail.SendFailedException;
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.EarlyAlertResponseDao;
 import org.jasig.ssp.factory.EarlyAlertResponseTOFactory;
@@ -40,6 +29,7 @@ import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
+import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
 import org.jasig.ssp.model.reference.EarlyAlertOutcome;
@@ -57,6 +47,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.VelocityTemplateService;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
+import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
 import org.jasig.ssp.service.reference.EarlyAlertOutreachService;
 import org.jasig.ssp.service.reference.EarlyAlertReferralService;
@@ -75,7 +66,6 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeRepo
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
-import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -85,6 +75,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.SendFailedException;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * EarlyAlertResponse service implementation
@@ -145,6 +145,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	
 	@Autowired
 	private EarlyAlertOutreachTOFactory earlyAlertOutreachFactoryTO;
+
+	@Autowired
+	private ConfigService configService;
 	
 
 	@Autowired
@@ -154,6 +157,8 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	protected EarlyAlertResponseDao getDao() {
 		return dao;
 	}
+
+	public static final String CONFIG_SHOW_SEND_CREATOR_EMAIL = "ear_show_send_faculty_email";
 
 	/**
 	 *
@@ -234,12 +239,15 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			}
 			
 		}
-
-		afterEarlyAlertResponseCreate(saved);
+		boolean sendCreatorEmail = true;
+		if (new Boolean(this.configService.getByNameNullOrDefaultValue(CONFIG_SHOW_SEND_CREATOR_EMAIL)).booleanValue()) {
+			sendCreatorEmail = obj.isSendCreatorEmail();
+		}
+		afterEarlyAlertResponseCreate(saved, sendCreatorEmail);
 		return saved;
 	}
 
-	private void afterEarlyAlertResponseCreate(EarlyAlertResponse saved)
+	private void afterEarlyAlertResponseCreate(EarlyAlertResponse saved, boolean sendCreatorEmail)
 	throws ValidationException {
 		// Save a journal note for the Early Alert. Do this first so all
 		// related state is available when we go to issue notifications
@@ -258,7 +266,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		// Ea *closure* triggers mail, it's that any Ea *response* triggers
 		// mail.
 		try {
-			sendEarlyAlertResponseNotifications(saved);
+			sendEarlyAlertResponseNotifications(saved, sendCreatorEmail);
 		} catch (final SendFailedException e) {
 			throw new ValidationException(
 					"Could not send EarlyAlertResponse notifications.",
@@ -340,7 +348,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	 *             If any data or references were invalid.
 	 */
 	private void sendEarlyAlertResponseNotifications(
-			@NotNull final EarlyAlertResponse earlyAlertResponse)
+			@NotNull final EarlyAlertResponse earlyAlertResponse, boolean sendCreatorEmail)
 			throws ObjectNotFoundException, SendFailedException,
 			ValidationException {
 		if (earlyAlertResponse == null) {
@@ -355,26 +363,25 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		if (earlyAlertResponse.getEarlyAlert().getPerson() == null) {
 			throw new IllegalArgumentException("EarlyAlert Person is missing.");
 		}
-		final Person person = personService.get(earlyAlertResponse.getEarlyAlert().getCreatedBy().getId());
-		if ( person == null ) {
-			LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
-					+ " response email to faculty.",
-					earlyAlertResponse.getEarlyAlert());
+		if (sendCreatorEmail) {
+			final Person person = personService.get(earlyAlertResponse.getEarlyAlert().getCreatedBy().getId());
+			if ( person == null ) {
+				LOGGER.warn("EarlyAlert {} has no creator. Unable to send"
+						+ " response email to faculty.",
+						earlyAlertResponse.getEarlyAlert());
+			} else {
+				Set<String> watcherAddresses = new HashSet<String>(earlyAlertResponse.getEarlyAlert().getPerson().getWatcherEmailAddresses());
+				String watcherEmails = org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
+						.toArray(new String[watcherAddresses.size()]));
+				sendEarlyAlertResponseToFacultyMessageEmail(person, watcherEmails, earlyAlertResponse);
+			}
 		} else {
-			final SubjectAndBody subjAndBody = messageTemplateService
-					.createEarlyAlertResponseToFacultyMessage(fillTemplateParameters(earlyAlertResponse));
-			
-			Set<String> watcherAddresses = new HashSet<String>(earlyAlertResponse.getEarlyAlert().getPerson().getWatcherEmailAddresses());
-			
-			// Create and queue the message
-			final Message message = messageService.createMessage(person, org.springframework.util.StringUtils.arrayToCommaDelimitedString(watcherAddresses
-					.toArray(new String[watcherAddresses.size()])),
-					subjAndBody);
 
-			LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
-					earlyAlertResponse);
+			for (WatchStudent watcher: earlyAlertResponse.getEarlyAlert().getPerson().getWatchers()) {
+				sendEarlyAlertResponseToFacultyMessageEmail(watcher.getPerson(), null, earlyAlertResponse);
+			}
 		}
-		
+
 		Set<EarlyAlertReferral> referrals = earlyAlertResponse.getEarlyAlertReferralIds();
 		
 		for(EarlyAlertReferral referral:referrals){
@@ -390,6 +397,26 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			}
 		}
 		
+	}
+
+	/**
+	 * Common method to send the Early Alert Response message to the faculty and watchers
+	 *
+	 * @param to Person
+	 * @param cc emailAddresses
+	 * @param earlyAlertResponse EarlyAlertResponse
+	 * @throws SendFailedException
+	 * @throws ObjectNotFoundException
+	 * @throws ValidationException
+     */
+	private void sendEarlyAlertResponseToFacultyMessageEmail (Person to, String cc, EarlyAlertResponse earlyAlertResponse) throws SendFailedException, ObjectNotFoundException, ValidationException {
+		final SubjectAndBody subjAndBody = messageTemplateService
+				.createEarlyAlertResponseToFacultyMessage(fillTemplateParameters(earlyAlertResponse));
+
+		// Create and queue the message
+		final Message message = messageService.createMessage(to, cc, subjAndBody);
+		LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
+				earlyAlertResponse);
 	}
 
 	/**

@@ -26,6 +26,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
         earlyAlert: 'currentEarlyAlert',
         outcomesStore: 'earlyAlertOutcomesAllUnpagedStore',
         outreachesStore: 'earlyAlertOutreachesAllUnpagedStore',
+        configStore: 'configurationOptionsUnpagedStore',
         textStore: 'sspTextStore'
     },
     initComponent: function() {
@@ -102,6 +103,12 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertResponse',{
                     fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.closed','Closed'),
                     name: 'closed',
                     itemId: 'closedField'
+                },{
+                    xtype: 'checkboxfield',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.early-alert.send-email-to-faculty-creator','Send Email to Faculty/Creator'),
+                    name: 'sendCreatorEmail',
+                    itemId: 'sendCreatorEmail',
+                    hidden: !me.configStore.getConfigByName('ear_show_send_faculty_email')
                 },{
                    xtype:'earlyalertreferrals',
                    flex: 1
