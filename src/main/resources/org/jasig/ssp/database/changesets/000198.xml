@@ -90,13 +90,13 @@ END;
     ${schema}.GET_EARLY_ALERT_RESPONSE_DUE_COUNT(${schema}.GET_EARLY_ALERT_RESPONSE_DATE(),p.id) as early_alert_response_due_count,
     ${schema}.GET_EARLY_ALERT_RESPONSE_CURRENT_COUNT(${schema}.GET_EARLY_ALERT_RESPONSE_DATE(),p.id) as early_alert_response_current_count,
     ${schema}.CURRENT_REGISTRATION_STATUS(ep.school_id, ${schema}.CURRENT_TERM_CODE()) as current_registration_status,
-    ${schema}.CURRENT_REGISTRATION_STATUS(ep.school_id, ${schema}.NEXT_TERM_CODE()) as next_term_registration_status,
     p.object_status as object_status,
     est.local_gpa as local_gpa,
     est.program_gpa as program_gpa,
     p.secondary_email_address as secondary_email_address,
     ep.coach_school_id as coach_school_id,
-    ${schema}.GET_CAMPUS_NAME_FROM_ID(COALESCE(p.campus_id, ${schema}.GET_CAMPUS_ID_FROM_CODE(ep.campus_code))) as campus_name
+    ${schema}.GET_CAMPUS_NAME_FROM_ID(COALESCE(p.campus_id, ${schema}.GET_CAMPUS_ID_FROM_CODE(ep.campus_code))) as campus_name,
+    ${schema}.CURRENT_REGISTRATION_STATUS(ep.school_id, ${schema}.NEXT_TERM_CODE()) as next_term_registration_status
     from external_person as ep FULL OUTER JOIN
     person as p on ep.school_id = p.school_id
     LEFT OUTER JOIN ${schema}.external_student_transcript as est on ep.school_id = est.school_id
