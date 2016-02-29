@@ -1,0 +1,49 @@
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="schema" value="${database.schema}" />
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    
+    <changeSet dbms="postgresql" id="update GetPrgStatFrmPerId for postgres to get the latest" author="michael.sultzaberger">
+        <sql ><![CDATA[
+create or replace function ${schema}.GET_PROGRAM_STATUS_FROM_PERSON_ID(uuid) RETURNS uuid as $$
+  select program_status_id from ${schema}.person_program_status pps where pps.person_id=$1 and pps.expiration_date IS NULL order by modified_date desc limit 1
+$$ LANGUAGE SQL STRICT;
+        ]]></sql>
+    </changeSet>
+    <changeSet dbms="mssql" id="update GetPrgStatFrmPerId for mssql to get the latest" author="michael.sultzaberger">
+        <sql><![CDATA[
+ALTER FUNCTION ${schema}.GET_PROGRAM_STATUS_FROM_PERSON_ID(@input UNIQUEIDENTIFIER) RETURNS UNIQUEIDENTIFIER
+AS BEGIN
+  DECLARE @id UNIQUEIDENTIFIER
+  set @id = (select top 1 program_status_id from ${schema}.person_program_status pps where pps.person_id=@input and pps.expiration_date IS NULL order by modified_date desc)
+RETURN @id
+END;
+        ]]></sql>
+        </changeSet>
+</databaseChangeLog>
