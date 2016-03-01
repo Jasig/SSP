@@ -28,9 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -49,6 +47,7 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -75,13 +74,13 @@ import com.google.common.collect.Maps;
 /**
  * Service methods for Reporting on Early Alert Student Outcomes
  * <p>
- * Mapped to URI path <code>/1/report/earlyalertstudentoutcome</code>
+ * Mapped to URI path <code>/1/report/earlyalertstudentoutcomeoutreach</code>
  */
 @Controller
-@RequestMapping("/1/report/earlyalertstudentoutcome")
-public class EarlyAlertStudentOutcomeReportController extends ReportBaseController<EarlyAlertStudentResponseOutcomeReportTO> {
+@RequestMapping("/1/report/earlyalertstudentoutcomeoutreach")
+public class EarlyAlertStudentOutcomeOutreachReportController extends ReportBaseController<EarlyAlertStudentResponseOutcomeReportTO> {
 
-	private static final String REPORT_URL = "/reports/earlyAlertStudentOutcomeReport.jasper";
+	private static final String REPORT_URL = "/reports/earlyAlertStudentOutcomeOutreachReport.jasper";
 	private static final String[] REPORT_FILE_TITLE = {"Early_Alert_Student_Outcome_Report", "Early_Alert_Student_Outreach_Report"};
 	private static final String[] REPORT_TITLE = {"Early Alert Student Outcome Report", "Early Alert Student Outreach Report"};
 	private static final String[] COLUMN_TITLE = {"Outcome(s)", "Outreach(s)"};
@@ -96,7 +95,7 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	private static final String OUTCOME_TOTALS = "outcomeTotals";
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EarlyAlertStudentOutcomeReportController.class);
+			.getLogger(EarlyAlertStudentOutcomeOutreachReportController.class);
 
 	@Autowired
 	private transient PersonService personService;
@@ -148,9 +147,10 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
+
 	@PreAuthorize(Permission.SECURITY_REPORT_READ)
 	@ResponseBody
-	public void getEarlyAlertStudentOutcomeReport(
+	public void getEarlyAlertStudentOutcomeOutreachReport(
 			final HttpServletResponse response,
 			final @RequestParam(required = true) String outcomeType,
 			final @RequestParam(required = false) ObjectStatus status,
@@ -324,6 +324,4 @@ public class EarlyAlertStudentOutcomeReportController extends ReportBaseControll
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-	
-	
 }

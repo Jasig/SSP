@@ -1556,7 +1556,7 @@
 
 <div class="hideable-form early-alert-student-outreach-report" style="display:none">
 	<h1>Early Alert Student Outreach Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
+	<form action="/ssp/api/1/report/earlyalertstudentoutcomeoutreach" method="get"
 		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutreachOutcomeType" name="outcomeType" value="earlyAlertOutreachIds"/>
 		
@@ -1770,7 +1770,7 @@
 
 <div class="hideable-form early-alert-student-outcome-report" style="display:none">
 	<h1>Early Alert Student Outcome Report</h1>
-	<form action="/ssp/api/1/report/earlyalertstudentoutcome" method="get"
+	<form action="/ssp/api/1/report/earlyalertstudentoutcomeoutreach" method="get"
 		target="_blank" onSubmit="return validateForm(this);" class="alert-form">	
 		<input type="hidden" id="earlyAlertStudentOutcomeOutcomeType"  name="outcomeType" value="earlyAlertOutcome"/>
 		<!-- Campus -->

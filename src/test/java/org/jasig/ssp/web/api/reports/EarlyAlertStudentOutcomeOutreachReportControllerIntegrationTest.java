@@ -18,33 +18,17 @@
  */
 package org.jasig.ssp.web.api.reports;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sf.jasperreports.engine.JRException;
-
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.util.service.stub.Stubs;
-import org.jasig.ssp.util.service.stub.Stubs.PersonFixture;
-import org.jasig.ssp.util.service.stub.Stubs.ProgramStatusFixture;
-import org.jasig.ssp.util.service.stub.Stubs.StudentTypeFixture;
-import org.jasig.ssp.util.service.stub.Stubs.TermFixture;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 
-public class EarlyAlertStudentOutcomeReportControllerIntegrationTest extends
+public class EarlyAlertStudentOutcomeOutreachReportControllerIntegrationTest extends
 		AbstractReportControllerIntegrationTest {
 
 
 
 	@Autowired
-	private transient EarlyAlertStudentOutcomeReportController controller;
+	private transient EarlyAlertStudentOutcomeOutreachReportController controller;
 
 // TODO: fix
 //	/**
