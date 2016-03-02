@@ -582,9 +582,9 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	
 	@Override
 	public 	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
-			String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP){
+			String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP, SortingAndPaging reportPersonSAndP){
 		
-		return dao.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(outcomeType, searchForm, sAndP);
+		return dao.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(outcomeType, searchForm, sAndP, reportPersonSAndP);
 	}
 	
 	public Long getEarlyAlertCountByOutcomeCriteria(EarlyAlertStudentSearchTO searchForm)  throws ObjectNotFoundException{

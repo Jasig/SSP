@@ -360,7 +360,7 @@ public final class SortingAndPaging { // NOPMD
 	/**
 	 * Add the current paging filter to the specified criteria.
 	 * 
-	 * @param criteria
+	 * @param query
 	 *            Paging filter will be added to this criteria
 	 */
 	public Query addPagingToQuery(final Query query) {
@@ -494,7 +494,7 @@ public final class SortingAndPaging { // NOPMD
 	/**
 	 * Add the current sorting filter to the specified criteria.
 	 * 
-	 * @param criteria
+	 * @param query
 	 *            Paging filter will be added to this criteria
 	 */
 	public StringBuilder addSortingToQuery(final StringBuilder query) {
@@ -538,12 +538,13 @@ public final class SortingAndPaging { // NOPMD
 	
 	@SuppressWarnings("unchecked")
 	private List<Object> sortList(List<Object> results) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
-		if(results == null || results.isEmpty())
-			return results;
+		if (results == null || results.isEmpty()) {
+            return results;
+        }
 		
-		if(isSorted()){
+		if (isSorted()) {
 			Collections.sort(results, new GenericComparator<Object>(results.get(0).getClass(), getSortFields()));
-		}else if(isDefaultSorted()){
+		} else if (isDefaultSorted()) {
 			Collections.sort(results, new GenericComparator<Object>(results.get(0).getClass(), Arrays.asList(new Pair<String, SortDirection>(getDefaultSortProperty(), SortDirection.ASC))));
 		}
 		return results;
@@ -765,20 +766,10 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @param status
 	 *            Object status
-	 * @param firstResult
-	 *            First result to return (0-based)
-	 * @param maxResults
-	 *            Maximum total results to return.
-	 * 
-	 *            <p>
-	 *            Will use {@link #DEFAULT_MAXIMUM_RESULTS} if not specified
-	 *            here. Can not exceed {@link #MAXIMUM_ALLOWABLE_RESULTS}.
-	 * @param sort
-	 *            Sort field (property)
-	 * @param sortDirection
-	 *            Sort direction
-	 * @param defaultSortProperty
-	 *            A default sort property if the sort parameter is null.
+	 * @param sortField
+     *            String sortField
+     * @param sortDirection
+     *            String sortDirection
 	 * @return An instance with the specified filters.
 	 */
 	public static SortingAndPaging createForSingleSortAll(

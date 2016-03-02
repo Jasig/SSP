@@ -613,7 +613,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
             return null;
         }
 
-		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids);
+		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids, sAndP);
 		do {
 			final Criteria criteria = createCriteria();
 								

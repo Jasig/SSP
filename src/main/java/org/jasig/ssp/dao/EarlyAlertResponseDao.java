@@ -18,13 +18,13 @@
  */
 package org.jasig.ssp.dao;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -53,8 +53,11 @@ import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+
 
 /**
  * EarlyAlertResponse data access methods
@@ -66,6 +69,9 @@ import org.springframework.util.CollectionUtils;
 public class EarlyAlertResponseDao extends
 		AbstractAuditableCrudDao<EarlyAlertResponse> implements
 		AuditableCrudDao<EarlyAlertResponse> {
+
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(EarlyAlertResponseDao.class);
 
 	/**
 	 * Construct a data access instance with specific class types for use by
@@ -343,7 +349,7 @@ public class EarlyAlertResponseDao extends
 	@SuppressWarnings({ "unchecked", "unused" })
 	public 	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(String outcomeType,
 			EarlyAlertStudentSearchTO searchForm,
-			SortingAndPaging sAndP){
+			SortingAndPaging sAndP, SortingAndPaging reportPersonSAndP){
 		
 		final Criteria criteria = getCriteriaForOutcomeType(searchForm, sAndP);
 		
@@ -355,9 +361,17 @@ public class EarlyAlertResponseDao extends
 		.setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(
 						EarlyAlertStudentResponseOutcomeReportTO.class,"ea_outcome_"));
-		
-		return (List)criteria.list();
-		
+
+        if (reportPersonSAndP != null) {
+            try {
+                return (List)reportPersonSAndP.sortAndPageList((List)criteria.list()); //attempt to sort by student name
+            } catch(Exception exp) {
+                LOGGER.error("Error returning results from Early Alert Response Service.",exp);
+                return (List)criteria.list();  //default no sorting
+            }
+        } else {
+            return (List)criteria.list();  //default no sorting
+        }
 	}
 	
 	

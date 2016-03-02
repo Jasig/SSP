@@ -130,7 +130,7 @@ public interface EarlyAlertResponseService
 	
 	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlertsByOutcome(List<UUID> earlyAlertIds, UUID outcomeId);
 	
-	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP);
+	List<EarlyAlertStudentResponseOutcomeReportTO> getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(String outcomeType, EarlyAlertStudentSearchTO searchForm, SortingAndPaging sAndP, SortingAndPaging reportPersonSAndP);
 
 	Long getEarlyAlertOutcomeTypeCountByCriteria(String outcomeType, UUID outcomeId, EarlyAlertStudentSearchTO searchForm) throws ObjectNotFoundException;
 

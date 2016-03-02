@@ -19,19 +19,12 @@
 package org.jasig.ssp.web.api.reports;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -39,10 +32,8 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.transferobject.reports.SpecialServicesReportingTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
@@ -54,8 +45,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
+
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -117,11 +108,12 @@ public class SpecialServicesReportController extends ReportBaseController<BaseSt
 				serviceReasonService);
 
 		personSearchForm.setSpecialServiceGroupRequired(true);
-		
-		final PagingWrapper<BaseStudentReportTO> people = personService
-				.getStudentReportTOsFromCriteria(personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
 
-		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
+        final SortingAndPaging sortingAndPaging = SearchParameters.getReportPersonSortingAndPagingAll(status);
+		final PagingWrapper<BaseStudentReportTO> people = personService
+				.getStudentReportTOsFromCriteria(personSearchForm, sortingAndPaging);
+
+		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people,sortingAndPaging);
 		LOGGER.debug("Number of personTOs: " + compressedReports.size());
 
 		

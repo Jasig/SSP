@@ -46,9 +46,9 @@ import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
-import org.jasig.ssp.transferobject.reports.ProgramStatusReportTO;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +66,7 @@ import com.google.common.collect.Maps;
 
 /**
  * Service methods for manipulating data about people in the system.
+ *  aka Counselor Case Management Report
  * <p>
  * Mapped to URI path <code>report/pretransistioned</code>
  */
@@ -199,21 +200,13 @@ public class PreTransitionedReportController extends ReportBaseController<BaseSt
 				parameters, 
 				personSearchForm);
 
-		// TODO Specifying person name sort fields in the SaP doesn't seem to
-		// work... end up with empty results need to dig into actual query
-		// building
-		/*final List<Person> people = personService.peopleFromCriteria(
-				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
-		
-		Collections.sort(people, Person.PERSON_NAME_AND_ID_COMPARATOR);
-		
-		final List<PersonReportTO> peopleReportTOList = PersonReportTO.toPersonTOList(people);*/
-		
-		final PagingWrapper<BaseStudentReportTO> reports = personService.getStudentReportTOsFromCriteria(
-				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
+        final SortingAndPaging sortingAndPaging = SearchParameters.getReportPersonSortingAndPagingAll(status);
 
-		Term currentTerm = termService.getCurrentTerm();
-		List<BaseStudentReportTO> compressedReports = this.processStudentReportTOs(reports);
+        final PagingWrapper<BaseStudentReportTO> reports = personService.getStudentReportTOsFromCriteria(
+				personSearchForm, sortingAndPaging);
+
+		final Term currentTerm = termService.getCurrentTerm();
+        final List<BaseStudentReportTO> compressedReports = this.processStudentReportTOs(reports, sortingAndPaging);
 
 		for(BaseStudentReportTO report:compressedReports) {
 			report.setAcademicPrograms(externalStudentAcademicProgramService.getAcademicProgramsBySchoolId(report.getSchoolId()));

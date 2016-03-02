@@ -25,26 +25,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
-
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +51,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
 
+
+/**
+ * Journal Session Details Report
+ */
 public class DistanceLearningReportController extends ReportBaseController<BaseStudentReportTO> {
 	private static String REPORT_URL = "/reports/journalSessionDetails.jasper";
 	private static String REPORT_FILE_TITLE = "Journal_Session_Details_Report";
@@ -149,13 +147,14 @@ public class DistanceLearningReportController extends ReportBaseController<BaseS
 				programStatusService, 
 				null);
 
-		
+		final SortingAndPaging sortingAndPaging = SearchParameters.getReportPersonSortingAndPagingAll(status);
 		final PagingWrapper<BaseStudentReportTO> people = personService.getStudentReportTOsFromCriteria(
-				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
+				personSearchForm, sortingAndPaging);
 		
-		List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people);
+		final List<BaseStudentReportTO> compressedReports = processStudentReportTOs(people, sortingAndPaging);
 		SearchParameters.addStudentCount(compressedReports, parameters);
-		renderReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
+
+        renderReport(response, parameters, compressedReports, REPORT_URL, reportType, REPORT_FILE_TITLE);
 
 	}
 

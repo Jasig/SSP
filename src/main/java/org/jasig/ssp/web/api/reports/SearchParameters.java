@@ -633,6 +633,7 @@ public class SearchParameters {
 		sortFields.add(new Pair<String, SortDirection>("lastName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>("firstName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>("middleName", SortDirection.ASC));
+        sortFields.add(new Pair<String, SortDirection>("schoolId", SortDirection.ASC));
 		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
 	}
 	
@@ -643,7 +644,8 @@ public class SearchParameters {
 		sortFields.add(new Pair<String, SortDirection>(prefix + "lastName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>(prefix + "firstName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>(prefix + "middleName", SortDirection.ASC));
-		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
+        sortFields.add(new Pair<String, SortDirection>("schoolId", SortDirection.ASC));
+        return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
 	}
 	
 	static final void addPlanSearchForm(SearchPlanTO form, Map<String,Object> parameters){

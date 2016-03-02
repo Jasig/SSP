@@ -22,13 +22,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
-
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -40,7 +36,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.service.EarlyAlertResponseService;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
@@ -48,10 +44,12 @@ import org.jasig.ssp.transferobject.reports.EarlyAlertResponseCounts;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 abstract class ReportBaseController<R> extends AbstractBaseController {
 
@@ -181,9 +179,9 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 	/**
 	 * If {@code true}, subclasses will have the opportunity to participate in more fine-grained, i.e. non-Jasper CSV
 	 * report rendering. In particular, CSV rendering will rely on
-	 * {@link #csvBodyRow(Object, java.util.Map, java.util.Collection, String, String, String, org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper)}
+	 * {svBodyRow(Object, java.util.Map, java.util.Collection, String, String, String, org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper)}
 	 * and
-	 * {@link #csvBodyRow(Object, java.util.Map, java.util.Collection, String, String, String, org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper)}
+	 * {csvBodyRow(Object, java.util.Map, java.util.Collection, String, String, String, org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper)}
 	 * via {@link #renderCsvReportWithFromattingOverrides(javax.servlet.http.HttpServletResponse, java.util.Map, java.util.Collection, String, String, String)}.
 	 * This is designed with a flag method rather than a mixin interface b/c Spring will not map {@code Controllers} that
 	 * mix in interfaces unless we change our proxying mode (See <a href="http://stackoverflow.com/a/16970812">this SO
@@ -241,30 +239,49 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 				"attachment; filename=" + reportName + "." + REPORT_TYPE_CSV);
 	}
 
-	<T extends BaseStudentReportTO> List<T> processStudentReportTOs(PagingWrapper<T> people){
+	<T extends BaseStudentReportTO> List<T> processStudentReportTOs(PagingWrapper<T> people, SortingAndPaging sAndP){
 		if(people == null || people.getRows().size() <= 0)
 			return new ArrayList<T>();
-		 return processStudentReportTOs(new ArrayList<T>(people.getRows()));
+		 return processStudentReportTOs(new ArrayList<T>(people.getRows()), sAndP);
 	}
 
-	<T extends BaseStudentReportTO> List<T> processStudentReportTOs(Collection<T> reports){
+	<T extends BaseStudentReportTO> List<T> processStudentReportTOs(Collection<T> reports, SortingAndPaging sAndP){
 		ArrayList<T> compressedReports = new ArrayList<T>();
-		if(reports == null || reports.size() <= 0)
-			return compressedReports;
+		if (reports == null || reports.size() <= 0) {
+            return compressedReports;
+        }
 		
-		for(T reportTO: reports){
+		for (T reportTO: reports) {
 			Integer index = compressedReports.indexOf(reportTO);
-			if(index != null && index >= 0)
+			if (index != null && index >= 0)
 			{
 				T compressedReportTo = compressedReports.get(index);
 				compressedReportTo.processDuplicate(reportTO);
-			}else{
+			} else {
 				reportTO.normalize();
 				compressedReports.add(reportTO);
 			}
 		}
-		return compressedReports;
+
+        try {
+            return sortedReportList(compressedReports, sAndP);
+        } catch (NoSuchFieldException|SecurityException|ClassNotFoundException e) {
+            LOGGER.debug("Error in sorting compressed report: {}", e.getStackTrace());
+        }
+
+        return compressedReports;
 	}
+
+    @SuppressWarnings("unchecked")
+    private <T extends BaseStudentReportTO> List<T> sortedReportList(List<T> results, SortingAndPaging sAndP) throws NoSuchFieldException, SecurityException, ClassNotFoundException{
+        if ( CollectionUtils.isEmpty(results) || sAndP == null) {
+            return results;
+        }
+
+        Collections.sort(results, new SortingAndPaging.GenericComparator<Object>(results.get(0).getClass(), sAndP.getSortFields()));
+
+        return results;
+    }
 	
 	protected List<EarlyAlertStudentReportTO> processReports(PagingWrapper<EarlyAlertStudentReportTO> reports, EarlyAlertResponseService earlyAlertResponseService){
 		 

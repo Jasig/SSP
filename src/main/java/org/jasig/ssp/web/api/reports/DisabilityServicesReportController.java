@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api.reports; // NOPMD
 
+
 import com.google.common.collect.Maps;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -36,6 +37,7 @@ import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -185,12 +187,11 @@ public class DisabilityServicesReportController extends ReportBaseController<Dis
 				parameters, 
 				personSearchForm);
 
-		// TODO Specifying person name sort fields in the SaP doesn't seem to
-		// work... end up with empty results need to dig into actual query
-		// building
+
+        final SortingAndPaging sortingAndPaging = SearchParameters.getReportPersonSortingAndPagingAll(status);
 		final PagingWrapper<DisabilityServicesReportTO> people = personService.getDisabilityReport(
-				personSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status));
-		List<DisabilityServicesReportTO> compressedReports = this.processStudentReportTOs(people);
+				personSearchForm, sortingAndPaging);
+		List<DisabilityServicesReportTO> compressedReports = this.processStudentReportTOs(people, sortingAndPaging);
 
 		SearchParameters.addStudentCount(compressedReports, parameters);
 

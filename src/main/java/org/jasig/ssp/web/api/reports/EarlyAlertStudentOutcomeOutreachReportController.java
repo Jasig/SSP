@@ -249,13 +249,13 @@ public class EarlyAlertStudentOutcomeOutreachReportController extends ReportBase
 		}else if(outcomeType.equals(EARLY_ALERT_OUTREACH)){
 			outcomeTotals = getOutreaches(cleanOutcomeIds,  searchForm, sAndP);
 		}
-		
+
 		// TODO Specifying person name sort fields in the SaP doesn't seem to
 		// work... end up with empty results need to dig into actual query
 		// building
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		final List<EarlyAlertStudentResponseOutcomeReportTO> reportTOs = earlyAlertResponseService.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
-				outcomeType, searchForm, SortingAndPaging.createForSingleSortAll(status, outcomeType + ".name", "ASC"));
+				outcomeType, searchForm, SortingAndPaging.createForSingleSortAll(status, outcomeType + ".name", "ASC"), SearchParameters.getReportPersonSortingAndPagingAll(status, "person."));
 		
 	
 		// Add a blank line to the table
