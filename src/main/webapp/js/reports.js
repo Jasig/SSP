@@ -136,8 +136,9 @@ var ssp = ssp || {};
 			requests++;
 			$.getJSON(url, function(data) {
 				requests--;
-
-				$(container).html("<h3>" + data.name + "</h3>" + "<p>" + data.text + "</p>");
+                if (data && data.name && data.text) {
+				    $(container).html("<h3>" + data.name + "</h3>" + "<p>" + data.text + "</p>");
+                }
 
 			}).error(function(jqXHR, textStatus, errorThrown) {
 				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
