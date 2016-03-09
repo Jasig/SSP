@@ -23,11 +23,12 @@ Ext.define('Ssp.service.EarlyAlertService', {
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
         apiProperties: 'apiProperties',
-        earlyAlertOutcomesStore: 'earlyAlertOutcomesStore',
+        earlyAlertOutcomesStore: 'earlyAlertOutcomesAllUnpagedStore',
         treeStore: 'earlyAlertsTreeStore',
         treeUtils: 'treeRendererUtils',
 		currentEarlyAlertResponsesGridStore: 'currentEarlyAlertResponsesGridStore'	
     },
+
     initComponent: function() {
         return this.callParent( arguments );
     },
@@ -243,15 +244,28 @@ Ext.define('Ssp.service.EarlyAlertService', {
             record.leaf=true;
             record.nodeType='early alert response';   
 			record.gridDisplayDetails='';
+
+			if (record.closed) {
+			    record.closedDate = record.modifiedDate; //may not be the closedDate, but needed for status to display
+			}
+
             if ( record.earlyAlertOutcomeId ) {
-                var outcome = me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId);
-                if ( outcome ) {
-                    record.gridDisplayDetails = outcome.get('name');
+                var storeLoaded = true;
+                if (me.earlyAlertOutcomesStore.getTotalCount() <= 0) {
+                    //shouldn't be necessary now that this is using the outcomesAllUnpaged store loaded om EaToolViewController
+                    storeLoaded = me.loadEarlyAlertOutcomesStore();
+                }
+
+                if (storeLoaded) {
+                    var outcome = me.earlyAlertOutcomesStore.getById(record.earlyAlertOutcomeId);
+                    if (outcome) {
+                        record.gridDisplayDetails = outcome.get('name');
+                    }
                 }
             } 	
 			dataArray.push(record);
         });
-		
+
 		me.currentEarlyAlertResponsesGridStore.loadData(dataArray);
 
         node.appendChild(records);
@@ -301,5 +315,17 @@ Ext.define('Ssp.service.EarlyAlertService', {
                 scope: me
             }); 
         }       
+    },
+
+    loadEarlyAlertOutcomesStore: function() {
+        var me = this;
+        me.earlyAlertOutcomesStore.load(function(records, operation, storeLoadSuccess) {
+            if ( storeLoadSuccess ) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
     }
 });

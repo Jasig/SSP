@@ -216,6 +216,14 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 		strHtml += '</div>';
 	    return strHtml;
 	},
+
+    renderEarlyAlertResponseStatus: function(val, metaData, record) {
+        var status = ((record.get('closedDate') != null && record.get('closedDate'))? 'Closed' : 'Open');
+        var strHtml = '<div style="white-space:normal !important;">';
+        strHtml += '<p>' + ((record.get('nodeType').toLowerCase() == 'early alert response')? status : "N/A") + '</p>';
+        strHtml += '</div>';
+        return strHtml;
+    },
 	
 	renderEarlyAlertReason: function(val, metaData, record) {
 		var strHtml = '<div style="white-space:normal !important;">';
