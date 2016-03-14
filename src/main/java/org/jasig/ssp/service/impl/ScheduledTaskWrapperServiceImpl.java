@@ -76,11 +76,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -223,6 +220,9 @@ public class ScheduledTaskWrapperServiceImpl
 	@Value("#{configProperties.ssp_trusted_code_run_as_key}")
 	private String runAsKey;
 
+    @Value("#{configProperties.background_jobs}")
+    private boolean backGroundJobsEnabled;
+
 	private HashMap<String, Task> tasks;
 
 	@Override
@@ -233,103 +233,109 @@ public class ScheduledTaskWrapperServiceImpl
 
 	protected synchronized void initTasks() {
 		this.tasks = new LinkedHashMap<String, Task>();
-		this.tasks.put(EXTERNAL_PERSON_SYNC_TASK_ID, new Task(EXTERNAL_PERSON_SYNC_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						syncExternalPersons();
-						refreshDirectoryPersonBlue();
-						refreshDirectoryPerson();
-					}
-				},
-				EXTERNAL_PERSON_SYNC_TASK_DEFAULT_TRIGGER,
-				EXTERNAL_PERSON_SYNC_TASK_TRIGGER_CONFIG_NAME));
-		
-		this.tasks.put(DIRECTORY_PERSON_REFRESH_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						refreshDirectoryPersonBlue();
-						refreshDirectoryPerson();
-					}
-				},
-				DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
-				DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
-		
-		//Schedule task to be run once on startup
-		this.tasks.put(DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						resetTaskStatus();
-						refreshDirectoryPersonBlue();
-						refreshDirectoryPerson();
-					}
-				},
-				DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
-				STARTUP_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
-		
+        if (!backGroundJobsEnabled) {
+            LOGGER.info("Background Jobs: Disabled!");
+            return;
+        } else {
+            LOGGER.info("Background Jobs: Enabled!");
+            this.tasks.put(EXTERNAL_PERSON_SYNC_TASK_ID, new Task(EXTERNAL_PERSON_SYNC_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            syncExternalPersons();
+                            refreshDirectoryPersonBlue();
+                            refreshDirectoryPerson();
+                        }
+                    },
+                    EXTERNAL_PERSON_SYNC_TASK_DEFAULT_TRIGGER,
+                    EXTERNAL_PERSON_SYNC_TASK_TRIGGER_CONFIG_NAME));
 
-		this.tasks.put(MAP_STATUS_REPORT_CALC_TASK_ID, new Task(MAP_STATUS_REPORT_CALC_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						calcMapStatusReports();
-					}
-				},
-				MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER,
-				MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME));
-		this.tasks.put(BULK_JOB_QUEUE_TASK_ID, new Task(BULK_JOB_QUEUE_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						scheduledQueuedJobs();
-					}
-				},
-				BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER,
-				BULK_JOB_QUEUE_TASK_CONFIG_NAME));		
-		this.tasks.put(MESSAGE_QUEUE_PRUNING_TASK_ID, new Task(MESSAGE_QUEUE_PRUNING_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						pruneMessageQueue();
-					}
-				},
-				MESSAGE_QUEUE_PRUNING_TASK_DEFAULT_TRIGGER,
-				MESSAGE_QUEUE_PRUNING_TASK_NAME));			
-		this.tasks.put(SCHEDULER_CONFIG_POLL_TASK_ID, new Task(SCHEDULER_CONFIG_POLL_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						updateTasksTask();
-					}
-				},
-				SCHEDULER_CONFIG_POLL_TASK_DEFAULT_TRIGGER,
-				SCHEDULER_CONFIG_POLL_TASK_TRIGGER_CONFIG_NAME));
-		
-		this.tasks.put(EARLY_ALERT_TASK_ID, new Task(EARLY_ALERT_TASK_ID,
-				new Runnable() {
-					@Override
-					public void run() {
-						sendEarlyAlertReminders();
-					}
-				},
-				EARLY_ALERT_TASK_DEFAULT_TRIGGER,
-				EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME));
+            this.tasks.put(DIRECTORY_PERSON_REFRESH_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            refreshDirectoryPersonBlue();
+                            refreshDirectoryPerson();
+                        }
+                    },
+                    DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
+                    DIRECTORY_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
 
-        this.tasks.put(OAUTH1_CULL_NONCE_TASK_ID, new Task(OAUTH1_CULL_NONCE_TASK_ID,
-                new Runnable() {
-                    @Override
-                    public void run () {
-                        cullOAuth1Nonces();
-                    }
-                }, OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER, OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME));
+            //Schedule task to be run once on startup
+            this.tasks.put(DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID, new Task(DIRECTORY_PERSON_REFRESH_STARTUP_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            resetTaskStatus();
+                            refreshDirectoryPersonBlue();
+                            refreshDirectoryPerson();
+                        }
+                    },
+                    DIRECTORY_PERSON_REFRESH_TASK_DEFAULT_TRIGGER,
+                    STARTUP_PERSON_REFRESH_TASK_TRIGGER_CONFIG_NAME));
 
-		// Can't interrupt this on cancel b/c it's responsible for rescheduling
-		// itself. A scheduling attempt on an interrupted thread is very
-		// likely to be refused when using java.util.concurrent schedulers
-		// under the covers.
-		this.tasks.get(SCHEDULER_CONFIG_POLL_TASK_ID).mayInterrupt = false;
+
+            this.tasks.put(MAP_STATUS_REPORT_CALC_TASK_ID, new Task(MAP_STATUS_REPORT_CALC_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            calcMapStatusReports();
+                        }
+                    },
+                    MAP_STATUS_REPORT_CALC_TASK_DEFAULT_TRIGGER,
+                    MAP_STATUS_REPORT_CALC_TASK_TRIGGER_CONFIG_NAME));
+            this.tasks.put(BULK_JOB_QUEUE_TASK_ID, new Task(BULK_JOB_QUEUE_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            scheduledQueuedJobs();
+                        }
+                    },
+                    BULK_JOB_QUEUE_TASK_DEFAULT_TRIGGER,
+                    BULK_JOB_QUEUE_TASK_CONFIG_NAME));
+            this.tasks.put(MESSAGE_QUEUE_PRUNING_TASK_ID, new Task(MESSAGE_QUEUE_PRUNING_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            pruneMessageQueue();
+                        }
+                    },
+                    MESSAGE_QUEUE_PRUNING_TASK_DEFAULT_TRIGGER,
+                    MESSAGE_QUEUE_PRUNING_TASK_NAME));
+            this.tasks.put(SCHEDULER_CONFIG_POLL_TASK_ID, new Task(SCHEDULER_CONFIG_POLL_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            updateTasksTask();
+                        }
+                    },
+                    SCHEDULER_CONFIG_POLL_TASK_DEFAULT_TRIGGER,
+                    SCHEDULER_CONFIG_POLL_TASK_TRIGGER_CONFIG_NAME));
+
+            this.tasks.put(EARLY_ALERT_TASK_ID, new Task(EARLY_ALERT_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            sendEarlyAlertReminders();
+                        }
+                    },
+                    EARLY_ALERT_TASK_DEFAULT_TRIGGER,
+                    EARLY_ALERT_TASK_TRIGGER_CONFIG_NAME));
+
+            this.tasks.put(OAUTH1_CULL_NONCE_TASK_ID, new Task(OAUTH1_CULL_NONCE_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            cullOAuth1Nonces();
+                        }
+                    }, OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER, OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME));
+
+            // Can't interrupt this on cancel b/c it's responsible for rescheduling
+            // itself. A scheduling attempt on an interrupted thread is very
+            // likely to be refused when using java.util.concurrent schedulers
+            // under the covers.
+            this.tasks.get(SCHEDULER_CONFIG_POLL_TASK_ID).mayInterrupt = false;
+        }
 	}
 
 	public synchronized void updateTasks() {
@@ -429,8 +435,8 @@ public class ScheduledTaskWrapperServiceImpl
 			// first time execution
 			newTrigger = configuredOrDefault;
 			LOGGER.debug("Preparing to schedule task [{}] for"
-					+ " first-time execution with trigger expression [{}]",
-					task.id, newTrigger.getFirst());
+                            + " first-time execution with trigger expression [{}]",
+                    task.id, newTrigger.getFirst());
 
 		} else if ( configuredOrDefault.getSecond() instanceof BadConfigTrigger ) {
 
@@ -492,16 +498,19 @@ public class ScheduledTaskWrapperServiceImpl
 
 	protected Pair<String,Trigger> readNewTriggerConfig(String configName)
 	throws BadTriggerConfigException {
-		final String configValue =
-				StringUtils.trimToNull(configService.getByNameNullOrDefaultValue(configName));
-		if ( configValue == null ) {
+		final String configValue = StringUtils.trimToNull(configService.getByNameNullOrDefaultValue(configName));
+
+        if ( configValue == null ) {
 			return null;
 		}
-		if(configValue.toUpperCase().equals(DISABLED_TRIGGER_CONFIG_VALUE))
-		   return  new Pair<String,Trigger>(configValue, new DisabledTrigger());
+
+        if (configValue.toUpperCase().equals(DISABLED_TRIGGER_CONFIG_VALUE)) {
+            return new Pair<String, Trigger>(configValue, new DisabledTrigger());
+        }
 		
-		if(configValue.toUpperCase().equals(RUN_ONCE_TRIGGER_CONFIG_VALUE))
-			   return  new Pair<String,Trigger>(configValue, new OnStartUpTrigger());
+		if( configValue.toUpperCase().equals(RUN_ONCE_TRIGGER_CONFIG_VALUE)) {
+            return new Pair<String, Trigger>(configValue, new OnStartUpTrigger());
+        }
 		
 		return new Pair<String,Trigger>(configValue, parseTriggerConfig(configValue));
 	}
@@ -875,8 +884,12 @@ public class ScheduledTaskWrapperServiceImpl
 	 */
 	@Override
 	public void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId) {
-		withTaskContext(taskName, work, isStatusedTask, runAsId).run();
-	}
+        if ( !backGroundJobsEnabled ) {
+            return;
+        } else {
+            withTaskContext(taskName, work, isStatusedTask, runAsId).run();
+        }
+    }
 
 	public void execWithTaskContext(String taskName, Runnable work) {
 		execWithTaskContext(taskName, work, true, null);
@@ -931,13 +944,17 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Override
 	public void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask, final boolean isStatusedTask, final UUID runAsId) {
-		withTaskName(taskName, new Runnable() {
-			@Override
-			public void run() {
-				batchedTask.exec(newTaskBatchExecutor(batchedTask.getBatchExecReturnType(), isStatusedTask, runAsId));
-			}
-		}, isStatusedTask).run();
-	}
+        if ( !backGroundJobsEnabled ) {
+            return;
+        } else {
+            withTaskName(taskName, new Runnable() {
+                @Override
+                public void run () {
+                    batchedTask.exec(newTaskBatchExecutor(batchedTask.getBatchExecReturnType(), isStatusedTask, runAsId));
+                }
+            }, isStatusedTask).run();
+        }
+    }
 
 	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
 		execBatchedTaskWithName(taskName, batchedTask, true, null);
@@ -947,7 +964,11 @@ public class ScheduledTaskWrapperServiceImpl
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
 	public void sendMessages() {
-		execBatchedTaskWithName(SEND_MESSAGES_TASK_NAME, sendQueuedMessagesTask);
+        if (!backGroundJobsEnabled) {
+            return;
+        } else {
+            execBatchedTaskWithName(SEND_MESSAGES_TASK_NAME, sendQueuedMessagesTask);
+        }
 	}
 
 	@Override
@@ -957,8 +978,8 @@ public class ScheduledTaskWrapperServiceImpl
 		execWithTaskContext(SYNC_COACHES_TASK_NAME, new Runnable() {
 			@Override
 			public void run() {
-				if (!(scheduledCoachSyncEnabled)) {
-					LOGGER.debug("Scheduled coach sync disabled. Abandoning sync job");
+				if (!(scheduledCoachSyncEnabled) || (!backGroundJobsEnabled)) {
+					LOGGER.debug("Scheduled coach sync disabled or background jobs disabled. Abandoning sync job");
 					return;
 				}
 				LOGGER.info("Scheduled coach sync starting.");
@@ -976,7 +997,11 @@ public class ScheduledTaskWrapperServiceImpl
 		execWithTaskContext(SEND_TASK_REMINDERS_TASK_NAME, new Runnable() {
 			@Override
 			public void run() {
-				taskService.sendAllTaskReminderNotifications();
+                if (!backGroundJobsEnabled) {
+                    return;
+                } else {
+                    taskService.sendAllTaskReminderNotifications();
+                }
 			}
 		});
 	}
@@ -1098,9 +1123,9 @@ public class ScheduledTaskWrapperServiceImpl
 		boolean hasRun = false;
 		@Override
 		public Date nextExecutionTime(TriggerContext triggerContext) {
-			if(hasRun)
-				return null;
-			else{
+			if (hasRun) {
+                return null;
+            } else {
 				hasRun = true;
 			}
 			return new Date();
@@ -1131,16 +1156,18 @@ public class ScheduledTaskWrapperServiceImpl
 
 		@Override
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			if (!super.equals(o)) return false;
+			if (this == o) { return true; }
+			if (o == null || getClass() != o.getClass()) { return false; }
+			if (!super.equals(o)) { return false; }
 
 			BadConfigTrigger that = (BadConfigTrigger) o;
 
-			if (cause != null ? !cause.equals(that.cause) : that.cause != null)
-				return false;
-			if (config != null ? !config.equals(that.config) : that.config != null)
-				return false;
+			if (cause != null ? !cause.equals(that.cause) : that.cause != null) {
+                return false;
+            }
+			if (config != null ? !config.equals(that.config) : that.config != null) {
+                return false;
+            }
 
 			return true;
 		}
