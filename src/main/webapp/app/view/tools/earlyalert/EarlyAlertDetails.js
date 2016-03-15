@@ -144,7 +144,7 @@ Ext.define('Ssp.view.tools.earlyalert.EarlyAlertDetails', {
                             flex: 0.5,
                             sortable: true,
                             dataIndex: 'closedDate',
-                            renderer: me.columnRendererUtils.renderEarlyAlertStatus
+                            renderer: me.columnRendererUtils.renderEarlyAlertResponseStatus
                         }, {
                             text: me.textStore.getValueByCode('ssp.label.early-alert.display-details','Details'),
                             flex: 2,
