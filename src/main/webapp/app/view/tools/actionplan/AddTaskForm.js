@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.AddTasksFormViewController',
     inject: {
-        store: 'confidentialityLevelsAllUnpagedStore'
+        store: 'confidentialityLevelsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
 	width: '100%',
     height: '100%',    
@@ -41,7 +42,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 		            },
 				    items: [{
 				            xtype: 'fieldset',
-				            title: 'Add Task',
+				            title: me.textStore.getValueByCode('ssp.label.action-plan.add-task-form.title', 'Add Tasks'),
 				            defaultType: 'textfield',
 					        border: 0,
 					        padding: 0,
@@ -50,18 +51,18 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				            },
 				       items: [{
 					    	xtype: 'displayfield',
-					        fieldLabel: 'Task Name',
+					        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.add-task-form.task-name', 'Task Name'),
 					        name: 'name'
 					    },{
 				    	xtype: 'textarea',
-				        fieldLabel: 'Description',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.add-task-form.description', 'Description'),
 				        name: 'description',
 				        maxLength: 1000,
 				        allowBlank:false
 				    },{
 				    	xtype: 'textarea',
-				        fieldLabel: 'Link (No HTML)',
-				        inputAttrTpl: " data-qtip='Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.add-task-form.link', 'Link (No HTML)'),
+                        inputAttrTpl: " data-qtip='" + me.textStore.getValueByCode('ssp.tooltip.action-plan.add-task-form.link', 'Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ') + "'",
 				        name: 'link',
 				        maxLength: 256,
 				        allowBlank:true
@@ -69,8 +70,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        xtype: 'combobox',
 				        itemId: 'confidentialityLevel',
 				        name: 'confidentialityLevelId',
-				        fieldLabel: 'Confidentiality Level',
-				        emptyText: 'Select One',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.add-task-form.confidentiality-level', 'Confidentiality Level'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.action-plan.add-task-form.confidentiality-level', 'Select One'),
 				        store: me.store,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -80,8 +81,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        forceSelection: true
 					},{
 				    	xtype: 'datefield',
-				    	fieldLabel: 'Target Date',
-				    	altFormats: 'm/d/Y|m-d-Y',
+				    	fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.add-task-form.due-date', 'Target Date'),
+				    	altFormats: me.textStore.getValueByCode('ssp.alt-formats.action-plan.add-task-form.due-date', 'm/d/Y|m-d-Y'),
 				        name: 'dueDate',
 						itemId: 'actionPlanDueDate',
 				        allowBlank:false,
@@ -90,7 +91,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				            render: function(field){
 				                Ext.create('Ext.tip.ToolTip',{
 				                    target: field.getEl(),
-				                    html: 'Use this to set the target completion date in the institution\'s time zone.'
+				                    html: me.textStore.getValueByCode('ssp.tooltip.action-plan.add-task-form.due-date', 'Use this to set the target completion date in the institution\'s time zone.')
 				                });
 				            }
 				        }
@@ -102,13 +103,13 @@ Ext.define('Ssp.view.tools.actionplan.AddTaskForm', {
 				        xtype: 'toolbar',
 				        items: [{xtype: 'button', 
 				        	     itemId: 'addButton', 
-				        	     text:'Save', 
+				        	     text: me.textStore.getValueByCode('ssp.label.save-button', 'Save'),
 				        	     action: 'add' },
 								 , '-',
 				        	     {
 				            	   xtype: 'button',
 				            	   itemId: 'closeButton',
-				            	   text: 'Cancel',
+				            	   text: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel'),
 				            	   action: 'close'}]
 				    }]
 				});

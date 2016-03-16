@@ -112,7 +112,7 @@ Ext.define('Ssp.controller.tool.actionplan.DisplayStrengthsViewController', {
                 item.set(col.dataIndex, col.defaultValue);
             }
             else {
-                item.set(col.dataIndex, 'default');
+                item.set(col.dataIndex, me.textStore.getValueByCode('ssp.empty-text.action-plan.display-strengths','default'));
             }
         });
         

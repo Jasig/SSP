@@ -28,7 +28,8 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
         model: 'currentTask',
         store: 'addTasksStore',
         confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
-        configStore: 'configStore'
+        configStore: 'configStore',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -120,19 +121,19 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 }
             },
             columns: [{
-                header: 'Task',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.tasks-grid.name','Task'),
                 flex: 0.35,
                 dataIndex: 'name',
                 renderer: me.addToolTipWithValue(),
                 rowEditable: false
             }, {
-                header: 'Description',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.tasks-grid.description','Description'),
                 flex: 1,
                 dataIndex: 'description',
                 rowEditable: false,
                 renderer: me.truncateDesc()
             }, {
-                header: 'Link',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.tasks-grid.link','Link'),
                 flex: 0.45,
                 dataIndex: 'link',
                 rowEditable: true,
@@ -143,7 +144,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
                                 target: field.getEl(),
-                                html: 'Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot;'
+                                html: me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks-grid.link','Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot;')
                             });
                         }
                     }
@@ -151,11 +152,11 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 renderer: me.renderLink()
             }, {
                 xtype: 'datecolumn',
-                header: 'Due Date',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.tasks-grid.due-date','Due Date'),
                 dataIndex: 'dueDate',
                 width: 85,
                 name: 'dueDate',
-                format: 'm/d/Y',
+                format: me.textStore.getValueByCode('ssp.format.action-plan.tasks-grid.due-date','m/d/Y'),
                 itemId: 'actionPlanDueDate',
                 renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
                     var dt = record.get('dueDate');
@@ -167,15 +168,15 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     }
                     else {
                         if (Ext.isDate(dt)) {
-                            metaData.tdAttr = 'data-qtip="' + Ext.Date.format(dt, 'm/d/y') + '"';
-                            return Ext.Date.format(dt, 'm/d/y');
+                            metaData.tdAttr = 'data-qtip="' + Ext.Date.format(dt, me.textStore.getValueByCode('ssp.format.action-plan.tasks-grid.due-date','m/d/y')) + '"';
+                            return Ext.Date.format(dt, me.textStore.getValueByCode('ssp.format.action-plan.tasks-grid.due-date','m/d/y'));
                         }
                         else {
                             if (dt) {
                                 metaData.tdAttr = 'data-qtip="' + dt + '"';
                             }
                             else {
-                                metaData.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
+                                metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks-grid.due-date','Double Click to Complete The Addition!') + '"';
                                 
                                 var dt = me.taskDueDate;
                                 
@@ -187,23 +188,23 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 editor: {
                     xtype: 'datefield',
                     allowBlank: false,
-                    altFormats: 'm/d/Y|m-d-Y',
-                    format: 'm/d/Y',
+                    altFormats: me.textStore.getValueByCode('ssp.alt-formats.action-plan.tasks-grid.due-date','m/d/Y|m-d-Y'),
+                    format: me.textStore.getValueByCode('ssp.format.action-plan.tasks-grid.due-date','m/d/Y'),
                     showToday: false,
-                    minValue: Ext.Date.format(new Date(), 'm/d/Y'),
-                    minText: 'Cannot have a due date before today!',
+                    minValue: Ext.Date.format(new Date(), me.textStore.getValueByCode('ssp.format.action-plan.tasks-grid.due-date','m/d/Y')),
+                    minText: me.textStore.getValueByCode('ssp.min-text.action-plan.tasks-grid.due-date','Cannot have a due date before today!'),
                     listeners: {
                         render: function(field){
                             Ext.create('Ext.tip.ToolTip', {
                                 target: field.getEl(),
-                                html: 'Use this to set the target completion date in the institution\'s time zone.'
+                                html: me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks-grid.target-completion-date','Use this to set the target completion date in the institution\'s time zone.')
                             });
                         }
                     }
                 }
             
             }, {
-                header: 'Confidentiality',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.tasks-grid.confidentiality','Confidentiality'),
                 dataIndex: 'confidentialityLevel',
                 itemId: 'confidentialityLevel',
                 name: 'confidentialityLevelId',
@@ -219,7 +220,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                     typeAhead: true,
                     queryMode: 'local',
                     allowBlank: false,
-                    emptyText: 'Select One'
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.action-plan.tasks-grid.confidentiality','Select One')
                 },
                 renderer: function(value, metadata){
                     if (value && value.name) {
@@ -231,7 +232,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                             return value;
                         }
                         else {
-                            metadata.tdAttr = 'data-qtip="Double Click to Complete The Addition!"';
+                            metadata.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks-grid.confidentiality','Double Click to Complete The Addition!') + '"';
                             value.name = "EVERYONE";
                         }
                     }
@@ -244,7 +245,7 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 dock: 'top',
                 items: [{
                     xtype: 'label',
-                    html: '<div>For Tasks Added to the Action Plan, Add the Due Date and Confidentiality Level.</div><div>Custom Tasks can be Added to the List Below</div>'
+                    html: me.textStore.getValueByCode('ssp.label.action-plan.tasks-grid.message','<div>For Tasks Added to the Action Plan, Add the Due Date and Confidentiality Level.</div><div>Custom Tasks can be Added to the List Below</div>')
                 }]
             }, {
                 xtype: 'tbspacer',
@@ -253,15 +254,15 @@ Ext.define('Ssp.view.tools.actionplan.TasksGrid', {
                 dock: 'top',
                 xtype: 'toolbar',
                 items: [{
-                    text: 'Add Custom',
+                    text: me.textStore.getValueByCode('ssp.label.add-custom-button','Add Custom'),
                     xtype: 'button',
                     itemId: 'addCustomButton'
                 }, {
-                    text: 'Remove',
+                    text: me.textStore.getValueByCode('ssp.label.remove-button','Remove'),
                     xtype: 'button',
                     itemId: 'removeTaskButton'
                 }, {
-                    text: 'Remove All',
+                    text: me.textStore.getValueByCode('ssp.label.remove-all-button','Remove All'),
                     xtype: 'button',
                     itemId: 'removeAllTaskButton'
                 }]

@@ -24,7 +24,8 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
     inject: {
         searchChallengeReferralStore: 'searchChallengeReferralStore',
         apiProperties: 'apiProperties',
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+        textStore: 'sspTextStore'
     },
     width: 450,
     border: 0,
@@ -57,7 +58,7 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
             cls: 'tasksgrid',
 			enableDragDrop: false,
             columns: [{
-                header: 'Challenge',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.challenge-grid.challenge', 'Challenge'),
                 dataIndex: 'challengeName',
                 xtype: 'gridcolumn',
                 renderer: function(value, metaData, record, rowIndex, colIndex, store, view){
@@ -71,13 +72,13 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'challengeReferralName',
-                header: 'Name',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.challenge-grid.name', 'Name'),
                 flex: 0.6 ,
                 renderer: me.addToolTipWithValue()
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'challengeReferralDescription',
-                header: 'Referrals',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.challenge-grid.referrals', 'Referrals'),
                 flex: 1,
                 renderer: me.fullReferralDescription()
             }],
@@ -87,6 +88,14 @@ Ext.define('Ssp.view.tools.actionplan.ChallengesGrid', {
                 displayInfo: true,
 				itemId: 'challengeGridPager',
 				store: this.searchChallengeReferralStore,
+                displayMsg: me.textStore.getValueByCode('ssp.label.paging.displayMsg','Displaying {0} - {1} of {2}'),
+                emptyMsg: me.textStore.getValueByCode('ssp.label.paging.emptyMsg','No data to display'),
+                beforePageText: me.textStore.getValueByCode('ssp.label.paging.beforePageText','Page'),
+                afterPageText: me.textStore.getValueByCode('ssp.label.paging.afterPageText','of {0}'),
+                firstText: me.textStore.getValueByCode('ssp.label.paging.firstText','First Page'),
+                prevText: me.textStore.getValueByCode('ssp.label.paging.prevText','Previous Page'),
+                nextText: me.textStore.getValueByCode('ssp.label.paging.nextText','Next Page'),
+                lastText: me.textStore.getValueByCode('ssp.label.paging.lastText','Last Page'),
                 //pageSize: me.apiProperties.getPagingSize(),
                listeners: {
                     afterrender: function(){

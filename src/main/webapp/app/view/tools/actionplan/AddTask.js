@@ -21,7 +21,8 @@ Ext.define('Ssp.view.tools.actionplan.AddTask', {
 	alias: 'widget.addtask',
 	mixins: [ 'Deft.mixin.Injectable'],
 	inject: {
-    	model: 'currentTask'
+    	model: 'currentTask',
+        textStore: 'sspTextStore'
     },
 	width: '100%',
     height: '100%',
@@ -32,7 +33,7 @@ Ext.define('Ssp.view.tools.actionplan.AddTask', {
 				type: 'vbox',
 				align: 'stretch'
 			},
-			title: 'Add Action Plan Tasks',
+			title: me.textStore.getValueByCode('ssp.label.action-plan.add-task.title', 'Add Action Plan Tasks'),
 			items: [{ xtype: 'tasktree', flex: 0.5 },
 			        { xtype: 'addtaskform', flex: 0.5 }]
 		});

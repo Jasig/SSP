@@ -24,7 +24,8 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController',
-        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     height: 375,
     width: 600,
@@ -44,17 +45,17 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
                     type: 'vbox'
                 },
                 bodyPadding: 10,
-                title: 'Edit Task',
+                title: me.textStore.getValueByCode('ssp.label.action-plan.edit-task-form.title','Edit Task') ,
                 dockedItems: [{
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [{
                         xtype: 'button',
-                        text: 'Save',
+                        text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
                         itemId: 'editActionPlanButton'
                     }, {
                         xtype: 'button',
-                        text: 'Cancel',
+                        text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
                         listeners: {
                             click: function(){
                                 me = this;
@@ -74,14 +75,14 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
                     items: [*/{
                         xtype: 'textfield',
                         width: '99%',
-                        fieldLabel: 'Name',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.edit-task-form.name','Name'),
                         name: 'name',
 						itemId: 'name'
                     }/*]
                 }*/, {
                     xtype: 'textareafield',
                     width: '95%',
-                    fieldLabel: 'Description',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.edit-task-form.description','Description'),
                     maxLength: 1000,
                     allowBlank: false,
                     name: 'description',
@@ -89,7 +90,7 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
                 }, {
                     xtype: 'textfield',
                     fieldLabel: 'Link (No HTML)',
-                    inputAttrTpl: " data-qtip='Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
+                    inputAttrTpl: " data-qtip='" + me.textStore.getValueByCode('ssp.tooltip.action-plan.add-task-form.link', 'Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ') + "'",
                     name: 'link',
                     maxLength: 256,
                     allowBlank: true,
@@ -104,20 +105,20 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
                     items: [{
                         width: '100%',
                         xtype: 'datefield',
-                        fieldLabel: 'Target Date',
-                        altFormats: 'm/d/Y|m-d-Y',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.edit-task-form.dueDate','Target Date'),
+                        altFormats: me.textStore.getValueByCode('ssp.alt-format.action-plan.edit-task-form.dueDate','m/d/Y|m-d-Y'),
                         name: 'dueDate',
                         itemId: 'actionPlanDueDate',
                         allowBlank: false,
-						format: 'm/d/Y',
-						minValue: Ext.Date.format(new Date(), 'm/d/Y'),
-						minText: 'Cannot have a due date before today!',
+						format: me.textStore.getValueByCode('ssp.format.action-plan.edit-task-form.format','m/d/Y'),
+						minValue: Ext.Date.format(new Date(), me.textStore.getValueByCode('ssp.format.action-plan.edit-task-form.dueDate','m/d/Y')),
+						minText: me.textStore.getValueByCode('ssp.min-text.action-plan.edit-task-form.dueDate','Cannot have a due date before today!'),
                         showToday: false, // else 'today' would be browser-local 'today'
                         listeners: {
                             render: function(field){
                                 Ext.create('Ext.tip.ToolTip', {
                                     target: field.getEl(),
-                                    html: 'Use this to set the target completion date in the institution\'s time zone.'
+                                    html: me.textStore.getValueByCode('ssp.tooltip.action-plan.edit-task-form.dueDate','Use this to set the target completion date in the institution\'s time zone.')
                                 });
                             }
                         }
@@ -127,7 +128,7 @@ Ext.define('Ssp.view.tools.actionplan.EditTaskForm', {
                     itemId: 'confidentialityLevel',
                     name: 'confidentialityLevelId',
                     fieldLabel: 'Confidentiality Level',
-                    emptyText: 'Select One',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.action-plan.edit-task-form.confidentiality','Select One'),
                     store: me.confidentialityLevelsStore,
                     valueField: 'id',
                     displayField: 'name',

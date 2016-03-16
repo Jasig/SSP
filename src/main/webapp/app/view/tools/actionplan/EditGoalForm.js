@@ -23,11 +23,12 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.EditGoalFormViewController',
     inject: {
-        store: 'confidentialityLevelsAllUnpagedStore'
+        store: 'confidentialityLevelsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
 	initComponent: function() {
         Ext.applyIf(this, {
-        	title: 'Add Goal',
+        	title: me.textStore.getValueByCode('ssp.label.action-plan.edit-goal-form.title', 'Add Goal'),
             fieldDefaults: {
                 msgTarget: 'side',
                 labelAlign: 'right',
@@ -36,14 +37,14 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
         	items: [
                 {
                     xtype: 'textfield',
-                    fieldLabel: 'Name',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.edit-goal-form.name', 'Name'),
                     anchor: '100%',
                     name: 'name',
                     allowBlank: false
                 },
                 {
                     xtype: 'textareafield',
-                    fieldLabel: 'Description',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.edit-goal-form.description', 'Description'),
                     anchor: '100%',
                     name: 'description',
                     allowBlank: false
@@ -51,7 +52,7 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
 			        xtype: 'combobox',
 			        itemId: 'confidentialityLevel',
 			        name: 'confidentialityLevelId',
-			        fieldLabel: 'Confidentiality Level',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.edit-goal-form.confidentiality', 'Confidentiality Level'),
 			        emptyText: 'Select One',
 			        store: this.store,
 			        valueField: 'id',
@@ -65,12 +66,12 @@ Ext.define('Ssp.view.tools.actionplan.EditGoalForm', {
             dockedItems: [{
        		               xtype: 'toolbar',
        		               items: [{
-		       		                   text: 'Save',
+		       		                   text: me.textStore.getValueByCode('ssp.label.save-button', 'Save'),
 		       		                   xtype: 'button',
 		       		                   action: 'save',
 		       		                   itemId: 'saveButton'
 		       		               }, '-', {
-		       		                   text: 'Cancel',
+		       		                   text: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel'),
 		       		                   xtype: 'button',
 		       		                   action: 'cancel',
 		       		                   itemId: 'cancelButton'

@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.DisplayActionPlanViewController',
     inject: {
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -33,7 +34,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlan', {
             layout: {
                 type: 'fit'
             },
-            title: 'Action Plan',
+            title: me.textStore.getValueByCode('ssp.label.action-plan.display-action-plan.title', 'Action Plan'),
             autoScroll: true,
             padding: 0,
             

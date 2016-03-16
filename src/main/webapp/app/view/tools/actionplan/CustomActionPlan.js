@@ -24,7 +24,8 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         appEventsController: 'appEventsController',
-        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsStore: 'confidentialityLevelsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     height: 375,
     width: 600,
@@ -43,17 +44,17 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
                     type: 'vbox'
                 },
                 bodyPadding: 10,
-                title: 'Custom Task',
+                title: me.textStore.getValueByCode('ssp.label.action-plan.custom-action-plan.title', 'Custom Task'),
                 dockedItems: [{
                     xtype: 'toolbar',
                     dock: 'top',
                     items: [{
                         xtype: 'button',
-                        text: 'Save',
+                        text: me.textStore.getValueByCode('ssp.label.save-button', 'Save'),
                         itemId: 'addCustomActionPlanButton'
                     }, {
                         xtype: 'button',
-                        text: 'Cancel',
+                        text: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel'),
                         listeners: {
                             click: function(){
                                 me = this;
@@ -66,21 +67,21 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
                 items: [{
                     xtype: 'textfield',
                     width: '99%',
-                    fieldLabel: 'Name',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.custom-action-plan.name', 'Name'),
                     name: 'name',
 					maxLength: 100,
 					allowBlank: false
                 }, {
                     xtype: 'textareafield',
                     width: '95%',
-                    fieldLabel: 'Description',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.custom-action-plan.description', 'Description'),
                     maxLength: 2000,
                     allowBlank: false,
                     name: 'description'
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: 'Link (No HTML)',
-                    inputAttrTpl: " data-qtip='Example: https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot; ' ",
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.custom-action-plan.link', 'Link (No HTML)'),
+                    inputAttrTpl: " data-qtip='" + me.textStore.getValueByCode('ssp.tooltip.action-plan.custom-action-plan.link', 'Example:&nbsp;https://www.sample.com  <br /> No HTML markup e.g. &quot;&lt; a href=...&gt;&quot;') + "'",
                     name: 'link',
                     maxLength: 256,
                     allowBlank: true,
@@ -95,13 +96,13 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
                     items: [{
                         width: '100%',
                         xtype: 'datefield',
-                        fieldLabel: 'Target Date',
-                        altFormats: 'm/d/Y|m-d-Y',
-                        ltFormats: 'm/d/Y|m-d-Y',
-    					format:'m/d/Y',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.custom-action-plan.due-date', 'Target Date'),
+                        altFormats: me.textStore.getValueByCode('ssp.alt-formats.action-plan.custom-action-plan.due-date', 'm/d/Y|m-d-Y'),
+                        ltFormats: me.textStore.getValueByCode('ssp.lt-formats.action-plan.custom-action-plan.due-date', 'm/d/Y|m-d-Y'),
+    					format: me.textStore.getValueByCode('ssp.format.action-plan.custom-action-plan.due-date', 'm/d/Y'),
                         showToday: false,
-    					minValue: Ext.Date.format(new Date(), 'm/d/Y'),
-    					minText: 'Cannot have a due date before today!',
+    					minValue: Ext.Date.format(new Date(), me.textStore.getValueByCode('ssp.format.action-plan.custom-action-plan.due-date', 'm/d/Y')),
+    					minText: me.textStore.getValueByCode('ssp.min-text.action-plan.custom-action-plan.due-date', 'Cannot have a due date before today!'),
                         name: 'dueDate',
                         itemId: 'actionPlanDueDate',
                         allowBlank: false,
@@ -110,7 +111,7 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
                             render: function(field){
                                 Ext.create('Ext.tip.ToolTip', {
                                     target: field.getEl(),
-                                    html: 'Use this to set the target completion date in the institution\'s time zone.'
+                                    html: me.textStore.getValueByCode('ssp.tooltip.action-plan.custom-action-plan.due-date', 'Use this to set the target completion date in the institution\'s time zone.')
                                 });
                             }
                         }
@@ -119,8 +120,8 @@ Ext.define('Ssp.view.tools.actionplan.CustomActionPlan', {
                     xtype: 'combobox',
                     itemId: 'confidentialityLevel',
                     name: 'confidentialityLevelId',
-                    fieldLabel: 'Confidentiality Level',
-                    emptyText: 'Select One',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.action-plan.custom-action-plan.confidentiality-level', 'Confidentiality Level'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.action-plan.custom-action-plan.confidentiality-level', 'Select One'),
                     store: me.confidentialityLevelsStore,
                     valueField: 'id',
                     displayField: 'name',

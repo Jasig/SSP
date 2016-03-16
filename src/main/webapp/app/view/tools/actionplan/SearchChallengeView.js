@@ -26,7 +26,8 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
         columnRendererUtils: 'columnRendererUtils',
         challengesStore: 'challengesAllUnpagedStore',
         challengeCategoriesStore: 'challengeCategoriesStore',
-        challengeReferralsStore: 'challengeReferralsStore'
+        challengeReferralsStore: 'challengeReferralsStore',
+        textStore: 'sspTextStore'
     },
     controller: 'Ssp.controller.tool.actionplan.SearchChallengeViewController',
     title: 'Add Task',
@@ -61,13 +62,13 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                     items: [{
                         xtype: 'label',
                         padding: '0 0 2 3',
-                        text: 'Filter Category, Challenge or Keyword'
+                        text: me.textStore.getValueByCode('ssp.label.action-plan.search-challenge.filter', 'Filter Category, Challenge or Keyword')
                     }, {
                         xtype: 'tbspacer',
                         width: 195
                     }, {
-                        tooltip: 'Reset',
-                        text: 'Reset',
+                        tooltip: me.textStore.getValueByCode('ssp.tooltip.reset-button', 'Reset'),
+                        text: me.textStore.getValueByCode('ssp.label.reset-button', 'Reset'),
                         type: 'refresh',
                         xtype: 'button',
                         padding: '0 0 2 3',
@@ -79,7 +80,7 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                     itemId: 'categoryNameCombo',
                     name: 'categoryNameCombo',
                     fieldLabel: '',
-                    emptyText: 'Filter by Category',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.action-plan.search-challenge.category', 'Filter by Category'),
                     store: me.challengeCategoriesStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -95,7 +96,7 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                     itemId: 'categoryChallengeNameCombo',
                     name: 'categoryChallengeNameCombo',
                     fieldLabel: '',
-                    emptyText: 'Filter by Challenge',
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.action-plan.search-challenge.challenge', 'Filter by Challenge'),
                     store: me.challengesStore,
                     valueField: 'id',
                     displayField: 'name',
@@ -115,7 +116,7 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                     fieldLabel: '',
                     items: [{
                         xtype: 'button',
-                        text: 'Search',
+                        text: me.textStore.getValueByCode('ssp.label.search-button', 'Search'),
                         itemId: 'searchKeywordButton'
                     }, {
                         xtype: 'tbspacer',
@@ -151,17 +152,17 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                         align: 'stretch',
                         type: 'hbox'
                     },
-                    title: 'Add ChallengeReferral',
+                    title: me.textStore.getValueByCode('ssp.label.action-plan.search-challenge.add-challenge-referral', 'Add ChallengeReferral'),
                     items: [{
                         xtype: 'button',
-                        text: 'Add',
+                        text: me.textStore.getValueByCode('ssp.label.add-button', 'Add'),
                         itemId: 'addChallengeReferralButton'
                     }, {
                         xtype: 'tbspacer',
                         width: 10
                     }, {
                         xtype: 'button',
-                        text: 'Add All',
+                        text: me.textStore.getValueByCode('ssp.label.add-all-button', 'Add All'),
                         itemId: 'addAllChallengeReferralButton'
                     }]
                 }, {
@@ -179,11 +180,11 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                 fieldLabel: '',
                 items: [{
                     xtype: 'button',
-                    text: 'Save',
+                    text: me.textStore.getValueByCode('ssp.label.save-button', 'Save'),
                     itemId: 'saveBulkActionPlanButton'
                 }, {
                     xtype: 'button',
-                    text: 'Cancel',
+                    text: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel'),
                     itemId: 'cancelButton'
                 
                 }]

@@ -27,15 +27,16 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     	authenticatedPerson: 'authenticatedPerson',
     	columnRendererUtils: 'columnRendererUtils',
     	model: 'currentTask',
-        store: 'tasksStore'
+        store: 'tasksStore',
+        textStore: 'sspTextStore'
     },
     layout: 'fit',
 	width: '100%',
     height: '100%',
 	itemId: 'tasksPanel',
-	dueDateMsg: 'Task due dates are always interpreted in the institution\'s time zone.',
 	dueDateRenderer: function() {
 		var me = this;
+	    var dueDateMsg = this.textStore.getValueByCode('ssp.label.action-plan.tasks.due-date-message', 'Task due dates are always interpreted in the institution\'s time zone.');
 		return function(value,metaData,record) {
 			metaData.tdAttr = 'data-qtip="' + me.dueDateMsg + '"';
 			return me.columnRendererUtils.renderTaskDueDate(value,metaData,record);
@@ -53,21 +54,22 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
     initComponent: function(){
     	var me=this;
     	var sm = Ext.create('Ext.selection.CheckboxModel');
+	    var dueDateMsg = this.textStore.getValueByCode('ssp.label.action-plan.tasks.due-date-message', 'Task due dates are always interpreted in the institution\'s time zone.');
     	Ext.apply(me,
     			{
     		        scroll: 'vertical',
     	    		store: me.store,    		
     	    		selModel: sm,
-					title: 'Tasks',
+					title: me.textStore.getValueByCode('ssp.label.action-plan.tasks.title','Tasks'),
 					cls: 'tasksgrid',
 		    	    columns: [{
 		    	        xtype:'actioncolumn',
 		    	        width:68,
-		    	        header: 'Action',
+		    	        header: me.textStore.getValueByCode('ssp.label.action-plan.tasks.action','Action'),
 						
 		    	        items: [{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_EDIT_ICON_PATH,
-		    	            tooltip: 'Edit Task',
+		    	            tooltip: me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks.edit-task','Edit Task'),
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
 		    	            	var panel = grid.up('panel');
@@ -89,7 +91,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            scope: me
 		    	        },{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_CLOSE_ICON_PATH,
-		    	            tooltip: 'Close Task',
+		    	            tooltip: me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks.close-task','Close Task'),
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
 		    	            	var panel = grid.up('panel');
@@ -111,7 +113,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            scope: me
 		    	        },{
 		    	            icon: Ssp.util.Constants.GRID_ITEM_DELETE_ICON_PATH,
-		    	            tooltip: 'Delete Task',
+		    	            tooltip: me.textStore.getValueByCode('ssp.tooltip.action-plan.tasks.delete-task','Delete Task'),
 		    	            handler: function(grid, rowIndex, colIndex) {
 		    	            	var rec = grid.getStore().getAt(rowIndex);
 		    	            	var panel = grid.up('panel');
@@ -133,7 +135,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 		    	            scope: me
 		    	        }]
 		    	    },{
-		    	        text: 'Challenge',
+		    	        text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.challenge','Challenge'),
 		    	        flex: 0.20,
 		    	        sortable: true,
 		    	        dataIndex: 'group',
@@ -146,13 +148,13 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 	                    }
 		    	    },
 					{
-		    	        text: 'Description',
+		    	        text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.description','Description'),
 		    	        flex: 1,
 		    	        sortable: true,
 		    	        dataIndex: 'name',
 		    	        renderer: me.fullDescription()
 		    	    },{
-		    	        header: 'Due Date',
+		    	        header: me.textStore.getValueByCode('ssp.label.action-plan.tasks.due-date','Due Date'),
 		    	        width: 80,
 		    	        dataIndex: 'dueDate',
 		    	        renderer: me.dueDateRenderer(),
@@ -166,28 +168,28 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
 						}
 		    	    },
 					{
-		    	        text: 'Status',
+		    	        text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.status','Status'),
 		    	        width: 80,
 		    	        sortable: true,
 		    	        dataIndex: 'completedDate',
 		    	        renderer: me.columnRendererUtils.renderTaskStatus
 		    	    },
 					{
-		    	        text: 'Completed Date',
+		    	        text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.completed-date','Completed Date'),
 		    	        width: 90,
 		    	        sortable: true,
 		    	        dataIndex: 'completedDate',
 		    	        renderer: me.columnRendererUtils.renderCompletedDate
 		    	    },
 					{
-		    	        text: 'Author',
+		    	        text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.author','Author'),
 		    	        flex: 0.20,
 		    	        sortable: true,
 		    	        dataIndex: 'name',
 		    	        renderer: me.columnRendererUtils.renderTaskAuthor
 		    	    },
 					{
-		    	        text: 'Confidentiality',
+		    	        text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.confidentiality','Confidentiality'),
 		    	        flex: 0.20,
 		    	        sortable: true,
 		    	        dataIndex: 'name',
@@ -199,12 +201,12 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                             dock: 'top',
                             xtype: 'toolbar',
                             items: [{
-                                text: 'Check All',
+                                text: me.textStore.getValueByCode('ssp.label.check-all-button','Check All'),
                                 xtype: 'button',
                                 itemId: 'selectAllTaskButton'
                             }, {
-                                tooltip: 'Add a Task',
-                                text: 'Add Task',
+                                tooltip: me.textStore.getValueByCode('ssp.tooltip.add-task-button','Add a Task'),
+                                text: me.textStore.getValueByCode('ssp.label.add-task-button','Add Task'),
                                 hidden: !me.authenticatedPerson.hasAccess('ADD_TASK_BUTTON'),
                                 xtype: 'button',
                                 itemId: 'addTaskButton'
@@ -216,11 +218,11 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                             }, 
 							{
 								xtype: 'label',
-								text: 'Show Only:',
+								text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.show-only','Show Only:'),
 								padding: '5 10 5 5'
 							},{
                                 xtype: 'checkbox',
-                                boxLabel: 'Tasks I created',
+                                boxLabel:  me.textStore.getValueByCode('ssp.label.action-plan.tasks.tasks-i-created','Tasks I created'),
                                 hidden: !me.authenticatedPerson.hasAccess('FILTER_TASKS_BY_AUTHENTICATED_USER_CHECKBOX'),
                                 itemId: 'filterTasksBySelfCheck'
                             },
@@ -230,7 +232,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                             }, 
 							{
                                 xtype: 'checkbox',
-                                boxLabel: 'Incomplete Tasks',
+                                boxLabel: me.textStore.getValueByCode('ssp.label.action-plan.tasks.incomplete-tasks','Incomplete Tasks'),
                                 itemId: 'filterTasksByIncompleteCheck'
                             },
 							{
@@ -243,7 +245,7 @@ Ext.define('Ssp.view.tools.actionplan.Tasks', {
                             dock: 'top',
                             items: [{
                                 xtype: 'label',
-                                text: 'By default, all items are included in the Print and Email functions. Select items to Print or Email individual items'
+                                text: me.textStore.getValueByCode('ssp.label.action-plan.tasks.message','By default, all items are included in the Print and Email functions. Select items to Print or Email individual items')
                             }]
                         }]
     	

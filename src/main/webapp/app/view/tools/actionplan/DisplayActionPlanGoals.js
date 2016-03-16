@@ -27,7 +27,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
         columnRendererUtils: 'columnRendererUtils',
         model: 'currentGoal',
         store: 'goalsStore',
-        confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore'
+        confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
+        textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -40,6 +41,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
         
         var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', {
             clicksToEdit: 2,
+		    saveBtnText  : me.textStore.getValueByCode('ssp.label.update-button', 'Update'),
+            cancelBtnText: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel'),
             listeners: {
                 cancelEdit: function(rowEditor, item){
                     var columns = rowEditor.grid.columns;
@@ -55,13 +58,13 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
             plugins: cellEditor,
             selType: 'rowmodel',
             cls: 'configgrid',
-            title: 'Goals',
+            title: me.textStore.getValueByCode('ssp.label.action-plan.display-goals.title', 'Goals'),
             store: me.store,
             viewConfig: {
                 markDirty: false
             },
             columns: [{
-                header: 'Name',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.display-goals.name', 'Name'),
                 flex: 0.25,
                 dataIndex: 'name',
                 rowEditable: true,
@@ -72,7 +75,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 					allowBlank: false
                 }
             }, {
-                header: 'Description',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.display-goals.description', 'Description'),
                 flex: 0.50,
                 dataIndex: 'description',
                 rowEditable: true,
@@ -83,7 +86,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
 					allowBlank: false
                 }
             }, {
-                header: 'Confidentiality',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.display-goals.confidentiality', 'Confidentiality'),
                 dataIndex: 'confidentialityLevel',
                 itemId: 'goalsCFCombo',
                 renderer: me.columnRendererUtils.renderConfidentialityLevel,
@@ -105,14 +108,14 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                 dock: 'top',
                 xtype: 'toolbar',
                 items: [{
-                    tooltip: 'Add a Goal',
-                    text: 'Add Goal',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.add-goal-button', 'Add a Goal'),
+                    text: me.textStore.getValueByCode('ssp.label.add-goal-button', 'Add Goal'),
                     hidden: !me.authenticatedPerson.hasAccess('ADD_GOAL_BUTTON'),
                     xtype: 'button',
                     itemId: 'addGoalButton'
                 }, {
-                    tooltip: 'Delete a Goal',
-                    text: 'Delete Goal',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.delete-goal-button', 'Delete a Goal'),
+                    text: me.textStore.getValueByCode('ssp.label.delete-goal-button', 'Delete Goal'),
                     hidden: !me.authenticatedPerson.hasAccess('DELETE_GOAL_BUTTON'),
                     xtype: 'button',
                     itemId: 'deleteGoalButton'
@@ -127,7 +130,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayActionPlanGoals', {
                 dock: 'top',
                 items: [{
                     xtype: 'label',
-                    text: 'Double-click to edit a goal'
+                    text: me.textStore.getValueByCode('ssp.label.action-plan.display-goals.edit-goal', 'Double-click to edit a goal')
                 }]
             }]
         });

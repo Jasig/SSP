@@ -28,7 +28,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
         columnRendererUtils: 'columnRendererUtils',
         model: 'currentStrength',
         store: 'strengthsStore',
-		confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore'
+		confidentialityLevelsAllUnpagedStore: 'confidentialityLevelsAllUnpagedStore',
+		textStore: 'sspTextStore'
     },
     width: '100%',
     height: '100%',
@@ -41,6 +42,8 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 		
 		var cellEditor = Ext.create('Ext.grid.plugin.RowEditing', { 
     							clicksToEdit: 2,
+    						    saveBtnText  : me.textStore.getValueByCode('ssp.label.update-button', 'Update'),
+                                cancelBtnText: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel'),
     							listeners: {
 	    							cancelEdit: function(rowEditor, item){
 	    								var columns = rowEditor.grid.columns;
@@ -60,14 +63,14 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
         Ext.apply(me, {
             plugins: cellEditor,
 			selType: 'rowmodel',
-            title: 'Strengths',
+            title: me.textStore.getValueByCode('ssp.label.action-plan.display-strengths.title', 'Strengths'),
             store: me.store,
 			viewConfig: {
                 markDirty: false
             },
             columns: [
 			{
-                header: 'Name',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.display-strengths.name', 'Name'),
                 flex: 0.25,
                 dataIndex: 'name',
 				
@@ -78,7 +81,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 					allowBlank: false
                 }
             }, {
-                header: 'Description',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.display-strengths.description', 'Description'),
                 flex: 0.50,
                 dataIndex: 'description',
 				field: {
@@ -88,7 +91,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
 					allowBlank: false
                 }
             }, {
-                header: 'Confidentiality',
+                header: me.textStore.getValueByCode('ssp.label.action-plan.display-strengths.confidentiality', 'Confidentiality'),
                 dataIndex: 'confidentialityLevel',
                 renderer: me.columnRendererUtils.renderConfidentialityLevel,
                 required: true,
@@ -108,15 +111,15 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
                 xtype: 'toolbar',
 				width: '100%',
                 items: [{
-                    tooltip: 'Add a Strength',
-                    text: 'Add Strength',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.add-strength-button', 'Add a Strength'),
+                    text: me.textStore.getValueByCode('ssp.label.add-strength-button', 'Add Strength'),
                     hidden: !me.authenticatedPerson.hasAccess('ADD_STRENGTH_BUTTON'),
                     xtype: 'button',
                     itemId: 'addStrengthButton'
                 },
 				{
-					tooltip: 'Delete a Strength',
-                    text: 'Delete Strength',
+					tooltip: me.textStore.getValueByCode('ssp.tooltip.delete-strength-button', 'Delete a Strength'),
+                    text: me.textStore.getValueByCode('ssp.label.delete-strength-button', 'Delete Strength'),
                     hidden: !me.authenticatedPerson.hasAccess('DELETE_STRENGTH_BUTTON'),
                     xtype: 'button',
                     itemId: 'deleteStrengthButton'
@@ -133,7 +136,7 @@ Ext.define('Ssp.view.tools.actionplan.DisplayStrengths', {
                 dock: 'top',
                 items: [{
                     xtype: 'label',
-                    text: 'Double-click to edit a strength'
+                    text: me.textStore.getValueByCode('ssp.label.action-plan.display-goals.edit-goal', 'Double-click to edit a strength')
                 }]
             }]
         });

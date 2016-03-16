@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.actionplan.TaskTree', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.actionplan.TaskTreeViewController',
     inject: {
-        store: 'treeStore'
+        store: 'treeStore',
+        textStore: 'sspTextStore'
     },
 	height: 250,
 	width: '100%',
@@ -48,7 +49,7 @@ Ext.define('Ssp.view.tools.actionplan.TaskTree', {
      	                      }*/
 	                       {
 	                         xtype: "label",
-	                         text: "Select a task to add to the Student's Action Plan:"
+	                         text: me.textStore.getValueByCode('ssp.label.action-plan.task-tree.select-task',"Select a task to add to the Student's Action Plan:")
 	                       }]
      		           }]
      		       	
