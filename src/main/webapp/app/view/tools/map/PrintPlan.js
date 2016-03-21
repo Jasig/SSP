@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
     controller: 'Ssp.controller.tool.map.PrintPlanController',
     inject: {
         columnRendererUtils: 'columnRendererUtils',
-        appEventsController: 'appEventsController'
+        appEventsController: 'appEventsController',
+        textStore: 'sspTextStore'
     },
     height: 300,
     width: 400,
@@ -36,7 +37,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Print Plan',
+            title: me.textStore.getValueByCode('ssp.label.map.print-plan.title','Print Plan'),
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -62,14 +63,14 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     layout: 'vbox',
                     align: 'stretch' ,
                     items: [ {
-                        boxLabel: 'Print MAP with Options',
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.print-map-options','Print MAP with Options'),
                         name: 'outputFormat',
                         inputValue: 'fullFormat',
                         itemId: 'fullFormat'
                     },
                     {
 						checked: true,
-                        boxLabel: 'Print MAP in Matrix Format',
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.print-map-matrix-format','Print MAP in Matrix Format'),
                         name: 'outputFormat',
                         inputValue: 'matrixFormat',
                         itemId: 'matrixFormat'
@@ -86,25 +87,25 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                     itemId: 'optionsPrintView',
                         items: [{
                             checked: true,
-                            boxLabel: 'With Course Description',
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.with-course-description','With Course Description'),
                             name: 'includeCourseDescription'
                         },
                         {
                             checked: true,
-                            boxLabel: 'With Header/Footer',
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.with-header-footer','With Header/Footer'),
                             name: 'includeHeaderFooter'
                         },
                         {
 							checked: true,
                             name: 'includeTotalTimeExpected',
                             labelSeparator: '',
-                            boxLabel: 'Total Time Expected Outside Class'
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.total-time-expected','Total Time Expected Outside Class')
                          },
                          {
 							checked: true,
                             name: 'includeFinancialAidInformation',
                             labelSeparator: '',
-                            boxLabel: 'Display FinAid Information'
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.display-fa-info','Display FinAid Information')
                          }
                         ]
                         }
@@ -116,7 +117,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                             items: [{
                                 xtype: 'button',
                                 itemId: 'sendPrintButton',
-                                text: 'Print',
+                                text: me.textStore.getValueByCode('ssp.label.print-button','Print'),
                                 listeners:{
                                 	click: function(){
                                 		me = this;
@@ -131,7 +132,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                             }, '-', {
                                 xtype: 'button',
                                 itemId: 'cancelButton',
-                                text: 'Cancel',
+                                text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
                                 listeners: {
     		                    	click:function(){
     		                    		me = this;

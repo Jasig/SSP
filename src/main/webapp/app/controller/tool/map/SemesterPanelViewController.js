@@ -111,11 +111,11 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		if((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
 			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ){
 			button.setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
-			var tooltip = "Term Notes: "
+			var tooltip =  me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.term-notes',"Term Notes")
 			if(termNote.data.contactNotes && termNote.data.contactNotes.length > 0)
-				tooltip += "Contact Notes: " + termNote.data.contactNotes + " ";
+				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.contact-notes',"Contact Notes: %CONTACT-NOTES%",{'%CONTACT-NOTES%':termNote.data.contactNotes});
 			if(termNote.data.studentNotes && termNote.data.studentNotes.length > 0)
-					tooltip += "Student Notes: " + termNote.data.studentNotes + " ";	
+				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.student-notes',"Contact Notes: %STUDENT-NOTES%",{'%STUDENT-NOTES%':termNote.data.studentNotes});
 			button.setTooltip(tooltip);
 			return;
 		}

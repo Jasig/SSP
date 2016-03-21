@@ -42,7 +42,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Save Template',
+            title: me.textStore.getValueByCode('ssp.label.map.save-template.title','Save Template'),
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -69,7 +69,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             height: 100,
                             items: [{
                 				    xtype:'checkbox',
-                			    	fieldLabel: 'Active Template',
+                			    	fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.object-status','Active Template'),
                 			    	name: 'objectStatus',
 									itemId: 'objectStatus',
                 			    	labelWidth: 95,
@@ -81,7 +81,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                                 },{
 						        	xtype: 'combobox',
 						        	name: 'visibility',
-						        	fieldLabel: 'Visibility',
+						        	fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.visibility','Visibility'),
 									labelWidth:60,
 									store: Ext.create('Ext.data.Store', {
 									    	fields: ['value', 'name'],
@@ -115,9 +115,9 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         		                        xtype: 'combobox',
         	                        name: 'programCode',
 									store: me.programsStore,
-        	                        fieldLabel: 'Program',
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.program-code','Program'),
 									labelAlign: "top",
-        	                        emptyText: 'Specific Program',
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-template.program-code','Specific Program'),
         	                        valueField: 'code',
         	                        displayField: 'name',
         	                        mode: 'local',
@@ -134,9 +134,9 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        xtype: 'combobox',
         	                        name: 'divisionCode',
 									store: me.divisionsStore,
-        	                        fieldLabel: 'Division',
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.division','Division'),
 									labelAlign: "top",
-        	                        emptyText: 'Specific Division',
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-template.division','Specific Division'),
         	                        valueField: 'code',
         	                        displayField: 'name',
         	                        mode: 'local',
@@ -152,9 +152,9 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        xtype: 'combobox',
         	                        name: 'departmentCode',
 									store: me.departmentsStore,
-        	                        fieldLabel: 'Department',
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.department','Department'),
 									labelAlign: "top",
-        	                        emptyText: 'Specific Department',
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-template.department','Specific Department'),
         	                        valueField: 'code',
         	                        displayField: 'name',
         	                        mode: 'local',
@@ -170,9 +170,9 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        xtype: 'combobox',
         	                        name: 'catalogYearCode',
 									store: me.catalogYearsStore,
-        	                        fieldLabel: 'Catalog Year',
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.catalog-year-code','Catalog Year'),
 									labelAlign: "top",
-        	                        emptyText: 'Specific Cat Year',
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-template.catalog-year-code','Specific Cat Year'),
         	                        valueField: 'code',
         	                        displayField: 'name',
         	                        mode: 'local',
@@ -194,62 +194,62 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             },
                             items: [
 				               {
-            				        fieldLabel: 'Template Title',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.template-title','Template Title'),
             				        name: 'name',
 									itemId: 'name',
             				        maxLength: 50,
             				        allowBlank:false
             				        
             				    },{
-            				        fieldLabel: 'Contact Name',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.contact-name','Contact Name'),
             				        name: 'contactName',
 									itemId: 'contactName',
             				        maxLength: 50            				        
             				    },{
-            				        fieldLabel: 'Contact Title',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.contact-title','Contact Title'),
             				        name: 'contactTitle',
             				        itemId: 'contactTitle',
             				        maxLength: 50,
             				        allowBlank:true
             				    },{
-	            				   fieldLabel: 'Contact Email',
+	            				   fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.contact-email','Contact Email'),
 	            				   name: 'contactEmail',
 		            			   itemId: 'contactEmail',
 								   maxLength: 200
 	            				},{
-            				        fieldLabel: 'Contact Phone',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.contact-phone','Contact Phone'),
             				        name: 'contactPhone',
             				        itemId: 'contactPhone',
 									maxLength: 200
             				    },
             				   {
-            				        fieldLabel: 'Academic Link',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.academic-link','Academic Link'),
             				        name: 'academicLink',
             				        itemId: 'academicLink',
             				        allowBlank:true,
 									maxLength: 2000
             				    },{
-            				        fieldLabel: 'Career Link',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.career-link','Career Link'),
             				        name: 'careerLink',
             				        itemId: 'careerLink',
             				        allowBlank:true,
 									maxLength: 2000
             				    },{
-            				        fieldLabel: 'Advisor/Coach Notes',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.contact-notes','Advisor/Coach Notes'),
             				        name: 'contactNotes',
             				        itemId: 'contactNotes',
             				        allowBlank:true,
             				        xtype: 'textareafield',
 									maxLength: 4000
             				    },{
-            				        fieldLabel: 'Student Notes',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.student-notes','Student Notes'),
             				    	name: 'studentNotes',
             				    	itemId: 'studentNotes',
             			        	allowBlank:true,
             			        	xtype: 'textareafield',
 									maxLength: 4000
                 			    },{
-                			        fieldLabel: 'Academic Goals',
+                			        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.academic-goals','Academic Goals'),
                 			        name: 'academicGoals',
                 			        itemId: 'academicGoals',
                 			        allowBlank:true,
@@ -261,8 +261,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 									itemId: 'mapTemplateTagId',
 									id: 'mapTemplateTagId',
 									store: me.mapTemplateTagsStore,
-									fieldLabel: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
-									emptyText: 'Specific ' + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+									fieldLabel: me.textStore.getValueByCode('ssp.label.map-template-tag',"Template Tag"),
+									emptyText: me.textStore.getValueByCode('ssp.empty-text.map-template-tag',"Specific Template Tag"),
 									valueField: 'id',
 									displayField: 'name',
 									mode: 'local',
@@ -282,11 +282,11 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                         items: [{
                             xtype: 'button',
                             itemId: 'saveButton',
-                            text: 'Save'
+                            text: me.textStore.getValueByCode('ssp.label.save-button','Save')
                             
                         }, '-', {
                             xtype: 'button',
-                            text: 'Cancel',
+                            text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
                             itemId: 'cancelButton'
                         }]
                     

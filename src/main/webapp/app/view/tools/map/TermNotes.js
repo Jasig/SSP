@@ -20,6 +20,9 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
     extend: 'Ext.window.Window',
     alias: 'widget.termnotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+        textStore: 'sspTextStore'
+    },
     height: 500,
     width: 500,
     resizable: true,
@@ -31,7 +34,7 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Term Notes',
+            title: me.textStore.getValueByCode('ssp.label.map.term-notes.title','Term Notes'),
             items:[{
                 xtype: 'form',
                 flex: 1,
@@ -54,7 +57,7 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
                
 				    items: [
 				   {
-				        fieldLabel: 'Advisor/Coach Notes',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.term-notes.contact-notes','Advisor/Coach Notes'),
 				        allowBlank:true,
 				        name: 'contactNotes',
 				        xtype: 'textareafield',
@@ -63,7 +66,7 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
 				        maxLength: 4000,
 				        enforceMaxLength: true
 				    },{
-				        fieldLabel: 'Student Notes',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.term-notes.student-notes','Student Notes'),
 				        name: 'studentNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
@@ -79,8 +82,8 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
                         padding: '0 0 0 105',
                         labelSeparator: '',
                         hideLabel: true,
-                        boxLabel: 'Mark As Important',
-                        fieldLabel: 'Mark As Important' 
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.term-notes.is-important','Mark As Important'),
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.term-notes.is-important','Mark As Important')
                         }],
 				    dockedItems: [{
 		                xtype: 'toolbar',
@@ -88,12 +91,12 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
 		                items: [{
 		                    xtype: 'button',
 		                    name: 'saveButton',
-		                    text: 'Save'
+		                    text: me.textStore.getValueByCode('ssp.label.save-button','Save')
 		                    
 		                }, '-', {
 		                    xtype: 'button',
 		                    name: 'cancelButton',
-		                    text: 'Cancel',
+		                    text: me.textStore.getValueByCode('ssp.label.map.cancel-button','Cancel'),
 							listeners:{
 								click:function(){
 									this.close();

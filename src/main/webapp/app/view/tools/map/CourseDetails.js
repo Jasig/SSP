@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     //controller: 'Ssp.controller.tool.map.CoursesGridController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+        textStore: 'sspTextStore'
     },
     height: 400,
     width: 650,
@@ -34,7 +35,7 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Course Details',
+            title: me.textStore.getValueByCode('ssp.label.map.course-details.title', 'Course Details'),
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -75,12 +76,12 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                         
                                         items: [
                     				               {
-                                				        fieldLabel: 'Course',
+                                				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.course', 'Course'),
 														labelWidth:120,
                                 				        name: 'formatted_course_title',
                                 				        itemId: 'formatted_course_title'
                                 				    },{
-                                				        fieldLabel: 'Course Description',
+                                				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.course-description', 'Course Description'),
 														labelWidth:120,
                                 				        name: 'description',
                                 				        itemId: 'description',
@@ -99,27 +100,27 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                                         
                                                         items: [
                                         				    {
-                                        				        fieldLabel: 'Max Credit Hours',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.max-credit-hours', 'Max Credit Hours'),
                                         				        name: 'maxCreditHours',
                                         				        itemId: 'maxCreditHours',
                                         				        width: 200
                                         				    },{
-                                        				        fieldLabel: 'Min Credit Hours',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.min-credit-hours', 'Min Credit Hours'),
                                         				        name: 'minCreditHours',
                                         				        itemId: 'minCreditHours',
 																 width: 200
                                         				    },
                                         				    {
-                                        				        fieldLabel: 'Department',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.department', 'Department'),
                                         				        name: 'departmentCode',
                                         				        itemId: 'departmentCode'
                                         				        
                                         				    },{
-                                        				        fieldLabel: 'Division',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.division', 'Division'),
                                         				        name: 'divisionCode',
                                         				        itemId: 'divisionCode'
                                         				    },{
-                                        				        fieldLabel: 'Tags',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.tags', 'Tags'),
                                         				        name: 'tags',
                                         				        itemId: 'tags'
                                         				    }
@@ -137,18 +138,18 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                                         
                                                         items: [
                                         				    {
-                                        				        fieldLabel: 'Requisites',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.requisites','Requisites'),
                                         				        name: 'prereqs',
                                         				        itemId: 'prereqs',
                                         				        fieldStyle:'color:red'
                                         				    },{
-                                        				    	fieldLabel:  '<a href="">Master Syllabus</a>',
+                                        				    	fieldLabel:  me.textStore.getValueByCode('ssp.label.map.course-details.master-syllabus','<a href="">Master Syllabus</a>'),
                                                                 name: 'mastersyllabus',
                                                                 itemId: 'mastersyllabus',
                                                                 labelSeparator : ''
                                         				    },
                                         				    {
-                                        				        fieldLabel: '<a href="">Academic Link</a>',
+                                        				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-details.academic-link','<a href="">Academic Link</a>'),
                                                                 name: 'academiclink',
                                                                 itemId: 'academiclink',
                                                                 labelSeparator : ''

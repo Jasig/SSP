@@ -24,14 +24,14 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 	    controller: 'Ssp.controller.tool.map.CoursesGridController',
 		inject: {
 		        store: 'coursesStore',
-				columnRendererUtils : 'columnRendererUtils'
+				columnRendererUtils : 'columnRendererUtils',
+				textStore: 'sspTextStore'
 		},
 
 	    width: 300,
 	    height: '100%',
 	    border: 0,
         autoScroll: true,
-	    title: 'All Courses',
 	    hideHeaders: false,
 	    columnLines: false,
 		itemId: 'coursesGrid',
@@ -42,6 +42,7 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 						    width: 300,
 	            		    height: '100%',
 							flex: 20,
+						    title: me.textStore.getValueByCode('ssp.label.map.all-course.title', 'All Courses'),
             				viewConfig: {
 	            				loadMask: false
 	            			},
@@ -55,33 +56,33 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 	                        {
 	                            xtype: 'gridcolumn',
 	                            dataIndex: 'formattedCourse',
-	                            text: 'Course',
+	                            text: me.textStore.getValueByCode('ssp.label.map.all-course.course', 'Course'),
 	                            width: 75
 	                        },
 	                        {
 	                             xtype: 'gridcolumn',
 	                             dataIndex: 'title',
-	                             text: 'Title',
+	                             text: me.textStore.getValueByCode('ssp.label.map.all-course.course-title', 'Title'),
 	                             width: 120
 	                         },
 							 
 							{
 	                            xtype: 'gridcolumn',
 	                             dataIndex: 'description',
-	                             text: 'Course',
+	                             text: me.textStore.getValueByCode('ssp.label.map.all-course.description', 'Description'),
 								 hidden:true,
 								 hideable: false
 	                         },
 	                         {
 	                           xtype: 'gridcolumn',
 	                            dataIndex: 'minCreditHours',
-	                            text: 'Cr.',
+	                            text: me.textStore.getValueByCode('ssp.label.map.all-course.min-credit-hours', 'Cr.'),
 	                            width: 30
 	                        },
 	                        {
 	                            xtype: 'gridcolumn',
 	                             dataIndex: 'maxCreditHours',
-	                             text: 'Max H',
+	                             text: me.textStore.getValueByCode('ssp.label.map.all-course.max-credit-hours', 'Max H'),
 	                             hidden:true,
 								 hideable: false
 	                         },
@@ -90,18 +91,18 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 	                             xtype: 'gridcolumn',
 	                              dataIndex: 'tags',
 	                              renderer: me.columnRendererUtils.renderTags,                              
-	                              text: 'Tags',
+	                              text: me.textStore.getValueByCode('ssp.label.map.all-course.tags', 'Tags'),
 	                              width: 40
 	                          },
 							  {
 					            xtype: 'gridcolumn',
 					            width: 16,
 					            flex:0,
-								text: 'D',
+								text: me.textStore.getValueByCode('ssp.label.map.all-course.dev-course','D'),
 					            renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 					            		var isDev = record.isDev();
 										if ( isDev == true) {
-											metaData.tdAttr = 'data-qtip="D indicates course is a dev course."';
+											metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.all-course.dev-course','D indicates course is a dev course.') + '"';
 											return "D"
 										}
 										return "";					
@@ -113,7 +114,7 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 							            ptype: 'gridviewdragdrop',
 										ddGroup: 'ddGroupForCourses',
 										dragGroup: 'coursesDDGroup',
-										dragText: 'Drag and drop course onto desired semester.'
+										dragText: me.textStore.getValueByCode('ssp.label.map.all-course.drag-text','Drag and drop course onto desired semester.')
 							        }
 						
 							    }

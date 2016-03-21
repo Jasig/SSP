@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.map.MAPView', {
     controller: 'Ssp.controller.tool.map.MAPViewController',
     inject:{
 		currentMapPlan: 'currentMapPlan',
-        authenticatedPerson: 'authenticatedPerson'
+        authenticatedPerson: 'authenticatedPerson',
+        textStore: 'sspTextStore'
     },	
     width: '100%',
     height: '100%',
@@ -49,24 +50,24 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                 xtype: 'toolbar',
 				height: '25',
                 items: [{
-                    tooltip: 'Create New Plan',
-                    text: '<u>New Plan</u>',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.new-plan-button','Create New Plan'),
+                    text: '<u>' + me.textStore.getValueByCode('ssp.label.new-plan-button','New Plan') + '</u>',
                     //width: 30,
                     height: 22,
                    // cls: 'emailIcon',
                     xtype: 'button',
                     itemId: 'createNewPlanButton'
                 }, {
-                    tooltip: 'Load Saved Plan',
-                    text: '<u>Load Saved Plan</u>',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.load-saved-plan-button','Load Saved Plan'),
+                    text: '<u>' + me.textStore.getValueByCode('ssp.label.load-saved-plan-button','Load Saved Plan') + '</u>',
                     height: 22,
                     xtype: 'button',
 	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
                     itemId: 'loadSavedPlanButton'
                 },
 				{
-                    tooltip: 'Load Template',
-                    text: '<u>Load Template</u>',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.load-template-button','Load Template'),
+                    text: '<u>' + me.textStore.getValueByCode('ssp.label.load-template-button','Load Template') + '</u>',
                     hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
                     height: 22,
                     xtype: 'button',
@@ -76,7 +77,7 @@ Ext.define('Ssp.view.tools.map.MAPView', {
 				 
                  {
                     xtype: 'button',
-                    text: 'Save',
+                    text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
                     itemId: 'addTool',
                     height: 22,
 	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_SAVE_BUTTON'),
@@ -85,32 +86,32 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                         
                         {
                             xtype: 'button',
-                            text: 'Save Plan',
+                            text: me.textStore.getValueByCode('ssp.label.save-plan-button','Save Plan'),
                             itemId: 'savePlanButton',
                             hidden: me.currentMapPlan.get('isTemplate') == true || !me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == ""
                         }, 
                         {
                             xtype: 'button',
-                            text: 'Save Template' ,
+                            text: me.textStore.getValueByCode('ssp.label.save-template-button','Save Template'),
                             itemId: 'saveTemplateButton',
                             hidden: (!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "") || me.currentMapPlan.get('isTemplate') == false
                         },
                         {
                         	xtype: 'button',
-                        	text: 'Save as New Plan',
+                        	text: me.textStore.getValueByCode('ssp.label.save-as-new-plan-button','Save as New Plan'),
                         	itemId: 'savePlanAsButton'
                         },
                         {
                         	xtype: 'button',
-                        	text: 'Save as New Template' ,
+                        	text: me.textStore.getValueByCode('ssp.label.save-as-new-template-button','Save as New Template'),
                         	itemId: 'saveTemplateAsButton'
                         }
                     ]
                     }
                 },
 				{
-                    tooltip: 'Cancel',
-                    text: '<u>Cancel</u>',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.cancel-button','Cancel'),
+                    text: '<u>' + me.textStore.getValueByCode('ssp.label.cancel-button','Cancel') + '</u>',
                     hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
                     height: 22,
                     xtype: 'button',

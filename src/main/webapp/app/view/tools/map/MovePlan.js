@@ -25,7 +25,8 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
         columnRendererUtils: 'columnRendererUtils',
         termsStore: 'termsStore',
         authenticatedPerson: 'authenticatedPerson',
-    	currentMapPlan: 'currentMapPlan'        	
+    	currentMapPlan: 'currentMapPlan',
+    	textStore: 'sspTextStore'
     },
     width: '100%',
     height: '38',
@@ -45,7 +46,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
             items: [
 
                  {
-                            fieldLabel: me.currentMapPlan.get("isTemplate") == true ? 'Template Title':'Plan Title',
+                            fieldLabel: me.currentMapPlan.get("isTemplate") == true ? me.textStore.getValueByCode('ssp.label.map.move-plan.template-title','Template Title'):me.textStore.getValueByCode('ssp.label.map.move-plan.plan-=title','Plan Title'),
         					xtype:'displayfield',
                             itemId: 'name',
                             name: 'name',
@@ -63,9 +64,9 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
         								 width: 20,
         								itemId:'onPlanStatusDetails',
         				    	         cls: 'helpIconSmall',
-        				    	         tooltip: 'Student is currently on plan.'
+        				    	         tooltip: me.textStore.getValueByCode('ssp.tooltip.map.move-plan.on-plan','Student is currently on plan.')
         				    	     },{
-                            		fieldLabel: 'Plan Status',
+                            		fieldLabel: me.textStore.getValueByCode('ssp.label.map.move-plan.on-plan','Plan Status'),
         		                    itemId: 'onPlan',
         		                    name: 'onPlan',
         							fieldStyle:"text-align:left"
@@ -75,7 +76,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                                flex: 0.5
                            },         				   
         		{
-                    fieldLabel: 'Plan Hrs',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.map.move-plan.current-total-plan-cr-hours','Plan Hrs'),
                     itemId: 'currentTotalPlanCrHrs',
                     name: 'currentTotalPlanCrHrs',
                     id: 'currentTotalPlanCrHrs',
@@ -85,7 +86,7 @@ Ext.define('Ssp.view.tools.map.MovePlan', {
                     xtype: 'tbspacer',
                     flex: 0.5
                 },  {
-                    fieldLabel: 'Dev Hrs',
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.map.move-plan.current-plan-total-dev-hours','Dev Hrs'),
                     itemId: 'currentPlanTotalDevCrHrs',
                     name: 'currentPlanTotalDevCrHrs',
                     id: 'currentPlanTotalDevCrHrs',

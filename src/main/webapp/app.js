@@ -2151,8 +2151,8 @@ Ext.onReady(function(){
 				            		if (response.status==403)
 				            		{
 				            			Ext.Msg.confirm({
-				            	   		     title:'Access Denied Error',
-				            	   		     msg: "It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?",
+				            	   		     title: me.textStore.getValueByCode('ssp.message.error-access-denied-title','Access Denied Error'),
+				            	   		     msg: me.textStore.getValueByCode('ssp.message.error-access-denied-body',"It looks like you are trying to access restricted information or your login session has expired. Would you like to login to continue working in SSP?"),
 				            	   		     buttons: Ext.Msg.YESNO,
 				            	   		     fn: function( btnId ){
 				            	   		    	if (btnId=="yes")
@@ -2171,7 +2171,9 @@ Ext.onReady(function(){
 				            		// Handle call not found result
 				            		if (response.status==404)
 				            		{
-				            			Ext.Msg.alert('SSP Error', '404 Server Error. See logs for additional details');
+				            			Ext.Msg.alert(
+				            			    me.textStore.getValueByCode('ssp.message.error-title','SSP Error'),
+				            			    me.textStore.getValueByCode('ssp.message.error-404','404 Server Error. See logs for additional details'));
 				            		}
 				                });
 				            }

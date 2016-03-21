@@ -19,6 +19,10 @@
 Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
     extend: 'Ext.window.Window',
     alias: 'widget.studenttranscriptviewer',
+    mixins: ['Deft.mixin.Injectable'],
+    inject: {
+        textStore: 'sspTextStore'
+    },
     width: 750,
     height: 400, 
     overflowY: 'auto',
@@ -26,10 +30,11 @@ Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
     layout: {
                 type: 'fit'
             },
-    initComponent: function() { 
+    initComponent: function() {
+        var me = this;
         Ext.apply(this,
 		{
-			title: 'Student Course History', 
+			title: me.textStore.getValueByCode('ssp.label.map.student-trans-viewer.title','Student Course History'),
 			items: [
 					{
 					xtype: 'studentcoursehistory'

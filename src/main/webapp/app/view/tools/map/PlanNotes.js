@@ -20,6 +20,9 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
     extend: 'Ext.window.Window',
     alias: 'widget.plannotes',
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
+    inject: {
+		textStore: 'sspTextStore'
+    },
     height: 500,
     width: 500,
     resizable: true,
@@ -32,7 +35,7 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Plan Notes',
+            title: me.textStore.getValueByCode('ssp.label.map.plan-notes.title','Plan Notes'),
             items:[{
                 xtype: 'form',
                 flex: 1,
@@ -55,7 +58,7 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
                
 				    items: [
 				   {
-				        fieldLabel: 'Advisor/Coach Notes',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.plan-notes.contactNotes','Advisor/Coach Notes'),
 				        name: 'contactNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
@@ -64,7 +67,7 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 				        maxLength: 4000,
 				        enforceMaxLength: true
 				    },{
-				        fieldLabel: 'Student Notes',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.plan-notes.studentNotes','Student Notes'),
 				        name: 'studentNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
@@ -73,7 +76,7 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 				        maxLength: 4000,
 				        enforceMaxLength: true
 				    },{
-				        fieldLabel: 'Academic Goals',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.plan-notes.academicGoals','Academic Goals'),
 				        name: 'academicGoals',
 				        allowBlank:true,
 				        xtype: 'textareafield',
@@ -86,12 +89,12 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 		                items: [{
 		                    xtype: 'button',
 		                    name: 'saveButton',
-		                    text: 'Save'
+		                    text: me.textStore.getValueByCode('ssp.label.save-button','Save')
 		                    
 		                }, '-', {
 		                    xtype: 'button',
 		                    name: 'cancelButton',
-		                    text: 'Cancel',
+		                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 							listeners:{
 								click:function(){
 									this.close();

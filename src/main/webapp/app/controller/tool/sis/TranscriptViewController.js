@@ -24,7 +24,8 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
         service: 'transcriptService',
         personLite: 'personLite',
         store: 'courseTranscriptsStore',
-        termsStore: 'termsStore'
+        termsStore: 'termsStore',
+        textStore: 'sspTextStore'
     },
 
     init: function() {
@@ -97,8 +98,8 @@ Ext.define('Ssp.controller.tool.sis.TranscriptViewController', {
                     }
                     courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
 
-                    courseForNonCourseDisplay.set("title", 'NonCourse: ' + courseForNonCourseDisplay.get('title'));
-                    courseForNonCourseDisplay.set("formattedCourse", 'Overrides: ' + nonCourse.targetFormattedCourse);
+                    courseForNonCourseDisplay.set("title", me.textStore.getValueByCode('ssp.tooltip.map.student-history.non-course','NonCourse: ') + courseForNonCourseDisplay.get('title'));
+                    courseForNonCourseDisplay.set("formattedCourse", me.textStore.getValueByCode('ssp.tooltip.map.student-history.overrides','Overrides: ') + nonCourse.targetFormattedCourse);
                     courseTranscripts.push(courseForNonCourseDisplay);
                 });
             }

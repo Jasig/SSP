@@ -42,26 +42,26 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                 align: 'stretch',
                 type: 'hbox'
             },
-            title: 'Load Template',
+            title: me.textStore.getValueByCode('ssp.label.map.load-template.title','Load Template'),
 			dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
                 items: [{
                     xtype: 'button',
                     itemId: 'openButton',
-                    text: 'Open'
+                    text: me.textStore.getValueByCode('ssp.label.open-button','Open')
                     
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
-                    text: 'Cancel'
+                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                 }]
             }],
            items: [{
                 xtype: 'form',
                 border: 0,
                 frame: false,
-				title: "Filters",
+				title: me.textStore.getValueByCode('ssp.label.map.load-template.filters',"Filters"),
 				titleAlign:"center",
                 layout: {
                     align: 'stretch',
@@ -108,9 +108,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						        xtype: 'combobox',
 						        name: 'program',
 						        store: me.programsStore,
-						        fieldLabel: 'Program',
+						        fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.program','Program'),
 								labelWidth:80,
-						        emptyText: 'Filter by Program',
+						        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.program','Filter by Program'),
 						        valueField: 'code',
 						        displayField: 'name',
 						        mode: 'local',
@@ -119,7 +119,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						        itemId: 'program',
 						        width: 260
 						    	}, {
-							        tooltip: 'Reset to All Programs',
+							        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.load-template.program-reset','Reset to All Programs'),
 							        text: '',
 							        width: 23,
 							        height: 25,
@@ -143,9 +143,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        xtype: 'combobox',
 							        name: 'department',
 							        store: me.departmentsStore,
-							        fieldLabel: 'Department',
+							        fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.department','Department'),
 									labelWidth:80,
-							        emptyText: 'Filter by Department',
+							        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.department','Filter by Department'),
 							        valueField: 'code',
 							        displayField: 'name',
 							        mode: 'local',
@@ -154,7 +154,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'department',
 							        width: 260
 							    	}, {
-							        tooltip: 'Reset to All Departments',
+							        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.load-template.department-reset','Reset to All Departments'),
 							        text: '',
 							        width: 23,
 							        height: 25,
@@ -177,9 +177,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        xtype: 'combobox',
 							        name: 'division',
 							        store: me.divisionsStore,
-							        fieldLabel: 'Division',
+							        fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.division','Division'),
 									labelWidth:80,
-							        emptyText: 'Filter by Division',
+							        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.division','Filter by Division'),
 							        valueField: 'code',
 							        displayField: 'name',
 							        mode: 'local',
@@ -188,7 +188,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'division',
 							        width: 260
 							    	}, {
-							        tooltip: 'Reset to All Divisions',
+							        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.load-template.division','Reset to All Divisions'),
 							        text: '',
 							        width: 23,
 							        height: 25,
@@ -211,9 +211,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        xtype: 'combobox',
 							        name: 'catalogYear',
 							        store: me.catalogYearsStore,
-							        fieldLabel: 'Catalog Year',
+							        fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.catalog-year','Catalog Year'),
 									labelWidth:80,
-							        emptyText: 'Filter by Catalog Year',
+							        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.catalog-year','Filter by Catalog Year'),
 							        valueField: 'code',
 							        displayField: 'name',
 							        mode: 'local',
@@ -222,7 +222,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'catalogYear',
 							        width: 260
 							    	}, {
-							        tooltip: 'Reset to All Catalog Years',
+							        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.load-template.catalog-year','Reset to All Catalog Years'),
 							        text: '',
 							        width: 23,
 							        height: 25,
@@ -245,9 +245,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        xtype: 'combobox',
 							        name: 'mapTemplateTag',
 							        store: me.mapTemplateTagsStore,
-							        fieldLabel: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+							        fieldLabel: me.textStore.getValueByCode('ssp.label.map-template-tag',"Template Tag"),
 									labelWidth:80,
-							        emptyText: 'Filter by ' + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+							        emptyText: me.textStore.getValueByCode('ssp.empty-text.map-template-tag',"Filter by Template Tag"),
 							        valueField: 'id',
 							        displayField: 'name',
 							        mode: 'local',
@@ -256,7 +256,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'mapTemplateTag',
 							        width: 260
 							    	}, {
-							        tooltip: 'Reset to All '  + (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tags"),
+							        tooltip: me.textStore.getValueByCode('ssp.tooltip.map-template-tag',"Reset to All Template Tags"),
 							        text: '',
 							        width: 23,
 							        height: 25,
@@ -278,7 +278,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						    items: [{
 						        	xtype: 'combobox',
 						        	name: 'isPrivateFilter',
-						        	fieldLabel: 'Visibility',
+						        	fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.visibility','Visibility'),
 									labelWidth:80,
 									store: Ext.create('Ext.data.Store', {
 									    fields: ['value', 'name'],
@@ -290,7 +290,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 										    	]
 									}),
 								
-						        		emptyText: 'Filter by Template Type',
+						        		emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.template-type','Filter by Template Type'),
 						        		valueField: 'value',
 						        		displayField: 'name',
 										value: "ALL",
@@ -313,9 +313,9 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 					    	items: [{
 				        		xtype: 'combobox',
 				        		name: 'objectStatusFilter',
-				        		fieldLabel: 'Status',
+				        		fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.status','Status'),
 								labelWidth:80,
-				        		emptyText: 'Filter by Status',
+				        		emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.status','Filter by Status'),
 								store: Ext.create('Ext.data.Store', {
 								    fields: ['value', 'name'],
 								    	data : [
@@ -348,7 +348,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                             items: [
                             	{
 								xtype: 'textfield',
-                                fieldLabel: 'Title',
+                                fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.template-name-filter-title','Title'),
                                 name: 'templateNameFilter',
                                 itemId: 'templateNameFilter',
                                 maxLength: 50,
@@ -382,63 +382,63 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
          store: me.store,
          columns: [
          {
-             text: 'Vis',
+             text: me.textStore.getValueByCode('ssp.label.map.load-template.visibility-column','Vis'),
              width: 45,
              dataIndex: 'visibility',
              sortable: true,
 				renderer:me.columnRendererUtils.renderTemplateVisibility
          },	{
-                 text: 'Status',
+                 text: me.textStore.getValueByCode('ssp.label.map.load-template.status-column','Status'),
                  width: 55,
                  dataIndex: 'objectStatus',
                  sortable: true
           },{
-             text: 'Template Title',
+             text: me.textStore.getValueByCode('ssp.label.map.load-template.name-column','Template Title'),
              width: 200,
              dataIndex: 'name',
              sortable: true
          }, {
-             text: 'Date/ Time',
+             text: me.textStore.getValueByCode('ssp.label.map.load-template.modified-date-column','Date/ Time'),
              width: 125,
              dataIndex: 'modifiedDate',
              sortable: true,
-             renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
+             renderer: Ext.util.Format.dateRenderer(me.textStore.getValueByCode('ssp.format.map.load-template.modified-date-column','Y-m-d g:i A'))
              
          }, {
-             text: 'Owner',
+             text: me.textStore.getValueByCode('ssp.label.map.load-template.owner-column','Owner'),
              width: 120,
              sortable: true,
              dataIndex: 'ownerName'
              
          }, {
-		    text: 'Program',
+		    text: me.textStore.getValueByCode('ssp.label.map.load-template.program-column','Program'),
 		    width: 200,
 		    sortable: true,
 		    dataIndex: 'programCode',
 		    renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.programsStore);}
 		 }, {
-			 text: 'Department',
+			 text: me.textStore.getValueByCode('ssp.label.map.load-template.department-column','Department'),
 			 width: 200,
 			 sortable: true,
 			 dataIndex: 'departmentCode',
 			 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.departmentsStore);}
 
 		 }, {
-		     text: 'Division',
+		     text: me.textStore.getValueByCode('ssp.label.map.load-template.division-column','Division'),
 		     width: 200,
 		     sortable: true,
 		     dataIndex: 'divisionCode',
              renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.divisionsStore);}
 
 	     }, {
-			 text: 'Catalog Year',
+			 text: me.textStore.getValueByCode('ssp.label.map.load-template.catalog-year-column','Catalog Year'),
 			 width: 85,
 			 sortable: true,
 			 dataIndex: 'catalogYearCode',
    			 renderer: function(value){ return me.columnRendererUtils.renderNameForCodeInStore(value, me.catalogYearsStore);}
 
 	     }, {
-			 text: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
+			 text: me.textStore.getValueByCode('ssp.label.map.load-template.template-tag-column',"Template Tag"),
 			 width: 200,
 			 sortable: true,
 			 dataIndex: 'mapTemplateTag',

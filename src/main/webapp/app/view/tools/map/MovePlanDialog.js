@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	controller: 'Ssp.controller.tool.map.MovePlanDialogController',
 	inject: {
 	    formUtils: 'formRendererUtils',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+    	textStore: 'sspTextStore'
 	},
     height: 220,
     width: 380,
@@ -39,7 +40,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+            title: me.currentMapPlan.get("isTemplate") == true ? me.textStore.getValueByCode('ssp.label.map.move-plan-dialog.template-title','Move Template') : me.textStore.getValueByCode('ssp.label.map.move-plan-dialog.plan-title','Move Plan'),
             items:[{
                 xtype: 'form',
                 flex: 1,
@@ -63,7 +64,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	                        xtype: 'combobox',
 	                        itemId: 'selectAction',
 							name: 'selectAction',
-	                        fieldLabel: 'Select Action',
+	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.move-plan-dialog.select-action','Select Action'),
 							queryMode: 'local',
 							displayField: 'name',
 							valueField: 'action',
@@ -73,7 +74,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	                        xtype: 'combobox',
 	                        itemId: 'termCodeToBump',
 							name: 'termCodeToBump',
-	                        emptyText: 'Start Term',
+	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.move-plan-dialog.start-term','Start Term'),
 	                        valueField: 'code',
 	                        displayField: 'name',
 	                        queryMode: 'local',
@@ -82,13 +83,13 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	                        width: 250,
 							labelWidth: 200,
 							labelSeparator : "",
-							fieldLabel:'Start Term: Choose the first term that you want to move. All subsequent terms will also be moved.'
+							fieldLabel: me.textStore.getValueByCode('ssp.label.map.move-plan-dialog.start-term','Start Term: Choose the first term that you want to move. All subsequent terms will also be moved.')
 			            },
 						{
 	                        xtype: 'combobox',
 	                        itemId: 'termCodeEnd',
 							name: 'termCodeEnd',
-	                        emptyText: 'Target Term',
+	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.move-plan-dialog.target-term','Target Term'),
 	                        valueField: 'code',
 	                        displayField: 'name',
 	                        queryMode: 'local',
@@ -97,7 +98,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 	                        width: 250,
 							labelWidth: 200,
 							labelSeparator : "",
-							fieldLabel: 'Target Term: Choose the target term to the move term selected above (start term). All term and course information will be moved into the new terms in the same order.'
+							fieldLabel: me.textStore.getValueByCode('ssp.label.map.move-plan-dialog.target-term','Target Term: Choose the target term to the move term selected above (start term). All term and course information will be moved into the new terms in the same order.')
 
 			            }],
 				    dockedItems: [{
@@ -106,11 +107,11 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 		                items: [{
 		                    xtype: 'button',
 		                    itemId: 'movePlanButton',
-		                    text: me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan'
+		                    text: me.currentMapPlan.get("isTemplate") == true ? me.textStore.getValueByCode('ssp.label.move-template-button','Move Template') : me.textStore.getValueByCode('ssp.label.move-plan-button','Move Plan')
 		                }, '-', {
 		                    xtype: 'button',
 		                    itemId: 'cancelButton',
-		                    text: 'Cancel',
+		                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 		                    
 		                    listeners: {
 		                    	click:function(){
@@ -140,7 +141,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 							 width: 20,
 			                 height: 20,
 			    	         cls: 'helpIconSmall',
-			    	         tooltip: 'Start Term: Choose the first term that you want to move. All subsequent terms will also be moved. Target Term: Choose the target term to he move term selected abose (start term). All term and course information will be moved into the new terms in the same order.'
+			    	         tooltip: me.textStore.getValueByCode('ssp.label.map.move-plan-dialog.help','Start Term: Choose the first term that you want to move. All subsequent terms will also be moved. Target Term: Choose the target term to he move term selected abose (start term). All term and course information will be moved into the new terms in the same order.')
 			    	     }]}]
        
 		            }]

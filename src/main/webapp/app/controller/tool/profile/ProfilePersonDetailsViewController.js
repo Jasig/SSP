@@ -353,8 +353,8 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                     courseForNonCourseDisplay.set("termStartDate", nonCourseTerm.get("startDate"));
                 }
 
-                courseForNonCourseDisplay.set("title", 'NonCourse: ' + courseForNonCourseDisplay.get('title'));
-                courseForNonCourseDisplay.set("formattedCourse", 'Overrides: ' + nonCourse.targetFormattedCourse);
+                courseForNonCourseDisplay.set("title", me.textStore.getValueByCode('ssp.tooltip.map.student-history.non-course','NonCourse: ') + courseForNonCourseDisplay.get('title'));
+                courseForNonCourseDisplay.set("formattedCourse", me.textStore.getValueByCode('ssp.tooltip.map.student-history.overrides','Overrides: ') + nonCourse.targetFormattedCourse);
                 courseTranscripts.push(courseForNonCourseDisplay);
             });
         }

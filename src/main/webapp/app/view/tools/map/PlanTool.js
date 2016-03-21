@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
     inject: {
         columnRendererUtils: 'columnRendererUtils',
         authenticatedPerson: 'authenticatedPerson',
-		currentMapPlan: 'currentMapPlan'
+		currentMapPlan: 'currentMapPlan',
+		textStore: 'sspTextStore'
     },
     width: '100%',
     height: '150',
@@ -44,7 +45,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			    flex: 0.02
 			},         	        
            {
-                    tooltip: 'View all',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-overview-button','View all'),
                     height: 30,
                     flex:0.10,
                     cls: 'overviewIcon',
@@ -55,7 +56,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     padding: '0 0 0 0'
             },
            {
-                    tooltip: 'Plan Notes',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-notes-button','Plan Notes'),
                     height: 30,
                     flex:0.10,
                     cls: 'mapNotesIcon',
@@ -66,7 +67,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     padding: '0 0 0 0'
                 },
              	{
-		                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? 'Move Template': 'Move Plan',
+		                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? me.textStore.getValueByCode('ssp.tooltip.move-template-button','Move Template') : me.textStore.getValueByCode('ssp.tooltip.move-plan-button','Move Plan'),
 		                    height: 30,
 		                    flex:0.10,
 		                    cls: 'mapMovePlanIcon',
@@ -78,7 +79,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 		                    padding: '0 0 0 0'							
 		           }, 
            {
-                    tooltip: 'Email Plan',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.email-plan-button','Email Plan'),
                     height: 30,
                     flex:0.10,
                     cls: 'planEmailIcon',
@@ -90,7 +91,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     padding: '0 0 0 0'
                 },
                 {
-                    tooltip: 'Print Plan',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.print-plan-button','Print Plan'),
                     height: 30,
                     flex:0.10,
                     cls: 'mapPrintIcon',
@@ -102,7 +103,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     padding: '0 0 0 0'
                 }, 
             	{
-	                    tooltip: 'Financial Aid',
+	                    tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-fa-button','Financial Aid'),
 	                    height: 30,
 	                    flex:0.10,
 	                    cls: 'mapFAIcon',
@@ -114,7 +115,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                    padding: '0 0 0 0'
 	                },
 			        {
-			                    tooltip:  'View of Student\'s Course History',
+			                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-student-transcript-button','View of Student\'s Course History'),
 			                    height: 30,
 			                    flex:0.10,
 			                    cls: 'transcriptIcon',
@@ -126,7 +127,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 			                    padding: '0 0 0 0'
 			          },
 			           {
-			                    tooltip:  'View of Student\'s Map Status Detail',
+			                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-map-status-button','View of Student\'s Map Status Detail'),
 			                    height: 30,
 			                    flex:0.10,
 			                    cls: 'studentHistoryIcon',

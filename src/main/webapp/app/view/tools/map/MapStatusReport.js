@@ -26,7 +26,8 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
     	personLite: 'personLite',
     	mapStatusReportCourseDetailsStore: 'mapStatusReportCourseDetailsStore',
     	mapStatusReportTermDetailsStore: 'mapStatusReportTermDetailsStore',
-    	mapStatusReportSubstitutionDetailsStore: 'mapStatusReportSubstitutionDetailsStore'
+    	mapStatusReportSubstitutionDetailsStore: 'mapStatusReportSubstitutionDetailsStore',
+    	textStore: 'sspTextStore'
     },
 	height:580,
 	width:900,   
@@ -39,14 +40,14 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
     initComponent: function() {
     	var me=this;
         Ext.apply(me, {
-			title: 'Map Status Report: '+me.personLite.get('displayFullName'),
+			title: me.textStore.getValueByCode('ssp.label.map.status-report.title','Map Status Report:') + ' ' + me.personLite.get('displayFullName'),
             dockedItems: [{
                 dock: 'top',
                 xtype: 'toolbar',
 				height: '25',
                 items: [{
-                    tooltip: 'Close',
-                    text: 'Close',
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.close-button','Close'),
+                    text: me.textStore.getValueByCode('ssp.label.close-button','Close'),
                     height: 22,
                     xtype: 'button',
                     itemId: 'closeButton'
@@ -60,37 +61,37 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				    bodyStyle: 'background:none',
 				    height: '370',
 				    items: [{
-				        fieldLabel: 'Plan Status',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.status-report.plan-status','Plan Status'),
 				        itemId: 'planStatus',
 				        name: 'planStatus',
 					    align: 'left'
 				    
 				    }, {
-				        fieldLabel: 'Total Plan Courses In Scope',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.status-report.total-plan-courses','Total Plan Courses In Scope'),
 				        itemId: 'totalPlanCourses',
 				        name: 'totalPlanCourses'
 				    }, {
-				        fieldLabel: 'Plan Anomalies',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.status-report.plan-ratio-demerits','Plan Anomalies'),
 				        itemId: 'planRatioDemerits',
 				        name: 'planRatioDemerits'
 				    }, {
-				        fieldLabel: 'Plan Ratio',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.status-report.plan-ratio','Plan Ratio'),
 				        itemId: 'planRatio',
 				        name: 'planRatio'
 				    },{
-				        fieldLabel: 'Plan Note',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.status-report.plan-note','Plan Note'),
 				        name: 'planNote',
 				        itemId: 'planNote'
 				    },{
-	                    tooltip: 'Re-Calculate Plan Status',
-	                    text: 'Re-Calculate Plan Status',
+	                    tooltip: me.textStore.getValueByCode('ssp.tooltip.map.status-report.re-calc-button','Re-Calculate Plan Status'),
+	                    text: me.textStore.getValueByCode('ssp.label.map.status-report.re-calc-button','Re-Calculate Plan Status'),
 	                    xtype: 'button',
 	                    itemId: 'calcPlanStatusButton'
 	                }]
 				}, {
 			        	xtype: 'gridpanel',
 			        	queryMode:'local',
-			        	title: 'Term Details',
+			        	title: me.textStore.getValueByCode('ssp.label.map.status-report.term-details','Term Details'),
 			        	width:800,
 			        	height:200,
 			        	align: 'center',
@@ -98,22 +99,22 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 			            columns: [{
 			                xtype: 'gridcolumn',
 			                dataIndex: 'termCode',
-			                text: 'Plan Term',
+			                text: me.textStore.getValueByCode('ssp.label.map.status-report.term-code','Plan Term'),
 			                flex: 0.10
 			            }, {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'termRatio',
-			                text: 'Term Ratio',
+			                text: me.textStore.getValueByCode('ssp.label.map.status-report.term-ratio','Term Ratio'),
 			                flex: 0.15
 			            }, {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'anomalyCode',
-			                text: 'Anomaly Code',
+			                text: me.textStore.getValueByCode('ssp.label.map.status-report.anomaly-code','Anomaly Code'),
 			                flex: 0.20
 			            }, {
 			                xtype: 'gridcolumn',
 			                dataIndex: 'anomalyNote',
-			                text: 'Note',
+			                text: me.textStore.getValueByCode('ssp.label.map.status-report.anomaly-note','Note'),
 			                flex: 0.20
 			            }],
 			            viewConfig: {
@@ -122,34 +123,34 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 			         }, {
 				        	xtype: 'gridpanel',
 				        	queryMode:'local',
-				        	title: 'Course Details',
+				        	title: me.textStore.getValueByCode('ssp.label.map.status-report.course-details-title','Course Details'),
 				        	width:800,
 				        	height:200,
 				            store: me.mapStatusReportCourseDetailsStore,
 				            columns: [{
 				                xtype: 'gridcolumn',
 				                dataIndex: 'termCode',
-				                text: 'Plan Term',
+				                text: me.textStore.getValueByCode('ssp.label.map.status-report.term-code','Plan Term'),
 				                flex: 0.10
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'formattedCourse',
-				                text: 'Plan Formatted Course',
+				                text: me.textStore.getValueByCode('ssp.label.map.status-report.formatted-course','Plan Formatted Course'),
 				                flex: 0.15
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'courseCode',
-				                text: 'Plan Course Code',
+				                text: me.textStore.getValueByCode('ssp.label.map.status-report.course-code','Plan Course Code'),
 				                flex: 0.20
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'anomalyCode',
-				                text: 'Anomaly Code',
+				                text: me.textStore.getValueByCode('ssp.label.map.status-report.anomaly-code','Anomaly Code'),
 				                flex: 0.20
 				            }, {
 				                xtype: 'gridcolumn',
 				                dataIndex: 'anomalyNote',
-				                text: 'Note',
+				                text: me.textStore.getValueByCode('ssp.label.map.status-report.anomaly-note','Note'),
 				                flex: 0.20
 				            }],
 				            viewConfig: {
@@ -158,44 +159,44 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 				         }, {
 					        	xtype: 'gridpanel',
 					        	queryMode:'local',
-					        	title: 'On Track Details',
+					        	title: me.textStore.getValueByCode('ssp.label.map.status-report.on-track-details-title','On Track Details'),
 					        	width:800,
 					        	height:200,
 					            store: me.mapStatusReportSubstitutionDetailsStore,
 					            columns: [{
 					                xtype: 'gridcolumn',
 					                dataIndex: 'termCode',
-					                text: 'Plan Term',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.term-code','Plan Term'),
 					                flex: 0.12
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'formattedCourse',
-					                text: 'Plan Formatted Course',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.formatted-course','Plan Formatted Course'),
 					                flex: 0.22
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'courseCode',
-					                text: 'Plan Course Code',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.course-code','Plan Course Code'),
 					                flex: 0.20
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedTermCode',
-					                text: 'Transcript Term Code',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.substituted-term-code','Transcript Term Code'),
 					                flex: 0.23
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedFormattedCourse',
-					                text: 'Transcript Formatted Course',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.substituted-formatted-course','Transcript Formatted Course'),
 					                flex: 0.27
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutedCourseCode',
-					                text: 'Transcript Course Code',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.substituted-course-code','Transcript Course Code'),
 					                flex: 0.27
 					            }, {
 					                xtype: 'gridcolumn',
 					                dataIndex: 'substitutionCode',
-					                text: 'Substitution Reason',
+					                text: me.textStore.getValueByCode('ssp.label.map.status-report.substitution-code','Substitution Reason'),
 					                flex: 0.27
 					            }],
 					            viewConfig: {

@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.LoadPlanViewController',
     inject: {
-        columnRendererUtils: 'columnRendererUtils'
+        columnRendererUtils: 'columnRendererUtils',
+        textStore: 'sspTextStore'
     },
     height: 500,
     width: 700,
@@ -36,7 +37,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Load Plan',
+            title: me.textStore.getValueByCode('ssp.label.map.load-plans.title','Load Plan'),
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -65,7 +66,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                        {
                         xtype: 'label',
                         padding: '2 0 0 5',
-                        text: 'Select plan then click open to load a plan.',
+                        text: me.textStore.getValueByCode('ssp.label.map.load-plans.select-plan','Select plan then click open to load a plan.'),
                         style: 'font-weight: bold'
                         } ,
                         {
@@ -80,13 +81,13 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                                 {
                                     xtype: 'label',
                                     padding: '2 15 0 0',
-                                    text: 'Blue background: Active Plan',
+                                    text: me.textStore.getValueByCode('ssp.label.map.load-plans.active-plan','Blue background: Active Plan'),
 									style: 'background-color:#C5D7F1;'
                                 },
                                 {
                                     xtype: 'label',
                                     padding: '2 0 0 5',
-                                    text: 'White background: Saved Plan'
+                                    text: me.textStore.getValueByCode('ssp.label.map.load-plans.saved-plan','White background: Saved Plan')
                                 }
                                 ]
                         },
@@ -101,7 +102,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             items: [
                             {
                             xtype: 'gridpanel',
-                            title: 'Load Plan',
+                            title: me.textStore.getValueByCode('ssp.label.map.load-plans.title','Load Plan'),
 							id: 'allPlansGridPanel',
                             width: '100%',
                             height: '100%',
@@ -109,28 +110,28 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                             autoScroll: true,
                             columnLines: true,
                             columns: [{
-                                text: 'Important',
+                                text: me.textStore.getValueByCode('ssp.label.map.load-plans.important','Important'),
                                 dataIndex: 'name',
                                 sortable: true,
 								width: 70,
-								tooltip:'Yes indicates plan as important.',
+								tooltip: me.textStore.getValueByCode('ssp.tooltip.map.load-plans.important','Yes indicates plan as important.'),
 								renderer: me.columnRendererUtils.renderImportant
                             },
 							{
-                                text: 'Plan Title',
+                                text: me.textStore.getValueByCode('ssp.label.map.load-plans.plan-title','Plan Title'),
                                 dataIndex: 'name',
                                 sortable: true,
 								width: 325,
 								renderer: me.columnRendererUtils.renderBackgroundColorActive
                             }, {
-                                text: 'Date/ Time',
+                                text: me.textStore.getValueByCode('ssp.label.map.load-plans.modified-date','Date/ Time'),
                                 dataIndex: 'modifiedDate',
                                 sortable: true,
 								width: 125,
                                 renderer: me.columnRendererUtils.renderDateBackgroundColorActive
                                 
                             }, {
-                                text: 'Owner',
+                                text: me.textStore.getValueByCode('ssp.label.map.load-plans.owner','Owner'),
                                 sortable: true,
 								width: 160,
                                 dataIndex: 'ownerName',
@@ -148,12 +149,12 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                         items: [{
                             xtype: 'button',
                             itemId: 'openButton',
-                            text: 'Open'
+                            text: me.textStore.getValueByCode('ssp.label.open-button','Open')
                             
                         }, '-', {
                             xtype: 'button',
                             itemId: 'cancelButton',
-                            text: 'Cancel'
+                            text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                         }]
                     
                     }]

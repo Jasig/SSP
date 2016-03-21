@@ -22,7 +22,8 @@ Ext.define('Ssp.view.tools.map.StudentCourseHistory', {
     mixins: ['Deft.mixin.Injectable', 'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.map.StudentCourseHistoryViewController',
     inject: {
-        store: 'studentCourseHistoryStore'
+        store: 'studentCourseHistoryStore',
+        textStore: 'sspTextStore'
     },
 	width: '100%',
 	height: '100%',
@@ -37,7 +38,7 @@ Ext.define('Ssp.view.tools.map.StudentCourseHistory', {
             columns: [{
                 xtype: 'gridcolumn',
                 dataIndex: 'termCode',
-                text: 'Term',
+                text: me.textStore.getValueByCode('ssp.tooltip.map.student-history.term-code','Term'),
                 flex: 0.10,
                 getSortParam: function() {
                       return 'termStartDate';
@@ -45,29 +46,29 @@ Ext.define('Ssp.view.tools.map.StudentCourseHistory', {
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'formattedCourse',
-                text: 'Course',
+                text: me.textStore.getValueByCode('ssp.tooltip.map.student-history.formatted-course','Course'),
                 flex: 0.15
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'title',
-                text: 'Course Title',
+                text: me.textStore.getValueByCode('ssp.tooltip.map.student-history.course-title','Course Title'),
                 flex: 0.30
             }, {
                 xtype: 'numbercolumn',
                 dataIndex: 'creditEarned',
-                text: 'Cr Hrs',
+                text: me.textStore.getValueByCode('ssp.tooltip.map.student-history.credit-earned','Cr Hrs'),
                 format: '0.00',
                 flex: 0.10
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'grade',
-                text: 'Grade',
+                text: me.textStore.getValueByCode('ssp.tooltip.map.student-history.grade','Grade'),
                 sortable: 'false',
                 flex: 0.20
             }, {
                 xtype: 'gridcolumn',
                 dataIndex: 'creditType',
-                text: 'Credit Type',
+                text: me.textStore.getValueByCode('ssp.tooltip.map.student-history.credit-type','Credit Type'),
                 flex: 0.20
             }],
             viewConfig: {

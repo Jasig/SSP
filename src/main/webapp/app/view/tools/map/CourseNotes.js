@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 	inject: {
 		electiveStore : 'electivesAllUnpagedStore',
 	    formUtils: 'formRendererUtils',
-    	currentMapPlan: 'currentMapPlan'
+    	currentMapPlan: 'currentMapPlan',
+    	textStore: 'sspTextStore'
 	},
     height: 390,
     width: 480,
@@ -38,7 +39,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Course Notes',
+            title: me.textStore.getValueByCode('ssp.label.map.course-notes.title','Course Notes'),
             items:[{
                 xtype: 'form',
                 flex: 1,
@@ -61,7 +62,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                
 				    items: [
 				   {
-				        fieldLabel: 'Advisor/Coach Notes',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-notes.contact-notes','Advisor/Coach Notes'),
 				        name: 'contactNotes',
 				        allowBlank:true,
 				        xtype: 'textareafield',
@@ -72,7 +73,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        maxLength: 4000,
 				        enforceMaxLength: true
 				    },{
-				        fieldLabel: 'Student Notes',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-notes.student-notes','Student Notes'),
 				        name: 'studentNotes',
 				        allowBlank:true,
 				        itemId: 'studentNotes',
@@ -90,7 +91,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        allowDecimals: true,
 				        minValue: 0,
 				        step: 1,
-				        fieldLabel: 'Credit hours(over ride)',
+				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-notes.credit-hours','Credit hours (over ride)'),
 				        name: 'creditHours',
 				        allowBlank:true,
 				        itemId: 'creditHours',
@@ -106,8 +107,8 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
                     	padding: '0 0 0 105',
                     	labelSeparator: '',
                     	hideLabel: true,
-                    	boxLabel: 'Mark As Important',
-                    	fieldLabel: 'Mark As Important',
+                    	boxLabel: me.textStore.getValueByCode('ssp.label.map.course-notes.is-important','Mark As Important'),
+                    	fieldLabel: me.textStore.getValueByCode('ssp.label.map.course-notes.is-important','Mark As Important'),
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate')
 
                     },
@@ -128,7 +129,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 						name: 'electiveId',
                         store: me.electiveStore,
                         fieldLabel: '',
-                        emptyText: 'Elective',
+                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.course-notes.elective','Elective'),
                         valueField: 'id',
                         displayField: 'name',
                         mode: 'local',
@@ -140,7 +141,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 				        disabled: !me.enableFields && !me.currentMapPlan.get('isTemplate'),
 				        associativeField: 'id'
                     },{
-				        tooltip: 'Reset',
+				        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.course-notes.reset','Reset'),
 				        text: '',
 				        width: 23,
 				        height: 25,
@@ -164,7 +165,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                items: [{
 		                    xtype: 'button',
 		                    itemId: 'saveButton',
-		                    text: 'Save',
+		                    text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
 		                    listeners: {
 		                    	click:function(){
 		                    		me = this;
@@ -178,7 +179,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                }, '-', {
 		                    xtype: 'button',
 		                    itemId: 'cancelButton',
-		                    text: 'Cancel',
+		                    text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 		                    
 		                    listeners: {
 		                    	click:function(){

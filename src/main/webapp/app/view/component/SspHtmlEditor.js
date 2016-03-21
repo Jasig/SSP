@@ -30,6 +30,10 @@
 Ext.define('Ssp.view.component.SspHtmlEditor', {
     extend: 'Ext.form.field.HtmlEditor',
     alias: 'widget.ssphtmleditor',
+    mixins: ['Deft.mixin.Injectable'],
+    inject: {
+            textStore: 'sspTextStore'
+    },
     allowBlank: true,
     blankText: 'This field is required',
     defaultValue: '<!-- Will be removed by the editor -->',
@@ -52,6 +56,14 @@ Ext.define('Ssp.view.component.SspHtmlEditor', {
         ext.apply(me, me.initialConfig);
         me.callParent(arguments);
         Ssp.util.Util.decorateFormField(this);
+
+        for(var button in me.buttonTips){
+            var obj = me.buttonTips[button];
+            obj.title = me.textStore.getValueByCode('ssp.label.ssphtmleditor.' + button + '-title', obj.title);
+            obj.text = me.textStore.getValueByCode('ssp.label.ssphtmleditor.' + button + '-text', obj.text);
+        }
+
+
     },
 
     // Not sure why we need this. Was in the third-party allowBlank patch, so kept it.

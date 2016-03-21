@@ -36,7 +36,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Email Plan',
+            title: me.textStore.getValueByCode('ssp.label.map.email-plan.title','Email Plan'),
             items: [{
                 xtype: 'form',
                 flex: 1,
@@ -76,7 +76,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                             xtype: 'textfield',
                             name: 'emailTo',
                             vtype: 'multiemail',
-                            fieldLabel: 'To',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.to','To'),
                             labelWidth: 30,
                             width:400,
                             allowBlank:false,
@@ -92,7 +92,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                         items: [{
                             xtype: 'textfield',
                             name: 'emailCC',
-                            fieldLabel: 'cc',
+                            fieldLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.cc','cc'),
                             vtype: 'multiemail',
                             labelWidth: 30,
                             width:400,
@@ -101,7 +101,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                     }, {
                         xtype: 'ssphtmleditor',
                         name: 'notes',
-                        fieldLabel: 'Notes',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.notes','Notes'),
                         labelWidth: 48,
                         inputWidth:400,
                         rows: 15,
@@ -118,13 +118,13 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                     align: 'stretch',
                     items: [{
                             checked: false,
-                            boxLabel: 'Email MAP with Options',
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.with-options','Email MAP with Options'),
                             name: 'outputFormat',
                             inputValue: 'fullFormat',
                             itemId: 'fullFormat'
                     }, {
                             checked: true,
-                            boxLabel: 'Email MAP in Matrix Format',
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.matrix-format','Email MAP in Matrix Format'),
                             name: 'outputFormat',
                             inputValue: 'matrixFormat',
                             itemId: 'matrixFormat'
@@ -141,22 +141,22 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                     itemId: 'optionsEmailView',
                     items: [{
                         checked: true,
-                        boxLabel: 'With Course Description',
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.with-course-description','With Course Description'),
                         name: 'includeCourseDescription'
                     }, {
                         checked: true,
-                        boxLabel: 'With Header/Footer',
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.with-header-footer','With Header/Footer'),
                         name: 'includeHeaderFooter'
                     }, {
                         checked: true,
                         name: 'includeTotalTimeExpected',
                         labelSeparator: '',
-                        boxLabel: 'Total Time Expected Outside Class'
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.total-time','Total Time Expected Outside Class')
                     }, {
                         checked: true,
                          name: 'includeFinancialAidInformation',
                          labelSeparator: '',
-                         boxLabel: 'Display FinAid Information'
+                         boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.display-financial-aid','Display FinAid Information')
                     }]
                 }],
                 dockedItems: [{
@@ -165,7 +165,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                     items: [{
                         xtype: 'button',
                         itemId: 'sendEmailButton',
-                        text: 'Send Email',
+                        text: me.textStore.getValueByCode('ssp.label.send-email-button','Send Email'),
                         listeners:{
                             click: function(){
                                 me = this;
@@ -188,7 +188,7 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                     }, '-', {
                         xtype: 'button',
                         itemId: 'cancelButton',
-                        text: 'Cancel',
+                        text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
                         listeners: {
                             click:function(){
                                 me = this;

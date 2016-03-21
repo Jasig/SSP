@@ -515,15 +515,16 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			(studentNotes && studentNotes.length > 0) ||
 			(academicGoals && academicGoals.length > 0)){
 			me.getPlanNotesButton().setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
-			var tooltip = "Plan Notes: ";
+			var tooltip =  me.textStore.getValueByCode('ssp.tooltip.map.plan-notes-button.plan-notes',"Plan Notes");
 			if(contactNotes && contactNotes.length > 0)
-				tooltip += "Contact Notes: " + contactNotes + " ";
+				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.plan-notes-button.contact-notes',"Contact Notes: %CONTACT-NOTES%",{'%CONTACT-NOTES%':contactNotes});
 			
 			if(studentNotes && studentNotes.length > 0)
-				tooltip += "Student Notes: " + studentNotes + " ";
+				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.plan-notes-button.student-notes',"Student Notes: %STUDENT-NOTES%",{'%STUDENT-NOTES%':studentNotes});
 			
 			if(academicGoals && academicGoals.length > 0)
-				tooltip += "Academic Goals: " + academicGoals;
+				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.plan-notes-button.academic-goals',"Academic Goals: %ACADEMIC-GOALS%",{'%ACADEMIC-GOALS%':academicGoals});
+
 			me.getPlanNotesButton().setTooltip(tooltip);
 			return;
 		}
@@ -558,7 +559,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			defaultMsg = 'Plan Status: %PLAN-STATUS%<br> Details: %PLAN-STATUS-DETAILS%';
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.map.plan-status-title',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails}),
-				me.textStore.getValueByCode('ssp.message.map.plan-status-body',defaultTitle,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails})
+				me.textStore.getValueByCode('ssp.message.map.plan-status-body',defaultMsg,{'%FULL-NAME%':me.personLite.get('displayFullName'), '%PLAN-STATUS%':me.currentMapPlan.planStatus,'%PLAN-STATUS-DETAILS%':me.currentMapPlan.planStatusDetails})
 				);
 		} else {
 		   if (me.showMapStatusPopup == null || me.showMapStatusPopup.isDestroyed) {
@@ -894,9 +895,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getPlanFAButton().hide();
 			me.getShowStudentTranscript().hide();
 			me.getEmailPlanButton().hide();
-			me.getName().setFieldLabel("Template Title");
-			me.getPlanNotesButton().setTooltip("Template Notes");
-			me.getMovePlanButton().setTooltip("Move Template");
+			me.getName().setFieldLabel(me.textStore.getValueByCode('ssp.label.map.view.template-title',"Template Title"));
+			me.getPlanNotesButton().setTooltip(me.textStore.getValueByCode('ssp.tooltip.map.view.template-notes-button',"Template Notes"));
+			me.getMovePlanButton().setTooltip(me.textStore.getValueByCode('ssp.tooltip.map.view.move-template-button',"Move Template"));
 		}else{
 			me.getSavePlanButton().show();
 			me.getSaveTemplateAsButton().show();
@@ -914,9 +915,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 				me.getShowStudentTranscript().hide();
 				
 			me.getEmailPlanButton().show();
-			me.getName().setFieldLabel("Plan Title");
-			me.getPlanNotesButton().setTooltip("Plan Notes");
-			me.getMovePlanButton().setTooltip("Move Plan");
+			me.getName().setFieldLabel(me.textStore.getValueByCode('ssp.label.map.view.plan-title',"Plan Title"));
+			me.getPlanNotesButton().setTooltip(me.textStore.getValueByCode('ssp.tooltip.map.view.plan-notes-button',"Plan Notes"));
+			me.getMovePlanButton().setTooltip(me.textStore.getValueByCode('ssp.tooltip.map.view.move-plan-button',"Move Plan"));
 		}
 		me.setPlanNotesButtonIcon();
 		me.getView().setLoading(false);

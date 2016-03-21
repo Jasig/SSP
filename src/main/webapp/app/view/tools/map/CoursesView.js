@@ -25,7 +25,8 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		tags: 'facetedTagsStore',
 		terms: 'termsFacetedStore',
 		departments: 'departmentsStore',
-		divisions: 'divisionsStore'
+		divisions: 'divisionsStore',
+		textStore: 'sspTextStore'
     },
     controller: 'Ssp.controller.tool.map.CoursesViewController',
     width: '100%',
@@ -61,7 +62,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'program',
 				        store: me.programs,
 				        fieldLabel: '',
-				        emptyText: 'Filter by Program',
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.courses-view.program','Filter by Program'),
 				        valueField: 'code',
 				        displayField: 'name',
 				        mode: 'local',
@@ -70,7 +71,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'program',
 				        width: 260
 				    }, {
-				        tooltip: 'Reset to All Programs',
+				        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.courses-view.program-reset','Reset to All Programs'),
 				        text: '',
 				        width: 23,
 				        height: 25,
@@ -94,7 +95,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'tag',
 				        fieldLabel: '',
 				        store: me.tags,
-				        emptyText: 'Filter by Tag',
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.courses-view.tag','Filter by Tag'),
 				        valueField: 'code',
 				        displayField: 'name',
 				        mode: 'local',
@@ -103,7 +104,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'tag',
 				        width: 260
 				    }, {
-				        tooltip: 'Reset to All Tags',
+				        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.courses-view.tag-reset','Reset to All Tags'),
 				        text: '',
 				        width: 23,
 				        height: 25,
@@ -127,7 +128,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'term',
 						store: me.terms,
 				        fieldLabel: '',
-				        emptyText: 'Filter by Term',
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.courses-view.term','Filter by Term'),
 				        valueField: 'code',
 				        displayField: 'name',
 				        mode: 'local',
@@ -136,7 +137,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'term',
 				        width: 260
 				    }, {
-				        tooltip: 'Reset to All Terms',
+				        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.courses-view.term-reset','Reset to All Terms'),
 				        text: '',
 				        width: 23,
 				        height: 25,
@@ -161,7 +162,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'department',
 				        store: me.departments,
 				        fieldLabel: '',
-				        emptyText: 'Filter by Department',
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.courses-view.department','Filter by Department'),
 				        valueField: 'code',
 				        displayField: 'name',
 				        mode: 'local',
@@ -170,7 +171,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'department',
 				        width: 260
 				    }, {
-				        tooltip: 'Reset to All Departments',
+				        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.courses-view.department-reset','Reset to All Departments'),
 				        text: '',
 				        width: 23,
 				        height: 25,
@@ -196,7 +197,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        name: 'division',
 				        store: me.divisions,
 				        fieldLabel: '',
-				        emptyText: 'Filter by Division',
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.courses-view.division','Filter by Division'),
 				        valueField: 'code',
 				        displayField: 'name',
 				        mode: 'local',
@@ -205,7 +206,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'division',
 				        width: 260
 				    }, {
-				        tooltip: 'Reset to All Division',
+				        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.courses-view.division-reset','Reset to All Division'),
 				        text: '',
 				        width: 23,
 				        height: 25,
@@ -229,7 +230,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 					    xtype: 'tbspacer',
                         width: 50
 					}, {
-                        fieldLabel: 'Filter By',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.courses-view.filter-by','Filter By'),
 						xtype:"textfield",
                         name: 'filterBy',
                         itemId: 'filterBy',
@@ -246,7 +247,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 		                    }
 						}
                     }, {
-                        tooltip: 'Clear Filter',
+                        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.courses-view.filter-by-reset','Clear Filter'),
                         text: '',
                         width: 23,
                         height: 25,

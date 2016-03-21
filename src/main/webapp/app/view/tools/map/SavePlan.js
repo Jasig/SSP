@@ -26,7 +26,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 		appEventsController: 'appEventsController',
         programsStore: 'programsStore',
         catalogYearsStore: 'catalogYearsStore',
-		currentMapPlan: 'currentMapPlan'
+		currentMapPlan: 'currentMapPlan',
+		textStore: 'sspTextStore'
     },
     height: 554,
     width: 684,
@@ -40,7 +41,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 align: 'stretch',
                 type: 'vbox'
             },
-            title: 'Save Plan',
+            title: me.textStore.getValueByCode('ssp.label.map.save-plan.title','Save Plan'),
 			
             items: [{
                 xtype: 'form',
@@ -70,7 +71,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             height: 100,
                             items: [{
                 				    
-                			    	fieldLabel: 'Active Plan',
+                			    	fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.object-status','Active Plan'),
                 			    	name: 'objectStatus',
 									itemId:'objectStatus',
                 			    	labelWidth: 65,
@@ -84,7 +85,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                                 },
                 			    {
                 			    	
-                			    	boxLabel: 'Important / Caution',
+                			    	boxLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.is-important','Important / Caution'),
                 			    	name: 'isImportant',
                 			    	labelWidth: 130,
                 			    	boxLabelAlign: 'before',
@@ -98,7 +99,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                                 },
                 			    {
                 			    	
-                			    	boxLabel: 'Required For Financial Aid(SAP)',
+                			    	boxLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.is-financial-aid','Required For Financial Aid(SAP)'),
                 			    	name: 'isFinancialAid',
                 			    	labelWidth: 200,
                 			    	boxLabelAlign: 'before',
@@ -111,7 +112,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                                 },
                 			    {
                 			    	
-                			    	boxLabel: 'F1 visa',
+                			    	boxLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.is-f1-visa','F1 visa'),
                 			    	name: 'isF1Visa',
                 			    	labelWidth: 70,
                 			    	boxLabelAlign: 'before',
@@ -133,7 +134,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                             },
                             items: [
 				               {
-            				        fieldLabel: 'Plan Title',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.plan-title','Plan Title'),
             				        name: 'name',
             				        itemId: 'name',
             				        maxLength: 50,
@@ -144,8 +145,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         	                        name: 'programCode',
             				        itemId: 'programCode',
 									store: me.programsStore,
-        	                        fieldLabel: 'Program',
-        	                        emptyText: 'Specific Program',
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.program-code','Program'),
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-plan.program-code','Specific Program'),
         	                        valueField: 'code',
         	                        displayField: 'name',
         	                        mode: 'local',
@@ -157,8 +158,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         	                        xtype: 'combobox',
         	                        name: 'catalogYearCode',
 									store: me.catalogYearsStore,
-        	                        fieldLabel: 'Catalog Year',
-        	                        emptyText: 'Specific Cat Year',
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.catalog-year-code','Catalog Year'),
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-plan.catalog-year-code','Specific Cat Year'),
         	                        valueField: 'code',
         	                        displayField: 'name',
         	                        mode: 'local',
@@ -166,7 +167,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 									width: '80%',
         	                        allowBlank: true
         	                    } ,{
-            				        fieldLabel: 'Contact Name',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.contact-name','Contact Name'),
             				        name: 'contactName',
             				        itemId: 'contactName',
             				        maxLength: 50,
@@ -174,21 +175,21 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             				        allowBlank:true
             				        
             				    },{
-            				        fieldLabel: 'Contact Title',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.contact-title','Contact Title'),
             				        name: 'contactTitle',
             				        itemId: 'contactTitle',
             				        maxLength: 50,
 									width: '80%',
             				        allowBlank:true
             				    },{
-	            				    fieldLabel: 'Contact Email',
+	            				    fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.contact-email','Contact Email'),
 	            				    name: 'contactEmail',
 	            				    itemId: 'contactEmail',
 									width: '80%',
 	            				   	allowBlank:true,
 									maxLength: 200
 	            				 },{
-            				        fieldLabel: 'Contact Phone',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.contact-phone','Contact Phone'),
             				        name: 'contactPhone',
             				        itemId: 'contactPhone',
 									width: '80%',
@@ -196,21 +197,21 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 									maxLength: 200
             				    },
             				   {
-            				        fieldLabel: 'Academic',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.academic-link','Academic'),
             				        name: 'academicLink',
             				        allowBlank:true,
 									width: '80%',
             				        itemId: 'academicLink',
 									maxLength: 2000
             				    },{
-            				        fieldLabel: 'Career Data',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.career-link','Career Data'),
             				        name: 'careerLink',
             				        allowBlank:true,
 									width: '80%',
             				        itemId: 'careerLink',
 									maxLength: 2000
             				    },{
-            				        fieldLabel: 'Advisor/Coach Notes',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.contact-notes','Advisor/Coach Notes'),
             				        name: 'contactNotes',
             				        allowBlank:true,
             				        itemId: 'contactNotes',
@@ -218,7 +219,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
             				        xtype: 'textareafield',
 									maxLength: 4000
             				    },{
-            				        fieldLabel: 'Student Notes',
+            				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.student-notes','Student Notes'),
             				    	name: 'studentNotes',
             			        	allowBlank:true,
             			        	itemId: 'studentNotes',
@@ -226,7 +227,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
 									width: '80%',
 									maxLength: 4000
                 			    },{
-                			        fieldLabel: 'Academic Goals',
+                			        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.academic-goals','Academic Goals'),
                 			        name: 'academicGoals',
                 			        allowBlank: true,
                 			        itemId: 'academicGoals',
@@ -244,13 +245,13 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                         items: [{
                             xtype: 'button',
                             itemId: 'saveButton',
-                            text: 'Save'
+                            text: me.textStore.getValueByCode('ssp.label.save-button','Save')
 
                             
                         }, '-', {
                             xtype: 'button',
                             itemId: 'cancelButton',
-                            text: 'Cancel'
+                            text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                         }]
                     
                     }]

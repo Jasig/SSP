@@ -30,7 +30,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 		colorsUnpagedStore: 'colorsUnpagedStore', 
 		colorsAllStore: 'colorsAllStore', 
     	termsStore:'termsStore',
-		colorsAllUnpagedStore: 'colorsAllUnpagedStore'    	
+		colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+		textStore: 'sspTextStore'
 	},
 
 	store: null,
@@ -77,7 +78,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					    	var color = isImportant ? '#ff9900' : 'rgba(0,0,0,0.0)';
 							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;'
 							if ( isImportant ) {
-								metaData.tdAttr = 'data-qtip="Orange indicates course is important"';
+								metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.orange-transcript','Orange indicates course is important') + '"';
 							}
 					     }		            
 					},
@@ -94,9 +95,9 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 							
 							if ( isTranscript ) {
 								if(!duplicateOfTranscript)
-									metaData.tdAttr = 'data-qtip="Yellow indicates course is already on this student\'s transcript"';
+									metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.yellow-transcript','Yellow indicates course is already on this student\'s transcript') + '"';
 								else{
-									metaData.tdAttr = 'data-qtip="Blue indicates course is a duplicate of one on this student\'s transcript but in a different term"';
+									metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.blue-transcript','Blue indicates course is a duplicate of one on this student\'s transcript but in a different term') + '"';
 								}
 							}
 							metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
@@ -115,7 +116,11 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					    	var colorCode = color ? '#'+color.get('hexCode') : 'rgba(0,0,0,0.0)';
 							metaData.style = 'background-color: '+colorCode+'; background-image: none; margin:2px 2px 2px 2px;'
 							if ( elective ) {
-								metaData.tdAttr = 'data-qtip="Course is an elective with code: ' + elective.get('code') + '"';
+								metaData.tdAttr = 'data-qtip="' +
+								    me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.blue-transcript',
+								        'Course is an elective with code: %ELECTIVE-CODE%',
+								        {'%ELECTIVE-CODE%': elective.get('code')}) +
+                                    '"';
 							}
 							return elective;						
 					     }		            
@@ -130,7 +135,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					        	var color = isDev ? '#ff0000' : 'rgba(0,0,0,0.0)';
 								metaData.style = 'background-color: '+ color +'; background-image: none; margin:2px 2px 2px 2px;';
 								if ( isDev ) {
-									metaData.tdAttr = 'data-qtip="Red indicates course is a developmental course"';
+									metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.red-transcript','Red indicates course is a developmental course') + '"';
 								}					
 					     }		            
 					}
@@ -151,7 +156,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 					    	var me=this;
 						    if(me.invalidRecord(record)){
 						    	metaData.style = 'font-style:italic;color:#FF0000';
-								metaData.tdAttr = 'data-qtip="Concerns:' + record.get("invalidReasons") + '"';
+								metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.concerns','Concerns:') + record.get("invalidReasons") + '"';
 							}
 							return value;
 					    }		
@@ -196,14 +201,16 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 						var elective = me.electiveStore.getById(record.get('electiveId'))
 						if((record.data.contactNotes != undefined && record.data.contactNotes.length > 0) ||
 														(record.data.studentNotes != undefined && record.data.studentNotes.length > 0) ){
+						    var tooltip = '';
 							if(record.data.contactNotes && record.data.contactNotes.length > 0)
-								metaData.tdAttr = 'data-qtip="Contact Notes: ' + record.data.contactNotes;
+								tooltip += me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.contact-notes','Contact Notes: %CONTACT-NOTES%',{'%CONTACT-NOTES%':record.data.contactNotes});
 							if(record.data.contactNotes && record.data.contactNotes.length > 0)
-								metaData.tdAttr += ' Student Notes: ' + record.data.studentNotes 
+								tooltip += '<br/>' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.student-notes','Student Notes: %STUDENT-NOTES%',{'%STUDENT-NOTES%':record.data.studentNotes});
 							if(elective)
-								metaData.tdAttr += ' Elective: ' + elective.get('name');
+								tooltip += '<br/>' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.elective-name','Elective: %ELECTIVE-NAME%',{'%ELECTIVE-NAME%':elective.get('name')});
 							
-							metaData.tdAttr += '"';
+							metaData.tdAttr += 'data-qtip="' + tooltip + '"';
+
 							return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
 						}
 						if(me.invalidRecord(record))
@@ -222,7 +229,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 cls: 'importantIconSmall',
                 text:'',
                 hidden: true,
-                tooltip: 'This is an important term!'
+                tooltip:  me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.is-important-term','This is an important term!')
                 
             },	{
                     xtype: 'tbspacer',
@@ -235,7 +242,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 cls: 'helpIconSmall',
                 text:'',
                 hidden: me.editable || me.currentMapPlan.get('isTemplate'),
-                tooltip: 'This term is in the past and cannot be edited.'
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.past-term','This term is in the past and cannot be edited.')
                 
             },{
                 xtype: 'button',
@@ -244,7 +251,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 height: 20,
                 cls: 'editPencilIcon',
                 text:'',
-                tooltip: 'Term Notes'
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.term-notes','Term Notes')
                 
             },{
                 xtype: 'button',
@@ -253,7 +260,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 height: 20,                
                 text:'',
                 cls: 'deleteIcon',
-                tooltip: 'Select a course and press this button to remove it from the term.'
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.delete-button','Select a course and press this button to remove it from the term.')
             }],
             dockedItems: [{
                 dock: 'bottom',
