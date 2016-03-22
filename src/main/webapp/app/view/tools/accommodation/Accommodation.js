@@ -23,9 +23,9 @@ Ext.define('Ssp.view.tools.accommodation.Accommodation', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.accommodation.AccommodationToolViewController',
     inject: {
-    	authenticatedPerson: 'authenticatedPerson'
+    	authenticatedPerson: 'authenticatedPerson',
+    	textStore: 'sspTextStore'
     },
-	title: 'Accommodation',
 	width: '100%',
 	height: '100%',
 	initComponent: function() {	
@@ -35,18 +35,19 @@ Ext.define('Ssp.view.tools.accommodation.Accommodation', {
 		    		layout: 'fit',
 		    		padding: 0,
 		    		border: 0,
+                	title: me.textStore.getValueByCode('ssp.label.accommodation.title','Accommodation'),
 					dockedItems: [{
 				        dock: 'top',
 				        xtype: 'toolbar',
 				        items: [{
 				        			xtype: 'button', 
 				        			itemId: 'saveButton', 
-				        			text:'Save',
+				        			text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
 				        			hidden: !me.authenticatedPerson.hasAccess('ACCOMMODATION_SAVE_BUTTON')
 				        	   },{
 					        	     xtype: 'button', 
 					        	     itemId: 'cancelButton', 
-					        	     text:'Cancel',
+					        	     text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel'),
 					        	     hidden: !me.authenticatedPerson.hasAccess('ACCOMMODATION_CANCEL_BUTTON')
 				        	   },{
 				        	    	xtype: 'label',

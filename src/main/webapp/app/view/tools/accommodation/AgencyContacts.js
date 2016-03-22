@@ -19,6 +19,10 @@
 Ext.define('Ssp.view.tools.accommodation.AgencyContacts', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.disabilityagencycontacts',
+	mixins: [ 'Deft.mixin.Injectable'],
+    inject: {
+    	textStore: 'sspTextStore'
+    },
     width: '100%',
     height: '100%',
     autoScroll: true,
@@ -47,7 +51,7 @@ Ext.define('Ssp.view.tools.accommodation.AgencyContacts', {
 					    },
 					    items: [{
 	                        xtype: 'textfield',
-	                        fieldLabel: 'Name of Contact',
+	                        fieldLabel: me.textStore.getValueByCode('ssp.label.accommodation.contact-name','Name of Contact'),
 	                        name: 'contactName',
 							maxLength: 50
 	                    }]

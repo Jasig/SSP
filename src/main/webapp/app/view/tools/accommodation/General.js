@@ -23,7 +23,8 @@ Ext.define('Ssp.view.tools.accommodation.General', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.tool.accommodation.GeneralViewController',
     inject: {
-    	disabilityStatusesStore: 'disabilityStatusesStore'
+    	disabilityStatusesStore: 'disabilityStatusesStore',
+    	textStore: 'sspTextStore'
     }, 
     height: '100%',
     width: '100%',
@@ -50,21 +51,21 @@ Ext.define('Ssp.view.tools.accommodation.General', {
             items: [{
 		                xtype: 'displayfield',
 		                name: 'odsRegistrationDate',
-		                fieldLabel: 'ODS Registration Date',
-		                renderer: Ext.util.Format.dateRenderer('m/d/Y'),
+		                fieldLabel: me.textStore.getValueByCode('ssp.label.accommodation.ods-registration-date','ODS Registration Date'),
+		                renderer: Ext.util.Format.dateRenderer(me.textStore.getValueByCode('ssp.format.accommodation.ods-registration-date','m/d/Y')),
 						listeners: {
 							render: function(field){
 								Ext.create('Ext.tip.ToolTip',{
 									target: field.getEl(),
-									html: 'This is the date on which Accommodation data for this student was first received. It is shown in institution-local time. E.g. for a May 9, 11pm submission on the US west coast to an east coast school, this would display the "next" day, i.e. May 10.'
+									html: me.textStore.getValueByCode('ssp.tooltip.accommodation.ods-registration-date','This is the date on which Accommodation data for this student was first received. It is shown in institution-local time. E.g. for a May 9, 11pm submission on the US west coast to an east coast school, this would display the "next" day, i.e. May 10.')
 								});
 							}
 						}
 		            },{
                         xtype: 'combobox',
                         name: 'disabilityStatusId',
-                        fieldLabel: 'ODS Status',
-				        emptyText: 'Select One',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.accommodation.disability-status','ODS Status'),
+				        emptyText: me.textStore.getValueByCode('ssp.empty-text.accommodation.disability-status','Select One'),
 				        store: me.disabilityStatusesStore,
 				        valueField: 'id',
 				        displayField: 'name',
@@ -77,20 +78,20 @@ Ext.define('Ssp.view.tools.accommodation.General', {
                     },
                     {
                         xtype: 'textareafield',
-                        fieldLabel: 'Please Explain Temporary Eligibility',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.accommodation.temp-eligibility-description','Please Explain Temporary Eligibility'),
                         name: 'tempEligibilityDescription',
 						maxLength: 250
                     },
                     {
                         xtype: 'textfield',
                         name: 'intakeCounselor',
-                        fieldLabel: 'ODS Counselor',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.accommodation.intake-counselor','ODS Counselor'),
 						maxLength: 50
                     },
                     {
                         xtype: 'textfield',
                         name: 'referredBy',
-                        fieldLabel: 'Referred to ODS by',
+                        fieldLabel: me.textStore.getValueByCode('ssp.label.accommodation.referred-by','Referred to ODS by'),
 						maxLength: 50
                     }]
         });
