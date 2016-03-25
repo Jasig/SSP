@@ -315,7 +315,7 @@ var ssp = ssp || {};
         $(selectors.term).text(options.parameters.termName);
 
 	// term
-        $(selectors.facultyid).text(options.parameters.facultyid + 'test');
+        $(selectors.facultyid).text(options.parameters.facultyid);
 
         // student
         $(selectors.student).text(studentName);
