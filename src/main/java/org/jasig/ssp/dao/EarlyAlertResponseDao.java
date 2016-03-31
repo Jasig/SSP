@@ -364,9 +364,9 @@ public class EarlyAlertResponseDao extends
 
         if (reportPersonSAndP != null) {
             try {
-                return (List)reportPersonSAndP.sortAndPageList((List)criteria.list()); //attempt to sort by student name
+                return (List)reportPersonSAndP.sortAndPageList(criteria.list()); //attempt to sort by student name
             } catch(Exception exp) {
-                LOGGER.error("Error returning results from Early Alert Response Service.",exp);
+                LOGGER.info("Error sorting results from Early Alert Response Service.", exp);
                 return (List)criteria.list();  //default no sorting
             }
         } else {

@@ -21,12 +21,9 @@ package org.jasig.ssp.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
+import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonChallenge;
@@ -38,6 +35,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+
 
 /**
  * CRUD methods for the PersonChallenge model.
@@ -59,21 +57,20 @@ public class PersonChallengeDao extends
 	public List<StudentChallengesTO> getStudentChallenges(PersonSearchFormTO form,
 			final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		
-		List<UUID> ids = personDao.getStudentUUIDs(form);
+		final List<UUID> ids = personDao.getStudentUUIDs(form);
 		
 		if(CollectionUtils.isEmpty(ids)){
 			return new ArrayList<StudentChallengesTO>();
 		}
 		
-		Criteria criteria = createCriteria();
+		final Criteria criteria = createCriteria();
 		criteria.createAlias("person", "p");
 		criteria.createAlias("p.coach", "coach");
 		criteria.createAlias("p.studentType", "studentType");
 		criteria.createAlias("challenge", "c");
-		criteria.createAlias("p.homeCampus", "homeCampus");
+		criteria.createAlias("p.homeCampus", "homeCampus", JoinType.LEFT_OUTER_JOIN);  //allow null campus_id
 		criteria.add(Restrictions.in("p.id", ids));
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		
 		
 		final ProjectionList projections = Projections.projectionList();
 		projections.add(Projections.groupProperty("c.name").as("challengeName"));
@@ -89,8 +86,8 @@ public class PersonChallengeDao extends
 		criteria.addOrder(Order.asc("challengeName"));
 		criteria.addOrder(Order.asc("lastName"));
 		criteria.addOrder(Order.asc("firstName"));
-		criteria.setResultTransformer(new AliasToBeanResultTransformer(
-				StudentChallengesTO.class));
+		criteria.setResultTransformer(new AliasToBeanResultTransformer(StudentChallengesTO.class));
+
 		return (List<StudentChallengesTO>)criteria.list();
 	}
 	

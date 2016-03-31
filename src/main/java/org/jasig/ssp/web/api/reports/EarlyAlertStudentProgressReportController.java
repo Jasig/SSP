@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
+import com.google.common.collect.Lists;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.RegistrationStatusByTerm;
@@ -178,19 +179,19 @@ public class EarlyAlertStudentProgressReportController extends ReportBaseControl
 				initialTerm.getCode(), null, null);
 
 		final PagingWrapper<EarlyAlertStudentReportTO> initialPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCriteria(
-				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
+				initialSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, ""));
 		
 		final EarlyAlertStudentSearchTO comparisonSearchForm = new EarlyAlertStudentSearchTO(personSearchForm, 
 				comparisonTerm.getCode(), null, null);
 
 		final PagingWrapper<EarlyAlertStudentReportTO> comparisonPeopleInfo = earlyAlertService.getStudentsEarlyAlertCountSetForCriteria(
-				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, "person"));
+				comparisonSearchForm, SearchParameters.getReportPersonSortingAndPagingAll(status, ""));
 		
 		
 		List<EarlyAlertStudentReportTO> initialPeopleInfoCompressed = processReports(initialPeopleInfo, earlyAlertResponseService);
 		List<EarlyAlertStudentReportTO> comparisonPeopleInfoCompressed = processReports(comparisonPeopleInfo, earlyAlertResponseService);
 		
-		List<EarlyAlertStudentProgressReportTO> people = new ArrayList<EarlyAlertStudentProgressReportTO>();
+		final List<EarlyAlertStudentProgressReportTO> people = Lists.newLinkedList();
 		for(EarlyAlertStudentReportTO initialPersonInfo : initialPeopleInfoCompressed){
 			EarlyAlertStudentReportTO foundPerson = null;
 			for(EarlyAlertStudentReportTO comparisonPersonInfo : comparisonPeopleInfoCompressed){

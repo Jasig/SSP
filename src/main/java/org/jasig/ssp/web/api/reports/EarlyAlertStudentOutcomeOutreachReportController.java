@@ -47,7 +47,6 @@ import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.reports.EarlyAlertStudentOutreachReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentResponseOutcomeReportTO;
 import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
@@ -67,9 +66,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 
 /**
  * Service methods for Reporting on Early Alert Student Outcomes
@@ -250,12 +249,9 @@ public class EarlyAlertStudentOutcomeOutreachReportController extends ReportBase
 			outcomeTotals = getOutreaches(cleanOutcomeIds,  searchForm, sAndP);
 		}
 
-		// TODO Specifying person name sort fields in the SaP doesn't seem to
-		// work... end up with empty results need to dig into actual query
-		// building
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		final List<EarlyAlertStudentResponseOutcomeReportTO> reportTOs = earlyAlertResponseService.getEarlyAlertResponseOutcomeTypeForStudentsByCriteria(
-				outcomeType, searchForm, SortingAndPaging.createForSingleSortAll(status, outcomeType + ".name", "ASC"), SearchParameters.getReportPersonSortingAndPagingAll(status, "person."));
+				outcomeType, searchForm, SortingAndPaging.createForSingleSortAll(status, outcomeType + ".name", "ASC"), SearchParameters.getReportPersonSortingAndPagingAll(status, ""));
 		
 	
 		// Add a blank line to the table

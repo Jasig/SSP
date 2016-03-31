@@ -20,19 +20,9 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
-
+import com.google.common.collect.Lists;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
@@ -46,7 +36,6 @@ import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
-import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadActivityReportTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
@@ -64,8 +53,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Maps;
+
 
 /**
  * Service methods for Reporting on Caseload Activity
@@ -156,7 +145,7 @@ public class CaseloadActivityReportController extends ReportBaseController<CaseL
 			return;
 		}
 		
-		List<CaseLoadActivityReportTO> caseLoadActivityReportList = new ArrayList<CaseLoadActivityReportTO>();
+		LinkedList<CaseLoadActivityReportTO> caseLoadActivityReportList = Lists.newLinkedList();
 		
 		EntityCountByCoachSearchForm form = new EntityCountByCoachSearchForm(coaches, 
 				dateTerm.getStartDate(), 
@@ -181,7 +170,7 @@ public class CaseloadActivityReportController extends ReportBaseController<CaseL
 		 Map<UUID, EntityStudentCountByCoachTO> indexedEarlyAlertResponses = getIndexedByCoaches(earlyAlertResponseCounts.getRows());
 		 
 
-		for (Person coach:coaches) {	
+		for (Person coach : coaches) {
 			UUID sspUserId = coach.getId();
 			EntityStudentCountByCoachTO studentsJournal = getEntityStudentCountByCoachTO(indexedJournals,  sspUserId);
 			EntityStudentCountByCoachTO studentsTask = getEntityStudentCountByCoachTO(indexedTasks,  sspUserId);

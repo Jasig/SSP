@@ -20,17 +20,8 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JRException;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
@@ -57,9 +48,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 
 /**
  * Service methods for Reporting on CaseLoad
@@ -188,7 +179,7 @@ public class CaseloadReportController extends ReportBaseController<CaseLoadRepor
 		final List<UUID> cleanSpecialServiceGroupIds = SearchParameters.cleanUUIDListOfNulls(specialServiceGroupIds);
 		final List<UUID> cleanServiceReasonsIds = SearchParameters.cleanUUIDListOfNulls(serviceReasonIds);
         CaseLoadSearchTO searchForm = new CaseLoadSearchTO(cleanStudentTypeIds, cleanServiceReasonsIds, cleanSpecialServiceGroupIds, homeDepartment);
-		final List<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(searchForm);		
+		final LinkedList<CaseLoadReportTO> caseLoadReportList = collectCaseLoadReportTOs(searchForm);
 		final Map<String, Object> parameters = collectParamsForReport(searchForm);
 
 		renderReport(response, parameters, caseLoadReportList, REPORT_URL,
@@ -196,9 +187,9 @@ public class CaseloadReportController extends ReportBaseController<CaseLoadRepor
 
 	}
 
-	private List<CaseLoadReportTO> collectCaseLoadReportTOs(
+	private LinkedList<CaseLoadReportTO> collectCaseLoadReportTOs(
 			CaseLoadSearchTO searchForm) {
-		List<CaseLoadReportTO> caseLoadReportList = Lists.newArrayList();
+		final LinkedList<CaseLoadReportTO> caseLoadReportList = Lists.newLinkedList();
 
 		final Collection<CoachCaseloadRecordCountForProgramStatus> countsByCoachAndStatus = caseLoadService
 				.currentCaseloadCountsByStatus(searchForm);

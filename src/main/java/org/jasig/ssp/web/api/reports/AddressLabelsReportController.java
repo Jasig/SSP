@@ -21,12 +21,7 @@ package org.jasig.ssp.web.api.reports; // NOPMD
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
@@ -222,12 +217,12 @@ public class AddressLabelsReportController extends ReportBaseController<BaseStud
 	 * @return
 	 */
 	private Map<String, BaseStudentReportTO> processStudentReportTOsAsMap(PagingWrapper<BaseStudentReportTO> people, final String[] phoneOrderConfig) {
-		Map<String, BaseStudentReportTO> compressedReportMap = Maps.newHashMap();
+		LinkedHashMap<String, BaseStudentReportTO> compressedReportMap = Maps.newLinkedHashMap();
 		if (people == null || people.getResults() <= 0) {
 			return compressedReportMap;
 		}
 
-		for (BaseStudentReportTO reportTO : new ArrayList<BaseStudentReportTO>(people.getRows())) {
+		for (BaseStudentReportTO reportTO : people.getRows()) {
             if (compressedReportMap.containsKey(reportTO.getSchoolId())) {
 				compressedReportMap.get(reportTO.getSchoolId()).processDuplicate(reportTO);
 			} else {

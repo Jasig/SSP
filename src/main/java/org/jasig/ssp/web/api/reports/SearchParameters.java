@@ -19,13 +19,7 @@
 package org.jasig.ssp.web.api.reports;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import java.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -54,8 +48,8 @@ import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-
 import com.google.common.collect.Lists;
+
 
 public class SearchParameters {
 
@@ -70,7 +64,6 @@ public class SearchParameters {
 	private static final String STUDENT_INTAKE_TERM = "studentIntakeTerm";
 	private static final String STUDENT_INTAKE_START_DATE = "studentIntakeStartDate";
 	private static final String STUDENT_INTAKE_END_DATE = "studentIntakeEndDate";
-	
 	
 	private static final String TERM_CODE = "termCode";
 	private static final String TERM_NAME = "termName";
@@ -124,23 +117,22 @@ public class SearchParameters {
 
 	static List<Person> getCoaches(final UUID coachId, String homeDepartment, PersonService personService)
 			throws ObjectNotFoundException {
-		List<Person> coaches;
+		LinkedList<Person> coaches;
 		if (coachId != null) {
-			Person coach = personService.get(coachId);
-			coaches = new ArrayList<Person>();
+			final Person coach = personService.get(coachId);
+			coaches = Lists.newLinkedList();
 			coaches.add(coach);
 		} else {
-			coaches = new ArrayList<Person>(
-					personService
-							.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR));
+			coaches = Lists.newLinkedList(personService.getAllCurrentCoaches(Person.PERSON_NAME_AND_ID_COMPARATOR));
 			
-			if(homeDepartment != null && homeDepartment.length() > 0){
-				List<Person> homeCoaches = new ArrayList<Person>();
-				for(Person coach:coaches){
+			if (homeDepartment != null && homeDepartment.length() > 0){
+                final LinkedList<Person> homeCoaches = Lists.newLinkedList();
+				for (Person coach : coaches) {
 					if(coach.getStaffDetails() != null && 
 							coach.getStaffDetails().getDepartmentName() != null &&
-							coach.getStaffDetails().getDepartmentName().equals(homeDepartment))
-						homeCoaches.add(coach);
+							coach.getStaffDetails().getDepartmentName().equals(homeDepartment)) {
+                        homeCoaches.add(coach);
+                    }
 				}
 				coaches = homeCoaches;
 			}
@@ -629,38 +621,46 @@ public class SearchParameters {
 	}
 	
 	static final SortingAndPaging getReportPersonSortingAndPagingAll(ObjectStatus status){
-		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
+		final List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
+
 		sortFields.add(new Pair<String, SortDirection>("lastName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>("firstName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>("middleName", SortDirection.ASC));
         sortFields.add(new Pair<String, SortDirection>("schoolId", SortDirection.ASC));
-		return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
+
+        return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
 	}
 	
 	static final SortingAndPaging getReportPersonSortingAndPagingAll(ObjectStatus status, String prefix){
-		List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
-		if(StringUtils.isNotBlank(prefix))
-			prefix =  prefix + "." ;
+		final List<Pair<String, SortDirection>> sortFields = Lists.newArrayList();
+
+		if (StringUtils.isNotBlank(prefix)) {
+            prefix = prefix + ".";
+        }
 		sortFields.add(new Pair<String, SortDirection>(prefix + "lastName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>(prefix + "firstName", SortDirection.ASC));
 		sortFields.add(new Pair<String, SortDirection>(prefix + "middleName", SortDirection.ASC));
-        sortFields.add(new Pair<String, SortDirection>("schoolId", SortDirection.ASC));
+        sortFields.add(new Pair<String, SortDirection>(prefix + "schoolId", SortDirection.ASC));
+
         return new SortingAndPaging(status, sortFields, null, SortDirection.ASC);
 	}
 	
 	static final void addPlanSearchForm(SearchPlanTO form, Map<String,Object> parameters){
-		if(form.getNumber() != null && !form.getNumber().isEmpty())
-			parameters.put(SearchParameters.COURSE_NUMBER, form.getNumber());
-		else
-			parameters.put(SearchParameters.COURSE_NUMBER, NOT_USED);
-		if(form.getSubjectAbbreviation() != null && !form.getSubjectAbbreviation().isEmpty())
-			parameters.put(SearchParameters.SUBJECT_ABBREVIATION, form.getSubjectAbbreviation());
-		else
-			parameters.put(SearchParameters.SUBJECT_ABBREVIATION, NOT_USED);
-		if(form.getPlanStatus() != null)
-			parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus().toString());
-		else
-			parameters.put(SearchParameters.PLAN_STATUS, NOT_USED);
+		if (form.getNumber() != null && !form.getNumber().isEmpty()) {
+            parameters.put(SearchParameters.COURSE_NUMBER, form.getNumber());
+        } else {
+            parameters.put(SearchParameters.COURSE_NUMBER, NOT_USED);
+        }
+		if (form.getSubjectAbbreviation() != null && !form.getSubjectAbbreviation().isEmpty()) {
+            parameters.put(SearchParameters.SUBJECT_ABBREVIATION, form.getSubjectAbbreviation());
+        } else {
+            parameters.put(SearchParameters.SUBJECT_ABBREVIATION, NOT_USED);
+        }
+		if (form.getPlanStatus() != null) {
+            parameters.put(SearchParameters.PLAN_STATUS, form.getPlanStatus().toString());
+        } else {
+            parameters.put(SearchParameters.PLAN_STATUS, NOT_USED);
+        }
 	}
 
 	public static void addWatcher(UUID watcherId,
