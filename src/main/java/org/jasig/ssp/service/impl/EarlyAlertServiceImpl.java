@@ -556,6 +556,11 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			throw new IllegalArgumentException("EarlyAlert.Person is missing.");
 		}
 
+        if (configService.getByNameOrDefaultValue("send_faculty_mail") != true) {
+            LOGGER.debug("Skipping Faculty Early Alert Confirmation Email: Config Turned Off");
+            return; //skip if faculty early alert email turned off
+        }
+
 		final UUID personId = earlyAlert.getCreatedBy().getId();
 		Person person = personService.get(personId);
 		if ( person == null ) {

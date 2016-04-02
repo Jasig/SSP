@@ -162,6 +162,17 @@ public class ConfigServiceImpl extends
 		return config.getValue();
 	}
 
+    @Override
+    public boolean getByNameOrDefaultValue(final String name) {
+        final Config config = getByName(name);
+        if (config == null || StringUtils.isBlank(config.getValue())) {
+            LOGGER.warn("Using default value for config:" + name);
+            return Boolean.valueOf(config.getDefaultValue());
+        } else {
+            return Boolean.valueOf(config.getValue());
+        }
+    }
+
 	@Override
 	public int getByNameExceptionOrDefaultAsInt(final String name) {
 		final Config config = getByName(name);

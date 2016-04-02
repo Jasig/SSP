@@ -72,15 +72,25 @@ public interface ConfigService extends
 	 */
 	String getByNameNullOrDefaultValue(String name);
 
-	/**
-	 * Get an int Config Value by name.
-	 * 
-	 * @param name
-	 *            of the config value
-	 * @return value or default value if not an integer
-	 * @throws ConfigException
-	 *             A runtimeException if the value is not found
-	 */
+
+    /**
+     * Get boolean Config Value by Name
+     *   returning default value if config is empty or null
+     * @param name
+     * @return
+     */
+    boolean getByNameOrDefaultValue(final String name);
+
+
+    /**
+     * Get an int Config Value by name.
+     *
+     * @param name
+     *            of the config value
+     * @return value or default value if not an integer
+     * @throws ConfigException
+     *             A runtimeException if the value is not found
+     */
 	int getByNameExceptionOrDefaultAsInt(String name);
 
 	/**

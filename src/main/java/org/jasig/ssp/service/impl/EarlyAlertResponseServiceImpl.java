@@ -75,7 +75,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -85,6 +84,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
 
 /**
  * EarlyAlertResponse service implementation
@@ -101,7 +101,10 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertResponseServiceImpl.class);
 
-	@Autowired
+    private static final String CONFIG_SHOW_SEND_CREATOR_EMAIL = "ear_show_send_faculty_email";
+    private static final String CONFIG_SEND_ANY_EMAIL_TO_FACULTY = "send_faculty_mail";
+
+    @Autowired
 	private transient EarlyAlertResponseDao dao;
 
 	@Autowired
@@ -148,7 +151,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 
 	@Autowired
 	private ConfigService configService;
-	
 
 	@Autowired
 	private transient PersonService personService;
@@ -158,7 +160,6 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 		return dao;
 	}
 
-	public static final String CONFIG_SHOW_SEND_CREATOR_EMAIL = "ear_show_send_faculty_email";
 
 	/**
 	 *
@@ -240,7 +241,7 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 			
 		}
 		boolean sendCreatorEmail = true;
-		if (new Boolean(this.configService.getByNameNullOrDefaultValue(CONFIG_SHOW_SEND_CREATOR_EMAIL)).booleanValue()) {
+		if (configService.getByNameOrDefaultValue(CONFIG_SHOW_SEND_CREATOR_EMAIL)) {
 			sendCreatorEmail = obj.isSendCreatorEmail();
 		}
 		afterEarlyAlertResponseCreate(saved, sendCreatorEmail);
@@ -410,13 +411,18 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	 * @throws ValidationException
      */
 	private void sendEarlyAlertResponseToFacultyMessageEmail (Person to, String cc, EarlyAlertResponse earlyAlertResponse) throws SendFailedException, ObjectNotFoundException, ValidationException {
-		final SubjectAndBody subjAndBody = messageTemplateService
-				.createEarlyAlertResponseToFacultyMessage(fillTemplateParameters(earlyAlertResponse));
+		if (configService.getByNameOrDefaultValue(CONFIG_SEND_ANY_EMAIL_TO_FACULTY) == true) {
+            final SubjectAndBody subjAndBody = messageTemplateService
+                    .createEarlyAlertResponseToFacultyMessage(fillTemplateParameters(earlyAlertResponse));
 
-		// Create and queue the message
-		final Message message = messageService.createMessage(to, cc, subjAndBody);
-		LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
-				earlyAlertResponse);
+            // Create and queue the message
+            final Message message = messageService.createMessage(to, cc, subjAndBody);
+            LOGGER.info("Message {} created for EarlyAlertResponse {}", message,
+                    earlyAlertResponse);
+        } else {
+            LOGGER.debug("Skipping Faculty Early Alert Response Email: Config Turned Off");
+            return;
+        }
 	}
 
 	/**
