@@ -281,7 +281,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 	}
 
 	private Message buildStudentEmail(EmailStudentRequestForm emailRequest, EmailVolume originalRequestVolume, boolean andSend)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		final EmailAddress addresses = emailRequest.getValidDeliveryAddresses(true);
 		final String body = formatEmailBody(emailRequest);
 		final SubjectAndBody subjectAndBody = new SubjectAndBody(emailRequest.getEmailSubject(), body);

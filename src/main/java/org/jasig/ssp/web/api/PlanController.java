@@ -21,18 +21,15 @@ package org.jasig.ssp.web.api;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
 import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
 import org.jasig.ssp.factory.external.MapStatusReportLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
-import org.jasig.ssp.model.MapStatusReport;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
@@ -56,7 +53,6 @@ import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.external.AbstractPlanStatusReportTO;
 import org.jasig.ssp.transferobject.external.ExternalPersonPlanStatusTO;
-import org.jasig.ssp.transferobject.external.MapStatusReportLiteTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -73,6 +69,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 @RequestMapping("/1/person/{personId}/map/plan")
@@ -336,7 +333,7 @@ public class PlanController  extends AbstractBaseController {
 	@RequestMapping(value = "/emailCurrent", method = RequestMethod.POST)
 	public @ResponseBody
 	String email(final HttpServletResponse response, final @PathVariable UUID personId,
-			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException, ValidationException {
 		
 		
 		Plan currentPlan = service.getCurrentForStudent(personId);
@@ -372,7 +369,7 @@ public class PlanController  extends AbstractBaseController {
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public @ResponseBody
 	String email(final HttpServletResponse response,
-			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
+			 @RequestBody final PlanOutputTO planOutputDataTO) throws ObjectNotFoundException, ValidationException {
 		
 		
 		SubjectAndBody messageText = service.createOutput(planOutputDataTO);

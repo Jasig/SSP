@@ -20,7 +20,6 @@ package org.jasig.ssp.service;
 
 import javax.mail.SendFailedException;
 import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -28,8 +27,6 @@ import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.web.api.validation.ValidationException;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
@@ -67,8 +64,7 @@ public interface MessageService {
 	 */
 	Message createMessage(@NotNull Person to, String emailCC,
 			@NotNull SubjectAndBody subjAndBody)
-			throws ObjectNotFoundException, SendFailedException,
-			ValidationException;
+			throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Create and save an email message to the queue to send.
@@ -88,7 +84,7 @@ public interface MessageService {
 	 */
 	Message createMessage(@NotNull String to, String emailCC,
 			@NotNull SubjectAndBody subjAndBody)
-			throws ObjectNotFoundException;
+			throws ObjectNotFoundException, ValidationException;
 
 	/**
 	 * Create a new {@link Message} entity but do not persist it.
@@ -131,7 +127,7 @@ public interface MessageService {
 	 * @throws UnsupportedEncodingException 
 	 */
 	boolean sendMessage(Message message) throws SendFailedException,
-			ObjectNotFoundException, UnsupportedEncodingException;
+			ObjectNotFoundException, UnsupportedEncodingException, ValidationException;
 
 
 	int archiveAndPruneMessages();

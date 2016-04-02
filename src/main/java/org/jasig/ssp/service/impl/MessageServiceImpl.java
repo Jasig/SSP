@@ -48,14 +48,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.validation.constraints.NotNull;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -102,15 +100,21 @@ public class MessageServiceImpl implements MessageService {
 	@Value("#{contextProperties.applicationMode}")
 	private transient String applicationMode;
 
+    @Value("#{configProperties.reroute_all_mail_to_address}")
+    private transient String routeAllMailToAddress;
+
+    @Value("#{configProperties.system_id}")
+    private  String systemId = "";
 
 
-	/**
-	 * Gets the global BCC e-mail address from the application configuration
-	 * information.
-	 * 
-	 * @return the global BCC e-mail address from the application configuration
-	 *         information
-	 */
+
+    /**
+     * Gets the global BCC e-mail address from the application configuration
+     * information.
+     *
+     * @return the global BCC e-mail address from the application configuration
+     *         information
+     */
 	@Transactional(readOnly = true)
 	public String getBcc() {
 		final String bcc = configService.getByNameEmpty("bcc_email_address");
@@ -170,8 +174,7 @@ public class MessageServiceImpl implements MessageService {
 	@Transactional(readOnly = false)
 	public Message createMessage(@NotNull final Person to,
 			final String emailCC, final SubjectAndBody subjAndBody)
-			throws ObjectNotFoundException, SendFailedException,
-			ValidationException {
+			throws ObjectNotFoundException, ValidationException {
 
 		if (to == null) {
 			throw new ValidationException("Recipient missing.");
@@ -184,18 +187,18 @@ public class MessageServiceImpl implements MessageService {
 			throw new ValidationException(
 					"Recipient e-mail address is missing.");
 		}
-		
+
 		if(!validateEmail(toAddress)){
 			throw new ValidationException(
 				"Recipient e-mail address is invalid.");
 		}
-		
+
 		final Message message = createMessage(subjAndBody);
 
 		message.setRecipient(to);
 		message.setCarbonCopy(emailCC);
 
-		return messageDao.save(message);
+		return save(message);
 	}
 
 	@Override
@@ -203,14 +206,14 @@ public class MessageServiceImpl implements MessageService {
 	public Message createMessage(@NotNull final String to,
 			final String emailCC,
 			@NotNull final SubjectAndBody subjAndBody)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 
 		final Message message = createMessage(subjAndBody);
 
 		message.setRecipientEmailAddress(to);
 		message.setCarbonCopy(emailCC);
 
-		return messageDao.save(message);
+		return save(message);
 	}
 
 	@Override
@@ -226,6 +229,39 @@ public class MessageServiceImpl implements MessageService {
 
 		return message;
 	}
+
+    /**
+     * Method to re-route all mail in the case of configuration set on
+     *  the file system in ssp-configuration.properties. This can eliminate
+     *   issues with DEV and UAT servers sending mail that is hard to
+     *    distinguish from valid PROD mail.
+     * @param message
+     * @return
+     * @throws ValidationException
+     */
+    private Message save (final Message message) throws ValidationException {
+        if (StringUtils.isNotBlank(routeAllMailToAddress) &&
+                !StringUtils.equalsIgnoreCase(routeAllMailToAddress.trim(), message.getRecipientEmailAddress().trim())) {
+
+            if (!validateEmail(routeAllMailToAddress)) {
+                LOGGER.error("Configured ReRoute All Mail Address in ssp configuration properties is invalid!");
+                throw new ValidationException(
+                        "Configured e-mail address that all SSP mail should be delivered to is invalid!.");
+            }
+
+            message.setBody("<html><body>\n***\nThis message was re-routed based on server " + systemId + " configuration.\n<br />"
+                    + "*Original Recipient: [" + message.getRecipientEmailAddress()
+                    +"]\n<br />*Original CC's: [" + message.getCarbonCopy()  + "]\n***\n\n<br /><br />"
+                    + message.getBody().replace("<html><body>", ""));
+            message.setCarbonCopy(null);
+            message.setRecipientEmailAddress(routeAllMailToAddress);
+            message.setRecipient(null); //this will override recipient address if set
+                                     //as of now only aware of EA using this, use of recipient below probably needs a refactor
+                                      // since specific rules on setting recipient addrs lies above and elsewhere
+        }
+
+        return messageDao.save(message);
+    }
 
 	@Override
 	public Pair<PagingWrapper<Message>, Collection<Throwable>> getSendQueuedMessagesBatchExecReturnType() {
@@ -336,7 +372,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	private Pair<PagingWrapper<Message>, Collection<Throwable>>
-	sendQueuedMessageBatch(SortingAndPaging sap) throws UnsupportedEncodingException {
+	sendQueuedMessageBatch(SortingAndPaging sap) throws UnsupportedEncodingException, ValidationException {
 		LinkedList<Throwable> errors = Lists.newLinkedList();
 		LOGGER.info("Looking for queued message batch at start row {}, batch size {}",
 				sap.getFirstResult(), sap.getMaxResults());
@@ -410,7 +446,7 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	@Transactional(readOnly = false)
 	public boolean sendMessage(@NotNull final Message message)
-			throws ObjectNotFoundException, SendFailedException, UnsupportedEncodingException {
+			throws ObjectNotFoundException, SendFailedException, UnsupportedEncodingException, ValidationException {
 
 		LOGGER.info("BEGIN : sendMessage()");
 		LOGGER.info(addMessageIdToError(message) + "Sending message: {}" , message.toString());
@@ -481,7 +517,7 @@ public class MessageServiceImpl implements MessageService {
 			// process BCC addresses
 			try{
 				InternetAddress[] bccs = getEmailAddresses(getBcc(), "bcc:", message.getId());
-				if(bccs.length > 0){
+				if (bccs.length > 0 && StringUtils.isBlank(routeAllMailToAddress)) {
 					mimeMessageHelper.setBcc(bccs);
 					message.setSentBccAddresses(StringUtils.join(bccs,",").trim());
 				}
@@ -507,7 +543,7 @@ public class MessageServiceImpl implements MessageService {
 			send(mimeMessage);
 
 			message.setSentDate(new Date());
-			messageDao.save(message);
+			save(message);
 		} catch (final MessagingException e) {
 			LOGGER.error("ERROR : sendMessage() : {}", e);
 			handleSendMessageError(message);

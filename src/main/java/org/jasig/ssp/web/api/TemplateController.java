@@ -355,7 +355,7 @@ public class TemplateController  extends AbstractBaseController {
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public @ResponseBody
 	String email(final HttpServletResponse response,
-			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException {
+			 @RequestBody final TemplateOutputTO planOutputDataTO) throws ObjectNotFoundException, ValidationException {
 		
 		SubjectAndBody messageText = getService().createOutput(planOutputDataTO);
 		if(messageText == null)

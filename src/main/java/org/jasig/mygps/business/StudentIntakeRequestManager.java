@@ -20,9 +20,6 @@ package org.jasig.mygps.business;
 
 import java.util.Date;
 import java.util.UUID;
-
-import javax.mail.SendFailedException;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
@@ -100,8 +97,6 @@ public class StudentIntakeRequestManager {
 			
 			personDao.save(student);
 			
-		} catch (SendFailedException e) {
-			LOGGER.error(e.getLocalizedMessage());
 		} catch (ValidationException e) {
 			LOGGER.error(e.getLocalizedMessage());
 		}

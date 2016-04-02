@@ -55,6 +55,7 @@ import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.transaction.WithTransaction;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -323,7 +324,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			SubjectAndBody subjectAndBody = new SubjectAndBody("Student MAP Off Plan Report", sb.toString());
 			try {
 				messageService.createMessage(sendToEmailAddress, null, subjectAndBody);
-			} catch ( ObjectNotFoundException e ) {
+			} catch ( ObjectNotFoundException | ValidationException e) {
 				LOGGER.error("Failed to send MAP status report to owner or coach {} at address {}",
 						new Object[] {sendToPersonId, sendToEmailAddress, e});
 			}
@@ -389,7 +390,7 @@ public class MapStatusReportCalcTaskImpl implements MapStatusReportCalcTask {
 			if (!StringUtils.isEmpty(mapEmail)) {
 				try {
 					messageService.createMessage(mapEmail, null, mapStatusEmail);
-				} catch (ObjectNotFoundException e) {
+				} catch (ObjectNotFoundException | ValidationException e) {
 					LOGGER.error("There was an error sending the map status report email", e);
 				}
 			}

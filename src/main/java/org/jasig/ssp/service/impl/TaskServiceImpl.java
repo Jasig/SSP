@@ -316,7 +316,7 @@ public class TaskServiceImpl
 	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
 			final List<Goal> goals, final List<Strength> strengths, final Person student,
 			final EmailPersonTasksForm form)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		EmailAddress addresses;
 		try {
 			addresses = form.getValidDeliveryAddressesOrFail(true);
@@ -351,7 +351,7 @@ public class TaskServiceImpl
 	public void sendTasksForPersonToEmail(@NotNull final List<Task> tasks,
 			final Person student,
 			final String emailAdresses)
-			throws ObjectNotFoundException {
+			throws ObjectNotFoundException, ValidationException {
 		if(!EmailStudentRequestForm.hasValidEmailAddress(emailAdresses, true)){
 			throw new IllegalArgumentException("Must enter at least one email address");
 		}
