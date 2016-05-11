@@ -18,11 +18,6 @@
  */
 package org.jasig.ssp.service.reference;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
@@ -41,11 +36,18 @@ import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintPar
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * MessageTemplate service
  */
 public interface MessageTemplateService extends
 		ReferenceService<MessageTemplate> {
+
+	SubjectAndBody createBulkAddCaseloadReassignmentMessage(int successCount, List<String> errors);
 
 	SubjectAndBody createContactCoachMessage(String body, String subject,
 			Person student);

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="michael.sultzaberger" id="create bulk add/caseload reassignment table" >
+        <createTable tableName="caseload_bulk_add_reassignment">
+            <column name="school_id" type="${nvarchar.type}(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="coach_school_id" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="modified_by_school_id" type="${nvarchar.type}(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="journal_entry_comment" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="notification_email_address" type="${nvarchar.type}(100)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="caseload_bulk_add_reassignment" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Template Message for Bulk Add Caseload Reassignment Email" author="michael.sultzaberger">
+        <insert tableName="message_template">
+            <column name="id" value="7df2c7bb-3c9d-435a-87f1-501e43bda153" />
+            <column name="name" value="Bulk Add Caseload Reassignment Email" />
+            <column name="description"
+                    value="Email sent after the Caseload Bulk Add Reassignment table has been process." />
+            <column name="subject"><![CDATA[Bulk Add / Caseload Re-assignment Complete]]></column>
+            <column name="body"><![CDATA[<html>
+<body>
+<p>
+The Bulk Add / Caseload Re-assingment file that you uploaded has been processed.  ${successCount} rows were process successfully.
+</p>
+#if(${errors} && ${errors.size()} > 0)
+<p>
+    The following ${errors.size()} errors where found and were not able to be processed: <br/>
+    #foreach($error in $errors)
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${error} <br/>
+    #end
+</p>
+#end
+</body>
+</html>]]>
+            </column>
+            <column name="created_date" valueDate="2015-05-27T16:00:00" />
+            <column name="modified_date" valueDate="2015-05-27T16:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="message_template">
+                <where>id = 'b0e61fad-74c2-4154-9248-7ca8db867fdf'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

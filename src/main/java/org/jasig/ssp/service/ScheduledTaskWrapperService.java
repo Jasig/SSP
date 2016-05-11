@@ -31,6 +31,9 @@ public interface ScheduledTaskWrapperService {
 	/* Not scheduled through config fires every 2.5 minutes after completion*/
 	public void sendMessages();
 
+	/* Not scheduled through config fires every 2.5 minutes after completion*/
+	public void processCaseloadBulkAddReassignment();
+
 	/* Not scheduled through config fires every 5 minutes after completion*/
 	public void syncCoaches();
 	

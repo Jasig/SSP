@@ -18,23 +18,23 @@
  */
 package org.jasig.ssp.web.api;
 
-import java.util.UUID;
-
-import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonSearchResult2TOFactory;
+import org.jasig.ssp.model.FileUploadResponse;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
-import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
+import org.jasig.ssp.service.tool.CaseloadService;
+import org.jasig.ssp.transferobject.BulkAddCaseloadReassignmentTO;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
-import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PersonSearchResult2TO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -44,12 +44,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.IOException;
+import java.util.UUID;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_PERSON_CASELOAD_READ')")
@@ -70,6 +75,9 @@ public class CaseloadController extends AbstractBaseController {
 
 	@Autowired
 	private transient PersonSearchResult2TOFactory factory;
+
+	@Autowired
+	private transient CaseloadService caseloadService;
 
 	@Autowired
 	private transient SecurityService securityService;
@@ -175,7 +183,7 @@ public class CaseloadController extends AbstractBaseController {
 		}
 		return sortAndPage;
 	}
-	
+
 	@RequestMapping(value = "/caseload", method = RequestMethod.POST)
 	@PreAuthorize(Permission.SECURITY_PERSON_BULK_REASSIGN)
 	public @ResponseBody
@@ -184,5 +192,41 @@ public class CaseloadController extends AbstractBaseController {
 			throws IllegalArgumentException, ObjectNotFoundException {
 		service.reassignStudents(obj);
 		return obj;
+	}
+
+	/**
+	 * Retrieves the specified list from persistent storage.
+	 *
+	 * @param id
+	 *            The specific id to use to lookup the associated data.
+	 * @return The specified instance if found.
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 * @throws ValidationException
+	 *             If that specified data is not invalid.
+	 */
+	@RequestMapping(value = "/caseload/addReassign",method = RequestMethod.POST)
+	@PreAuthorize(Permission.SECURITY_PERSON_BULK_REASSIGN)
+	public @ResponseBody String create(BulkAddCaseloadReassignmentTO uploadItem, BindingResult result) throws IllegalStateException, IOException, ObjectNotFoundException, ValidationException{
+
+		FileUploadResponse extjsFormResult = new FileUploadResponse();
+		if (result.hasErrors()){
+			for(ObjectError error : result.getAllErrors()){
+				LOGGER.error("Error: " + error.getCode() +  " - " + error.getDefaultMessage());
+			}
+			extjsFormResult.setSuccess(false);
+			return extjsFormResult.toString();
+		}
+		try {
+			caseloadService.loadCaseloadBulkAddReassignment(uploadItem, extjsFormResult);
+		}
+		catch(Exception e)
+		{
+			extjsFormResult.setErrorMessage(e.getMessage());
+			extjsFormResult.setSuccess(false);
+		}
+		return extjsFormResult.toString();
 	}
 }

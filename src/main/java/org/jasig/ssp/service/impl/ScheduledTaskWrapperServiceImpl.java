@@ -45,6 +45,7 @@ import org.jasig.ssp.service.external.MapStatusReportCalcTask;
 import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.security.oauth.OAuth1NonceServiceMaintenance;
+import org.jasig.ssp.service.tool.CaseloadService;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
@@ -98,6 +99,7 @@ public class ScheduledTaskWrapperServiceImpl
 
 	public static final String TASK_NAME_MDC_KEY = "ssp.taskName";
 	public static final String SEND_MESSAGES_TASK_NAME = "send-messages";
+	public static final String PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_NAME = "sync-caseload-bulk-add";
 	public static final String SYNC_COACHES_TASK_NAME = "sync-coaches";
 	public static final String SYNC_EXTERNAL_PERSONS_TASK_NAME = "sync-external-persons";
 	public static final String REFRESH_DIRECTORY_PERSON_TASK_NAME = "directory-person-refresh";
@@ -183,7 +185,10 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient PersonService personService;
-	
+
+	@Autowired
+	private transient CaseloadService caseloadService;
+
 	@Autowired
 	private transient ScheduledApplicationTaskStatusService taskStatusService;
 
@@ -958,6 +963,24 @@ public class ScheduledTaskWrapperServiceImpl
 
 	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
 		execBatchedTaskWithName(taskName, batchedTask, true, null);
+	}
+
+	@Override
+	@Scheduled(fixedDelay = 300000)
+	// run 2.5 minutes after the end of the last invocation
+	public void processCaseloadBulkAddReassignment() {
+		execWithTaskContext(PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_NAME, new Runnable() {
+			@Override
+			public void run() {
+				if (!(scheduledCoachSyncEnabled) || (!backGroundJobsEnabled)) {
+					LOGGER.debug("Scheduled coach sync disabled or background jobs disabled. Abandoning CaseloadBulkAddReassignment sync job");
+					return;
+				}
+				LOGGER.info("Scheduled CaseloadBulkAddReassignment sync starting.");
+				caseloadService.processCaseloadBulkAddReassignment();
+				LOGGER.info("Scheduled CaseloadBulkAddReassignment sync complete.");
+			}
+		});
 	}
 
 	@Override

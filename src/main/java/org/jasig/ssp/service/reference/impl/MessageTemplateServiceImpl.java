@@ -18,10 +18,6 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.reference.MessageTemplateDao;
 import org.jasig.ssp.model.AbstractPlan;
@@ -30,7 +26,6 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TermCourses;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
 import org.jasig.ssp.model.reference.MessageTemplate;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.VelocityTemplateService;
@@ -42,13 +37,9 @@ import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
-import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
-import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertOutcomeMessageTemplateTO;
-import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertResponseMessageTemplateTO;
-import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
-import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummary;
 import org.jasig.ssp.util.DateTimeUtils;
@@ -56,6 +47,16 @@ import org.jasig.ssp.util.MessageTemplatePreviewTOBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * MessageTemplate service
@@ -151,6 +152,17 @@ public class MessageTemplateServiceImpl extends
 
 	private String formatDate(final Date date) {
 		return new SimpleDateFormat("MM/dd/yyyy").format(date);
+	}
+
+	@Override
+	public SubjectAndBody createBulkAddCaseloadReassignmentMessage(int successCount, List<String> errors) {
+
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("successCount", successCount);
+		messageParams.put("errors", errors);
+
+		return populateFromTemplate(MessageTemplate.BULK_ADD_CASELOAD_REASSIGNMENT_ID,
+				messageParams);
 	}
 
 	@Override
@@ -492,6 +504,8 @@ public class MessageTemplateServiceImpl extends
 			messageParams = createNewStudentIntakeTaskEmailMessageParams();
 		} else if (id.equals(MessageTemplate.OUTPUT_TEMPLATE_PLAN_MATRIX_ID)) {
 			messageParams = createTemplatePlanPrintoutMessageParams();
+		} else if (id.equals(MessageTemplate.BULK_ADD_CASELOAD_REASSIGNMENT_ID)) {
+			messageParams = createBulkAddCaseloadReassignmentMessageParams();
 		} else{
 			messageParams = new HashMap<String, Object>();
 		}
@@ -721,4 +735,16 @@ public class MessageTemplateServiceImpl extends
 		messageParams.put("printParams",params);
 		return messageParams;
 	}
+
+	private Map<String,Object> createBulkAddCaseloadReassignmentMessageParams() {
+		Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("successCount", 7);
+		List<String> errors = new ArrayList<String>();
+		errors.add("This is the first error.");
+		errors.add("This is the second error.");
+		errors.add("This is the third error.");
+		messageParams.put("errors", errors);
+		return messageParams;
+	}
+
 }

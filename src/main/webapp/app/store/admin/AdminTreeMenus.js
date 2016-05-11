@@ -238,7 +238,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'Re-Assignment',
                     form: 'caseloadreassignment',
                     leaf: true
-                } ]
+                }, {
+                     text: 'Bulk Add/Caseload Re-Assignment',
+                     title: 'Bulk Add/Caseload Re-Assignment',
+                     form: 'bulkAddCaseloadReassignment',
+                     leaf: true
+                 } ]
             }, {
                 text: 'Student Intake',
                 title: 'Student Intake',

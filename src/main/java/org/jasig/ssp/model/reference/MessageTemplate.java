@@ -18,13 +18,12 @@
  */
 package org.jasig.ssp.model.reference;
 
-import java.util.UUID;
+import org.jasig.ssp.model.Auditable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
-
-import org.jasig.ssp.model.Auditable;
+import java.util.UUID;
 
 /*
  * Allows e-mails and other messaging to be customized using the Velocity Framework
@@ -37,6 +36,9 @@ public class MessageTemplate
 	private static final long serialVersionUID = 2756578010766636880L;
 
 	// Message Templates
+
+	public static final UUID BULK_ADD_CASELOAD_REASSIGNMENT_ID = UUID
+			.fromString("7df2c7bb-3c9d-435a-87f1-501e43bda153");
 
 	public static final UUID JOURNAL_NOTE_FOR_EARLY_ALERT_RESPONSE_ID = UUID
 			.fromString("b528c1ac-6104-435b-ae62-08eb4f7ee2f9");

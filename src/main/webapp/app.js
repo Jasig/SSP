@@ -197,7 +197,8 @@ Ext.require([
     'Ssp.view.admin.forms.caseload.CaseloadReassignment',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentSource',
     'Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget',
-    
+    'Ssp.view.admin.forms.caseload.BulkAddCaseloadReassignment',
+
     //CASELOAD REASSIGNMENT TOOL
     'Ssp.view.tools.caseload.CaseloadReassignment',
     'Ssp.view.tools.caseload.CaseloadReassignmentSource',
@@ -581,6 +582,7 @@ var apiUrls = [
   {name: 'personAppointment', url: 'person/{id}/appointment'},
   {name: 'personAssessment', url: 'person/{id}/test'},
   {name: 'personCaseload', url: 'person/caseload'},
+  {name: 'personCaseloadAddReassign', url: 'person/caseload/addReassign'},
   {name: 'exportableCaseload', url: 'exportableCaseload'},
   {name: 'personCaseloadId', url: 'person/{id}/caseload'},
   {name: 'personMasterCaseload', url: 'person/{id}/caseload'},
