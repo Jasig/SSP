@@ -944,8 +944,8 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 securityRole: 'REFERENCE_MAP_WRITE',
                 expanded: false,
                 children: [{
-                    text: 'Electives',
-                    title: 'Electives',
+                    text: 'Elective Tags',
+                    title: 'Elective Tags',
                     store: 'electivesAll',
                     sort: {
                     	field: 'sortOrder'
@@ -1161,6 +1161,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'planTemplatesSummary',
                     form: 'maptemplatesadmin',
                     
+                    leaf: true,
+                    addButtonVisible: false
+                },{
+                    text: 'Elective Courses',
+                    title: 'Elective Courses Manager',
+                    form: 'mapelectivecourses',
+
                     leaf: true,
                     addButtonVisible: false
                 }

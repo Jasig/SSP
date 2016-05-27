@@ -173,7 +173,7 @@ Ext.require([
     'Ssp.view.tools.map.CourseDetails',
 	'Ssp.view.tools.map.CoursesGridPanel',
 	'Ssp.view.tools.map.StudentCourseHistory',
-	
+
 	
 	
 	//PERSON NOTES TOOL
@@ -252,10 +252,13 @@ Ext.require([
     'Ssp.view.admin.forms.apikey.lticonsumer.LTIConsumerAdmin',
     'Ssp.view.admin.forms.apikey.lticonsumer.EditLTIConsumer',
     
-    //MAPTemplate Admin views
+    //MAP Admin views
     'Ssp.view.admin.forms.map.MapTemplatesAdmin',
     'Ssp.view.admin.forms.map.MapTemplatesListAdmin',
     'Ssp.view.admin.forms.map.MapTemplatesFilterAdmin',
+   	'Ssp.view.admin.forms.map.MapElectiveCourses',
+   	'Ssp.view.admin.forms.map.AssociateElectiveCoursesAdmin',
+
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
@@ -321,6 +324,7 @@ Ext.require([
 	'Ssp.model.tool.map.MapStatusTermDetail',
 	'Ssp.model.tool.map.TermNote',
 	'Ssp.model.tool.map.PlanCourse',
+	'Ssp.model.tool.map.ElectiveCourse',
 	'Ssp.model.tool.map.PlanOutputData',
 	'Ssp.model.tool.shg.SelfHelpGuides',
 	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
@@ -467,6 +471,7 @@ Ext.require([
     'Ssp.store.MapStatusReportTermDetails',
     'Ssp.store.CurrentlyRegistered',
     'Ssp.store.FinancialAidSAPStatus',
+    'Ssp.store.ElectiveCourse',
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.AssessmentService',
@@ -647,7 +652,8 @@ var apiUrls = [
   {name: 'termsfaceted', url: 'reference/term/facet'},
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
   {name: 'successIndicator', url: 'reference/successIndicator'},
-  {name: 'personCoachHistory', url: 'person/{id}/coachHistory'}
+  {name: 'personCoachHistory', url: 'person/{id}/coachHistory'},
+  {name: 'electiveCourses', url: 'reference/map/electiveCourses'}
 ];
 
 Ext.onReady(function(){	
@@ -1529,6 +1535,16 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
+					electiveCoursesAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.ElectiveCourse', {
+							     storeId: 'electiveCoursesAllStore',
+							     extraParams: {status: "ALL"}
+							     //extraParams: {sort: "sortOrder", sortDirection:'ASC' }
+							 });
+					    },
+					    singleton: true
+					},
 			    	electivesStore: {
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.Electives', {
@@ -1565,7 +1581,7 @@ Ext.onReady(function(){
 					    },
 					    singleton: true
 					},
-					
+
 					planTemplatesSummaryStore: {
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplatesSummary', {

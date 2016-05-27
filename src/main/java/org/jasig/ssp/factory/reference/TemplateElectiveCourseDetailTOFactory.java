@@ -16,23 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model;
+package org.jasig.ssp.factory.reference;
 
-public enum SubstitutionCode {
-TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course"), OVERRIDE_COURSE("Overridden Course"), ELECTIVE_COURSE("Elective Course");
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
+import java.util.List;
 
-private String displayText;
-
-private SubstitutionCode(String displayText)
-{
-	this.setDisplayText(displayText);
-}
-
-public String getDisplayText() {
-	return displayText;
-}
-
-public void setDisplayText(String displayText) {
-	this.displayText = displayText;
-}
+public interface TemplateElectiveCourseDetailTOFactory extends
+		TOFactory<TemplateElectiveCourseTO, TemplateElectiveCourse> {
+	    List<TemplateElectiveCourseTO> asTOList(final List<TemplateCourse> models);
 }

@@ -19,19 +19,17 @@
 package org.jasig.ssp.model;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name="map_template_course")
-public class TemplateCourse extends AbstractPlanCourse<Template> implements Cloneable {
+@Table(name="map_plan_elective_course_electives")
+public class PlanElectiveCourseElective extends AbstractMapElectiveCourse implements Cloneable {
 
 	/**
 	 * 
@@ -40,40 +38,27 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 	
 	@NotNull
 	@ManyToOne()
-	@JoinColumn(name = "template_id", updatable = false, nullable = false)	
-	private Template template;
+	@JoinColumn(name = "map_plan_elective_course_id", updatable = false, nullable = false)
+	private PlanElectiveCourse planElectiveCourse;
+	
 
-//	private UUID mapPlanElectiveCourseId;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "map_template_elective_course_id", updatable = false, nullable = true)
-	private TemplateElectiveCourse templateElectiveCourse;
-
-	public Template getTemplate() {
-		return template;
+	public PlanElectiveCourse getPlanElectiveCourse() {
+		return planElectiveCourse;
 	}
 
-	public void setTemplate(Template template) {
-		this.template = template;
+	public void setPlanElectiveCourse(PlanElectiveCourse planElectiveCourse) {
+		this.planElectiveCourse = planElectiveCourse;
 	}
 
-	@Override
-	public Template getParent() {
-		return template;
+	public PlanElectiveCourse getParent() {
+		return planElectiveCourse;
 	}
 	
 	@Override
-	protected TemplateCourse clone() throws CloneNotSupportedException {
-		TemplateCourse clone = new TemplateCourse();
+	protected PlanElectiveCourseElective clone() throws CloneNotSupportedException {
+		PlanElectiveCourseElective clone = new PlanElectiveCourseElective();
 		cloneCommonFields(clone);
 		return clone;
 	}
 
-	public TemplateElectiveCourse getTemplateElectiveCourse() {
-		return templateElectiveCourse;
-	}
-
-	public void setTemplateElectiveCourse(TemplateElectiveCourse templateElectiveCourse) {
-		this.templateElectiveCourse = templateElectiveCourse;
-	}
 }

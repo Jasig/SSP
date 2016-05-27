@@ -18,10 +18,15 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.Comparator;
-
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.PlanElectiveCourse;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 
@@ -37,6 +42,9 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 			new PlanCourseIndexComparator();
 	
 	private String personId;
+
+	private UUID planElectiveCourseId;
+	private List<AbstractMapElectiveCourseTO> planElectiveCourseElectives;
 
 	public PlanCourseTO(PlanCourse planCourse) {
 		super();
@@ -56,6 +64,16 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 		this.setPersonId(model.getPerson().getId().toString());
 		this.setIsTranscript(model.getIsTranscript());
 		this.setDuplicateOfTranscript(model.getDuplicateOfTranscript());
+
+		PlanElectiveCourse planElectiveCourse = model.getPlanElectiveCourse();
+		if (planElectiveCourse!=null) {
+			planElectiveCourseId = planElectiveCourse.getId();
+			planElectiveCourseElectives = new ArrayList<>();
+			planElectiveCourseElectives.add(new PlanElectiveCourseTO(planElectiveCourse));
+			for (AbstractMapElectiveCourse electiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
+				planElectiveCourseElectives.add(new PlanElectiveCourseTO(electiveCourseElective));
+			}
+		}
 	}
 
 	public String getPersonId() {
@@ -64,5 +82,21 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
+	}
+
+	public UUID getPlanElectiveCourseId() {
+		return planElectiveCourseId;
+	}
+
+	public void setPlanElectiveCourseId(UUID planElectiveCourseId) {
+		this.planElectiveCourseId = planElectiveCourseId;
+	}
+
+	public List<AbstractMapElectiveCourseTO> getPlanElectiveCourseElectives() {
+		return planElectiveCourseElectives;
+	}
+
+	public void setPlanElectiveCourseElectives(List<AbstractMapElectiveCourseTO> planElectiveCourseElectives) {
+		this.planElectiveCourseElectives = planElectiveCourseElectives;
 	}
 }

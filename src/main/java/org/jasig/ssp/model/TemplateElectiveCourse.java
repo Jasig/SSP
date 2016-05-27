@@ -18,20 +18,26 @@
  */
 package org.jasig.ssp.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name="map_template_course")
-public class TemplateCourse extends AbstractPlanCourse<Template> implements Cloneable {
+@Table(name="map_template_elective_course")
+public class TemplateElectiveCourse extends AbstractMapElectiveCourse implements Cloneable {
 
 	/**
 	 * 
@@ -43,11 +49,20 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 	@JoinColumn(name = "template_id", updatable = false, nullable = false)	
 	private Template template;
 
-//	private UUID mapPlanElectiveCourseId;
+	@OneToMany(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "map_template_elective_course_id")
+	@OrderBy("formattedCourse")
+	private List<TemplateElectiveCourseElective> templateElectiveCourseElectives = new ArrayList<TemplateElectiveCourseElective>(0);
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "map_template_elective_course_id", updatable = false, nullable = true)
-	private TemplateElectiveCourse templateElectiveCourse;
+	public List<? extends AbstractMapElectiveCourse> getElectiveCourseElectives() {
+		return templateElectiveCourseElectives;
+	}
+
+	public void setElectiveCourseElectives(List<TemplateElectiveCourseElective> templateElectiveCourseElectives) {
+		this.templateElectiveCourseElectives = templateElectiveCourseElectives;
+	}
+
 
 	public Template getTemplate() {
 		return template;
@@ -57,23 +72,15 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 		this.template = template;
 	}
 
-	@Override
 	public Template getParent() {
 		return template;
 	}
 	
 	@Override
-	protected TemplateCourse clone() throws CloneNotSupportedException {
-		TemplateCourse clone = new TemplateCourse();
+	protected TemplateElectiveCourse clone() throws CloneNotSupportedException {
+		TemplateElectiveCourse clone = new TemplateElectiveCourse();
 		cloneCommonFields(clone);
 		return clone;
 	}
 
-	public TemplateElectiveCourse getTemplateElectiveCourse() {
-		return templateElectiveCourse;
-	}
-
-	public void setTemplateElectiveCourse(TemplateElectiveCourse templateElectiveCourse) {
-		this.templateElectiveCourse = templateElectiveCourse;
-	}
 }

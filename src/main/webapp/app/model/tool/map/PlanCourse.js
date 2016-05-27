@@ -35,7 +35,9 @@ Ext.define('Ssp.model.tool.map.PlanCourse', {
              {name:'hasCorequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'invalidReasons',type:'string'},
-             {name:'electiveId',type:'string'}],
+             {name:'electiveId',type:'string'},
+             {name:'planElectiveCourseId',type:'string'},
+             {name:'planElectiveCourseElectives',type:'auto'}],
     isDev: function(){
         		return this.get("isDev");
         	}

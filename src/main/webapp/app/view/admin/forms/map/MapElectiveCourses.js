@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,23 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model;
+Ext.define('Ssp.view.admin.forms.map.MapElectiveCourses', {
+   extend: 'Ext.container.Container',
+    alias : 'widget.mapelectivecourses',
+    mixins: [ 'Deft.mixin.Injectable',
+              'Deft.mixin.Controllable'],
+    controller: 'Ssp.controller.admin.map.MapElectiveCoursesViewController',
+	width : '100%',
+	height : '100%',
+	layout : {
+		type : 'hbox',
+		align : 'stretch'
+	},
+        	initComponent : function() {
+        		Ext.apply(this, {
+        			items : [ {
+        				xtype : 'coursesview',
+        				width : 300
+        			}, {
+        				xtype : 'associateelectivecoursesadmin',
+        				flex : 1
+        			}
 
-public enum SubstitutionCode {
-TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course"), OVERRIDE_COURSE("Overridden Course"), ELECTIVE_COURSE("Elective Course");
+        			]
+        		});
 
-private String displayText;
+        		return this.callParent(arguments);
+    }
 
-private SubstitutionCode(String displayText)
-{
-	this.setDisplayText(displayText);
-}
-
-public String getDisplayText() {
-	return displayText;
-}
-
-public void setDisplayText(String displayText) {
-	this.displayText = displayText;
-}
-}
+});

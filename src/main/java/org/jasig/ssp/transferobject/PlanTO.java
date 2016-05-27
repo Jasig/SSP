@@ -18,14 +18,13 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.TermNote;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  */
@@ -33,7 +32,9 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 
 	private String personId;
 	
-	private List<PlanCourseTO> planCourses = new ArrayList<PlanCourseTO>(); 
+	private List<PlanCourseTO> planCourses = new ArrayList<PlanCourseTO>();
+
+	private List<PlanElectiveCourseTO> planElectiveCourseTOs = new ArrayList<PlanElectiveCourseTO>();
 	/**
 	 * Empty constructor.
 	 */

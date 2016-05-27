@@ -129,7 +129,9 @@ Ext.define('Ssp.util.Constants',{
         GRID_ITEM_CLOSE_ICON_PATH: '/ssp/images/close-icon.jpg',
         GRID_ITEM_MAIL_REPLY_ICON_PATH: '/ssp/images/mail-reply-icon.png',
         DEFAULT_NO_STUDENT_PHOTO_URL:'/ssp/images/no-photo.jpg',
-        
+
+   		COURSE_ELECTIVES_ICON_PATH: '/ssp/images/pencil.png',
+
         // CAN BE APPLIED TO THE LABEL OF A FIELD TO SHOW A RED REQUIRED ASTERISK
         REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
 

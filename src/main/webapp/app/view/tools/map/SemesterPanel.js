@@ -25,13 +25,13 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
     	currentMapPlan: 'currentMapPlan',
 		appEventsController: 'appEventsController',
 		electiveStore: 'electivesAllUnpagedStore',
-    	currentMapPlan: 'currentMapPlan',
-		colorsStore: 'colorsStore', 
+		colorsStore: 'colorsStore',
 		colorsUnpagedStore: 'colorsUnpagedStore', 
 		colorsAllStore: 'colorsAllStore', 
     	termsStore:'termsStore',
 		colorsAllUnpagedStore: 'colorsAllUnpagedStore',
-		textStore: 'sspTextStore'
+		textStore: 'sspTextStore',
+		columnRendererUtils: 'columnRendererUtils'
 	},
 
 	store: null,
@@ -67,6 +67,12 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
         title: me.store.termName,
         scroll: true,
         itemId: me.store.termCode,
+        //selType: 'rowmodel',
+        plugins: [
+            Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1
+            })
+        ],
 		columns: [
 					{
 					    xtype: 'gridcolumn',
@@ -138,29 +144,67 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 									metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.red-transcript','Red indicates course is a developmental course') + '"';
 								}					
 					     }		            
-					}
-					,
+					},
 					{
 					dataIndex: 'title',
 					xtype: 'gridcolumn',
 					hidden: true,
 					hideable: false
-					
-					}, 
+
+					},
 					{
-					dataIndex: 'formattedCourse',
-					xtype: 'gridcolumn',
-					flex:1,
-					width:160,
-					renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-					    	var me=this;
-						    if(me.invalidRecord(record)){
-						    	metaData.style = 'font-style:italic;color:#FF0000';
-								metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.concerns','Concerns:') + record.get("invalidReasons") + '"';
-							}
-							return value;
-					    }		
-					},            
+                        dataIndex: 'formattedCourse',
+                        xtype: 'gridcolumn',
+                        flex:1,
+                        width:160,
+                        renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+                                var me=this;
+                                if (!record.get('hasElectiveCourses')) {
+                                    me.columns[colIndex].editor = null;
+                                } else {
+                                    if (me.columns[colIndex].editor) {
+                                        var store = new Ssp.store.ElectiveCourse();
+                                        store.loadData(record.get('planElectiveCourseElectives'));
+                                        me.columns[colIndex].editor.store = store;
+                                        value = value; //+ '&nbsp;&nbsp;&nbsp;' + me.columnRendererUtils.renderPhotoIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
+                                    }
+                                }
+                                if(me.invalidRecord(record)){
+                                    metaData.style = 'font-style:italic;color:#FF0000';
+                                    metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.concerns','Concerns:') + record.get("invalidReasons") + '"';
+                                }
+                                return value;
+                        },
+                        editor: {
+                                xtype: 'combo',
+                                itemId: 'courseElectivesCombo',
+                                editable: false,
+                                mode: 'local',
+                                queryMode: 'local',
+                                displayField: 'formattedCourse',
+                                valueField: 'formattedCourse',
+//                                listeners: {
+//                                    select: function( combo, records, eOpts ) {
+//                                                alert('paul');
+//                                                console.log(combo);
+//                                                console.log(records);
+//                                                console.log(eOpts);
+//                                            }
+//                                }
+                        }
+					},
+					{
+					    xtype: 'gridcolumn',
+					    width: 20,
+					    height: 5,
+					    flex:0,
+					    renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+					        	if (record.get('hasElectiveCourses')) {
+								  // metaData.style = 'background-color: #0000FF; background-image: none; margin:2px 2px 2px 2px;';
+    								return me.columnRendererUtils.renderPhotoIcon(Ssp.util.Constants.COURSE_ELECTIVES_ICON_PATH);
+								}
+					     }
+					},
 					{
 					dataIndex: 'creditHours',
 					xtype: 'gridcolumn',

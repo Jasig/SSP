@@ -21,10 +21,13 @@ package org.jasig.ssp.factory.reference.impl;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.PlanCourseTOFactory;
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.reference.ElectiveService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +49,9 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 	
 	@Autowired
 	private ElectiveService electiveService;
-	
 
+	@Autowired
+	private PlanService planService;
 	
 	public PersonService getPersonService() {
 		return personService;
@@ -60,17 +64,38 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 	@Override
 	public PlanCourse from(PlanCourseTO tObject) throws ObjectNotFoundException {
 		PlanCourse model = super.from(tObject);
-		model.setCourseCode(tObject.getCourseCode());
-		model.setCourseDescription(tObject.getCourseDescription());
-		model.setCourseTitle(tObject.getCourseTitle());
 		model.setContactNotes(tObject.getContactNotes());
 		model.setStudentNotes(tObject.getStudentNotes());
 		model.setIsImportant(tObject.getIsImportant());
 		model.setIsTranscript(tObject.getIsTranscript());
 		model.setDuplicateOfTranscript(tObject.getDuplicateOfTranscript());
-		model.setCreditHours(tObject.getCreditHours());
 		model.setTermCode(tObject.getTermCode());
 		model.setFormattedCourse(tObject.getFormattedCourse());
+		if (tObject.getPlanElectiveCourseId() != null) {
+			PlanElectiveCourse planElectiveCourse = planService.getPlanElectiveCourse(tObject.getPlanElectiveCourseId());
+			model.setPlanElectiveCourse(planElectiveCourse);
+			if (model.getFormattedCourse().equals(planElectiveCourse.getFormattedCourse())) {
+				model.setCourseCode(planElectiveCourse.getCourseCode());
+				model.setCourseDescription(planElectiveCourse.getCourseDescription());
+				model.setCourseTitle(planElectiveCourse.getCourseTitle());
+				model.setCreditHours(planElectiveCourse.getCreditHours());
+			} else {
+				for (AbstractMapElectiveCourse planElectiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
+					if (model.getFormattedCourse().equals(planElectiveCourseElective.getFormattedCourse())) {
+						model.setCourseCode(planElectiveCourseElective.getCourseCode());
+						model.setCourseDescription(planElectiveCourseElective.getCourseDescription());
+						model.setCourseTitle(planElectiveCourseElective.getCourseTitle());
+						model.setCreditHours(planElectiveCourseElective.getCreditHours());
+						break;
+					}
+				}
+			}
+		} else {
+			model.setCourseCode(tObject.getCourseCode());
+			model.setCourseDescription(tObject.getCourseDescription());
+			model.setCourseTitle(tObject.getCourseTitle());
+			model.setCreditHours(tObject.getCreditHours());
+		}
 		model.setIsDev(tObject.isDev());
 		model.setOrderInTerm(tObject.getOrderInTerm());
 		if(tObject.getElectiveId() != null)
@@ -78,7 +103,6 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 			Elective elective = electiveService.get(tObject.getElectiveId());
 			model.setElective(elective);
 		}
-		
 		model.setIsValidInTerm(tObject.getIsValidInTerm());
 		model.setHasPrerequisites(tObject.getHasPrerequisites());
 		model.setHasCorequisites(tObject.getHasCorequisites());

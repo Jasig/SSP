@@ -16,23 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model;
+package org.jasig.ssp.dao;
 
-public enum SubstitutionCode {
-TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course"), OVERRIDE_COURSE("Overridden Course"), ELECTIVE_COURSE("Elective Course");
+import org.jasig.ssp.model.PlanElectiveCourse;
+import org.springframework.stereotype.Repository;
 
-private String displayText;
+@Repository
+public class PlanElectiveCourseDao
+		extends AbstractAuditableCrudDao<PlanElectiveCourse>
+		implements AuditableCrudDao<PlanElectiveCourse> {
 
-private SubstitutionCode(String displayText)
-{
-	this.setDisplayText(displayText);
-}
+	protected PlanElectiveCourseDao() {
+		super(PlanElectiveCourse.class);
+	}
 
-public String getDisplayText() {
-	return displayText;
-}
-
-public void setDisplayText(String displayText) {
-	this.displayText = displayText;
-}
+//	public List<PlanElectiveCourse> getAllForPlan(UUID planId) {
+//		List<PlanElectiveCourse> planElectiveCourses = createCriteria().add(Restrictions.eq("plan.id", planId)).list();
+//		return planElectiveCourses;
+//	}
 }

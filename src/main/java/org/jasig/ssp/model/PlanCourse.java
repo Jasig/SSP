@@ -18,15 +18,17 @@
  */
 package org.jasig.ssp.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.Formula;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -55,8 +57,12 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	@ManyToOne()
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
-	
-	
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "map_plan_elective_course_id", updatable = false, nullable = true)
+	private PlanElectiveCourse planElectiveCourse;
+
+
 	@Formula(IS_TRANSCRIPT_FORMULA)
 	private Integer isTranscript;	
 	
@@ -89,8 +95,6 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 		return clone;
 	}
 
-
-
 	@Override
 	public Plan getParent() {
 		return plan;
@@ -110,5 +114,13 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 
 	public void setDuplicateOfTranscript(Boolean duplicateOfTranscript) {
 		this.duplicateOfTranscript = duplicateOfTranscript == false ? 1 : 0;
+	}
+
+	public PlanElectiveCourse getPlanElectiveCourse() {
+		return planElectiveCourse;
+	}
+
+	public void setPlanElectiveCourse(PlanElectiveCourse planElectiveCourse) {
+		this.planElectiveCourse = planElectiveCourse;
 	}
 }

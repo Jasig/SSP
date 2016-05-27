@@ -82,16 +82,27 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     clear: function(){
     	this.treeUtils.clearRootCategories();
     },
-    
-    getParentItems: function(){
+      getParentItems: function(){
+      	var me=this;
+      	var treeRequest = new Ssp.model.util.TreeRequest();
+      	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) );
+      	treeRequest.set('nodeType', me.getParentItemType() );
+      	treeRequest.set('isLeaf', false);
+      	treeRequest.set('callbackFunc', me.onLoadComplete);
+      	treeRequest.set('callbackScope', me);
+      	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1'});
+
+      },
+
+    getParentItemsWithIdAndParams: function(id , params){
     	var me=this;
     	var treeRequest = new Ssp.model.util.TreeRequest();
-    	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) );
+    	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + id );
     	treeRequest.set('nodeType', me.getParentItemType() );
     	treeRequest.set('isLeaf', false);
     	treeRequest.set('callbackFunc', me.onLoadComplete);
     	treeRequest.set('callbackScope', me);
-    	me.treeUtils.getItemsWithParams( treeRequest , {limit: '-1'});
+    	me.treeUtils.getItemsWithParams( treeRequest , params);
 		
     }, 
     
@@ -111,6 +122,10 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	var me=this;
     	var parentUrl = me.apiProperties.getItemUrl( me.parentItemType );
     	var url = parentUrl + '/' + id + '/' + me.getAssociatedItemType();
+
+    	console.log(parentUrl);
+    	console.log(url);
+
     	var treeRequest = new Ssp.model.util.TreeRequest();
     	treeRequest.set('url',url);
     	treeRequest.set('nodeType', me.getAssociatedItemType);

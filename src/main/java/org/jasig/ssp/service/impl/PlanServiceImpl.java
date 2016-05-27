@@ -18,16 +18,14 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PlanDao;
+import org.jasig.ssp.dao.PlanElectiveCourseDao;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
@@ -55,6 +53,11 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Person service implementation
@@ -92,6 +95,9 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	protected PlanDao getDao() {
 		return dao;
 	}
+
+	@Autowired
+	private PlanElectiveCourseDao planElectiveCourseDao;
 
 	@Override
 	protected UUID getPersonIdPlannedFor(PlanTO model) {
@@ -231,4 +237,8 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 			return subjectAndBody;
 	}
 
+	@Override
+	public PlanElectiveCourse getPlanElectiveCourse(UUID id) throws ObjectNotFoundException {
+		return planElectiveCourseDao.get(id);
+	}
 }

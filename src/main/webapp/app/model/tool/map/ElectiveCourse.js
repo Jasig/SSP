@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,23 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model;
-
-public enum SubstitutionCode {
-TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course"), OVERRIDE_COURSE("Overridden Course"), ELECTIVE_COURSE("Elective Course");
-
-private String displayText;
-
-private SubstitutionCode(String displayText)
-{
-	this.setDisplayText(displayText);
-}
-
-public String getDisplayText() {
-	return displayText;
-}
-
-public void setDisplayText(String displayText) {
-	this.displayText = displayText;
-}
-}
+Ext.define('Ssp.model.tool.map.ElectiveCourse', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'courseCode',type:'string'},
+             {name:'formattedCourse', type:'string'},
+             {name:'courseTitle',type:'string'},
+             {name:'courseDescription',type:'string'},
+             {name:'creditHours',type:'float'}]
+});

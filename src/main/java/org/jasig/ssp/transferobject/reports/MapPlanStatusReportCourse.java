@@ -24,13 +24,14 @@ import java.util.UUID;
 public class MapPlanStatusReportCourse {
 
 	public MapPlanStatusReportCourse(String termCode, String formattedCourse,
-			String courseCode, String courseTitle, BigDecimal creditHours) {
+									 String courseCode, String courseTitle, BigDecimal creditHours, UUID mapPlanElectiveCourseId) {
 		super();
 		this.termCode = termCode;
 		this.formattedCourse = formattedCourse;
 		this.courseCode = courseCode;
 		this.courseTitle = courseTitle;
 		this.creditHours = creditHours;
+		this.mapPlanElectiveCourseId = mapPlanElectiveCourseId;
 	}
 
 	private String termCode;
@@ -38,6 +39,7 @@ public class MapPlanStatusReportCourse {
 	private String courseCode;
 	private String courseTitle;
 	private BigDecimal creditHours;
+	private UUID mapPlanElectiveCourseId;
 	
 	public String getTermCode() {
 		return termCode;
@@ -77,5 +79,13 @@ public class MapPlanStatusReportCourse {
 
 	public void setCreditHours(BigDecimal creditHours) {
 		this.creditHours = creditHours;
+	}
+
+	public UUID getMapPlanElectiveCourseId() {
+		return mapPlanElectiveCourseId;
+	}
+
+	public void setMapPlanElectiveCourseId(UUID mapPlanElectiveCourseId) {
+		this.mapPlanElectiveCourseId = mapPlanElectiveCourseId;
 	}
 }

@@ -18,11 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -34,9 +30,9 @@ import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
+import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
@@ -44,7 +40,12 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.google.common.collect.Lists;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Repository
 public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<Plan> {
@@ -333,7 +334,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	@SuppressWarnings("unchecked")
 	public List<MapPlanStatusReportCourse> getAllPlanCoursesForStatusReport(
 			UUID planId) {
-		String getAllPlanCoursesForStatusReportTO = "select new org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse(pc.termCode, pc.formattedCourse, pc.courseCode, pc.courseTitle, pc.creditHours) "
+		String getAllPlanCoursesForStatusReportTO = "select new org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse(pc.termCode, pc.formattedCourse, pc.courseCode, pc.courseTitle, pc.creditHours, pc.planElectiveCourse.id) "
 												  + " from PlanCourse pc where pc.plan.id = :planId and objectStatus = :objectStatus";
 		Query query = createHqlQuery(getAllPlanCoursesForStatusReportTO).setParameter("planId", planId).setInteger("objectStatus", ObjectStatus.ACTIVE.ordinal());
 		return query.list();

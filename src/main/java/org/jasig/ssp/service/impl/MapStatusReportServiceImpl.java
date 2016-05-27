@@ -18,25 +18,30 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.awt.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.MapStatusReportDao;
 import org.jasig.ssp.dao.PersonAssocAuditableCrudDao;
+import org.jasig.ssp.dao.PlanElectiveCourseDao;
 import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
-import org.jasig.ssp.model.*;
-import org.jasig.ssp.model.external.*;
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
+import org.jasig.ssp.model.AnomalyCode;
+import org.jasig.ssp.model.MapStatusReport;
+import org.jasig.ssp.model.MapStatusReportCourseDetails;
+import org.jasig.ssp.model.MapStatusReportOverrideDetails;
+import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
+import org.jasig.ssp.model.MapStatusReportTermDetails;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.model.SubstitutionCode;
+import org.jasig.ssp.model.TermStatus;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
+import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
+import org.jasig.ssp.model.external.PlanStatus;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.MapStatusReportService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -56,6 +61,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Person service implementation
@@ -91,7 +107,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	@Autowired 
 	private transient ExternalSubstitutableCourseDao externalSubstitutableCourseDao;
 
-
+	@Autowired
+	private transient PlanElectiveCourseDao planElectiveCourseDao;
 	
 
 	private static String CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE = "COURSE_TITLE";
@@ -158,7 +175,6 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		Map<String,List<ExternalStudentTranscriptCourse>> transcriptCoursesByTerm = organizeTranscriptCourseByTerm(transcript);
 		
 		Map<String,List<MapStatusReportCourseDetails>> courseReportsByTerm = new HashMap<String,List<MapStatusReportCourseDetails>>();
-		
 
 	    //Iterate through terms, if there are plan courses for a particular term, start status calculation
 		for (Term term : allTerms) {
@@ -447,6 +463,13 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
 						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
 					}
+				} else if (mapPlanStatusReportCourse.getMapPlanElectiveCourseId()!=null) {
+					matchedTranscriptCourse = findTranscriptCourseMatchElectiveCourse(mapPlanStatusReportCourse, transcript, criteriaSet);
+					if (matchedTranscriptCourse != null) {
+						if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
+							reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse, mapPlanStatusReportCourse, SubstitutionCode.ELECTIVE_COURSE, report));
+						}
+					}
 				}
 			}
 
@@ -531,6 +554,43 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			}			
 		}
 
+		return null;
+	}
+	private ExternalStudentTranscriptCourse findTranscriptCourseMatchElectiveCourse(
+			MapPlanStatusReportCourse mapPlanStatusReportCourse,
+			List<ExternalStudentTranscriptCourse> transcript,
+			Set<String> criteriaSet) {
+
+		PlanElectiveCourse planElectiveCourse = getPlanElectiveCourse(mapPlanStatusReportCourse.getMapPlanElectiveCourseId());
+		if (planElectiveCourse==null){
+			return null;
+		}
+
+		ExternalStudentTranscriptCourse transcriptCourse = findExternalStudentTranscriptCourseForElectiveCourse(transcript, criteriaSet, planElectiveCourse.getFormattedCourse(),
+				planElectiveCourse.getCourseTitle(), planElectiveCourse.getCreditHours(), planElectiveCourse.getCourseCode());
+		if (transcriptCourse != null) {
+			return transcriptCourse;
+		}
+		for (AbstractMapElectiveCourse planElectiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
+			transcriptCourse = findExternalStudentTranscriptCourseForElectiveCourse(transcript, criteriaSet, planElectiveCourseElective.getFormattedCourse(),
+					planElectiveCourseElective.getCourseTitle(), planElectiveCourseElective.getCreditHours(), planElectiveCourseElective.getCourseCode());
+			if (transcriptCourse != null) {
+				return transcriptCourse;
+			}
+		}
+		return null;
+	}
+
+	private ExternalStudentTranscriptCourse findExternalStudentTranscriptCourseForElectiveCourse(List<ExternalStudentTranscriptCourse> transcript, Set<String> criteriaSet,
+																								 String formattedCourse, String courseTitle, BigDecimal creditHours, String courseCode){
+		for (ExternalStudentTranscriptCourse transcriptCourse : transcript) {
+			if( (transcriptCourse.getFormattedCourse().trim().equalsIgnoreCase(formattedCourse.trim()) &&
+					(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE) || transcriptCourse.getTitle().trim().equalsIgnoreCase(courseTitle)) &&
+					(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS) || transcriptCourse.getCreditEarned().equals(creditHours)) &&
+					(!criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE) || transcriptCourse.getCourseCode().trim().equals(courseCode)))
+					)
+				return transcriptCourse;
+		}
 		return null;
 	}
 
@@ -854,4 +914,38 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	public List<MapStatusReportPerson> getOffPlanPlansForWatcher(Person person) {
 		return dao.getOffPlanPlansForWatcher(person);
 	}
+
+	private PlanElectiveCourse getPlanElectiveCourse(UUID id) {
+		try {
+			return planElectiveCourseDao.get(id);
+		} catch (ObjectNotFoundException e) {
+			return null;
+		}
+	}
+
+//	private Map<String, List<String>> getPlanElectiveCourses(MapStatusReportPerson planAndPersonInfo) {
+//		List<PlanElectiveCourse> planElectiveCourses = planElectiveCourseDao.getAllForPlan(planAndPersonInfo.getPlanId());
+//		Map<String, List<String>> map = new HashMap<>();
+//		for (PlanElectiveCourse planElectiveCourse : planElectiveCourses) {
+//			List<String> electiveCourses = map.get(planElectiveCourse.getFormattedCourse());
+//			if (electiveCourses == null) {
+//				electiveCourses = new ArrayList<>();
+//			}
+//			for (AbstractMapElectiveCourse planElectiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
+//				if (!electiveCourses.contains(planElectiveCourseElective.getFormattedCourse())) {
+//					electiveCourses.add(planElectiveCourseElective.getFormattedCourse());
+//				}
+//				List<String> electiveCourseElectives = map.get(planElectiveCourseElective.getFormattedCourse());
+//				if (electiveCourseElectives == null) {
+//					electiveCourseElectives = new ArrayList<>();
+//				}
+//				if (!electiveCourseElectives.contains(planElectiveCourse.getFormattedCourse())) {
+//					electiveCourseElectives.add(planElectiveCourse.getFormattedCourse());
+//				}
+//				map.put(planElectiveCourseElective.getFormattedCourse(), electiveCourseElectives);
+//			}
+//			map.put(planElectiveCourse.getFormattedCourse(), electiveCourses);
+//		}
+//		return map;
+//	}
 }

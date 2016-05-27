@@ -16,23 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.model;
+package org.jasig.ssp.transferobject;
 
-public enum SubstitutionCode {
-TERM("Different Term"), SUBSTITUTABLE_COURSE("Substituted Course"), OVERRIDE_COURSE("Overridden Course"), ELECTIVE_COURSE("Elective Course");
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
 
-private String displayText;
+public class PlanElectiveCourseTO extends AbstractMapElectiveCourseTO {
 
-private SubstitutionCode(String displayText)
-{
-	this.setDisplayText(displayText);
-}
+	/**
+	 * Empty constructor.
+	 */
+	public PlanElectiveCourseTO() {
+		super();
+	}
 
-public String getDisplayText() {
-	return displayText;
-}
+	public PlanElectiveCourseTO(AbstractMapElectiveCourse model) {
+		from(model);
+	}
 
-public void setDisplayText(String displayText) {
-	this.displayText = displayText;
-}
+	public void from(AbstractMapElectiveCourse model) {
+		super.from(model);
+	}
 }
