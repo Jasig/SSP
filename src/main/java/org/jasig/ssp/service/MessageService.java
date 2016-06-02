@@ -26,6 +26,7 @@ import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
@@ -34,14 +35,22 @@ import java.util.Collection;
  * Message service
  */
 public interface MessageService {
-	/**
-	 * Gets the configuration value indicating whether e-mails (message) should
-	 * be sent.
-	 * 
-	 * @return True if messages should be sent by the system; false if messages
-	 *         should be ignored.
-	 */
-	boolean shouldSendMail();
+
+    /**
+     * Returns all messages based on sortingAndPaging
+     * @param sortingAndPaging
+     * @return
+     */
+    PagingWrapper<Message> getMessages(final SortingAndPaging sortingAndPaging);
+
+    /**
+    * Gets the configuration value indicating whether e-mails (message) should
+    * be sent.
+    *
+    * @return True if messages should be sent by the system; false if messages
+    *         should be ignored.
+    */
+    boolean shouldSendMail();
 
 	/**
 	 * Create and save an email message to the queue to send.

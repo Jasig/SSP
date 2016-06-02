@@ -19,13 +19,10 @@
 package org.jasig.ssp.dao;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.Message;
-import org.jasig.ssp.service.impl.MessageServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
@@ -64,8 +61,7 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 	public List<Message> queued(int batchSize) {
 		return sessionFactory
 				.getCurrentSession()
-				.createQuery(
-						"from Message where sentDate is null order by createdDate")
+				.createQuery("from Message where sentDate is null order by createdDate")
 				.setMaxResults(batchSize)
 				.list();
 	}

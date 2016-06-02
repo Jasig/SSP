@@ -19,7 +19,6 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
 import com.google.common.collect.Lists;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.jasig.ssp.dao.MessageDao;
@@ -65,6 +64,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
+
 /**
  * Message service implementation for sending e-mails (messages) to various
  * parties.
@@ -107,6 +107,15 @@ public class MessageServiceImpl implements MessageService {
     private  String systemId = "";
 
 
+
+    /**
+     * Gets all Messages useful for viewing what what is sent/not-sent
+     * @return Messages based on paging and supplied option
+     */
+    @Transactional(readOnly = true)
+    public PagingWrapper<Message> getMessages(final SortingAndPaging sAndP) {
+        return messageDao.getAll(sAndP);
+    }
 
     /**
      * Gets the global BCC e-mail address from the application configuration
@@ -438,8 +447,11 @@ public class MessageServiceImpl implements MessageService {
 	 */
 	protected boolean validateEmails(final List<String> emails) {
 		final EmailValidator emailValidator = EmailValidator.getInstance();
-		for(String email:emails)
-			if( !emailValidator.isValid(email)) return false;
+		for (final String email : emails) {
+            if ( !emailValidator.isValid(email) ) {
+                return false;
+            }
+        }
 		return true;
 	}
 
@@ -556,7 +568,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	private void handleSendMessageError(Message message) {
-		message.setRetryCount(message.getRetryCount() == null ? 1 : message.getRetryCount() + 1);
+		message.setRetryCount((message.getRetryCount() == null) ? 1 : message.getRetryCount() + 1);
 		
 	}
 
@@ -606,14 +618,16 @@ public class MessageServiceImpl implements MessageService {
 			while(tokenizer.hasMoreTokens())
 			{
 				String token = tokenizer.nextToken();
-				if(StringUtils.isBlank(token))
-					continue;
+				if (StringUtils.isBlank(token)) {
+                    continue;
+                }
 				InternetAddress address = getInternetAddress(token, type, messageId);
 				if(address != null){
-					if(validateEmail(address.getAddress()))
-						emailAddresses.add(address);
-					else
-						LOGGER.warn("Invalid email address found: " + token  + " for " + type +  "of message " + messageId);
+					if(validateEmail(address.getAddress())) {
+                        emailAddresses.add(address);
+                    } else {
+                        LOGGER.warn("Invalid email address found: " + token + " for " + type + "of message " + messageId);
+                    }
 				}
 			}
 		}
@@ -621,10 +635,11 @@ public class MessageServiceImpl implements MessageService {
 		{
 			InternetAddress address = getInternetAddress(emailAddress, type, messageId);
 			if(address != null){
-				if(validateEmail(address.getAddress()))
-					emailAddresses.add(address);
-				else
-					LOGGER.warn("Invalid email address found: " + emailAddress + " for " + type +  "of message " + messageId);
+				if(validateEmail(address.getAddress())) {
+                    emailAddresses.add(address);
+                } else {
+                    LOGGER.warn("Invalid email address found: " + emailAddress + " for " + type + "of message " + messageId);
+                }
 			}
 		}
 		
