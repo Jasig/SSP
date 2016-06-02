@@ -18,17 +18,16 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
+import org.jasig.ssp.dao.TemplateCourseDao;
 import org.jasig.ssp.dao.TemplateDao;
+import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
@@ -50,6 +49,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * 
  * 
@@ -67,7 +71,10 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 
 	@Autowired
 	private transient TemplateDao dao;
-	
+
+	@Autowired
+	private transient TemplateCourseDao templateCourseDao;
+
 	@Autowired
 	private PersonService personService;
 	
@@ -192,5 +199,38 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, params);
 		return subjectAndBody;
 	}
-	
+
+	@Override
+	public TemplateCourse getTemplateCourse(UUID id) throws ObjectNotFoundException {
+		return templateCourseDao.get(id);
+	}
+
+	@Override
+	public void updateTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse) {
+		Template template = templateElectiveCourse.getTemplate();
+		for (AbstractPlanCourse<?> templateCourse: template.getCourses()) {
+			TemplateCourse tCourse = (TemplateCourse) templateCourse;
+			if (tCourse.getFormattedCourse().equals(templateElectiveCourse.getFormattedCourse())) {
+				tCourse.setTemplateElectiveCourse(templateElectiveCourse);
+			}
+		}
+		save(template);
+	}
+
+	@Override
+	public void removeTemplaceCourseElective(TemplateElectiveCourse templateElectiveCourse) {
+		Template template = templateElectiveCourse.getTemplate();
+		for (AbstractPlanCourse<?> templateCourse: template.getCourses()) {
+			TemplateCourse tCourse = (TemplateCourse) templateCourse;
+			if (tCourse.getFormattedCourse().equals(templateElectiveCourse.getFormattedCourse())) {
+				tCourse.setTemplateElectiveCourse(null);
+			}
+		}
+		save(template);
+	}
+
+	@Override
+	public List<TemplateCourse> getUniqueTemplateCourseList(UUID id) {
+		return templateCourseDao.getAllCoursesForTemplate(id);
+	}
 }

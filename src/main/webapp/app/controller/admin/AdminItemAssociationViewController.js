@@ -22,7 +22,8 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     inject: {
     	apiProperties: 'apiProperties',
     	formUtils: 'formRendererUtils',
-    	treeUtils: 'treeRendererUtils'
+    	treeUtils: 'treeRendererUtils',
+	    textStore: 'sspTextStore'
     },
 
     config: {
@@ -122,10 +123,6 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	var me=this;
     	var parentUrl = me.apiProperties.getItemUrl( me.parentItemType );
     	var url = parentUrl + '/' + id + '/' + me.getAssociatedItemType();
-
-    	console.log(parentUrl);
-    	console.log(url);
-
     	var treeRequest = new Ssp.model.util.TreeRequest();
     	treeRequest.set('url',url);
     	treeRequest.set('nodeType', me.getAssociatedItemType);

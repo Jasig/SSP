@@ -46,9 +46,10 @@ Ext.define('Ssp.view.admin.forms.map.AssociateElectiveCoursesAdmin', {
 			     viewConfig: {
 				        plugins: {
 				            ptype: 'treeviewdragdrop',
-				            dropGroup: 'gridtotree',
-				            dragGroup: 'gridtotree',
-				            enableDrop: true
+							dropGroup: 'coursesDDGroup',
+							dragGroup: 'coursesDDGroup',
+				            enableDrop: true,
+				            enableDrag: false
 				        }
 				 },    			 
     		     dockedItems: [{

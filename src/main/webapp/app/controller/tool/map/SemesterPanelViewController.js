@@ -55,12 +55,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 				fn: 'onAfterLayout',
 				single: true
 			}
-//    	},
-//        courseElectivesCombo: {
-//            selector: '#courseElectivesCombo',
-//            listeners: {
-//                select: 'onCourseElectivesComboSelect'
-//            }
         }
 	},
 	config:{
@@ -498,17 +492,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			// fall into a endless loop of calling onConfirmInvalidCourseOp()
 			me.completeCourseOp();
 		}
-    },
-    onCourseElectivesComboSelect: function( comp, records, eOpts ){
-        var me=this;
-//        if(me.getIsSearch()) {
-//            me.appEventsController.getApplication().fireEvent('onSearchActionComboSelect', records);
-//            comp.setValue(null);
-//            return;
-//        }
-        console.log(comp);
-        console.log(records);
-        console.log(eOpts);
     },
     newServiceSuccessHandler: function(name, callback, serviceResponses) {
         var me = this;

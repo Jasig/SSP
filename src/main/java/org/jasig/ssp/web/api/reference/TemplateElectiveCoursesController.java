@@ -21,8 +21,8 @@ package org.jasig.ssp.web.api.reference;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseDetailTOFactory;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseElectiveCourseDetailTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -33,7 +33,6 @@ import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseElectiveTO;
 import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.AbstractBaseController;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
@@ -65,22 +64,11 @@ public class TemplateElectiveCoursesController
     @Autowired
     protected transient TemplateElectiveCourseDetailService templateElectiveCourseDetailService;
 
-//	@Autowired
-//	protected transient JournalStepDetailDao journalStepDetailDao;
-
-//	@Autowired
-//	protected transient JournalStepTOFactory factory;
-
     @Autowired
     protected transient TemplateElectiveCourseDetailTOFactory templateElectiveCourseDetailTOFactory;
 
 	@Autowired
 	protected transient TemplateElectiveCourseElectiveCourseDetailTOFactory templateElectiveCourseElectiveCourseDetailTOFactory;
-
-//	@Override
-//	protected TOFactory<JournalStepTO, JournalStep> getFactory() {
-//		return factory;
-//	}
 
     protected TemplateElectiveCoursesController() {
         super();
@@ -95,11 +83,11 @@ public class TemplateElectiveCoursesController
         return LOGGER;
     }
 
-	@RequestMapping(value = "/{electiveCourseId}/electiveCourseDetail", method = RequestMethod.GET)
+	@RequestMapping(value = "/{templateCourseId}/electiveCourseDetail", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_REFERENCE_READ)
 	public @ResponseBody
 	PagedResponse<TemplateElectiveCourseElectiveTO> getAllElectiveCourseAssociationsForElectiveCourse(
-			final @PathVariable UUID electiveCourseId,
+			final @PathVariable UUID templateCourseId,
 			final @RequestParam(required = false) ObjectStatus status,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
@@ -107,14 +95,18 @@ public class TemplateElectiveCoursesController
 			final @RequestParam(required = false) String sortDirection)
 			throws ObjectNotFoundException {
 
-		final PagingWrapper<TemplateElectiveCourseElective> data =
-                templateElectiveCourseDetailService.getElectiveCourseAssociationsForElectiveCourse(electiveCourseId,
-				SortingAndPaging.createForSingleSortWithPaging(status, start,
-						limit, sort, sortDirection, null));
+        TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
 
-		return new PagedResponse<TemplateElectiveCourseElectiveTO>(true,
-				data.getResults(), templateElectiveCourseElectiveCourseDetailTOFactory
-					.asTOList(data.getRows()));
+        if (null!= templateCourse.getTemplateElectiveCourse()) {
+            final PagingWrapper<TemplateElectiveCourseElective> data =
+                    templateElectiveCourseDetailService.getElectiveCourseAssociationsForElectiveCourse(templateCourse.getTemplateElectiveCourse().getId());
+
+            return new PagedResponse<>(true,
+                    data.getResults(), templateElectiveCourseElectiveCourseDetailTOFactory
+                    .asTOList(data.getRows()));
+        } else {
+            return new PagedResponse<>(true, 0L, templateElectiveCourseElectiveCourseDetailTOFactory.asTOList(null));
+        }
 	}
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -129,117 +121,64 @@ public class TemplateElectiveCoursesController
             final @RequestParam(required = false) String sortDirection)
             throws ObjectNotFoundException {
 
-//		final JournalStep journalStep = getService()
-//				.get(id);
+        List<TemplateCourse> templateCourses = templateService.getUniqueTemplateCourseList(id);
 
-        Template template = templateService.get(id);
-
-//        final PagingWrapper<TemplateElectiveCourse> data = templateElectiveCourseDetailService
-//                .getAllForTemplate(template,
-//                        SortingAndPaging.createForSingleSortWithPaging(status, start,
-//                                limit, sort, sortDirection, null));
         return new PagedResponse<TemplateElectiveCourseTO>(true,
-                (long)template.getCourses().size(),  templateElectiveCourseDetailTOFactory.asTOList((List<TemplateCourse>) template.getCourses()));
+                (long)templateCourses.size(),  templateElectiveCourseDetailTOFactory.asTOList(templateCourses));
     }
-//
-//	@RequestMapping(value = "/{id}/journalStepDetail", method = RequestMethod.POST)
-//	public @ResponseBody
-//	ServiceResponse addJournalStepDetailToJournalStep(
-//			@PathVariable final UUID id,
-//			@RequestBody @NotNull final JournalAssociationTO journalAssociation)
-//			throws ObjectNotFoundException {
-//
-//		final JournalStepDetail journalStepDetail = electiveCourseDetailService
-//				.get(journalAssociation.getId());
-//		final JournalStep journalStep = service.get(id);
-//		for(JournalStepJournalStepDetail detail:journalStep.getJournalStepJournalStepDetails())
-//		{
-//			if(detail.getJournalStepDetail().getId().equals(journalStepDetail.getId())){
-//				service.removeJournalStepDetailFromJournalStep(journalStepDetail, journalStep);
-//				break;
-//			}
-//		}
-//		service.addJournalStepDetailToJournalStep(journalStepDetail,
-//				journalStep,journalAssociation.getSortOrder());
-//
-//		return new ServiceResponse(true);
-//	}
 
-    @RequestMapping(value = "/{id}/electiveCourse", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{templateCourseId}/electiveCourseDetail", method = RequestMethod.DELETE)
     public @ResponseBody
     ServiceResponse removeElectiveCourseDetail(
-            @PathVariable final UUID id,
-            @RequestBody @NotNull final UUID templateElectiveCourseId)
+            @PathVariable final UUID templateCourseId,
+            @RequestBody @NotNull final UUID templateElectiveCourseElectiveId)
             throws ObjectNotFoundException {
+        LOGGER.debug("ID: " + templateCourseId);
 
-//		final JournalStepDetail journalStepDetail = journalStepDetailDao
-//				.load(journalStepDetailId);
-//		final JournalStep journalStep = service.get(id);
-//
-//		service.removeJournalStepDetailFromJournalStep(journalStepDetail,
-//				journalStep);
-
+        templateElectiveCourseDetailService.deleteAssociatedElective(templateElectiveCourseElectiveId);
+        TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplateElectiveCourse().getId());
+        if (templateElectiveCourse.getElectiveCourseElectives().size()==0) {
+            templateService.removeTemplaceCourseElective(templateElectiveCourse);
+            templateElectiveCourseDetailService.delete(templateElectiveCourse);
+        }
         return new ServiceResponse(true);
     }
 
-    /**
-     * Persist a new instance of the specified object.
-     * <p>
-     * Must not include an id.
-     *
-     * @param obj
-     *            New instance to persist.
-     * @return Original instance plus the generated id.
-     * @throws ObjectNotFoundException
-     *             If specified object could not be found.
-     * @throws ValidationException
-     *             If the specified data contains an id (since it shouldn't).
-     */
-//	@Override
-    @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody TemplateElectiveCourseTO create(@Valid @RequestBody final TemplateElectiveCourseTO obj)
-            throws ObjectNotFoundException,	ValidationException {
-//		return super.create(obj);
-        return null;
-    }
+    @RequestMapping(value = "/{templateCourseId}/electiveCourseDetail", method = RequestMethod.POST)
+    public @ResponseBody
+    ServiceResponse addElectiveCourseDetail(
+            @PathVariable final UUID templateCourseId,
+            final @Valid @RequestBody TemplateElectiveCourseTO obj)
 
-    /**
-     * Persist any changes to the specified instance.
-     *
-     * @param id
-     *            Explicit id to the instance to persist.
-     * @param obj
-     *            Full instance to persist.
-     * @return The update data object instance.
-     * @throws ObjectNotFoundException
-     *             If specified object could not be found.
-     * @throws ValidationException
-     *             If the specified id is null.
-     */
-//	@Override
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public @ResponseBody TemplateElectiveCourseTO save(@PathVariable final UUID id, @Valid @RequestBody final TemplateElectiveCourseTO obj)
-            throws ValidationException, ObjectNotFoundException {
-//		return super.save(id, obj);
-        return null;
-    }
+            throws ObjectNotFoundException, ValidationException {
+        TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
+        TemplateElectiveCourse templateElectiveCourse = templateCourse.getTemplateElectiveCourse();
 
-    /**
-     * Marks the specified data instance with a status of
-     * {@link ObjectStatus#INACTIVE}.
-     *
-     * @param id
-     *            The id of the data instance to mark deleted.
-     * @return Success boolean.
-     * @throws ObjectNotFoundException
-     *             If specified object could not be found.
-     */
-//	@Override
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody ServiceResponse delete(@PathVariable final UUID id)
-            throws ObjectNotFoundException {
-//		return super.delete(id);
-        return null;
-    }
+        if (null == templateElectiveCourse) {
+            templateElectiveCourse = new TemplateElectiveCourse();
+            templateElectiveCourse.setFormattedCourse(templateCourse.getFormattedCourse());
+            templateElectiveCourse.setCourseCode(templateCourse.getCourseCode());
+            templateElectiveCourse.setCourseDescription(templateCourse.getCourseDescription());
+            templateElectiveCourse.setCourseTitle(templateCourse.getCourseTitle());
+            templateElectiveCourse.setCreditHours(templateCourse.getCreditHours());
+            templateElectiveCourse.setTemplate(templateCourse.getTemplate());
+            templateElectiveCourse.setObjectStatus(ObjectStatus.ACTIVE);
+            templateElectiveCourse = templateElectiveCourseDetailService.createTemplateElectiveCourse(templateElectiveCourse);
+            templateService.updateTemplateCourseElective(templateElectiveCourse);
+        }
 
+        TemplateElectiveCourseElective templateElectiveCourseElective = new TemplateElectiveCourseElective();
+        templateElectiveCourseElective.setFormattedCourse(obj.getFormattedCourse());
+        templateElectiveCourseElective.setCourseCode(obj.getCourseCode());
+        templateElectiveCourseElective.setCourseDescription(obj.getCourseDescription());
+        templateElectiveCourseElective.setCourseTitle(obj.getCourseTitle());
+        templateElectiveCourseElective.setCreditHours(obj.getCreditHours());
+        templateElectiveCourseElective.setTemplateElectiveCourse(templateElectiveCourse);
+        templateElectiveCourseElective.setObjectStatus(ObjectStatus.ACTIVE);
+
+        templateElectiveCourseDetailService.createTemplateElectiveCourseElective(templateElectiveCourseElective);
+
+        return new ServiceResponse(true);
+    }
 }

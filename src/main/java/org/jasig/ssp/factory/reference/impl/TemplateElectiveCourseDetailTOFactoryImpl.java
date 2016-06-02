@@ -67,9 +67,8 @@ public class TemplateElectiveCourseDetailTOFactoryImpl extends
 		toReturn.setCourseTitle(model.getCourseTitle());
 		toReturn.setFormattedCourse(model.getFormattedCourse());
 		toReturn.setCreditHours(model.getCreditHours());
-		if (null!=model.getTemplateElectiveCourse()) {
-			toReturn.setId(model.getTemplateElectiveCourse().getId());
-		}
+		toReturn.setId(model.getId());
+
 		return toReturn;
 	}
 

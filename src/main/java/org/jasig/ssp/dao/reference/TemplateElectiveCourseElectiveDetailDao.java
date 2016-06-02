@@ -26,12 +26,10 @@ import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
-import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Data access class for the TemplateElectiveCourse reference entity.
@@ -41,19 +39,10 @@ public class TemplateElectiveCourseElectiveDetailDao extends
 		AbstractAuditableCrudDao<TemplateElectiveCourseElective>
 		implements AuditableCrudDao<TemplateElectiveCourseElective> {
 
-//	@Autowired
-//	private JournalStepDao journalStepDao;
-
 	private Logger logger = Logger.getLogger(TemplateElectiveCourseElectiveDetailDao.class);
 
 	public TemplateElectiveCourseElectiveDetailDao() {
 		super(TemplateElectiveCourseElective.class);
-	}
-
-	public void softDeleteReferencingAssociations(UUID id) throws ObjectNotFoundException {
-		TemplateElectiveCourseElective obj = get(id);
-//		String softDeleteAssociations = "update JournalStepJournalStepDetail set objectStatus = :objectStatus where journalStepDetail = :journalStepDetail";
-//		createHqlQuery(softDeleteAssociations).setInteger("objectStatus", ObjectStatus.INACTIVE.ordinal()).setEntity("journalStepDetail", obj).executeUpdate();
 	}
 
 	public List<TemplateElectiveCourseElective> getAllElectivesForElectiveCourse(TemplateElectiveCourse templateElectiveCourse) {
@@ -62,27 +51,11 @@ public class TemplateElectiveCourseElectiveDetailDao extends
 		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 		criteria.addOrder(Order.asc("formattedCourse"));
 		return criteria.list();
-
-//		SortingAndPaging sp = sAndP;
-//		if (sp == null) {
-//			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
-//		}
-//
-//		if (!sp.isSorted()) {
-//			sp.appendSortField("objectStatus", SortDirection.ASC);
-//			sp.appendSortField("formattedCourse", SortDirection.ASC);
-//		}
-//
-//		return super.getAll(sp);
 	}
 
-
-//	public JournalStepDao getJournalStepDao() {
-//		return journalStepDao;
-//	}
-
-
-//	public void setJournalStepDao(JournalStepDao journalStepDao) {
-//		this.journalStepDao = journalStepDao;
-//	}
+	@Override
+	public void delete(TemplateElectiveCourseElective templateElectiveCourseElective) {
+		super.delete(templateElectiveCourseElective);
+		sessionFactory.getCurrentSession().flush();
+	}
 }

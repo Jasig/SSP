@@ -22,12 +22,8 @@ Ext.define('Ssp.controller.admin.map.AssociateElectiveCoursesAdminViewController
         associatedItemType: 'electiveCourseDetail',
         parentItemType: 'electiveCourses',
         parentIdAttribute: 'electiveCourseId',
-        associatedItemIdAttribute: 'electiveCourseDetailId',
-        nodeSortFunction: function(rec1, rec2){
-        	if(rec1.objectStatus != rec2.objectStatus)
-        		return rec1.objectStatus == 'ACTIVE' ? -1:1;
-        	return rec1.sortOrder - rec2.sortOrder;
-        }},
+        associatedItemIdAttribute: 'electiveCourseDetailId'
+        },
 	constructor: function(){
 		var me=this;
 		me.callParent(arguments);
@@ -36,7 +32,64 @@ Ext.define('Ssp.controller.admin.map.AssociateElectiveCoursesAdminViewController
 		var params = {status: "ACTIVE", limit: "-1"};
 		this.getParentItemsWithIdAndParams('0A0F0F4E-4E03-1A34-814E-037BB8850000', params);
 		
-		//me.getParentItems();	
 		return me;
-	}
+	},
+    onBeforeDrop: function(node, data, overModel, dropPosition, dropHandler, eOpts) {
+        var me=this;
+        var url, parentId, associatedItemId, node;
+
+        // ensure the drop handler waits for the drop
+        dropHandler.wait=true;
+        if(data.records[0].get('objectStatus') ==='INACTIVE')
+        {
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.elective-course.error-title','SSP Error'),
+                me.textStore.getValueByCode('ssp.message.elective-course.inactive-reference-item','You cannot assign inactive reference items'));
+            dropHandler.cancelDrop;
+            return 1;
+        }
+        // handle drop on a folder
+        if ((!overModel.isLeaf() && dropPosition == 'append')||((dropPosition=='before' || dropPosition=='after') && overModel.isLeaf()))
+        {
+            if (!overModel.isLeaf() && dropPosition == 'append') {
+                node = overModel;
+            } else {
+                node = overModel.parentNode;
+            }
+
+            //Check to see if duplicate course
+            for (i=0; i < node.childNodes.length; i++) {
+                if (node.childNodes[i].data.text==data.records[0].get('formattedCourse')) {
+                    Ext.Msg.alert(
+                        me.textStore.getValueByCode('ssp.message.elective-course.error-title','SSP Error'),
+                        me.textStore.getValueByCode('ssp.message.elective-course.duplicate-course','You cannot associated the same course more than once.'));
+                    dropHandler.cancelDrop;
+                    return 1;
+                }
+            }
+
+            parentId = me.treeUtils.getIdFromNodeId(node.data.id);
+
+            parentUrl = me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + parentId + '/' + me.getAssociatedItemType();
+            url = me.apiProperties.createUrl( parentUrl );
+
+            var requestData = {formattedCourse:data.records[0].get('formattedCourse'),
+                               courseCode:data.records[0].get('code'),
+                               courseTitle:data.records[0].get('title'),
+                               courseDescription:data.records[0].get('description'),
+                               creditHours:data.records[0].get('maxCreditHours') };
+
+            me.apiProperties.makeRequest({
+                url: url,
+                method: 'POST',
+                jsonData: requestData,
+                successFunc: function(response, view){
+                    me.getAssociatedItems(node, parentId);
+                }
+            });
+        }
+
+        dropHandler.cancelDrop;
+        return 1;
+    }
 });

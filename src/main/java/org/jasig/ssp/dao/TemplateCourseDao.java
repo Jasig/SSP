@@ -16,41 +16,47 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.dao.reference;
+package org.jasig.ssp.dao;
 
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.jasig.ssp.dao.AbstractAuditableCrudDao;
-import org.jasig.ssp.dao.AuditableCrudDao;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Template;
-import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.model.TemplateCourse;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Data access class for the TemplateElectiveCourse reference entity.
  */
 @Repository
-public class TemplateElectiveCourseDetailDao extends
-		AbstractAuditableCrudDao<TemplateElectiveCourse>
-		implements AuditableCrudDao<TemplateElectiveCourse> {
+public class TemplateCourseDao extends
+		AbstractAuditableCrudDao<TemplateCourse>
+		implements AuditableCrudDao<TemplateCourse> {
 
-	private Logger logger = Logger.getLogger(TemplateElectiveCourseDetailDao.class);
+	private Logger logger = Logger.getLogger(TemplateCourseDao.class);
 
-	public TemplateElectiveCourseDetailDao() {
-		super(TemplateElectiveCourse.class);
+	public TemplateCourseDao() {
+		super(TemplateCourse.class);
 	}
 
-	public List<TemplateElectiveCourse> getAllForTemplate(Template template) {
+	public List<TemplateCourse> getAllCoursesForTemplate (final UUID id) {
+		List<Object[]> list = createCriteria()
+				.add(Restrictions.eq("template.id", id))
+				.setProjection(
+					Projections.projectionList()
+						.add(Projections.min("id"))
+						.add(Projections.groupProperty("formattedCourse"))
+				).list();
 
-		final Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("template", template));
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		criteria.addOrder(Order.asc("formattedCourse"));
-		return criteria.list();
+		List<UUID> uuidList = new ArrayList<>();
+		for (Object[] o : list) {
+			UUID uuid = (UUID) o [0];
+			uuidList.add(uuid);
+		}
+		return createCriteria().add(Restrictions.in("id", uuidList)).addOrder(Order.asc("formattedCourse")).list();
 	}
 }

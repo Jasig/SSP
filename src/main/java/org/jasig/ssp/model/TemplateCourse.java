@@ -46,7 +46,7 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 //	private UUID mapPlanElectiveCourseId;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "map_template_elective_course_id", updatable = false, nullable = true)
+	@JoinColumn(name = "map_template_elective_course_id", updatable = true, nullable = true)
 	private TemplateElectiveCourse templateElectiveCourse;
 
 	public Template getTemplate() {

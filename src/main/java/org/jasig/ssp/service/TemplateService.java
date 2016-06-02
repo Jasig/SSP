@@ -18,10 +18,9 @@
  */
 package org.jasig.ssp.service;
 
-import java.util.UUID;
-
-import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Template;
+import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
@@ -29,12 +28,20 @@ import org.jasig.ssp.transferobject.reference.MessageTemplatePlanTemplatePrintPa
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface TemplateService extends AbstractPlanService<Template,TemplateTO,
 TemplateOutputTO , MessageTemplatePlanTemplatePrintParamsTO> {
 
 	PagingWrapper<Template> getAll(SortingAndPaging createForSingleSortWithPaging,
 			TemplateSearchTO searchTO);
 
+	TemplateCourse getTemplateCourse(UUID id) throws ObjectNotFoundException;
 
-	
+	void updateTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse);
+
+	void removeTemplaceCourseElective(TemplateElectiveCourse templateElectiveCourse);
+
+	List<TemplateCourse> getUniqueTemplateCourseList(UUID id);
 }

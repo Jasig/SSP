@@ -18,13 +18,11 @@
  */
 package org.jasig.ssp.service.reference;
 
-import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 
 import java.util.UUID;
 
@@ -34,11 +32,14 @@ import java.util.UUID;
 public interface TemplateElectiveCourseDetailService extends
 		AuditableCrudService<TemplateElectiveCourse> {
 
-	PagingWrapper<TemplateElectiveCourse> getAllForTemplate(
-			final Template tempateId,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException;
-
 	PagingWrapper<TemplateElectiveCourseElective> getElectiveCourseAssociationsForElectiveCourse (
-			final UUID electiveCourseId,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+			final UUID electiveCourseId) throws ObjectNotFoundException;
+
+	void deleteAssociatedElective(UUID id) throws ObjectNotFoundException;
+
+	TemplateElectiveCourse createTemplateElectiveCourse(TemplateElectiveCourse templateElectiveCourse);
+
+	TemplateElectiveCourseElective createTemplateElectiveCourseElective(TemplateElectiveCourseElective templateElectiveCourseElective);
+
+	void delete(TemplateElectiveCourse templateElectiveCourse);
 }
