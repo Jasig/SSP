@@ -101,7 +101,7 @@ Ext.define('Ssp.controller.admin.AdminItemAssociationViewController', {
     	treeRequest.set('url', me.apiProperties.getItemUrl( me.getParentItemType() ) + '/' + id );
     	treeRequest.set('nodeType', me.getParentItemType() );
     	treeRequest.set('isLeaf', false);
-    	treeRequest.set('callbackFunc', me.onLoadComplete);
+    	treeRequest.set('callbackFunc', me.onLoadCompleteExpand);
     	treeRequest.set('callbackScope', me);
     	me.treeUtils.getItemsWithParams( treeRequest , params);
 		
