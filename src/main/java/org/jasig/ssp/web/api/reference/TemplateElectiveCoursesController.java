@@ -20,7 +20,9 @@ package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseDetailTOFactory;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseElectiveCourseDetailTOFactory;
+import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
@@ -139,7 +141,7 @@ public class TemplateElectiveCoursesController
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
         TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplateElectiveCourse().getId());
         if (templateElectiveCourse.getElectiveCourseElectives().size()==0) {
-            templateService.removeTemplaceCourseElective(templateElectiveCourse);
+            templateService.removeTemplateCourseElective(templateElectiveCourse);
             templateElectiveCourseDetailService.delete(templateElectiveCourse);
         }
         return new ServiceResponse(true);
@@ -178,6 +180,15 @@ public class TemplateElectiveCoursesController
         templateElectiveCourseElective.setObjectStatus(ObjectStatus.ACTIVE);
 
         templateElectiveCourseDetailService.createTemplateElectiveCourseElective(templateElectiveCourseElective);
+
+        Template template = templateService.get(templateCourse.getTemplate().getId());
+
+        for (AbstractPlanCourse<?> tCourse : template.getCourses()) {
+            if (tCourse.getFormattedCourse().equals(templateCourse.getFormattedCourse())) {
+                ((TemplateCourse)tCourse).setTemplateElectiveCourse(templateElectiveCourse);
+            }
+        }
+        templateService.save(template);
 
         return new ServiceResponse(true);
     }

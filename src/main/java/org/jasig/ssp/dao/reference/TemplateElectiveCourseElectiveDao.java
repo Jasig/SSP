@@ -26,7 +26,6 @@ import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
-import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,13 +34,11 @@ import java.util.List;
  * Data access class for the TemplateElectiveCourse reference entity.
  */
 @Repository
-public class TemplateElectiveCourseElectiveDetailDao extends
+public class TemplateElectiveCourseElectiveDao extends
 		AbstractAuditableCrudDao<TemplateElectiveCourseElective>
 		implements AuditableCrudDao<TemplateElectiveCourseElective> {
 
-	private Logger logger = Logger.getLogger(TemplateElectiveCourseElectiveDetailDao.class);
-
-	public TemplateElectiveCourseElectiveDetailDao() {
+	public TemplateElectiveCourseElectiveDao() {
 		super(TemplateElectiveCourseElective.class);
 	}
 

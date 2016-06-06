@@ -18,8 +18,9 @@
  */
 package org.jasig.ssp.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.jasig.ssp.model.reference.MapTemplateTag;
 
 import javax.annotation.Nullable;
 import javax.persistence.Column;
@@ -35,10 +36,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.jasig.ssp.model.reference.MapTemplateTag;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -151,6 +150,14 @@ public class Template extends AbstractPlan implements Cloneable{
 		for (TemplateCourse planCourse : planCourses) {
 			TemplateCourse planCourseClone = planCourse.clone();
 			planCourseClone.setTemplate(clone);
+
+			TemplateElectiveCourse templateElectiveCourseClone = null;
+			if (null!=planCourse.getTemplateElectiveCourse()) {
+				templateElectiveCourseClone = planCourse.getTemplateElectiveCourse().clone();
+				templateElectiveCourseClone.setTemplate(clone);
+			}
+			planCourseClone.setTemplateElectiveCourse(templateElectiveCourseClone);
+
 			clone.getPlanCourses().add(planCourseClone);
 		}
 		List<TermNote> termNotes = this.getTermNotes();

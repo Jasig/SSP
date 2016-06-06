@@ -18,6 +18,9 @@
  */
 package org.jasig.ssp.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -43,9 +46,8 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 	@JoinColumn(name = "template_id", updatable = false, nullable = false)	
 	private Template template;
 
-//	private UUID mapPlanElectiveCourseId;
-
 	@OneToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "map_template_elective_course_id", updatable = true, nullable = true)
 	private TemplateElectiveCourse templateElectiveCourse;
 

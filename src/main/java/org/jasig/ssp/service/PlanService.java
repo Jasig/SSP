@@ -60,5 +60,5 @@ PlanOutputTO, MessageTemplatePlanPrintParams> {
 	List<MapPlanStatusReportCourse> getAllPlanCoursesForStatusReport(UUID planId);
 
 	PlanElectiveCourse getPlanElectiveCourse(UUID id) throws ObjectNotFoundException;
-		
+
 }

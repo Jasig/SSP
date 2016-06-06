@@ -18,7 +18,7 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import org.jasig.ssp.dao.reference.TemplateElectiveCourseElectiveDetailDao;
+import org.jasig.ssp.dao.reference.TemplateElectiveCourseElectiveDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseElectiveCourseDetailTOFactory;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
@@ -39,10 +39,10 @@ public class TemplateElectiveCourseElectiveCourseDetailTOFactoryImpl extends
 	}
 
 	@Autowired
-	private transient TemplateElectiveCourseElectiveDetailDao dao;
+	private transient TemplateElectiveCourseElectiveDao dao;
 
 	@Override
-	protected TemplateElectiveCourseElectiveDetailDao getDao() {
+	protected TemplateElectiveCourseElectiveDao getDao() {
 		return dao;
 	}
 

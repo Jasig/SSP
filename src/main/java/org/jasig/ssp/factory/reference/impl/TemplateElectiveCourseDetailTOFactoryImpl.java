@@ -19,7 +19,7 @@
 package org.jasig.ssp.factory.reference.impl;
 
 import com.google.common.collect.Lists;
-import org.jasig.ssp.dao.reference.TemplateElectiveCourseDetailDao;
+import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseDetailTOFactory;
 import org.jasig.ssp.model.TemplateCourse;
@@ -43,10 +43,10 @@ public class TemplateElectiveCourseDetailTOFactoryImpl extends
 	}
 
 	@Autowired
-	private transient TemplateElectiveCourseDetailDao dao;
+	private transient TemplateElectiveCourseDao dao;
 
 	@Override
-	protected TemplateElectiveCourseDetailDao getDao() {
+	protected TemplateElectiveCourseDao getDao() {
 		return dao;
 	}
 

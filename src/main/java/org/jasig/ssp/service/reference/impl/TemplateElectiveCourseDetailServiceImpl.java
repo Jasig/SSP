@@ -18,8 +18,8 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
-import org.jasig.ssp.dao.reference.TemplateElectiveCourseDetailDao;
-import org.jasig.ssp.dao.reference.TemplateElectiveCourseElectiveDetailDao;
+import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
+import org.jasig.ssp.dao.reference.TemplateElectiveCourseElectiveDao;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
@@ -47,51 +47,51 @@ public class TemplateElectiveCourseDetailServiceImpl extends
 		TemplateElectiveCourseDetailService {
 
 	@Autowired
-	transient private TemplateElectiveCourseDetailDao templateElectiveCourseDetailDao;
+	transient private TemplateElectiveCourseDao templateElectiveCourseDao;
 
 	@Autowired
-	transient private TemplateElectiveCourseElectiveDetailDao templateElectiveCourseElectiveDetailDao;
+	transient private TemplateElectiveCourseElectiveDao templateElectiveCourseElectiveDao;
 
 	@Autowired
 	transient private TemplateService templateService;
 
-	protected void setDao(final TemplateElectiveCourseDetailDao dao) {
-		this.templateElectiveCourseDetailDao = dao;
+	protected void setDao(final TemplateElectiveCourseDao dao) {
+		this.templateElectiveCourseDao = dao;
 	}
 
 	@Override
-	protected TemplateElectiveCourseDetailDao getDao() {
-		return templateElectiveCourseDetailDao;
+	protected TemplateElectiveCourseDao getDao() {
+		return templateElectiveCourseDao;
 	}
 
 	@Override
 	public PagingWrapper<TemplateElectiveCourseElective> getElectiveCourseAssociationsForElectiveCourse (
 			final UUID electiveCourseId) throws ObjectNotFoundException {
-		return new PagingWrapper<TemplateElectiveCourseElective>(templateElectiveCourseElectiveDetailDao.getAllElectivesForElectiveCourse(templateElectiveCourseDetailDao.get(electiveCourseId)));
+		return new PagingWrapper<TemplateElectiveCourseElective>(templateElectiveCourseElectiveDao.getAllElectivesForElectiveCourse(templateElectiveCourseDao.get(electiveCourseId)));
 	}
 
 	@Override
 	public TemplateElectiveCourse save(TemplateElectiveCourse obj) throws ObjectNotFoundException, ValidationException{
-		return templateElectiveCourseDetailDao.save(obj);
+		return templateElectiveCourseDao.save(obj);
 	}
 	
 	@Override
 	public void deleteAssociatedElective(UUID id) throws ObjectNotFoundException {
-		TemplateElectiveCourseElective tece = templateElectiveCourseElectiveDetailDao.get(id);
-		templateElectiveCourseElectiveDetailDao.delete(tece);
+		TemplateElectiveCourseElective tece = templateElectiveCourseElectiveDao.get(id);
+		templateElectiveCourseElectiveDao.delete(tece);
 	}
 
 	@Override
 	public TemplateElectiveCourse createTemplateElectiveCourse(TemplateElectiveCourse templateElectiveCourse) {
-		return templateElectiveCourseDetailDao.save(templateElectiveCourse);
+		return templateElectiveCourseDao.save(templateElectiveCourse);
 	}
 
 	@Override
 	public TemplateElectiveCourseElective createTemplateElectiveCourseElective(TemplateElectiveCourseElective templateElectiveCourseElective){
-		return templateElectiveCourseElectiveDetailDao.save(templateElectiveCourseElective);
+		return templateElectiveCourseElectiveDao.save(templateElectiveCourseElective);
 	}
 	@Override
 	public void delete(TemplateElectiveCourse templateElectiveCourse) {
-		templateElectiveCourseDetailDao.delete(templateElectiveCourse);
+		templateElectiveCourseDao.delete(templateElectiveCourse);
 	}
 }

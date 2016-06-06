@@ -55,7 +55,7 @@ public class PlanElectiveCourse extends AbstractMapElectiveCourse implements Clo
 	@OrderBy("formattedCourse")
 	private List<PlanElectiveCourseElective> planElectiveCourseElectives = new ArrayList<PlanElectiveCourseElective>(0);
 
-	public List<? extends AbstractMapElectiveCourse> getElectiveCourseElectives() {
+	public List<PlanElectiveCourseElective> getElectiveCourseElectives() {
 		return planElectiveCourseElectives;
 	}
 
@@ -79,6 +79,11 @@ public class PlanElectiveCourse extends AbstractMapElectiveCourse implements Clo
 	protected PlanElectiveCourse clone() throws CloneNotSupportedException {
 		PlanElectiveCourse clone = new PlanElectiveCourse();
 		cloneCommonFields(clone);
+		for (PlanElectiveCourseElective planElectiveCourseElective : this.getElectiveCourseElectives()) {
+			PlanElectiveCourseElective planElectiveCourseElectiveClone = planElectiveCourseElective.clone();
+			planElectiveCourseElectiveClone.setPlanElectiveCourse(clone);
+			clone.getElectiveCourseElectives().add(planElectiveCourseElectiveClone);
+		}
 		return clone;
 	}
 

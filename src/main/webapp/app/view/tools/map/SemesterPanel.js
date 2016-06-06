@@ -159,7 +159,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                         width:160,
                         renderer: function(value, metaData, record, rowIndex, colIndex, store) {
                                 var me=this;
-                                if (!record.get('hasElectiveCourses')) {
+                                if (!record.get('hasElectiveCourses') || me.currentMapPlan.get('isTemplate')) {
                                     me.columns[colIndex].editor = null;
                                 } else {
                                     if (me.columns[colIndex].editor) {
@@ -182,15 +182,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                                 mode: 'local',
                                 queryMode: 'local',
                                 displayField: 'formattedCourse',
-                                valueField: 'formattedCourse',
-//                                listeners: {
-//                                    select: function( combo, records, eOpts ) {
-//                                                alert('paul');
-//                                                console.log(combo);
-//                                                console.log(records);
-//                                                console.log(eOpts);
-//                                            }
-//                                }
+                                valueField: 'formattedCourse'
                         }
 					},
 					{

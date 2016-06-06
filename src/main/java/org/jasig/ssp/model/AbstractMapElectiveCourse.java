@@ -67,6 +67,7 @@ public abstract class AbstractMapElectiveCourse extends AbstractAuditable implem
 		clone.setFormattedCourse(this.getFormattedCourse());
 		clone.setCourseDescription(this.getCourseDescription());
 		clone.setCourseTitle(this.getCourseTitle());
+		clone.setCreditHours(this.getCreditHours());
 	}
 
 	public Boolean getIsDirty() {

@@ -55,7 +55,7 @@ public class TemplateElectiveCourse extends AbstractMapElectiveCourse implements
 	@OrderBy("formattedCourse")
 	private List<TemplateElectiveCourseElective> templateElectiveCourseElectives = new ArrayList<TemplateElectiveCourseElective>(0);
 
-	public List<? extends AbstractMapElectiveCourse> getElectiveCourseElectives() {
+	public List<TemplateElectiveCourseElective> getElectiveCourseElectives() {
 		return templateElectiveCourseElectives;
 	}
 
@@ -80,6 +80,11 @@ public class TemplateElectiveCourse extends AbstractMapElectiveCourse implements
 	protected TemplateElectiveCourse clone() throws CloneNotSupportedException {
 		TemplateElectiveCourse clone = new TemplateElectiveCourse();
 		cloneCommonFields(clone);
+		for (TemplateElectiveCourseElective templateElectiveCourseElective : this.getElectiveCourseElectives()) {
+			TemplateElectiveCourseElective templateElectiveCourseElectiveClone = templateElectiveCourseElective.clone();
+			templateElectiveCourseElectiveClone.setTemplateElectiveCourse(clone);
+			clone.getElectiveCourseElectives().add(templateElectiveCourseElectiveClone);
+		}
 		return clone;
 	}
 

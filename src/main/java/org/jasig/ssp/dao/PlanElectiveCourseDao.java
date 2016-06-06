@@ -30,8 +30,4 @@ public class PlanElectiveCourseDao
 		super(PlanElectiveCourse.class);
 	}
 
-//	public List<PlanElectiveCourse> getAllForPlan(UUID planId) {
-//		List<PlanElectiveCourse> planElectiveCourses = createCriteria().add(Restrictions.eq("plan.id", planId)).list();
-//		return planElectiveCourses;
-//	}
 }

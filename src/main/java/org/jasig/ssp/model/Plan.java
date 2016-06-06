@@ -18,9 +18,8 @@
  */
 package org.jasig.ssp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,9 +31,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -93,6 +92,14 @@ public class Plan extends AbstractPlan  {
 			PlanCourse planCourseClone = planCourse.clone();
 			planCourseClone.setPlan(clone);
 			planCourseClone.setPerson(clone.getPerson());
+
+			PlanElectiveCourse planElectiveCourseClone = null;
+			if (null!=planCourse.getPlanElectiveCourse()) {
+				planElectiveCourseClone = planCourse.getPlanElectiveCourse().clone();
+				planElectiveCourseClone.setPlan(clone);
+			}
+			planCourseClone.setPlanElectiveCourse(planElectiveCourseClone);
+
 			clone.getPlanCourses().add(planCourseClone);
 		}
 		List<TermNote> termNotes = this.getTermNotes();

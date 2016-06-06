@@ -18,12 +18,6 @@
  */
 package org.jasig.ssp.web.api;
 
-import java.util.UUID;
-
-import javax.mail.SendFailedException;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
 import org.jasig.ssp.model.MapTemplateVisibility;
@@ -39,8 +33,10 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
@@ -61,6 +57,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.UUID;
  
 @Controller
 @RequestMapping("/1/reference/map/template")
@@ -349,7 +349,7 @@ public class TemplateController  extends AbstractBaseController {
 	 * @return html text strem
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
-	 * @throws SendFailedException 
+	 * @throws ValidationException
 	 */
 	@PreAuthorize("hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
@@ -418,6 +418,12 @@ public class TemplateController  extends AbstractBaseController {
 		else
 		{
 			obj.setId(null);
+			for (TemplateCourseTO templateCourseTO : obj.getPlanCourses()) {
+				templateCourseTO.setPlanElectiveCourseId(null);
+				for(AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : templateCourseTO.getPlanElectiveCourseElectives()) {
+					planElectiveCourseElectiveTO.setId(null);
+				}
+			}
 			Template model = getFactory().from(obj);
 			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
 

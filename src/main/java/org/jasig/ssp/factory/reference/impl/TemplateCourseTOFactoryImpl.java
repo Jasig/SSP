@@ -22,9 +22,11 @@ import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateCourseTOFactory;
 import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.reference.ElectiveService;
 import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,8 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 	@Autowired
 	private ElectiveService electiveService;
 	
-
+	@Autowired
+	private TemplateService templateService;
 	
 	public PersonService getPersonService() {
 		return personService;
@@ -76,7 +79,10 @@ public class TemplateCourseTOFactoryImpl extends AbstractAuditableTOFactory<Temp
 			Elective elective = electiveService.get(tObject.getElectiveId());
 			model.setElective(elective);
 		}
-		
+		if (tObject.getPlanElectiveCourseId() != null) {
+			TemplateElectiveCourse templateElectiveCourse = templateService.getTemplateElectiveCourse(tObject.getPlanElectiveCourseId());
+			model.setTemplateElectiveCourse(templateElectiveCourse);
+		}
 		model.setIsValidInTerm(tObject.getIsValidInTerm());
 		model.setHasPrerequisites(tObject.getHasPrerequisites());
 		model.setHasCorequisites(tObject.getHasCorequisites());

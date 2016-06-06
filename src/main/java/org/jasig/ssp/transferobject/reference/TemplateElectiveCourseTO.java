@@ -56,8 +56,6 @@ public class TemplateElectiveCourseTO extends AbstractMapElectiveCourseTO<Templa
 	public final void from(final TemplateElectiveCourse model) {
 		super.from(model);
 		setTemplateId(model.getTemplate().getId());
-
-//		sortOrder = model.getSortOrder();
 	}
 
 	public UUID getTemplateId() {

@@ -18,39 +18,21 @@
  */
 package org.jasig.ssp.dao.reference;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AbstractAuditableCrudDao;
 import org.jasig.ssp.dao.AuditableCrudDao;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateElectiveCourse;
-import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-/**
+/**`
  * Data access class for the TemplateElectiveCourse reference entity.
  */
 @Repository
-public class TemplateElectiveCourseDetailDao extends
+public class TemplateElectiveCourseDao extends
 		AbstractAuditableCrudDao<TemplateElectiveCourse>
 		implements AuditableCrudDao<TemplateElectiveCourse> {
 
-	private Logger logger = Logger.getLogger(TemplateElectiveCourseDetailDao.class);
-
-	public TemplateElectiveCourseDetailDao() {
+	public TemplateElectiveCourseDao() {
 		super(TemplateElectiveCourse.class);
 	}
 
-	public List<TemplateElectiveCourse> getAllForTemplate(Template template) {
-
-		final Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("template", template));
-		criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		criteria.addOrder(Order.asc("formattedCourse"));
-		return criteria.list();
-	}
 }

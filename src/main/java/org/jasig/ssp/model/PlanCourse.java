@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.Entity;
@@ -59,6 +61,7 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	private Person person;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	@JoinColumn(name = "map_plan_elective_course_id", updatable = false, nullable = true)
 	private PlanElectiveCourse planElectiveCourse;
 

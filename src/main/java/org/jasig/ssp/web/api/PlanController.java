@@ -18,21 +18,16 @@
  */
 package org.jasig.ssp.web.api;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-import javax.mail.SendFailedException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
 import org.jasig.ssp.factory.external.MapStatusReportLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.MapStatusReportService;
@@ -46,7 +41,10 @@ import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.reference.TemplateElectiveCourseDetailService;
+import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
+import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -69,6 +67,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 
 @Controller
@@ -126,11 +133,13 @@ public class PlanController  extends AbstractBaseController {
 	@Autowired
 	private MapStatusReportLiteTOFactory mapStatusReportTOFactory;
 
+	@Autowired
+	private TemplateElectiveCourseDetailService templateElectiveCourseDetailService;
  
 	/**
 	 * Retrieves the specified list from persistent storage.
 	 * 
-	 * @param id
+	 * @param personId
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
@@ -185,7 +194,7 @@ public class PlanController  extends AbstractBaseController {
 	/**
 	 * Retrieves the current entity from persistent storage.
 	 * 
-	 * @param id
+	 * @param personId
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
@@ -210,7 +219,7 @@ public class PlanController  extends AbstractBaseController {
 	/**
 	 * Retrieves the specified list from persistent storage.  
 	 * 
-	 * @param id
+	 * @param personId
 	 *            The specific id to use to lookup the associated data.
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
@@ -262,7 +271,31 @@ public class PlanController  extends AbstractBaseController {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
-
+//		for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
+//			planCourseTO.setPlanElectiveCourseId(null);
+//			if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
+//				for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planCourseTO.getPlanElectiveCourseElectives()) {
+//					planElectiveCourseElectiveTO.setId(null);
+//				}
+//			}
+//		}
+//		Map<UUID, UUID> uuidMap = new HashMap<>();
+//		for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
+//			if (planCourseTO.getPlanElectiveCourseId()!=null) {
+//				if (uuidMap.get(planCourseTO.getPlanElectiveCourseId()) != null) {
+//					planCourseTO.setPlanElectiveCourseId(uuidMap.get(planCourseTO.getPlanElectiveCourseId()));
+//				} else {
+//					AbstractMapElectiveCourse mapElectiveCourse = service.getPlanElectiveCourse(planCourseTO.getPlanElectiveCourseId());
+//					if (mapElectiveCourse == null) {
+//						mapElectiveCourse = templateElectiveCourseDetailService.get(planCourseTO.getPlanElectiveCourseId());
+//					}
+//					PlanElectiveCourse planElectiveCourse = service.copyAndSavePlanElectiveCourse(mapElectiveCourse);
+//
+//					planCourseTO.setPlanElectiveCourseId(planElectiveCourse.getId());
+//					uuidMap.put(planCourseTO.getPlanElectiveCourseId(), planElectiveCourse.getId());
+//				}
+//			}
+//		}
 		Plan model = getFactory().from(obj);
 		model = getService().copyAndSave(model);
 
@@ -280,7 +313,7 @@ public class PlanController  extends AbstractBaseController {
 	 * <p>
 	 *
 	 * 
-	 * @param obj
+	 * @param planOutputDataTO
 	 *            instance to print.
 	 * @return html text strem
 	 * @throws ObjectNotFoundException
@@ -322,12 +355,12 @@ public class PlanController  extends AbstractBaseController {
 	 * <p>
 	 *
 	 * 
-	 * @param obj
+	 * @param planOutputDataTO
 	 *            instance to print.
 	 * @return html text strem
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
-	 * @throws SendFailedException 
+	 * @throws ValidationException
 	 */
 	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value = "/emailCurrent", method = RequestMethod.POST)
@@ -358,12 +391,12 @@ public class PlanController  extends AbstractBaseController {
 	 * <p>
 	 *
 	 * 
-	 * @param obj
+	 * @param planOutputDataTO
 	 *            instance to print.
 	 * @return html text strem
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
-	 * @throws SendFailedException 
+	 * @throws ValidationException
 	 */
 	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_MAP_READ')")
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
@@ -432,6 +465,14 @@ public class PlanController  extends AbstractBaseController {
 		else
 		{
 			obj.setId(null);
+			for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
+				planCourseTO.setPlanElectiveCourseId(null);
+				if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
+					for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planCourseTO.getPlanElectiveCourseElectives()) {
+						planElectiveCourseElectiveTO.setId(null);
+					}
+				}
+			}
 			Plan model = getFactory().from(obj);
 			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {
@@ -464,9 +505,7 @@ public class PlanController  extends AbstractBaseController {
 	/**
 	 * Validate the plan instance.
 	 * 
-	 * @param id
-	 *            Explicit id to the instance to persist.
-	 * @param obj
+	 * @param plan
 	 *            Full instance of plan object.
 	 * @return The validated data object instance.
 	 * @throws ObjectNotFoundException

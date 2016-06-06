@@ -21,6 +21,7 @@ package org.jasig.ssp.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateCourseDao;
 import org.jasig.ssp.dao.TemplateDao;
+import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Person;
@@ -97,6 +98,9 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	protected TemplateDao getDao() {
 		return dao;
 	}
+
+	@Autowired
+	private transient TemplateElectiveCourseDao templateElectiveCourseDao;
 
 	@Override
 	protected UUID getPersonIdPlannedFor(TemplateTO model) {
@@ -218,7 +222,7 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	}
 
 	@Override
-	public void removeTemplaceCourseElective(TemplateElectiveCourse templateElectiveCourse) {
+	public void removeTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse) {
 		Template template = templateElectiveCourse.getTemplate();
 		for (AbstractPlanCourse<?> templateCourse: template.getCourses()) {
 			TemplateCourse tCourse = (TemplateCourse) templateCourse;
@@ -232,5 +236,10 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	@Override
 	public List<TemplateCourse> getUniqueTemplateCourseList(UUID id) {
 		return templateCourseDao.getAllCoursesForTemplate(id);
+	}
+
+	@Override
+	public TemplateElectiveCourse getTemplateElectiveCourse(UUID id) throws ObjectNotFoundException {
+		return templateElectiveCourseDao.get(id);
 	}
 }

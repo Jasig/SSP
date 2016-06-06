@@ -275,7 +275,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
 			if (me.get('mapTemplateTag')) {
-    			simpleData.mapTemplateTag = me.get('mapTemplateTag').getData();
+    			simpleData.mapTemplateTag = me.get('mapTemplateTag');
 			}
 		}else{
 			simpleData.personId = me.get('personId');
