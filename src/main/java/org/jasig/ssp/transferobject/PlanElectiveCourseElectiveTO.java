@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,12 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.tool.map.ElectiveCourse', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'courseCode',type:'string'},
-             {name:'formattedCourse', type:'string'},
-             {name:'courseTitle',type:'string'},
-             {name:'courseDescription',type:'string'},
-             {name:'creditHours',type:'float'},
-             {name:'electiveCourseElective',type:'auto'}]
-});
+package org.jasig.ssp.transferobject;
+
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
+
+public class PlanElectiveCourseElectiveTO extends AbstractMapElectiveCourseTO {
+
+	/**
+	 * Empty constructor.
+	 */
+	public PlanElectiveCourseElectiveTO() {
+		super();
+	}
+
+	public PlanElectiveCourseElectiveTO(AbstractMapElectiveCourse model) {
+		from(model);
+	}
+
+	public void from(AbstractMapElectiveCourse model) {
+		super.from(model);
+	}
+}

@@ -21,6 +21,7 @@ package org.jasig.ssp.transferobject;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.TermNote;
 
 import java.util.ArrayList;
@@ -64,6 +65,11 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 			TermNoteTO termNoteTO = new TermNoteTO(termNote);
 			this.getTermNotes().add(termNoteTO);
 		}
+		List<PlanElectiveCourse> planElectiveCourses = (List<PlanElectiveCourse>) model.getPlanElectiveCourses();
+		for (PlanElectiveCourse planElectiveCourse : planElectiveCourses) {
+			PlanElectiveCourseTO planElectiveCourseTO = new PlanElectiveCourseTO(planElectiveCourse);
+			this.getElectiveCourses().add(planElectiveCourseTO);
+		}
 	}
 
 	public String getPersonId() {
@@ -85,4 +91,11 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 		return planCourses;
 	}
 
+	public List<PlanElectiveCourseTO> getElectiveCourses() {
+		return planElectiveCourseTOs;
+	}
+
+	public void setElectiveCourses(List<PlanElectiveCourseTO> planElectiveCourseTOs) {
+		this.planElectiveCourseTOs = planElectiveCourseTOs;
+	}
 }

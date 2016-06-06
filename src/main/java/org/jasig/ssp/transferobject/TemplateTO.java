@@ -18,16 +18,18 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
+import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  */
@@ -44,8 +46,9 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	private List<TemplateCourseTO> planCourses = new ArrayList<TemplateCourseTO>();
 
 	private MapTemplateTagTO mapTemplateTag;
-	
-	
+
+	private List<TemplateElectiveCourseTO> planElectiveCourseTOs = new ArrayList<TemplateElectiveCourseTO>();
+
 	public TemplateTO(Template model) {
 		super();
 		from(model);
@@ -74,6 +77,11 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		for (TermNote termNote : termNotes) {
 			TermNoteTO termNoteTO = new TermNoteTO(termNote);
 			this.getTermNotes().add(termNoteTO);
+		}
+		List<TemplateElectiveCourse> planElectiveCourses = (List<TemplateElectiveCourse>) model.getPlanElectiveCourses();
+		for (TemplateElectiveCourse planElectiveCourse : planElectiveCourses) {
+			TemplateElectiveCourseTO templateElectiveCourseTO = new TemplateElectiveCourseTO(planElectiveCourse);
+			this.getElectiveCourses().add(templateElectiveCourseTO);
 		}
 		if (model.getMapTemplateTag()!=null) {
 			this.setMapTemplateTag(new MapTemplateTagTO(model.getMapTemplateTag()));
@@ -142,5 +150,13 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 
 	public void setMapTemplateTag(MapTemplateTagTO mapTemplateTag) {
 		this.mapTemplateTag = mapTemplateTag;
+	}
+
+	public List<TemplateElectiveCourseTO> getElectiveCourses() {
+		return planElectiveCourseTOs;
+	}
+
+	public void setElectiveCourses(List<TemplateElectiveCourseTO> planElectiveCourseTOs) {
+		this.planElectiveCourseTOs = planElectiveCourseTOs;
 	}
 }

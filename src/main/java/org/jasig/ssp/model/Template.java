@@ -71,6 +71,10 @@ public class Template extends AbstractPlan implements Cloneable{
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<TermNote> termNotes = new ArrayList<TermNote>(0);
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "template", orphanRemoval=true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private List<TemplateElectiveCourse> planElectiveCourses = new ArrayList<TemplateElectiveCourse>(0);
+
 	@Nullable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "map_template_tag_id", nullable = true)
@@ -189,4 +193,8 @@ public class Template extends AbstractPlan implements Cloneable{
 		return termNotes;
 	}
 
+	@Override
+	public List<? extends AbstractMapElectiveCourse> getPlanElectiveCourses() {
+		return planElectiveCourses;
+	}
 }

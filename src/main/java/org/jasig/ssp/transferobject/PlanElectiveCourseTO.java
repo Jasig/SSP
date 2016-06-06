@@ -19,8 +19,15 @@
 package org.jasig.ssp.transferobject;
 
 import org.jasig.ssp.model.AbstractMapElectiveCourse;
+import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.model.PlanElectiveCourseElective;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanElectiveCourseTO extends AbstractMapElectiveCourseTO {
+
+	private List<PlanElectiveCourseElectiveTO> planElectiveCourseElectiveTOs = new ArrayList<PlanElectiveCourseElectiveTO>();
 
 	/**
 	 * Empty constructor.
@@ -29,11 +36,25 @@ public class PlanElectiveCourseTO extends AbstractMapElectiveCourseTO {
 		super();
 	}
 
-	public PlanElectiveCourseTO(AbstractMapElectiveCourse model) {
+	public PlanElectiveCourseTO(PlanElectiveCourse model) {
 		from(model);
+
+		List<PlanElectiveCourseElective> planElectiveCourseElectives = model.getElectiveCourseElectives();
+		for (PlanElectiveCourseElective planElectiveCourseElective : planElectiveCourseElectives) {
+			PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO = new PlanElectiveCourseElectiveTO(planElectiveCourseElective);
+			this.getPlanElectiveCourseElectiveTOs().add(planElectiveCourseElectiveTO);
+		}
 	}
 
 	public void from(AbstractMapElectiveCourse model) {
 		super.from(model);
+	}
+
+	public List<PlanElectiveCourseElectiveTO> getPlanElectiveCourseElectiveTOs() {
+		return planElectiveCourseElectiveTOs;
+	}
+
+	public void setPlanElectiveCourseElectiveTOs(List<PlanElectiveCourseElectiveTO> planElectiveCourseElectiveTOs) {
+		this.planElectiveCourseElectiveTOs = planElectiveCourseElectiveTOs;
 	}
 }

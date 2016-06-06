@@ -51,7 +51,11 @@ public class Plan extends AbstractPlan  {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<TermNote> termNotes = new ArrayList<TermNote>(0);
-	
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "plan", orphanRemoval=true)
+	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+	private List<PlanElectiveCourse> planElectiveCourses = new ArrayList<PlanElectiveCourse>(0);
+
 	@NotNull
 	@ManyToOne()
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
@@ -132,6 +136,11 @@ public class Plan extends AbstractPlan  {
 	@Override
 	public List<? extends TermNote> getNotes() {
 		return termNotes;
+	}
+
+	@Override
+	public List<? extends AbstractMapElectiveCourse> getPlanElectiveCourses() {
+		return planElectiveCourses;
 	}
 
 }

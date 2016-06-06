@@ -69,9 +69,9 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 		if (planElectiveCourse!=null) {
 			planElectiveCourseId = planElectiveCourse.getId();
 			planElectiveCourseElectives = new ArrayList<>();
-			planElectiveCourseElectives.add(new PlanElectiveCourseTO(planElectiveCourse));
+			planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(planElectiveCourse));
 			for (AbstractMapElectiveCourse electiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
-				planElectiveCourseElectives.add(new PlanElectiveCourseTO(electiveCourseElective));
+				planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(electiveCourseElective));
 			}
 		}
 	}

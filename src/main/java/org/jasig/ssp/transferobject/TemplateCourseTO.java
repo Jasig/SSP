@@ -22,8 +22,6 @@ import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TemplateElectiveCourse;
-import org.jasig.ssp.model.TemplateElectiveCourseElective;
-import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseElectiveTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +55,9 @@ public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCour
 		if (templateElectiveCourse!=null) {
 			planElectiveCourseId = templateElectiveCourse.getId();
 			planElectiveCourseElectives = new ArrayList<>();
-			planElectiveCourseElectives.add(new PlanElectiveCourseTO(templateElectiveCourse));
+			planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(templateElectiveCourse));
 			for (AbstractMapElectiveCourse electiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
-				planElectiveCourseElectives.add(new TemplateElectiveCourseElectiveTO((TemplateElectiveCourseElective)electiveCourseElective));
+				planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(electiveCourseElective));
 			}
 		}
 	}

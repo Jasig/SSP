@@ -66,6 +66,12 @@ Ext.define('Ssp.model.tool.map.Plan', {
     	       		return data;
     	       	}
             },
+			{name:'planElectiveCourses',type:'auto',
+				convert: function(data,model){
+					data = (data && !Ext.isArray(data) ) ? [data] : data;
+    	       		return data;
+    	       	}
+            },
             {name:'mapTemplateTag', type:'auto'}
 	],
 			

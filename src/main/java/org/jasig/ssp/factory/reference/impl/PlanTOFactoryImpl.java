@@ -18,9 +18,6 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.PlanCourseTOFactory;
@@ -37,6 +34,9 @@ import org.jasig.ssp.transferobject.TermNoteTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -112,6 +112,12 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 			planCourse.setPerson(model.getPerson());
 			model.getPlanCourses().add(planCourse);
 		}
+//		List<PlanElectiveCourseTO> planElectiveCourses = tObject.getElectiveCourses();
+//		for (PlanElectiveCourseTO planElectiveCourseTO : planElectiveCourses) {
+//			PlanElectiveCourse planElectiveCourse = getPlanElectiveCourseTOFactory().from(planElectiveCourseTO);
+//			planElectiveCourse.setPlan(model);
+//			model.getPlanElectiveCourses().add(planElectiveCourse);
+//		}
 		return model;
 	}
 

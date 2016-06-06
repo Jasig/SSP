@@ -24,10 +24,14 @@ import org.jasig.ssp.factory.reference.PlanCourseTOFactory;
 import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.model.PlanElectiveCourseElective;
+import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
+import org.jasig.ssp.service.TemplateService;
 import org.jasig.ssp.service.reference.ElectiveService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +56,9 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 
 	@Autowired
 	private PlanService planService;
+
+	@Autowired
+	private TemplateService templateService;
 	
 	public PersonService getPersonService() {
 		return personService;
@@ -72,7 +79,21 @@ public class PlanCourseTOFactoryImpl extends AbstractAuditableTOFactory<PlanCour
 		model.setTermCode(tObject.getTermCode());
 		model.setFormattedCourse(tObject.getFormattedCourse());
 		if (tObject.getPlanElectiveCourseId() != null) {
-			PlanElectiveCourse planElectiveCourse = planService.getPlanElectiveCourse(tObject.getPlanElectiveCourseId());
+			PlanElectiveCourse planElectiveCourse;
+			try {
+				planElectiveCourse = planService.getPlanElectiveCourse(tObject.getPlanElectiveCourseId());
+			} catch (ObjectNotFoundException e) {
+				TemplateElectiveCourse templateElectiveCourse = templateService.getTemplateElectiveCourse(tObject.getPlanElectiveCourseId());
+				planElectiveCourse = new PlanElectiveCourse();
+				planElectiveCourse.cloneCommonFields(templateElectiveCourse);
+				for (TemplateElectiveCourseElective templateElectiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
+					PlanElectiveCourseElective planElectiveCourseElective = new PlanElectiveCourseElective();
+					planElectiveCourseElective.cloneCommonFields(templateElectiveCourseElective);
+					planElectiveCourseElective.setPlanElectiveCourse(planElectiveCourse);
+					planElectiveCourse.getElectiveCourseElectives().add(planElectiveCourseElective);
+				}
+			}
+
 			model.setPlanElectiveCourse(planElectiveCourse);
 			if (model.getFormattedCourse().equals(planElectiveCourse.getFormattedCourse())) {
 				model.setCourseCode(planElectiveCourse.getCourseCode());

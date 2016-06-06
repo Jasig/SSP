@@ -18,7 +18,7 @@
  */
 package org.jasig.ssp.model;
 
-import java.util.List;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -27,8 +27,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Immutable;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -110,7 +109,9 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	public abstract List<? extends AbstractPlanCourse<?>> getCourses();
 		
 	public abstract List<? extends TermNote> getNotes();
-	
+
+	public abstract List<? extends AbstractMapElectiveCourse> getPlanElectiveCourses();
+
 	public String getName() {
 		return name;
 	}
