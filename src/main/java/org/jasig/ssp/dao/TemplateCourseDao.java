@@ -22,7 +22,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.TemplateCourse;
-import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -36,8 +35,6 @@ import java.util.UUID;
 public class TemplateCourseDao extends
 		AbstractAuditableCrudDao<TemplateCourse>
 		implements AuditableCrudDao<TemplateCourse> {
-
-	private Logger logger = Logger.getLogger(TemplateCourseDao.class);
 
 	public TemplateCourseDao() {
 		super(TemplateCourse.class);

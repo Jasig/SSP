@@ -274,6 +274,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.programCode = me.get('programCode');
 		simpleData.catalogYearCode = me.get('catalogYearCode');
 		simpleData.planCourses = me.get('planCourses');
+		simpleData.planElectiveCourses = me.get('planElectiveCourses');
 		
 		if(me.get('isTemplate')){
 			simpleData.departmentCode = me.get('departmentCode');

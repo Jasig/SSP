@@ -324,7 +324,8 @@ Ext.require([
 	'Ssp.model.tool.map.MapStatusTermDetail',
 	'Ssp.model.tool.map.TermNote',
 	'Ssp.model.tool.map.PlanCourse',
-	'Ssp.model.tool.map.ElectiveCourse',
+	'Ssp.model.tool.map.PlanElectiveCourse',
+	'Ssp.model.tool.map.PlanElectiveCourseElective',
 	'Ssp.model.tool.map.PlanOutputData',
 	'Ssp.model.tool.shg.SelfHelpGuides',
 	'Ssp.model.tool.shg.SelfHelpGuideQuestions',
@@ -471,7 +472,7 @@ Ext.require([
     'Ssp.store.MapStatusReportTermDetails',
     'Ssp.store.CurrentlyRegistered',
     'Ssp.store.FinancialAidSAPStatus',
-    'Ssp.store.ElectiveCourse',
+    'Ssp.store.PlanElectiveCourse',
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.AssessmentService',
@@ -1535,10 +1536,10 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
-					electiveCoursesAllStore: {
+					planElectiveCoursesAllStore: {
 			    		fn: function(){
-					    	return Ext.create('Ssp.store.ElectiveCourse', {
-							     storeId: 'electiveCoursesAllStore',
+					    	return Ext.create('Ssp.store.PlanElectiveCourse', {
+							     storeId: 'planElectiveCoursesAllStore',
 							     extraParams: {status: "ALL"}
 							     //extraParams: {sort: "sortOrder", sortDirection:'ASC' }
 							 });

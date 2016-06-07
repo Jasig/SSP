@@ -39,10 +39,7 @@ import java.util.List;
 @Table(name="map_template_elective_course")
 public class TemplateElectiveCourse extends AbstractMapElectiveCourse implements Cloneable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5473230782807660690L;
+	private static final long serialVersionUID = -764494364668103335L;
 	
 	@NotNull
 	@ManyToOne()

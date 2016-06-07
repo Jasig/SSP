@@ -163,7 +163,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                                     me.columns[colIndex].editor = null;
                                 } else {
                                     if (me.columns[colIndex].editor) {
-                                        var store = new Ssp.store.ElectiveCourse();
+                                        var store = new Ssp.store.PlanElectiveCourse();
                                         store.loadData(record.get('planElectiveCourseElectives'));
                                         me.columns[colIndex].editor.store = store;
                                         value = value; //+ '&nbsp;&nbsp;&nbsp;' + me.columnRendererUtils.renderPhotoIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);

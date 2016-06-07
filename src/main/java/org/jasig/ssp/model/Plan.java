@@ -139,7 +139,7 @@ public class Plan extends AbstractPlan  {
 	}
 
 	@Override
-	public List<? extends AbstractMapElectiveCourse> getPlanElectiveCourses() {
+	public List<PlanElectiveCourse> getPlanElectiveCourses() {
 		return planElectiveCourses;
 	}
 

@@ -32,10 +32,11 @@ import java.util.List;
 public class PlanTO extends AbstractPlanTO<Plan> {
 
 	private String personId;
-	
+
+
 	private List<PlanCourseTO> planCourses = new ArrayList<PlanCourseTO>();
 
-	private List<PlanElectiveCourseTO> planElectiveCourseTOs = new ArrayList<PlanElectiveCourseTO>();
+	private List<PlanElectiveCourseTO> planElectiveCourses= new ArrayList<PlanElectiveCourseTO>();
 	/**
 	 * Empty constructor.
 	 */
@@ -68,7 +69,7 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 		List<PlanElectiveCourse> planElectiveCourses = (List<PlanElectiveCourse>) model.getPlanElectiveCourses();
 		for (PlanElectiveCourse planElectiveCourse : planElectiveCourses) {
 			PlanElectiveCourseTO planElectiveCourseTO = new PlanElectiveCourseTO(planElectiveCourse);
-			this.getElectiveCourses().add(planElectiveCourseTO);
+			this.getPlanElectiveCourses().add(planElectiveCourseTO);
 		}
 	}
 
@@ -91,11 +92,11 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 		return planCourses;
 	}
 
-	public List<PlanElectiveCourseTO> getElectiveCourses() {
-		return planElectiveCourseTOs;
+	public List<PlanElectiveCourseTO> getPlanElectiveCourses() {
+		return planElectiveCourses;
 	}
 
-	public void setElectiveCourses(List<PlanElectiveCourseTO> planElectiveCourseTOs) {
-		this.planElectiveCourseTOs = planElectiveCourseTOs;
+	public void setPlanElectiveCourses(List<PlanElectiveCourseTO> planElectiveCourseTOs) {
+		this.planElectiveCourses = planElectiveCourseTOs;
 	}
 }

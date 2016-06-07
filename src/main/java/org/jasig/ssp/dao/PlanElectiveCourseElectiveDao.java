@@ -16,24 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.transferobject;
+package org.jasig.ssp.dao;
 
 import org.jasig.ssp.model.PlanElectiveCourseElective;
+import org.springframework.stereotype.Repository;
 
-public class PlanElectiveCourseElectiveTO extends AbstractMapElectiveCourseTO<PlanElectiveCourseElective> {
+@Repository
+public class PlanElectiveCourseElectiveDao
+		extends AbstractAuditableCrudDao<PlanElectiveCourseElective>
+		implements AuditableCrudDao<PlanElectiveCourseElective> {
 
-	/**
-	 * Empty constructor.
-	 */
-	public PlanElectiveCourseElectiveTO() {
-		super();
+	protected PlanElectiveCourseElectiveDao() {
+		super(PlanElectiveCourseElective.class);
 	}
 
-	public PlanElectiveCourseElectiveTO(PlanElectiveCourseElective model) {
-		from(model);
-	}
-
-	public void from(PlanElectiveCourseElective model) {
-		super.from(model);
-	}
 }

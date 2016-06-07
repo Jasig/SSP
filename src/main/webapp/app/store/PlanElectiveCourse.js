@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.store.ElectiveCourse', {
+Ext.define('Ssp.store.PlanElectiveCourse', {
     extend: 'Ext.data.Store',
     mixins: [ 'Deft.mixin.Injectable'],
-    model: 'Ssp.model.tool.map.ElectiveCourse',
+    model: 'Ssp.model.tool.map.PlanElectiveCourse',
     inject: {
     	apiProperties: 'apiProperties',
 		appEventsController: 'appEventsController'

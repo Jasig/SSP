@@ -31,10 +31,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="map_template_elective_course_electives")
 public class TemplateElectiveCourseElective extends AbstractMapElectiveCourse implements Cloneable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5473230782807660690L;
+	private static final long serialVersionUID = -3283766850311531431L;
 	
 	@NotNull
 	@ManyToOne()

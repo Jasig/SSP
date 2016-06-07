@@ -23,11 +23,9 @@ import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
 import org.jasig.ssp.factory.external.MapStatusReportLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
-import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.MapStatusReportService;
@@ -45,6 +43,7 @@ import org.jasig.ssp.service.reference.TemplateElectiveCourseDetailService;
 import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanElectiveCourseTO;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -71,9 +70,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -271,6 +268,14 @@ public class PlanController  extends AbstractBaseController {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
+		for (PlanElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
+			planElectiveCourseTO.setId(null);
+			if (null!=planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+				for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+					planElectiveCourseElectiveTO.setId(null);
+				}
+			}
+		}
 //		for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
 //			planCourseTO.setPlanElectiveCourseId(null);
 //			if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
@@ -279,6 +284,7 @@ public class PlanController  extends AbstractBaseController {
 //				}
 //			}
 //		}
+
 //		Map<UUID, UUID> uuidMap = new HashMap<>();
 //		for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
 //			if (planCourseTO.getPlanElectiveCourseId()!=null) {
@@ -465,14 +471,22 @@ public class PlanController  extends AbstractBaseController {
 		else
 		{
 			obj.setId(null);
-			for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
-				planCourseTO.setPlanElectiveCourseId(null);
-				if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
-					for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planCourseTO.getPlanElectiveCourseElectives()) {
+			for (PlanElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
+				planElectiveCourseTO.setId(null);
+				if (null!=planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+					for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
 						planElectiveCourseElectiveTO.setId(null);
 					}
 				}
 			}
+//			for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
+//				planCourseTO.setPlanElectiveCourseId(null);
+//				if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
+//					for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planCourseTO.getPlanElectiveCourseElectives()) {
+//						planElectiveCourseElectiveTO.setId(null);
+//					}
+//				}
+//			}
 			Plan model = getFactory().from(obj);
 			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {

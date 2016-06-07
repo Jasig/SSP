@@ -25,7 +25,7 @@ Ext.define('Ssp.controller.admin.map.MapElectiveCoursesViewController', {
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
-		store: 'electiveCoursesAllStore',
+		store: 'planElectiveCoursesAllStore',
 //        formUtils: 'formRendererUtils',
 //        semesterStores : 'currentSemesterStores',
         authenticatedPerson: 'authenticatedPerson'

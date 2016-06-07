@@ -16,12 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.tool.map.ElectiveCourse', {
+Ext.define('Ssp.model.tool.map.PlanElectiveCourseElective', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'courseCode',type:'string'},
              {name:'formattedCourse', type:'string'},
              {name:'courseTitle',type:'string'},
              {name:'courseDescription',type:'string'},
-             {name:'creditHours',type:'float'},
-             {name:'electiveCourseElective',type:'auto'}]
+             {name:'creditHours',type:'float'}]
 });

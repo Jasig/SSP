@@ -18,10 +18,10 @@
  */
 package org.jasig.ssp.transferobject;
 
-import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.model.PlanElectiveCourseElective;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -69,11 +69,34 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 		if (planElectiveCourse!=null) {
 			planElectiveCourseId = planElectiveCourse.getId();
 			planElectiveCourseElectives = new ArrayList<>();
-			planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(planElectiveCourse));
-			for (AbstractMapElectiveCourse electiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
+			planElectiveCourseElectives.add(createPlanElectiveCourseElective(planElectiveCourse));
+			for (PlanElectiveCourseElective electiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
 				planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(electiveCourseElective));
 			}
 		}
+	}
+
+	private PlanElectiveCourseElectiveTO createPlanElectiveCourseElective(PlanElectiveCourse model) {
+		PlanElectiveCourseElectiveTO planElectiveCourseElective = new PlanElectiveCourseElectiveTO();
+		planElectiveCourseElective.setId(model.getId());
+		if (model.getCreatedBy() != null) {
+			planElectiveCourseElective.setCreatedBy(new PersonLiteTO(model.getCreatedBy().getId(),model.getCreatedBy().getFirstName(),model.getCreatedBy().getLastName()));
+			}
+
+			if (model.getModifiedBy() != null) {
+				planElectiveCourseElective.setModifiedBy(new PersonLiteTO(model.getModifiedBy().getId(),model.getModifiedBy().getFirstName(),model.getModifiedBy().getLastName()));
+			}
+
+		planElectiveCourseElective.setCreatedDate(model.getCreatedDate());
+		planElectiveCourseElective.setModifiedDate(model.getModifiedDate());
+		planElectiveCourseElective.setObjectStatus(model.getObjectStatus());
+		planElectiveCourseElective.setCourseCode(model.getCourseCode());
+		planElectiveCourseElective.setCourseDescription(model.getCourseDescription());
+		planElectiveCourseElective.setCourseTitle(model.getCourseTitle());
+		planElectiveCourseElective.setFormattedCourse(model.getFormattedCourse());
+		planElectiveCourseElective.setCreditHours(model.getCreditHours());
+
+		return planElectiveCourseElective;
 	}
 
 	public String getPersonId() {

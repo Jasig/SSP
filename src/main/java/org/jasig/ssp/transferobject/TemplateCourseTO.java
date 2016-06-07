@@ -18,10 +18,11 @@
  */
 package org.jasig.ssp.transferobject;
 
-import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.model.TemplateElectiveCourseElective;
+import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseElectiveTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +56,34 @@ public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCour
 		if (templateElectiveCourse!=null) {
 			planElectiveCourseId = templateElectiveCourse.getId();
 			planElectiveCourseElectives = new ArrayList<>();
-			planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(templateElectiveCourse));
-			for (AbstractMapElectiveCourse electiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
-				planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(electiveCourseElective));
+			planElectiveCourseElectives.add(createTemplateElectiveCourseElective(templateElectiveCourse));
+			for (TemplateElectiveCourseElective electiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
+				planElectiveCourseElectives.add(new TemplateElectiveCourseElectiveTO(electiveCourseElective));
 			}
 		}
 	}
+	private TemplateElectiveCourseElectiveTO createTemplateElectiveCourseElective(TemplateElectiveCourse model) {
+		TemplateElectiveCourseElectiveTO templateElectiveCourseElective = new TemplateElectiveCourseElectiveTO();
+		templateElectiveCourseElective.setId(model.getId());
+		if (model.getCreatedBy() != null) {
+			templateElectiveCourseElective.setCreatedBy(new PersonLiteTO(model.getCreatedBy().getId(),model.getCreatedBy().getFirstName(),model.getCreatedBy().getLastName()));
+		}
 
+		if (model.getModifiedBy() != null) {
+			templateElectiveCourseElective.setModifiedBy(new PersonLiteTO(model.getModifiedBy().getId(),model.getModifiedBy().getFirstName(),model.getModifiedBy().getLastName()));
+		}
+
+		templateElectiveCourseElective.setCreatedDate(model.getCreatedDate());
+		templateElectiveCourseElective.setModifiedDate(model.getModifiedDate());
+		templateElectiveCourseElective.setObjectStatus(model.getObjectStatus());
+		templateElectiveCourseElective.setCourseCode(model.getCourseCode());
+		templateElectiveCourseElective.setCourseDescription(model.getCourseDescription());
+		templateElectiveCourseElective.setCourseTitle(model.getCourseTitle());
+		templateElectiveCourseElective.setFormattedCourse(model.getFormattedCourse());
+		templateElectiveCourseElective.setCreditHours(model.getCreditHours());
+
+		return templateElectiveCourseElective;
+	}
 	public UUID getPlanElectiveCourseId() {
 		return planElectiveCourseId;
 	}

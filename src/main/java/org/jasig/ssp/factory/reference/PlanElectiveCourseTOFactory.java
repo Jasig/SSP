@@ -16,24 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.transferobject;
+package org.jasig.ssp.factory.reference;
 
-import org.jasig.ssp.model.PlanElectiveCourseElective;
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.transferobject.PlanElectiveCourseTO;
 
-public class PlanElectiveCourseElectiveTO extends AbstractMapElectiveCourseTO<PlanElectiveCourseElective> {
-
-	/**
-	 * Empty constructor.
-	 */
-	public PlanElectiveCourseElectiveTO() {
-		super();
-	}
-
-	public PlanElectiveCourseElectiveTO(PlanElectiveCourseElective model) {
-		from(model);
-	}
-
-	public void from(PlanElectiveCourseElective model) {
-		super.from(model);
-	}
+public interface PlanElectiveCourseTOFactory extends
+		TOFactory<PlanElectiveCourseTO, PlanElectiveCourse> {
 }

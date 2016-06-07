@@ -18,16 +18,15 @@
  */
 package org.jasig.ssp.transferobject;
 
-import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.PlanElectiveCourseElective;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlanElectiveCourseTO extends AbstractMapElectiveCourseTO {
+public class PlanElectiveCourseTO extends AbstractMapElectiveCourseTO<PlanElectiveCourse> {
 
-	private List<PlanElectiveCourseElectiveTO> planElectiveCourseElectiveTOs = new ArrayList<PlanElectiveCourseElectiveTO>();
+	private List<PlanElectiveCourseElectiveTO> planElectiveCourseElectives = new ArrayList<PlanElectiveCourseElectiveTO>();
 
 	/**
 	 * Empty constructor.
@@ -37,24 +36,25 @@ public class PlanElectiveCourseTO extends AbstractMapElectiveCourseTO {
 	}
 
 	public PlanElectiveCourseTO(PlanElectiveCourse model) {
+		super();
 		from(model);
 
 		List<PlanElectiveCourseElective> planElectiveCourseElectives = model.getElectiveCourseElectives();
 		for (PlanElectiveCourseElective planElectiveCourseElective : planElectiveCourseElectives) {
 			PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO = new PlanElectiveCourseElectiveTO(planElectiveCourseElective);
-			this.getPlanElectiveCourseElectiveTOs().add(planElectiveCourseElectiveTO);
+			this.getPlanElectiveCourseElectives().add(planElectiveCourseElectiveTO);
 		}
 	}
 
-	public void from(AbstractMapElectiveCourse model) {
+	public void from(PlanElectiveCourse model) {
 		super.from(model);
 	}
 
-	public List<PlanElectiveCourseElectiveTO> getPlanElectiveCourseElectiveTOs() {
-		return planElectiveCourseElectiveTOs;
+	public List<PlanElectiveCourseElectiveTO> getPlanElectiveCourseElectives() {
+		return planElectiveCourseElectives;
 	}
 
-	public void setPlanElectiveCourseElectiveTOs(List<PlanElectiveCourseElectiveTO> planElectiveCourseElectiveTOs) {
-		this.planElectiveCourseElectiveTOs = planElectiveCourseElectiveTOs;
+	public void setPlanElectiveCourseElectives(List<PlanElectiveCourseElectiveTO> planElectiveCourseElectives) {
+		this.planElectiveCourseElectives = planElectiveCourseElectives;
 	}
 }

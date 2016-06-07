@@ -21,14 +21,17 @@ package org.jasig.ssp.factory.reference.impl;
 import org.jasig.ssp.dao.PlanDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.PlanCourseTOFactory;
+import org.jasig.ssp.factory.reference.PlanElectiveCourseTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.factory.reference.TermNoteTOFactory;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
+import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanElectiveCourseTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +58,9 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 	
 	@Autowired
 	private PlanCourseTOFactory planCourseTOFactory;
-	
+
+	@Autowired
+	private PlanElectiveCourseTOFactory planElectiveCourseTOFactory;
 	
 	@Autowired
 	private TermNoteTOFactory termNoteTOFactory;
@@ -112,12 +117,12 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 			planCourse.setPerson(model.getPerson());
 			model.getPlanCourses().add(planCourse);
 		}
-//		List<PlanElectiveCourseTO> planElectiveCourses = tObject.getElectiveCourses();
-//		for (PlanElectiveCourseTO planElectiveCourseTO : planElectiveCourses) {
-//			PlanElectiveCourse planElectiveCourse = getPlanElectiveCourseTOFactory().from(planElectiveCourseTO);
-//			planElectiveCourse.setPlan(model);
-//			model.getPlanElectiveCourses().add(planElectiveCourse);
-//		}
+		List<PlanElectiveCourseTO> planElectiveCourses = tObject.getPlanElectiveCourses();
+		for (PlanElectiveCourseTO planElectiveCourseTO : planElectiveCourses) {
+			PlanElectiveCourse planElectiveCourse = planElectiveCourseTOFactory.from(planElectiveCourseTO);
+			planElectiveCourse.setPlan(model);
+			model.getPlanElectiveCourses().add(planElectiveCourse);
+		}
 		return model;
 	}
 

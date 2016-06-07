@@ -47,7 +47,7 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 
 	private MapTemplateTagTO mapTemplateTag;
 
-	private List<TemplateElectiveCourseTO> planElectiveCourseTOs = new ArrayList<TemplateElectiveCourseTO>();
+	private List<TemplateElectiveCourseTO> planElectiveCourses = new ArrayList<TemplateElectiveCourseTO>();
 
 	public TemplateTO(Template model) {
 		super();
@@ -81,7 +81,7 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		List<TemplateElectiveCourse> planElectiveCourses = (List<TemplateElectiveCourse>) model.getPlanElectiveCourses();
 		for (TemplateElectiveCourse planElectiveCourse : planElectiveCourses) {
 			TemplateElectiveCourseTO templateElectiveCourseTO = new TemplateElectiveCourseTO(planElectiveCourse);
-			this.getElectiveCourses().add(templateElectiveCourseTO);
+			this.getPlanElectiveCourses().add(templateElectiveCourseTO);
 		}
 		if (model.getMapTemplateTag()!=null) {
 			this.setMapTemplateTag(new MapTemplateTagTO(model.getMapTemplateTag()));
@@ -152,11 +152,11 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		this.mapTemplateTag = mapTemplateTag;
 	}
 
-	public List<TemplateElectiveCourseTO> getElectiveCourses() {
-		return planElectiveCourseTOs;
+	public List<TemplateElectiveCourseTO> getPlanElectiveCourses() {
+		return planElectiveCourses;
 	}
 
-	public void setElectiveCourses(List<TemplateElectiveCourseTO> planElectiveCourseTOs) {
-		this.planElectiveCourseTOs = planElectiveCourseTOs;
+	public void setPlanElectiveCourses(List<TemplateElectiveCourseTO> planElectiveCourseTOs) {
+		this.planElectiveCourses = planElectiveCourseTOs;
 	}
 }

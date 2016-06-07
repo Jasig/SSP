@@ -20,8 +20,10 @@ package org.jasig.ssp.transferobject.reference;
 
 import com.google.common.collect.Lists;
 import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +34,7 @@ public class TemplateElectiveCourseTO extends AbstractMapElectiveCourseTO<Templa
 
 	private UUID templateId;
 
-	private int sortOrder;
+	private List<TemplateElectiveCourseElectiveTO> planElectiveCourseElectives = new ArrayList<TemplateElectiveCourseElectiveTO>();
 
 	public TemplateElectiveCourseTO() {
 		super();
@@ -41,6 +43,11 @@ public class TemplateElectiveCourseTO extends AbstractMapElectiveCourseTO<Templa
 	public TemplateElectiveCourseTO(final TemplateElectiveCourse model) {
 		super();
 		from(model);
+		List<TemplateElectiveCourseElective> planElectiveCourseElectives = model.getElectiveCourseElectives();
+		for (TemplateElectiveCourseElective planElectiveCourseElective : planElectiveCourseElectives) {
+			TemplateElectiveCourseElectiveTO planElectiveCourseElectiveTO = new TemplateElectiveCourseElectiveTO(planElectiveCourseElective);
+			this.getPlanElectiveCourseElectives().add(planElectiveCourseElectiveTO);
+		}
 	}
 
 	public static List<TemplateElectiveCourseTO> toTOList(
@@ -66,17 +73,17 @@ public class TemplateElectiveCourseTO extends AbstractMapElectiveCourseTO<Templa
 		this.templateId = templateId;
 	}
 
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(final int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
 	public String getName() {return getFormattedCourse();}
 
 	public void setName(String name) {
 		// Do nothing
+	}
+
+	public List<TemplateElectiveCourseElectiveTO> getPlanElectiveCourseElectives() {
+		return planElectiveCourseElectives;
+	}
+
+	public void setPlanElectiveCourseElectives(List<TemplateElectiveCourseElectiveTO> planElectiveCourseElectives) {
+		this.planElectiveCourseElectives = planElectiveCourseElectives;
 	}
 }

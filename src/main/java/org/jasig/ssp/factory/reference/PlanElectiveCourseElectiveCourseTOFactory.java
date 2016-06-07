@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,11 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.tool.map.ElectiveCourseElective', {
-    extend: 'Ssp.model.AbstractBase',
-    fields: [{name:'courseCode',type:'string'},
-             {name:'formattedCourse', type:'string'},
-             {name:'courseTitle',type:'string'},
-             {name:'courseDescription',type:'string'},
-             {name:'creditHours',type:'float'}]
-});
+package org.jasig.ssp.factory.reference;
+
+import org.jasig.ssp.factory.TOFactory;
+import org.jasig.ssp.model.PlanElectiveCourseElective;
+import org.jasig.ssp.transferobject.PlanElectiveCourseElectiveTO;
+
+public interface PlanElectiveCourseElectiveCourseTOFactory extends
+		TOFactory<PlanElectiveCourseElectiveTO, PlanElectiveCourseElective> {
+}
