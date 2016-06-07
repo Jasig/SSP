@@ -20,7 +20,11 @@ package org.jasig.ssp.transferobject;
 
 import org.jasig.ssp.model.PlanElectiveCourseElective;
 
+import java.util.UUID;
+
 public class PlanElectiveCourseElectiveTO extends AbstractMapElectiveCourseTO<PlanElectiveCourseElective> {
+
+	private UUID planElectiveCourseId;
 
 	/**
 	 * Empty constructor.
@@ -30,10 +34,19 @@ public class PlanElectiveCourseElectiveTO extends AbstractMapElectiveCourseTO<Pl
 	}
 
 	public PlanElectiveCourseElectiveTO(PlanElectiveCourseElective model) {
+		super();
 		from(model);
 	}
-
-	public void from(PlanElectiveCourseElective model) {
+	public final void from(final PlanElectiveCourseElective model) {
 		super.from(model);
+		setPlanElectiveCourseId(model.getPlanElectiveCourse().getId());
+	}
+
+	public UUID getPlanElectiveCourseId() {
+		return planElectiveCourseId;
+	}
+
+	public void setPlanElectiveCourseId(UUID planElectiveCourseId) {
+		this.planElectiveCourseId = planElectiveCourseId;
 	}
 }

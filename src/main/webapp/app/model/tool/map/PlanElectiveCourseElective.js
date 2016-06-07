@@ -22,5 +22,6 @@ Ext.define('Ssp.model.tool.map.PlanElectiveCourseElective', {
              {name:'formattedCourse', type:'string'},
              {name:'courseTitle',type:'string'},
              {name:'courseDescription',type:'string'},
-             {name:'creditHours',type:'float'}]
+             {name:'creditHours',type:'float'},
+             {name:'planElectiveCourseId', type:'string'}]
 });

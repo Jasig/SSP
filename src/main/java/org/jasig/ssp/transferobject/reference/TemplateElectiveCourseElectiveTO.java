@@ -30,9 +30,7 @@ public class TemplateElectiveCourseElectiveTO extends AbstractMapElectiveCourseT
 
 	private static final long serialVersionUID = 7775312780775745728L;
 
-	private UUID mapTemplateElectiveCourseId;
-
-	private int sortOrder;
+	private UUID planElectiveCourseId;
 
 	public TemplateElectiveCourseElectiveTO() {
 		super();
@@ -55,24 +53,15 @@ public class TemplateElectiveCourseElectiveTO extends AbstractMapElectiveCourseT
 
 	public final void from(final TemplateElectiveCourseElective model) {
 		super.from(model);
-		setMapTemplateElectiveCourseId(model.getTemplateElectiveCourse().getId());
-//		sortOrder = model.getSortOrder();
+		setPlanElectiveCourseId(model.getTemplateElectiveCourse().getId());
 	}
 
-	public UUID getMapTemplateElectiveCourseId() {
-		return mapTemplateElectiveCourseId;
+	public UUID getPlanElectiveCourseId() {
+		return planElectiveCourseId;
 	}
 
-	public void setMapTemplateElectiveCourseId(UUID mapTemplateElectiveCourseId) {
-		this.mapTemplateElectiveCourseId = mapTemplateElectiveCourseId;
-	}
-
-	public int getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(final int sortOrder) {
-		this.sortOrder = sortOrder;
+	public void setPlanElectiveCourseId(UUID planElectiveCourseId) {
+		this.planElectiveCourseId = planElectiveCourseId;
 	}
 
 	public String getName() {return getFormattedCourse();}

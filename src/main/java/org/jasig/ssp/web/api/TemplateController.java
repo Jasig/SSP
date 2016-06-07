@@ -41,6 +41,7 @@ import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
 import org.jasig.ssp.transferobject.TemplateTO;
+import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
 import org.jasig.ssp.util.security.DynamicPermissionChecking;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -251,6 +252,14 @@ public class TemplateController  extends AbstractBaseController {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
+		}
+		for (TemplateElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
+			planElectiveCourseTO.setId(null);
+			if (null!=planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+				for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+					planElectiveCourseElectiveTO.setId(null);
+				}
+			}
 		}
 		assertTemplateWritePublicApiAuthorization(obj);
 
