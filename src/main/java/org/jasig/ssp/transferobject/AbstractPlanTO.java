@@ -18,14 +18,12 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.AbstractPlanCourse;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.TermNote;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		AbstractAuditableTO<T> implements TransferObject<T> {
@@ -271,5 +269,16 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 
 	public void setCatalogYearCode(String catalogYearCode) {
 		this.catalogYearCode = catalogYearCode;
+	}
+
+	protected AbstractMapElectiveCourse findPlanElectiveCourse(List<? extends AbstractMapElectiveCourse> planElectiveCourses, String formattedCourse) {
+		if (planElectiveCourses!=null) {
+			for (AbstractMapElectiveCourse electiveCourse : planElectiveCourses) {
+				if (electiveCourse.getFormattedCourse().equals(formattedCourse)) {
+					return electiveCourse;
+				}
+			}
+		}
+		return null;
 	}
 }

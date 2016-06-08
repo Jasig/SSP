@@ -18,16 +18,11 @@
  */
 package org.jasig.ssp.model;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -45,11 +40,6 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 	@ManyToOne()
 	@JoinColumn(name = "template_id", updatable = false, nullable = false)	
 	private Template template;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@JoinColumn(name = "map_template_elective_course_id", updatable = true, nullable = true)
-	private TemplateElectiveCourse templateElectiveCourse;
 
 	public Template getTemplate() {
 		return template;
@@ -71,11 +61,4 @@ public class TemplateCourse extends AbstractPlanCourse<Template> implements Clon
 		return clone;
 	}
 
-	public TemplateElectiveCourse getTemplateElectiveCourse() {
-		return templateElectiveCourse;
-	}
-
-	public void setTemplateElectiveCourse(TemplateElectiveCourse templateElectiveCourse) {
-		this.templateElectiveCourse = templateElectiveCourse;
-	}
 }

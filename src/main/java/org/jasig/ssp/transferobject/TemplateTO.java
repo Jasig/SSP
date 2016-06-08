@@ -71,7 +71,13 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		this.setDivisionCode(model.getDivisionCode());
 		List<TemplateCourse> templateCourses = model.getPlanCourses();
 		for (TemplateCourse templateCourse : templateCourses) {
-			this.getPlanCourses().add(new TemplateCourseTO(templateCourse));
+			TemplateCourseTO templateCourseTO = new TemplateCourseTO(templateCourse);
+			TemplateElectiveCourse templateElectiveCourse = (TemplateElectiveCourse)findPlanElectiveCourse(model.getPlanElectiveCourses(), templateCourse.getFormattedCourse());
+			if (templateElectiveCourse!=null) {
+				templateCourseTO.setOriginalFormattedCourse(templateCourse.getFormattedCourse());
+			}
+			templateCourseTO.addTemplateElectiveCourseElectives(templateElectiveCourse);
+			this.getPlanCourses().add(templateCourseTO);
 		}
 		List<TermNote> termNotes = model.getTermNotes();
 		for (TermNote termNote : termNotes) {

@@ -26,18 +26,17 @@ import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseElectiveTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCourse> {
 
+	private List<AbstractMapElectiveCourseTO> planElectiveCourseElectives;
+
+	private String originalFormattedCourse;
 
 	public TemplateCourseTO(TemplateCourse planCourse) {
 		super();
 		from(planCourse);
 	}
-	private UUID planElectiveCourseId;
-
-	private List<AbstractMapElectiveCourseTO> planElectiveCourseElectives;
 
 	/**
 	 * Empty constructor.
@@ -51,14 +50,14 @@ public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCour
 		super.from(model);
 		this.setIsTranscript(false);
 		this.setDuplicateOfTranscript(false);
+	}
+	public void addTemplateElectiveCourseElectives(TemplateElectiveCourse templateElectiveCourse) {
 
-		TemplateElectiveCourse templateElectiveCourse = model.getTemplateElectiveCourse();
 		if (templateElectiveCourse!=null) {
-			planElectiveCourseId = templateElectiveCourse.getId();
 			planElectiveCourseElectives = new ArrayList<>();
 			planElectiveCourseElectives.add(createTemplateElectiveCourseElective(templateElectiveCourse));
-			for (TemplateElectiveCourseElective electiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
-				planElectiveCourseElectives.add(new TemplateElectiveCourseElectiveTO(electiveCourseElective));
+			for (TemplateElectiveCourseElective templateElectiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
+				planElectiveCourseElectives.add(new TemplateElectiveCourseElectiveTO(templateElectiveCourseElective));
 			}
 		}
 	}
@@ -84,13 +83,6 @@ public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCour
 
 		return templateElectiveCourseElective;
 	}
-	public UUID getPlanElectiveCourseId() {
-		return planElectiveCourseId;
-	}
-
-	public void setPlanElectiveCourseId(UUID planElectiveCourseId) {
-		this.planElectiveCourseId = planElectiveCourseId;
-	}
 
 	public List<AbstractMapElectiveCourseTO> getPlanElectiveCourseElectives() {
 		return planElectiveCourseElectives;
@@ -98,5 +90,13 @@ public class TemplateCourseTO extends AbstractPlanCourseTO<Template,TemplateCour
 
 	public void setPlanElectiveCourseElectives(List<AbstractMapElectiveCourseTO> planElectiveCourseElectives) {
 		this.planElectiveCourseElectives = planElectiveCourseElectives;
+	}
+
+	public String getOriginalFormattedCourse() {
+		return originalFormattedCourse;
+	}
+
+	public void setOriginalFormattedCourse(String originalFormattedCourse) {
+		this.originalFormattedCourse = originalFormattedCourse;
 	}
 }

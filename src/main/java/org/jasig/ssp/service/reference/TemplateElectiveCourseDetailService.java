@@ -42,4 +42,6 @@ public interface TemplateElectiveCourseDetailService extends
 	TemplateElectiveCourseElective createTemplateElectiveCourseElective(TemplateElectiveCourseElective templateElectiveCourseElective);
 
 	void delete(TemplateElectiveCourse templateElectiveCourse);
+
+	TemplateElectiveCourse get(String formattedCourse);
 }

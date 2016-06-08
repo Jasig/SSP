@@ -39,10 +39,6 @@ TemplateOutputTO , MessageTemplatePlanTemplatePrintParamsTO> {
 
 	TemplateCourse getTemplateCourse(UUID id) throws ObjectNotFoundException;
 
-	void updateTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse);
-
-	void removeTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse);
-
 	List<TemplateCourse> getUniqueTemplateCourseList(UUID id);
 
 	TemplateElectiveCourse getTemplateElectiveCourse(UUID id) throws ObjectNotFoundException;

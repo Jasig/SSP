@@ -39,8 +39,8 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
              {name:'hasPrerequisites',type:'boolean', defaultValue:true, convert: null},
              {name:'invalidReasons',type:'string'},
              {name:'electiveId',type:'string'},
-             {name:'planElectiveCourseId',type:'string'},
              {name:'planElectiveCourseElectives',type:'auto'},
+			 {name:'originalFormattedCourse', type: 'string'},
              {name:'hasElectiveCourses', type: 'boolean', defaultValue:false}
              ],
 	constructor: function(planCourse){
@@ -97,13 +97,15 @@ Ext.define('Ssp.model.tool.map.SemesterCourse', {
 							me.set('isDev',  planCourse.dev);
 
 						if (planCourse.planElectiveCourseElectives) {
-						    me.set('planElectiveCourseId', planCourse.planElectiveCourseId);
 						    me.set('planElectiveCourseElectives', planCourse.planElectiveCourseElectives);
 						    me.set('hasElectiveCourses', planCourse.planElectiveCourseElectives.length > 0);
 						} else {
 						    me.set('hasElectiveCourses', false);
 						}
-						
+
+						if (planCourse.originalFormattedCourse) {
+						    me.set('originalFormattedCourse', planCourse.originalFormattedCourse);
+						}
 					}else if(!me.get('creditHours')) {
 		        		me.set('creditHours', me.get('minCreditHours'));
 					}

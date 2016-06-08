@@ -268,40 +268,6 @@ public class PlanController  extends AbstractBaseController {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
-		for (PlanElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
-			planElectiveCourseTO.setId(null);
-			if (null!=planElectiveCourseTO.getPlanElectiveCourseElectives()) {
-				for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
-					planElectiveCourseElectiveTO.setId(null);
-				}
-			}
-		}
-//		for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
-//			planCourseTO.setPlanElectiveCourseId(null);
-//			if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
-//				for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planCourseTO.getPlanElectiveCourseElectives()) {
-//					planElectiveCourseElectiveTO.setId(null);
-//				}
-//			}
-//		}
-
-//		Map<UUID, UUID> uuidMap = new HashMap<>();
-//		for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
-//			if (planCourseTO.getPlanElectiveCourseId()!=null) {
-//				if (uuidMap.get(planCourseTO.getPlanElectiveCourseId()) != null) {
-//					planCourseTO.setPlanElectiveCourseId(uuidMap.get(planCourseTO.getPlanElectiveCourseId()));
-//				} else {
-//					AbstractMapElectiveCourse mapElectiveCourse = service.getPlanElectiveCourse(planCourseTO.getPlanElectiveCourseId());
-//					if (mapElectiveCourse == null) {
-//						mapElectiveCourse = templateElectiveCourseDetailService.get(planCourseTO.getPlanElectiveCourseId());
-//					}
-//					PlanElectiveCourse planElectiveCourse = service.copyAndSavePlanElectiveCourse(mapElectiveCourse);
-//
-//					planCourseTO.setPlanElectiveCourseId(planElectiveCourse.getId());
-//					uuidMap.put(planCourseTO.getPlanElectiveCourseId(), planElectiveCourse.getId());
-//				}
-//			}
-//		}
 		Plan model = getFactory().from(obj);
 		model = getService().copyAndSave(model);
 
@@ -471,22 +437,6 @@ public class PlanController  extends AbstractBaseController {
 		else
 		{
 			obj.setId(null);
-			for (PlanElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
-				planElectiveCourseTO.setId(null);
-				if (null!=planElectiveCourseTO.getPlanElectiveCourseElectives()) {
-					for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
-						planElectiveCourseElectiveTO.setId(null);
-					}
-				}
-			}
-//			for (PlanCourseTO planCourseTO : obj.getPlanCourses()) {
-//				planCourseTO.setPlanElectiveCourseId(null);
-//				if (null!=planCourseTO.getPlanElectiveCourseElectives()) {
-//					for (AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : planCourseTO.getPlanElectiveCourseElectives()) {
-//						planElectiveCourseElectiveTO.setId(null);
-//					}
-//				}
-//			}
 			Plan model = getFactory().from(obj);
 			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {

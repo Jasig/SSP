@@ -94,4 +94,9 @@ public class TemplateElectiveCourseDetailServiceImpl extends
 	public void delete(TemplateElectiveCourse templateElectiveCourse) {
 		templateElectiveCourseDao.delete(templateElectiveCourse);
 	}
+
+	@Override
+	public TemplateElectiveCourse get(String formattedCourse) {
+		return templateElectiveCourseDao.get(formattedCourse);
+	}
 }

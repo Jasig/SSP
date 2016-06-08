@@ -46,9 +46,8 @@ public class TemplateElectiveCourse extends AbstractMapElectiveCourse implements
 	@JoinColumn(name = "template_id", updatable = false, nullable = false)	
 	private Template template;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "templateElectiveCourse", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@JoinColumn(name = "map_template_elective_course_id")
 	@OrderBy("formattedCourse")
 	private List<TemplateElectiveCourseElective> templateElectiveCourseElectives = new ArrayList<TemplateElectiveCourseElective>(0);
 

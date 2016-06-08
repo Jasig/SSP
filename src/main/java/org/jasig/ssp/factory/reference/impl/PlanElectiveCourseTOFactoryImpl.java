@@ -19,11 +19,17 @@
 package org.jasig.ssp.factory.reference.impl;
 
 import org.jasig.ssp.dao.PlanElectiveCourseDao;
+import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.reference.PlanElectiveCourseElectiveCourseTOFactory;
 import org.jasig.ssp.factory.reference.PlanElectiveCourseTOFactory;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.model.PlanElectiveCourseElective;
+import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.PlanElectiveCourseElectiveTO;
 import org.jasig.ssp.transferobject.PlanElectiveCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,21 +46,42 @@ public class PlanElectiveCourseTOFactoryImpl extends
 	}
 
 	@Autowired
-	private transient PlanElectiveCourseDao dao;
+	private transient PlanElectiveCourseDao planElectiveCourseDao;
+
+	@Autowired
+	private transient TemplateElectiveCourseDao templateElectiveCourseDao;
 
 	@Override
 	protected PlanElectiveCourseDao getDao() {
-		return dao;
+		return planElectiveCourseDao;
 	}
+
+	@Autowired
+	private transient PlanElectiveCourseElectiveCourseTOFactory planElectiveCourseElectiveCourseTOFactory;
 
 	@Override
 	public PlanElectiveCourse from(final PlanElectiveCourseTO tObject)
 			throws ObjectNotFoundException {
-		final PlanElectiveCourse model = super.from(tObject);
 
-//		model.setSortOrder(tObject.getSortOrder());
-
-		return model;
+		try {
+			PlanElectiveCourse model = super.from(tObject);
+			model.setId(tObject.getId());
+			model.setFormattedCourse(tObject.getFormattedCourse());
+			model.setCourseCode(tObject.getCourseCode());
+			model.setCourseDescription(tObject.getCourseDescription());
+			model.setCourseTitle(tObject.getCourseTitle());
+			model.setCreditHours(tObject.getCreditHours());
+			for (PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO : tObject.getPlanElectiveCourseElectives()) {
+				PlanElectiveCourseElective planElectiveCourseElective = planElectiveCourseElectiveCourseTOFactory.from(planElectiveCourseElectiveTO);
+				planElectiveCourseElective.setPlanElectiveCourse(model);
+				model.getElectiveCourseElectives().add(planElectiveCourseElective);
+			}
+			return model;
+		} catch (ObjectNotFoundException e) {
+			TemplateElectiveCourse model = templateElectiveCourseDao.get(tObject.getId());
+			model.setObjectStatus(tObject.getObjectStatus());
+			return from(model);
+		}
 	}
 
 	public PlanElectiveCourseTO from(PlanCourse model) {
@@ -67,5 +94,27 @@ public class PlanElectiveCourseTOFactoryImpl extends
 		toReturn.setId(model.getId());
 
 		return toReturn;
+	}
+
+	public PlanElectiveCourse from (TemplateElectiveCourse templateElectiveCourse) {
+		PlanElectiveCourse planElectiveCourse = new PlanElectiveCourse();
+		templateElectiveCourse.cloneCommonFields(planElectiveCourse);
+		planElectiveCourse.setCreatedBy(templateElectiveCourse.getCreatedBy());
+		planElectiveCourse.setModifiedBy(templateElectiveCourse.getModifiedBy());
+		planElectiveCourse.setCreatedDate(templateElectiveCourse.getCreatedDate());
+		planElectiveCourse.setModifiedDate(templateElectiveCourse.getModifiedDate());
+		planElectiveCourse.setId(templateElectiveCourse.getId());
+		for (TemplateElectiveCourseElective templateElectiveCourseElective : templateElectiveCourse.getElectiveCourseElectives()) {
+			PlanElectiveCourseElective planElectiveCourseElective = new PlanElectiveCourseElective();
+			templateElectiveCourseElective.cloneCommonFields(planElectiveCourseElective);
+			planElectiveCourseElective.setCreatedBy(templateElectiveCourseElective.getCreatedBy());
+			planElectiveCourseElective.setModifiedBy(templateElectiveCourseElective.getModifiedBy());
+			planElectiveCourseElective.setCreatedDate(templateElectiveCourseElective.getCreatedDate());
+			planElectiveCourseElective.setModifiedDate(templateElectiveCourseElective.getModifiedDate());
+			planElectiveCourseElective.setId(templateElectiveCourseElective.getId());
+			planElectiveCourseElective.setPlanElectiveCourse(planElectiveCourse);
+			planElectiveCourse.getElectiveCourseElectives().add(planElectiveCourseElective);
+		}
+		return planElectiveCourse;
 	}
 }

@@ -49,9 +49,8 @@ public class PlanElectiveCourse extends AbstractMapElectiveCourse implements Clo
 	@JoinColumn(name = "plan_id", updatable = false, nullable = false)
 	private Plan plan;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "planElectiveCourse", orphanRemoval=true)
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@JoinColumn(name = "map_plan_elective_course_id")
 	@OrderBy("formattedCourse")
 	private List<PlanElectiveCourseElective> planElectiveCourseElectives = new ArrayList<PlanElectiveCourseElective>(0);
 

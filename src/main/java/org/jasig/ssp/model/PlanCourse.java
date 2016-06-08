@@ -18,19 +18,17 @@
  */
 package org.jasig.ssp.model;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Formula;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -60,10 +58,9 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
-	@JoinColumn(name = "map_plan_elective_course_id", updatable = false, nullable = true)
-	private PlanElectiveCourse planElectiveCourse;
+	@Column(length = 35 , nullable = true)
+	@Size(max = 35)
+	private String originalFormattedCourse;
 
 
 	@Formula(IS_TRANSCRIPT_FORMULA)
@@ -94,6 +91,7 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 		PlanCourse clone = new PlanCourse();
 		clone.setPerson(this.getPerson());
 		clone.setIsTranscript(this.getIsTranscript());
+		clone.setOriginalFormattedCourse(this.originalFormattedCourse);
 		cloneCommonFields(clone);
 		return clone;
 	}
@@ -119,11 +117,11 @@ public class PlanCourse extends AbstractPlanCourse<Plan> {
 		this.duplicateOfTranscript = duplicateOfTranscript == false ? 1 : 0;
 	}
 
-	public PlanElectiveCourse getPlanElectiveCourse() {
-		return planElectiveCourse;
+	public String getOriginalFormattedCourse() {
+		return originalFormattedCourse;
 	}
 
-	public void setPlanElectiveCourse(PlanElectiveCourse planElectiveCourse) {
-		this.planElectiveCourse = planElectiveCourse;
+	public void setOriginalFormattedCourse(String originalFormattedCourse) {
+		this.originalFormattedCourse = originalFormattedCourse;
 	}
 }

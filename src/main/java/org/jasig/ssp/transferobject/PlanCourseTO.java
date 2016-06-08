@@ -26,7 +26,6 @@ import org.jasig.ssp.model.PlanElectiveCourseElective;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 
@@ -43,7 +42,7 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 	
 	private String personId;
 
-	private UUID planElectiveCourseId;
+	private String originalFormattedCourse;
 	private List<AbstractMapElectiveCourseTO> planElectiveCourseElectives;
 
 	public PlanCourseTO(PlanCourse planCourse) {
@@ -64,39 +63,7 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 		this.setPersonId(model.getPerson().getId().toString());
 		this.setIsTranscript(model.getIsTranscript());
 		this.setDuplicateOfTranscript(model.getDuplicateOfTranscript());
-
-		PlanElectiveCourse planElectiveCourse = model.getPlanElectiveCourse();
-		if (planElectiveCourse!=null) {
-			planElectiveCourseId = planElectiveCourse.getId();
-			planElectiveCourseElectives = new ArrayList<>();
-			planElectiveCourseElectives.add(createPlanElectiveCourseElective(planElectiveCourse));
-			for (PlanElectiveCourseElective electiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
-				planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(electiveCourseElective));
-			}
-		}
-	}
-
-	private PlanElectiveCourseElectiveTO createPlanElectiveCourseElective(PlanElectiveCourse model) {
-		PlanElectiveCourseElectiveTO planElectiveCourseElective = new PlanElectiveCourseElectiveTO();
-		planElectiveCourseElective.setId(model.getId());
-		if (model.getCreatedBy() != null) {
-			planElectiveCourseElective.setCreatedBy(new PersonLiteTO(model.getCreatedBy().getId(),model.getCreatedBy().getFirstName(),model.getCreatedBy().getLastName()));
-			}
-
-			if (model.getModifiedBy() != null) {
-				planElectiveCourseElective.setModifiedBy(new PersonLiteTO(model.getModifiedBy().getId(),model.getModifiedBy().getFirstName(),model.getModifiedBy().getLastName()));
-			}
-
-		planElectiveCourseElective.setCreatedDate(model.getCreatedDate());
-		planElectiveCourseElective.setModifiedDate(model.getModifiedDate());
-		planElectiveCourseElective.setObjectStatus(model.getObjectStatus());
-		planElectiveCourseElective.setCourseCode(model.getCourseCode());
-		planElectiveCourseElective.setCourseDescription(model.getCourseDescription());
-		planElectiveCourseElective.setCourseTitle(model.getCourseTitle());
-		planElectiveCourseElective.setFormattedCourse(model.getFormattedCourse());
-		planElectiveCourseElective.setCreditHours(model.getCreditHours());
-
-		return planElectiveCourseElective;
+		this.setOriginalFormattedCourse(model.getOriginalFormattedCourse());
 	}
 
 	public String getPersonId() {
@@ -107,14 +74,13 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 		this.personId = personId;
 	}
 
-	public UUID getPlanElectiveCourseId() {
-		return planElectiveCourseId;
+	public String getOriginalFormattedCourse() {
+		return originalFormattedCourse;
 	}
 
-	public void setPlanElectiveCourseId(UUID planElectiveCourseId) {
-		this.planElectiveCourseId = planElectiveCourseId;
+	public void setOriginalFormattedCourse(String originalFormattedCourse) {
+		this.originalFormattedCourse = originalFormattedCourse;
 	}
-
 	public List<AbstractMapElectiveCourseTO> getPlanElectiveCourseElectives() {
 		return planElectiveCourseElectives;
 	}
@@ -122,4 +88,38 @@ public class PlanCourseTO extends AbstractPlanCourseTO<Plan,PlanCourse> {
 	public void setPlanElectiveCourseElectives(List<AbstractMapElectiveCourseTO> planElectiveCourseElectives) {
 		this.planElectiveCourseElectives = planElectiveCourseElectives;
 	}
+
+	public void addPlanElectiveCourseElectives(PlanElectiveCourse planElectiveCourse) {
+
+		if (planElectiveCourse!=null) {
+			planElectiveCourseElectives = new ArrayList<>();
+			planElectiveCourseElectives.add(createPlanElectiveCourseElective(planElectiveCourse));
+			for (PlanElectiveCourseElective planElectiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
+				planElectiveCourseElectives.add(new PlanElectiveCourseElectiveTO(planElectiveCourseElective));
+			}
+		}
+	}
+	private PlanElectiveCourseElectiveTO createPlanElectiveCourseElective(PlanElectiveCourse model) {
+		PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO = new PlanElectiveCourseElectiveTO();
+		planElectiveCourseElectiveTO.setId(model.getId());
+		if (model.getCreatedBy() != null) {
+			planElectiveCourseElectiveTO.setCreatedBy(new PersonLiteTO(model.getCreatedBy().getId(),model.getCreatedBy().getFirstName(),model.getCreatedBy().getLastName()));
+		}
+
+		if (model.getModifiedBy() != null) {
+			planElectiveCourseElectiveTO.setModifiedBy(new PersonLiteTO(model.getModifiedBy().getId(),model.getModifiedBy().getFirstName(),model.getModifiedBy().getLastName()));
+		}
+
+		planElectiveCourseElectiveTO.setCreatedDate(model.getCreatedDate());
+		planElectiveCourseElectiveTO.setModifiedDate(model.getModifiedDate());
+		planElectiveCourseElectiveTO.setObjectStatus(model.getObjectStatus());
+		planElectiveCourseElectiveTO.setCourseCode(model.getCourseCode());
+		planElectiveCourseElectiveTO.setCourseDescription(model.getCourseDescription());
+		planElectiveCourseElectiveTO.setCourseTitle(model.getCourseTitle());
+		planElectiveCourseElectiveTO.setFormattedCourse(model.getFormattedCourse());
+		planElectiveCourseElectiveTO.setCreditHours(model.getCreditHours());
+
+		return planElectiveCourseElectiveTO;
+	}
+
 }

@@ -22,7 +22,6 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateCourseDao;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
-import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -207,30 +206,6 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	@Override
 	public TemplateCourse getTemplateCourse(UUID id) throws ObjectNotFoundException {
 		return templateCourseDao.get(id);
-	}
-
-	@Override
-	public void updateTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse) {
-		Template template = templateElectiveCourse.getTemplate();
-		for (AbstractPlanCourse<?> templateCourse: template.getCourses()) {
-			TemplateCourse tCourse = (TemplateCourse) templateCourse;
-			if (tCourse.getFormattedCourse().equals(templateElectiveCourse.getFormattedCourse())) {
-				tCourse.setTemplateElectiveCourse(templateElectiveCourse);
-			}
-		}
-		save(template);
-	}
-
-	@Override
-	public void removeTemplateCourseElective(TemplateElectiveCourse templateElectiveCourse) {
-		Template template = templateElectiveCourse.getTemplate();
-		for (AbstractPlanCourse<?> templateCourse: template.getCourses()) {
-			TemplateCourse tCourse = (TemplateCourse) templateCourse;
-			if (tCourse.getFormattedCourse().equals(templateElectiveCourse.getFormattedCourse())) {
-				tCourse.setTemplateElectiveCourse(null);
-			}
-		}
-		save(template);
 	}
 
 	@Override

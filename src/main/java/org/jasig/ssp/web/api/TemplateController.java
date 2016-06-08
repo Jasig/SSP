@@ -36,7 +36,6 @@ import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
-import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
 import org.jasig.ssp.transferobject.TemplateOutputTO;
 import org.jasig.ssp.transferobject.TemplateSearchTO;
@@ -427,12 +426,6 @@ public class TemplateController  extends AbstractBaseController {
 		else
 		{
 			obj.setId(null);
-			for (TemplateCourseTO templateCourseTO : obj.getPlanCourses()) {
-				templateCourseTO.setPlanElectiveCourseId(null);
-				for(AbstractMapElectiveCourseTO planElectiveCourseElectiveTO : templateCourseTO.getPlanElectiveCourseElectives()) {
-					planElectiveCourseElectiveTO.setId(null);
-				}
-			}
 			Template model = getFactory().from(obj);
 			final Template clonedTemplate = getService().copyAndSave(model,securityService.currentlyAuthenticatedUser().getPerson());
 

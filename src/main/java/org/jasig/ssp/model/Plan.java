@@ -96,14 +96,6 @@ public class Plan extends AbstractPlan  {
 			PlanCourse planCourseClone = planCourse.clone();
 			planCourseClone.setPlan(clone);
 			planCourseClone.setPerson(clone.getPerson());
-
-			PlanElectiveCourse planElectiveCourseClone = null;
-			if (null!=planCourse.getPlanElectiveCourse()) {
-				planElectiveCourseClone = planCourse.getPlanElectiveCourse().clone();
-				planElectiveCourseClone.setPlan(clone);
-			}
-			planCourseClone.setPlanElectiveCourse(planElectiveCourseClone);
-
 			clone.getPlanCourses().add(planCourseClone);
 		}
 		List<TermNote> termNotes = this.getTermNotes();
@@ -111,6 +103,11 @@ public class Plan extends AbstractPlan  {
 			TermNote termNoteClone = termNote.clone();
 			termNoteClone.setPlan(clone);
 			clone.getTermNotes().add(termNoteClone);
+		}
+		for (PlanElectiveCourse planElectiveCourse : this.getPlanElectiveCourses()) {
+			PlanElectiveCourse planElectiveCourseClone = planElectiveCourse.clone();
+			planElectiveCourseClone.setPlan(clone);
+			clone.getPlanElectiveCourses().add(planElectiveCourseClone);
 		}
 		return clone;
 	}

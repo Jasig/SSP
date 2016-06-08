@@ -20,9 +20,7 @@ package org.jasig.ssp.web.api.reference;
 
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseDetailTOFactory;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseElectiveCourseDetailTOFactory;
-import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
@@ -98,10 +96,11 @@ public class TemplateElectiveCoursesController
 			throws ObjectNotFoundException {
 
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getFormattedCourse());
 
-        if (null!= templateCourse.getTemplateElectiveCourse()) {
+        if (null!= templateElectiveCourse) {
             final PagingWrapper<TemplateElectiveCourseElective> data =
-                    templateElectiveCourseDetailService.getElectiveCourseAssociationsForElectiveCourse(templateCourse.getTemplateElectiveCourse().getId());
+                    templateElectiveCourseDetailService.getElectiveCourseAssociationsForElectiveCourse(templateElectiveCourse.getId());
 
             return new PagedResponse<>(true,
                     data.getResults(), templateElectiveCourseElectiveCourseDetailTOFactory
@@ -139,9 +138,8 @@ public class TemplateElectiveCoursesController
 
         templateElectiveCourseDetailService.deleteAssociatedElective(templateElectiveCourseElectiveId);
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
-        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplateElectiveCourse().getId());
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getFormattedCourse());
         if (templateElectiveCourse.getElectiveCourseElectives().size()==0) {
-            templateService.removeTemplateCourseElective(templateElectiveCourse);
             templateElectiveCourseDetailService.delete(templateElectiveCourse);
         }
         return new ServiceResponse(true);
@@ -155,7 +153,7 @@ public class TemplateElectiveCoursesController
 
             throws ObjectNotFoundException, ValidationException {
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
-        TemplateElectiveCourse templateElectiveCourse = templateCourse.getTemplateElectiveCourse();
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getFormattedCourse());
 
         if (null == templateElectiveCourse) {
             templateElectiveCourse = new TemplateElectiveCourse();
@@ -167,7 +165,6 @@ public class TemplateElectiveCoursesController
             templateElectiveCourse.setTemplate(templateCourse.getTemplate());
             templateElectiveCourse.setObjectStatus(ObjectStatus.ACTIVE);
             templateElectiveCourse = templateElectiveCourseDetailService.createTemplateElectiveCourse(templateElectiveCourse);
-            templateService.updateTemplateCourseElective(templateElectiveCourse);
         }
 
         TemplateElectiveCourseElective templateElectiveCourseElective = new TemplateElectiveCourseElective();
@@ -180,15 +177,6 @@ public class TemplateElectiveCoursesController
         templateElectiveCourseElective.setObjectStatus(ObjectStatus.ACTIVE);
 
         templateElectiveCourseDetailService.createTemplateElectiveCourseElective(templateElectiveCourseElective);
-
-        Template template = templateService.get(templateCourse.getTemplate().getId());
-
-        for (AbstractPlanCourse<?> tCourse : template.getCourses()) {
-            if (tCourse.getFormattedCourse().equals(templateCourse.getFormattedCourse())) {
-                ((TemplateCourse)tCourse).setTemplateElectiveCourse(templateElectiveCourse);
-            }
-        }
-        templateService.save(template);
 
         return new ServiceResponse(true);
     }

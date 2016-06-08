@@ -154,14 +154,6 @@ public class Template extends AbstractPlan implements Cloneable{
 		for (TemplateCourse planCourse : planCourses) {
 			TemplateCourse planCourseClone = planCourse.clone();
 			planCourseClone.setTemplate(clone);
-
-			TemplateElectiveCourse templateElectiveCourseClone = null;
-			if (null!=planCourse.getTemplateElectiveCourse()) {
-				templateElectiveCourseClone = planCourse.getTemplateElectiveCourse().clone();
-				templateElectiveCourseClone.setTemplate(clone);
-			}
-			planCourseClone.setTemplateElectiveCourse(templateElectiveCourseClone);
-
 			clone.getPlanCourses().add(planCourseClone);
 		}
 		List<TermNote> termNotes = this.getTermNotes();

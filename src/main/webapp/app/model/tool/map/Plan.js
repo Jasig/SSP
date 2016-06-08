@@ -362,8 +362,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
             		planCourse.isTranscript = model.get('isTranscript') ==  null ? false : model.get('isTranscript');
 					planCourse.duplicateOfTranscript = model.get('duplicateOfTranscript') ==  null ? false : model.get('duplicateOfTranscript');
             		planCourse.electiveId = model.get('electiveId');
-            		planCourse.planElectiveCourseId = model.get('planElectiveCourseId');
             		planCourse.planElectiveCourseElectives = model.get('planElectiveCourseElectives');
+                    planCourse.originalFormattedCourse = model.get('originalFormattedCourse');
             		planCourse.isValidInTerm = model.get('isValidInTerm');
             		planCourse.hasCorequisites = model.get('hasCorequisites');
             		planCourse.hasPrerequisites = model.get('hasPrerequisites');
