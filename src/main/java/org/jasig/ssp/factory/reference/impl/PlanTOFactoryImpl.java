@@ -117,6 +117,7 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 			planCourse.setPerson(model.getPerson());
 			model.getPlanCourses().add(planCourse);
 		}
+		model.getPlanElectiveCourses().clear();
 		List<PlanElectiveCourseTO> planElectiveCourses = tObject.getPlanElectiveCourses();
 		for (PlanElectiveCourseTO planElectiveCourseTO : planElectiveCourses) {
 			PlanElectiveCourse planElectiveCourse = planElectiveCourseTOFactory.from(planElectiveCourseTO);

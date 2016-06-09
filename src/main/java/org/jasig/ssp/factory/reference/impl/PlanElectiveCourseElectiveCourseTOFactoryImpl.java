@@ -50,6 +50,11 @@ public class PlanElectiveCourseElectiveCourseTOFactoryImpl extends
 	public PlanElectiveCourseElective from(final PlanElectiveCourseElectiveTO tObject)
 			throws ObjectNotFoundException {
 		final PlanElectiveCourseElective model = super.from(tObject);
+		model.setFormattedCourse(tObject.getFormattedCourse());
+		model.setCourseCode(tObject.getCourseCode());
+		model.setCourseDescription(tObject.getCourseDescription());
+		model.setCourseTitle(tObject.getCourseTitle());
+		model.setCreditHours(tObject.getCreditHours());
 		return model;
 	}
 }

@@ -40,9 +40,9 @@ import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.TemplateElectiveCourseDetailService;
-import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanElectiveCourseElectiveTO;
 import org.jasig.ssp.transferobject.PlanElectiveCourseTO;
 import org.jasig.ssp.transferobject.PlanLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
@@ -71,6 +71,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -267,6 +268,12 @@ public class PlanController  extends AbstractBaseController {
 		if (obj.getId() != null) {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
+		}
+		for (PlanElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
+			planElectiveCourseTO.setId(null);
+			for (PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+				planElectiveCourseElectiveTO.setId(null);
+			}
 		}
 		Plan model = getFactory().from(obj);
 		model = getService().copyAndSave(model);

@@ -65,7 +65,6 @@ public class PlanElectiveCourseTOFactoryImpl extends
 
 		try {
 			PlanElectiveCourse model = super.from(tObject);
-			model.setId(tObject.getId());
 			model.setFormattedCourse(tObject.getFormattedCourse());
 			model.setCourseCode(tObject.getCourseCode());
 			model.setCourseDescription(tObject.getCourseDescription());
