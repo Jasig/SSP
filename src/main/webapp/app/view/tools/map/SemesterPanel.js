@@ -182,7 +182,23 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                                 mode: 'local',
                                 queryMode: 'local',
                                 displayField: 'formattedCourse',
-                                valueField: 'formattedCourse'
+                                valueField: 'formattedCourse',
+                                listeners: {
+                                    change : function(comboBox, newValue, oldValue, e) {
+                                        var me = this;
+                                        var selectedModel = this.up('grid').getSelectionModel().getSelection()[0];
+                                        if (selectedModel && selectedModel.data.planElectiveCourseElectives) {
+                                            for(i = 0; i < selectedModel.data.planElectiveCourseElectives.length; i++){
+                                                if (selectedModel.data.planElectiveCourseElectives[i].formattedCourse == newValue ) {
+                                                    selectedModel.data.code = selectedModel.data.planElectiveCourseElectives[i].courseCode;
+                                                    selectedModel.data.description = selectedModel.data.planElectiveCourseElectives[i].courseDescription;
+                                                    selectedModel.data.title = selectedModel.data.planElectiveCourseElectives[i].courseTitle;
+                                                    selectedModel.data.creditHours = selectedModel.data.planElectiveCourseElectives[i].creditHours;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                         }
 					},
 					{

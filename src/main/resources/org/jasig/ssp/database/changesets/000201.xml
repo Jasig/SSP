@@ -47,6 +47,7 @@
                 <constraints nullable="true" />
             </column>
         </createTable>
+        <sql>grant all on caseload_bulk_add_reassignment to ${database.app.username}</sql>
         <rollback>
             <dropTable tableName="caseload_bulk_add_reassignment" />
         </rollback>

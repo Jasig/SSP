@@ -25,22 +25,11 @@ Ext.define('Ssp.store.PlanElectiveCourse', {
 		appEventsController: 'appEventsController'
 
     },    autoLoad: false,
-//    constructor: function(){
-//        return this.callParent(arguments);
-//		this.callParent(arguments);
-//		Ext.apply(this.getProxy(),{
-//			url: this.getProxy.url + this.apiProperties.getItemUrl('electiveCourses'),
-//			extraParams: this.extraParams,
-//			autoLoad: false
-//		});
-//		return this;
-//    }
     load: function(id)
     {
     	var me=this;
     	if(id)
     	{
-            console.log(id);
         	var successFunc = function(response){
 //            	var r;
 //            	r = Ext.decode(response.responseText);
