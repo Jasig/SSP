@@ -23,6 +23,7 @@ import org.jasig.ssp.factory.external.ExternalPersonPlanStatusTOFactory;
 import org.jasig.ssp.factory.external.MapStatusReportLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanLiteTOFactory;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
+import org.jasig.ssp.model.AbstractMapElectiveCourse;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
@@ -40,6 +41,7 @@ import org.jasig.ssp.service.external.ExternalPersonPlanStatusService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.TemplateElectiveCourseDetailService;
+import org.jasig.ssp.transferobject.AbstractMapElectiveCourseTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanElectiveCourseElectiveTO;
@@ -269,12 +271,9 @@ public class PlanController  extends AbstractBaseController {
 			throw new ValidationException(
 					"It is invalid to send an entity with an ID to the create method. Did you mean to use the save method instead?");
 		}
-		for (PlanElectiveCourseTO planElectiveCourseTO : obj.getPlanElectiveCourses()) {
-			planElectiveCourseTO.setId(null);
-			for (PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
-				planElectiveCourseElectiveTO.setId(null);
-			}
-		}
+		clearPlanElectiveCourseIds(obj);
+		setElectiveCourseData(obj);
+
 		Plan model = getFactory().from(obj);
 		model = getService().copyAndSave(model);
 
@@ -430,6 +429,8 @@ public class PlanController  extends AbstractBaseController {
 		final Person oldOwner = oldPlan.getOwner();
 		
 		SspUser currentUser = getSecurityService().currentlyAuthenticatedUser();
+
+		setElectiveCourseData(obj);
 		
 		//If the currently logged in user is not the owner of this plan
 		//we need to create a clone then save it.
@@ -444,6 +445,7 @@ public class PlanController  extends AbstractBaseController {
 		else
 		{
 			obj.setId(null);
+			clearPlanElectiveCourseIds(obj);
 			Plan model = getFactory().from(obj);
 			final Plan clonedPlan = getService().copyAndSave(model);
 			if (null != clonedPlan) {
@@ -539,7 +541,57 @@ public class PlanController  extends AbstractBaseController {
 		
 		return mapStatusService.getByPersonId(personId);
 	}
-	
+	private void setElectiveCourseData(PlanTO planTO) {
+		for (PlanCourseTO planCourseTO : planTO.getPlanCourses()) {
+			if (StringUtils.isNotBlank(planCourseTO.getOriginalFormattedCourse())) {
+				PlanElectiveCourseTO planElectiveCourseTO = findPlanElectiveCourse(planCourseTO.getOriginalFormattedCourse(), planTO.getPlanElectiveCourses());
+				if (planElectiveCourseTO!=null && planCourseTO.getFormattedCourse().equals(planElectiveCourseTO.getFormattedCourse())) {
+					setElectiveCourseData(planCourseTO, planElectiveCourseTO);
+				} else {
+					PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO = findPlanElectiveCourseElective(planCourseTO.getFormattedCourse(), planElectiveCourseTO.getPlanElectiveCourseElectives());
+					if (planElectiveCourseElectiveTO!=null) {
+						setElectiveCourseData(planCourseTO, planElectiveCourseElectiveTO);
+					}
+				}
+			} else {
+				PlanElectiveCourseTO planElectiveCourseTO = findPlanElectiveCourse(planCourseTO.getFormattedCourse(), planTO.getPlanElectiveCourses());
+				if (planElectiveCourseTO!=null) {
+					planCourseTO.setOriginalFormattedCourse(planCourseTO.getFormattedCourse());
+				}
+			}
+		}
+	}
+
+	private void setElectiveCourseData(PlanCourseTO planCourseTO, AbstractMapElectiveCourseTO electiveCourseTO) {
+		planCourseTO.setCourseCode(electiveCourseTO.getCourseCode());
+		planCourseTO.setCourseDescription(electiveCourseTO.getCourseDescription());
+		planCourseTO.setCourseTitle(electiveCourseTO.getCourseTitle());
+		planCourseTO.setCreditHours(electiveCourseTO.getCreditHours());
+	}
+
+	private PlanElectiveCourseTO findPlanElectiveCourse(String formattedCourse, List<PlanElectiveCourseTO> planElectiveCourseTOs ) {
+		for (PlanElectiveCourseTO planElectiveCourseTO : planElectiveCourseTOs) {
+			if (formattedCourse.equals(planElectiveCourseTO.getFormattedCourse()))
+			return planElectiveCourseTO;
+		}
+		return null;
+	}
+	private PlanElectiveCourseElectiveTO findPlanElectiveCourseElective (String formattedCourse, List<PlanElectiveCourseElectiveTO> planElectiveCourseElectiveTOs ) {
+		for (PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO : planElectiveCourseElectiveTOs) {
+			if (formattedCourse.equals(planElectiveCourseElectiveTO.getFormattedCourse()))
+				return planElectiveCourseElectiveTO;
+		}
+		return null;
+	}
+	private void clearPlanElectiveCourseIds(PlanTO planTO) {
+		for (PlanElectiveCourseTO planElectiveCourseTO : planTO.getPlanElectiveCourses()) {
+			planElectiveCourseTO.setId(null);
+			for (PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO : planElectiveCourseTO.getPlanElectiveCourseElectives()) {
+				planElectiveCourseElectiveTO.setId(null);
+			}
+		}
+	}
+
 	private PlanTO validatePlan(PlanTO plan) throws ObjectNotFoundException{
 		String schoolId = null;
 		if(StringUtils.isNotBlank(plan.getPersonId())){

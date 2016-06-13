@@ -334,7 +334,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	
 	updatePlanCourses: function(semesterStores, useSemesterTermCode){ 
         var me = this;
-        
+
 		me.clearPlanCourses();
         var planCourses = new Array();
 		var i = 0;
@@ -375,12 +375,51 @@ Ext.define('Ssp.model.tool.map.Plan', {
             		planCourse.orderInTerm = model.get('orderInTerm');
 					planCourse.objectStatus = 'ACTIVE';
             		planCourse.isDev = model.get('isDev');
+            		if (!planCourse.originalFormattedCourse || planCourse.originalFormattedCourse == "") {
+            		    var planElectiveCourseElectives = me.findPlanElectiveCourseElectives(planCourse.formattedCourse);
+            		    if (planElectiveCourseElectives) {
+            		         planCourse.originalFormattedCourse = model.get('formattedCourse');
+            		         model.set('originalFormattedCourse', model.get('formattedCourse'));
+            		         planCourse.planElectiveCourseElectives = planElectiveCourseElectives;
+            		         model.set('planElectiveCourseElectives', planElectiveCourseElectives);
+            		         model.set('hasElectiveCourses', true);
+            		    }
+            		}
             		planCourses[i++] = planCourse;
             });
          }
          me.set('planCourses',planCourses);
     },
-    
+    findPlanElectiveCourseElectives: function(formattedCourse) {
+        var me = this;
+        var i = 0;
+        var planElectiveCourseElectives = null;
+        for(var j = 0; j < me.data.planElectiveCourses.length; j++){
+            planElectiveCourse = me.data.planElectiveCourses[j]
+            if (planElectiveCourse.formattedCourse == formattedCourse) {
+                planElectiveCourseElectives = new Array();
+                var newPlanElectiveCourseElective = new Object();
+                newPlanElectiveCourseElective.formattedCourse = planElectiveCourse.formattedCourse;
+                newPlanElectiveCourseElective.courseCode = planElectiveCourse.courseCode;
+                newPlanElectiveCourseElective.courseTitle = planElectiveCourse.courseTitle;
+                newPlanElectiveCourseElective.courseDescription = planElectiveCourse.courseDescription;
+                newPlanElectiveCourseElective.creditHours = planElectiveCourse.creditHours;
+                planElectiveCourseElectives[i++] = newPlanElectiveCourseElective;
+                Ext.Array.forEach(planElectiveCourse.planElectiveCourseElectives, function(planElectiveCourseElective) {
+                    var newPlanElectiveCourseElective = new Object();
+                    newPlanElectiveCourseElective.formattedCourse = planElectiveCourseElective.formattedCourse;
+                    newPlanElectiveCourseElective.courseCode = planElectiveCourseElective.courseCode;
+                    newPlanElectiveCourseElective.courseTitle = planElectiveCourseElective.courseTitle;
+                    newPlanElectiveCourseElective.courseDescription = planElectiveCourseElective.courseDescription;
+                    newPlanElectiveCourseElective.creditHours = planElectiveCourseElective.creditHours;
+                    planElectiveCourseElectives[i++] = newPlanElectiveCourseElective;
+                })
+                break;
+            }
+        }
+        return planElectiveCourseElectives;
+    },
+
     validateCourseRequisites: function(courseRequisites, termsStore, coursesStore){
 		var me = this;
     	var planCourses = me.get('planCourses');

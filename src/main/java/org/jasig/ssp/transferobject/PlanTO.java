@@ -59,11 +59,10 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 		List<PlanCourse> planCourses = model.getPlanCourses();
 		for (PlanCourse planCourse : planCourses) {
 			PlanCourseTO courseTO = new PlanCourseTO(planCourse);
-			PlanElectiveCourse planElectiveCourse = (PlanElectiveCourse)findPlanElectiveCourse(model.getPlanElectiveCourses(), planCourse.getOriginalFormattedCourse());
-			if (planElectiveCourse!=null) {
-				courseTO.setOriginalFormattedCourse(planCourse.getFormattedCourse());
+			if (null!=planCourse.getOriginalFormattedCourse()) {
+				PlanElectiveCourse planElectiveCourse = (PlanElectiveCourse)findPlanElectiveCourse(model.getPlanElectiveCourses(), planCourse.getOriginalFormattedCourse());
+				courseTO.addPlanElectiveCourseElectives(planElectiveCourse);
 			}
-			courseTO.addPlanElectiveCourseElectives(planElectiveCourse);
 			this.getPlanCourses().add(courseTO);
 		}
 		List<TermNote> termNotes = model.getTermNotes();

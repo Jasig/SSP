@@ -146,16 +146,8 @@
             <column name="course_description" type="${nvarchar.type}(2500)"/>
             <column name="credit_hours" type="decimal(9,2)"/>
         </createTable>
-        <addColumn tableName="map_template_course">
-            <column name="map_template_elective_course_id" type="uuid">
-                <constraints nullable="true" foreignKeyName="mtec_id"
-                             references="map_template_elective_course(id)" />
-            </column>
-        </addColumn>
         <addColumn tableName="map_plan_course">
-            <column name="map_plan_elective_course_id" type="uuid">
-                <constraints nullable="true" foreignKeyName="mpec_id"
-                             references="map_plan_elective_course(id)" />
+            <column name="original_formatted_course" type="${nvarchar.type}(35)">
             </column>
         </addColumn>
         <rollback>
@@ -163,8 +155,27 @@
             <dropTable tableName="map_template_elective_course_electives" />
             <dropTable tableName="map_plan_elective_course" />
             <dropTable tableName="map_plan_elective_course_electives" />
-            <dropColumn tableName="map_template_course" columnName="map_template_elective_course_id"/>
-            <dropColumn tableName="map_plan_course" columnName="map_plan_elective_course_id"/>
+            <dropColumn tableName="map_plan_course" columnName="original_formatted_course"/>
         </rollback>
+    </changeSet>
+    <changeSet dbms="postgresql" id="Add min(uuid) AGGREGATE and min(uuid,uuid) FUNCTION" author="michael.sultzaberger">
+        <sql ><![CDATA[
+            CREATE OR REPLACE FUNCTION min_uuid(uuid, uuid)
+            RETURNS uuid AS
+            $BODY$
+               SELECT CAST ( CASE WHEN ($2 IS NULL OR $1 < $2) THEN $1 ELSE $2 END AS uuid)
+            $BODY$
+              LANGUAGE sql VOLATILE
+              COST 100;
+            ALTER FUNCTION min_uuid(uuid, uuid)
+              OWNER TO sspadmin;
+
+            CREATE AGGREGATE min(uuid) (
+                sfunc = min_uuid,
+                stype = uuid
+            );
+            ALTER AGGREGATE min(uuid)
+              OWNER TO sspadmin;
+        ]]></sql>
     </changeSet>
 </databaseChangeLog>
