@@ -1015,10 +1015,10 @@ void writeuPortUsers(groovyPersons){
 
 String getXmlLicense(){
 	return " <!-- 													\n\
-			Licensed to Jasig under one or more contributor license		\n\
+			Licensed to Apereo under one or more contributor license		\n\
 		    agreements. See the NOTICE file distributed with this work	\n\
 		    for additional information regarding copyright ownership.	\n\
-		    Jasig licenses this file to you under the Apache License,	\n\
+		    Apereo licenses this file to you under the Apache License,	\n\
 		    Version 2.0 (the \"License\"); you may not use this file 	\n\
 		    except in compliance with the License. You may obtain a 	\n\
 		    copy of the License at: 									\n\
@@ -1375,10 +1375,10 @@ void writePerson(writer, username, password, firstName, lastName, email, phoneNu
 void writeLdif(writer, persons){
 	
 	writer.write("#\n")
-	writer.write("# Licensed to Jasig under one or more contributor license\n")
+	writer.write("# Licensed to Apereo under one or more contributor license\n")
 	writer.write("# agreements. See the NOTICE file distributed with this work\n")
 	writer.write("# for additional information regarding copyright ownership.\n")
-	writer.write("# Jasig licenses this file to you under the Apache License,\n")
+	writer.write("# Apereo licenses this file to you under the Apache License,\n")
 	writer.write("# Version 2.0 (the \"License\"); you may not use this file\n")
 	writer.write("# except in compliance with the License. You may obtain a\n")
 	writer.write("# copy of the License at:\n")
