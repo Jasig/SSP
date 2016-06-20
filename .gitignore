@@ -15,3 +15,6 @@ src/main/resources/org/jasig/ssp/database/basicChangesets/datasetAddendum2PSQL.s
 src/main/resources/org/jasig/ssp/database/basicChangesets/datasetPSQL.sql
 src/main/resources/org/jasig/ssp/database/demoDataChangeset/large_course_set_demo_data.xml
 src/main/resources/org/jasig/ssp/database/masterChangeLog-basic-data.xml
+*.iml
+.idea
+out
