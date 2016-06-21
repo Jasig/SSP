@@ -63,7 +63,7 @@
             <column name="body"><![CDATA[<html>
 <body>
 <p>
-The Bulk Add / Caseload Re-assingment file that you uploaded has been processed.  ${successCount} rows were process successfully.
+The Bulk Add / Caseload Re-assignment file that you uploaded has been processed.  ${successCount} rows were process successfully.
 </p>
 #if(${errors} && ${errors.size()} > 0)
 <p>
