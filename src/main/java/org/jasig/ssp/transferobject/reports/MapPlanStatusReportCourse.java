@@ -19,19 +19,18 @@
 package org.jasig.ssp.transferobject.reports;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class MapPlanStatusReportCourse {
 
 	public MapPlanStatusReportCourse(String termCode, String formattedCourse,
-									 String courseCode, String courseTitle, BigDecimal creditHours, UUID mapPlanElectiveCourseId) {
+									 String courseCode, String courseTitle, BigDecimal creditHours, String originalFormattedCourse) {
 		super();
 		this.termCode = termCode;
 		this.formattedCourse = formattedCourse;
 		this.courseCode = courseCode;
 		this.courseTitle = courseTitle;
 		this.creditHours = creditHours;
-		this.mapPlanElectiveCourseId = mapPlanElectiveCourseId;
+		this.originalFormattedCourse = originalFormattedCourse;
 	}
 
 	private String termCode;
@@ -39,7 +38,7 @@ public class MapPlanStatusReportCourse {
 	private String courseCode;
 	private String courseTitle;
 	private BigDecimal creditHours;
-	private UUID mapPlanElectiveCourseId;
+	private String originalFormattedCourse;
 	
 	public String getTermCode() {
 		return termCode;
@@ -81,11 +80,11 @@ public class MapPlanStatusReportCourse {
 		this.creditHours = creditHours;
 	}
 
-	public UUID getMapPlanElectiveCourseId() {
-		return mapPlanElectiveCourseId;
+	public String getOriginalFormattedCourse() {
+		return originalFormattedCourse;
 	}
 
-	public void setMapPlanElectiveCourseId(UUID mapPlanElectiveCourseId) {
-		this.mapPlanElectiveCourseId = mapPlanElectiveCourseId;
+	public void setOriginalFormattedCourse(String originalFormattedCourse) {
+		this.originalFormattedCourse = originalFormattedCourse;
 	}
 }

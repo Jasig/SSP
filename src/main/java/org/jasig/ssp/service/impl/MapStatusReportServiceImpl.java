@@ -463,8 +463,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
 						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
 					}
-				} else if (mapPlanStatusReportCourse.getMapPlanElectiveCourseId()!=null) {
-					matchedTranscriptCourse = findTranscriptCourseMatchElectiveCourse(mapPlanStatusReportCourse, transcript, criteriaSet);
+				} else if (mapPlanStatusReportCourse.getOriginalFormattedCourse()!=null) {
+					matchedTranscriptCourse = findTranscriptCourseMatchElectiveCourse(planAndPersonInfo, mapPlanStatusReportCourse, transcript, criteriaSet);
 					if (matchedTranscriptCourse != null) {
 						if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
 							reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse, mapPlanStatusReportCourse, SubstitutionCode.ELECTIVE_COURSE, report));
@@ -557,11 +557,18 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		return null;
 	}
 	private ExternalStudentTranscriptCourse findTranscriptCourseMatchElectiveCourse(
+			MapStatusReportPerson planAndPersonInfo,
 			MapPlanStatusReportCourse mapPlanStatusReportCourse,
 			List<ExternalStudentTranscriptCourse> transcript,
 			Set<String> criteriaSet) {
 
-		PlanElectiveCourse planElectiveCourse = getPlanElectiveCourse(mapPlanStatusReportCourse.getMapPlanElectiveCourseId());
+		Plan plan;
+		try {
+			plan = planService.get(planAndPersonInfo.getPlanId());
+		} catch (ObjectNotFoundException e) {
+			return null;
+		}
+		PlanElectiveCourse planElectiveCourse = getPlanElectiveCourse(plan, mapPlanStatusReportCourse.getOriginalFormattedCourse());
 		if (planElectiveCourse==null){
 			return null;
 		}
@@ -915,37 +922,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		return dao.getOffPlanPlansForWatcher(person);
 	}
 
-	private PlanElectiveCourse getPlanElectiveCourse(UUID id) {
-		try {
-			return planElectiveCourseDao.get(id);
-		} catch (ObjectNotFoundException e) {
-			return null;
+	private PlanElectiveCourse getPlanElectiveCourse(Plan plan, String originalFormattedCourse) {
+		for (PlanElectiveCourse planElectiveCourse : plan.getPlanElectiveCourses()) {
+			if (planElectiveCourse.getFormattedCourse().equals(originalFormattedCourse)) {
+				return planElectiveCourse;
+			}
 		}
+		return null;
 	}
-
-//	private Map<String, List<String>> getPlanElectiveCourses(MapStatusReportPerson planAndPersonInfo) {
-//		List<PlanElectiveCourse> planElectiveCourses = planElectiveCourseDao.getAllForPlan(planAndPersonInfo.getPlanId());
-//		Map<String, List<String>> map = new HashMap<>();
-//		for (PlanElectiveCourse planElectiveCourse : planElectiveCourses) {
-//			List<String> electiveCourses = map.get(planElectiveCourse.getFormattedCourse());
-//			if (electiveCourses == null) {
-//				electiveCourses = new ArrayList<>();
-//			}
-//			for (AbstractMapElectiveCourse planElectiveCourseElective : planElectiveCourse.getElectiveCourseElectives()) {
-//				if (!electiveCourses.contains(planElectiveCourseElective.getFormattedCourse())) {
-//					electiveCourses.add(planElectiveCourseElective.getFormattedCourse());
-//				}
-//				List<String> electiveCourseElectives = map.get(planElectiveCourseElective.getFormattedCourse());
-//				if (electiveCourseElectives == null) {
-//					electiveCourseElectives = new ArrayList<>();
-//				}
-//				if (!electiveCourseElectives.contains(planElectiveCourse.getFormattedCourse())) {
-//					electiveCourseElectives.add(planElectiveCourse.getFormattedCourse());
-//				}
-//				map.put(planElectiveCourseElective.getFormattedCourse(), electiveCourseElectives);
-//			}
-//			map.put(planElectiveCourse.getFormattedCourse(), electiveCourses);
-//		}
-//		return map;
-//	}
 }
