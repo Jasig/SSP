@@ -798,7 +798,7 @@
 							SOURCE.early_alert_response_current_count,
 							SOURCE.current_registration_status,
 							SOURCE.campus_name,
-							SOURCE.next_term_registration_status)
+							SOURCE.next_term_registration_status);
                 END;
         ]]></sql>
     </changeSet>
