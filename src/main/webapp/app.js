@@ -243,6 +243,9 @@ Ext.require([
     'Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin',
 	'Ssp.view.admin.forms.config.MessageTemplateDetails',
 	'Ssp.view.admin.forms.config.MessageTemplatePreview',
+    'Ssp.view.admin.forms.config.MessageQueueAdmin',
+    'Ssp.view.admin.forms.config.MessageQueueDisplayAdmin',
+    'Ssp.view.admin.forms.config.MessageQueueDetails',
 
     //OAUTH2 ADMIN VIEWS
     'Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin',
@@ -295,6 +298,7 @@ Ext.require([
 	'Ssp.model.Transcript',
 	'Ssp.model.FilterDiscreteValues',
 	'Ssp.model.MessageTemplates',
+    'Ssp.model.Message',
 	'Ssp.model.OAuth2Client',
 	'Ssp.model.LTIConsumer',
 	'Ssp.model.Permission',
@@ -473,6 +477,7 @@ Ext.require([
     'Ssp.store.CurrentlyRegistered',
     'Ssp.store.FinancialAidSAPStatus',
     'Ssp.store.PlanElectiveCourse',
+    'Ssp.store.Messages',
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.AssessmentService',
@@ -577,6 +582,7 @@ var apiUrls = [
   {name: 'courseworkHours', url: 'reference/courseworkHours'},
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
   {name: 'messageTemplatePreview', url: 'messageTemplatePreview'},
+  {name: 'messageQueue', url: 'message'},
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'careerstatus', url: 'reference/careerstatus'},
@@ -1853,6 +1859,7 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
+                    messageQueueStore: 'Ssp.store.Messages',
 			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',			    	

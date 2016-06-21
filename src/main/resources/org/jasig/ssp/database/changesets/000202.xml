@@ -150,6 +150,10 @@
             <column name="original_formatted_course" type="${nvarchar.type}(35)">
             </column>
         </addColumn>
+        <sql>grant all on map_template_elective_course to ${database.app.username}</sql>
+        <sql>grant all on map_template_elective_course_electives to ${database.app.username}</sql>
+        <sql>grant all on map_plan_elective_course to ${database.app.username}</sql>
+        <sql>grant all on map_plan_elective_course_electives to ${database.app.username}</sql>
         <rollback>
             <dropTable tableName="map_template_elective_course" />
             <dropTable tableName="map_template_elective_course_electives" />

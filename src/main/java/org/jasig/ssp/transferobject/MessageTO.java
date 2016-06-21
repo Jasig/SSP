@@ -18,8 +18,8 @@
  */
 package org.jasig.ssp.transferobject;
 
-import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
 import org.jasig.ssp.model.Message;
+import java.util.Date;
 
 public class MessageTO extends AbstractAuditableTO<Message>
 	implements TransferObject<Message> {
@@ -29,6 +29,14 @@ public class MessageTO extends AbstractAuditableTO<Message>
 	private String recipientEmailAddress;
 	private String body;
 	private PersonLiteTO sender;
+    private String sentToAddresses;
+    private String sentCcAddresses;
+    private String sentBccAddresses;
+    private String sentFromAddress;
+    private String sentReplyToAddress;
+    private Date sentDate;
+    private Integer retryCount;
+
 	
 	public MessageTO() {
 		super();
@@ -49,6 +57,13 @@ public class MessageTO extends AbstractAuditableTO<Message>
 		if (model.getSender() != null) {
 			this.sender = new PersonLiteTO(model.getSender().getId(),model.getSender().getFirstName(),model.getSender().getLastName());
 		}
+        this.sentToAddresses = model.getSentToAddresses();
+        this.sentCcAddresses = model.getSentCcAddresses();
+        this.sentBccAddresses = model.getSentBccAddresses();
+        this.sentFromAddress = model.getSentFromAddress();
+        this.sentReplyToAddress = model.getSentReplyToAddress();
+        this.sentDate = model.getSentDate();
+        this.retryCount = model.getRetryCount();
 	}
 
 	public String getSubject() {
@@ -90,4 +105,60 @@ public class MessageTO extends AbstractAuditableTO<Message>
 	public void setSender(PersonLiteTO sender) {
 		this.sender = sender;
 	}
+
+    public String getSentToAddresses () {
+        return sentToAddresses;
+    }
+
+    public void setSentToAddresses (String sentToAddresses) {
+        this.sentToAddresses = sentToAddresses;
+    }
+
+    public String getSentCcAddresses () {
+        return sentCcAddresses;
+    }
+
+    public void setSentCcAddresses (String sentCcAddresses) {
+        this.sentCcAddresses = sentCcAddresses;
+    }
+
+    public String getSentBccAddresses () {
+        return sentBccAddresses;
+    }
+
+    public void setSentBccAddresses (String sentBccAddresses) {
+        this.sentBccAddresses = sentBccAddresses;
+    }
+
+    public String getSentFromAddress () {
+        return sentFromAddress;
+    }
+
+    public void setSentFromAddress (String sentFromAddress) {
+        this.sentFromAddress = sentFromAddress;
+    }
+
+    public String getSentReplyToAddress () {
+        return sentReplyToAddress;
+    }
+
+    public void setSentReplyToAddress (String sentReplyToAddress) {
+        this.sentReplyToAddress = sentReplyToAddress;
+    }
+
+    public Date getSentDate () {
+        return sentDate;
+    }
+
+    public void setSentDate (Date sentDate) {
+        this.sentDate = sentDate;
+    }
+
+    public Integer getRetryCount () {
+        return retryCount;
+    }
+
+    public void setRetryCount (Integer retryCount) {
+        this.retryCount = retryCount;
+    }
 }

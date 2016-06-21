@@ -81,7 +81,8 @@ final public class Message
 	private Date sentDate;
 
 	private Integer retryCount;
-	/**
+
+    /**
 	 * Empty constructor
 	 */
 	public Message() {
