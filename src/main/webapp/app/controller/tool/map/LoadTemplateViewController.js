@@ -33,138 +33,137 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsStore',
         divisionsStore: 'divisionsStore',
-        textStore: 'sspTextStore'
+        textStore: 'sspTextStore',
+        isTemplateFlag: 'isTemplateMode'
     },
-    
 	control: {
+        'newButton': {
+            click: 'onNewClick'
+        },
     	'openButton': {
 			click: 'onOpenClick'
 		},	
 		'cancelButton': {
 			click: 'onCloseClick'
 		},
-	   'program': {
-    	   selector: '#program',
-    	   listeners: {
-            select: 'onProgramSelect'
-           }
+	    'program': {
+    	    selector: '#program',
+    	    listeners: {
+                select: 'onProgramSelect'
+            }
         },
-          'department':{
+        'department':{
            selector: '#department',
            hidden: false,
            listeners: {
-            select: 'onDepartmentSelect'
+                select: 'onDepartmentSelect'
            }
         },
-         'division':{
-           selector: '#division',
-           listeners: {
-            select: 'onDivisionSelect'
-           }
+        'division':{
+            selector: '#division',
+            listeners: {
+                select: 'onDivisionSelect'
+            }
         },
-
-         'catalogYear':{
-           selector: '#catalogYear',
-           listeners: {
-            select: 'onCatalogYearSelect'
-           }
+        'catalogYear':{
+            selector: '#catalogYear',
+            listeners: {
+                select: 'onCatalogYearSelect'
+            }
         },
-
-         'mapTemplateTag':{
-           selector: '#mapTemplateTag',
-           listeners: {
-            select: 'onMapTemplateTagSelect'
-           }
+        'mapTemplateTag':{
+            selector: '#mapTemplateTag',
+            listeners: {
+                select: 'onMapTemplateTagSelect'
+            }
         },
-
         'programCancel':{
             selector: '#programCancel',
             hidden: true,
-              listeners: {
-               click: 'onProgramCancelClick'
-              }
-           },
-           
+            listeners: {
+                click: 'onProgramCancelClick'
+            }
+        },
         'departmentCancel':{
             selector: '#departmentCancel',
             hidden: false,
             listeners: {
-             click: 'onDepartmentCancelClick'
+                click: 'onDepartmentCancelClick'
             }
          },
-        
-        
         'divisionCancel':{
            selector: '#divisionCancel',
            listeners: {
-            click: 'onDivisionCancelClick'
+                click: 'onDivisionCancelClick'
            }
         },
-
         'catalogYearCancel':{
            selector: '#catalogYearCancel',
            listeners: {
-            click: 'onCatalogYearCancelClick'
+                click: 'onCatalogYearCancelClick'
            }
         },
-
         'mapTemplateTagCancel':{
            selector: '#mapTemplateTagCancel',
            listeners: {
-            click: 'onMapTemplateTagCancelCancelClick'
+                click: 'onMapTemplateTagCancelCancelClick'
            }
         },
-
 		'objectStatusFilter':{
             selector: '#objectStatusFilter',
             hidden: false,
             listeners: {
-             select: 'onObjectStatusFilterSelect'
+                select: 'onObjectStatusFilterSelect'
             }
          },
-
 		'typeFilter':{
             selector: '#typeFilter',
             hidden: false,
             listeners: {
-             select: 'onTypeFilterSelect'
+                select: 'onTypeFilterSelect'
             }
-         },
-         view: {
+        },
+        view: {
             show: 'onShow'
-         },
-		 'allPlansTemplateGridPanel':{
-		 	itemdblclick: 'onItemDblClick'
-		 }
+        },
+        'allPlansTemplateGridPanel':{
+            itemdblclick: 'onItemDblClick'
+        }
 	},
 
 	init: function() {
 		var me=this;
 	    me.resetForm();
-		if(me.programsStore.getTotalCount() < 1)
-	    	me.programsStore.load();
-		if(me.departmentsStore.getTotalCount() < 1)
-	    	me.departmentsStore.load();
-		if(me.divisionsStore.getTotalCount() < 1)
+
+		if (me.programsStore.getTotalCount() < 1) {
+            me.programsStore.load();
+        }
+		if (me.departmentsStore.getTotalCount() < 1) {
+            me.departmentsStore.load();
+        }
+		if (me.divisionsStore.getTotalCount() < 1) {
 	    	me.divisionsStore.load();
-	    if(me.catalogYearsStore.getTotalCount() < 1)
+		}
+	    if (me.catalogYearsStore.getTotalCount() < 1) {
 	        me.catalogYearsStore.load();
-	    if(me.mapTemplateTagsStore.getTotalCount() < 1)
+	    }
+	    if (me.mapTemplateTagsStore.getTotalCount() < 1) {
 	        me.mapTemplateTagsStore.load();
+	    }
 	    me.store.addListener("load", me.onStoreLoaded, me);
-		return me.callParent(arguments);
+
+        return me.callParent(arguments);
     },
 
     loadTemplates: function() {
         var me = this;
         me.getView().setLoading(true);
         me.store.load(); 
-		me.store.filter([
-		{
+
+        me.store.filter([{
 			property: 'objectStatus',
 			value: 'ACTIVE'
-		}
-		]);
+		}]);
 		// callback registered in init()
     },
     
@@ -175,12 +174,15 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     },
 
     onShow: function() {
+        var me = this;
+        if (!isTemplateFlag) {
+            me.getNewButton().hide(); //hide when coming from MAP tool
+        }
         // do this on show rather than init b/c this component isn't destroyed
         // when dismissed, but we need to make sure you see all the latest
         // Template changes whenever we do display this component. The easiest
         // way to do that is to just hit the store/server again every time the
         // view fires its show event
-        var me = this;
         me.loadTemplates();
     },
 
@@ -200,8 +202,12 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		
 		me.mapEventUtils.loadTemplate(record.get('id'));
      	me.getView().hide();
-		
-		},
+    },
+
+    onNewClick: function(button) {
+        var me = this;
+        me.appEventsController.getApplication().fireEvent('onNewTemplateRequest', {viewToClose:me.getView()});
+    },
     
     onOpenClick: function(button) {
     	var me = this;
@@ -214,11 +220,10 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		
 		record = me.getView().query('gridpanel')[0].getView().getSelectionModel().getSelection()[0];
 		
-        if (record) 
-        {	
+        if (record) {
         	 me.mapEventUtils.loadTemplate(record.get('id'));
      	     me.getView().hide();
-        }else{
+        } else {
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.load-template.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.load-template.select-item','Please select an item to edit.')
@@ -235,11 +240,11 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 		me.getView().hide();
 	},
 	
-	 onProgramSelect: function(){
-	        var me=this;
-	        me.handleSelect(me);
-	        var params = {};
-	        me.setParam(params, me.getProgram(), "programCode");
+    onProgramSelect: function(){
+        var me=this;
+        me.handleSelect(me);
+        var params = {};
+        me.setParam(params, me.getProgram(), "programCode");
     },  
     
     onProgramCancelClick: function(button){
@@ -325,22 +330,22 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 			me.store.clearFilter(false);
 			me.store.filterBy(me.typeStatusFilter, me);
 	},
-	
-	
-	
+
 	typeStatusFilter: function(record){
 		var me = this;
-		if(me.values.objectStatus != null && me.values.objectStatus != undefined && me.values.objectStatus != 'ALL')
-		{
-			if(record.get("objectStatus") != me.values.objectStatus)
-				return false;
+		if (me.values.objectStatus != null && me.values.objectStatus != undefined && me.values.objectStatus != 'ALL') {
+			if (record.get("objectStatus") != me.values.objectStatus) {
+                return false;
+            }
 		}
 		var visibilityMatch = false;
 		var typeValue = me.getTypeFilter().getValue();
-		if( typeValue == 'ALL')
-			visibilityMatch = true;
-		else if(record.get("visibility") == typeValue)
-			visibilityMatch = true;
+
+        if (typeValue == 'ALL') {
+            visibilityMatch = true;
+        } else if (record.get("visibility") == typeValue) {
+            visibilityMatch = true;
+        }
 				
 		return visibilityMatch;
 	},
@@ -349,7 +354,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	    var me=this;
 	    me.store.clearFilter(false);
 	    me.store.removeListener("load", me.onStoreLoaded, me);
-	    return me.callParent( arguments );
+
+        return me.callParent( arguments );
 	}
-		
 });

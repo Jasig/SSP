@@ -44,6 +44,7 @@ Ext.define('Ssp.store.Tools', {
 				{ group:'beta', name: me.textStore.getValueByCode('ssp.label.tools.journal', 'Journal'), toolType: "journal", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.earlyalert', 'Early Alert'), toolType: "earlyalert", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.map', 'MAP'), toolType: "map", active: true },
+		    	{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.template', 'Template'), toolType: "template", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.emailstudent', 'Email Student'), toolType: "emailstudent", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.acommodation', 'Accommodation'), toolType: "accommodation", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.documents', 'Documents'), toolType: "documents", active: true },

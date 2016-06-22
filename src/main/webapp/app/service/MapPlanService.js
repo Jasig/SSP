@@ -352,11 +352,14 @@ Ext.define('Ssp.service.MapPlanService', {
 	    	callbacks.failure("Plan not found", callbacks.scope);
 		}
 			var url = me.getBaseUrl(plan.get('personId'));
-		if(isTemplate){
+		if (isTemplate) {
 			plan.set("personId","");
 			plan.setIsTemplate(isTemplate);
-			url = me.getTemplateBaseUrl();
-		}
+			if (!plan.get('planElectiveCourses')) {
+				plan.set('planElectiveCourses', []);
+			}
+            url = me.getTemplateBaseUrl();
+        }
 
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );

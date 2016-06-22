@@ -84,12 +84,12 @@ Ext.define('Ssp.controller.AdminViewController', {
 		view: {
 			itemclick: 'onItemClick'
 		}
-		
 	},
 	
 	init: function() {
 		var me = this;
 		me.confidentialityLevelOptionsStore.load();
+
 		return this.callParent(arguments);
     }, 
     
@@ -97,19 +97,19 @@ Ext.define('Ssp.controller.AdminViewController', {
 	 * Handle selecting an item in the tree grid
 	 */
 	onItemClick: function(view,record,item,index,eventObj) {
-		var storeName = "";
+		var me = this;
+	    var storeName = "";
 		var columns = null;
 
-		if (record.raw != undefined )
-		{
-			if ( record.raw.form != "")
-			{
-				if (record.raw.store != "")
-				{
+		if (record && record.raw != undefined) {
+
+		    if (record.raw.form && record.raw.form != "") {
+
+		        if (record.raw.store != "") {
 					storeName = record.raw.store;
 				}
-				if (record.raw.columns != null)
-				{
+
+				if (record.raw.columns != null) {
 					columns = record.raw.columns;
 				}
 				var options = {
@@ -117,7 +117,14 @@ Ext.define('Ssp.controller.AdminViewController', {
 					viewConfig: record.raw.viewConfig,
 					sort: record.raw.sort
 				}
-				this.loadAdmin( record.raw.title, record.raw.form, storeName, columns, options);
+
+				this.loadAdmin(record.raw.title, record.raw.form, storeName, columns, options);
+
+			} else if (record.raw.text == 'Template') {
+                // var tool = new Ssp.model.Tool();
+                // tool.set('active', true); //TODO See if can reach Template tool from Admin
+                // tool.set('toolType', 'template');
+                // var skipCallback = me.appEventsController.getApplication().fireEvent('doSelectTool', null, tool, null, null);
 			}
 		}
 	},
@@ -130,28 +137,26 @@ Ext.define('Ssp.controller.AdminViewController', {
 		var comp = this.formUtils.loadDisplay('adminforms',form, true, options);
 		var store = null;
 
-		if (Ext.isFunction(comp.setTitle))
+		if (Ext.isFunction(comp.setTitle)) {
 			comp.setTitle(title + ' Admin');
+		}
 		
 		// set a store if defined
-		if (storeName != "")
-		{
+		if (storeName != "") {
 			store = me[storeName+'Store'];
 			// If the store was set, then modify
 			// the component to use the store
-			if (store != null)
-			{
+			if (store != null) {
 				// pass the columns for editing
-				if(store.sorters){
+				if (store.sorters) {
 					store.sorters.clear();
 				}
 				//TODO  currentPage for store is reset to 1 since sorting is client side.
 				store.currentPage=1;
-				if (columns != null)
-				{
+				if (columns != null) {
 					// comp.reconfigure(store, columns); // ,columns
 					me.formUtils.reconfigureGridPanel(comp, store, columns);
-				}else{
+				} else {
 					// comp.reconfigure(store);
 					me.formUtils.reconfigureGridPanel(comp, store);
 				}
@@ -199,8 +204,9 @@ Ext.define('Ssp.controller.AdminViewController', {
 	},
 	
 	destroy: function(){
-		if(sspInDevelopMode)
+		if (sspInDevelopMode) {
 			this.appEventsController.checkAllObjectsForEvents();
+		}
 		return this.callParent(arguments);
 	}
 });

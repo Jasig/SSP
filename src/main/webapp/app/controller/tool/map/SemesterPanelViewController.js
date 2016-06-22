@@ -32,8 +32,9 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		termsStore: 'termsStore',
 		formRendererUtils: 'formRendererUtils',
 		coursesStore: 'coursesStore',
-		textStore: 'sspTextStore'
-	},
+		textStore: 'sspTextStore',
+        isTemplateFlag: 'isTemplateMode'
+    },
 	
 	control:{
 		termNotesButton:{
@@ -60,7 +61,8 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	config:{
 		minHrs : '0',
 		maxHrs: '0'
-	},	
+	},
+
 	init: function() {
 		var me=this;
 		me.appEventsController.getApplication().addListener("onAfterPlanLoad", me.updatePastTermButton, me);
@@ -69,14 +71,12 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.getView().view.addListener('drop', me.onDrop, me);	
 
 		var helpButton = me.getView().tools[0];
-		if(me.currentMapPlan.get('isTemplate'))
-		{
+		if(me.currentMapPlan.get('isTemplate'))	{
 			helpButton.hidden = true;
-		}
-		else
-		{
+		} else {
 			helpButton.hidden = !me.getView().editable;
 		}
+
 		return me.callParent(arguments);
     },
 
@@ -84,42 +84,46 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		var me = this;
 		me.setTermNoteButton();
 	},
+
 	updatePastTermButton: function(){
 		var me = this;
 		var helpButton = me.getView().tools[0];
-		if(me.currentMapPlan.get('isTemplate'))
-		{
+		if (me.currentMapPlan.get('isTemplate')) {
 			helpButton.hidden = true;
-		}
-		else
-		{
+		} else {
 			helpButton.hidden = !me.getView().editable;
 		}
 		me.setTermNoteButton();
 	},
+
 	setTermNoteButton: function(){
 		var me = this;
 		var termNote = me.currentMapPlan.getTermNoteByTermCode(me.getView().itemId);
 		var button = me.getTermNotesButton();
 		var isImportantTermButton = me.getIsImportantTermButton();
-		if(termNote != undefined && termNote != null && termNote.data.isImportant){
+		if (termNote != undefined && termNote != null && termNote.data.isImportant) {
 			isImportantTermButton.show();
 			Ext.select('.importantIconSmall').setStyle('left', '1px');
-		}else{
+		} else {
 			isImportantTermButton.hide();
 		}
-		if((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
-			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ){
+		if ((termNote != undefined && termNote != null && termNote.data.contactNotes && termNote.data.contactNotes.length > 0) ||
+			(termNote.data.studentNotes != undefined && termNote.data.studentNotes.length > 0) ) {
 			button.setIcon(Ssp.util.Constants.EDIT_TERM_NOTE_ICON_PATH);
 			var tooltip =  me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.term-notes',"Term Notes")
-			if(termNote.data.contactNotes && termNote.data.contactNotes.length > 0)
-				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.contact-notes',"Contact Notes: %CONTACT-NOTES%",{'%CONTACT-NOTES%':termNote.data.contactNotes});
-			if(termNote.data.studentNotes && termNote.data.studentNotes.length > 0)
-				tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.student-notes',"Contact Notes: %STUDENT-NOTES%",{'%STUDENT-NOTES%':termNote.data.studentNotes});
-			button.setTooltip(tooltip);
-			return;
+
+            if (termNote.data.contactNotes && termNote.data.contactNotes.length > 0) {
+                tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.contact-notes', "Contact Notes: %CONTACT-NOTES%", {'%CONTACT-NOTES%': termNote.data.contactNotes});
+            }
+
+            if (termNote.data.studentNotes && termNote.data.studentNotes.length > 0) {
+                tooltip += "<br/>" + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.student-notes', "Contact Notes: %STUDENT-NOTES%", {'%STUDENT-NOTES%': termNote.data.studentNotes});
+            }
+            button.setTooltip(tooltip);
+
+            return;
 		}
-	     button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
+        button.setIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
 	},
 	
 	onTermNotesButtonClick: function() {
@@ -133,31 +137,29 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	    me.termNotesPopUp.query('form')[0].getForm().loadRecord(termNote);
 		me.termNotesPopUp.query('[name=saveButton]')[0].addListener('click', me.onTermNotesSave, me, {single:true});
 
-		
         me.termNotesPopUp.center();
         me.termNotesPopUp.show();
     },
+
     onDeleteButtonClick: function() {
 		var me = this;
 		var grid = me.getView();
 		var record = grid.getSelectionModel().getSelection()[0];
-		if(!grid.editable && !me.currentMapPlan.get('isTemplate'))
-		{
+
+        if (!grid.editable && !me.currentMapPlan.get('isTemplate')) {
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.semester-panel.cannot-modify-old-terms','You cannot modify old terms.')
 				);
 		    return;
 		}
-		if(!record)
-		{
+
+		if (!record) {
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.semester-panel.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.semester-panel.select-item','Please select an item.')
-				);
-	    }
-		else
-		{
+            );
+	    } else {
 			me.appEventsController.loadMaskOn();
 			// cache dirty state now b/c the store.remove() on the next line will dirty the plan.
 			var planWasDirty = me.currentMapPlan.isDirty(me.semesterStores);
@@ -184,6 +186,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.setTermNoteButton();
 		me.termNotesPopUp.close();
 	},
+
     onItemDblClick: function(grid, record, item, index, e, eOpts) {
 		var me = this;
 		var courseRecord = record;
@@ -226,20 +229,17 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			
 			var course = me.coursesStore.findRecord('code', planCourse.get('code'), 0, false, false, true);
 		
-			if(me.getMinHrs() == 0){
+			if(me.getMinHrs() == 0) {
 				if(course != null)
 					creditHours.setMinValue(course.get('minCreditHours'));
-			}
-			else
-			{
+			} else {
 				creditHours.setMinValue(me.getMinHrs());
 			}
-    		if(me.getMaxHrs() == 0){
+
+    		if(me.getMaxHrs() == 0) {
 				if(course != null)
 					creditHours.setMaxValue(course.get('maxCreditHours'));
-			}
-			else
-			{
+			} else {
 				creditHours.setMaxValue(me.getMaxHrs());
 			}
 		    
@@ -281,7 +281,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		}, me.beforeDropState);
 		delete me.beforeDropState; // paranoia
 
-		if(data.view.findParentByType("semesterpanel")){
+		if (data.view.findParentByType("semesterpanel")) {
 			courseOp.fromStore = data.view.getStore();
 		}
 
@@ -292,19 +292,19 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		return true;
     },
 
-
 	validateCourses: function(courseOp){
 		var me = this;
+        var isTemplate = me.currentMapPlan.get('isTemplate') || isTemplateFlag;
 		var serviceResponses = {
                 failures: {},
                 successes: {},
                 responseCnt: 0,
                 expectedResponseCnt: 1
-            };
+        };
 
 		me.setOrderInTerm();
 		me.currentMapPlan.updatePlanCourses(me.semesterStores, true);
-		me.mapPlanService.validate(me.currentMapPlan, me.currentMapPlan.get('isTemplate'), {
+		me.mapPlanService.validate(me.currentMapPlan, isTemplate, {
             success: me.newServiceSuccessHandler('validatedPlan', me.newOnValidateSuccess(courseOp), serviceResponses),
             failure: me.newServiceFailureHandler('validatedFailed', me.newOnValidateFailure(courseOp), serviceResponses),
             scope: me,
@@ -385,7 +385,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			var record = store.getAt(i);
 			record.set("orderInTerm", i);
 		}
-
 	},
 
 	newOnConfirmInvalidCourseOp: function(courseOp) {
@@ -397,7 +396,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 
 	onConfirmInvalidCourseOp: function(buttonId, courseOp){
 		var me = this;
-    	if(buttonId != 'yes'){
+    	if (buttonId != 'yes') {
 			courseOp.rollback = true;
 			if ( courseOp.op === 'MOVE' ) {
 				// Undo the add to this semester's store (the target of the move), but preventing the corresponding
@@ -413,7 +412,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 
 			// Re-add back to the 'source' store handled below -- same mechanism for both 'MOVE' and 'DELETE' ops.
 
-			if(courseOp.fromStore){
+			if (courseOp.fromStore) {
 
 				var rec = courseOp.course.copy(); // clone the record
 
@@ -440,7 +439,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 			} else {
 				me.completeCourseOp(courseOp); // complete 'null' course op, i.e. clean up after a rollback
 			}
-    	}else{
+    	} else {
 			me.completeCourseOp(courseOp);
 		}
     },
@@ -448,7 +447,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 	removeCourseUnjournaled: function(course, store) {
 		var me = this;
 		var index = store.findExact('code', course.get("code"));
-		if(index >= 0){
+		if (index >= 0) {
 			store.removeAt(index);
 			me.unjournalCourseRemoval(course, store);
 		}
@@ -538,7 +537,6 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelViewController', {
 		me.getView().view.removeListener('drop', me.onDrop, me);
 		me.appEventsController.getApplication().removeListener("onAfterPlanLoad", me.updatePastTermButton, me);
 
-		
-		 return me.callParent( arguments );
+        return me.callParent( arguments );
 	}
 });

@@ -17,31 +17,55 @@
  * under the License.
  */
 Ext.define('Ssp.view.admin.forms.map.MapElectiveCourses', {
-   extend: 'Ext.container.Container',
+	extend: 'Ext.window.Window',
     alias : 'widget.mapelectivecourses',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.map.MapElectiveCoursesViewController',
-	width : '100%',
-	height : '100%',
-	layout : {
+    inject: {
+        textStore: 'textStore'
+	},
+    title: 'Edit Template Elective Courses',
+    floating: true,
+    centered: true,
+    closable: true,
+	resizable: true,
+	modal: true,
+    width : 750,
+    height : 550,
+    //bodyPadding: 2,
+    layout : {
 		type : 'hbox',
 		align : 'stretch'
 	},
-        	initComponent : function() {
-        		Ext.apply(this, {
-        			items : [ {
-        				xtype : 'coursesview',
-        				width : 300
-        			}, {
-        				xtype : 'associateelectivecoursesadmin',
-        				flex : 1
-        			}
+	initComponent : function() {
+	    var me = this;
+		Ext.apply(this, {
+            items : [{
+                xtype : 'coursesview',
+                width : 300
+            }, {
+                xtype : 'associateelectivecoursesadmin',
+                flex : 1
+            }],
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'top',
+                items: [{
+                    xtype: 'button',
+                    itemId: 'cancelButton',
+                    text: me.textStore.getValueByCode('ssp.label.close-button', 'Close'),
+                    listeners: {
+                        click: function () {
+                            me = this;
+                            me.close();
+                        },
+                        scope: me
+                    }
+                }]
+            }]
+		});
 
-        			]
-        		});
-
-        		return this.callParent(arguments);
+		return this.callParent(arguments);
     }
-
 });

@@ -1131,7 +1131,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                 header: 'Tag Code',
                                 dataIndex: 'code',
                                 required: true,
-                                editor:{
+                                editor: {
                                     allowBlank: false
                                 },
                                 field: {
@@ -1151,6 +1151,10 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     },
                     form: 'AbstractReferenceAdmin',
                     leaf: true
+                // }, {
+                //     text: 'Template',
+                //     title: 'Template Tool',
+                //     leaf: true
                 }, {
                     text: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
                     title: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag") + ' Management',
@@ -1162,22 +1166,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 },{
-                    text: 'Template Status',
-                    title: 'Template Status Manager',
+                    text: 'Template Management',
+                    title: 'Template Manager',
                     store: 'planTemplatesSummary',
                     form: 'maptemplatesadmin',
-                    
                     leaf: true,
                     addButtonVisible: false
-                },{
-                    text: 'Elective Courses',
-                    title: 'Elective Courses Manager',
-                    form: 'mapelectivecourses',
-
-                    leaf: true,
-                    addButtonVisible: false
-                }
-                ]
+                }]
             }]
         };
         

@@ -27,18 +27,19 @@ Ext.define('Ssp.controller.ToolsViewController', {
         personLite: 'personLite',
 		person: 'currentPerson',
 		personService:'personService',
-        toolsStore: 'toolsStore'
+        toolsStore: 'toolsStore',
+        isTemplateFlag: 'isTemplateMode'
     },
     control: {
         view: {
             itemclick: 'onItemClick',
             viewready: 'onViewReady'
         }
-    
     },
     
-    init: function(){
-        return this.callParent(arguments);
+    init: function() {
+        var me = this;
+        return me.callParent(arguments);
     },
     
     onViewReady: function(comp, obj){
@@ -60,16 +61,19 @@ Ext.define('Ssp.controller.ToolsViewController', {
         });
         
         me.appEventsController.assignEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
+        me.appEventsController.assignEvent({eventName: 'doSelectTool', callBackFunc: me.onItemClick, scope: me});
         me.appEventsController.assignEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
        
         if (me.personLite.get('id') != "") {
             me.loadPerson();
         }
     },
+
     doToolsNav: function(){
-    	var me=this;
+    	var me = this;
     	me.loadTool(toolsRecord.get('toolType'));
     },
+
     destroy: function(){
         var me = this;
         
@@ -90,7 +94,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
         });
         
         me.appEventsController.removeEvent({eventName: 'doToolsNav', callBackFunc: me.doToolsNav, scope: me});
-        
+        me.appEventsController.removeEvent({eventName: 'doSelectTool', callBackFunc: me.onItemClick, scope: me});
         me.appEventsController.removeEvent({eventName: 'emailCoach', callBackFunc: me.onEmailCoach, scope: me});
 
         if ( me.emailStudentPopup ) {
@@ -106,7 +110,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 			var callbacks = {success: me.getPersonSuccess, failure:me.getPersonFailure, scope:me};
 			me.appEventsController.loadMaskOn();
 			me.personService.get(me.personLite.get('id'), callbacks);
-		}else if(me.person.get('id') ){
+		} else if(me.person.get('id') ) {
 			me.loadToolWithPersonLoaded();
 		}  	
    	},
@@ -122,49 +126,57 @@ Ext.define('Ssp.controller.ToolsViewController', {
 	loadToolWithPersonLoaded: function(){
 		var me = this;
 		var tool = me.toolsStore.find('toolType', 'profile');
-    	if(tool == -1)
-			me.loadFirstTool();
-		else
-			me.loadPerson();
+    	if (tool == -1) {
+            me.loadFirstTool();
+        } else {
+            me.loadPerson();
+        }
     	me.appEventsController.getApplication().fireEvent('updateStudentRecord',{'person':me.person});
 	},
 
     getPersonFailure: function() {
-		 me.appEventsController.loadMaskOff();
+	    var me = this;
+        me.appEventsController.loadMaskOff();
     },
     
-    onLoadIntake: function(){
-        this.loadIntake();
+    onLoadIntake: function() {
+        var me = this;
+        me.loadIntake();
     },    
     onTransitionStudent: function(){
-        this.selectTool('journal');
-        this.loadTool('journal');
+        var me = this;
+        me.selectTool('journal');
+        me.loadTool('journal');
     },
     
     loadFirstTool: function(){
-    	var tool = this.toolsStore.getRange()[0];
-        this.getView().getSelectionModel().select(tool);
-        this.loadTool(tool.get('toolType'));
+        var me = this;
+        var tool = me.toolsStore.getRange()[0];
+        me.getView().getSelectionModel().select(tool);
+        me.loadTool(tool.get('toolType'));
     },
     
     loadPerson: function(){
-        this.selectTool('profile');
-        this.loadTool('profile');
+        var me = this;
+        me.selectTool('profile');
+        me.loadTool('profile');
     },
     loadIntake: function(){
-        this.selectTool('studentintake');
-        this.loadTool('studentintake');
+        var me = this;
+        me.selectTool('studentintake');
+        me.loadTool('studentintake');
     },
     selectTool: function(toolType){
-        var tool = this.toolsStore.findExact('toolType', toolType)
-        this.getView().getSelectionModel().select(tool);
+        var me = this;
+        var tool = me.toolsStore.findExact('toolType', toolType)
+        me.getView().getSelectionModel().select(tool);
     },
     
     onItemClick: function(grid, record, item, index){
         var me = this;
-        
-        //Listeners will need to return false to halt navigation from this point. 
-        var skipCallBack = this.appEventsController.getApplication().fireEvent('toolsNav', record, me);  
+
+        //Listeners will need to return false to halt navigation from this point.
+        var skipCallBack = me.appEventsController.getApplication().fireEvent('toolsNav', record, me);
         
         if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
 			if (record.get('toolType') === 'emailstudent'){
@@ -177,13 +189,17 @@ Ext.define('Ssp.controller.ToolsViewController', {
 				} else {
 					me.authenticatedPerson.showUnauthorizedAccessAlert();
 				}
-			} else {
-				this.loadTool(record.get('toolType'));
+			} else if (record.get('toolType') === 'template' || record.get('toolType') === 'map') {
+                    me.onTemplateOrMap(record.get('toolType')); //switch between Template non-student and MAP views
+            } else {
+                me.loadTool(record.get('toolType'));
 			}
-        }
-        else
-        if(record.get('toolType') === 'toolcaseloadreassignment' && skipCallBack) {
-            this.loadTool(record.get('toolType'));
+        } else {
+            if (record.get('toolType') === 'toolcaseloadreassignment' && skipCallBack) {
+                me.loadTool(record.get('toolType'));
+            } else if (record.get('toolType') === 'template' && skipCallBack) {
+                me.onTemplateOrMap(record.get('toolType'));   //able to select Template tool without a student selected
+            }
         }
     },
 
@@ -198,9 +214,12 @@ Ext.define('Ssp.controller.ToolsViewController', {
 
 		//TAKE OUT LEGACY AND DOCUMENTS GRANT
         if (me.isAllowedToLoadTool(toolType)) {
-            comp = me.formUtils.loadDisplay('tools', toolType, true, {});
-        }
-        else {
+            if (toolType == 'template') {
+                me.onTemplateOrMap(toolType); //handles rare cases where doNav or this method is called without going through item click above
+            } else {
+                comp = me.formUtils.loadDisplay('tools', toolType, true, {});
+            }
+        } else {
             me.authenticatedPerson.showUnauthorizedAccessAlert();
         }
     },
@@ -210,5 +229,15 @@ Ext.define('Ssp.controller.ToolsViewController', {
         if (me.person.getCoachPrimaryEmailAddress()) {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
+    },
+
+    onTemplateOrMap: function(toolType) {
+        var me = this;
+        if (toolType && toolType === 'template') {
+            isTemplateFlag = true;
+        } else {
+            isTemplateFlag = false;
+        }
+        me.loadTool('map'); //always load map tool which uses the flag set above
     }
 });

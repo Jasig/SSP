@@ -16,10 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-
-
-
 Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
@@ -29,7 +25,8 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
         formUtils: 'formRendererUtils',
         semesterStores : 'currentSemesterStores',
         authenticatedPerson: 'authenticatedPerson',
-        personLite: 'personLite'
+        personLite: 'personLite',
+        currentTemplate: 'currentMapPlan'
     },
     config: {
         containerToLoadInto: 'adminforms',
@@ -39,25 +36,26 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
                ref : 'templatePanel',
                selector: '#templatePanel'
            }
-   ],
-    control: {    
-              
+    ],
+    control: {
         isTemplateActive: {
             selector: '#isTemplateActive',
             listeners: {
             	checkChange: 'onCheckChange'
             }
         },
-    
 	    programCodeNameColumn: {
 	        selector: '#programCodeNameColumn',
 	        renderer: function(value) {
 			    var text = 'TEST';
 			    return text;
 			} 
-	    }
-        
+	    },
+		'editElectiveCoursesButton': {
+			click: 'onEditElectiveCoursesClick'
+		}
     },
+
     init: function() {    	
         var me=this;
 
@@ -66,7 +64,45 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
 
         return me.callParent(arguments);
     },
-     
+
+    destroy: function() {
+        var me=this;
+        if ( me.electiveCoursesPopUp ) {
+            me.electiveCoursesPopUp.destroy();
+        }
+        return me.callParent( arguments );
+    },
+
+    onEditElectiveCoursesClick: function(button) {
+        var me = this;
+        var grid, record, idx;
+        grid = button.up('grid');
+        record = grid.getView().getSelectionModel().getSelection()[0];
+
+        if (record && record.data.id) {
+            if ( me.electiveCoursesPopUp ) {
+                me.electiveCoursesPopUp.destroy();
+            }
+
+            if (me.currentTemplate) {
+                me.currentTemplate.data = record.data;
+                me.currentTemplate.data.isTemplate = true;
+            }
+
+            me.electiveCoursesPopUp = Ext.create('Ssp.view.admin.forms.map.MapElectiveCourses', {
+                currentTemplateGetId: me.currentTemplate
+            });
+
+            me.electiveCoursesPopUp.show();
+
+        } else {
+            Ext.Msg.alert('SSP Error', 'Please select a Template before assigning Elective Courses!');
+        }
+    },
+
+    displayEditor: function(){
+        var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
+    },
     
     onGetTemplateSuccess: function(response, t) {    	
     	var me = t;
@@ -112,7 +148,7 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     },
     
     onGetTemplateFailure: function(response, t) {
-    	console.log('Get Template From ServerFailure: ' + JSON.stringify(response));
+		alert('Get Template From ServerFailure: ' + response + ' ' + t);
     },
     
     onCheckChange: function(column, rowIndex, checked, eOpts){    
@@ -138,8 +174,6 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     onLoadCompleteSuccess: function(response, t) {
     	var me = t;
     	//Ext.getCmp('templatePanel').getStore().load();
-    	
-    	
     	var grid = Ext.getCmp("templatePanel");
     	var params = {};
     	var me = this;
@@ -152,8 +186,8 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     	grid.store.load({params: params});
     },
     setParam: function(params, field, fieldName){
-    	if(field.getValue() && field.getValue().length > 0)
-    		params[fieldName] = field.getValue();
+    	if (field.getValue() && field.getValue().length > 0) {
+            params[fieldName] = field.getValue();
+        }
     }
-    
 });

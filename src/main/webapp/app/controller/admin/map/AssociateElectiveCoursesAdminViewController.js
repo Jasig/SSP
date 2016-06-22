@@ -18,19 +18,30 @@
  */
 Ext.define('Ssp.controller.admin.map.AssociateElectiveCoursesAdminViewController', {
 	extend: 'Ssp.controller.admin.AdminItemAssociationViewController',
+    inject: {
+        apiProperties: 'apiProperties',
+        formUtils: 'formRendererUtils',
+        treeUtils: 'treeRendererUtils',
+        textStore: 'sspTextStore',
+        currentTemplateGetId: 'currentMapPlan'
+    },
     config: {
         associatedItemType: 'electiveCourseDetail',
         parentItemType: 'electiveCourses',
         parentIdAttribute: 'electiveCourseId',
         associatedItemIdAttribute: 'electiveCourseDetailId'
-        },
+    },
 	constructor: function(){
 		var me=this;
 		me.callParent(arguments);
 		me.clear();
-		
+
 		var params = {status: "ACTIVE", limit: "-1"};
-		this.getParentItemsWithIdAndParams('0A0F0F4E-4E03-1A34-814E-037BB8850000', params);
+		if (me.currentTemplateGetId && me.currentTemplateGetId.get('id')) {
+            me.getParentItemsWithIdAndParams(me.currentTemplateGetId.get('id'), params);
+        } else {
+            Ext.Msg.alert('SSP Error', 'Please select a Template.');
+        }
 		
 		return me;
 	},

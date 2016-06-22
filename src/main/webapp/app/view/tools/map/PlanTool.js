@@ -39,12 +39,10 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                 align: 'stretch',
                 type: 'hbox'
             },        	
-        	items: [   
-			{
+        	items: [{
 			    xtype: 'tbspacer',
 			    flex: 0.02
-			},         	        
-           {
+			}, {
                     tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-overview-button','View all'),
                     height: 30,
                     flex:0.10,
@@ -54,8 +52,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     align: 'center',
                     hideMode: 'offsets',
                     padding: '0 0 0 0'
-            },
-           {
+            }, {
                     tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-notes-button','Plan Notes'),
                     height: 30,
                     flex:0.10,
@@ -65,20 +62,18 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     hideMode: 'offsets',
                     align: 'center',
                     padding: '0 0 0 0'
-                },
-             	{
-		                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? me.textStore.getValueByCode('ssp.tooltip.move-template-button','Move Template') : me.textStore.getValueByCode('ssp.tooltip.move-plan-button','Move Plan'),
-		                    height: 30,
-		                    flex:0.10,
-		                    cls: 'mapMovePlanIcon',
-		                    xtype: 'button',							
-		                    itemId: 'movePlanButton',
-			                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
-		                    align: 'center',
-                    		hideMode: 'offsets',
-		                    padding: '0 0 0 0'							
-		           }, 
-           {
+            }, {
+                    tooltip:  me.currentMapPlan.get("isTemplate") == true ? me.textStore.getValueByCode('ssp.tooltip.move-template-button','Move Template') : me.textStore.getValueByCode('ssp.tooltip.move-plan-button','Move Plan'),
+                    height: 30,
+                    flex:0.10,
+                    cls: 'mapMovePlanIcon',
+                    xtype: 'button',
+                    itemId: 'movePlanButton',
+                    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON'),
+                    align: 'center',
+                    hideMode: 'offsets',
+                    padding: '0 0 0 0'
+            }, {
                     tooltip: me.textStore.getValueByCode('ssp.tooltip.email-plan-button','Email Plan'),
                     height: 30,
                     flex:0.10,
@@ -89,8 +84,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     align: 'center',
                     hideMode: 'offsets',
                     padding: '0 0 0 0'
-                },
-                {
+            }, {
                     tooltip: me.textStore.getValueByCode('ssp.tooltip.print-plan-button','Print Plan'),
                     height: 30,
                     flex:0.10,
@@ -101,53 +95,56 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
 	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_PRINT_BUTTON') || me.currentMapPlan.get("isTemplate") == true,
                     align: 'center',
                     padding: '0 0 0 0'
-                }, 
-            	{
-	                    tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-fa-button','Financial Aid'),
-	                    height: 30,
-	                    flex:0.10,
-	                    cls: 'mapFAIcon',
-	                    xtype: 'button',
-	                    itemId: 'planFAButton',
-	                    align: 'center',
-                  	    hideMode: 'offsets',
-                  	    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_FINANCIAL_AID_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
-	                    padding: '0 0 0 0'
-	                },
-			        {
-			                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-student-transcript-button','View of Student\'s Course History'),
-			                    height: 30,
-			                    flex:0.10,
-			                    cls: 'transcriptIcon',
-			                    xtype: 'button',
-			                    itemId: 'showStudentTranscript',
-			                    align: 'center',
-                  	   		    hideMode: 'offsets',
-                  	   		    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_TRANSCRIPT_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
-			                    padding: '0 0 0 0'
-			          },
-			           {
-			                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-map-status-button','View of Student\'s Map Status Detail'),
-			                    height: 30,
-			                    flex:0.10,
-			                    cls: 'studentHistoryIcon',
-			                    xtype: 'button',
-			                    itemId: 'showMapStatus',
-			                    align: 'center',
-                  			    hideMode: 'offsets',
-			                    hidden:  me.currentMapPlan.get("isTemplate") == true,
-			                    padding: '0 0 0 0'
-			                    
-			                }, 
-						{
-						    xtype: 'tbspacer',
-						    flex: 0.3
-						}
-			          ]
-
+            }, {
+                    tooltip: me.textStore.getValueByCode('ssp.tooltip.plan-fa-button','Financial Aid'),
+                    height: 30,
+                    flex:0.10,
+                    cls: 'mapFAIcon',
+                    xtype: 'button',
+                    itemId: 'planFAButton',
+                    align: 'center',
+                    hideMode: 'offsets',
+                    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_FINANCIAL_AID_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
+                    padding: '0 0 0 0'
+            }, {
+                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-student-transcript-button','View of Student\'s Course History'),
+                    height: 30,
+                    flex:0.10,
+                    cls: 'transcriptIcon',
+                    xtype: 'button',
+                    itemId: 'showStudentTranscript',
+                    align: 'center',
+                    hideMode: 'offsets',
+                    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_TRANSCRIPT_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
+                    padding: '0 0 0 0'
+            }, {
+                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-map-status-button','View of Student\'s Map Status Detail'),
+                    height: 30,
+                    flex:0.10,
+                    cls: 'studentHistoryIcon',
+                    xtype: 'button',
+                    itemId: 'showMapStatus',
+                    align: 'center',
+                    hideMode: 'offsets',
+                    hidden:  me.currentMapPlan.get("isTemplate") == true,
+                    padding: '0 0 0 0'
+            }, {
+                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-template-electives-button','Edit Template Elective Courses'),
+                    height: 30,
+                    flex:0.10,
+                    cls: 'mapElectiveCoursesIcon',
+                    xtype: 'button',
+                    itemId: 'showTemplateElectives',
+                    align: 'center',
+                    hideMode: 'offsets',
+                    hidden: !me.authenticatedPerson.hasAccess('TEMPLATE_TOOL') ||  me.currentMapPlan.get("isTemplate") == true,
+                    padding: '0 0 0 0'
+            }, {
+                    xtype: 'tbspacer',
+                    flex: 0.3
+            }]
         });
         
         return me.callParent(arguments);
     }
-    
 });

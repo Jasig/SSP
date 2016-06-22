@@ -73,23 +73,19 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                     xtype: 'button',
                     itemId: 'loadTemplateButton'
                 },
-                
-				 
-                 {
+                {
                     xtype: 'button',
                     text: me.textStore.getValueByCode('ssp.label.save-button','Save'),
                     itemId: 'addTool',
                     height: 22,
-	                hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_SAVE_BUTTON'),
+                    hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_SAVE_BUTTON'),
                     menu: {
-                    items: [
-                        
-                        {
+                    items: [{
                             xtype: 'button',
                             text: me.textStore.getValueByCode('ssp.label.save-plan-button','Save Plan'),
                             itemId: 'savePlanButton',
                             hidden: me.currentMapPlan.get('isTemplate') == true || !me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == ""
-                        }, 
+                        },
                         {
                             xtype: 'button',
                             text: me.textStore.getValueByCode('ssp.label.save-template-button','Save Template'),
@@ -97,19 +93,17 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                             hidden: (!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "") || me.currentMapPlan.get('isTemplate') == false
                         },
                         {
-                        	xtype: 'button',
-                        	text: me.textStore.getValueByCode('ssp.label.save-as-new-plan-button','Save as New Plan'),
-                        	itemId: 'savePlanAsButton'
+                            xtype: 'button',
+                            text: me.textStore.getValueByCode('ssp.label.save-as-new-plan-button','Save as New Plan'),
+                            itemId: 'savePlanAsButton'
                         },
                         {
-                        	xtype: 'button',
-                        	text: me.textStore.getValueByCode('ssp.label.save-as-new-template-button','Save as New Template'),
-                        	itemId: 'saveTemplateAsButton'
-                        }
-                    ]
+                            xtype: 'button',
+                            text: me.textStore.getValueByCode('ssp.label.save-as-new-template-button','Save as New Template'),
+                            itemId: 'saveTemplateAsButton'
+                        }]
                     }
-                },
-				{
+                }, {
                     tooltip: me.textStore.getValueByCode('ssp.tooltip.cancel-button','Cancel'),
                     text: '<u>' + me.textStore.getValueByCode('ssp.label.cancel-button','Cancel') + '</u>',
                     hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_LOAD_BUTTON'),
@@ -120,20 +114,12 @@ Ext.define('Ssp.view.tools.map.MAPView', {
                 {
                     xtype: 'tbspacer',
                     flex: 0.05
-                }
-                
-				]
-            },
-			{
+                }]
+            }, {
                 xtype: 'plantool'
-                
-                
-            },
-			{
+            }, {
                 xtype: 'moveplan'
-            }
-			]
-            
+            }]
         });
         
         return me.callParent(arguments);

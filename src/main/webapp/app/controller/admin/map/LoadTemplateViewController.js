@@ -20,124 +20,129 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject:{
-		appEventsController: 'appEventsController',
-		formUtils: 'formRendererUtils',
-    	currentMapPlan: 'currentMapPlan',
-    	store: 'planTemplatesSummaryStore',
+        appEventsController: 'appEventsController',
+        formUtils: 'formRendererUtils',
+        currentMapPlan: 'currentMapPlan',
+        store: 'planTemplatesSummaryStore',
         personLite: 'personLite',
-    	apiProperties: 'apiProperties',
-    	mapPlanService:'mapPlanService',
-		programsStore: 'programsStore',
+        apiProperties: 'apiProperties',
+        mapPlanService:'mapPlanService',
+        programsStore: 'programsStore',
         departmentsStore: 'departmentsStore',
-    	mapEventUtils: 'mapEventUtils',
+        mapEventUtils: 'mapEventUtils',
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsStore',
         divisionsStore: 'divisionsStore'
     },
-    
 	control: {
-    	
-	   'name': {
-		   selector: '#templateNameFilter',
-    	   listeners: {
-    		   keyup: 'ontemplateNameKeyUp'
-           }
-	   },		
-	   'program': {
-    	   selector: '#program',
-    	   listeners: {
-            select: 'onProgramSelect'
+        'name': {
+            selector: '#templateNameFilter',
+            listeners: {
+                keyup: 'ontemplateNameKeyUp'
+            }
+        },
+        'program': {
+           selector: '#program',
+           listeners: {
+                select: 'onProgramSelect'
            }
         },
         'department':{
            selector: '#department',
            hidden: false,
            listeners: {
-            select: 'onDepartmentSelect'
+                select: 'onDepartmentSelect'
            }
         },
         'division':{
            selector: '#division',
            listeners: {
-            select: 'onDivisionSelect'
+                select: 'onDivisionSelect'
            }
         },
         'programCancel':{
             selector: '#programCancel',
             hidden: true,
-              listeners: {
-               click: 'onProgramCancelClick'
-              }
-           },           
+            listeners: {
+                click: 'onProgramCancelClick'
+            }
+        },
         'departmentCancel':{
             selector: '#departmentCancel',
             hidden: false,
             listeners: {
-             click: 'onDepartmentCancelClick'
-             }
-         },        
+                click: 'onDepartmentCancelClick'
+            }
+         },
         'divisionCancel':{
-           selector: '#divisionCancel',
-           listeners: {
-            click: 'onDivisionCancelClick'
-           }
+            selector: '#divisionCancel',
+            listeners: {
+                click: 'onDivisionCancelClick'
+            }
         },
          'catalogYear':{
            selector: '#catalogYear',
            listeners: {
-            select: 'onCatalogYearSelect'
+                select: 'onCatalogYearSelect'
            }
         },
          'mapTemplateTag':{
            selector: '#mapTemplateTag',
            listeners: {
-            select: 'onMapTemplateTagSelect'
+                select: 'onMapTemplateTagSelect'
            }
         },
         'catalogYearCancel':{
            selector: '#catalogYearCancel',
            listeners: {
-            click: 'onCatalogYearCancelClick'
+                click: 'onCatalogYearCancelClick'
            }
         },
         'mapTemplateTagCancel':{
            selector: '#mapTemplateTagCancel',
            listeners: {
-            click: 'onMapTemplateTagCancelCancelClick'
+                click: 'onMapTemplateTagCancelCancelClick'
            }
         },
-		'objectStatusFilter':{
+        'objectStatusFilter':{
             selector: '#objectStatusFilter',
             hidden: false,
             listeners: {
-             select: 'onObjectStatusFilterSelect'
+                select: 'onObjectStatusFilterSelect'
             }
-         },
-         view: {
+        },
+        view: {
             show: 'onShow'
-         },
-		 
+        }
 	},
 
 	init: function() {
 		var me=this;
 	    //me.resetForm();
-		if(me.programsStore.getTotalCount() < 1)
-	    	me.programsStore.load();
-		if(me.departmentsStore.getTotalCount() < 1)
-	    	me.departmentsStore.load();
-		if(me.divisionsStore.getTotalCount() < 1)
-	    	me.divisionsStore.load();
-	    if(me.catalogYearsStore.getTotalCount() < 1)
-	        me.catalogYearsStore.load();
-	    if(me.mapTemplateTagsStore.getTotalCount() < 1)
-	        me.mapTemplateTagsStore.load();
+
+        if(me.programsStore.getTotalCount() < 1) {
+            me.programsStore.load();
+        }
+		if(me.departmentsStore.getTotalCount() < 1) {
+            me.departmentsStore.load();
+        }
+		if(me.divisionsStore.getTotalCount() < 1) {
+            me.divisionsStore.load();
+        }
+	    if(me.catalogYearsStore.getTotalCount() < 1) {
+            me.catalogYearsStore.load();
+        }
+	    if(me.mapTemplateTagsStore.getTotalCount() < 1) {
+            me.mapTemplateTagsStore.load();
+        }
 	    me.store.addListener("load", me.onStoreLoaded, me);
-		return me.callParent(arguments);
+
+        return me.callParent(arguments);
     },
 
     loadTemplates: function() {
         var me = this;
+
         me.getView().setLoading(true);
         me.store.load(); 
 		me.store.filter([
@@ -164,17 +169,18 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         var me = this;
         me.loadTemplates();
     },
+
     resetForm: function() {
         var me = this;
          me.getView().query("form")[0].getForm().reset();
     },
 	
-	 onProgramSelect: function(){
-	        var me=this;
-	        me.handleSelect(me);
-	        var params = {};
-	        me.setParam(params, me.getProgram(), "programCode");
-    },  
+    onProgramSelect: function(){
+        var me=this;
+        me.handleSelect(me);
+        var params = {};
+        me.setParam(params, me.getProgram(), "programCode");
+    },
     
     onProgramCancelClick: function(button){
         var me=this;
@@ -208,6 +214,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         var me=this;
 		me.handleSelect(me);
     },
+
     onCatalogYearCancelClick: function(button){
         var me=this;
         me.getCatalogYear().setValue("");
@@ -218,6 +225,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         var me=this;
 		me.handleSelect(me);
     },
+
     onMapTemplateTagCancelCancelClick: function(button){
         var me=this;
         me.getMapTemplateTag().setValue("");
@@ -233,13 +241,15 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
 		var grid = Ext.getCmp("templatePanel");
     	var params = {};
     	var me = this;
-		me.setParam(params, Ext.getCmp('program'), 'programCode');
+
+        me.setParam(params, Ext.getCmp('program'), 'programCode');
     	me.setParam(params, Ext.getCmp('department'), 'departmentCode');
     	me.setParam(params, Ext.getCmp('division'), 'divisionCode');
     	me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
     	me.setParam(params, me.getCatalogYear(), 'catalogYearCode');
     	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
-		params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
+
+        params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
     	grid.store.on('load', me.onLoadComplete, this, {single: true});
     	grid.store.load({params: params});
     },
@@ -247,17 +257,20 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     onLoadComplete: function(){
 		var me = this;
     	me.onObjectStatusFilterSelect();
-    },    
+    },
+
     setParam: function(params, field, fieldName){
     	if(field.getValue() && field.getValue().length > 0)
     		params[fieldName] = field.getValue();
     },
+
 	onObjectStatusFilterSelect:function(){
 		var me = this;	
 		var grid = Ext.getCmp("templatePanel");
 		var objectStatus = Ext.getCmp('objectStatusFilter').getRawValue();	
 		grid.store.clearFilter(false);
-		if(objectStatus!='ALL'){
+
+        if(objectStatus!='ALL'){
 			grid.store.filter('objectStatus', Ext.getCmp('objectStatusFilter').getRawValue());
 		}
 	},
@@ -268,5 +281,4 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
 	    me.store.removeListener("load", me.onStoreLoaded, me);
 	    return me.callParent( arguments );
 	}
-		
 });

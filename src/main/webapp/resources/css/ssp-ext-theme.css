@@ -73,7 +73,11 @@ background: transparent url('/ssp/images/icon-transcript.png') no-repeat !import
  width:22px;
 }
 
-
+.mapElectiveCoursesIcon {
+    background: transparent url('/ssp/images/template-electives.png') no-repeat !important;
+    border-style: none;
+    width: 22px;
+}
 
 .mapEmailIcon {
 background: transparent url('/ssp/images/email-icon.png') no-repeat !important;

@@ -38,7 +38,7 @@ Ext.define('Ssp.store.PlanElectiveCourse', {
         	};
 
         	me.url = me.apiProperties.getItemUrl('electiveCourses') + "/" + id;
-        	console.log(me.url);
+
         	me.apiProperties.makeRequest({
         		url: me.apiProperties.createUrl(me.url),
         		method: 'GET',

@@ -48,16 +48,19 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                 dock: 'top',
                 items: [{
                     xtype: 'button',
+                    itemId: 'newButton',
+                    text: me.textStore.getValueByCode('ssp.label.new-button','New')
+                }, '-', {
+                    xtype: 'button',
                     itemId: 'openButton',
                     text: me.textStore.getValueByCode('ssp.label.open-button','Open')
-                    
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
                     text: me.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                 }]
             }],
-           items: [{
+            items: [{
                 xtype: 'form',
                 border: 0,
                 frame: false,
@@ -71,8 +74,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                 height: '80%',
                 bodyPadding: 10,
                 autoScroll: true,
-                items: [
-                {
+                items: [{
                     xtype: 'fieldcontainer',
                     border: 0,
                     title: '',
@@ -82,9 +84,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     padding: 0,
                     margin: '0 0 0 0',
                     
-                    items: [
-                      
-                    {
+                    items: [{
                     xtype: 'fieldset',
                     border: 0,
                     title: '',
@@ -138,7 +138,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							    layout: 'hbox',
 							    defaults: {
 							        anchor: '100%'
-							    	},
+                                },
 							    items: [{
 							        xtype: 'combobox',
 							        name: 'department',
@@ -162,7 +162,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
 							        itemId: 'departmentCancel'
-							    	}]
+                                }]
 							},{
 							    xtype: 'fieldset',
 							    border: 0,
@@ -196,7 +196,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
 							        itemId: 'divisionCancel'
-							    	}]
+                                }]
 							},{
 							    xtype: 'fieldset',
 							    border: 0,
@@ -206,7 +206,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							    layout: 'hbox',
 							    defaults: {
 							        anchor: '100%'
-							    	},
+                                },
 							    items: [{
 							        xtype: 'combobox',
 							        name: 'catalogYear',
@@ -221,7 +221,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        allowBlank: true,
 							        itemId: 'catalogYear',
 							        width: 260
-							    	}, {
+                                }, {
 							        tooltip: me.textStore.getValueByCode('ssp.tooltip.map.load-template.catalog-year','Reset to All Catalog Years'),
 							        text: '',
 							        width: 23,
@@ -230,7 +230,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
 							        itemId: 'catalogYearCancel'
-							    	}]
+                                }]
 							},{
 							    xtype: 'fieldset',
 							    border: 0,
@@ -240,7 +240,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							    layout: 'hbox',
 							    defaults: {
 							        anchor: '100%'
-							    	},
+                                },
 							    items: [{
 							        xtype: 'combobox',
 							        name: 'mapTemplateTag',
@@ -264,7 +264,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        cls: 'mapClearSearchIcon',
 							        xtype: 'button',
 							        itemId: 'mapTemplateTagCancel'
-							    	}]
+                                }]
 							},{
 						    xtype: 'fieldset',
 						    border: 0,
@@ -274,7 +274,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 						    layout: 'hbox',
 						    defaults: {
 						        anchor: '100%'
-						    	},
+                            },
 						    items: [{
 						        	xtype: 'combobox',
 						        	name: 'isPrivateFilter',
@@ -287,18 +287,17 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 										        	{"value":"ANONYMOUS","name":"ANONYMOUS"},
 										        	{"value":"AUTHENTICATED","name":"AUTHENTICATED"},
 										        	{"value":"PRIVATE","name":"PRIVATE"}
-										    	]
+                                            ]
 									}),
-								
-						        		emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.template-type','Filter by Template Type'),
-						        		valueField: 'value',
-						        		displayField: 'name',
-										value: "ALL",
-						        		mode: 'local',
-						        		queryMode: 'local',
-						        		allowBlank: false,
-						        		itemId: 'typeFilter',
-						        		width: 290
+                                    emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.template-type','Filter by Template Type'),
+                                    valueField: 'value',
+                                    displayField: 'name',
+                                    value: "ALL",
+                                    mode: 'local',
+                                    queryMode: 'local',
+                                    allowBlank: false,
+                                    itemId: 'typeFilter',
+                                    width: 290
 						    		}]
 								},{
 					    	xtype: 'fieldset',
@@ -392,7 +391,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                  width: 55,
                  dataIndex: 'objectStatus',
                  sortable: true
-          },{
+         },{
              text: me.textStore.getValueByCode('ssp.label.map.load-template.name-column','Template Title'),
              width: 200,
              dataIndex: 'name',
@@ -443,23 +442,23 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 			 sortable: true,
 			 dataIndex: 'mapTemplateTag',
 			 renderer: function(value, metadata, record) {
-			 				if (record != null && record.get('mapTemplateTag') != null) {
-			 					return record.get('mapTemplateTag').name;
-			 				}
-			 			},
+				if (record != null && record.get('mapTemplateTag') != null) {
+					return record.get('mapTemplateTag').name;
+				}
+			 },
 			 doSort: function(state) {
-						var ds = this.up('grid').getStore();
-						var field = this.getSortParam();
-						ds.sort({
-							 property: field,
-							 direction: state,
-							 sorterFn: function(v1, v2){
-									v1 = (v1.get('mapTemplateTag') ? v1.get('mapTemplateTag').name : '');
-									v2 = (v2.get('mapTemplateTag') ? v2.get('mapTemplateTag').name : '');
-									return v1.localeCompare(v2);
-								  }
-						 });
-					}
+				var ds = this.up('grid').getStore();
+				var field = this.getSortParam();
+				ds.sort({
+					 property: field,
+					 direction: state,
+					 sorterFn: function(v1, v2){
+							v1 = (v1.get('mapTemplateTag') ? v1.get('mapTemplateTag').name : '');
+							v2 = (v2.get('mapTemplateTag') ? v2.get('mapTemplateTag').name : '');
+							return v1.localeCompare(v2);
+					 }
+				 });
+			 }
 		 }
          ]}]
         });

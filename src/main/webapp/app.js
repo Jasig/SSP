@@ -146,7 +146,7 @@ Ext.require([
     'Ssp.view.admin.forms.cda.CDAAdmin',
     'Ssp.view.admin.forms.cda.CDAEdit',
     'Ssp.view.admin.forms.cda.CDAList',
-	
+
 	//MAP Views
     'Ssp.view.tools.map.MAP',
 	'Ssp.view.tools.map.CoursesView',
@@ -261,7 +261,6 @@ Ext.require([
     'Ssp.view.admin.forms.map.MapTemplatesFilterAdmin',
    	'Ssp.view.admin.forms.map.MapElectiveCourses',
    	'Ssp.view.admin.forms.map.AssociateElectiveCoursesAdmin',
-
     
     // ERROR DISPLAYS
     'Ssp.view.ErrorWindow',
@@ -1147,6 +1146,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+                    isTemplateMode: {
+                        fn: function(){
+                            return new Boolean(false); //default false
+                        },
+                        singleton: true
+                    },
 					addTasksStore:{
 				        fn: function(){
 				            return new Ssp.store.AddTasks();

@@ -100,7 +100,7 @@ Ext.define('Ssp.controller.admin.cda.CDAListViewController', {
             closable: true,
             defaultType: 'textfield',
             bodyPadding: 10,
-            renderTo: Ext.getBody(),
+            renderTo: Ext.getBody()
         });
 
         popWindow.loadRecord(model);

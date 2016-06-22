@@ -28,7 +28,7 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
     	planStore: 'planStore',
     	termsStore:'termsStore',
     	currentMapPlan: 'currentMapPlan',
-    	mapPlanService:'mapPlanService',
+        mapPlanService:'mapPlanService',
 		authenticatedPerson: 'authenticatedPerson',
 		semesterStores : 'currentSemesterStores',
         electiveStore: 'electivesAllUnpagedStore',
@@ -118,9 +118,16 @@ Ext.define('Ssp.util.tools.map.MapEventUtils',{
 		me.appEventsController.getApplication().fireEvent("onPlanLoad");
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.map.plan-ready-to-edit', 'The plan is ready for edit')
-			);
+		);
 	},
- 
+	createNewTemplate: function () {
+		var me = this;
+		me.currentMapPlan.dirty = false;
+		me.appEventsController.getApplication().fireEvent("onPlanLoad");
+		Ext.Msg.alert(
+			me.textStore.getValueByCode('ssp.message.map.template-ready-to-edit', 'New template is ready for edit')
+		);
+	},
 	saveTemplate: function(saveAs) {
 	    var me = this;
 		me.appEventsController.getApplication().fireEvent("onBeforePlanSave");
