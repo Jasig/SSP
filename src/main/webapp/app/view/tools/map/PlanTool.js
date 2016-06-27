@@ -118,7 +118,7 @@ Ext.define('Ssp.view.tools.map.PlanTool', {
                     hidden: !me.authenticatedPerson.hasAccess('MAP_TOOL_STUDENT_TRANSCRIPT_BUTTON') ||  me.currentMapPlan.get("isTemplate") == true,
                     padding: '0 0 0 0'
             }, {
-                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-map-status-button','View of Student\'s Map Status Detail'),
+                    tooltip:  me.textStore.getValueByCode('ssp.tooltip.show-map-status-button','View of Student\'s MAP Status Detail'),
                     height: 30,
                     flex:0.10,
                     cls: 'studentHistoryIcon',

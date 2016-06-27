@@ -679,7 +679,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 				
 			} else {
                 Ext.Msg.confirm(
-                    me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title', "Map Plan Has Changed!"),
+                    me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title', "MAP Plan Has Changed!"),
                     me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-body', "It appears the MAP plan has been altered. Do you wish to save your changes?"),
                     me.planDataChangedLoadingPlans,
                     me);
@@ -764,7 +764,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 			} else {
                 Ext.Msg.confirm(
-                    me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title', "Map Plan Has Changed!"),
+                    me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title', "MAP Plan Has Changed!"),
                     me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-body', "It appears the MAP plan has been altered. Do you wish to save your changes?"),
                     me.planDataChangedLoadingTemplate,
                     me);
@@ -874,7 +874,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 				
 			} else {
                 Ext.Msg.confirm(
-                    me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title', "Map Plan Has Changed!"),
+                    me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-title', "MAP Plan Has Changed!"),
                     me.textStore.getValueByCode('ssp.message.map.confirm-plan-change-body', "It appears the MAP plan has been altered. Do you wish to save your changes?"),
                     me.planDataChangedNewMap,
                     me);

@@ -40,7 +40,7 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
     initComponent: function() {
     	var me=this;
         Ext.apply(me, {
-			title: me.textStore.getValueByCode('ssp.label.map.status-report.title','Map Status Report:') + ' ' + me.personLite.get('displayFullName'),
+			title: me.textStore.getValueByCode('ssp.label.map.status-report.title','MAP Status Report:') + ' ' + me.personLite.get('displayFullName'),
             dockedItems: [{
                 dock: 'top',
                 xtype: 'toolbar',
