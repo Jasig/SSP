@@ -68,6 +68,13 @@ Ext.define('Ssp.controller.admin.map.AssociateElectiveCoursesAdminViewController
                 node = overModel.parentNode;
             }
 
+            if (node.data.text==data.records[0].get('formattedCourse')) {
+                    Ext.Msg.alert(
+                        me.textStore.getValueByCode('ssp.message.elective-course.error-title','SSP Error'),
+                        me.textStore.getValueByCode('ssp.message.elective-course.duplicate-parent-course','You cannot associated the same course.'));
+                    dropHandler.cancelDrop;
+                    return 1;
+            }
             //Check to see if duplicate course
             for (i=0; i < node.childNodes.length; i++) {
                 if (node.childNodes[i].data.text==data.records[0].get('formattedCourse')) {

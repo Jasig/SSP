@@ -46,7 +46,7 @@ public class TemplateElectiveCourseDao extends
 			.add(Restrictions.eq("template", template));
 		List results = criteria.list();
 		if (results.size() > 0) {
-			return (TemplateElectiveCourse) criteria.list().get(0);
+			return (TemplateElectiveCourse)results.get(0);
 		}
 		return null;
 	}

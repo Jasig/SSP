@@ -38,6 +38,7 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -139,8 +140,15 @@ public class TemplateElectiveCoursesController
         templateElectiveCourseDetailService.deleteAssociatedElective(templateElectiveCourseElectiveId);
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
         TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplate(), templateCourse.getFormattedCourse());
-        if (templateElectiveCourse.getElectiveCourseElectives().size()==0) {
-            templateElectiveCourseDetailService.delete(templateElectiveCourse);
+        if (null != templateElectiveCourse) {
+            if (templateElectiveCourse.getElectiveCourseElectives().size() == 0) {
+                try {
+                    templateElectiveCourseDetailService.delete(templateElectiveCourse);
+                } catch (HibernateOptimisticLockingFailureException e) {
+                    LOGGER.debug("HibernateOptimisticLockingFailureException");
+                    //swallow the exception
+                }
+            }
         }
         return new ServiceResponse(true);
     }
