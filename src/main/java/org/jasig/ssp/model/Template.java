@@ -186,7 +186,7 @@ public class Template extends AbstractPlan implements Cloneable{
 	}
 
 	@Override
-	public List<? extends AbstractMapElectiveCourse> getPlanElectiveCourses() {
+	public List<TemplateElectiveCourse> getPlanElectiveCourses() {
 		return planElectiveCourses;
 	}
 }

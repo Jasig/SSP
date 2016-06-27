@@ -96,7 +96,7 @@ public class TemplateElectiveCoursesController
 			throws ObjectNotFoundException {
 
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
-        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getFormattedCourse());
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplate(), templateCourse.getFormattedCourse());
 
         if (null!= templateElectiveCourse) {
             final PagingWrapper<TemplateElectiveCourseElective> data =
@@ -138,7 +138,7 @@ public class TemplateElectiveCoursesController
 
         templateElectiveCourseDetailService.deleteAssociatedElective(templateElectiveCourseElectiveId);
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
-        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getFormattedCourse());
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplate(), templateCourse.getFormattedCourse());
         if (templateElectiveCourse.getElectiveCourseElectives().size()==0) {
             templateElectiveCourseDetailService.delete(templateElectiveCourse);
         }
@@ -153,7 +153,7 @@ public class TemplateElectiveCoursesController
 
             throws ObjectNotFoundException, ValidationException {
         TemplateCourse templateCourse = templateService.getTemplateCourse(templateCourseId);
-        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getFormattedCourse());
+        TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailService.get(templateCourse.getTemplate(), templateCourse.getFormattedCourse());
 
         if (null == templateElectiveCourse) {
             templateElectiveCourse = new TemplateElectiveCourse();

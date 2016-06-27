@@ -22,6 +22,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AbstractAuditableCrudDao;
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.springframework.stereotype.Repository;
 
@@ -39,9 +40,10 @@ public class TemplateElectiveCourseDao extends
 		super(TemplateElectiveCourse.class);
 	}
 
-	public TemplateElectiveCourse get(String formattedCourse) {
+	public TemplateElectiveCourse get(Template template, String formattedCourse) {
 		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("formattedCourse", formattedCourse));
+		criteria.add(Restrictions.eq("formattedCourse", formattedCourse))
+			.add(Restrictions.eq("template", template));
 		List results = criteria.list();
 		if (results.size() > 0) {
 			return (TemplateElectiveCourse) criteria.list().get(0);

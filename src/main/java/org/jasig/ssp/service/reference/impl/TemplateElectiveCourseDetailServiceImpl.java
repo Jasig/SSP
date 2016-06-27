@@ -20,6 +20,7 @@ package org.jasig.ssp.service.reference.impl;
 
 import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
 import org.jasig.ssp.dao.reference.TemplateElectiveCourseElectiveDao;
+import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
@@ -96,7 +97,7 @@ public class TemplateElectiveCourseDetailServiceImpl extends
 	}
 
 	@Override
-	public TemplateElectiveCourse get(String formattedCourse) {
-		return templateElectiveCourseDao.get(formattedCourse);
+	public TemplateElectiveCourse get(Template template, String formattedCourse) {
+		return templateElectiveCourseDao.get(template, formattedCourse);
 	}
 }

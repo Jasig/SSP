@@ -18,28 +18,30 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.MapTemplateTagTOFactory;
 import org.jasig.ssp.factory.reference.TemplateCourseTOFactory;
+import org.jasig.ssp.factory.reference.TemplateElectiveCourseDetailTOFactory;
 import org.jasig.ssp.factory.reference.TemplateTOFactory;
 import org.jasig.ssp.factory.reference.TermNoteTOFactory;
 import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateCourse;
+import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TermNote;
-import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
+import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -59,7 +61,10 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 	
 	@Autowired
 	private TemplateCourseTOFactory templateCourseTOFactory;
-	
+
+	@Autowired
+	private TemplateElectiveCourseDetailTOFactory templateElectiveCourseDetailTOFactory;
+
 	@Autowired
 	private TermNoteTOFactory termNoteTOFactory;	
 
@@ -116,6 +121,12 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 			TermNote noteModel = getTermNoteTOFactory().from(termNoteTO);
 			noteModel.setTemplate(model);
 			model.getTermNotes().add(noteModel);
+		}
+		List<TemplateElectiveCourseTO> planElectiveCourses = tObject.getPlanElectiveCourses();
+		for (TemplateElectiveCourseTO templateElectiveCourseTO : planElectiveCourses) {
+			TemplateElectiveCourse templateElectiveCourse = templateElectiveCourseDetailTOFactory.from(templateElectiveCourseTO);
+			templateElectiveCourse.setTemplate(model);
+			model.getPlanElectiveCourses().add(templateElectiveCourse);
 		}
 		MapTemplateTagTO mapTemplateTagTO = tObject.getMapTemplateTag();
 		if (mapTemplateTagTO!=null) {

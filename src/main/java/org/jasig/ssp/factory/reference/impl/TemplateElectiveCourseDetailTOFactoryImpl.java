@@ -22,9 +22,12 @@ import com.google.common.collect.Lists;
 import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.TemplateElectiveCourseDetailTOFactory;
+import org.jasig.ssp.factory.reference.TemplateElectiveCourseElectiveCourseDetailTOFactory;
 import org.jasig.ssp.model.TemplateCourse;
 import org.jasig.ssp.model.TemplateElectiveCourse;
+import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseElectiveTO;
 import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,8 @@ public class TemplateElectiveCourseDetailTOFactoryImpl extends
 	public TemplateElectiveCourseDetailTOFactoryImpl() {
 		super(TemplateElectiveCourseTO.class, TemplateElectiveCourse.class);
 	}
+	@Autowired
+	private transient TemplateElectiveCourseElectiveCourseDetailTOFactory templateElectiveCourseElectiveCourseDetailTOFactory;
 
 	@Autowired
 	private transient TemplateElectiveCourseDao dao;
@@ -53,13 +58,20 @@ public class TemplateElectiveCourseDetailTOFactoryImpl extends
 	@Override
 	public TemplateElectiveCourse from(final TemplateElectiveCourseTO tObject)
 			throws ObjectNotFoundException {
-		final TemplateElectiveCourse model = super.from(tObject);
-
-//		model.setSortOrder(tObject.getSortOrder());
-
-		return model;
+			TemplateElectiveCourse model = super.from(tObject);
+			model.setFormattedCourse(tObject.getFormattedCourse());
+			model.setCourseCode(tObject.getCourseCode());
+			model.setCourseDescription(tObject.getCourseDescription());
+			model.setCourseTitle(tObject.getCourseTitle());
+			model.setCreditHours(tObject.getCreditHours());
+			for (TemplateElectiveCourseElectiveTO planElectiveCourseElectiveTO : tObject.getPlanElectiveCourseElectives()) {
+				TemplateElectiveCourseElective templateElectiveCourseElective = templateElectiveCourseElectiveCourseDetailTOFactory.from(planElectiveCourseElectiveTO);
+				templateElectiveCourseElective.setTemplateElectiveCourse(model);
+				model.getElectiveCourseElectives().add(templateElectiveCourseElective);
+			}
+			return model;
 	}
-
+	
 	public TemplateElectiveCourseTO from(TemplateCourse model) {
 		TemplateElectiveCourseTO toReturn = new TemplateElectiveCourseTO();
 		toReturn.setCourseCode(model.getCourseCode());

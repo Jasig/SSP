@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.service.reference;
 
+import org.jasig.ssp.model.Template;
 import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TemplateElectiveCourseElective;
 import org.jasig.ssp.service.AuditableCrudService;
@@ -43,5 +44,5 @@ public interface TemplateElectiveCourseDetailService extends
 
 	void delete(TemplateElectiveCourse templateElectiveCourse);
 
-	TemplateElectiveCourse get(String formattedCourse);
+	TemplateElectiveCourse get(Template template, String formattedCourse);
 }

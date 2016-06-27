@@ -50,10 +50,11 @@ public class TemplateElectiveCourseElectiveCourseDetailTOFactoryImpl extends
 	public TemplateElectiveCourseElective from(final TemplateElectiveCourseElectiveTO tObject)
 			throws ObjectNotFoundException {
 		final TemplateElectiveCourseElective model = super.from(tObject);
-
-//		model.setSortOrder(tObject.getSortOrder());
-
+		model.setFormattedCourse(tObject.getFormattedCourse());
+		model.setCourseCode(tObject.getCourseCode());
+		model.setCourseDescription(tObject.getCourseDescription());
+		model.setCourseTitle(tObject.getCourseTitle());
+		model.setCreditHours(tObject.getCreditHours());
 		return model;
 	}
-
 }
