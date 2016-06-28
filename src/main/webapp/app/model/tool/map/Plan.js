@@ -28,7 +28,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
             {name:'contactName',type:'string'},
             {name:'contactNotes',type:'string'},
             {name:'studentNotes',type:'string'},
-            //{name:'basedOnTemplateId',type:'string'},
+            {name:'basedOnTemplateId',type:'string'},
             {name:'isFinancialAid',type:'boolean'},
             {name:'isImportant',type:'boolean'},
             {name:'isF1Visa',type:'boolean'},
@@ -186,7 +186,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.set('contactName','');
 		me.set('contactNotes','');
 		me.set('studentNotes','');
-		//me.set('basedOnTemplateId','');
+		me.set('basedOnTemplateId','');
 		me.set('isFinancialAid',false);
 		me.set('isImportant',false);
 		me.set('isF1Visa',false);
@@ -261,7 +261,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
         simpleData.contactName = me.get('contactName');
         simpleData.contactNotes = me.get('contactNotes');
         simpleData.studentNotes = me.get('studentNotes');
-         //simpleData.basedOnTemplateId = me.get('basedOnTemplateId');
+		simpleData.basedOnTemplateId = me.get('basedOnTemplateId');
         simpleData.isFinancialAid = me.getBoolean('isFinancialAid');
         simpleData.isImportant = me.getBoolean('isImportant');
         simpleData.isF1Visa = me.getBoolean('isF1Visa');

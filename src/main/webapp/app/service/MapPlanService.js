@@ -25,6 +25,7 @@ Ext.define('Ssp.service.MapPlanService', {
         personLite: 'personLite',
 		authenticatedPerson: 'authenticatedPerson'
     },
+
     initComponent: function() {
 		return this.callParent( arguments );
     },
@@ -41,8 +42,7 @@ Ext.define('Ssp.service.MapPlanService', {
 		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
 		return baseUrl;
     },
- 
-    
+
     getCurrent: function( personId, callbacks ){
 		var me=this;
 		var url = me.getBaseUrl(personId);
@@ -165,7 +165,7 @@ Ext.define('Ssp.service.MapPlanService', {
     	var termCodes = [];
     	var i = 0;
     	var planCourses = mapPlan.get('planCourses');
-    	if(!planCourses){
+    	if (!planCourses) {
     		return termCodes;
 		}
     	
@@ -174,7 +174,7 @@ Ext.define('Ssp.service.MapPlanService', {
 				termCodes[i++] = planCourse.termCode;
 			  }});
 			return termCodes;
-    	},
+    },
     
     updateCurrentMap: function(semesterStores){ 
         var me = this;
@@ -183,7 +183,8 @@ Ext.define('Ssp.service.MapPlanService', {
         var i = 0;
 		me.currentMapPlan.clearPlanCourses();
         me.currentMapPlan.updatePlanCourses(semesterStores);
-    }, 
+    },
+
     updatePrintableMap: function(semesterStores,printableMap){ 
         var me = this;
         printableMap.set('personId',  me.personLite.get('id'));
@@ -191,16 +192,18 @@ Ext.define('Ssp.service.MapPlanService', {
         var i = 0;
         printableMap.clearPlanCourses();
         printableMap.updatePlanCourses(semesterStores);
-    }, 
+    },
+
 	getBoolean: function(model, fieldName){
 		var me = model;
-		if(me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 || me.get(fieldName) == 'true'){
+		if (me.get(fieldName) == 'on' || me.get(fieldName) == true || me.get(fieldName) == 1 ||
+                me.get(fieldName) == 'true') {
 			return true;
 		}
+
 		return false;
 	},
 
-    
     save: function(semesterStores, callbacks, currentMapPlan, saveAs ){
 		var me=this;
 		var url = me.getBaseUrl(me.personLite.get('id'));
@@ -217,10 +220,11 @@ Ext.define('Ssp.service.MapPlanService', {
 		me.currentMapPlan.set('ownerId',me.authenticatedPerson.get('id'));
 
 		// save
-		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == true)
-		{	
-			me.currentMapPlan.set('id','');
-			me.apiProperties.makeRequest({
+		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == true) {
+
+		    me.currentMapPlan.set('id','');
+
+            me.apiProperties.makeRequest({
     			url: url,
     			method: 'POST',
     			jsonData: me.currentMapPlan.getSimpleJsonData(),
@@ -228,7 +232,8 @@ Ext.define('Ssp.service.MapPlanService', {
     			failureFunc: failure,
     			scope: me
     		});				
-		}else{
+
+		} else {
 			// update
     		me.apiProperties.makeRequest({
     			url: url+'/'+ me.currentMapPlan.get('id'), 
@@ -258,8 +263,8 @@ Ext.define('Ssp.service.MapPlanService', {
 	    me.updateCurrentMap(semesterStores);
 	    
 		// save
-		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == false )
-		{	
+		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == false ) {
+
 			me.currentMapPlan.set('id','');
 			me.apiProperties.makeRequest({
     			url: url,
@@ -269,7 +274,7 @@ Ext.define('Ssp.service.MapPlanService', {
     			failureFunc: failure,
     			scope: me
     		});				
-		}else{
+		} else {
 			// update
     		me.apiProperties.makeRequest({
     			url: url+'/'+ me.currentMapPlan.get('id'), 
@@ -286,18 +291,22 @@ Ext.define('Ssp.service.MapPlanService', {
 		var me = this;
     	me.outputMap(semesterStores, callbacks, outputData, 'print', planType);
     },
+
     printCurrent: function(semesterStores, outputData, callbacks, planType ){
 		var me = this;
     	me.outputCurrentMap(semesterStores, callbacks, outputData, 'printCurrent');
-    },    
+    },
+
     email: function(semesterStores, outputData, callbacks, planType ){
 		var me = this;
     	me.outputMap(semesterStores, callbacks, outputData, 'email');
     },
+
     emailCurrent: function(semesterStores, outputData, callbacks, planType ){
 		var me = this;
     	me.outputCurrentMap(semesterStores, callbacks, outputData, 'emailCurrent');
     },
+
     outputCurrentMap: function(semesterStores, callbacks, outputData, outputType){
     	var me=this;
 		var url = me.getBaseUrl(me.personLite.get('id'));
@@ -321,21 +330,27 @@ Ext.define('Ssp.service.MapPlanService', {
     outputMap: function(semesterStores, callbacks, outputData, outputType, planType){
     	var me=this;
     	var url = null;
-    	if(planType == null)
-			planType = "plan"
-    	if(planType=="plan")
-		  url = me.getBaseUrl(me.personLite.get('id'));
-    	else
-    	  url = me.getTemplateBaseUrl();
+
+        if (planType == null) {
+            planType = "plan";
+        }
+
+        if (planType=="plan") {
+            url = me.getBaseUrl(me.personLite.get('id'));
+        } else {
+            url = me.getTemplateBaseUrl();
+        }
     	
 	    var success = function( response ){
 			callbacks.success( response, callbacks.scope );
 	    };
+
 	    var failure = function( response ){
 	    	me.apiProperties.handleError( response );	 
 	    	callbacks.failure(response, callbacks.scope);
 	    };
-	    me.prepareMapOutput(semesterStores, outputData, callbacks.isPrivate)
+
+	    me.prepareMapOutput(semesterStores, outputData, callbacks.isPrivate);
 		me.apiProperties.makeRequest({
    			url: url+'/' + outputType,
    			method: 'POST',
@@ -348,7 +363,8 @@ Ext.define('Ssp.service.MapPlanService', {
 
 	validate: function(plan, isTemplate, callbacks){
 		var me=this;
-		if(plan == null){
+
+        if (plan == null) {
 	    	callbacks.failure("Plan not found", callbacks.scope);
 		}
 			var url = me.getBaseUrl(plan.get('personId'));
@@ -368,7 +384,8 @@ Ext.define('Ssp.service.MapPlanService', {
 	    	me.apiProperties.handleError( response );	 
 	    	callbacks.failure(response, callbacks.scope);
 	    };
-		me.apiProperties.makeRequest({
+
+	    me.apiProperties.makeRequest({
    			url: url+'/validate',
    			method: 'POST',
    			jsonData: plan.getSimpleJsonData(),
@@ -380,7 +397,7 @@ Ext.define('Ssp.service.MapPlanService', {
 	
 	planStatus: function(plan, callbacks){
 		var me=this;
-		if(plan.get("isTemplate")){
+		if (plan.get("isTemplate")) {
 			if ( callbacks.failure ) {
 				if ( callbacks.scope ) {
 					callbacks.failure.apply(callbacks.scope, ["Is template, no plan status."]);
@@ -403,7 +420,8 @@ Ext.define('Ssp.service.MapPlanService', {
 			callbacks.failure.apply(this, [response, this]);
 		};
 		var url = me.getBaseUrl(me.personLite.get('id'));
-		me.apiProperties.makeRequest({
+
+        me.apiProperties.makeRequest({
    			url: url+'/calculatedPlanstatus',
    			method: 'GET',
    			successFunc: success,
@@ -420,14 +438,17 @@ Ext.define('Ssp.service.MapPlanService', {
 		var me = this;	
 		var printableMap = me.currentMapPlan.copy();
     	var objectStatus = printableMap.get('objectStatus');
-		if(objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE'){
+
+        if (objectStatus != 'ACTIVE' || objectStatus != 'INACTIVE') {
 			printableMap.set('objectStatus','ACTIVE');
 		}
-	    var failure = function( response ){
+
+		var failure = function( response ){
 	    	me.apiProperties.handleError( response );
 		    callbacks.failure( response, callbacks.scope );
 	    };
-    	if(semesterStores == null){
+
+	    if(semesterStores == null) {
 			var planCourses = printableMap.get('planCourses');
 			var semsetersStore = new Ssp.store.SemesterCourses();
 			semesterStores = [semsetersStore];
@@ -439,5 +460,4 @@ Ext.define('Ssp.service.MapPlanService', {
 	    outputData.set("plan", printableMap.getSimpleJsonData());
 	    outputData.set("isPrivate",isPrivate);
     }
-    	
 });

@@ -39,74 +39,78 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		'cancelButton': {
 			click: 'onCancelClick'
 		}
-	},
-	init: function() {
-		var me=this;
-	    me.resetForm();
-	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
-	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
-	    if ( me.currentMapPlan.get('id') ) {
-	        activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
-	    } else {
-	        activenessCheckbox.setValue(true);
-	    }
-		me.setCheckBox('checkbox[name=isFinancialAid]', 'isFinancialAid');
-		me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
-		me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
-		me.programsStore.load();
-		
-		me.checkForContactInfo();
+    },
+    init: function() {
+        var me=this;
 
-		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
-   		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
-		me.appEventsController.assignEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+        me.resetForm();
+        me.getView().query('form')[0].loadRecord( me.currentMapPlan );
+        var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
 
+        if ( me.currentMapPlan.get('id') ) {
+            activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+        } else {
+            activenessCheckbox.setValue(true);
+        }
 
-		return me.callParent(arguments);
+        me.setCheckBox('checkbox[name=isFinancialAid]', 'isFinancialAid');
+        me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
+        me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
+        me.programsStore.load();
+
+        me.checkForContactInfo();
+
+        me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+        me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+        me.appEventsController.assignEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
+        me.appEventsController.assignEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
+
+        return me.callParent(arguments);
+    },
+
+    checkForContactInfo: function(){
+        var me = this;
+
+            if (me.checkEmpty(me.getView().query('textfield[name="contactName"]')[0].getValue())) {
+
+                me.contactPersonStore.each(function(rec){
+                var displayFullName = rec.get('displayFullName');
+                var primaryEmailAddress = rec.get('primaryEmailAddress');
+                var workPhone = rec.get('workPhone');
+
+                me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
+                me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
+                me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
+                me.getView().query('textfield[name="contactTitle"]')[0].setValue('Academic Advisor');
+            });
+        }
+    },
+
+    checkEmpty: function(str){
+        return !str || !/[^\s]+/.test(str);
     },
 	
-	checkForContactInfo: function(){
-		var me = this;
-			
-			if (me.checkEmpty(me.getView().query('textfield[name="contactName"]')[0].getValue())) {
-			
-				me.contactPersonStore.each(function(rec){
-				var displayFullName = rec.get('displayFullName');
-				var primaryEmailAddress = rec.get('primaryEmailAddress');
-				var workPhone = rec.get('workPhone');
-				
-				me.getView().query('textfield[name="contactName"]')[0].setValue(displayFullName);
-				me.getView().query('textfield[name="contactEmail"]')[0].setValue(primaryEmailAddress);
-				me.getView().query('textfield[name="contactPhone"]')[0].setValue(workPhone);
-				me.getView().query('textfield[name="contactTitle"]')[0].setValue('Academic Advisor');
-			});
-		}
-	},
-	
-	checkEmpty: function(str){
-    	return !str || !/[^\s]+/.test(str);
-	},
-	
-   getContactPersonSuccess: function( r, scope ){
-    	var me=scope;
-		},
-		
-   getContactPersonFailure: function( response, scope ){
-    	var me=scope;
-    	me.getView().setLoading( false );  	
+    getContactPersonSuccess: function( r, scope ){
+        var me=scope;
     },
-	
+		
+    getContactPersonFailure: function( response, scope ){
+        var me=scope;
+        me.getView().setLoading( false );
+    },
+
     onCancelClick: function(){
-    	me = this;
-    	me.doCloseWindow(false)
+        var me = this;
+        me.doCloseWindow(false);
     },
 
     doCloseWindow: function(saving) {
-    	me.getView().close();
-		if(me.getView().viewToClose){
+        var me = this;
+        me.getView().close();
+
+        if (me.getView().viewToClose) {
 			me.getView().viewToClose.close();
-		}else if (!saving) {
+		} else if (!saving) {
 			me.doNavigation();
 			me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
 			me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
@@ -114,52 +118,49 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
     },
 
     doNavigation: function() {
-        me = this;
-        if(me.getView().loaderDialogEventName){
-			if(me.getView().loaderDialogEventName === 'doToolsNav')
-			{
+        var me = this;
+        if (me.getView().loaderDialogEventName) {
+			if (me.getView().loaderDialogEventName === 'doToolsNav') {
 				me.getView().navController.loadTool(me.getView().secondaryNavInfo);
-			} else
-			if(me.getView().loaderDialogEventName === 'doPersonNav')
-			{
-				me.appEventsController.getApplication().fireEvent('loadPerson');
-			}
-			else
-			{
-				me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName,me.getView().status,me.getView().actionOnPersonId);
-			}
+			} else {
+                if (me.getView().loaderDialogEventName === 'doPersonNav') {
+                    me.appEventsController.getApplication().fireEvent('loadPerson');
+                }
+                else {
+                    me.appEventsController.getApplication().fireEvent(me.getView().loaderDialogEventName, me.getView().status, me.getView().actionOnPersonId);
+                }
+            }
 		}
     },
 
 	doAfterSaveSuccess: function() {
-		me = this;
+		var me = this;
 		Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.save-plan.save-title','Save'),
 			me.textStore.getValueByCode('ssp.message.save-plan.save-body','Your changes have been saved.'),
 			function (btn) {me.doNavigation()}, me
-			);
+        );
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 	},
 
 	doAfterSaveFailure: function() {
-		me = this;
+		var me = this;
 		me.doNavigation();
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 	},
 
     onSaveClick: function(){
-    	me = this;
+    	var me = this;
 
     	var form =  me.getView().query('form')[0].getForm();
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
-    	if(!nameField || nameField == '')
-    	{
+    	if (!nameField || nameField == '') {
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.save-plan.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.save-plan.save-error','Please give the plan a name.')
-				);
+            );
     		return;
     	}
 
@@ -172,11 +173,16 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			me.setField('checkbox[name=isImportant]', 'isImportant');
 			me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
 			me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
+
+			if (me.currentMapPlan.get('isTemplate') == true) {
+				me.currentMapPlan.set('basedOnTemplateId', me.currentMapPlan.get('id'));
+			}
+
 			me.currentMapPlan.setIsTemplate(false);
 			me.mapEventUtils.save(me.getView().saveAs,me.getView().secondaryNavInfo,me.getView().navController);
 			me.doCloseWindow(true);
-		}
-		else{
+
+		} else {
 			me.formUtils.displayErrors( validateResult.fields );
 		}
     },

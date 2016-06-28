@@ -23,7 +23,6 @@ import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.TermNote;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 
 	private String personId;
 
+	private String basedOnTemplateId;
 
 	private List<PlanCourseTO> planCourses = new ArrayList<PlanCourseTO>();
 
@@ -50,13 +50,17 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 		super();
 		from(model);
 	}
-	
 
 	// This is totally wrong just so that validation can take place without hitting plan is modifi
 	public void from(Plan model) {
 		super.from(model);
 		this.setPersonId(model.getPerson().getId().toString());
-		List<PlanCourse> planCourses = model.getPlanCourses();
+
+        if (model.getTemplateBasedOn() != null) {
+            this.setBasedOnTemplateId(model.getTemplateBasedOn().getId().toString());
+        }
+
+        List<PlanCourse> planCourses = model.getPlanCourses();
 		for (PlanCourse planCourse : planCourses) {
 			PlanCourseTO courseTO = new PlanCourseTO(planCourse);
 			if (null!=planCourse.getOriginalFormattedCourse()) {
@@ -65,11 +69,13 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 			}
 			this.getPlanCourses().add(courseTO);
 		}
+
 		List<TermNote> termNotes = model.getTermNotes();
 		for (TermNote termNote : termNotes) {
 			TermNoteTO termNoteTO = new TermNoteTO(termNote);
 			this.getTermNotes().add(termNoteTO);
 		}
+
 		List<PlanElectiveCourse> planElectiveCourses = model.getPlanElectiveCourses();
 		for (PlanElectiveCourse planElectiveCourse : planElectiveCourses) {
 			PlanElectiveCourseTO planElectiveCourseTO = new PlanElectiveCourseTO(planElectiveCourse);
@@ -103,4 +109,12 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	public void setPlanElectiveCourses(List<PlanElectiveCourseTO> planElectiveCourseTOs) {
 		this.planElectiveCourses = planElectiveCourseTOs;
 	}
+
+    public String getBasedOnTemplateId() {
+        return basedOnTemplateId;
+    }
+
+    public void setBasedOnTemplateId(String basedOnTemplateId) {
+        this.basedOnTemplateId = basedOnTemplateId;
+    }
 }

@@ -20,7 +20,7 @@ package org.jasig.ssp.model;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-
+import org.hibernate.annotations.Immutable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -61,6 +61,11 @@ public class Plan extends AbstractPlan  {
 	@JoinColumn(name = "person_id", updatable = false, nullable = false)
 	private Person person;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@Immutable
+	@JoinColumn(name = "based_on_template_id")
+	private Template templateBasedOn;
+
 	public Plan(UUID id) {
 		super();
 		setId(id);
@@ -91,6 +96,7 @@ public class Plan extends AbstractPlan  {
 		Plan clone = new Plan();
 		cloneCommonFields(clone);
 		clone.setPerson(this.getPerson());
+        clone.setTemplateBasedOn(this.getTemplateBasedOn());
 		List<PlanCourse> planCourses = this.getPlanCourses();
 		for (PlanCourse planCourse : planCourses) {
 			PlanCourse planCourseClone = planCourse.clone();
@@ -140,4 +146,11 @@ public class Plan extends AbstractPlan  {
 		return planElectiveCourses;
 	}
 
+    public Template getTemplateBasedOn() {
+        return templateBasedOn;
+    }
+
+    public void setTemplateBasedOn(Template templateBasedOn) {
+        this.templateBasedOn = templateBasedOn;
+    }
 }

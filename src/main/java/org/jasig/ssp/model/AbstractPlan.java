@@ -19,7 +19,6 @@
 package org.jasig.ssp.model;
 
 import org.hibernate.annotations.Immutable;
-
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
