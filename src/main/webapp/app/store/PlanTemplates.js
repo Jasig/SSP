@@ -19,20 +19,33 @@
 Ext.define('Ssp.store.PlanTemplates', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.map.Plan',
+    groupField: 'visibility',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'
     },
-	constructor: function(){
-		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('templatePlan')),
-			  			  autoLoad: true,
-						     sorters: [{
-						         property: 'name',
-						         direction: 'ASC'
-						     }, {
-						         property: 'modifiedDate',
-						         direction: 'DESC'
-						     }]	});
-		return this.callParent(arguments);
+	constructor: function(args){
+        var me = this;
+		Ext.apply(me, {
+		    proxy: me.apiProperties.getProxy( this.apiProperties.getItemUrl('templatePlan')),
+            autoLoad: false,
+            autoSync: false,
+            pageSize: me.apiProperties.getPagingSize(),
+            params : {
+                page : 0,
+                start : 0,
+                limit : me.apiProperties.getPagingSize()
+            },
+            sorters: [{
+             property: 'name',
+             direction: 'ASC'
+            }, {
+             property: 'modifiedDate',
+             direction: 'DESC'
+            }],
+            extraParams: this.extraParams
+		});
+
+        return me.callParent(arguments);
 	}
 });

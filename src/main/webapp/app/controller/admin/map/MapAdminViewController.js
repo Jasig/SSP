@@ -23,9 +23,6 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
         apiProperties: 'apiProperties',
 		store: 'planTemplatesStore',
         formUtils: 'formRendererUtils',
-        semesterStores : 'currentSemesterStores',
-        authenticatedPerson: 'authenticatedPerson',
-        personLite: 'personLite',
         currentTemplate: 'currentMapPlan'
     },
     config: {
@@ -189,5 +186,13 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     	if (field.getValue() && field.getValue().length > 0) {
             params[fieldName] = field.getValue();
         }
+    },
+    onLoadComplete: function(){
+        var me = this;
+        me.onObjectStatusFilterSelect();
+    },
+    onObjectStatusFilterSelect:function(){
+        var me = this;
+        //do nothing at this time
     }
 });

@@ -57,11 +57,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.UUID;
- 
+
+
 @Controller
 @RequestMapping("/1/reference/map/template")
 public class TemplateController  extends AbstractBaseController {
@@ -131,21 +131,28 @@ public class TemplateController  extends AbstractBaseController {
 			final @RequestParam(required = false) String departmentCode,
 			final @RequestParam(required = false) String catalogYearCode,
 			final @RequestParam(required = false) UUID mapTemplateTagId,
-			final @RequestParam(required = false) String name) throws ObjectNotFoundException,
-			ValidationException {
+			final @RequestParam(required = false) String name,
+            final @RequestParam(required = false) Integer start,
+            final @RequestParam(required = false) Integer limit,
+            final @RequestParam(required = false) String sort,
+            final @RequestParam(required = false) String sortDirection)
+                        throws ObjectNotFoundException, ValidationException {
 		
-		TemplateSearchTO searchTO = new TemplateSearchTO(visibility,  objectStatus,
-															divisionCode,  programCode,  departmentCode, catalogYearCode, mapTemplateTagId, name);
-		validateAccessForGet(searchTO);
-		final PagingWrapper<Template> data = getService().getAll(
+		final TemplateSearchTO searchTO = new TemplateSearchTO(visibility,  objectStatus, divisionCode,  programCode,
+                departmentCode, catalogYearCode, mapTemplateTagId, name);
+
+        validateAccessForGet(searchTO);
+
+        final PagingWrapper<Template> data = getService().getAll(
 				SortingAndPaging.createForSingleSortWithPaging(
-						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
-						null, null, null, null), searchTO);
-		if(data == null)
-			return null;
+						objectStatus == null ? ObjectStatus.ALL : objectStatus, start,
+						limit, null, sortDirection, null), searchTO);
+
+		if (data == null) {
+            return null;
+        }
 		
-		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory()
-				.asTOList(data.getRows()));		
+		return new PagedResponse<TemplateTO>(true, data.getResults(), getFactory().asTOList(data.getRows()));
 	}
 
 	/**
@@ -221,8 +228,9 @@ public class TemplateController  extends AbstractBaseController {
 				SortingAndPaging.createForSingleSortWithPaging(
 						objectStatus == null ? ObjectStatus.ALL : objectStatus, null,
 						null, null, null, null), searchTO);
-		if(data == null)
-			return null;
+		if (data == null) {
+            return null;
+        }
 		return new PagedResponse<TemplateLiteTO>(true, data.getResults(), getLiteFactory()
 				.asTOList(data.getRows()));		
 	}
@@ -525,8 +533,9 @@ public class TemplateController  extends AbstractBaseController {
 				LOGGER.info("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
 				throw new AccessDeniedException("Invalid request for templates, requested by anonymous user, anonymous access is not enabled");
 			}
-			if(searchTO.visibilityAll())
+			if(searchTO.visibilityAll()) {
 				searchTO.setVisibility(MapTemplateVisibility.ANONYMOUS);
+			}
 			if(!searchTO.getVisibility().equals(MapTemplateVisibility.ANONYMOUS)){
 				LOGGER.info("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
 				throw new AccessDeniedException("Invalid request for templates, request by anonymous user request was for private/authenticated templates only.");
