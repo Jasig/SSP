@@ -292,7 +292,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
         }
         
         var programs = transcript.get('programs');
-        if (programs) {
+        if (programs && me.getAcademicProgramsField() && me.getIntendedProgramAtAdmitField()) {
             var programNames = [];
             var intendedProgramsAtAdmit = [];
             Ext.Array.each(programs, function(program){
@@ -301,7 +301,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
                 if (program.intendedProgramAtAdmit && program.intendedProgramAtAdmit.length > 0) 
                     intendedProgramsAtAdmit.push(program.intendedProgramAtAdmit);
             });
-             me.getAcademicProgramsField().setValue(programNames.join(', '));
+            me.getAcademicProgramsField().setValue(programNames.join(', '));
             me.getIntendedProgramAtAdmitField().setValue(intendedProgramsAtAdmit.join(', '));
         }
     },
@@ -433,12 +433,15 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             me.currentMapPlan.loadFromServer(Ext.decode(mapResponse.responseText));
             var lastTerm = me.termsStore.getTermsFromTermCodes(me.mapPlanService.getTermCodes(me.currentMapPlan))[0];
             if (me.getOnPlanField()) {
-                me.getOnPlanField().setValue("Plan Exists.")
-                me.getMapNameField().setValue(me.currentMapPlan.get("name"));
+                me.getOnPlanField().setValue("Plan Exists.");
+                if (me.getMapNameField()) {
+                    me.getMapNameField().setValue(me.currentMapPlan.get("name"));
+                }
                 me.getMapLastUpdatedField().setValue(me.currentMapPlan.getFormattedModifiedDate());
             }
-            if (lastTerm) 
+            if (lastTerm) {
                 me.getMapProjectedField().setValue(lastTerm.get("code"));
+            }
             me.getPlanCatalogYearField().setValue(me.currentMapPlan.get('catalogYearCode'));
             me.getPlanProgramField().setValue(me.currentMapPlan.get('programCode'));
             

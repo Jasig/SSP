@@ -133,7 +133,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
 			
 			// mapNameField.setFieldLabel('');
         	// mapNameField.setValue('<span style="color:#15428B">Plan Name:  </span>' + me.currentMapPlan.get("name"));
-        	mapNameField.setValue(me.currentMapPlan.get("name"));
+        	if (mapNameField) {
+                mapNameField.setValue(me.currentMapPlan.get("name"));
+            }
 			
             me.personService.getLite(me.currentMapPlan.get('ownerId'), {
                 success: me.getMapPersonSuccess,
@@ -276,7 +278,7 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonViewController', {
         var transcript = new Ssp.model.Transcript(transcriptTOResponse);
         var programs = transcript.get('programs');
         
-		if (programs) {
+		if (programs && me.getAcademicProgramsField()) {
             var programNames = [];
             // var intendedProgramsAtAdmit = [];
             Ext.Array.each(programs, function(program){
