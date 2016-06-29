@@ -282,14 +282,16 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * 
      */
     hasAccess: function( objectName ){
-    	var col = this.get('objectPermissionsCollection');
-    	var permission = col.findBy(function(item,key){
-    		if(objectName==item.get('name'))
-    		{
+        var me=this;
+    	var col = me.get('objectPermissionsCollection');
+
+        var permission = col.findBy(function(item,key){
+    		if (objectName==item.get('name')) {
     			return true;
     		}
     	});
-    	return ((permission != null)? permission.get('hasAccess') : false);
+
+        return ((permission != null)? permission.get('hasAccess') : false);
     },
  
     /**
@@ -302,22 +304,22 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * the ObjectPermissions MixedCollection. 
      */
     setObjectPermissions: function(){
-    	var me=this;
+    	var me = this;
     	var col = new Ext.util.MixedCollection();
     	var re = new RegExp(/REQUIRED_PERMISSIONS/);
     	var reAny = new RegExp(/REQUIRED_ANY_PERMISSIONS/);
     	var objectPermission, hasAccess, requiredPermissions;
-    	for (prop in Ssp.model.AuthenticatedPerson)
-    	{
-    		if( prop.search(re) != -1)
-    		{
+
+        for (prop in Ssp.model.AuthenticatedPerson) {
+    		if ( prop.search(re) != -1) {
     			requiredPermissions = Ssp.model.AuthenticatedPerson[prop];
     			hasAccess = me.hasRequiredPermissions(requiredPermissions);
     			objectPermission = new Ssp.model.ObjectPermission;
     			objectPermission.set('name',prop.replace('REQUIRED_PERMISSIONS_',""));
     			objectPermission.set('hasAccess',hasAccess);
     			col.add( objectPermission );
-    		}else if( prop.search(reAny) != -1)	{
+
+    		} else if ( prop.search(reAny) != -1) {
     			requiredPermissions = Ssp.model.AuthenticatedPerson[prop];
     			hasAccess = me.hasAnyRequiredPermissions(requiredPermissions);
     			objectPermission = new Ssp.model.ObjectPermission;
@@ -326,6 +328,7 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
     			col.add( objectPermission );
     		}
     	}
+
     	me.set('objectPermissionsCollection',col);
     },    
     
@@ -338,38 +341,43 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      *  return true if all of the permissions exist in the user's record
      */
     hasRequiredPermissions: function( arrRequiredPermissions ){
+        var me = this;
         var access = new Array();
-    	Ext.Array.each(arrRequiredPermissions,function(permission){
-    		if ( this.hasPermission( permission ) == true )
+
+        Ext.Array.each(arrRequiredPermissions,function(permission){
+    		if ( me.hasPermission( permission ) == true )
    		   {
    			 access.push( true ); 
    		   }
-   	    },this);
+   	    },me);
     	
         return ((access.length==arrRequiredPermissions.length)? true : false); 
     },
     
     hasAnyRequiredPermissions: function( arrRequiredPermissions ){
+        var me = this;
         var access = new Array();
-    	Ext.Array.each(arrRequiredPermissions,function(permission){
-    		if ( this.hasPermission( permission ) == true )
+
+        Ext.Array.each(arrRequiredPermissions,function(permission){
+    		if ( me.hasPermission( permission ) == true )
    		   {
    			 access.push( true ); 
    		   }
-   	    },this);
+   	    },me);
     	
         return access.length > 0 ? true : false; 
     },
 
     hasAnyBulkExportPermissions: function(){
-        var me=this;
+        var me = this;
+
         return me.hasAccess('EXPORT_CASELOAD_TO_CSV_ACTION')
             || me.hasAccess('EXPORT_WATCHLIST_TO_CSV_ACTION')
             || me.hasAccess('EXPORT_SEARCH_TO_CSV_ACTION');
     },
 
     hasAnyBulkPermissions: function(){
-    	var me=this;
+    	var me = this;
         return me.hasAnyBulkExportPermissions()
                 || me.hasAccess('BULK_EMAIL_ACTION')
                 || me.hasAccess('BULK_PROGRAM_STATUS_ACTION')
@@ -391,29 +399,31 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      *  return true if the permission exists in the user's record
      */
     hasPermission: function( permission ){
-   	 return Ext.Array.contains( this.get('permissions'), permission );
+        var me = this;
+        return Ext.Array.contains( me.get('permissions'), permission );
     },
 
     /**
      * Determines if a user has a supplied confidentiality level by id.
      * Tests against the granted confidentiality levels for this user.
-     *      
+     *
      * @arguments
      *  id - confidentialityLevelId
-     *  
+     *
      *  return true if the confidentiality level exists in the user's record
      */
     hasConfidentialityLevel: function( id ){
-    	var me=this;
+    	var me = this;
     	var levels = new Array();
     	var confidentialityLevels = me.get('confidentialityLevels');
-    	Ext.Array.each(confidentialityLevels ,function( item ){
-    	   if ( item.id == id )
-		   {
+
+        Ext.Array.each(confidentialityLevels ,function( item ){
+    	   if ( item.id == id ) {
 			 levels.push(id); 
 		   }
 	    },me);
-   	 	return ((levels.length==0)? false : true);
+
+        return ((levels.length==0)? false : true);
     },    
     
     /**
@@ -422,16 +432,18 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * a users authenticated level of confidentiality.
      */
     applyConfidentialityLevelsFilter: function( store ){
-		var me=this;
+		var me = this;
     	var filtersArr = [];
 		var filterAuthenticatedFunc;
-		filterAuthenticatedFunc = new Ext.util.Filter({
+
+        filterAuthenticatedFunc = new Ext.util.Filter({
 		    filterFn: function(item) {
-				return this.hasConfidentialityLevel( item.get('id') ); 
+				return me.hasConfidentialityLevel( item.get('id') );
 			},
 			scope: me
 		});
-		filtersArr.push( filterAuthenticatedFunc );
+
+        filtersArr.push( filterAuthenticatedFunc );
 		store.filter( filtersArr );
     },
     
@@ -439,22 +451,25 @@ Ext.define('Ssp.model.AuthenticatedPerson', {
      * Provides an unauthorized access alert message.
      */
     showUnauthorizedAccessAlert: function(){
-    	Ext.Msg.alert(
-    			me.textStore.getValueByCode('ssp.message.unauthorized.error-title',this.getUnauthorizedAccessAlertTitle()),
-    			me.textStore.getValueByCode('ssp.message.unauthorized.error-body',this.getUnauthorizedAccessAlertMessage())
-    		);
+    	var me = this;
+
+        Ext.Msg.alert(
+            me.textStore.getValueByCode('ssp.message.unauthorized.error-title', this.getUnauthorizedAccessAlertTitle()),
+            me.textStore.getValueByCode('ssp.message.unauthorized.error-body', this.getUnauthorizedAccessAlertMessage())
+        );
     },
     
     /**
      * Provides a warning if a user attempts to modify data that is critical to system operation.
      */
     showDeveloperRestrictedContentAlert: function(){
-        var me=this;
+        var me = this;
 		var defaultMsg = "Access to this information has been restricted due to the sensitive nature of the information and it's impact on the SSP System. Please see your system administrator if you need to make changes to this information.";
-		Ext.Msg.alert(
+
+        Ext.Msg.alert(
 			me.textStore.getValueByCode('ssp.message.restricted-content.error-title','WARNING'),
 			me.textStore.getValueByCode('ssp.message.restricted-content.error-body',defaultMsg)
-			);
+        );
     },
     
     isDeveloperRestrictedContent: function( item ){

@@ -28,6 +28,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		person: 'currentPerson',
 		personService:'personService',
         toolsStore: 'toolsStore',
+        textStore: 'textStore',
         isTemplateFlag: 'isTemplateMode'
     },
     control: {
@@ -199,6 +200,12 @@ Ext.define('Ssp.controller.ToolsViewController', {
                 me.loadTool(record.get('toolType'));
             } else if (record.get('toolType') === 'template' && skipCallBack) {
                 me.onTemplateOrMap(record.get('toolType'));   //able to select Template tool without a student selected
+            } else {
+                Ext.Msg.alert(
+                    me.textStore.getValueByCode('ssp.message.no-student-selected-title', 'No Student Selected'),
+                    me.textStore.getValueByCode('ssp.message.no-student-selected-body',
+                            'No student is selected. Please select a student before using this tool!')
+                );
             }
         }
     },

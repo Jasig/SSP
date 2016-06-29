@@ -28,20 +28,17 @@ Ext.define('Ssp.view.tools.map.MAP', {
 		type : 'hbox',
 		align : 'stretch'
 	},    
-        	initComponent : function() {
-        		Ext.apply(this, {
-        			items : [ {
-        				xtype : 'coursesview',
-        				width : 300
-        			}, {
-        				xtype : 'mapview',
-        				flex : 1
-        			}
+	initComponent : function() {
+		Ext.apply(this, {
+			items : [ {
+				xtype : 'coursesview',
+				width : 300
+			}, {
+				xtype : 'mapview',
+				flex : 1
+			}]
+		});
 
-        			]
-        		});
-
-        		return this.callParent(arguments);
-    }
-        
+		return this.callParent(arguments);
+	}
 });

@@ -394,29 +394,31 @@ Ext.define('Ssp.model.tool.map.Plan', {
         var me = this;
         var i = 0;
         var planElectiveCourseElectives = null;
-        for(var j = 0; j < me.data.planElectiveCourses.length; j++){
-            planElectiveCourse = me.data.planElectiveCourses[j]
-            if (planElectiveCourse.formattedCourse == formattedCourse) {
-                planElectiveCourseElectives = new Array();
-                var newPlanElectiveCourseElective = new Object();
-                newPlanElectiveCourseElective.formattedCourse = planElectiveCourse.formattedCourse;
-                newPlanElectiveCourseElective.courseCode = planElectiveCourse.courseCode;
-                newPlanElectiveCourseElective.courseTitle = planElectiveCourse.courseTitle;
-                newPlanElectiveCourseElective.courseDescription = planElectiveCourse.courseDescription;
-                newPlanElectiveCourseElective.creditHours = planElectiveCourse.creditHours;
-                planElectiveCourseElectives[i++] = newPlanElectiveCourseElective;
-                Ext.Array.forEach(planElectiveCourse.planElectiveCourseElectives, function(planElectiveCourseElective) {
-                    var newPlanElectiveCourseElective = new Object();
-                    newPlanElectiveCourseElective.formattedCourse = planElectiveCourseElective.formattedCourse;
-                    newPlanElectiveCourseElective.courseCode = planElectiveCourseElective.courseCode;
-                    newPlanElectiveCourseElective.courseTitle = planElectiveCourseElective.courseTitle;
-                    newPlanElectiveCourseElective.courseDescription = planElectiveCourseElective.courseDescription;
-                    newPlanElectiveCourseElective.creditHours = planElectiveCourseElective.creditHours;
-                    planElectiveCourseElectives[i++] = newPlanElectiveCourseElective;
-                })
-                break;
-            }
-        }
+		if (me.data && me.data.planElectiveCourses) {
+			for (var j = 0; j < me.data.planElectiveCourses.length; j++) {
+				planElectiveCourse = me.data.planElectiveCourses[j]
+				if (planElectiveCourse.formattedCourse == formattedCourse) {
+					planElectiveCourseElectives = new Array();
+					var newPlanElectiveCourseElective = new Object();
+					newPlanElectiveCourseElective.formattedCourse = planElectiveCourse.formattedCourse;
+					newPlanElectiveCourseElective.courseCode = planElectiveCourse.courseCode;
+					newPlanElectiveCourseElective.courseTitle = planElectiveCourse.courseTitle;
+					newPlanElectiveCourseElective.courseDescription = planElectiveCourse.courseDescription;
+					newPlanElectiveCourseElective.creditHours = planElectiveCourse.creditHours;
+					planElectiveCourseElectives[i++] = newPlanElectiveCourseElective;
+					Ext.Array.forEach(planElectiveCourse.planElectiveCourseElectives, function (planElectiveCourseElective) {
+						var newPlanElectiveCourseElective = new Object();
+						newPlanElectiveCourseElective.formattedCourse = planElectiveCourseElective.formattedCourse;
+						newPlanElectiveCourseElective.courseCode = planElectiveCourseElective.courseCode;
+						newPlanElectiveCourseElective.courseTitle = planElectiveCourseElective.courseTitle;
+						newPlanElectiveCourseElective.courseDescription = planElectiveCourseElective.courseDescription;
+						newPlanElectiveCourseElective.creditHours = planElectiveCourseElective.creditHours;
+						planElectiveCourseElectives[i++] = newPlanElectiveCourseElective;
+					})
+					break;
+				}
+			}
+		}
         return planElectiveCourseElectives;
     },
 

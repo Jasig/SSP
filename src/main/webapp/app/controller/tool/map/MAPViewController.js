@@ -585,7 +585,17 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
         var me=this;
 
         if ( (me.currentMapPlan.get('isTemplate') && me.currentMapPlan.isDirty(me.semesterStores)) ) {
-            Ext.Msg.alert('SSP Error', 'Please save your current Template before assigning Elective Courses!');
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.map.template-unsaved-elective-course-title','SSP Save Template'),
+                me.textStore.getValueByCode('ssp.message.map.template-unsaved-elective-course-body',
+                    'Please save your current Template before assigning Elective Courses!'));
+
+        } else if (isTemplateFlag && (!me.currentMapPlan.get('planCourses') || me.currentMapPlan.get('planCourses').length < 1)) {
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.map.template-nocourses-elective-course-title','SSP Add Courses and Save'),
+                me.textStore.getValueByCode('ssp.message.map.template-nocourses-elective-course-body',
+                    'Please add courses to your current Template and save before assigning Elective Courses!'));
+
         } else {
             if (me.electiveCoursesPopUp) {
                 me.electiveCoursesPopUp.destroy();

@@ -23,6 +23,8 @@ Ext.define('Ssp.view.admin.forms.map.MapElectiveCourses', {
               'Deft.mixin.Controllable'],
     controller: 'Ssp.controller.admin.map.MapElectiveCoursesViewController',
     inject: {
+        mapEventUtils: 'mapEventUtils',
+        currentMapPlan: 'currentMapPlan',
         textStore: 'textStore'
 	},
     title: 'Edit Template Elective Courses',
@@ -57,7 +59,9 @@ Ext.define('Ssp.view.admin.forms.map.MapElectiveCourses', {
                     text: me.textStore.getValueByCode('ssp.label.close-button', 'Close'),
                     listeners: {
                         click: function () {
-                            me = this;
+                            if (me.mapEventUtils && me.currentMapPlan) {
+                                me.mapEventUtils.loadTemplate(me.currentMapPlan.get('id'));
+                            }
                             me.close();
                         },
                         scope: me

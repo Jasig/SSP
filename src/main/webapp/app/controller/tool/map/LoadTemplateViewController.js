@@ -227,16 +227,21 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 			Ext.Msg.alert(
 				me.textStore.getValueByCode('ssp.message.load-template.error-title','SSP Error'),
 				me.textStore.getValueByCode('ssp.message.load-template.select-item','Please select an item to edit.')
-				);
+            );
      	    me.getView().setLoading(false);
         }    	
     },
+
 	onLoadCompleteFailure: function(serviceResponses){
 		var me = this;
-		view.setLoading(false);
-	},	    
+        me.getView().setLoading(false);
+	},
+
 	onCloseClick: function(){
 		var me = this;
+        if ( isTemplateFlag && (!me.currentMapPlan || me.currentMapPlan.get('id') == "") ) {
+            me.appEventsController.getApplication().fireEvent('doStudentsNav', null); //on cancel and no student or template loaded go back to students view
+        }
 		me.getView().hide();
 	},
 	
@@ -313,8 +318,9 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     },
     
     setParam: function(params, field, fieldName){
-    	if(field.getValue() && field.getValue().length > 0)
-    		params[fieldName] = field.getValue();
+    	if (field.getValue() && field.getValue().length > 0) {
+            params[fieldName] = field.getValue();
+        }
     },
 
 	onTypeFilterSelect:function(){
@@ -324,7 +330,7 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
 	
 	onObjectStatusFilterSelect:function(){
 			var me = this;
-			me.values = {}
+			me.values = {};
 			me.values.objectStatus = me.getObjectStatusFilter().getValue();
 			me.values.typeValue = me.getTypeFilter().getValue();
 			me.store.clearFilter(false);
