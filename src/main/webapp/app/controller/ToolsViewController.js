@@ -200,12 +200,14 @@ Ext.define('Ssp.controller.ToolsViewController', {
                 me.loadTool(record.get('toolType'));
             } else if (record.get('toolType') === 'template' && skipCallBack) {
                 me.onTemplateOrMap(record.get('toolType'));   //able to select Template tool without a student selected
-            } else {
+            } else if (skipCallBack) {
                 Ext.Msg.alert(
                     me.textStore.getValueByCode('ssp.message.no-student-selected-title', 'No Student Selected'),
                     me.textStore.getValueByCode('ssp.message.no-student-selected-body',
                             'No student is selected. Please select a student before using this tool!')
                 );
+            } else {
+                //Do nothing as not a valid navigation
             }
         }
     },
