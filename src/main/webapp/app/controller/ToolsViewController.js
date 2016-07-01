@@ -176,9 +176,17 @@ Ext.define('Ssp.controller.ToolsViewController', {
     onItemClick: function(grid, record, item, index){
         var me = this;
 
-        //Listeners will need to return false to halt navigation from this point.
-        var skipCallBack = me.appEventsController.getApplication().fireEvent('toolsNav', record, me);
-        
+        if ((record.get('active') && me.personLite.get('id') != "") || record.get('toolType') === 'toolcaseloadreassignment' || record.get('toolType') === 'template') {
+            //Listeners will need to return false to halt navigation from this point.
+            var skipCallBack = me.appEventsController.getApplication().fireEvent('toolsNav', record, me);
+        } else {
+            Ext.Msg.alert(
+                me.textStore.getValueByCode('ssp.message.no-student-selected-title', 'No Student Selected'),
+                me.textStore.getValueByCode('ssp.message.no-student-selected-body',
+                        'No student is selected. Please select a student before using this tool!')
+            );
+            return;
+        }
         if (record.get('active') && me.personLite.get('id') != "" && skipCallBack) {
 			if (record.get('toolType') === 'emailstudent'){
 				if ( me.isAllowedToLoadTool(record.get('toolType')) ) {
@@ -200,14 +208,6 @@ Ext.define('Ssp.controller.ToolsViewController', {
                 me.loadTool(record.get('toolType'));
             } else if (record.get('toolType') === 'template' && skipCallBack) {
                 me.onTemplateOrMap(record.get('toolType'));   //able to select Template tool without a student selected
-            } else if (skipCallBack) {
-                Ext.Msg.alert(
-                    me.textStore.getValueByCode('ssp.message.no-student-selected-title', 'No Student Selected'),
-                    me.textStore.getValueByCode('ssp.message.no-student-selected-body',
-                            'No student is selected. Please select a student before using this tool!')
-                );
-            } else {
-                //Do nothing as not a valid navigation
             }
         }
     },
