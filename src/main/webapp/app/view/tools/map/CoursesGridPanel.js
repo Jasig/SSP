@@ -113,7 +113,6 @@ Ext.define('Ssp.view.tools.map.CoursesGridPanel', {
 							        plugins: {
 							            ptype: 'gridviewdragdrop',
 										ddGroup: 'ddGroupForCourses',
-										dropGroup: 'coursesDDGroup',
 										dragGroup: 'coursesDDGroup',
 										dragText: me.textStore.getValueByCode('ssp.label.map.all-course.drag-text','Drag and drop course to desired location.')
 							        }

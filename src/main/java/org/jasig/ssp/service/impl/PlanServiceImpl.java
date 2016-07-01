@@ -241,26 +241,4 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	public PlanElectiveCourse getPlanElectiveCourse(UUID id) throws ObjectNotFoundException {
 		return planElectiveCourseDao.get(id);
 	}
-
-//	@Override
-//	public PlanElectiveCourse copyAndSavePlanElectiveCourse(AbstractMapElectiveCourse abstractMapElectiveCourse) {
-//		PlanElectiveCourse planElectiveCourse = new PlanElectiveCourse();
-//		planElectiveCourse.cloneCommonFields(abstractMapElectiveCourse);
-//		if (abstractMapElectiveCourse instanceof PlanElectiveCourse) {
-//			List<PlanElectiveCourseElective> list = ((PlanElectiveCourse) abstractMapElectiveCourse).getElectiveCourseElectives();
-//			for (PlanElectiveCourseElective pCourse : list) {
-//				PlanElectiveCourseElective planElectiveCourseElective = new PlanElectiveCourseElective();
-//				planElectiveCourseElective.cloneCommonFields(pCourse);
-//				planElectiveCourse.getElectiveCourseElectives().add(planElectiveCourseElective);
-//			}
-//		} else {
-//			List<TemplateElectiveCourseElective> list = ((TemplateElectiveCourse) abstractMapElectiveCourse).getElectiveCourseElectives();
-//			for (TemplateElectiveCourseElective pCourse : list) {
-//				PlanElectiveCourseElective planElectiveCourseElective = new PlanElectiveCourseElective();
-//				planElectiveCourseElective.cloneCommonFields(pCourse);
-//				planElectiveCourse.getElectiveCourseElectives().add(planElectiveCourseElective);
-//			}
-//		}
-//		return planElectiveCourseDao.save(planElectiveCourse);
-//	}
 }

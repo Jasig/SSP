@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateCourseDao;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.dao.reference.TemplateElectiveCourseDao;
+import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
@@ -50,6 +51,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -216,5 +218,46 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 	@Override
 	public TemplateElectiveCourse getTemplateElectiveCourse(UUID id) throws ObjectNotFoundException {
 		return templateElectiveCourseDao.get(id);
+	}
+	@Override
+	public Template save(Template obj) {
+		cleanUpOrphanedElectiveCourses(obj);
+		return super.save(obj);
+	}
+
+	@Override
+	public Template copyAndSave(Template model, Person newOwner) throws CloneNotSupportedException {
+		cleanUpOrphanedElectiveCourses(model);
+		return super.copyAndSave(model, newOwner);
+	}
+
+	private void cleanUpOrphanedElectiveCourses(Template template) {
+		if (null!=template.getPlanElectiveCourses()) {
+//			for (TemplateElectiveCourse templateElectiveCourse : template.getPlanElectiveCourses()) {
+//				if (!hasFormattedCourse(templateElectiveCourse.getFormattedCourse(), template.getCourses())) {
+//					template.getPlanElectiveCourses().remove(templateElectiveCourse);
+//					templateElectiveCourseDao.delete(templateElectiveCourse);
+//				}
+//			}
+
+			Iterator<TemplateElectiveCourse> iter = template.getPlanElectiveCourses().iterator();
+			while (iter.hasNext()) {
+				TemplateElectiveCourse templateElectiveCourse = iter.next();
+				if (!hasFormattedCourse(templateElectiveCourse.getFormattedCourse(), template.getCourses())) {
+					iter.remove();
+					templateElectiveCourseDao.delete(templateElectiveCourse);
+				}
+			}
+		}
+	}
+	private boolean hasFormattedCourse (String formattedCourse, List<? extends AbstractPlanCourse<?>> templateCourses) {
+		if (null!=templateCourses) {
+			for (AbstractPlanCourse templateCourse : templateCourses) {
+				if (templateCourse.getFormattedCourse().equals((formattedCourse))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
