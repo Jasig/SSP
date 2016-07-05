@@ -18,14 +18,15 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
 import org.jasig.ssp.factory.reference.AbstractReferenceTOFactory;
 import org.jasig.ssp.factory.reference.SpecialServiceGroupTOFactory;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.reference.SpecialServiceGroupTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,4 +46,12 @@ public class SpecialServiceGroupTOFactoryImpl extends
 		return dao;
 	}
 
+    @Override
+	public SpecialServiceGroup from(final SpecialServiceGroupTO tObject) throws ObjectNotFoundException {
+        SpecialServiceGroup model = super.from(tObject);
+		model.setCode(tObject.getCode());
+        model.setNotifyOnWithdraw(tObject.isNotifyOnWithdraw());
+
+        return model;
+	}
 }

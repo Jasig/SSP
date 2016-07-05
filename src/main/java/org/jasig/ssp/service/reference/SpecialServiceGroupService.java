@@ -19,8 +19,14 @@
 package org.jasig.ssp.service.reference;
 
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
-public interface SpecialServiceGroupService
-		extends ReferenceService<SpecialServiceGroup> {
+public interface SpecialServiceGroupService extends ReferenceService<SpecialServiceGroup> {
+
+    SpecialServiceGroup getByCode(@NotNull final String code) throws ObjectNotFoundException;
+
+    List<SpecialServiceGroup> getByNotifyOnWithdraw(final boolean notifyOnWithdraw) throws ObjectNotFoundException;
 }

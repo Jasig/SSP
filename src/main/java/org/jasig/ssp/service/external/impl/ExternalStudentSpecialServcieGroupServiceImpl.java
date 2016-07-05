@@ -16,42 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.service.reference.impl;
+package org.jasig.ssp.service.external.impl;
 
-import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.reference.SpecialServiceGroupService;
+import org.jasig.ssp.dao.external.ExternalDataDao;
+import org.jasig.ssp.dao.external.ExternalStudentSpecialServiceGroupDao;
+import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
 @Transactional
-public class SpecialServiceGroupServiceImpl extends AbstractReferenceService<SpecialServiceGroup>
-		implements SpecialServiceGroupService {
+public class ExternalStudentSpecialServcieGroupServiceImpl extends
+		AbstractExternalDataService<ExternalStudentSpecialServiceGroup>
+            implements ExternalStudentSpecialServiceGroupService {
 
 	@Autowired
-	transient private SpecialServiceGroupDao dao;
-
-	protected void setDao(final SpecialServiceGroupDao dao) {
-		this.dao = dao;
-	}
+	private transient ExternalStudentSpecialServiceGroupDao dao;
 
 	@Override
-	protected SpecialServiceGroupDao getDao() {
+	protected ExternalDataDao<ExternalStudentSpecialServiceGroup> getDao() {
+		// TODO Auto-generated method stub
 		return dao;
 	}
-
+	
 	@Override
-	public SpecialServiceGroup getByCode(@NotNull final String code) throws ObjectNotFoundException {
-		return this.dao.getByCode(code);
+	public List<ExternalStudentSpecialServiceGroup> getStudentSpecialServiceGroups(String schoolId) {
+		return  dao.getStudentSpecialServiceGroups(schoolId);
 	}
-
-    @Override
-    public List<SpecialServiceGroup> getByNotifyOnWithdraw(final boolean notifyOnWithdraw) throws ObjectNotFoundException {
-        return this.dao.getByNotifyOnWithdraw(notifyOnWithdraw);
-    }
 }

@@ -168,7 +168,47 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'specialServiceGroupsAll',
 					interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false                  
+                        deleteButtonVisible: false,
+                        columnOverrides: [
+                            {
+                                dataIndex: 'objectStatus',
+                                flex: 0.10
+                            },
+                            {
+                                dataIndex: 'name',
+                                flex: 0.5
+                            },
+                            {
+                                dataIndex: 'description',
+                                flex: 0.5
+                            },
+                            {
+                                header: 'Notify on Withdrawal',
+                                required: true,
+                                dataIndex: 'notifyOnWithdraw',
+                                flex: 0.15,
+                                renderer: me.columnRendererUtils.renderFriendlyBoolean,
+                                field: {
+                                    xtype: 'checkbox'
+                                },
+                                sortOrder: 40
+                            },
+                            {
+                                header: 'SSG Code',
+                                required: true,
+                                dataIndex: 'code',
+                                editor:{
+                                    allowBlank: false
+                                },
+                                field: {
+                                    xtype: 'textfield',
+                                    allowBlank: false,
+                                    maxLength: 10
+                                },
+                                flex: 0.25,
+                                sortOrder: 50
+                            }
+                        ]
                     }, 
                     form: 'AbstractReferenceAdmin',
                     leaf: true
