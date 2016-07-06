@@ -1146,6 +1146,12 @@ Ext.onReady(function(){
 				    	},
 				        singleton: true
 			        },
+                    currentMessage:{
+                        fn: function(){
+                            return new Ssp.model.Message({id:""});
+                        },
+                        singleton: true
+                    },
                     isTemplateMode: {
                         fn: function(){
                             return new Boolean(false); //default false

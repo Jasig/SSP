@@ -23,6 +23,7 @@ Ext.define('Ssp.controller.admin.config.MessageQueueDisplayAdminViewController',
     	apiProperties: 'apiProperties',
     	store: 'messageQueueStore',
     	unpagedStore: 'messageQueueStore',
+        message: 'currentMessage',
     	formUtils: 'formRendererUtils',
 		adminSelectedIndex: 'adminSelectedIndex',
 		storeUtils:'storeUtils'
@@ -38,14 +39,15 @@ Ext.define('Ssp.controller.admin.config.MessageQueueDisplayAdminViewController',
     },       
 	init: function() {
 		var me=this;
-		//
-		// var params = {store:me.store,
-		// 		unpagedStore:me.unpagedStore,
-		// 		propertyName:"name",
-		// 		grid:me.getView(),
-		// 		model:null,
-		// 		selectedIndex: me.adminSelectedIndex};
-		// me.storeUtils.onStoreUpdate(params);
+
+		var params = {
+			    store:me.store,
+				unpagedStore:me.unpagedStore,
+				propertyName:"subject",
+				grid:me.getView(),
+				model:me.message,
+				selectedIndex: me.adminSelectedIndex};
+		me.storeUtils.onStoreUpdate(params);
 		
 		return me.callParent(arguments);
     },
@@ -59,15 +61,16 @@ Ext.define('Ssp.controller.admin.config.MessageQueueDisplayAdminViewController',
    		this.adminSelectedIndex.set('value', -1);
 
         if (record) {
-            var model = new  Ext.create('Ssp.model.Message');
-            model.populateFromGenericObject(record.data);
+            var message = new  Ext.create('Ssp.model.Message');
+            message.populateFromGenericObject(record.data);
+            me.message.data = record.data;
 
             if ( me.messageQueuePopup ) {
                 me.messageQueuePopup.destroy();
             }
 
-            me.messageQueuePopup = Ext.create('Ssp.view.admin.forms.config.MessageTemplatePreview', {
-                messageQueuePopup: model
+            me.messageQueuePopup = Ext.create('Ssp.view.admin.forms.config.MessageQueueDetails', {
+                messageQueuePopup: message
             });
 
             me.messageQueuePopup.show();

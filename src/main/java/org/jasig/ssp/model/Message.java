@@ -18,26 +18,17 @@
  */
 package org.jasig.ssp.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 /**
  * Email (Message) model
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-final public class Message
-		extends AbstractAuditable
-		implements Auditable {
+final public class Message extends AbstractAuditable implements Auditable {
 
 	private static final long serialVersionUID = -7643811408668209143L;
 
@@ -103,9 +94,8 @@ final public class Message
 	 * @param recipientEmailAddress
 	 *            Recipient e-mail address
 	 */
-	public Message(final String subject, final String body,
-			final Person sender,
-			final Person recipient, final String recipientEmailAddress) {
+	public Message(final String subject, final String body, final Person sender, final Person recipient,
+                   final String recipientEmailAddress) {
 		super();
 		setObjectStatus(ObjectStatus.ACTIVE);
 		this.subject = subject;

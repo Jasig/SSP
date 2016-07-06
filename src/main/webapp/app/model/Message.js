@@ -20,14 +20,17 @@ Ext.define('Ssp.model.Message', {
     extend: 'Ssp.model.AbstractBase',
     fields: [{name:'subject',type:'string'},
              {name:'body',type:'string'},
-             {name:'carbonCopy',type:'string'},
-             {name:'recipientEmailAddress',type:'string'},
              {name:'sender',type:'auto'},
+             {name:'recipientEmailAddress',type:'string'},
+             {name:'carbonCopy',type:'string'},
              {name:'sentToAddresses',type:'string'},
              {name:'sentCcAddresses',type:'string'},
              {name:'sentBccAddresses',type:'string'},
              {name:'sentFromAddress',type:'string'},
              {name:'sentReplyToAddress',type:'string'},
              {name:'sentDate',type: 'date', dateFormat: 'time'},
-             {name:'retryCount',type:'int'}]
+             {name:'retryCount',type:'int'},
+             {name:'sent', convert: function(value, record) {
+                 return record.get('sent') ==  false ? 'No' : 'Yes';
+             }}]
 });

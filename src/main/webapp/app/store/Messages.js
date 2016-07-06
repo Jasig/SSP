@@ -34,8 +34,9 @@ Ext.define('Ssp.store.Messages', {
             params : {
                 page : 0,
                 start : 0,
-                limit : 40
-            }
+                limit : me.apiProperties.getPagingSize()
+            },
+            extraParams: this.extraParams
         });
 		return me.callParent(arguments);
     }

@@ -32,15 +32,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
 /**
  * DAO for the {@link Message} model
  */
 @Repository
-public class MessageDao extends AbstractAuditableCrudDao<Message> implements
-		AuditableCrudDao<Message> {
+public class MessageDao extends AbstractAuditableCrudDao<Message> implements AuditableCrudDao<Message> {
 
-	@Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageDao.class);
+
+    @Autowired
 	private transient ConfigService configService;
+
+
 	/**
 	 * Constructor that initializes the instance with the specific class types
 	 * for super class method use.
@@ -49,8 +53,7 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 		super(Message.class);
 	}
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MessageDao.class);
+
 	/**
 	 * Return messages that have not been sent, up to the specified maximum
 	 * 
@@ -66,41 +69,53 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements
 				.list();
 	}
 
+    /**
+     * Returns messages that have not been sent using sorting and paging
+     *  Note: does not return messages that have failed
+     *    (retryCount > retryConfiguration)
+     * @param sAndP
+     * @return
+     */
 	public PagingWrapper<Message> queued(SortingAndPaging sAndP) {
 		int retryConfig = configService.getByNameExceptionOrDefaultAsInt("mail_delivery_retry_limit");
-		// will let the caller decide on object status filtering, but since
+
+        // will let the caller decide on object status filtering, but since
 		// this method is supposed to act like a queue, at least make sure
 		// it acts that way by default.
 		if (!(sAndP.isSorted()) && !(sAndP.isDefaultSorted())) {
 			sAndP.appendSortField("createdDate", SortDirection.ASC);
 		}
+
 		// cannot use createCriteria(sAndP) b/c that applies the sort order
 		// immediately, which breaks the 'select count()' that runs as part
 		// of the query pagination mechanism. The sort order will be applied
 		// to the criteria asˇ part of processCriteriaWithSortingAndPaging()
 		// below.
-		Criteria criteria = this.createCriteria();
+		final Criteria criteria = this.createCriteria();
 		criteria.add(Restrictions.isNull("sentDate"));
 		criteria.add(Restrictions.or(Restrictions.isNull("retryCount"), Restrictions.lt("retryCount", retryConfig))  );
-		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
+
+        return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 
 	public int archiveAndPruneMessages(Integer messageAgeInDays) {
-		Calendar date = Calendar.getInstance();
+		final Calendar date = Calendar.getInstance();
 		date.add(Calendar.DAY_OF_MONTH, messageAgeInDays * -1);
-		String hql = "INSERT INTO ArchivedMessage(id,createdDate, createdBy,modifiedDate, modifiedBy, objectStatus,subject,  body,  sender, recipient,  recipientEmailAddress,  "
+
+        final String hql = "INSERT INTO ArchivedMessage(id,createdDate, createdBy,modifiedDate, modifiedBy, objectStatus,subject,  body,  sender, recipient,  recipientEmailAddress,  "
 				+ "carbonCopy,	 sentToAddresses,  sentCcAddresses,	 sentBccAddresses,  sentFromAddress, sentReplyToAddress,  sentDate) "  + 
 	             "SELECT id,createdDate, createdBy,modifiedDate, modifiedBy,objectStatus,subject,  body,  sender, recipient,  recipientEmailAddress,  "
 				+ "carbonCopy,	 sentToAddresses,  sentCcAddresses,	 sentBccAddresses,  sentFromAddress, sentReplyToAddress,  sentDate FROM Message msg"
 				+ " Where createdDate < :date and id not in (select message.id from TaskMessageEnqueue)";
 		
-		int executedInsert = createHqlQuery(hql).setDate("date", date.getTime()).executeUpdate();
-		String deleteHql = "delete from Message where createdDate < :date and id not in (select message.id from TaskMessageEnqueue)";
-		int executedDelete = createHqlQuery(deleteHql).setDate("date", date.getTime()).executeUpdate();
-		if(executedInsert != executedDelete)
-		{
+		final int executedInsert = createHqlQuery(hql).setDate("date", date.getTime()).executeUpdate();
+		final String deleteHql = "delete from Message where createdDate < :date and id not in (select message.id from TaskMessageEnqueue)";
+		final int executedDelete = createHqlQuery(deleteHql).setDate("date", date.getTime()).executeUpdate();
+
+        if(executedInsert != executedDelete) {
 			throw new RuntimeException("Number of messages being archived and deleted are not equal, so transaction is being rolled back");
 		}
+
 		return executedInsert;
 	}
 }

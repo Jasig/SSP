@@ -32,7 +32,6 @@ Ext.define('Ssp.view.admin.forms.config.MessageQueueDisplayAdmin', {
     
     initComponent: function(){
         var me = this;
-        
         Ext.apply(me, {
             viewConfig: {},
             autoScroll: true,
@@ -40,12 +39,37 @@ Ext.define('Ssp.view.admin.forms.config.MessageQueueDisplayAdmin', {
             enableDragDrop: false,
 			cls: 'configgrid',
             columns: [{
-                header: 'Body',
-                dataIndex: 'name',
+                header: 'Sent',
+                dataIndex: 'sent',
                 flex: 1
             }, {
                 header: 'Subject',
-                dataIndex: 'description',
+                dataIndex: 'subject',
+                flex: 1
+            }, {
+                header: 'Sender',
+                dataIndex: 'sender',
+                renderer: function(value) {
+                    if (value && value.fullName) {
+                        return value.fullName;
+                    } else {
+                        return 'Not Available';
+                    }
+                },
+                flex: 1
+            }, {
+                header: 'Created On',
+                dataIndex: 'createdDate',
+                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
+                flex: 1
+            }, {
+                header: 'Recipient',
+                dataIndex: 'recipientEmailAddress',
+                flex: 1
+            }, {
+                header: 'Sent Date',
+                dataIndex: 'sentDate',
+                renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A'),
                 flex: 1
             }],
             dockedItems: [{

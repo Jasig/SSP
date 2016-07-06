@@ -23,7 +23,8 @@ Ext.define('Ssp.controller.admin.config.MessageQueueAdminViewController', {
     	messageQueueStore: 'messageQueueStore'
     },
 	init: function() {
-		this.messageQueueStore.load();
-		return this.callParent(arguments);
+        var me = this;
+        me.messageQueueStore.load();
+		return me.callParent(arguments);
     }
 });

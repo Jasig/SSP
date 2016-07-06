@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.transferobject;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.Message;
 import java.util.Date;
 
@@ -25,10 +26,10 @@ public class MessageTO extends AbstractAuditableTO<Message>
 	implements TransferObject<Message> {
 
 	private String subject;
-	private String carbonCopy;
-	private String recipientEmailAddress;
 	private String body;
 	private PersonLiteTO sender;
+    private String recipientEmailAddress;
+    private String carbonCopy;
     private String sentToAddresses;
     private String sentCcAddresses;
     private String sentBccAddresses;
@@ -36,6 +37,7 @@ public class MessageTO extends AbstractAuditableTO<Message>
     private String sentReplyToAddress;
     private Date sentDate;
     private Integer retryCount;
+    private boolean sent;
 
 	
 	public MessageTO() {
@@ -51,19 +53,31 @@ public class MessageTO extends AbstractAuditableTO<Message>
 	public void from(Message model) {
 		super.from(model);
 		this.subject = model.getSubject();
-		this.recipientEmailAddress = model.getRecipientEmailAddress();
-		this.carbonCopy = model.getCarbonCopy();
 		this.body = model.getBody();
 		if (model.getSender() != null) {
 			this.sender = new PersonLiteTO(model.getSender().getId(),model.getSender().getFirstName(),model.getSender().getLastName());
 		}
-        this.sentToAddresses = model.getSentToAddresses();
-        this.sentCcAddresses = model.getSentCcAddresses();
-        this.sentBccAddresses = model.getSentBccAddresses();
-        this.sentFromAddress = model.getSentFromAddress();
-        this.sentReplyToAddress = model.getSentReplyToAddress();
+		this.recipientEmailAddress = cleanEmailAddress(model.getRecipientEmailAddress());
+		if (model.getRecipient() != null && StringUtils.isNotBlank(model.getRecipient().getPrimaryEmailAddress())) {
+            if (StringUtils.isNotBlank(this.recipientEmailAddress)) {
+                this.recipientEmailAddress = this.recipientEmailAddress + ", ";
+            }
+            this.recipientEmailAddress = this.recipientEmailAddress +
+                    cleanEmailAddress(model.getRecipient().getPrimaryEmailAddress());
+        }
+        this.carbonCopy = cleanEmailAddress(model.getCarbonCopy());
+        this.sentToAddresses = cleanEmailAddress(model.getSentToAddresses());
+        this.sentCcAddresses = cleanEmailAddress(model.getSentCcAddresses());
+        this.sentBccAddresses = cleanEmailAddress(model.getSentBccAddresses());
+        this.sentFromAddress = cleanEmailAddress(model.getSentFromAddress());
+        this.sentReplyToAddress = cleanEmailAddress(model.getSentReplyToAddress());
         this.sentDate = model.getSentDate();
         this.retryCount = model.getRetryCount();
+        if (sentDate == null) {
+            this.setSent(false);
+        } else {
+            this.setSent(true);
+        }
 	}
 
 	public String getSubject() {
@@ -74,16 +88,16 @@ public class MessageTO extends AbstractAuditableTO<Message>
 		this.subject = subject;
 	}
 
-	public void setRecipientEmailAddress(String recipientEmailAddress) {
-		this.recipientEmailAddress = recipientEmailAddress;
+	public void setRecipientEmailAddress(String recipientEmailAddresses) {
+		this.recipientEmailAddress = recipientEmailAddresses;
 	}
 	
 	public String getRecipientEmailAddress() {
 		return this.recipientEmailAddress;
 	}
 	
-	public void setCarbonCopy(String carbonCopy) {
-		this.carbonCopy = carbonCopy;
+	public void setCarbonCopy(String carbonCopyEmailAddresses) {
+		this.carbonCopy = carbonCopyEmailAddresses;
 	}
 	
 	public String getCarbonCopy() {
@@ -160,5 +174,20 @@ public class MessageTO extends AbstractAuditableTO<Message>
 
     public void setRetryCount (Integer retryCount) {
         this.retryCount = retryCount;
+    }
+
+    public boolean isSent() {
+        return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
+
+    private String cleanEmailAddress (String emailAddress) {
+        if (StringUtils.isNotBlank(emailAddress)) {
+            return emailAddress.replace("\"", "").replace("'", "").trim();
+        }
+        return emailAddress;
     }
 }

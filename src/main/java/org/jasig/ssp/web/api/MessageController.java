@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.web.api;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.MessageTOFactory;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -76,11 +77,16 @@ public class MessageController extends AbstractBaseController {
         final @RequestParam(required = false) String sort,
         final @RequestParam(required = false) String sortDirection) throws ObjectNotFoundException, ValidationException {
 
+        String sortProperty = sort;
+        if (StringUtils.isNotBlank(sortProperty) && sortProperty.trim().equals("sent")) {
+            sortProperty = "sentDate"; //sent doesn't exist (only for front-end display)
+        }
+
         // Run getAll
         final PagingWrapper<Message> messages = messageService.getMessages(
                 SortingAndPaging.createForSingleSortWithPaging(
-                        status == null ? ObjectStatus.ACTIVE : status, start,
-                        limit, sort, sortDirection, "sentDate"));
+                        ObjectStatus.ALL, start,
+                        limit, sortProperty, sortDirection, "sentDate"));
 
         return new PagedResponse<MessageTO>(true, messages.getResults(), messageTOFactory.asTOList(messages.getRows()));
 	}
