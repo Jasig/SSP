@@ -78,8 +78,8 @@
             <column name="code" type="${nvarchar.type}(50)">
                 <constraints nullable="true" />
             </column>
-            <column name="notify_on_withdraw" type="boolean">
-                <constraints nullable="true" />
+            <column name="notify_on_withdraw" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
             </column>
         </addColumn>
         <rollback>
@@ -153,7 +153,7 @@
         </rollback>
         <insert tableName="config">
             <column name="id" value="ff569419-7313-4ab0-b44f-f2a5d28ec93e" />
-            <column name="name" value="special service group unset from external dataa" />
+            <column name="name" value="special service group unset from external data" />
             <column name="description"
                     value="This allows external special service group data with nulls to remove the group for a student." />
             <column name="value">false</column>

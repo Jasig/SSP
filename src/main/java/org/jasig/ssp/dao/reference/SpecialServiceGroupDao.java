@@ -18,14 +18,17 @@
  */
 package org.jasig.ssp.dao.reference;
 
-import org.springframework.stereotype.Repository;
-
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Data access class for the SpecialServiceGroup reference entity.
@@ -37,7 +40,20 @@ public class SpecialServiceGroupDao extends AbstractReferenceAuditableCrudDao<Sp
 	public SpecialServiceGroupDao() {
 		super(SpecialServiceGroup.class);
 	}
-	
+
+	public SpecialServiceGroup getByCode(final String code) {
+		// TODO: (performance) Perfect example of data that should be cached
+		final Criteria query = createCriteria();
+		query.add(Restrictions.eq("code", code));
+		return (SpecialServiceGroup) query.uniqueResult();
+	}
+
+    public List<SpecialServiceGroup> getByNotifyOnWithdraw(final boolean notifyOnWithdraw) {
+        final Criteria query = createCriteria();
+        query.add(Restrictions.eq("notifyOnWithdraw", notifyOnWithdraw));
+        return query.list();
+    }
+
 	@Override
 	public PagingWrapper<SpecialServiceGroup> getAll(
 			final SortingAndPaging sAndP) {
