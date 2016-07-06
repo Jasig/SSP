@@ -134,7 +134,7 @@
     <changeSet author="paul.spaude" id="add config sync special service group" >
         <insert tableName="config">
             <column name="id" value="b044c7c1-1b54-4a19-8a70-373a53bb78d9" />
-            <column name="name" value="special service group set from external data" />
+            <column name="name" value="special_service_group_set_from_external_data" />
             <column name="description"
                     value="Special Service Group is set from external data if true. It will overwrite any local changes." />
             <column name="value">false</column>
@@ -153,7 +153,7 @@
         </rollback>
         <insert tableName="config">
             <column name="id" value="ff569419-7313-4ab0-b44f-f2a5d28ec93e" />
-            <column name="name" value="special service group unset from external data" />
+            <column name="name" value="special_service_group_unset_from_external_data" />
             <column name="description"
                     value="This allows external special service group data with nulls to remove the group for a student." />
             <column name="value">false</column>

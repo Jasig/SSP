@@ -27,11 +27,12 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
     	store: 'specialServiceGroupsAllUnpagedStore',
     	service: 'specialServiceGroupService',
         itemSelectorInitializer: 'itemSelectorInitializer',
-        textStore: 'sspTextStore'
+        textStore: 'sspTextStore',
+        configStore: 'configStore'
     },
 	init: function() {
 		var me=this;
-				
+
 		me.service.getAll({
 			success: me.getAllSuccess,
 			failure: me.getAllFailure,
@@ -44,26 +45,32 @@ Ext.define('Ssp.controller.person.SpecialServiceGroupsViewController', {
 	getAllSuccess: function( r, scope ){
 		var me=scope;
     	var selectedSpecialServiceGroups = me.columnRendererUtils.getSelectedIdsForMultiSelect( me.person.get('specialServiceGroups') );
+        var shouldDisableEdit = false;
 
         me.store.loadData(r.rows);
         me.store.clearFilter(true);
         me.formRendererUtils.applyAssociativeStoreFilter(me.store, selectedSpecialServiceGroups);
+
+        // when editing a student, and syncExternal and specialServiceGroup syncd disable edits
+        if (me.person.get('id') != "" && me.configStore.getConfigByName('syncStudentPersonalDataWithExternalData')
+            && me.configStore.getConfigByName('special_service_group_set_from_external_data')) {
+            shouldDisableEdit = true;
+        }
 		
 		var assigned = me.textStore.getValueByCode('ssp.message.special-service-groups.assigned','Assigned to the Student');
 		var available = me.textStore.getValueByCode('ssp.message.special-service-groups.available','Available Service Groups');
         me.itemSelectorInitializer.defineAndAddSelectorField(me.getView(), selectedSpecialServiceGroups, {
             itemId: 'specialServiceGroupsItemSelector',
             name: 'specialServiceGroups',
+            disabled: shouldDisableEdit,
             fieldLabel: '<div style="float:right; width: 48%; ">' + assigned + '</div><div style="width: 50%;">' + available + '</div>',
 			labelAlign: 'top',
 			labelSeparator: ' ',
             store: me.store
         });
-
 	},
 	
     getAllFailure: function( response, scope ){
     	var me=scope;  	
     }
-
 });
