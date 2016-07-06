@@ -30,7 +30,7 @@
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
 
-    <changeSet id="Create person_course status history table" author="paul.spaude">
+    <changeSet id="create person_course status history table" author="paul.spaude">
         <createTable tableName="person_course_status">
             <column name="id" type="uuid">
                 <constraints primaryKey="true" nullable="false" />
@@ -62,6 +62,9 @@
             </column>
             <column name="section_code" type="${nvarchar.type}(128)" >
                 <constraints nullable="false" />
+            </column>
+            <column name="previous_status_code" type="${nvarchar.type}(2)" >
+                <constraints nullable="true" />
             </column>
             <column name="status_code" type="${nvarchar.type}(2)" >
                 <constraints nullable="false" />
