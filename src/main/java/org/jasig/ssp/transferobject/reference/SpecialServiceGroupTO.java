@@ -47,8 +47,18 @@ public class SpecialServiceGroupTO extends AbstractReferenceTO<SpecialServiceGro
         notifyOnWithdraw = model .isNotifyOnWithdraw();
     }
 
-	public static List<SpecialServiceGroupTO> toTOList(
-			final Collection<SpecialServiceGroup> models) {
+    @Override
+    public final void from(final SpecialServiceGroup model) {
+        if (model == null) {
+            throw new IllegalArgumentException("Model can not be null.");
+        }
+
+        super.from(model);
+        code = model.getCode();
+        notifyOnWithdraw = model .isNotifyOnWithdraw();
+    }
+
+	public static List<SpecialServiceGroupTO> toTOList(final Collection<SpecialServiceGroup> models) {
 		final List<SpecialServiceGroupTO> tObjects = Lists.newArrayList();
 		for (final SpecialServiceGroup model : models) {
 			tObjects.add(new SpecialServiceGroupTO(model));// NOPMD

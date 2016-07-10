@@ -18,10 +18,14 @@
  */
 package org.jasig.ssp.service.external;
 
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+
 import java.util.List;
 
 public interface ExternalStudentSpecialServiceGroupService extends ExternalDataService<ExternalStudentSpecialServiceGroup> {
 	
 	List<ExternalStudentSpecialServiceGroup> getStudentSpecialServiceGroups(String schoolId);
+
+    void updatePersonSSGsFromExternalPerson(Person personToUpdate);
 }
