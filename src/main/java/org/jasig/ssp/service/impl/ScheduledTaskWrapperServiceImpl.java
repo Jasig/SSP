@@ -42,6 +42,7 @@ import org.jasig.ssp.service.TaskService;
 import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
+import org.jasig.ssp.service.external.SpecialServiceGroupCourseWithdrawalAdvisorEmailTask;
 import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.security.oauth.OAuth1NonceServiceMaintenance;
@@ -109,11 +110,13 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SEND_TASK_REMINDERS_TASK_NAME = "send-task-reminders";
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
     public static final String OAUTH1_CULL_NONCE_TABLE_TASK_NAME = "cull-oauth1-nonces";
+	public static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_NAME = "special-service-group-course-withdrawal";
 
 	private static final String EVERY_DAY_10_PM = "0 0 22 * * *";
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
 	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
+	private static final String EVERY_DAY_5_AM = "0 0 5 * * *";
 	private static final String EVERY_15_SECONDS_WITH_30_SECOND_DELAY = "15000/30000";
 	private static final String FIFTEEN_MINUTES_IN_MILLIS = 15 * 60 * 1000 + "";
 	private static final String NEVER = "0 0 0 31 12 *";
@@ -158,12 +161,19 @@ public class ScheduledTaskWrapperServiceImpl
     private static final String OAUTH1_CULL_NONCE_TASK_ID = "task_oauth1_nonce_cull";
     private static final String OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_oauth_nonce_cull_trigger";
     private static final String OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
-	
+
+	private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_ID = "task_special_service_group_course_withdrawal";
+	private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_TRIGGER_CONFIG_NAME = "task_special_service_group_email_course_withdrawal_trigger";
+	private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_DEFAULT_TRIGGER = EVERY_DAY_5_AM;
+
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
 	@Autowired
 	private transient ExternalPersonSyncTask externalPersonSyncTask;
+
+	@Autowired
+	private transient SpecialServiceGroupCourseWithdrawalAdvisorEmailTask specialServiceGroupCourseWithdrawalAdvisorEmailTask;
 
 	@Autowired
 	private transient OAuth1NonceServiceMaintenance oAuth1NonceServiceMaintenance;
@@ -335,6 +345,15 @@ public class ScheduledTaskWrapperServiceImpl
                         }
                     }, OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER, OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME));
 
+			this.tasks.put(SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_ID, new Task(SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_ID,
+					new Runnable() {
+						@Override
+						public void run () {
+							processSpecialServiceGroupCourseWithdrawal();
+						}
+					},
+					SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_DEFAULT_TRIGGER,
+					SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_TRIGGER_CONFIG_NAME));
             // Can't interrupt this on cancel b/c it's responsible for rescheduling
             // itself. A scheduling attempt on an interrupted thread is very
             // likely to be refused when using java.util.concurrent schedulers
@@ -1038,6 +1057,14 @@ public class ScheduledTaskWrapperServiceImpl
 		execBatchedTaskWithName(SYNC_EXTERNAL_PERSONS_TASK_NAME, externalPersonSyncTask);
 	}
 
+	/**
+	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
+	 * config polling job.
+	 */
+	@Override
+	public void processSpecialServiceGroupCourseWithdrawal() {
+		execBatchedTaskWithName(SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_NAME, specialServiceGroupCourseWithdrawalAdvisorEmailTask);
+	}
 	@Override 
 	public void refreshDirectoryPerson(){
 		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_TASK_NAME, directoryPersonRefreshTask);
