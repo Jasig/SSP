@@ -18,9 +18,15 @@
  */
 package org.jasig.ssp.service;
 
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import java.util.List;
 
-public interface PersonSpecialServiceGroupService
-		extends PersonAssocAuditableService<PersonSpecialServiceGroup> {
+public interface PersonSpecialServiceGroupService extends PersonAssocAuditableService<PersonSpecialServiceGroup> {
 
+    List<String> getAllSSGCodesForPerson(Person person);
+
+    void deleteAllForPerson(Person person);
+
+    void deleteByCode(String code, Person person);
 }

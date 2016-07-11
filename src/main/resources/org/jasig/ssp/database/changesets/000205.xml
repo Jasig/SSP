@@ -78,13 +78,14 @@
 
     <changeSet author="paul.spaude" id="add code and notify to special service group reference table" >
         <addColumn tableName="special_service_group">
-            <column name="code" type="${nvarchar.type}(50)">
-                <constraints nullable="true" />
-            </column>
+            <column name="code" type="${nvarchar.type}(50)"
+                    valueComputed="left(name,5) ${concat.type} right(cast(id as ${nvarchar.type}(36)),5)"/>
             <column name="notify_on_withdraw" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+        <addNotNullConstraint columnName="code" tableName="special_service_group" columnDataType="${nvarchar.type}(50)" />
+        <addUniqueConstraint columnNames="code" tableName="special_service_group" />
         <rollback>
             <dropColumn tableName="special_service_group" columnName="code" />
             <dropColumn tableName="special_service_group" columnName="notify_on_withdraw" />
@@ -140,8 +141,8 @@
             <column name="name" value="special_service_group_set_from_external_data" />
             <column name="description"
                     value="Special Service Group is set from external data if true. It will overwrite any local changes." />
-            <column name="value">false</column>
-            <column name="default_value">false</column>
+            <column name="value">true</column>
+            <column name="default_value">true</column>
             <column name="created_date" valueDate="2016-06-28T12:00:00" />
             <column name="modified_date" valueDate="2016-06-28T12:00:00" />
             <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
@@ -158,7 +159,7 @@
             <column name="id" value="ff569419-7313-4ab0-b44f-f2a5d28ec93e" />
             <column name="name" value="special_service_group_unset_from_external_data" />
             <column name="description"
-                    value="This allows external special service group data with nulls to remove the group for a student." />
+                    value="This allows external special service group data that is removed from external table to remove the group for a student." />
             <column name="value">false</column>
             <column name="default_value">false</column>
             <column name="created_date" valueDate="2016-06-18T12:00:00" />

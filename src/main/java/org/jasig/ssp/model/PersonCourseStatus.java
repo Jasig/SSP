@@ -47,7 +47,7 @@ public class PersonCourseStatus extends AbstractAuditable  implements Auditable 
 	@Size(max = 128)
 	private String sectionCode;
 
-	@Column(length = 2, nullable = false)
+	@Column(length = 2)
 	@Size(max = 2)
 	private String previousStatusCode;
 	

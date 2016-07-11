@@ -33,6 +33,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -52,7 +53,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import javax.portlet.PortletRequest;
 import java.util.Collection;
 import java.util.Comparator;
@@ -94,9 +94,13 @@ public class PersonServiceImpl implements PersonService {
 	private transient ExternalPersonService externalPersonService;
 
 	@Autowired
+	private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
+
+	@Autowired
 	private transient WithTransaction withTransaction;
 
-	/**
+
+    /**
 	 * If <code>true</code>, each individual coach synchronized by
 	 * {@link #syncCoaches()} will be written in its own transaction. If false,
 	 * the entire synchronization across all coaches will be a single
@@ -125,7 +129,6 @@ public class PersonServiceImpl implements PersonService {
 				return personAttributesService.getAttributes(username);
 			}
 		});
-
 	}
 
 	@Override
@@ -354,14 +357,14 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public Person getBySchoolId(final String schoolId,boolean commitPerson)
-			throws ObjectNotFoundException {
+	public Person getBySchoolId(final String schoolId,boolean commitPerson) throws ObjectNotFoundException {
 		try { 
 			return dao.getBySchoolId(schoolId);
+
 		} catch (final ObjectNotFoundException e) {
-			final ExternalPerson externalPerson = externalPersonService
-					.getBySchoolId(schoolId);
-			if (externalPerson == null) {
+			final ExternalPerson externalPerson = externalPersonService.getBySchoolId(schoolId);
+
+            if (externalPerson == null) {
 				throw new ObjectNotFoundException( // NOPMD
 						"Unable to find person by schoolId: " + schoolId,
 						"Person");
@@ -369,33 +372,38 @@ public class PersonServiceImpl implements PersonService {
 
 			final Person person = new Person();
 			evict(person);
-			externalPersonService.updatePersonFromExternalPerson(person,
-					externalPerson,commitPerson);
+			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
+
+            if (commitPerson) {
+                externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
+            }
+
 			return person;
 		}
 	}
 	
 	@Override
-	public Person getByUsername(final String username, final Boolean commitPerson)
-			throws ObjectNotFoundException {
+	public Person getByUsername(final String username, final Boolean commitPerson) throws ObjectNotFoundException {
 
 		final Person obj = dao.fromUsername(username);
-		if(obj != null)
-			return obj;
 
+        if (obj != null) {
+            return obj;
+        }
 
-		final ExternalPerson externalPerson = externalPersonService
-				.getByUsername(username);
+		final ExternalPerson externalPerson = externalPersonService.getByUsername(username);
 		if (externalPerson == null) {
-			throw new ObjectNotFoundException( // NOPMD
-					"Unable to find person by username: " + username,
-					"Person");
+			throw new ObjectNotFoundException("Unable to find person by username: " + username, "Person");
 		}
 
 		final Person person = new Person();
 		evict(person);
-		externalPersonService.updatePersonFromExternalPerson(person,
-				externalPerson, commitPerson);
+		externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
+
+		if (commitPerson) {
+			externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
+		}
+
 		return person;
 	}
 
@@ -754,7 +762,6 @@ public class PersonServiceImpl implements PersonService {
 				}
 			}
 
-
 			if (coach.get() != null) {
 				coaches.add(coach.get());
 			}
@@ -785,8 +792,6 @@ public class PersonServiceImpl implements PersonService {
 		}
 		return withTransaction.withTransactionAndUncheckedExceptions(callable);
 	}
-
-	
 
 	@Override
 	public void setPersonAttributesService(
