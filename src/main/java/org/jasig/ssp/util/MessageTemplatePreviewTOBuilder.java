@@ -422,14 +422,21 @@ public class MessageTemplatePreviewTOBuilder {
         setSetters(mapStatusReportSummaryDetail, suffix);
         return mapStatusReportSummaryDetail;
     }
+
+    public static List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTOList() {
+        List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("Student1"));
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("Student2"));
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("Student3"));
+        return studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs;
+    }
     public static StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO() {
         return createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("");
     }
-
     public static StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO(final String suffix) {
         StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO = new StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO();
         setSetters(studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO, suffix);
-        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO.setCourses(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTOList());
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO.setCourses(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTOList(suffix));
         return studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
     }
 
@@ -438,11 +445,11 @@ public class MessageTemplatePreviewTOBuilder {
         setSetters(courseSpecialServiceGroupCourseWithdrawalMessageTemplateTO, suffix);
         return courseSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
     }
-    public static List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTOList() {
+    public static List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTOList(final String suffix) {
         List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
-        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO("_1"));
-        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO("_2"));
-        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO("_3"));
+        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(suffix + "_1"));
+        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(suffix + "_2"));
+        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(suffix + "_3"));
         return courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs;
     }
 

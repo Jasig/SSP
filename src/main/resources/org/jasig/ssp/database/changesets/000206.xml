@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="Template Message for SSG Course Withdrawal Email To Advisor" author="michael.sultzaberger">
+        <insert tableName="message_template">
+            <column name="id" value="55185f25-3356-465e-9ebc-c62125bd7ca2" />
+            <column name="name" value="Special Service Group Course Withdrawal Email To Advisor" />
+            <column name="description"
+                    value="Email sent to advisor for Course Withdrawals for students in select Special Service Groups." />
+            <column name="subject"><![CDATA[Special Service Group Course Withdrawals]]></column>
+            <column name="body"><![CDATA[<html>
+<body>
+<p>
+The following students have withdrawn from the course listed.
+</p>
+<table cellspacing=0 cellpadding=3>
+	<tr>
+		<th>Student Id</th>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Term</th>
+		<th>Course</th>
+		<th>Section</th>
+		<th>Current Status</th>
+		<th>Previous Status</th>
+	</tr>
+	 #foreach($student in $students)
+	    #set ($odd = $foreach.count % 2)
+	    #foreach($course in $student.courses)
+		#if($odd==0)
+		  <tr style="background: #CCC">
+		#else
+		  <tr style="background: #FFF">
+		#end
+	    	  #if($foreach.first)
+                    <td>$student.schoolId</td>
+                    <td>$student.firstName</td>
+                    <td>$student.lastName</td>
+                  #else
+                    <td colspan=3>&nbsp;</td>
+                  #end
+                  <td>$course.termCode</td>
+                  <td>$course.formattedCourse</td>
+                  <td>$course.sectionCode</td>
+                  <td style="text-align:center;">$course.statusCode</td>
+                  <td style="text-align:center;">$course.previousStatusCode</td>
+              </tr>
+	    #end
+	 #end
+</table>
+</body>
+</html>]]>
+            </column>
+            <column name="created_date" valueDate="2015-05-27T16:00:00" />
+            <column name="modified_date" valueDate="2015-05-27T16:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="message_template">
+                <where>id = 'b0e61fad-74c2-4154-9248-7ca8db867fdf'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

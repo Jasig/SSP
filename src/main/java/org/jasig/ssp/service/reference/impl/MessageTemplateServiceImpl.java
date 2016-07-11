@@ -516,7 +516,7 @@ public class MessageTemplateServiceImpl extends
 		} else if (id.equals(MessageTemplate.BULK_ADD_CASELOAD_REASSIGNMENT_ID)) {
 			messageParams = createBulkAddCaseloadReassignmentMessageParams();
 		} else if (id.equals(MessageTemplate.EMAIL_SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TO_ADVISOR_ID)) {
-			messageParams = createSpecialServiceGroupCourseWithdrawalToAdisorMessageParams();
+			messageParams = createSpecialServiceGroupCourseWithdrawalToAdvisorMessageParams();
 		} else{
 			messageParams = new HashMap<String, Object>();
 		}
@@ -758,10 +758,10 @@ public class MessageTemplateServiceImpl extends
 		return messageParams;
 	}
 
-	private Map<String,Object> createSpecialServiceGroupCourseWithdrawalToAdisorMessageParams() {
+	private Map<String,Object> createSpecialServiceGroupCourseWithdrawalToAdvisorMessageParams() {
 		final Map<String, Object> messageParams = new HashMap<String, Object>();
 		messageParams.put("coach", MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO());
-		messageParams.put("students", MessageTemplatePreviewTOBuilder.createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO());
+		messageParams.put("students", MessageTemplatePreviewTOBuilder.createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTOList());
 		return messageParams;
 	}
 }
