@@ -18,13 +18,12 @@
  */
 package org.jasig.ssp.service.external;
 
-import java.util.List;
-
 import org.jasig.ssp.model.external.ExternalFacultyCourseRoster;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
 import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
+import java.util.List;
 
 /**
  * FacultyCourse service
@@ -43,8 +42,19 @@ public interface FacultyCourseService extends
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
 	 */
-	List<FacultyCourse> getAllCoursesForFaculty(final String facultySchoolId)
-			throws ObjectNotFoundException;
+	List<FacultyCourse> getAllCoursesForFaculty(final String facultySchoolId) throws ObjectNotFoundException;
+
+	/**
+	 * Gets all courses for the specified faculty sorted by term start_date
+     *  descending and places current term courses at the top.
+	 *
+	 * @param facultySchoolId
+	 *            The faculty school id to use to lookup the associated data.
+	 * @return The specified courses if any were found.
+	 * @throws ObjectNotFoundException
+	 *             If specified object could not be found.
+	 */
+	List<FacultyCourse> getAllCoursesForFacultySortedByTerm(final String facultySchoolId) throws ObjectNotFoundException;
 
 	/**
 	 * Gets the course roster for the specified faculty's course. Note that
@@ -70,8 +80,7 @@ public interface FacultyCourseService extends
 	 *             If specified object could not be found.
 	 */
 	List<ExternalFacultyCourseRoster> getRosterByFacultySchoolIdAndCourse(
-			final String facultySchoolId, final String formattedCourse)
-			throws ObjectNotFoundException;
+	        final String facultySchoolId, final String formattedCourse) throws ObjectNotFoundException;
 
 	/**
 	 * Gets the course with the specified id for the specified faculty in the
@@ -92,16 +101,17 @@ public interface FacultyCourseService extends
 	 * @throws ObjectNotFoundException see method description
 	 */
 	List<ExternalFacultyCourseRoster>
-	getRosterByFacultySchoolIdAndCourseAndTermCode(String facultySchoolId,
-			String formattedCourse,
-			String termCode)
-	throws ObjectNotFoundException;
-	
-	
-	List<ExternalFacultyCourseRoster>
-	getFacultyCourseRoster(SearchFacultyCourseTO searchFacultyCourse)
-	throws ObjectNotFoundException;
+	getRosterByFacultySchoolIdAndCourseAndTermCode(String facultySchoolId, String formattedCourse, String termCode)
+	    throws ObjectNotFoundException;
 
+    /**
+     * Gets the Faculty Course Roster
+     * @param searchFacultyCourse
+     * @return
+     * @throws ObjectNotFoundException
+     */
+	List<ExternalFacultyCourseRoster> getFacultyCourseRoster(SearchFacultyCourseTO searchFacultyCourse)
+	    throws ObjectNotFoundException;
 
 	/**
 	 * Gets a single enrollment in a course identified by instructor, course
@@ -119,11 +129,8 @@ public interface FacultyCourseService extends
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	ExternalFacultyCourseRoster getEnrollment(String facultySchoolId,
-			String formattedCourse,
-			String termCode,
-			String studentSchoolId)
-	throws ObjectNotFoundException;
+	ExternalFacultyCourseRoster getEnrollment(String facultySchoolId, String formattedCourse, String termCode,
+                                              String studentSchoolId) throws ObjectNotFoundException;
 	
 	/**
 	 * Gets a single enrollment in a course identified by instructor, course
@@ -139,7 +146,7 @@ public interface FacultyCourseService extends
 	 * @throws ObjectNotFoundException
 	 */
 	ExternalFacultyCourseRoster getEnrollment(SearchStudentCourseTO searchStudentCourseTO)
-	throws ObjectNotFoundException;
+            throws ObjectNotFoundException;
 
 	/**
 	 * Gets the course with the specified id for the specified faculty.
@@ -160,8 +167,7 @@ public interface FacultyCourseService extends
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
 	 */
-	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(
-			String facultySchoolId, final String formattedCourse) 
+	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourse(String facultySchoolId, final String formattedCourse)
 			throws ObjectNotFoundException;
 
 	/**
@@ -175,8 +181,7 @@ public interface FacultyCourseService extends
 	 * @throws ObjectNotFoundException
 	 */
 	FacultyCourse getCourseByFacultySchoolIdAndFormattedCourseAndTermCode(
-			String facultySchoolId, final String formattedCourse,
-			final String termCode) throws ObjectNotFoundException;
+	        String facultySchoolId, final String formattedCourse, final String termCode) throws ObjectNotFoundException;
 	
 	/**
 	 * Same as {@link #getCourseByFacultySchoolIdAndFormattedCourse(String, String)}
@@ -186,6 +191,7 @@ public interface FacultyCourseService extends
 	 * @return
 	 * @throws ObjectNotFoundException
 	 */
-	FacultyCourse getCourseBySearchFacultyCourseTO(SearchFacultyCourseTO searchFacultyCourse) throws ObjectNotFoundException;
+	FacultyCourse getCourseBySearchFacultyCourseTO(SearchFacultyCourseTO searchFacultyCourse)
+            throws ObjectNotFoundException;
 
 }

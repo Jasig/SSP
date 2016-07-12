@@ -168,6 +168,9 @@ var ssp = ssp || {};
 
             // Initialize the courseSelect
             var pagerOptions = {
+                model: {
+                    pageSize: 50
+                },
                 dataModel: getRosterData( that.options.initialSelectedCourse),
                 columnDefs: [
                     { key: 'firstName', valuebinding: '*.firstName', sortable: true },

@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.web.api.external;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.external.ExternalFacultyCourseRosterTOFactory;
 import org.jasig.ssp.factory.external.ExternalTOFactory;
@@ -39,27 +37,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/1/person/{facultySchoolId}/instruction")
-public class FacultyCourseController extends
-		AbstractExternalController<FacultyCourseTO, FacultyCourse> {
+public class FacultyCourseController extends AbstractExternalController<FacultyCourseTO, FacultyCourse> {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(FacultyCourseController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FacultyCourseController.class);
 
 	@Autowired
 	protected transient FacultyCourseService service;
-
-	@Override
-	protected FacultyCourseService getService() {
-		return service;
-	}
 
 	@Autowired
 	protected transient FacultyCourseTOFactory factory;
@@ -68,18 +57,25 @@ public class FacultyCourseController extends
 	protected transient ExternalFacultyCourseRosterTOFactory externalFacultyCourseRosterTOFactory;
 
 	@Override
-	protected ExternalTOFactory<FacultyCourseTO, FacultyCourse> getFactory() {
-		return factory;
+	protected FacultyCourseService getService() {
+		return service;
 	}
 
-	protected FacultyCourseController() {
-		super(FacultyCourseTO.class, FacultyCourse.class);
+	@Override
+	protected ExternalTOFactory<FacultyCourseTO, FacultyCourse> getFactory() {
+		return factory;
 	}
 
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;
 	}
+
+
+	protected FacultyCourseController() {
+		super(FacultyCourseTO.class, FacultyCourse.class);
+	}
+
 
 	/**
 	 * Gets all courses for the specified faculty.
@@ -95,14 +91,12 @@ public class FacultyCourseController extends
 	@RequestMapping(value = "/course", method = RequestMethod.GET)
 	@PreAuthorize(Permission.SECURITY_PERSON_INSTRUCTION_READ)
 	public @ResponseBody
-	PagedResponse<FacultyCourseTO> getAllCoursesForFaculty(
-			final @PathVariable String facultySchoolId)
+	PagedResponse<FacultyCourseTO> getAllCoursesForFaculty(final @PathVariable String facultySchoolId)
 			throws ObjectNotFoundException, ValidationException {
-		final List<FacultyCourse> list = getService().getAllCoursesForFaculty(
-				facultySchoolId);
 
-		return new PagedResponse<FacultyCourseTO>(true, Long.valueOf(list
-				.size()), factory.asTOList(list));
+		final List<FacultyCourse> list = getService().getAllCoursesForFacultySortedByTerm(facultySchoolId);
+
+		return new PagedResponse<FacultyCourseTO>(true, Long.valueOf(list.size()), factory.asTOList(list));
 	}
 
 	/**
@@ -128,13 +122,13 @@ public class FacultyCourseController extends
 			final @PathVariable String formattedCourse,
 			final @RequestParam(required = false) String sectionCode,
 			final @RequestParam(required = false) String termCode)
-			throws ObjectNotFoundException, ValidationException {
-		String scrubbedTermCode = StringUtils.trimToNull(termCode);
-		List<ExternalFacultyCourseRoster> list = getService().getFacultyCourseRoster(new SearchFacultyCourseTO( facultySchoolId,  
-				termCode, 
-				sectionCode,  
-				formattedCourse));
-		return new PagedResponse<ExternalFacultyCourseRosterTO>(true, Long.valueOf(list
-				.size()), externalFacultyCourseRosterTOFactory.asTOList(list));
+			    throws ObjectNotFoundException, ValidationException {
+
+		final String scrubbedTermCode = StringUtils.trimToNull(termCode);
+		final List<ExternalFacultyCourseRoster> list = getService().getFacultyCourseRoster(
+		        new SearchFacultyCourseTO( facultySchoolId, termCode, sectionCode, formattedCourse));
+
+		return new PagedResponse<ExternalFacultyCourseRosterTO>(true, Long.valueOf(list.size()),
+                externalFacultyCourseRosterTOFactory.asTOList(list));
 	}
 }
