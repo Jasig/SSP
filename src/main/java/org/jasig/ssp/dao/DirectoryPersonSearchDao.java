@@ -21,22 +21,10 @@ package org.jasig.ssp.dao;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
+import org.hibernate.*;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.model.PersonSearchResult2;
-import org.jasig.ssp.model.PersonSearchResultFull;
-import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
-import org.jasig.ssp.model.ScheduledTaskStatus;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.PlanStatus;
-import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
@@ -52,14 +40,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -68,15 +50,9 @@ import java.util.UUID;
 @Repository
 public class DirectoryPersonSearchDao  {
 
-	public DirectoryPersonSearchDao() {
-		super();
- 	}
-
 	@Autowired
 	private transient ConfigService configService;
-	
-	private static final String ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW = "activate_materialized_directory_person_view";
-	
+
 	@Autowired
 	private transient TermService termService;
 	
@@ -89,73 +65,76 @@ public class DirectoryPersonSearchDao  {
 	@Autowired
 	protected transient SessionFactory sessionFactory;
 
-	
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(DirectoryPersonSearchDao.class);
+    private static final String ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW = "activate_materialized_directory_person_view";
 
- 
-	FileWriter fileWriter;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DirectoryPersonSearchDao.class);
+
+
+    public DirectoryPersonSearchDao() {
+        super();
+    }
 
 	public void refreshDirectoryPerson(){
 		
-		if(isPostgresSession()){
-			try{
+		if (isPostgresSession()) {
+			try {
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON started");
-				Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON();");
+				final Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON();");
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON ended successfully");
 				query.list();
-			}catch(Exception exp){
+			} catch(Exception exp) {
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON started after catch.");
-				Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
+                final Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
 				query.list();
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON ended succesfully after catch.");
 			}
-		}else{
+		} else {
 			LOGGER.info("REFRESH_MV_DIRECTORY_PERSON started");
-			Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
+            final Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON;");
 			query.list();
 			LOGGER.info("REFRESH_MV_DIRECTORY_PERSON ended successfully");
 		}
 	}
 	
-	public void refreshDirectoryPersonBlue(){
+	public void refreshDirectoryPersonBlue() {
 		
-		if(isPostgresSession()){
-			try{
+		if (isPostgresSession()) {
+			try {
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE started");
-				Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON_BLUE();");
+                final Query query = sessionFactory.getCurrentSession().createSQLQuery("select REFRESH_MV_DIRECTORY_PERSON_BLUE();");
 				query.list();
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE ended");
-			}catch(Exception exp){
+			} catch(Exception exp) {
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE started after catch");
-				Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
+                final Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
 				query.list();
 				LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE ended successfully after catch.");
 			}
-		}else{
+		} else {
 			LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE started");
-			Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
+            final Query query = sessionFactory.getCurrentSession().createSQLQuery("exec REFRESH_MV_DIRECTORY_PERSON_BLUE;");
 			query.list();
 			LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE ended successfully");
 		}
 	}
 	
-	private Boolean isPostgresSession(){
-		try{
-			Properties properties = System.getProperties();
+	private Boolean isPostgresSession() {
+		try {
+			final Properties properties = System.getProperties();
 			String dialect = properties.getProperty("db_dialect");
-			if(StringUtils.isBlank(dialect)){
-				SessionFactoryImpl sfi = (SessionFactoryImpl) sessionFactory; 
-				Properties props = sfi.getProperties();
+			if (StringUtils.isBlank(dialect)) {
+				final SessionFactoryImpl sfi = (SessionFactoryImpl) sessionFactory;
+				final Properties props = sfi.getProperties();
 				dialect = props.get("hibernate.dialect").toString();
 			}
 			return dialect.toUpperCase().contains("POSTGRES") ? true:false;
-		}catch(Exception exp){
-			
+		} catch(Exception exp) {
+		    //swallow exception
 		}
 
 		return true;
 	}
+
 	/**
 	 * Search people by the specified terms.
 	 * 
@@ -163,33 +142,32 @@ public class DirectoryPersonSearchDao  {
 	 */
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
-		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(), personSearchRequest, false);
-		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-				PersonSearchResult2.class, "person_"));
-		return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
+		final Pair<Long, Query> querySet = prepSearchQuery(
+		        sessionFactory.getCurrentSession(), personSearchRequest, false);
+		querySet.getSecond().setResultTransformer(
+		        new NamespacedAliasToBeanResultTransformer(PersonSearchResult2.class, "person_"));
+
+        return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
 	}
 
-	private Pair<Long, Query> prepSearchQuery(Object session,
-			PersonSearchRequest personSearchRequest, boolean fullResultSearch) {
-		Term currentTerm;
-		Map<String,Object> params = null;
-		FilterTracker filterTracker = new FilterTracker();
-		try
-		{
-			currentTerm = termService.getCurrentTerm();
-		}
-		//If there is no current term, lets degrade silently
-		catch(ObjectNotFoundException e)
-		{
-			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
-			currentTerm = new Term();
-			currentTerm.setName("CURRENT TERM NOT SET");
-			currentTerm.setStartDate(Calendar.getInstance().getTime());
-			currentTerm.setEndDate(Calendar.getInstance().getTime());
-			
-		}
+	private Pair<Long, Query> prepSearchQuery(Object session, PersonSearchRequest personSearchRequest,
+                                              boolean fullResultSearch) {
 
-		final String hqlSelect;
+		final FilterTracker filterTracker = new FilterTracker();
+        final String hqlSelect;
+        final StringBuilder hqlWithoutSelect = new StringBuilder();
+        //Term currentTerm;
+        Map<String,Object> params = null;
+
+//        try { //TODO currentTerm in bindParams, is this needed?
+//			currentTerm = termService.getCurrentTerm();
+//		} catch(ObjectNotFoundException e) { //If there is no current term, lets degrade silently
+//			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
+//			currentTerm = new Term();
+//			currentTerm.setName("CURRENT TERM NOT SET");
+//			currentTerm.setStartDate(Calendar.getInstance().getTime());
+//			currentTerm.setEndDate(Calendar.getInstance().getTime());
+//		}
 
 		if (fullResultSearch) {
 			hqlSelect = buildFullSelect().toString();
@@ -197,37 +175,28 @@ public class DirectoryPersonSearchDao  {
 			hqlSelect = buildSelect().toString();
 		}
 
-		final StringBuilder hqlWithoutSelect = new StringBuilder();
-		
 		buildFrom(personSearchRequest,hqlWithoutSelect);
 		
 		buildJoins(personSearchRequest,hqlWithoutSelect);
 		
 		buildWhere(personSearchRequest, filterTracker, hqlWithoutSelect);
 		
-		params = getBindParams(personSearchRequest, currentTerm);
+		params = getBindParams(personSearchRequest); //TODO use currentTerm in bindParams here?
 		
-		Pair<Long,Query> querySet =  personSearchRequest
-				.getSortAndPage()
-				.applySortingAndPagingToPagedQuery(session, "dp.schoolId", hqlSelect,
-						hqlWithoutSelect, false, null, false, params);
-		
-		
+		Pair<Long,Query> querySet =  personSearchRequest.getSortAndPage()
+                .applySortingAndPagingToPagedQuery(
+                        session, "dp.schoolId", hqlSelect, hqlWithoutSelect, false, null, false, params);
+
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-				PersonSearchResult2.class, "person_"));
+		        PersonSearchResult2.class, "person_"));
 
 		return querySet;
 	}
 
-	private StringBuilder buildSelect(){
-		StringBuilder stringBuilder = new StringBuilder();
-		/*stringBuilder.append(" select distinct dp.id as person_id, dp.personId as person_personId, dp.firstName as person_firstName, " +
-				"dp.middleName as person_middleName, " +
-				"dp.lastName as person_lastName, " +
-				"dp.schoolId as person_schoolId, " +
-				
-			;*/
-		stringBuilder.append(" select distinct " +
+	private StringBuilder buildSelect() {
+		final StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(" select distinct " +
 				"dp.schoolId as person_schoolId," +
 				"dp.firstName as person_firstName, " +
 				"dp.middleName as person_middleName, " +
@@ -247,11 +216,12 @@ public class DirectoryPersonSearchDao  {
 				"dp.coachId as person_coachId, " +
 				"dp.photoUrl as person_photoUrl, " +
 				"dp.campusName as person_campusName");
-		return stringBuilder;
+
+        return stringBuilder;
 	}
 
 	private StringBuilder buildFullSelect(){
-		StringBuilder stringBuilder = new StringBuilder();
+		final StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(" select distinct " +
 				"dp.schoolId as person_schoolId," +
@@ -297,27 +267,27 @@ public class DirectoryPersonSearchDao  {
 		return stringBuilder;
 	}
 
-	private void buildWhere(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
-		// + lastName
+	private void buildWhere(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		//person searchTerm : firstName, lastName, studentId or firstName + ' ' + lastName
 		buildPersonObjectStatus(personSearchRequest, filterTracker, stringBuilder);
 		buildSchoolId(personSearchRequest, filterTracker, stringBuilder);
 		buildFirstName(personSearchRequest, filterTracker, stringBuilder);
 		buildLastName(personSearchRequest, filterTracker, stringBuilder);
-		// currentlyRegistered 
+
+        //currentlyRegistered
 		buildCurrentlyRegistered(personSearchRequest, filterTracker,stringBuilder);
 		
-		// coach && myCaseload
+		//coach && myCaseload
 		buildCoach(personSearchRequest, filterTracker, stringBuilder);		
 		
-		// programStatus
+		//programStatus
 		buildProgramStatus(personSearchRequest, filterTracker, stringBuilder);	
 		
-		// personTableType
+		//personTableType
 		buildPersonTableType(personSearchRequest, filterTracker,  stringBuilder);
 		
-		// specialServiceGroup
+		//specialServiceGroup
 		buildSpecialServiceGroup( personSearchRequest, filterTracker, stringBuilder);
 		
 		//declaredMajor
@@ -346,51 +316,52 @@ public class DirectoryPersonSearchDao  {
 
         //actualStartTerm
         buildActualStartTerm(personSearchRequest, filterTracker, stringBuilder);
-		
+
+        //early alert
 		buildEarlyAlertCriteria(personSearchRequest,filterTracker, stringBuilder);
 		
 		//watchList
 		buildWatchList(personSearchRequest,filterTracker, stringBuilder);
 
-		// homeCampus
+		//homeCampus
 		buildHomeCampus(personSearchRequest, filterTracker, stringBuilder);
 
+        //programStatus
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
 	}
 	
-	private void buildPersonObjectStatus(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(requiresObjectStatus(personSearchRequest))
-		{
-			if(sspPersonOnly(personSearchRequest)){
+	private void buildPersonObjectStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (requiresObjectStatus(personSearchRequest)) {
+			if (sspPersonOnly(personSearchRequest)) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.objectStatus = :personObjectStatus ");
-			}else{
+			} else {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" (dp.objectStatus = :personObjectStatus or dp.objectStatus is NULL) ");
 			}
 		}
 	}
 	
-	
 	private Boolean sspPersonOnly(PersonSearchRequest personSearchRequest) {
-		return (personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY));
+		return (personSearchRequest.getPersonTableType() != null &&
+                personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY));
 	}
+
 	private Boolean requiresObjectStatus(PersonSearchRequest personSearchRequest){
-		if (personSearchRequest.getPersonTableType() != null && personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
+		if (personSearchRequest.getPersonTableType() != null &&
+            personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
             return false;
         }
 		return true;
 	}
 
-	private void buildBirthDate(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasBirthDate(personSearchRequest))
-		{
+	private void buildBirthDate(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasBirthDate(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.birthDate = :birthDate ");
 		}
-		
 	}
 
 	private boolean hasBirthDate(PersonSearchRequest personSearchRequest) {
@@ -398,8 +369,8 @@ public class DirectoryPersonSearchDao  {
 	}
 
     private void buildActualStartTerm(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-                                      StringBuilder stringBuilder) {
-        if( hasActualStartTerm(personSearchRequest) ) {
+                                                                                        StringBuilder stringBuilder) {
+        if ( hasActualStartTerm(personSearchRequest) ) {
             appendAndOrWhere(stringBuilder, filterTracker);
             stringBuilder.append(" dp.actualStartTerm in (:actualStartTerm) ");
         }
@@ -409,19 +380,20 @@ public class DirectoryPersonSearchDao  {
         return (CollectionUtils.isNotEmpty(personSearchRequest.getActualStartTerm()));
     }
 	
-	private void buildEarlyAlertCriteria(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(requiresActiveEarlyAlerts(personSearchRequest))
-		{
+	private void buildEarlyAlertCriteria(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (requiresActiveEarlyAlerts(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.activeAlertsCount > 0 ");
-			if(personSearchRequest.getEarlyAlertResponseLate().equals(PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_OVERDUE) )
-			{
+
+            if (personSearchRequest.getEarlyAlertResponseLate().equals(
+                                                        PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_OVERDUE) ) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.earlyAlertResponseDueCount > 0 ");
 			}
-			if(personSearchRequest.getEarlyAlertResponseLate().equals(PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_CURRENT) )
-			{
+
+			if (personSearchRequest.getEarlyAlertResponseLate().equals(
+                                                        PersonSearchRequest.EARLY_ALERT_RESPONSE_RESPONSE_CURRENT) ) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.earlyAlertResponseCurrentCount > 0 ");
 				appendAndOrWhere(stringBuilder,filterTracker);
@@ -430,85 +402,71 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 	
-	private Boolean requiresActiveEarlyAlerts(PersonSearchRequest personSearchRequest){
+	private Boolean requiresActiveEarlyAlerts(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getEarlyAlertResponseLate() != null;
 	}
 
-
-	private void buildMyPlans(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasMyPlans(personSearchRequest))
-		{
+	private void buildMyPlans(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasMyPlans(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" plan.owner = :owner ");
-			
 		}
 	}
 	
-	private void addProgramStatusRequired(PersonSearchRequest personSearchRequest, FilterTracker filterTracker, StringBuilder stringBuilder){
-		if(personRequired(personSearchRequest)){
+	private void addProgramStatusRequired(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (personRequired(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.programStatusName is not null and dp.programStatusName <> '' and dp.personId = p.id ");
 		}
 	}
 
-
 	private boolean hasMyPlans(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getMyPlans() != null && personSearchRequest.getMyPlans();
 	}
 
-
-	private void buildFinancialAidStatus(
-			PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-			StringBuilder stringBuilder) {
-		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
+	private void buildFinancialAidStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasFinancialAidStatus(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.sapStatusCode in (:sapStatusCode)");
 		}
-		
 	}
-
 
 	private boolean hasFinancialAidStatus(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getSapStatusCode()));
 	}
 	
-	private void buildPersonTableType(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if (this.hasPersonTableType(personSearchRequest)) {
+	private void buildPersonTableType(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                      StringBuilder stringBuilder) {
+		if (hasPersonTableType(personSearchRequest)) {
 			if (personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.personId IS NOT NULL ");
-			} else if(personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
+			} else if(personSearchRequest.getPersonTableType().equals(
+                                                        personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
 				appendAndOrWhere(stringBuilder,filterTracker);
 				stringBuilder.append(" dp.personId IS NULL ");
 			}
 		}
 	}
 
-
-	private void buildProgramStatus(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasProgramStatus(personSearchRequest))
-		{
+	private void buildProgramStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasProgramStatus(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.programStatusName in (:programStatusName) ");
 		}
-		
-		
 	}
-
 
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
         return (CollectionUtils.isNotEmpty(personSearchRequest.getProgramStatus()));
 	}
 
-	private void buildHomeCampus(PersonSearchRequest personSearchRequest,
-									FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasHomeCampus(personSearchRequest))
-		{
+	private void buildHomeCampus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasHomeCampus(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.campusName in (:homeCampusName) ");
 		}
@@ -518,52 +476,48 @@ public class DirectoryPersonSearchDao  {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getHomeCampus()));
 	}
 
-	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest){
+	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest) {
 		return StringUtils.isNotBlank(personSearchRequest.getPersonTableType());
 	}
 	
-	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasSpecialServiceGroup(personSearchRequest))
-		{
+	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasSpecialServiceGroup(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null ");
 		}
 	}
 
-
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getSpecialServiceGroup()));
 	}
 	
-	private void buildWatchList(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasAnyWatchCriteria(personSearchRequest))
-		{
+	private void buildWatchList(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasAnyWatchCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ws.person.id = :watcherId ");
 			stringBuilder.append(" and ws.student.id = dp.personId ");			
 		}
 	}
 
-	
-	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, Term currentTerm)
-	{
-		HashMap<String,Object> params= new HashMap<String,Object>();
-		if(hasSchoolId(personSearchRequest)) {
+	//TODO Use currentTerm in bindParams?
+	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest) {
+		final HashMap<String,Object> params= new HashMap<String,Object>();
+
+        if (hasSchoolId(personSearchRequest)) {
 			params.put("schoolId",personSearchRequest.getSchoolId().trim().toUpperCase());
 		}
 		
-		if(hasFirstName(personSearchRequest)) {
+		if (hasFirstName(personSearchRequest)) {
 			params.put("firstName",personSearchRequest.getFirstName().trim().toUpperCase() + "%");
 		}
 		
-		if(hasLastName(personSearchRequest)) {
+		if (hasLastName(personSearchRequest)) {
 			params.put("lastName",personSearchRequest.getLastName().trim().toUpperCase() + "%");
 		}
 
-		if(hasPlanExists(personSearchRequest))
-		{
+		if (hasPlanExists(personSearchRequest)) {
 			// otherwise the conditional is handled structurally (exists test)
 			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
 				params.put("planObjectStatus",ObjectStatus.ACTIVE);
@@ -575,23 +529,19 @@ public class DirectoryPersonSearchDao  {
 				params.put("planObjectStatus",null);
 			}
 		}
-		if(hasPlanStatus(personSearchRequest))
-		{ 
+
+		if (hasPlanStatus(personSearchRequest)) {
 			PlanStatus param = null;
-			if(PersonSearchRequest.PLAN_STATUS_ON_PLAN.equals(personSearchRequest.getPlanStatus()))
-			{
+			if (PersonSearchRequest.PLAN_STATUS_ON_PLAN.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.ON;
 			}
-			if(PersonSearchRequest.PLAN_STATUS_OFF_PLAN.equals(personSearchRequest.getPlanStatus()))
-			{
+			if (PersonSearchRequest.PLAN_STATUS_OFF_PLAN.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.OFF;
 			}
-			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getPlanStatus()))
-			{
+			if (PersonSearchRequest.PLAN_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.ON_TRACK_SEQUENCE;
 			}
-			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getPlanStatus()))
-			{
+			if (PersonSearchRequest.PLAN_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.ON_TRACK_SUBSTITUTION;
 			}			
 			params.put("planStatus",param);
@@ -621,6 +571,8 @@ public class DirectoryPersonSearchDao  {
 		}
 
 		if (hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest)) {
+            List<UUID> queryPersonIds = Lists.newArrayList();
+            List<Person> compareTo = null;
             List<Person> me = null;
             List<Person> coaches = null;
 
@@ -628,12 +580,11 @@ public class DirectoryPersonSearchDao  {
                 me = Lists.newArrayList();
                 me.add(securityService.currentlyAuthenticatedUser().getPerson());
             }
+
             if ( hasCoach(personSearchRequest) ) {
                 coaches = personSearchRequest.getCoach();
             }
 
-            List<UUID> queryPersonIds = Lists.newArrayList();
-            List<Person> compareTo = null;
             if ( me != null ) {
                 queryPersonIds.add(me.get(0).getId());
                 compareTo = coaches;
@@ -656,8 +607,7 @@ public class DirectoryPersonSearchDao  {
             params.put("coachId", queryPersonIds);
 		}
 
-		if(hasAnyWatchCriteria(personSearchRequest))
-		{
+		if (hasAnyWatchCriteria(personSearchRequest)) {
 			Person me = null;
 			Person watcher = null;
 			if ( hasMyWatchList(personSearchRequest) ) {
@@ -684,84 +634,69 @@ public class DirectoryPersonSearchDao  {
 			params.put("watcherId", queryPersonId);
 		}
 
-		if(hasDeclaredMajor(personSearchRequest))
-		{
+		if (hasDeclaredMajor(personSearchRequest)) {
 			params.put("programCode", personSearchRequest.getDeclaredMajor());
 		}
 		
-		if(hasHoursEarnedCriteria(personSearchRequest))
-		{
-			if(personSearchRequest.getHoursEarnedMin() != null)
-			{
+		if (hasHoursEarnedCriteria(personSearchRequest)) {
+			if(personSearchRequest.getHoursEarnedMin() != null) {
 				params.put("hoursEarnedMin", personSearchRequest.getHoursEarnedMin());
 			}
-			if(personSearchRequest.getHoursEarnedMax() != null )
-			{
+			if(personSearchRequest.getHoursEarnedMax() != null ) {
 				params.put("hoursEarnedMax", personSearchRequest.getHoursEarnedMax());
 			}	
 		}
-		
-		
-		//String hql = "from A where name in (:names)";
-		//Query q = s.createQuery(hql);
-		//q.setParameterList("names", l);
-		
-		if(hasProgramStatus(personSearchRequest))
-		{
+
+		if( hasProgramStatus(personSearchRequest)) {
 			params.put("programStatusName", personSearchRequest.getProgramStatusNames());
 		}
 
-		if(hasHomeCampus(personSearchRequest)) {
+		if (hasHomeCampus(personSearchRequest)) {
 			params.put("homeCampusName", personSearchRequest.getHomeCampusNames());
 		}
 		
-		if(hasSpecialServiceGroup(personSearchRequest))
-		{
+		if (hasSpecialServiceGroup(personSearchRequest)) {
 			params.put("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
 		}
 		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
+		if (hasFinancialAidStatus(personSearchRequest)) {
 			params.put("sapStatusCode", personSearchRequest.getSapStatusCode());
 		}
 		
-		if(hasMyPlans(personSearchRequest))
-		{
+		if (hasMyPlans(personSearchRequest)) {
 			params.put("owner", securityService.currentlyAuthenticatedUser().getPerson());
 		}
 		
-		if(hasBirthDate(personSearchRequest))
-		{
+		if (hasBirthDate(personSearchRequest)) {
 			params.put("birthDate", personSearchRequest.getBirthDate());
 		}
 		
-		if(requiresObjectStatus(personSearchRequest)){
+		if (requiresObjectStatus(personSearchRequest)) {
 			params.put("personObjectStatus", ObjectStatus.ACTIVE);
 		}
 
-        if(hasActualStartTerm(personSearchRequest)) {
+        if (hasActualStartTerm(personSearchRequest)) {
             params.put("actualStartTerm", personSearchRequest.getActualStartTerm());
         }
 		
 		return params;
 	}
 
-
 	private boolean hasCoach(PersonSearchRequest personSearchRequest) {
         return (CollectionUtils.isNotEmpty(personSearchRequest.getCoach()));
 	}
 
-
-	private void buildPlanExists(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
-	{
-		if(hasPlanExists(personSearchRequest))
-		{
+	private void buildPlanExists(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasPlanExists(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+
+            if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" not exists elements(p.plans) ");
 			} else {
 				stringBuilder.append(" plan.objectStatus = :planObjectStatus and plan.person.id = dp.personId ");
 			}
+
 			if ( PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" and not exists ( from Plan as myPlans where myPlans.person.id = dp.personId and myPlans.objectStatus = "
 						+ ObjectStatus.ACTIVE.ordinal() + " ) ");
@@ -769,50 +704,45 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-
-	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
-	{
+	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
-		{
+		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esps.status = :planStatus and esps.schoolId = dp.schoolId ");
 		}
 		
-		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
-		{
+		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" msr.plan in elements(p.plans) ");
 			stringBuilder.append(" and msr.planStatus = :planStatus and msr.person.id = dp.personId ");
-			
 		}
 	}
 
-
-	private void buildCreditHours(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasHoursEarnedCriteria(personSearchRequest))
-		{
+	private void buildCreditHours(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasHoursEarnedCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if(personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() != null)
-			{
+
+            if (personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() != null) {
 				stringBuilder.append(" dp.creditHoursEarned >= :hoursEarnedMin ");
 				stringBuilder.append(" and dp.creditHoursEarned <= :hoursEarnedMax ");
 			}
-			if(personSearchRequest.getHoursEarnedMax() == null && personSearchRequest.getHoursEarnedMin() != null)
-			{
+
+			if (personSearchRequest.getHoursEarnedMax() == null && personSearchRequest.getHoursEarnedMin() != null) {
 				stringBuilder.append(" dp.creditHoursEarned >= :hoursEarnedMin ");
 			}
-			if(personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() == null)
-			{
+
+			if (personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() == null) {
 				stringBuilder.append(" dp.creditHoursEarned <= :hoursEarnedMax ");
 			}	
 		}
 	}
 
 
-	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) {
+	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
 		if (hasAnyGpaCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
             boolean appendAnd = false;
@@ -866,45 +796,39 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 	
-	private void buildDeclaredMajor(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasDeclaredMajor(personSearchRequest))
-		{
+	private void buildDeclaredMajor(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if(hasDeclaredMajor(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esap.programCode in (:programCode) ");
 			stringBuilder.append(" and esap.schoolId = dp.id ");
 		}
 	}
 
-
-	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		
+	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
 		LOGGER.debug("HAS COACH");
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
-		{
+		if (hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.coachId in (:coachId) ");
 		}
 		LOGGER.debug("END HAS COACH");
 	}
 
-
 	private boolean hasMyCaseload(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload();
 	}
 
-
-	private void buildCurrentlyRegistered(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,StringBuilder stringBuilder) 
-	{
-		if(hasCurrentlyRegistered(personSearchRequest))
-		{
+	private void buildCurrentlyRegistered(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasCurrentlyRegistered(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder, filterTracker);
 			boolean registeredCurrentTerm = false;
 			boolean notRegisteredCurrentTerm = false;
 			boolean registeredNextTerm = false;
 			boolean notRegisteredNextTerm = false;
-			for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+
+            for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
 				if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered)) {
 					registeredCurrentTerm = true;
 				}
@@ -918,9 +842,11 @@ public class DirectoryPersonSearchDao  {
 					notRegisteredNextTerm = true;
 				}
 			}
+
 			if (registeredCurrentTerm || notRegisteredCurrentTerm) {
 				buildCurrentTerm(stringBuilder, registeredCurrentTerm, notRegisteredCurrentTerm);
 			}
+
 			if (registeredNextTerm || notRegisteredNextTerm) {
 				if (registeredCurrentTerm || notRegisteredCurrentTerm) {
 					stringBuilder.append(" and ");
@@ -930,17 +856,20 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-	private void buildCurrentTerm(StringBuilder stringBuilder, boolean registeredCurrentTerm, boolean notRegisteredCurrentTerm) {
+	private void buildCurrentTerm(StringBuilder stringBuilder, boolean registeredCurrentTerm,
+                                                                                    boolean notRegisteredCurrentTerm) {
 		stringBuilder.append(" ( ");
 		if (registeredCurrentTerm) {
 			stringBuilder.append("dp.currentRegistrationStatus > 0");
 		}
+
 		if (notRegisteredCurrentTerm) {
 			if (registeredCurrentTerm) {
 				stringBuilder.append(" or ");
 			}
 			stringBuilder.append(" (dp.currentRegistrationStatus is null or dp.currentRegistrationStatus <= 0) ");
 		}
+
 		stringBuilder.append(" ) ");
 	}
 
@@ -949,6 +878,7 @@ public class DirectoryPersonSearchDao  {
 		if (registeredNextTerm) {
 			stringBuilder.append("dp.nextTermRegistrationStatus > 0");
 		}
+
 		if (notRegisteredNextTerm) {
 			if (registeredNextTerm) {
 				stringBuilder.append(" or ");
@@ -958,35 +888,29 @@ public class DirectoryPersonSearchDao  {
 		stringBuilder.append(" ) ");
 	}
 
-	private void buildSchoolId(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		
-		if(hasSchoolId(personSearchRequest))
-		{
+	private void buildSchoolId(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasSchoolId(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" upper(dp.schoolId) = :schoolId ");
 		}
 	}
-	private void buildLastName(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		
-		if(hasLastName(personSearchRequest))
-		{
+
+	private void buildLastName(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasLastName(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" upper(dp.lastName) like :lastName ");
 		}
 	}
 	
-	private void buildFirstName(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		
-		if(hasFirstName(personSearchRequest))
-		{
+	private void buildFirstName(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasFirstName(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" upper(dp.firstName) like :firstName ");
 		}
 	}
-
 
 	private boolean hasSchoolId(PersonSearchRequest personSearchRequest) {
 		return StringUtils.isNotBlank(personSearchRequest.getSchoolId());
@@ -1000,21 +924,18 @@ public class DirectoryPersonSearchDao  {
 		return StringUtils.isNotBlank(personSearchRequest.getLastName());
 	}
 
-
-	private void buildJoins(PersonSearchRequest personSearchRequest,
-			StringBuilder stringBuilder) 
-	{
+	private void buildJoins(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 		
-		if(hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest))
-		{
-			if ( hasPlanExists(personSearchRequest) && PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)) {
+			if ( hasPlanExists(personSearchRequest) &&
+                                    PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" left join p.plans as plan ");
 			} else {
 				stringBuilder.append(" join p.plans as plan ");
 			}
 		}
 		
-		if(this.hasSpecialServiceGroup(personSearchRequest)){
+		if (hasSpecialServiceGroup(personSearchRequest)) {
 			stringBuilder.append(" inner join p.specialServiceGroups as specialServiceGroups ");
 			stringBuilder.append(" inner join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
 		}
@@ -1024,55 +945,52 @@ public class DirectoryPersonSearchDao  {
 		return StringUtils.isNotEmpty(personSearchRequest.getPlanExists());
 	}
 
-
 	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) {
 		return StringUtils.isNotEmpty(personSearchRequest.getPlanStatus());
 	}
 
-
-	private boolean hasHoursEarnedCriteria(PersonSearchRequest personSearchRequest) 
-	{
+	private boolean hasHoursEarnedCriteria(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getHoursEarnedMax() != null || personSearchRequest.getHoursEarnedMin() != null;
 	}
 	
-	private boolean personRequired(PersonSearchRequest personSearchRequest){
+	private boolean personRequired(PersonSearchRequest personSearchRequest) {
 		return hasSpecialServiceGroup(personSearchRequest) || hasPlanExists(personSearchRequest)
 				|| hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest);
 	}
 
-	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
-	{
+	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 		ScheduledApplicationTaskStatus status = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_TASK_NAME);
 		ScheduledApplicationTaskStatus status_blue = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME);
 		
-		if(status != null && status.getStatus() != null && status.getStatus().equals(ScheduledTaskStatus.COMPLETED)){
+		if (status != null && status.getStatus() != null && status.getStatus().equals(ScheduledTaskStatus.COMPLETED)) {
 			stringBuilder.append(" from MaterializedDirectoryPerson dp ");
-		}else if(status_blue != null && status_blue.getStatus() != null && status_blue.getStatus().equals(ScheduledTaskStatus.COMPLETED)){
+		} else if (status_blue != null && status_blue.getStatus() != null && status_blue.getStatus().equals(
+		                                                                                ScheduledTaskStatus.COMPLETED)){
 			stringBuilder.append(" from MaterializedDirectoryPersonBlue dp ");
-		}else
-			return false;
+		} else {
+            return false;
+        }
 		
-		if(personRequired(personSearchRequest)){
+		if (personRequired(personSearchRequest)) {
 			stringBuilder.append(", Person p");
 		}
 		
-		if(hasDeclaredMajor(personSearchRequest))
-		{
+		if (hasDeclaredMajor(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
 		}
 		
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(
+                                                    configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
-		{
+		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
 			stringBuilder.append(", ExternalPersonPlanStatus esps ");
 		}
-		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
-		{
+
+		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
 			stringBuilder.append(", MapStatusReport msr ");
 		}
-		if(hasAnyWatchCriteria(personSearchRequest))
-		{
+
+		if (hasAnyWatchCriteria(personSearchRequest)) {
 			stringBuilder.append(", WatchStudent ws ");
 		}		
 		
@@ -1101,27 +1019,22 @@ public class DirectoryPersonSearchDao  {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getDeclaredMajor()));
 	}
 
-	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) 
-	{
+	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getCurrentlyRegistered() != null;
 	}
 
-	private void appendAndOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) 
-	{
-		if(!filterTracker.isFirstFilter())
-		{
+	private void appendAndOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) {
+		if (!filterTracker.isFirstFilter()) {
 			stringBuilder.append(" and ");
-		}
-		else
-		{
+		} else {
 			stringBuilder.append(" where ");
 		}
+
 		filterTracker.setFirstFilter(false);
 	}
 	
 	//Necessary due to the pass by value nature of booleans
-	private class FilterTracker
-	{
+	private class FilterTracker {
 		private boolean isFirstFilter = true;
 
 		public boolean isFirstFilter() {
@@ -1133,7 +1046,8 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-	public List<PersonSearchResultFull> exportableCustomizableSearch(PersonSearchRequest personSearchRequest) throws IOException {
+	public List<PersonSearchResultFull> exportableCustomizableSearch(PersonSearchRequest personSearchRequest)
+                                                                                                    throws IOException {
 
 		StatelessSession openStatelessSession = null;
 
@@ -1160,17 +1074,17 @@ public class DirectoryPersonSearchDao  {
 				}
 			}
 		}
-	 }
+    }
 
 	public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
 		
-		Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest, false);
+		final Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest, false);
 
 		return querySet.getFirst();
 	}
 
-	public void exportableSearch(
-			CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest) throws IOException {
+	public void exportableSearch(CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest)
+                                                                                                    throws IOException {
 
 		StatelessSession openStatelessSession = null;
 

@@ -48,14 +48,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import javax.validation.constraints.NotNull;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -63,10 +57,6 @@ import java.util.UUID;
  */
 @Repository
 public class PersonSearchDao extends AbstractDao<Person> {
-
-	public PersonSearchDao() {
-		super(Person.class);
-	}
 
 	@Autowired
 	private transient ConfigService configService;
@@ -76,12 +66,15 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	
 	@Autowired
 	private transient SecurityService securityService;
+
 	
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonSearchDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersonSearchDao.class);
 
 
-	FileWriter fileWriter;
+	public PersonSearchDao() {
+		super(Person.class);
+	}
+
 
 	/**
 	 * Search people by the specified terms.
@@ -116,49 +109,35 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 		final Criteria query = createCriteria();
 
+		final boolean isRequiringProgramStatus = programStatus != null || requireProgramStatus == null ||
+                Boolean.TRUE.equals(requireProgramStatus);
 
-		boolean isRequiringProgramStatus = programStatus != null ||
-				requireProgramStatus == null ||
-				Boolean.TRUE.equals(requireProgramStatus);
-		JoinType programStatusJoinType =
-				isRequiringProgramStatus ? JoinType.INNER_JOIN : JoinType.LEFT_OUTER_JOIN;
-		query.createAlias("programStatuses", "personProgramStatus", programStatusJoinType);
+        final JoinType programStatusJoinType = isRequiringProgramStatus ? JoinType.INNER_JOIN : JoinType.LEFT_OUTER_JOIN;
+
+        query.createAlias("programStatuses", "personProgramStatus", programStatusJoinType);
 
 		if (programStatus != null) {
-			query.add(Restrictions.eq("personProgramStatus.programStatus",
-					programStatus));
+			query.add(Restrictions.eq("personProgramStatus.programStatus", programStatus));
 		}
 
 		if ((sAndP != null) && sAndP.isFilteredByStatus()) {
-			query.add(Restrictions
-					.isNull("personProgramStatus.expirationDate"));
+			query.add(Restrictions.isNull("personProgramStatus.expirationDate"));
 		}
 
 		if (Boolean.FALSE.equals(outsideCaseload)) {
 			query.add(Restrictions.eq("coach", advisor));
 		}
 
-		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
-		// + lastName
+		// searchTerm : firstName, lastName, studentId or firstName + ' '+ lastName
 		final Disjunction terms = Restrictions.disjunction();
+		final String searchTermLowercase = searchTerm.toLowerCase(Locale.getDefault());
+		terms.add(Restrictions.ilike("firstName", searchTermLowercase, MatchMode.ANYWHERE));
+		terms.add(Restrictions.ilike("lastName", searchTermLowercase, MatchMode.ANYWHERE));
+		terms.add(Restrictions.ilike("schoolId", searchTermLowercase, MatchMode.ANYWHERE));
 
-		final String searchTermLowercase = searchTerm.toLowerCase(Locale
-				.getDefault());
-		terms.add(Restrictions.ilike("firstName", searchTermLowercase,
-				MatchMode.ANYWHERE));
-		terms.add(Restrictions.ilike("lastName", searchTermLowercase,
-				MatchMode.ANYWHERE));
-		terms.add(Restrictions.ilike("schoolId", searchTermLowercase,
-				MatchMode.ANYWHERE));
-
-		terms.add(Restrictions
-				.sqlRestriction(
-						"lower({alias}.first_name) "
-								+ configService.getDatabaseConcatOperator()
-								+ " ' ' "
-								+ configService.getDatabaseConcatOperator()
-								+ " lower({alias}.last_name) like ? ",
-						searchTermLowercase, new StringType()));
+		terms.add(Restrictions.sqlRestriction("lower({alias}.first_name) " + configService.getDatabaseConcatOperator()
+								+ " ' ' " + configService.getDatabaseConcatOperator()
+                        + " lower({alias}.last_name) like ? ", searchTermLowercase, new StringType()));
 
 		query.add(terms);
 
@@ -166,13 +145,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		query.setFetchMode("personProgramStatus", FetchMode.JOIN);
 		query.setFetchMode("personProgramStatus.programStatus", FetchMode.JOIN);
 
-		final PagingWrapper<Object[]> results = processCriteriaWithSortingAndPaging(
-				query, sAndP, true);
+		final PagingWrapper<Object[]> results = processCriteriaWithSortingAndPaging(query, sAndP, true);
 
 		final List<Person> people = Lists.newArrayList();
 		for (Object[] personAndProgramStatus : results) {
-			if ((personAndProgramStatus != null)
-					&& (personAndProgramStatus.length > 0)) {
+			if ((personAndProgramStatus != null) && (personAndProgramStatus.length > 0)) {
 				if (personAndProgramStatus[0] instanceof Person) {
 					people.add((Person) personAndProgramStatus[0]);
 				} else if (personAndProgramStatus[1] instanceof Person) {
@@ -183,67 +160,58 @@ public class PersonSearchDao extends AbstractDao<Person> {
 
 		return new PagingWrapper<Person>(results.getResults(), people);
 	}
-
 	
 	@SuppressWarnings("unchecked")
-	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest)
-	{
-		FilterTracker filterTracker = new FilterTracker();
-
-		StringBuilder stringBuilder = buildSelect();
+	public List<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
+		final FilterTracker filterTracker = new FilterTracker();
+        final StringBuilder stringBuilder = buildSelect();
 		
 		buildFrom(personSearchRequest,stringBuilder);
 		
 		buildJoins(personSearchRequest,stringBuilder);
 		
 		buildWhere(personSearchRequest, filterTracker, stringBuilder);
-		
-		Query query = createHqlQuery(stringBuilder.toString());
+
+        final Query query = createHqlQuery(stringBuilder.toString());
 		
 		addBindParams(personSearchRequest, query, getCurrentTerm(), getNextTerm());
-		query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-				PersonSearchResult2.class, "person_"));
-		return query.list();
+		query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(PersonSearchResult2.class, "person_"));
+
+        return query.list();
 	}
 
 	private Term getCurrentTerm () {
 		Term term;
-		try
-		{
+		try	{
 			term = termService.getCurrentTerm();
-		}
-		//If there is no current term, lets degrade silently
-		catch(ObjectNotFoundException e)
-		{
+		} catch (ObjectNotFoundException e) { //If there is no current term, lets degrade silently
 			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
 			term = new Term();
 			term.setName("CURRENT TERM NOT SET");
 			term.setStartDate(Calendar.getInstance().getTime());
 			term.setEndDate(Calendar.getInstance().getTime());
 		}
+
 		return term;
 	}
 
 	private Term getNextTerm () {
 		Term term;
-		try
-		{
+		try {
 			term = termService.getNextTerm();
-		}
-		//If there is no next term, lets degrade silently
-		catch(ObjectNotFoundException e)
-		{
+		} catch(ObjectNotFoundException e) { //If there is no next term, lets degrade silently
 			LOGGER.error("NEXT TERM NOT SET, org.jasig.ssp.dao.PersonSearchDao.search(PersonSearchRequest) is being called but will not function properly");
 			term = new Term();
 			term.setName("NEXT TERM NOT SET");
 			term.setStartDate(Calendar.getInstance().getTime());
 			term.setEndDate(Calendar.getInstance().getTime());
 		}
+
 		return term;
 	}
 
-	private StringBuilder buildSelect(){
-		StringBuilder stringBuilder = new StringBuilder();
+	private StringBuilder buildSelect() {
+		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(" select distinct p.id as person_id, p.firstName as person_firstName, " +
 				"p.middleName as person_middleName, " +
 				"p.lastName as person_lastName, " +
@@ -256,24 +224,25 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				"p.birthDate as person_birthDate, " +
 				"p.studentType.name as person_studentTypeName, " +
 				"p.photoUrl as person_photoUrl");
-		return stringBuilder;
+
+        return stringBuilder;
 	}
-	private void buildWhere(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		// searchTerm : Can be firstName, lastName, studentId or firstName + ' '
-		// + lastName
+
+	private void buildWhere(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		//searchTerm Can be firstName, lastName, studentId or firstName + ' ' + lastName
 		buildStudentIdOrName(personSearchRequest, filterTracker, stringBuilder);
 
-		// currentlyRegistered 
+		//currentlyRegistered
 		buildCurrentlyRegistered(personSearchRequest, filterTracker,stringBuilder);
 		
-		// coach && myCaseload
+		//coach && myCaseload
 		buildCoach(personSearchRequest, filterTracker, stringBuilder);		
 		
-		// programStatus
+		//programStatus
 		buildProgramStatus(personSearchRequest, filterTracker, stringBuilder);	
 		
-		// specialServiceGroup
+		//specialServiceGroup
 		buildSpecialServiceGroup( personSearchRequest, filterTracker, stringBuilder);
 		
 		//declaredMajor
@@ -309,104 +278,78 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		stringBuilder.append(" and programStatuses.expirationDate IS NULL");
 	}
 
-
-	private void buildWatchList(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasAnyWatchCriteria(personSearchRequest))
-		{
+	private void buildWatchList(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasAnyWatchCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ws.person.id = :watcherId	 ");
 			stringBuilder.append("and ws.student = p ");
 		}
 	}
 
-
-	private void buildBirthDate(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasBirthDate(personSearchRequest))
-		{
+	private void buildBirthDate(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasBirthDate(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" p.birthDate = :birthDate ");
 		}
-		
 	}
-
  
 	private boolean hasBirthDate(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getBirthDate() != null;
 	}
 
-
-	private void buildMyPlans(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasMyPlans(personSearchRequest))
-		{
+	private void buildMyPlans(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasMyPlans(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" plan.owner = :owner ");
 		}
 	}
 
-
 	private boolean hasMyPlans(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getMyPlans() != null && personSearchRequest.getMyPlans();
 	}
 
-
-	private void buildFinancialAidStatus(
-			PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-			StringBuilder stringBuilder) {
-		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
+	private void buildFinancialAidStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasFinancialAidStatus(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esfa.sapStatusCode in (:sapStatusCode)");
 			stringBuilder.append(" and esfa.schoolId = p.schoolId ");
 		}
-		
 	}
 
-
-	private boolean hasFinancialAidStatus(
-			PersonSearchRequest personSearchRequest) {
+	private boolean hasFinancialAidStatus(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getSapStatusCode()));
 	}
 
-
-	private void buildProgramStatus(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasProgramStatus(personSearchRequest))
-		{
+	private void buildProgramStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasProgramStatus(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" programStatus = :programStatus ");
 		}
 	}
 
-
 	private boolean hasProgramStatus(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getProgramStatus()));
 	}
 	
-	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		if(hasSpecialServiceGroup(personSearchRequest))
-		{
+	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasSpecialServiceGroup(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) ");
 		}
-		
-		
 	}
-
 
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getSpecialServiceGroup()));
 	}
 
-
-	private void addBindParams(PersonSearchRequest personSearchRequest,
-			Query query, Term currentTerm, Term nextTerm)
-	{
-		if(hasStudentId(personSearchRequest)) {
+	private void addBindParams(PersonSearchRequest personSearchRequest, Query query, Term currentTerm, Term nextTerm) {
+		if (hasStudentId(personSearchRequest)) {
 			final String wildcardedStudentIdOrNameTerm = new StringBuilder("%")
 					.append(personSearchRequest.getSchoolId().toUpperCase())
 					.append("%")
@@ -414,8 +357,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.setString("studentIdOrName", wildcardedStudentIdOrNameTerm);
 		}
 
-		if(hasPlanExists(personSearchRequest))
-		{
+		if (hasPlanExists(personSearchRequest)) {
 			if (PersonSearchRequest.PLAN_EXISTS_ACTIVE.equals(personSearchRequest.getPlanExists())) {
 				query.setInteger("planObjectStatus",ObjectStatus.ACTIVE.ordinal());
 			} else if (PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists())) {
@@ -426,25 +368,26 @@ public class PersonSearchDao extends AbstractDao<Person> {
 				query.setParameter("planObjectStatus", null);
 			}
 		}
-		if(hasPlanStatus(personSearchRequest))
-		{ 
+
+		if (hasPlanStatus(personSearchRequest)) {
 			PlanStatus param = null;
-			if(PersonSearchRequest.PLAN_STATUS_ON_PLAN.equals(personSearchRequest.getPlanStatus()))
-			{
+
+            if (PersonSearchRequest.PLAN_STATUS_ON_PLAN.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.ON;
 			}
-			if(PersonSearchRequest.PLAN_STATUS_OFF_PLAN.equals(personSearchRequest.getPlanStatus()))
-			{
+
+			if (PersonSearchRequest.PLAN_STATUS_OFF_PLAN.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.OFF;
 			}
-			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getPlanStatus()))
-			{
+
+			if (PersonSearchRequest.PLAN_STATUS_ON_TRACK_SEQUENCE.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.ON_TRACK_SEQUENCE;
 			}
-			if(PersonSearchRequest.PLAN_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getPlanStatus()))
-			{
+
+			if (PersonSearchRequest.PLAN_STATUS_ON_TRACK_SUBSTITUTION.equals(personSearchRequest.getPlanStatus())) {
 				param = PlanStatus.ON_TRACK_SUBSTITUTION;
-			}			
+			}
+
 			query.setString("planStatus",param == null ? null : param.name());
 		}
 		
@@ -470,10 +413,10 @@ public class PersonSearchDao extends AbstractDao<Person> {
                 query.setBigDecimal("programGpaMax", personSearchRequest.getProgramGpaMax());
             }
 		}
-		
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
-		{
-			Person me = null;
+
+		if (hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest)) {
+			//TODO The below needs a refactor
+		    Person me = null;
 			Person coach = null;
 			if ( hasMyCaseload(personSearchRequest) ) {
 				me = securityService.currentlyAuthenticatedUser().getPerson();
@@ -496,18 +439,17 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			if ( queryPersonId != null && compareTo != null ) {
 				queryPersonId = queryPersonId.equals(compareTo.getId()) ? queryPersonId : null;
 			}
-			query.setParameter("coachId", queryPersonId);
+			query.setParameter("coachId", queryPersonId); //TODO refactor always null?
 			
 			List<UUID> coachIds = new ArrayList<UUID>();
 			List<Person> coaches = personSearchRequest.getCoach();
 			for(Person coachn: coaches) {
 				coachIds.add(coachn.getId());
 			}
-			query.setParameter("coachId", coachIds);
+			query.setParameter("coachId", coachIds); //TODO refactor do we need to set an empty list if none found?
 		}
 		
-		if(hasAnyWatchCriteria(personSearchRequest))
-		{
+		if (hasAnyWatchCriteria(personSearchRequest)) {
 			Person me = null;
 			Person watcher = null;
 			if ( hasMyWatchList(personSearchRequest) ) {
@@ -534,78 +476,69 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			query.setParameter("watcherId", queryPersonId);
 		}
 		
-		if(hasDeclaredMajor(personSearchRequest))
-		{
+		if (hasDeclaredMajor(personSearchRequest)) {
 			//query.setString("programCode", personSearchRequest.getDeclaredMajor());
 			query.setParameter("programCode", personSearchRequest.getDeclaredMajor());
 		}
 		
-		if(hasHoursEarnedCriteria(personSearchRequest))
-		{
-			if(personSearchRequest.getHoursEarnedMin() != null)
-			{
+		if (hasHoursEarnedCriteria(personSearchRequest)) {
+			if (personSearchRequest.getHoursEarnedMin() != null) {
 				query.setBigDecimal("hoursEarnedMin", personSearchRequest.getHoursEarnedMin());
 			}
-			if(personSearchRequest.getHoursEarnedMax() != null )
-			{
+
+			if (personSearchRequest.getHoursEarnedMax() != null ) {
 				query.setBigDecimal("hoursEarnedMax", personSearchRequest.getHoursEarnedMax());
 			}	
 		}
 		
-		if(hasProgramStatus(personSearchRequest))
-		{
+		if (hasProgramStatus(personSearchRequest)) {
 			query.setEntity("programStatus", personSearchRequest.getProgramStatus());
 		}
 		
-		if(hasSpecialServiceGroup(personSearchRequest))
-		{
+		if (hasSpecialServiceGroup(personSearchRequest)) {
 			query.setEntity("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
 		}
 		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
+		if (hasFinancialAidStatus(personSearchRequest)) {
 			query.setEntity("sapStatusCode", personSearchRequest.getSapStatusCode());
 		}
 		
-		if(hasCurrentlyRegistered(personSearchRequest))
-		{
+		if (hasCurrentlyRegistered(personSearchRequest)) {
 			if (hasCurrentTerm(personSearchRequest)) {
 				query.setString("currentTerm", currentTerm.getCode());
 			}
+
 			if (hasNextTerm(personSearchRequest)) {
 				query.setString("nextTerm", nextTerm.getCode());
 			}
 		}
 		
-		if(hasMyPlans(personSearchRequest))
-		{
+		if (hasMyPlans(personSearchRequest)) {
 			query.setEntity("owner", securityService.currentlyAuthenticatedUser().getPerson());
 		}
 		
-		if(hasBirthDate(personSearchRequest))
-		{
+		if (hasBirthDate(personSearchRequest)) {
 			query.setDate("birthDate", personSearchRequest.getBirthDate());
 		}		
 		
 		query.setInteger("activeObjectStatus", ObjectStatus.ACTIVE.ordinal());
 	}
 
-
 	private boolean hasCoach(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getCoach()));
 	}
 
-
-	private void buildPlanExists(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
-	{
-		if(hasPlanExists(personSearchRequest))
-		{
+	private void buildPlanExists(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasPlanExists(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+
+            if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" not exists elements(p.plans) ");
 			} else {
 				stringBuilder.append(" plan.objectStatus = :planObjectStatus ");
 			}
+
 			if ( PersonSearchRequest.PLAN_EXISTS_INACTIVE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" and not exists ( from Plan as myPlans where myPlans.person.id = p.id and myPlans.objectStatus = "
 						+ ObjectStatus.ACTIVE.ordinal() + " ) ");
@@ -613,20 +546,18 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
+	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		boolean calculateMapPlanStatus =
+                                Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
-	private void buildPlanStatus(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder)
-	{
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
-
-		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
-		{
+		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esps.status = :planStatus ");
 			stringBuilder.append(" and esps.schoolId = p.schoolId ");
 		}
 		
-		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
-		{
+		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" msr.plan in elements(p.plans) ");
 			stringBuilder.append(" and msr.planStatus = :planStatus ");
@@ -634,32 +565,30 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
-
-	private void buildCreditHours(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasHoursEarnedCriteria(personSearchRequest))
-		{
+	private void buildCreditHours(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasHoursEarnedCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			if(personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() != null)
-			{
+
+            if (personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() != null) {
 				stringBuilder.append(" est.creditHoursEarned >= :hoursEarnedMin ");
 				stringBuilder.append(" and est.creditHoursEarned <= :hoursEarnedMax ");
 			}
-			if(personSearchRequest.getHoursEarnedMax() == null && personSearchRequest.getHoursEarnedMin() != null)
-			{
+
+			if(personSearchRequest.getHoursEarnedMax() == null && personSearchRequest.getHoursEarnedMin() != null) {
 				stringBuilder.append(" est.creditHoursEarned >= :hoursEarnedMin ");
 			}
-			if(personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() == null)
-			{
-				stringBuilder.append(" est.creditHoursEarned <= :hoursEarnedMax ");
-			}	
-			stringBuilder.append(" and est.schoolId = p.schoolId ");
 
+			if (personSearchRequest.getHoursEarnedMax() != null && personSearchRequest.getHoursEarnedMin() == null) {
+				stringBuilder.append(" est.creditHoursEarned <= :hoursEarnedMax ");
+			}
+
+			stringBuilder.append(" and est.schoolId = p.schoolId ");
 		}
 	}
 
-
-	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) {
+	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
 		if (hasAnyGpaCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
             boolean appendAnd = false;
@@ -715,44 +644,38 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
-
-	private void buildDeclaredMajor(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasDeclaredMajor(personSearchRequest))
-		{
+	private void buildDeclaredMajor(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasDeclaredMajor(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esap.programCode in (:programCode)");
 			stringBuilder.append(" and esap.schoolId = p.schoolId");
 		}
 	}
 
-
-	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker, StringBuilder stringBuilder) 
-	{
-		if(hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest))
-		{
+	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			//stringBuilder.append(" p.coach.id = :coachId ");
 			stringBuilder.append(" p.coach.id in (:coachId) ");
 		}
 	}
 
-
 	private boolean hasMyCaseload(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getMyCaseload() != null && personSearchRequest.getMyCaseload();
 	}
 
-
-	private void buildCurrentlyRegistered(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,StringBuilder stringBuilder) 
-	{
-		if(hasCurrentlyRegistered(personSearchRequest))
-		{
+	private void buildCurrentlyRegistered(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                       StringBuilder stringBuilder) {
+		if (hasCurrentlyRegistered(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			boolean registeredCurrentTerm = false;
 			boolean notRegisteredCurrentTerm = false;
 			boolean registeredNextTerm = false;
 			boolean notRegisteredNextTerm = false;
-			for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+
+            for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
 				if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered)) {
 					registeredCurrentTerm = true;
 				}
@@ -770,21 +693,23 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			if (registeredCurrentTerm || notRegisteredCurrentTerm) {
 				buildCurrentTerm(stringBuilder, registeredCurrentTerm, notRegisteredCurrentTerm);
 			}
+
 			if (registeredNextTerm || notRegisteredNextTerm) {
 				if (registeredCurrentTerm || notRegisteredCurrentTerm) {
 					stringBuilder.append(" and ");
 				}
 				buildNextTerm(stringBuilder, registeredNextTerm, notRegisteredNextTerm);
 			}
-
 		}
 	}
 
-	private void buildCurrentTerm(StringBuilder stringBuilder, boolean registeredCurrentTerm, boolean notRegisteredCurrentTerm) {
+	private void buildCurrentTerm(StringBuilder stringBuilder, boolean registeredCurrentTerm,
+                                                                                    boolean notRegisteredCurrentTerm) {
 		stringBuilder.append(" ( ");
 		if (registeredCurrentTerm) {
 			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount > 0 ) ");
 		}
+
 		if (notRegisteredCurrentTerm) {
 			if (registeredCurrentTerm) {
 				stringBuilder.append(" or ");
@@ -792,6 +717,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			stringBuilder.append(" (not exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId )  or ");
 			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :currentTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount = 0))  ");
 		}
+
 		stringBuilder.append(" ) ");
 	}
 
@@ -800,6 +726,7 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		if (registeredNextTerm) {
 			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :nextTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount > 0 ) ");
 		}
+
 		if (notRegisteredNextTerm) {
 			if (registeredNextTerm) {
 				stringBuilder.append(" or ");
@@ -807,14 +734,13 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			stringBuilder.append(" (not exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :nextTerm and rbt.schoolId = p.schoolId )  or ");
 			stringBuilder.append(" exists ( select 1 from RegistrationStatusByTerm rbt where rbt.termCode = :nextTerm and rbt.schoolId = p.schoolId and rbt.registeredCourseCount = 0))  ");
 		}
+
 		stringBuilder.append(" ) ");
 	}
 
-	private void buildStudentIdOrName(PersonSearchRequest personSearchRequest,
-			FilterTracker filterTracker, StringBuilder stringBuilder) {
-		
-		if(hasStudentId(personSearchRequest))
-		{
+	private void buildStudentIdOrName(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
+                                                                                        StringBuilder stringBuilder) {
+		if (hasStudentId(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ( ");
 			stringBuilder.append(" upper(p.firstName) like :studentIdOrName ");
@@ -828,28 +754,24 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		}
 	}
 
-
 	private boolean hasStudentId(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getSchoolId() != null;
 	}
 
-
-	private void buildJoins(PersonSearchRequest personSearchRequest,
-			StringBuilder stringBuilder) 
-	{
+	private void buildJoins(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 		stringBuilder.append(" left join p.programStatuses as programStatuses ");
 		stringBuilder.append(" left join programStatuses.programStatus as programStatus ");
 		
-		if(hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest))
-		{
-			if ( hasPlanExists(personSearchRequest) && PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
+		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)) {
+			if ( hasPlanExists(personSearchRequest) &&
+                                    PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" left join p.plans as plan ");
 			} else {
 				stringBuilder.append(" join p.plans as plan ");
 			}
 		}	
 		
-		if(this.hasSpecialServiceGroup(personSearchRequest)){
+		if (hasSpecialServiceGroup(personSearchRequest)) {
 			stringBuilder.append(" left join p.specialServiceGroups as specialServiceGroups ");
 			stringBuilder.append(" left join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
 		}
@@ -864,19 +786,14 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		return StringUtils.isNotEmpty(personSearchRequest.getPlanStatus());
 	}
 
-
-	private boolean hasHoursEarnedCriteria(PersonSearchRequest personSearchRequest) 
-	{
+	private boolean hasHoursEarnedCriteria(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getHoursEarnedMax() != null || personSearchRequest.getHoursEarnedMin() != null;
 	}
 
-
-	private void buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) 
-	{
+	private void buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 		stringBuilder.append(" from Person p ");
 		
-		if(hasDeclaredMajor(personSearchRequest))
-		{
+		if (hasDeclaredMajor(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
 		}
 		
@@ -886,30 +803,26 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		
 		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());		
 
-		if(hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus)
-		{
+		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
 			stringBuilder.append(", ExternalPersonPlanStatus esps ");
 		}
-		if(hasPlanStatus(personSearchRequest) && calculateMapPlanStatus)
-		{
+
+		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
 			stringBuilder.append(", org.jasig.ssp.model.MapStatusReport msr ");
 		}
 		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
+		if(hasFinancialAidStatus(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentFinancialAid esfa ");
 		}
 		
-		if(hasFinancialAidStatus(personSearchRequest))
-		{
+		if(hasFinancialAidStatus(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentFinancialAid esfa ");
-		}	
-		if(hasAnyWatchCriteria(personSearchRequest))
-		{
+		}
+
+		if(hasAnyWatchCriteria(personSearchRequest)) {
 			stringBuilder.append(", WatchStudent ws ");
 		}		
 	}
-
 
 	private boolean hasMyWatchList(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getMyWatchList() != null && personSearchRequest.getMyWatchList();
@@ -923,13 +836,11 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		return hasMyWatchList(personSearchRequest) || hasWatcher(personSearchRequest);
 	}
 
-
 	private boolean hasAnyGpaCriteria(PersonSearchRequest personSearchRequest) {
 		return (personSearchRequest.getGpaEarnedMin() != null || personSearchRequest.getGpaEarnedMax() != null ||
                 personSearchRequest.getLocalGpaMin() != null || personSearchRequest.getLocalGpaMax() != null ||
                 personSearchRequest.getProgramGpaMin() != null || personSearchRequest.getProgramGpaMax() != null);
 	}
-
 
 	private boolean hasDeclaredMajor(PersonSearchRequest personSearchRequest) {
 		if (CollectionUtils.isEmpty(personSearchRequest.getDeclaredMajor())) {
@@ -940,48 +851,42 @@ public class PersonSearchDao extends AbstractDao<Person> {
 		return StringUtils.isNotEmpty(declaredMajor);
 	}
 
-
-	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) 
-	{
+	private boolean hasCurrentlyRegistered(PersonSearchRequest personSearchRequest) {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getCurrentlyRegistered()));
 	}
 
-	private boolean hasCurrentTerm(PersonSearchRequest personSearchRequest)
-	{
+	private boolean hasCurrentTerm(PersonSearchRequest personSearchRequest) {
 		for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
-			if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered) || PersonSearchRequest.CURRENTLY_REGISTERED_NOT_CURRENT_TERM.equals(currentlyRegistered)){
-				return true;
-			}
-		}
-		return false;
-	}
-	private boolean hasNextTerm(PersonSearchRequest personSearchRequest)
-	{
-		for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
-			if (PersonSearchRequest.CURRENTLY_REGISTERED_NEXT_TERM.equals(currentlyRegistered) || PersonSearchRequest.CURRENTLY_REGISTERED_NOT_NEXT_TERM.equals(currentlyRegistered)){
+			if (PersonSearchRequest.CURRENTLY_REGISTERED_CURRENT_TERM.equals(currentlyRegistered) ||
+                    PersonSearchRequest.CURRENTLY_REGISTERED_NOT_CURRENT_TERM.equals(currentlyRegistered)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	private boolean hasNextTerm(PersonSearchRequest personSearchRequest) {
+		for (String currentlyRegistered : personSearchRequest.getCurrentlyRegistered()) {
+			if (PersonSearchRequest.CURRENTLY_REGISTERED_NEXT_TERM.equals(currentlyRegistered) ||
+                    PersonSearchRequest.CURRENTLY_REGISTERED_NOT_NEXT_TERM.equals(currentlyRegistered)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	private void appendAndOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) 
-	{
-		if(!filterTracker.isFirstFilter())
-		{
+	private void appendAndOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) {
+		if(!filterTracker.isFirstFilter()) {
 			stringBuilder.append(" and ");
-		}
-		else
-		{
+		} else {
 			stringBuilder.append(" where ");
 		}
+
 		filterTracker.setFirstFilter(false);
 	}
 	
 	//Necessary due to the pass by value nature of booleans
-	private class FilterTracker
-	{
+	private class FilterTracker {
 		private boolean isFirstFilter = true;
 
 		public boolean isFirstFilter() {
