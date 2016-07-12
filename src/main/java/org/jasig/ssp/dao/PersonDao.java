@@ -18,23 +18,11 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
+import org.hibernate.criterion.*;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -55,6 +43,11 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * CRUD methods for the Person model.
@@ -62,8 +55,7 @@ import org.springframework.util.CollectionUtils;
  * Default sort order is <code>lastName</code> then <code>firstName</code>.
  */
 @Repository
-public class PersonDao extends AbstractAuditableCrudDao<Person> implements
-		AuditableCrudDao<Person> {
+public class PersonDao extends AbstractAuditableCrudDao<Person> implements AuditableCrudDao<Person> {
 
 	/**
 	 * Constructor
@@ -96,13 +88,10 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	@SuppressWarnings(UNCHECKED)
 	public PagingWrapper<Person> getAll(final SortingAndPaging sAndP) {
 
-		
-
 		Criteria criteria = createCriteria();
-		
 		sAndP.addStatusFilterToCriteria(criteria);
 		
-		Long totalRows = (Long) criteria.setProjection(Projections.rowCount())
+		final Long totalRows = (Long) criteria.setProjection(Projections.rowCount())
 				.uniqueResult();
 
 		criteria.setProjection(null);
@@ -126,55 +115,52 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
-		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
-		Session currentSession = sessionFactory.getCurrentSession();
-		final Criteria query = currentSession
-				.createCriteria(Person.class);
+		final Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+		final Session currentSession = sessionFactory.getCurrentSession();
+		final Criteria query = currentSession.createCriteria(Person.class);
+
 		//Sqlserver does a case insensitive string compare so we don't do the string
 		//normalization for sqlserver so that it hits index on person table idx_person_username
 		if ( dialect instanceof SQLServerDialect) {
-			query.add(Restrictions.eq("username", username)).setFlushMode(
-					FlushMode.COMMIT);
-			return (Person) query.uniqueResult();			
-			
-		}
-		else
-		{
+			query.add(Restrictions.eq("username", username)).setFlushMode(FlushMode.COMMIT);
+
+            return (Person) query.uniqueResult();
+		} else {
 			//Postgres has an index on lower(username): idx_func_username_person
-			query.add(Restrictions.eq("username", StringUtils.lowerCase(username))).setFlushMode(
-					FlushMode.COMMIT);
+			query.add(Restrictions.eq("username", StringUtils.lowerCase(username))).setFlushMode(FlushMode.COMMIT);
 		}
+
 		return (Person) query.uniqueResult();
 	}
 
 	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleInList(@NotNull final List<UUID> personIds,
-			final SortingAndPaging sAndP) throws ValidationException {
+	public List<Person> getPeopleInList(@NotNull final List<UUID> personIds, final SortingAndPaging sAndP)
+                                                                                            throws ValidationException {
 		if ((personIds == null) || personIds.isEmpty()) {
-			throw new ValidationException(
-					"Missing or empty list of Person identifiers.");
+			throw new ValidationException("Missing or empty list of Person identifiers.");
 		}
-		BatchProcessor<UUID, Person> processor =  new BatchProcessor<UUID,Person>(personIds, sAndP);
-		do{
-			
+
+		final BatchProcessor<UUID, Person> processor =  new BatchProcessor<UUID,Person>(personIds, sAndP);
+
+        do {
 			final Criteria criteria = createCriteria();
 			processor.process(criteria, "id");
 			
-		}while(processor.moreToProcess());
+		} while (processor.moreToProcess());
 		
 		return processor.getSortedAndPagedResultsAsList();
 	}
 	
-	public void removeFromSession(Person person)
-	{
+	public void removeFromSession(Person person) {
 		sessionFactory.getCurrentSession().evict(person);
 	}
 	
-	public String getSchoolIdForPersonId(UUID personId){
-		Criteria criteria = createCriteria();
+	public String getSchoolIdForPersonId(UUID personId) {
+		final Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("id", personId));
 		criteria.setProjection(Projections.property("schoolId"));
-		return (String)criteria.uniqueResult();
+
+        return (String)criteria.uniqueResult();
 	}
 
 	/**
@@ -187,35 +173,29 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	public Person getBySchoolId(final String schoolId)
-			throws ObjectNotFoundException {
+	public Person getBySchoolId(final String schoolId) throws ObjectNotFoundException {
 
 		if (!StringUtils.isNotBlank(schoolId)) {
 			throw new IllegalArgumentException("schoolId can not be empty.");
 		}
 
-		final Person person = (Person) createCriteria().add(
-				Restrictions.eq("schoolId", schoolId)).uniqueResult();
+		final Person person = (Person) createCriteria().add(Restrictions.eq("schoolId", schoolId)).uniqueResult();
 
 		if (person == null) {
-			throw new ObjectNotFoundException(
-					"Person not found with schoolId: " + schoolId,
-					Person.class.getName());
+			throw new ObjectNotFoundException("Person not found with schoolId: " + schoolId, Person.class.getName());
 		}
 
 		return person;
 	}
 	
-	
-	public Person getByUsername(final String username)
-			throws ObjectNotFoundException {
+	public Person getByUsername(final String username) throws ObjectNotFoundException {
 
 		if (!StringUtils.isNotBlank(username)) {
 			throw new IllegalArgumentException("username can not be empty.");
 		}
 
-		final Person person = (Person) createCriteria().add(
-				Restrictions.eq("username", StringUtils.lowerCase(username))).uniqueResult();
+		final Person person = (Person) createCriteria()
+                .add(Restrictions.eq("username", StringUtils.lowerCase(username))).uniqueResult();
 
 		if (person == null) {
 			throw new ObjectNotFoundException(
@@ -239,15 +219,12 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *             If any referenced data is not found.
 	 */
 	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleByCriteria( // NOPMD
-			final PersonSearchFormTO personSearchFormTO,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		
-		Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  personSearchFormTO);
-
-
+	public List<Person> getPeopleByCriteria(final PersonSearchFormTO personSearchFormTO, final SortingAndPaging sAndP)
+                                                                                        throws ObjectNotFoundException {
+        final Criteria criteria = setBasicSearchCriteria(createCriteria(sAndP),  personSearchFormTO);
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		return criteria.list();
+
+        return criteria.list();
 	}
 
 	/**
@@ -262,22 +239,17 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	 *             If any referenced data is not found.
 	 */
 	@SuppressWarnings(UNCHECKED)
-	public List<Person> getPeopleBySpecialServices(
-			final List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
-			throws ObjectNotFoundException {
+	public List<Person> getPeopleBySpecialServices(final List<UUID> specialServiceGroups, final SortingAndPaging sAndP)
+			                                                                            throws ObjectNotFoundException {
 
 		final Criteria criteria = createCriteria(sAndP);
 
 		if (specialServiceGroups != null && !specialServiceGroups.isEmpty()) {
-			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups")
-					.add(Restrictions
-							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									specialServiceGroups));
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups")
+                    .add(Restrictions.in("personSpecialServiceGroups.specialServiceGroup.id", specialServiceGroups));
 		}
 
-		// don't bring back any non-students, there will likely be a better way
-		// to do this later
+		// don't bring back any non-students, there will likely be a better way to do this later
 		criteria.add(Restrictions.isNotNull("studentType"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
@@ -285,35 +257,35 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	}
 	
 	@SuppressWarnings(UNCHECKED)
-	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
-			final Collection<String> coachUsernames, final SortingAndPaging sAndP) {
+	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(final Collection<String> coachUsernames,
+                                                                                        final SortingAndPaging sAndP) {
 
-		if(CollectionUtils.isEmpty(coachUsernames))
-			return new PagingWrapper<CoachPersonLiteTO>(new ArrayList<CoachPersonLiteTO>());
+		if (CollectionUtils.isEmpty(coachUsernames)) {
+            return new PagingWrapper<CoachPersonLiteTO>(new ArrayList<CoachPersonLiteTO>());
+        }
+
 		return getCoachPersonsLiteByUsernames(coachUsernames, sAndP, null);
-
 	}
 	
 	@SuppressWarnings(UNCHECKED)
-	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(
-			final Collection<String> coachUsernames, final SortingAndPaging sAndP, final String homeDepartment) {
+	public PagingWrapper<CoachPersonLiteTO> getCoachPersonsLiteByUsernames(final Collection<String> coachUsernames,
+                                                           final SortingAndPaging sAndP, final String homeDepartment) {
 		
-		List<String> normalizedCoachUsernames = new ArrayList<String>();
-		//Normalize usernames as per SSP-1733
-		for (String coachUsername : coachUsernames) 
-		{
-			normalizedCoachUsernames.add(StringUtils.lowerCase(coachUsername));
+        final List<String> normalizedCoachUsernames = new ArrayList<String>();
+
+		for (String coachUsername : coachUsernames) {
+			normalizedCoachUsernames.add(StringUtils.lowerCase(coachUsername)); //Normalize usernames as per SSP-1733
 		}
 		
-		BatchProcessor<String, CoachPersonLiteTO> processor = new BatchProcessor(normalizedCoachUsernames, sAndP);
-		do{
+		final BatchProcessor<String, CoachPersonLiteTO> processor = new BatchProcessor(normalizedCoachUsernames, sAndP);
+		do {
 			// ignore department name and office location for now... would
 			// require join we know we don't actually need for existing call sites
-			Criteria criteria = createCriteria(sAndP);
-			if(homeDepartment != null && homeDepartment.length() > 0){
+			final Criteria criteria = createCriteria(sAndP);
+			if (homeDepartment != null && homeDepartment.length() > 0) {
 				criteria.createAlias("staffDetails", "personStaffDetails")
-					.add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
-			}else{
+                        .add(Restrictions.eq("personStaffDetails.departmentName", homeDepartment));
+			} else {
 				criteria.createAlias("staffDetails", "personStaffDetails", JoinType.LEFT_OUTER_JOIN);
 			}
 
@@ -329,26 +301,25 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 							.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
 							.add(Projections.property("personStaffDetails.officeLocation").as("person_officeLocation"))
 							.add(Projections.property("campus.name").as("person_homeCampusName")))
-					.setResultTransformer(
-							new NamespacedAliasToBeanResultTransformer(
-									CoachPersonLiteTO.class, "person_"));
-				processor.process(criteria, "username");
-		}while(processor.moreToProcess());
+					        .setResultTransformer(new
+                                NamespacedAliasToBeanResultTransformer(CoachPersonLiteTO.class, "person_"));
+
+            processor.process(criteria, "username");
+
+		} while(processor.moreToProcess());
 		
 		return processor.getSortedAndPagedResults();
 	}
 
 	public PagingWrapper<Person> getAllAssignedCoaches(SortingAndPaging sAndP) {
-
-		DetachedCriteria coach_ids =
-				DetachedCriteria.forClass(Person.class, "coach_ids");
+		final DetachedCriteria coach_ids = DetachedCriteria.forClass(Person.class, "coach_ids");
 		final ProjectionList projections = Projections.projectionList();
-		projections.add(Projections.distinct(Projections.property("coach.id")));
+
+        projections.add(Projections.distinct(Projections.property("coach.id")));
 		coach_ids.setProjection(projections);
 		coach_ids.add(Restrictions.isNotNull("coach"));
 
-		Criteria criteria = createCriteria()
-				.add(Subqueries.propertiesIn(new String[] {"id"}, coach_ids));
+		final Criteria criteria = createCriteria().add(Subqueries.propertiesIn(new String[] {"id"}, coach_ids));
 
 		if ( sAndP != null && sAndP.isFilteredByStatus() ) {
 			sAndP.addStatusFilterToCriteria(criteria);
@@ -357,8 +328,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// item count
 		Long totalRows = 0L;
 		if ((sAndP != null) && sAndP.isPaged()) {
-			totalRows = (Long) criteria.setProjection(Projections.rowCount())
-					.uniqueResult();
+			totalRows = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 		}
 
 		criteria.setProjection(null);
@@ -373,23 +343,22 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 
 		return new PagingWrapper<Person>(totalRows, criteria.list());
-
 	}
+
 	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP) {
 		return  getAllAssignedCoachesLite(sAndP, null);
 	}
 
 	public PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP, String homeDepartment) {
 
-		DetachedCriteria coach_ids =
-				DetachedCriteria.forClass(Person.class, "coach_ids");
+		final DetachedCriteria coach_ids = DetachedCriteria.forClass(Person.class, "coach_ids");
 		final ProjectionList projections = Projections.projectionList();
-		projections.add(Projections.distinct(Projections.property("coach.id")));
+
+        projections.add(Projections.distinct(Projections.property("coach.id")));
 		coach_ids.setProjection(projections);
 		coach_ids.add(Restrictions.isNotNull("coach"));
 
-		Criteria criteria = createCriteria()
-				.add(Subqueries.propertiesIn(new String[]{"id"}, coach_ids));
+		final Criteria criteria = createCriteria().add(Subqueries.propertiesIn(new String[]{"id"}, coach_ids));
 
 		if ( sAndP != null && sAndP.isFilteredByStatus() ) {
 			sAndP.addStatusFilterToCriteria(criteria);
@@ -407,8 +376,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		// item count
 		Long totalRows = 0L;
 		if ((sAndP != null) && sAndP.isPaged()) {
-			totalRows = (Long) criteria.setProjection(Projections.rowCount())
-					.uniqueResult();
+			totalRows = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 		}
 
 		criteria.setProjection(null);
@@ -420,25 +388,26 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Projections.property("workPhone").as("person_workPhone"))
 					.add(Projections.property("personStaffDetails.departmentName").as("person_departmentName"))
 					.add(Projections.property("campus.name").as("person_homeCampusName")))
-				.setResultTransformer(
-						new NamespacedAliasToBeanResultTransformer(
-								CoachPersonLiteTO.class, "person_"));
+				    .setResultTransformer(
+						new NamespacedAliasToBeanResultTransformer(CoachPersonLiteTO.class, "person_"));
 
 		return new PagingWrapper<CoachPersonLiteTO>(totalRows, criteria.list());
-
 	}
 	
-	private Boolean setCoachAlias(Criteria criteria, String alias, Boolean created){
+	private Boolean setCoachAlias(Criteria criteria, String alias, Boolean created) {
 		if (created.equals(true)) {
             return created;
         }
-		criteria.createAlias("coach", alias);
-		return true;
+
+        criteria.createAlias("coach", alias);
+
+        return true;
 	}
-	protected Criteria setBasicSearchCriteria(Criteria criteria, final PersonSearchFormTO personSearchTO){
+
+	protected Criteria setBasicSearchCriteria(Criteria criteria, final PersonSearchFormTO personSearchTO) {
 		Boolean coachCriteriaCreated = false;
-		if (personSearchTO.getCoach() != null
-				&& personSearchTO.getCoach().getId() != null) {
+
+        if (personSearchTO.getCoach() != null && personSearchTO.getCoach().getId() != null) {
 			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
 
 			// Not 100% clear whether this should or shouldn't include a coach.objectStatus = ACTIVE
@@ -448,18 +417,16 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			// for person->studenttype, but journalentry.status does matter for person->journalentry.
 			// In this case we've chosen not to filter since for persons in particular, soft-deletion
 			// is strongly discouraged since ~2.4.0 since it leads to strange UI behaviors.
-			criteria.add(Restrictions.eq("c.id",
-					personSearchTO.getCoach().getId()));
+			criteria.add(Restrictions.eq("c.id", personSearchTO.getCoach().getId()));
 		}
 
-		if (personSearchTO.getWatcher() != null
-				&& personSearchTO.getWatcher().getId() != null) {
+		if (personSearchTO.getWatcher() != null && personSearchTO.getWatcher().getId() != null) {
 			criteria.createCriteria("watchers")
-					.add(Restrictions.eq("person.id", personSearchTO.getWatcher().getId()))
-					.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+                .add(Restrictions.eq("person.id", personSearchTO.getWatcher().getId()))
+                .add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
 		}		
-		if (personSearchTO.getHomeDepartment() != null
-				&& personSearchTO.getHomeDepartment().length() > 0) {
+
+		if (personSearchTO.getHomeDepartment() != null && personSearchTO.getHomeDepartment().length() > 0) {
 			coachCriteriaCreated = setCoachAlias( criteria,  "c", coachCriteriaCreated);
 
 			// As with coaches, it's not 100% clear whether or not this should have a objectstatus filter.
@@ -469,92 +436,73 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			// coach.staffdetails.objectstatus=2, the coach's department will still render in the
 			// caseload add/edit form). So we ignore it here as well.
 			criteria.createAlias("c.staffDetails", "coachStaffDetails");
-			criteria.add(Restrictions.eq("coachStaffDetails.departmentName",
-					personSearchTO.getHomeDepartment()));
+			criteria.add(Restrictions.eq("coachStaffDetails.departmentName", personSearchTO.getHomeDepartment()));
 		}
-		criteria.createAlias("programStatuses",
-				"personProgramStatuses");
+
+		criteria.createAlias("programStatuses", "personProgramStatuses");
 		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
-		if (personSearchTO.getProgramStatus() != null) {
-			criteria.add(Restrictions
-					.eq("personProgramStatuses.programStatus.id",
-							personSearchTO
-									.getProgramStatus()));
+
+        if (personSearchTO.getProgramStatus() != null) {
+			criteria.add(Restrictions.eq("personProgramStatuses.programStatus.id", personSearchTO.getProgramStatus()));
 		}
 		
 		if (personSearchTO.getSpecialServiceGroupIds() != null) {
-			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups");
-			criteria.add(Restrictions
-							.in("personSpecialServiceGroups.specialServiceGroup.id",
-									personSearchTO
-											.getSpecialServiceGroupIds()));
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups");
+			criteria.add(Restrictions.in("personSpecialServiceGroups.specialServiceGroup.id",
+                                                                        personSearchTO.getSpecialServiceGroupIds()));
 			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
-		}else if(personSearchTO.getSpecialServiceGroupRequired()){
+
+		} else if (personSearchTO.getSpecialServiceGroupRequired()) {
 			/* Makes sure that at least one special service group has an active status */
-			criteria.createAlias("specialServiceGroups",
-					"personSpecialServiceGroups");
+			criteria.createAlias("specialServiceGroups", "personSpecialServiceGroups");
 			criteria.add(Restrictions.eq("personSpecialServiceGroups.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchTO.getReferralSourcesIds() != null) {
 			criteria.createAlias("referralSources", "personReferralSources")
-					.add(Restrictions.in(
-							"personReferralSources.referralSource.id",
+					.add(Restrictions.in("personReferralSources.referralSource.id",
 							personSearchTO.getReferralSourcesIds()))
 					.add(Restrictions.eq("personReferralSources.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		if (personSearchTO.getAnticipatedStartTerm() != null && personSearchTO.getAnticipatedStartTerm().length() > 0) {
-			criteria.add(Restrictions.eq("anticipatedStartTerm",
-					personSearchTO.getAnticipatedStartTerm())
-					.ignoreCase());
+			criteria.add(Restrictions.eq("anticipatedStartTerm", personSearchTO.getAnticipatedStartTerm()).ignoreCase());
 		}
 
 		if (personSearchTO.getAnticipatedStartYear() != null) {
-			criteria.add(Restrictions.eq("anticipatedStartYear",
-					personSearchTO.getAnticipatedStartYear()));
+			criteria.add(Restrictions.eq("anticipatedStartYear", personSearchTO.getAnticipatedStartYear()));
 		}
 		
 		if (personSearchTO.getActualStartTerm() != null  && personSearchTO.getActualStartTerm().length() > 0) {
-			criteria.add(Restrictions.eq("actualStartTerm",
-					personSearchTO.getActualStartTerm())
-					.ignoreCase());
+			criteria.add(Restrictions.eq("actualStartTerm", personSearchTO.getActualStartTerm()).ignoreCase());
 		}
 
 		if (personSearchTO.getActualStartYear() != null) {
-			criteria.add(Restrictions.eq("actualStartYear",
-					personSearchTO.getActualStartYear()));
+			criteria.add(Restrictions.eq("actualStartYear", personSearchTO.getActualStartYear()));
 		}
 
 		if (personSearchTO.getStudentTypeIds() != null) {
-			criteria.add(Restrictions.in("studentType.id",
-					personSearchTO.getStudentTypeIds()));
+			criteria.add(Restrictions.in("studentType.id", personSearchTO.getStudentTypeIds()));
 		}
 
 		if (personSearchTO.getHomeCampusIds() != null) {
-			criteria.add(Restrictions.in("homeCampus.id",
-					personSearchTO.getHomeCampusIds()));
+			criteria.add(Restrictions.in("homeCampus.id", personSearchTO.getHomeCampusIds()));
 		}
 
 		if (personSearchTO.getCreateDateFrom() != null) {
-			criteria.add(Restrictions.ge("createdDate",
-					personSearchTO.getCreateDateFrom()));
+			criteria.add(Restrictions.ge("createdDate", personSearchTO.getCreateDateFrom()));
 		}
 
 		if (personSearchTO.getCreateDateTo() != null) {
-			criteria.add(Restrictions.le("createdDate",
-					personSearchTO.getCreateDateTo()));
+			criteria.add(Restrictions.le("createdDate", personSearchTO.getCreateDateTo()));
 		}
 		
 		if (personSearchTO.getStudentIntakeCompleteDateFrom() != null) {
-			criteria.add(Restrictions.ge("studentIntakeCompleteDate",
-					personSearchTO.getStudentIntakeCompleteDateFrom()));
+			criteria.add(Restrictions.ge("studentIntakeCompleteDate", personSearchTO.getStudentIntakeCompleteDateFrom()));
 		}
 		
 		if (personSearchTO.getStudentIntakeCompleteDateTo() != null) {
-			criteria.add(Restrictions.le("studentIntakeCompleteDate",
-					personSearchTO.getStudentIntakeCompleteDateTo()));
+			criteria.add(Restrictions.le("studentIntakeCompleteDate", personSearchTO.getStudentIntakeCompleteDateTo()));
 		}
 		
 		if (personSearchTO.getDisabilityIsNotNull() != null && personSearchTO.getDisabilityIsNotNull() == true) {
@@ -575,45 +523,43 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		}
 		
 		if (personSearchTO.getDisabilityTypeId() != null) {
-			criteria.createAlias("disabilityTypes", "personDisabilityTypes")
-			.add(Restrictions.eq(
-					"personDisabilityTypes.disabilityType.id",
-					personSearchTO.getDisabilityTypeId()))
+			criteria.createAlias("disabilityTypes", "personDisabilityTypes").add(Restrictions.eq(
+					"personDisabilityTypes.disabilityType.id", personSearchTO.getDisabilityTypeId()))
 			.add(Restrictions.eq("personDisabilityTypes.objectStatus", ObjectStatus.ACTIVE));
 		}
 		
 		if (personSearchTO.getServiceReasonsIds() != null && personSearchTO.getServiceReasonsIds().size() > 0) {
 			criteria.createAlias("serviceReasons", "serviceReasons");
 			criteria.createAlias("serviceReasons.serviceReason", "serviceReason");
-			criteria.add(Restrictions.in("serviceReason.id",
-					personSearchTO.getServiceReasonsIds()));
+			criteria.add(Restrictions.in("serviceReason.id", personSearchTO.getServiceReasonsIds()));
 			criteria.add(Restrictions.eq("serviceReasons.objectStatus", ObjectStatus.ACTIVE));
 		}
 
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
 		criteria.add(Restrictions.isNotNull("studentType"));
-		return criteria;
+
+        return criteria;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<UUID> getStudentUUIDs(PersonSearchFormTO form){
-		Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
+		final Criteria criteria = setBasicSearchCriteria(createCriteria(),  form);
 		criteria.setProjection(Projections.distinct(Projections.property("id")));
 		
 		return (List<UUID>)criteria.list();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<BaseStudentReportTO> getStudentReportTOs(PersonSearchFormTO form,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		
-		List<UUID> ids = getStudentUUIDs(form);
-		if (ids.size() == 0) {
+	public PagingWrapper<BaseStudentReportTO> getStudentReportTOs(PersonSearchFormTO form, final SortingAndPaging sAndP)
+                                                                                        throws ObjectNotFoundException {
+		final List<UUID> ids = getStudentUUIDs(form);
+
+        if (ids.size() == 0) {
             return null;
         }
 
-		BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids, sAndP);
+		final BatchProcessor<UUID, BaseStudentReportTO> processor =  new BatchProcessor<UUID,BaseStudentReportTO>(ids, sAndP);
 		do {
 			final Criteria criteria = createCriteria();
 								
@@ -633,27 +579,24 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 	
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
-		
-		List<UUID> ids = getStudentUUIDs(form);
-		if(ids.size() == 0) {
+                                                         final SortingAndPaging sAndP) throws ObjectNotFoundException {
+		final List<UUID> ids = getStudentUUIDs(form);
+
+        if (ids.size() == 0) {
             return null;
         }
 
-        BatchProcessor<UUID, DisabilityServicesReportTO> processor =  new BatchProcessor<UUID,DisabilityServicesReportTO>(ids, sAndP);
-		do{
+        final BatchProcessor<UUID, DisabilityServicesReportTO> processor =  new BatchProcessor<UUID,DisabilityServicesReportTO>(ids, sAndP);
+		do {
 			final Criteria criteria = createCriteria();
 			
 			// don't bring back any non-students, there will likely be a better way
 			// to do this later
-			
 			final ProjectionList projections = Projections.projectionList();
-			
 			criteria.setProjection(projections);
-					
 			addBasicStudentProperties(projections, criteria, sAndP.getStatus());
 			
-			Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
+			final Criteria demographics = criteria.createAlias("demographics", "demographics", JoinType.LEFT_OUTER_JOIN);
 			demographics.createAlias("demographics.ethnicity", "ethnicity", JoinType.LEFT_OUTER_JOIN);
 			demographics.createAlias("demographics.race", "race", JoinType.LEFT_OUTER_JOIN);
 			demographics.createAlias("demographics.veteranStatus", "veteranStatus", JoinType.LEFT_OUTER_JOIN);
@@ -672,7 +615,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 			
 			criteria.createAlias("educationGoal", "educationGoal", JoinType.LEFT_OUTER_JOIN);
 			
-			Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+			final Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 			if ( dialect instanceof SQLServerDialect) {
 	
 				projections.add(Projections.groupProperty("ethnicity.name").as("ethnicity"));
@@ -704,16 +647,15 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 				projections.add(Projections.groupProperty("personDisability.noSpecialEd").as("noSpecialEd"));
 			}
 			
-			criteria.setResultTransformer(new AliasToBeanResultTransformer(
-					DisabilityServicesReportTO.class));
+			criteria.setResultTransformer(new AliasToBeanResultTransformer(DisabilityServicesReportTO.class));
 			processor.process(criteria, "id");
-		}while(processor.moreToProcess());
+
+		} while (processor.moreToProcess());
 
 		return new PagingWrapper<DisabilityServicesReportTO>(ids.size(), processor.getSortedAndPagedResultsAsList());
-
 	}
 	
-	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria, ObjectStatus status){
+	private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria, ObjectStatus status) {
 		
 		projections.add(Projections.groupProperty("firstName").as("firstName"));
 		projections.add(Projections.groupProperty("middleName").as("middleName"));
@@ -764,7 +706,7 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 		criteria.createAlias("coach", "c");
 		criteria.createAlias("watchers", "watcher", JoinType.LEFT_OUTER_JOIN);
 
-		Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
+		final Dialect dialect = ((SessionFactoryImplementor) sessionFactory).getDialect();
 		if ( dialect instanceof SQLServerDialect) {
 			// sql server requires all these to part of the grouping
 			//projections.add(Projections.groupProperty("c.id").as("coachId"));
@@ -782,15 +724,16 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements
 					.add(Projections.groupProperty("c.schoolId").as("coachSchoolId"))
 					.add(Projections.groupProperty("c.username").as("coachUsername"));
 		}
+
 		return projections;
 	}
 
 	public UUID getCoachIdForStudent(PersonTO obj) {
-		String query = "select p.coach.id from Person p where p = :person";
-		Object coachId =  createHqlQuery(query).setEntity("person", new Person(obj.getId())).uniqueResult();
-		UUID coachIdUUID = null;
-		if(coachId != null)
-		{
+		final String query = "select p.coach.id from Person p where p = :person";
+		final Object coachId =  createHqlQuery(query).setEntity("person", new Person(obj.getId())).uniqueResult();
+
+        UUID coachIdUUID = null;
+		if (coachId != null) {
 			coachIdUUID = (UUID) coachId;
 		}
 			

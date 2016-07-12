@@ -93,13 +93,13 @@ public class CaseloadServiceImpl implements CaseloadService {
 				}
 				if (!StringUtils.isEmpty(model.getSchoolId().trim())) {
 					try {
-						Person student = personService.getBySchoolId(model.getSchoolId(), new Boolean(false));
+						Person student = personService.getBySchoolIdOrGetFromExternalBySchoolId(model.getSchoolId(), new Boolean(false)); //method is slow, but looks like proper use
 						if (!StringUtils.isEmpty(model.getCoachSchoolId().trim())) {
 							if (!StringUtils.isEmpty(model.getModifiedBySchoolId().trim())) {
 								AuditPerson auditPerson = getAuditPerson(auditPersonMap, model.getModifiedBySchoolId());
 								if (auditPerson != null) {
 									try {
-										Person coach = personService.getBySchoolId(model.getCoachSchoolId(), new Boolean(false));
+										Person coach = personService.getBySchoolIdOrGetFromExternalBySchoolId(model.getCoachSchoolId(), new Boolean(false)); //method is slow, but looks like proper use
 										student.setCoach(coach);
 										student.setModifiedBy(auditPerson);
 										personService.save(student);
@@ -114,7 +114,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 								createError(errors, "Modified By School Id was not set for record", model);
 							}
 						} else if (null != student.getCoach()) {
-							student = personService.getBySchoolId(model.getSchoolId(), new Boolean(true));
+							student = personService.getBySchoolIdOrGetFromExternalBySchoolId(model.getSchoolId(), new Boolean(true)); //method is slow, but looks like proper use
 							successCount++;
 						} else {
 							createError(errors, "Student not added because the external student does not have a coach assigned for record", model);
@@ -153,7 +153,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 		AuditPerson auditPerson = map.get(schoolId);
 		if (auditPerson==null) {
 			try {
-				Person modifiedBy = personService.getBySchoolId(schoolId, new Boolean(false));
+				Person modifiedBy = personService.getBySchoolIdOrGetFromExternalBySchoolId(schoolId, new Boolean(false)); //lookup can be slow, but sync/external lookup ideally won't occur
 				auditPerson = new AuditPerson();
 				auditPerson.setFirstName(modifiedBy.getFirstName());
 				auditPerson.setLastName(modifiedBy.getLastName());

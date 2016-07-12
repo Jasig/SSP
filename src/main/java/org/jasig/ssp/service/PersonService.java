@@ -18,44 +18,37 @@
  */
 package org.jasig.ssp.service;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.UUID;
-
-import javax.mail.SendFailedException;
-import javax.portlet.PortletRequest;
-
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
-import org.jasig.ssp.transferobject.form.BulkEmailStudentRequestForm;
-import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.transferobject.reports.BaseStudentReportTO;
 import org.jasig.ssp.transferobject.reports.DisabilityServicesReportTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.security.core.GrantedAuthority;
+import javax.portlet.PortletRequest;
+import java.util.*;
+
 
 /**
  * Person service
  */
 public interface PersonService extends AuditableCrudService<Person> {
 
+	/**
+	 * Gets all Persons based on sorting and paging
+	 * @param sAndP SortingAndPaging
+     * @return
+     */
 	@Override
 	PagingWrapper<Person> getAll(SortingAndPaging sAndP);
 
 	/**
-	 * Retrieves the specified Person.
+	 * Retrieves the specified Person by uuid.
 	 * 
 	 * @param id
 	 *            Required identifier for the Person to retrieve. Can not be
@@ -67,7 +60,21 @@ public interface PersonService extends AuditableCrudService<Person> {
 	@Override
 	Person get(UUID id) throws ObjectNotFoundException;
 
+    /**
+     * Returns internal-only person by Username (Doesn't sync from external)
+     * @param username
+     * @return
+     * @throws ObjectNotFoundException
+     */
 	Person personFromUsername(String username) throws ObjectNotFoundException;
+
+    /**
+     * Returns internal-only person by SchoolId (Doesn't sync from external!)
+     * @param schoolId
+     * @return
+     * @throws ObjectNotFoundException
+     */
+    Person personFromSchoolId(String schoolId) throws ObjectNotFoundException;
 
 	/**
 	 * Creates a new Person instance based on the supplied model.
@@ -108,11 +115,17 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param sAndP
 	 * @return A person object for every personId where available
 	 */
-	List<Person> peopleFromListOfIds(List<UUID> personIds,
-			SortingAndPaging sAndP);
+	List<Person> peopleFromListOfIds(List<UUID> personIds, SortingAndPaging sAndP);
 
 	/**
-	 * Retrieves the specified Person by their Student ID (school_id).
+	 * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
+     *
+     * *NOTE*: If school_id is *not* in Person (internal), it then retrieves from external_person
+     *    if exists and syncs the recordd.
+     *
+     * *WARNING*: Syncs person from external_person and syncs special_service_groups
+     *  so it may be slow. Best use is when you need a completely up-to-date person
+     *    such as in add/edit scenarios.
 	 * 
 	 * @param studentId
 	 *            Required school identifier for the Person to retrieve. Can not
@@ -123,23 +136,28 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *                If the supplied identifier does not exist in the database.
 	 * @return The specified Person instance.
 	 */
-	Person getBySchoolId(String studentId,boolean commitPerson) throws ObjectNotFoundException;
-	
-	/**
-	 * Retrieves the specified Person by their User name (userName).
-	 * 
-	 * @param username
-	 *            Required school identifier for the Person to retrieve. Can not
-	 *            be null.
-	 *            Also searches the External Database for the identifier,
-	 *            creating a Person if an ExternalPerson record exists..
-	 * @exception ObjectNotFoundException
-	 *                If the supplied identifier does not exist in the database.
-	 * @return The specified Person instance.
-	 */
-	Person getByUsername(final String username, final Boolean commit) throws ObjectNotFoundException;
+	Person getBySchoolIdOrGetFromExternalBySchoolId(String studentId,boolean commitPerson) throws ObjectNotFoundException;
 
-	/**
+    /**
+     * Retrieves the specified Person by their User name (userName) and syncs from external for the most up to date
+     *  record as possible.
+     *
+     * *WARNING*: Syncs person from external_person and syncs special_service_groups
+     *  so it may be slow. Best use is when you need a completely up-to-date person
+     *    such as in add/edit scenarios.
+     *
+     * @param username
+     *            Required school identifier for the Person to retrieve. Can not
+     *            be null.
+     *            Also searches the External Database for the identifier,
+     *            creating a Person if an ExternalPerson record exists..
+     * @exception ObjectNotFoundException
+     *                If the supplied identifier does not exist in the database.
+     * @return The specified Person instance.
+     */
+    Person getSyncedByUsername(final String username, final Boolean commit) throws ObjectNotFoundException;
+
+    /**
 	 * Gets a list of {@link Person} objects based on specified criteria
 	 * 
 	 * @param addressLabelSearchTO
@@ -149,8 +167,8 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return List of person objects based on specified criteria
 	 * @throws ObjectNotFoundException
 	 */
-	List<Person> peopleFromCriteria(PersonSearchFormTO addressLabelSearchTO,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+	List<Person> peopleFromCriteria(PersonSearchFormTO addressLabelSearchTO, final SortingAndPaging sAndP)
+            throws ObjectNotFoundException;
 
 	/**
 	 * Get a list of all Coaches
@@ -175,6 +193,19 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @return List of all coaches
 	 */
 	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(SortingAndPaging sAndP);
+
+    /**
+     * Get a list of all Coaches where you don't need the complete Person graphs by sAndP and homeDepartment.
+     *
+     * <em>Does not have the same external-to-internal person record
+     * copying side-effects as {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
+     * This method only returns coaches that have already been sync'd into
+     * local person records by some other mechanism.</em>
+     *
+     * @param sAndP
+     * @param HomeDepartment
+     * @return
+     */
 	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP, String HomeDepartment);
 
 	/**
@@ -193,11 +224,22 @@ public interface PersonService extends AuditableCrudService<Person> {
 	/**
 	 * Lighter-weight version of
 	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
-	 *
+	 * Get a list of all assigned Coaches where you don't need the complete Person graphs by sAndP and homeDepartment.
+     *
 	 * @param sAndP
 	 * @return
 	 */
 	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP);
+
+    /**
+     * Lighter-weight version of
+     * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
+     * Get a list of all assigned Coaches where you don't need the complete Person graphs by sAndP and homeDepartment.
+     *
+     * @param sAndP
+     * @param homeDepartment
+     * @return
+     */
 	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP, String homeDepartment);
 
 	/**
@@ -237,19 +279,35 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param sortBy
 	 * @return
 	 */
-	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(
-			Comparator<CoachPersonLiteTO> sortBy, String homeDepartment);
-	
-	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(
-			Comparator<CoachPersonLiteTO> sortBy);
+	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy, String homeDepartment);
 
+    /**
+     * Gets all current coaches use CoachLite model
+     * @param sortBy
+     * @return
+     */
+	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy);
+
+    /**
+     * Loads a Person
+     * @param id
+     * @return
+     */
 	Person load(UUID id);
 
-	Person createUserAccount(String username,
-			Collection<GrantedAuthority> authorities);
+    /**
+     * Create a user account with specified authorities
+     * @param username
+     * @param authorities
+     * @return
+     */
+	Person createUserAccount(String username, Collection<GrantedAuthority> authorities);
 
-	void setPersonAttributesService(
-			final PersonAttributesService personAttributesService);
+    /**
+     * Sets the PersonAttributes Service
+     * @param personAttributesService
+     */
+	void setPersonAttributesService(final PersonAttributesService personAttributesService);
 
 	/**
 	 * Attempt to create a new user account using JSR-168/286
@@ -270,24 +328,53 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 *   of an existing account with conflicting keys or missing required
 	 *   user attributes on <code>portletRequest</code>
 	 */
-	Person createUserAccountForCurrentPortletUser(String username,
-			PortletRequest portletRequest)
-			throws UnableToCreateAccountException;
-	
-	PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+	Person createUserAccountForCurrentPortletUser(String username, PortletRequest portletRequest)
+            throws UnableToCreateAccountException;
 
+    /**
+     * Get DisabilityReport for person(s) by criteria in the PersonSearchForm
+     * @param form
+     * @param sAndP
+     * @return
+     * @throws ObjectNotFoundException
+     */
+	PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form, final SortingAndPaging sAndP)
+            throws ObjectNotFoundException;
 
-	public PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(
-			final PersonSearchFormTO personSearchFormTO,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException;
+    /**
+     * Get Student Report(s) based on Sorting and Paging and criteria in PersonSearchForm
+     * @param personSearchFormTO
+     * @param sAndP
+     * @return
+     * @throws ObjectNotFoundException
+     */
+	 PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(final PersonSearchFormTO personSearchFormTO,
+                                                        final SortingAndPaging sAndP) throws ObjectNotFoundException;
 
+    /**
+     * Syncs Coaches between internal and external
+     * @return
+     */
 	PagingWrapper<Person> syncCoaches();
 
+    /**
+     * Returns a Person's school_id based on their UUID person.id
+     * @param personId
+     * @return
+     * @throws ObjectNotFoundException
+     */
 	String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException;
 
+    /**
+     * Removes from session the supplied model
+     * @param model
+     */
 	void evict(Person model);
 
+    /**
+     * Get a student's assigned coach uuid that corresponds to the coaches person.id (if set)
+     * @param obj
+     * @return
+     */
 	UUID getCoachIdForStudent(PersonTO obj);
-
 }

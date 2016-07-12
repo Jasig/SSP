@@ -247,7 +247,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 				for (PersonSearchResult2 personSearchResult2 : getAllStudentsForCoach(coach, specialServiceGroups)) {
 					try {
 						List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
-						Person person = personService.getBySchoolId(personSearchResult2.getSchoolId(), false);
+						Person person = personService.getBySchoolIdOrGetFromExternalBySchoolId(personSearchResult2.getSchoolId(), false); //slow lookup, but sync/external should never happen keeping it here as insurance
 						Collection<PersonCourseStatus> personCourseStatuses = personCourseStatusDao.getAllForPerson(person).getRows();
 						for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : externalStudentTranscriptCourseService.getTranscriptsBySchoolId(person.getSchoolId())) {
 							PersonCourseStatus personCourseStatus = getPersonCourseStatus(externalStudentTranscriptCourse, personCourseStatuses);

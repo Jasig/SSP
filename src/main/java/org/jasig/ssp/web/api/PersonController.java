@@ -18,13 +18,6 @@
  */
 package org.jasig.ssp.web.api;
 
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.UUID;
-
-import javax.mail.SendFailedException;
-import javax.validation.Valid;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.factory.PersonTOFactory;
@@ -36,12 +29,7 @@ import org.jasig.ssp.service.PersonEmailService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.ExternalPersonService;
-import org.jasig.ssp.transferobject.CoachPersonLiteTO;
-import org.jasig.ssp.transferobject.PagedResponse;
-import org.jasig.ssp.transferobject.PersonLiteTO;
-import org.jasig.ssp.transferobject.PersonSearchResultTO;
-import org.jasig.ssp.transferobject.PersonTO;
-import org.jasig.ssp.transferobject.ServiceResponse;
+import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -52,12 +40,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import javax.mail.SendFailedException;
+import javax.validation.Valid;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.UUID;
 
 /**
  * Service methods for manipulating data about people in the system.
@@ -231,7 +219,7 @@ public class PersonController extends AbstractBaseController {
 	PersonTO bySchoolId(final @PathVariable String id)
 			throws ObjectNotFoundException {
 
-		final Person model = service.getBySchoolId(id,false);
+		final Person model = service.getBySchoolIdOrGetFromExternalBySchoolId(id,false); //method is slow but proper use
 		if (model == null) {
 			return null;
 		}
