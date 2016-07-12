@@ -231,8 +231,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 			for (ExternalStudentTranscriptCourseTO course : courses) {
 				try {
 					Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolIdOrGetFromExternalBySchoolId(course.getFacultySchoolId(), false); //TODO: getBySchoolIdOrGetFromExternalBySchoolId is slow refactor?
-					if (person != null)
+					if (person != null) {
 						course.setFacultyName(person.getFullName());
+					}
 				} catch (ObjectNotFoundException e) {
 					course.setFacultyName("None Listed");
 					LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Faculty School_id: " + course.getFacultySchoolId() + " Student ID: " + course.getSchoolId() + " Course: " + course.getFormattedCourse());
@@ -267,8 +268,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		for(ExternalStudentTranscriptCourseTO course:courses){
 			try{
 				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolIdOrGetFromExternalBySchoolId(course.getFacultySchoolId(),false); //TODO: getBySchoolIdOrGetFromExternalBySchoolId is slow refactor?
-				if(person != null)
+				if (person != null) {
 					course.setFacultyName(person.getFullName());
+				}
 			}catch(ObjectNotFoundException e)
 			{
 				course.setFacultyName("None Listed");

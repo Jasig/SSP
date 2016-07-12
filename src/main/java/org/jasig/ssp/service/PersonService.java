@@ -76,7 +76,14 @@ public interface PersonService extends AuditableCrudService<Person> {
      */
     Person personFromSchoolId(String schoolId) throws ObjectNotFoundException;
 
-	/**
+    /**
+     * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
+     *  saving a Person but where getBySchoolIdOrGetFromExternalBySchoolId was run with commit == false.
+     * @param studentToSync
+     */
+    void syncSpecialServiceGroups(Person studentToSync);
+
+    /**
 	 * Creates a new Person instance based on the supplied model.
 	 * 
 	 * @param obj

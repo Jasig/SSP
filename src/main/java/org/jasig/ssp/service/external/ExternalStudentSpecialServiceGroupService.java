@@ -19,13 +19,32 @@
 package org.jasig.ssp.service.external;
 
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
-
 import java.util.List;
+import java.util.Set;
 
 public interface ExternalStudentSpecialServiceGroupService extends ExternalDataService<ExternalStudentSpecialServiceGroup> {
-	
-	List<ExternalStudentSpecialServiceGroup> getStudentSpecialServiceGroups(String schoolId);
 
-    void updatePersonSSGsFromExternalPerson(Person personToUpdate);
+    /**
+     * Returns all raw external student ssgs for student, they might not match a code in Special Service Groups
+     * @param schoolId
+     * @return
+     */
+	List<ExternalStudentSpecialServiceGroup> getStudentExternalSpecialServiceGroups(String schoolId);
+
+    /**
+     * Returns ssgs for student that can be adequately matched to internal Special Service Groups by code
+     *   on the code field.
+     * @param studentPerson
+     * @return
+     */
+    Set<PersonSpecialServiceGroup> getStudentsExternalSSGsSyncedAsInternalSSGs(Person studentPerson);
+
+    /**
+     * Updates internal person ssgs from external student ssgs based on configurations and matches on code field
+     *   Saves the result into person special service groups
+     * @param studentPersonToUpdate
+     */
+    void updatePersonSSGsFromExternalPerson(Person studentPersonToUpdate);
 }

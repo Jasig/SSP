@@ -20,12 +20,14 @@ package org.jasig.ssp.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
@@ -54,16 +56,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import javax.portlet.PortletRequest;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 /**
  * Person service implementation
@@ -379,9 +376,7 @@ public class PersonServiceImpl implements PersonService {
 			final ExternalPerson externalPerson = externalPersonService.getBySchoolId(schoolId);
 
             if (externalPerson == null) {
-				throw new ObjectNotFoundException( // NOPMD
-						"Unable to find person by schoolId: " + schoolId,
-						"Person");
+				throw new ObjectNotFoundException("Unable to find person by schoolId: " + schoolId, "Person");
 			}
 
 			final Person person = new Person();
@@ -389,7 +384,20 @@ public class PersonServiceImpl implements PersonService {
 			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
 
             if (commitPerson) {
-                externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
+                syncSpecialServiceGroups(person); //syncs and saves SSGs
+            } else {
+                //retrieves external SSGs syncs to internal ids and sets in model as if SSG's actually were in person
+                // used for times where we load external person but don't save yet e.g. EditPerson/CaseloadAssign etc.
+                if (CollectionUtils.isNotEmpty(person.getSpecialServiceGroups())) {
+                    final Set<PersonSpecialServiceGroup> toSetForPerson = person.getSpecialServiceGroups();
+                    toSetForPerson.addAll(
+                        externalStudentSpecialServiceGroupService.getStudentsExternalSSGsSyncedAsInternalSSGs(person));
+                    person.setSpecialServiceGroups(toSetForPerson);
+
+                } else {
+                    person.setSpecialServiceGroups(externalStudentSpecialServiceGroupService.
+                        getStudentsExternalSSGsSyncedAsInternalSSGs(person));
+                }
             }
 
 			return person;
@@ -429,7 +437,7 @@ public class PersonServiceImpl implements PersonService {
 		externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
 
 		if (commitPerson) {
-			externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
+            syncSpecialServiceGroups(person);
 		}
 
 		return person;
@@ -469,6 +477,18 @@ public class PersonServiceImpl implements PersonService {
         }
 
         return obj;
+    }
+
+    /**
+     * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
+     *  saving a Person but where getBySchoolIdOrGetFromExternalBySchoolId was run with commit == false.
+     * @param studentToSync
+     */
+    @Override
+    public void syncSpecialServiceGroups(final Person studentToSync) {
+        if (studentToSync != null && studentToSync.getId() != null) {
+            externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(studentToSync);
+        }
     }
 
 	/**
