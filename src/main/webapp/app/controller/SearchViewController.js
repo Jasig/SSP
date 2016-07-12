@@ -1534,7 +1534,7 @@ Ext.define('Ssp.controller.SearchViewController', {
     		me.getSearchGridPager().onLoad();
     	}
 		me.harmonizePersonLite();
-		if ( me.getIsCaseload() ) {
+		if ( me.getIsCaseload() && me.getCaseloadActionCombo() ) {
             if(me.caseloadStore.data.length < 1) {
                 me.getCaseloadActionCombo().hide();
             } else {
