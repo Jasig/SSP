@@ -288,7 +288,7 @@ public class DirectoryPersonSearchDao  {
 		buildPersonTableType(personSearchRequest, filterTracker,  stringBuilder);
 		
 		//specialServiceGroup
-		buildSpecialServiceGroup( personSearchRequest, filterTracker, stringBuilder);
+		buildSpecialServiceGroup(personSearchRequest, filterTracker, stringBuilder);
 		
 		//declaredMajor
 		buildDeclaredMajor(personSearchRequest, filterTracker, stringBuilder);
@@ -417,9 +417,8 @@ public class DirectoryPersonSearchDao  {
 	private void addProgramStatusRequired(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
                                                                                         StringBuilder stringBuilder) {
 		if (personRequired(personSearchRequest)) {
-			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" dp.programStatusName is not null and dp.programStatusName <> '' and dp.personId = p.id ");
-		}
+            stringBuilder.append(" dp.programStatusName is not null and dp.programStatusName <> '' and dp.personId = p.id ");
+        }
 	}
 
 	private boolean hasMyPlans(PersonSearchRequest personSearchRequest) {
@@ -484,7 +483,8 @@ public class DirectoryPersonSearchDao  {
                                                                                         StringBuilder stringBuilder) {
 		if (hasSpecialServiceGroup(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null ");
+			stringBuilder.append(" ((dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
+            stringBuilder.append(" or (esssg.schoolId = dp.schoolId and esssg.code = secondssg.code and secondssg.objectStatus = 1 and secondssg in (:specialServiceGroup) and secondssg is not null)) ");
 		}
 	}
 
@@ -936,9 +936,9 @@ public class DirectoryPersonSearchDao  {
 		}
 		
 		if (hasSpecialServiceGroup(personSearchRequest)) {
-			stringBuilder.append(" inner join p.specialServiceGroups as specialServiceGroups ");
-			stringBuilder.append(" inner join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
-		}
+			stringBuilder.append(" left join p.specialServiceGroups as specialServiceGroups ");
+			stringBuilder.append(" left join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
+        }
 	}
 
 	private boolean hasPlanExists(PersonSearchRequest personSearchRequest) {
@@ -954,8 +954,8 @@ public class DirectoryPersonSearchDao  {
 	}
 	
 	private boolean personRequired(PersonSearchRequest personSearchRequest) {
-		return hasSpecialServiceGroup(personSearchRequest) || hasPlanExists(personSearchRequest)
-				|| hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest);
+		return hasPlanExists(personSearchRequest) || hasMyPlans(personSearchRequest) ||
+                hasPlanStatus(personSearchRequest);
 	}
 
 	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
@@ -971,7 +971,7 @@ public class DirectoryPersonSearchDao  {
             return false;
         }
 		
-		if (personRequired(personSearchRequest)) {
+		if (personRequired(personSearchRequest) || hasSpecialServiceGroup(personSearchRequest)) {
 			stringBuilder.append(", Person p");
 		}
 		
@@ -992,7 +992,11 @@ public class DirectoryPersonSearchDao  {
 
 		if (hasAnyWatchCriteria(personSearchRequest)) {
 			stringBuilder.append(", WatchStudent ws ");
-		}		
+		}
+
+		if (hasSpecialServiceGroup(personSearchRequest)) {
+		    stringBuilder.append(", ExternalStudentSpecialServiceGroup esssg , SpecialServiceGroup secondssg");
+        }
 		
 		return true;
 	}
