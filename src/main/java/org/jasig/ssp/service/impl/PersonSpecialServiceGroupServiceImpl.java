@@ -18,16 +18,24 @@
  */
 package org.jasig.ssp.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PersonSpecialServiceGroupDao;
+import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.PersonSpecialServiceGroupService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
-public class PersonSpecialServiceGroupServiceImpl extends
-		AbstractPersonAssocAuditableService<PersonSpecialServiceGroup>
-		implements
-		PersonSpecialServiceGroupService {
+
+@Service
+public class PersonSpecialServiceGroupServiceImpl extends AbstractPersonAssocAuditableService<PersonSpecialServiceGroup>
+		implements PersonSpecialServiceGroupService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersonSpecialServiceGroupServiceImpl.class);
 
 	@Autowired
 	private transient PersonSpecialServiceGroupDao dao;
@@ -37,4 +45,31 @@ public class PersonSpecialServiceGroupServiceImpl extends
 		return dao;
 	}
 
+	@Override
+	public List<String> getAllSSGCodesForPerson(final Person person) {
+		if (person != null) {
+			return dao.getAllCodesForPersonId(person.getId());
+		} else {
+			LOGGER.debug("Can't get Special Service Groups by Code for Person that is empty!");
+			return null;
+		}
+	}
+
+	@Override
+	public void deleteAllForPerson(final Person person) {
+	    if (person != null) {
+	        dao.deleteAllForPerson(person.getId());
+        } else {
+            LOGGER.debug("Can't delete Special Service Groups for Person that is empty!");
+        }
+	}
+
+	@Override
+	public void deleteByCode(final String code, final Person person) {
+		if (person != null && StringUtils.isNotBlank(code)) {
+		    dao.deleteForPersonByCode(code, person.getId());
+		} else {
+            LOGGER.debug("Can't delete Special Service Groups for Person and/or Code that is empty!");
+        }
+	}
 }

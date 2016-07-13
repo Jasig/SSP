@@ -31,6 +31,8 @@ import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
@@ -90,6 +92,7 @@ public interface MessageTemplateService extends
 
     SubjectAndBody createMyGPSWelcomeMessage();
 
+	SubjectAndBody createSpecialServiceGroupCourseWithdrawalCoachMessage(CoachPersonLiteMessageTemplateTO coach, List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students);
 	
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
 			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params, Map<String,Object> additionalParams);

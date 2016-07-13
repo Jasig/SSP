@@ -81,11 +81,12 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	@Override
 	public void processCaseloadBulkAddReassignment() {
-		Map<String, AuditPerson> auditPersonMap = new HashMap<String, AuditPerson>();
-		List<String> errors = new ArrayList<String>();
-		List<CaseloadBulkAddReassignment> list = dao.getAll();
+		final Map<String, AuditPerson> auditPersonMap = new HashMap<String, AuditPerson>();
+		final List<String> errors = new ArrayList<String>();
+		final List<CaseloadBulkAddReassignment> list = dao.getAll();
 		String notificationEmailAddress = null;
-		if (list.size() > 0) {
+
+        if (list.size() > 0) {
 			int successCount = 0;
 			for (CaseloadBulkAddReassignment model : list) {
 				if (notificationEmailAddress==null) {
@@ -93,16 +94,17 @@ public class CaseloadServiceImpl implements CaseloadService {
 				}
 				if (!StringUtils.isEmpty(model.getSchoolId().trim())) {
 					try {
-						Person student = personService.getBySchoolId(model.getSchoolId(), new Boolean(false));
+						Person student = personService.getBySchoolIdOrGetFromExternalBySchoolId(model.getSchoolId(), new Boolean(false)); //method is slow, but looks like proper use
 						if (!StringUtils.isEmpty(model.getCoachSchoolId().trim())) {
 							if (!StringUtils.isEmpty(model.getModifiedBySchoolId().trim())) {
-								AuditPerson auditPerson = getAuditPerson(auditPersonMap, model.getModifiedBySchoolId());
+								final AuditPerson auditPerson = getAuditPerson(auditPersonMap, model.getModifiedBySchoolId());
 								if (auditPerson != null) {
 									try {
-										Person coach = personService.getBySchoolId(model.getCoachSchoolId(), new Boolean(false));
+										final Person coach = personService.getBySchoolIdOrGetFromExternalBySchoolId(model.getCoachSchoolId(), new Boolean(false)); //method is slow, but looks like proper use
 										student.setCoach(coach);
 										student.setModifiedBy(auditPerson);
-										personService.save(student);
+										final Person savedPerson = personService.save(student);
+                                        personService.syncSpecialServiceGroups(savedPerson);
 										successCount++;
 									} catch (ObjectNotFoundException e) {
 										createError(errors, "Coach School Id not found for record", model);
@@ -114,7 +116,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 								createError(errors, "Modified By School Id was not set for record", model);
 							}
 						} else if (null != student.getCoach()) {
-							student = personService.getBySchoolId(model.getSchoolId(), new Boolean(true));
+							student = personService.getBySchoolIdOrGetFromExternalBySchoolId(model.getSchoolId(), new Boolean(true)); //method is slow, but looks like proper use
 							successCount++;
 						} else {
 							createError(errors, "Student not added because the external student does not have a coach assigned for record", model);
@@ -153,7 +155,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 		AuditPerson auditPerson = map.get(schoolId);
 		if (auditPerson==null) {
 			try {
-				Person modifiedBy = personService.getBySchoolId(schoolId, new Boolean(false));
+				Person modifiedBy = personService.getBySchoolIdOrGetFromExternalBySchoolId(schoolId, new Boolean(false)); //lookup can be slow, but sync/external lookup ideally won't occur
 				auditPerson = new AuditPerson();
 				auditPerson.setFirstName(modifiedBy.getFirstName());
 				auditPerson.setLastName(modifiedBy.getLastName());

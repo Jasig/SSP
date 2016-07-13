@@ -20,15 +20,17 @@ package org.jasig.ssp.service.reference.impl;
 
 import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Service
 @Transactional
-public class SpecialServiceGroupServiceImpl extends
-		AbstractReferenceService<SpecialServiceGroup>
+public class SpecialServiceGroupServiceImpl extends AbstractReferenceService<SpecialServiceGroup>
 		implements SpecialServiceGroupService {
 
 	@Autowired
@@ -42,4 +44,14 @@ public class SpecialServiceGroupServiceImpl extends
 	protected SpecialServiceGroupDao getDao() {
 		return dao;
 	}
+
+	@Override
+	public SpecialServiceGroup getByCode(@NotNull final String code) throws ObjectNotFoundException {
+		return this.dao.getByCode(code);
+	}
+
+    @Override
+    public List<SpecialServiceGroup> getByNotifyOnWithdraw(final boolean notifyOnWithdraw) throws ObjectNotFoundException {
+        return this.dao.getByNotifyOnWithdraw(notifyOnWithdraw);
+    }
 }

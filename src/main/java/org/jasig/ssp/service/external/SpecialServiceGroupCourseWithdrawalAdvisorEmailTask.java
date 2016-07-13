@@ -1,4 +1,4 @@
-/*
+/**
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -16,8 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.SpecialServiceGroup', {
-	extend: 'Ssp.model.reference.AbstractReference',
-    fields: [{name:'code', type:'string'},
-        {name:'notifyOnWithdraw',type:'boolean'}]
-});
+package org.jasig.ssp.service.external;
+
+import org.jasig.ssp.util.collections.Pair;
+
+public interface SpecialServiceGroupCourseWithdrawalAdvisorEmailTask extends BatchedTask<Pair<Long, Long>> {
+
+}

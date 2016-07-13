@@ -18,11 +18,7 @@
  */
 package org.jasig.ssp.portlet.alert;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.portlet.PortletRequest;
-
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.model.ObjectStatus;
@@ -42,7 +38,6 @@ import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.external.SearchFacultyCourseTO;
 import org.jasig.ssp.transferobject.external.SearchStudentCourseTO;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +49,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import javax.portlet.PortletRequest;
+import java.util.Map;
 
 @Controller
 @RequestMapping("VIEW")
@@ -91,7 +88,7 @@ public final class EarlyAlertPortletController {
 			throw new EarlyAlertPortletControllerRuntimeException("Missing student identifier.");
 		}
 		if(isConfirmed(req))
-			model.put("studentName", org.apache.commons.lang.StringEscapeUtils.unescapeJavaScript(req.getParameter("studentName")));
+			model.put("studentName", StringEscapeUtils.unescapeJavaScript(req.getParameter("studentName")));
 			
 		Person user = (Person)model.get("user");
 		model.put("facultySchoolId", user.getId());
@@ -231,7 +228,7 @@ public final class EarlyAlertPortletController {
 			 */
 			if(StringUtils.isNotBlank(schoolId)) {
 				try {
-					student = personService.getBySchoolId(schoolId, true);  // TODO:  Handle error better??
+					student = personService.getBySchoolIdOrGetFromExternalBySchoolId(schoolId, true);  // TODO:  Handle error better??
 					if ( student == null ) {
 						throw new EarlyAlertPortletControllerRuntimeException("Student not found by school ID: " + schoolId);
 					}
@@ -240,7 +237,7 @@ public final class EarlyAlertPortletController {
 				}
 			} else {
 				try {
-					student = personService.getByUsername(studentUserName, true);
+					student = personService.getSyncedByUsername(studentUserName, true); //slow but syncs person and saves
 					if ( student == null ) {
 						throw new EarlyAlertPortletControllerRuntimeException("Student not found by username: " + studentUserName);
 					}

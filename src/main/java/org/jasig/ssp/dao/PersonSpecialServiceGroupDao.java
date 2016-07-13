@@ -18,14 +18,16 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.UUID;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class PersonSpecialServiceGroupDao
@@ -48,4 +50,43 @@ public class PersonSpecialServiceGroupDao
 				specialServiceGroupId));
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
+
+	public List<String> getAllCodesForPersonId(final UUID personId) {
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("person.id", personId));
+        criteria.setProjection(Projections.property("ssg.code"));
+		criteria.createAlias("specialServiceGroup", "ssg");
+
+        return criteria.list();
+	}
+
+    public void deleteAllForPerson(final UUID personId) {
+        final Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("person.id", personId));
+        final List<PersonSpecialServiceGroup> personSpecialServiceGroups = criteria.list();
+
+        if (CollectionUtils.isNotEmpty(personSpecialServiceGroups)) {
+            for (PersonSpecialServiceGroup personSpecialServiceGroup : personSpecialServiceGroups) {
+                this.delete(personSpecialServiceGroup);
+            }
+            sessionFactory.getCurrentSession().flush();
+        } else {
+            return;
+        }
+    }
+
+    public void deleteForPersonByCode(final String code, final UUID id) {
+        final Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("person.id", id));
+        criteria.add(Restrictions.eq("ssg.code", code));
+        criteria.createAlias("specialServiceGroup", "ssg");
+        final PersonSpecialServiceGroup personSpecialServiceGroup = (PersonSpecialServiceGroup) criteria.uniqueResult();
+
+        if (personSpecialServiceGroup != null) {
+            this.delete(personSpecialServiceGroup);
+            sessionFactory.getCurrentSession().flush();
+        } else {
+            return;
+        }
+    }
 }

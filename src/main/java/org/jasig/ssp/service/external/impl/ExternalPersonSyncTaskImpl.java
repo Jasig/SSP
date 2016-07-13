@@ -18,19 +18,15 @@
  */
 package org.jasig.ssp.service.external.impl;
 
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
-
+import com.google.common.collect.Maps;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.external.ExternalPerson;
-import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
@@ -42,8 +38,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Maps;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 @Service
 public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
@@ -64,13 +62,13 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 	private ExternalPersonService externalPersonService;
 	
 	@Autowired
-	private PersonSearchService directoryPersonService;
-
-	@Autowired
 	private PersonService personService;
 
 	@Autowired
 	private ConfigService configService;
+
+    @Autowired
+    private ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
 
 	@Autowired
 	private transient ExternalPersonDao dao;
@@ -215,7 +213,6 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 			}
 		}
 
-
 		LOGGER.info("END : External person sync.");
 	}
 
@@ -291,19 +288,21 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 		for (final ExternalPerson externalPerson : externalPeople) {
 
 			if ( Thread.currentThread().isInterrupted() ) {
-				LOGGER.info("Abandoning external person sync because of thread interruption on person {}", externalPerson.getUsername());
+				LOGGER.info("Abandoning external person sync because of thread interruption on person {}",
+                        externalPerson.getUsername());
 				throw new InterruptedException();
 			}
 
-			LOGGER.debug(
-					"Looking for internal person by external person schoolId {}",
-					externalPerson.getSchoolId());
-			// get the previously fetched person
-			final Person person = peopleBySchoolId.get(externalPerson
-					.getSchoolId());
-			// upate person from external person
+			LOGGER.debug("Looking for internal person by external person schoolId {}", externalPerson.getSchoolId());
+
+            // get the previously fetched person
+			final Person person = peopleBySchoolId.get(externalPerson.getSchoolId());
+
+            // update person from external person
 			externalPersonService.updatePersonFromExternalPerson(person, externalPerson,true);
 
+            // update person special service groups from external student special service groups
+            externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
 		}
 
 		return new Pair(peopleCnt, people.getResults());
@@ -331,13 +330,11 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 	}
 
 	private int getBatchSize() {
-		String batchSizeStr =
-				configService.getByNameNullOrDefaultValue(BATCH_SIZE_CONFIG_NAME);
+		String batchSizeStr = configService.getByNameNullOrDefaultValue(BATCH_SIZE_CONFIG_NAME);
 		int batchSize = DEFAULT_BATCH_SIZE;
 		try {
 			batchSize = Integer.parseInt(batchSizeStr);
-			LOGGER.debug("Using [{}] configured batch size of [{}]."
-					+ " (Negative values treated as unlimited.)",
+			LOGGER.debug("Using [{}] configured batch size of [{}]. (Negative values treated as unlimited.)",
 					BATCH_SIZE_CONFIG_NAME, batchSize);
 		} catch ( NumberFormatException e ) {
 			// only info b/c this thing is potentially called so frequently and
@@ -350,5 +347,4 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 		}
 		return batchSize;
 	}
-
 }

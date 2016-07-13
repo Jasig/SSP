@@ -18,18 +18,18 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
+import com.google.common.collect.Lists;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.transferobject.TransferObject;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
-import org.jasig.ssp.transferobject.TransferObject;
-
-import com.google.common.collect.Lists;
-
-public class SpecialServiceGroupTO
-		extends AbstractReferenceTO<SpecialServiceGroup>
+public class SpecialServiceGroupTO extends AbstractReferenceTO<SpecialServiceGroup>
 		implements TransferObject<SpecialServiceGroup> { // NOPMD
+
+	private String code;
+    private boolean notifyOnWithdraw = false;
 
 	public SpecialServiceGroupTO() {
 		super();
@@ -43,10 +43,22 @@ public class SpecialServiceGroupTO
 	public SpecialServiceGroupTO(final SpecialServiceGroup model) {
 		super();
 		from(model);
-	}
+        code = model.getCode();
+        notifyOnWithdraw = model .isNotifyOnWithdraw();
+    }
 
-	public static List<SpecialServiceGroupTO> toTOList(
-			final Collection<SpecialServiceGroup> models) {
+    @Override
+    public final void from(final SpecialServiceGroup model) {
+        if (model == null) {
+            throw new IllegalArgumentException("Model can not be null.");
+        }
+
+        super.from(model);
+        code = model.getCode();
+        notifyOnWithdraw = model .isNotifyOnWithdraw();
+    }
+
+	public static List<SpecialServiceGroupTO> toTOList(final Collection<SpecialServiceGroup> models) {
 		final List<SpecialServiceGroupTO> tObjects = Lists.newArrayList();
 		for (final SpecialServiceGroup model : models) {
 			tObjects.add(new SpecialServiceGroupTO(model));// NOPMD
@@ -54,4 +66,20 @@ public class SpecialServiceGroupTO
 
 		return tObjects;
 	}
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public boolean isNotifyOnWithdraw() {
+        return notifyOnWithdraw;
+    }
+
+    public void setNotifyOnWithdraw(boolean notifyOnWithdraw) {
+        this.notifyOnWithdraw = notifyOnWithdraw;
+    }
 }

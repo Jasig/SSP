@@ -18,15 +18,6 @@
  */
 package org.jasig.ssp.web.api.external;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.jasig.ssp.factory.EarlyAlertTOFactory;
@@ -34,33 +25,16 @@ import org.jasig.ssp.factory.JournalEntryTOFactory;
 import org.jasig.ssp.factory.TaskTOFactory;
 import org.jasig.ssp.factory.external.*;
 import org.jasig.ssp.factory.reference.PlanTOFactory;
-import org.jasig.ssp.model.EarlyAlert;
-import org.jasig.ssp.model.JournalEntry;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.Task;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.JournalEntryService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonDemographicsService;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.PlanService;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.EnrollmentStatusService;
-import org.jasig.ssp.transferobject.EarlyAlertTO;
-import org.jasig.ssp.transferobject.JournalEntryTO;
-import org.jasig.ssp.transferobject.PersonLiteTO;
-import org.jasig.ssp.transferobject.PlanTO;
-import org.jasig.ssp.transferobject.RecentActivityTO;
-import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.transferobject.external.*;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -70,11 +44,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Controller
 @RequestMapping("/1/person/{id}")
@@ -256,9 +230,10 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		if (courses!=null) {
 			for (ExternalStudentTranscriptCourseTO course : courses) {
 				try {
-					Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId(), false);
-					if (person != null)
+					Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolIdOrGetFromExternalBySchoolId(course.getFacultySchoolId(), false); //TODO: getBySchoolIdOrGetFromExternalBySchoolId is slow refactor?
+					if (person != null) {
 						course.setFacultyName(person.getFullName());
+					}
 				} catch (ObjectNotFoundException e) {
 					course.setFacultyName("None Listed");
 					LOGGER.debug("FACULTY SCHOOL ID WAS NOT RESOLVED WHILE LOADING TRANSCRIPT RECORD.  Faculty School_id: " + course.getFacultySchoolId() + " Student ID: " + course.getSchoolId() + " Course: " + course.getFormattedCourse());
@@ -292,9 +267,10 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		
 		for(ExternalStudentTranscriptCourseTO course:courses){
 			try{
-				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolId(course.getFacultySchoolId(),false);
-				if(person != null)
+				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolIdOrGetFromExternalBySchoolId(course.getFacultySchoolId(),false); //TODO: getBySchoolIdOrGetFromExternalBySchoolId is slow refactor?
+				if (person != null) {
 					course.setFacultyName(person.getFullName());
+				}
 			}catch(ObjectNotFoundException e)
 			{
 				course.setFacultyName("None Listed");

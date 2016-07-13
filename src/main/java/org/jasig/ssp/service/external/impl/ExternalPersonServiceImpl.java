@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.service.external.impl;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.external.ExternalDataDao;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
@@ -27,27 +25,19 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.external.ExternalPerson;
-import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.Ethnicity;
-import org.jasig.ssp.model.reference.Genders;
-import org.jasig.ssp.model.reference.MaritalStatus;
-import org.jasig.ssp.model.reference.Race;
-import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.model.reference.*;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PersonStaffDetailsService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.service.reference.EthnicityService;
-import org.jasig.ssp.service.reference.RaceService;
-import org.jasig.ssp.service.reference.MaritalStatusService;
-import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.service.reference.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 
 @Service
@@ -103,6 +93,7 @@ public class ExternalPersonServiceImpl
 		ExternalPerson externalPerson = null;
 		final String schoolId = person.getSchoolId();
 		final String username = person.getUsername();
+
 		try {
 			externalPerson = getBySchoolId(schoolId);
 		} catch ( ObjectNotFoundException e ) {
@@ -167,8 +158,7 @@ public class ExternalPersonServiceImpl
 			person.setLastName(externalPerson.getLastName());
 		}
 
-		if ((person.getMiddleName() == null)
-				||
+		if ((person.getMiddleName() == null) ||
 				(!person.getMiddleName().equals(externalPerson.getMiddleName()))) {
 			person.setMiddleName(externalPerson.getMiddleName());
 		}
@@ -185,15 +175,13 @@ public class ExternalPersonServiceImpl
 					.getPrimaryEmailAddress());
 		}
 
-		if ((person.getAddressLine1() == null)
-				||
+		if ((person.getAddressLine1() == null) ||
 				(!person.getAddressLine1().equals(
 						externalPerson.getAddressLine1()))) {
 			person.setAddressLine1(externalPerson.getAddressLine1());
 		}
 
-		if ((person.getAddressLine2() == null)
-				||
+		if ((person.getAddressLine2() == null) ||
 				(!person.getAddressLine2().equals(
 						externalPerson.getAddressLine2()))) {
 			person.setAddressLine2(externalPerson.getAddressLine2());
@@ -280,7 +268,7 @@ public class ExternalPersonServiceImpl
 							.delete(person.getStaffDetails().getId());
 				} catch (final ObjectNotFoundException e) {
 					LOGGER.info(
-							"Strange that we found a staffDetails object a moment ago, but cannot find it again to delte it.",
+							"Strange that we found a staffDetails object a moment ago, but cannot find it again to delete it.",
 							e);
 				}
 			}
@@ -322,64 +310,48 @@ public class ExternalPersonServiceImpl
 			demographics = person.getDemographics();
 		}
  
-			//As per SSP-874, how to handle external data overwrites:
-//			Based on jasig-ssp discussions, the rules for the updates to the person_demographics are:
-//			1. Null/Empty/Blank value from external table: over-write (they may be intentionally desiring the existing value overwritten.
-//			2. Valid value from external table that matches entry in reference table: over-write
-//			3. Invalid value from external table that has no matching entry in reference table: don't over-write
-		
-			if(StringUtils.isBlank(externalPerson.getMaritalStatus()))
-			{
-				demographics.setMaritalStatus(null);
-			}
-			else
-			{
-				MaritalStatus maritalStatus = maritalStatusService.getByName(externalPerson.getMaritalStatus());
-				demographics.setMaritalStatus(maritalStatus == null ? demographics.getMaritalStatus() : maritalStatus);
-			}
-			
-			if(StringUtils.isBlank(externalPerson.getEthnicity()))
-			{
-				demographics.setEthnicity(null);
-			}
-			else
-			{
-				Ethnicity ethnicity =ethnicityService.getByName(externalPerson.getEthnicity());
-				demographics.setEthnicity(ethnicity == null ? demographics.getEthnicity() : ethnicity);
-			}
+        /*  As per SSP-874, how to handle external data overwrites:
+		 *	Based on jasig-ssp discussions, the rules for the updates to the person_demographics are:
+		 *	1. Null/Empty/Blank value from external table: over-write (they may be intentionally desiring the existing value overwritten.
+		 *	2. Valid value from external table that matches entry in reference table: over-write
+		 *	3. Invalid value from external table that has no matching entry in reference table: don't over-write
+		 */
+        if (StringUtils.isBlank(externalPerson.getMaritalStatus())) {
+            demographics.setMaritalStatus(null);
+        } else {
+            MaritalStatus maritalStatus = maritalStatusService.getByName(externalPerson.getMaritalStatus());
+            demographics.setMaritalStatus(maritalStatus == null ? demographics.getMaritalStatus() : maritalStatus);
+        }
 
-			if(StringUtils.isBlank(externalPerson.getRace()))
-			{
-				demographics.setRace(null);
-			}
-			else
-			{ 
-				Race race =raceService.getByCode(externalPerson.getRace());
-				demographics.setRace(race == null ? demographics.getRace() : race);
-			}
-			
-			if(StringUtils.isBlank(externalPerson.getGender()))
-			{
-				demographics.setGender(null);
-			}
-			else
-			{
-				try
-				{
-					Genders gender =Genders.valueOf(externalPerson.getGender());
-					demographics.setGender(gender);
-				}
-				catch (IllegalArgumentException e)
-				{
-					demographics.setGender(null);
-				}
-			}			
+        if (StringUtils.isBlank(externalPerson.getEthnicity())) {
+            demographics.setEthnicity(null);
+        } else {
+            Ethnicity ethnicity =ethnicityService.getByName(externalPerson.getEthnicity());
+            demographics.setEthnicity(ethnicity == null ? demographics.getEthnicity() : ethnicity);
+        }
+
+        if (StringUtils.isBlank(externalPerson.getRace())) {
+            demographics.setRace(null);
+        } else {
+            Race race =raceService.getByCode(externalPerson.getRace());
+            demographics.setRace(race == null ? demographics.getRace() : race);
+        }
+
+        if (StringUtils.isBlank(externalPerson.getGender())) {
+            demographics.setGender(null);
+        } else {
+            try {
+                Genders gender =Genders.valueOf(externalPerson.getGender());
+                demographics.setGender(gender);
+            } catch (IllegalArgumentException e) {
+                demographics.setGender(null);
+            }
+        }
 
 		if (externalPerson.getIsLocal() == null) {
 			demographics.setLocal(null);
 		} else {
-			demographics.setLocal(externalPerson.getIsLocal().equalsIgnoreCase(
-					"Y"));
+			demographics.setLocal(externalPerson.getIsLocal().equalsIgnoreCase("Y"));
 		}
 
 		if (externalPerson.getBalanceOwed() == null) {
@@ -394,14 +366,12 @@ public class ExternalPersonServiceImpl
 		}
 
 		try {
-			if(commit)
-			{
+			if (commit) {
 				personService.save(person);
 			}
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("person failed to save", e);
 		}
-
 	}
 
 	private void setCoachForPerson(final Person person, final String coachId) {
@@ -449,17 +419,14 @@ public class ExternalPersonServiceImpl
 
 	private Person getCoach(final String coachId) {
 		try {
-			return personService.getBySchoolId(coachId,true);
+			return personService.getBySchoolIdOrGetFromExternalBySchoolId(coachId,true); //this adds the coach if only exists externally, otherwise retrieves the internal record
 		} catch (final ObjectNotFoundException e) {
-			LOGGER.warn(
-					"Coach referenced in external table not available in system",
-					e);
+			LOGGER.warn("Coach referenced in external table not available in system", e);
 			return null;
 		}
 	}
 	
-	private void setStudentTypeForPerson(final Person person, final String externStudentType)
-	{
+	private void setStudentTypeForPerson(final Person person, final String externStudentType) {
 		if (configService.getByNameNullOrDefaultValue(
 				"studentTypeSetFromExternalData").equalsIgnoreCase("false")) {
 			LOGGER.debug("Skipping all student type assignment processing for person "
@@ -512,8 +479,7 @@ public class ExternalPersonServiceImpl
 		}				
 	}
 
-	private void setHomeCampusForPerson(final Person person, final String externalCampusCode)
-	{
+	private void setHomeCampusForPerson(final Person person, final String externalCampusCode) {
 		if (person.getHomeCampus() == null) {
 			if (externalCampusCode != null && !externalCampusCode.trim().isEmpty()) {
 				LOGGER.debug("Assigning campus_code '{}' to person " +
@@ -559,5 +525,4 @@ public class ExternalPersonServiceImpl
 	public List<String> getAllDepartmentNames() {
 		return dao.getAllDepartmentNames();
 	}
-
 }

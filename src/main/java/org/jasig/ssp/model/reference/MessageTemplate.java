@@ -97,6 +97,9 @@ public class MessageTemplate
 	public static final UUID EMAIL_COACHING_ASSIGNMENT_CHANGE_ID = UUID.
 			fromString("b0e61fad-74c2-4154-9248-7ca8db867fdf");
 
+	public static final UUID EMAIL_SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TO_ADVISOR_ID = UUID.
+			fromString("55185f25-3356-465e-9ebc-c62125bd7ca2");
+
 	@NotNull
 	@Column(name = "subject", nullable = false, length = 250)
 	private String subject;

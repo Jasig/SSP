@@ -19,22 +19,50 @@
 package org.jasig.ssp.util;
 
 import com.google.common.collect.Maps;
-import org.jasig.ssp.model.*;
-import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.transferobject.*;
+import org.jasig.ssp.model.AuditPerson;
+import org.jasig.ssp.model.EarlyAlert;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonStaffDetails;
+import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.EarlyAlertOutcome;
-import org.jasig.ssp.transferobject.messagetemplate.*;
-import org.jasig.ssp.transferobject.reference.*;
+import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.transferobject.GoalTO;
+import org.jasig.ssp.transferobject.MessageTO;
+import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.PlanCourseTO;
+import org.jasig.ssp.transferobject.PlanTO;
+import org.jasig.ssp.transferobject.StrengthTO;
+import org.jasig.ssp.transferobject.TaskTO;
+import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertOutcomeMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.EarlyAlertResponseMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.StudentPersonLiteMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
+import org.jasig.ssp.transferobject.reference.CampusTO;
+import org.jasig.ssp.transferobject.reference.ChallengeReferralTO;
+import org.jasig.ssp.transferobject.reference.ChallengeTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertOutcomeTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertOutreachTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertReferralTO;
+import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
 import org.jasig.ssp.transferobject.reports.MapStatusReportSummaryDetail;
 import org.jasig.ssp.util.collections.Pair;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * MessageTemplatePreviewTO Builder creates transition objects used when building Message Templates for the preview.
@@ -393,6 +421,36 @@ public class MessageTemplatePreviewTOBuilder {
         MapStatusReportSummaryDetail mapStatusReportSummaryDetail = new MapStatusReportSummaryDetail("PlanName" + suffix, count);
         setSetters(mapStatusReportSummaryDetail, suffix);
         return mapStatusReportSummaryDetail;
+    }
+
+    public static List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTOList() {
+        List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("Student1"));
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("Student2"));
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("Student3"));
+        return studentSpecialServiceGroupCourseWithdrawalMessageTemplateTOs;
+    }
+    public static StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO() {
+        return createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO("");
+    }
+    public static StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO(final String suffix) {
+        StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO = new StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO();
+        setSetters(studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO, suffix);
+        studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO.setCourses(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTOList(suffix));
+        return studentSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
+    }
+
+    public static CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(final String suffix) {
+        CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO courseSpecialServiceGroupCourseWithdrawalMessageTemplateTO = new CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO();
+        setSetters(courseSpecialServiceGroupCourseWithdrawalMessageTemplateTO, suffix);
+        return courseSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
+    }
+    public static List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTOList(final String suffix) {
+        List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
+        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(suffix + "_1"));
+        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(suffix + "_2"));
+        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.add(createCourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(suffix + "_3"));
+        return courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs;
     }
 
     private static void setSetters(Object o, final String suffix) {

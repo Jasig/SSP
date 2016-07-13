@@ -20,12 +20,14 @@ package org.jasig.ssp.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.security.PersonAttributesResult;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
@@ -33,6 +35,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonAttributesService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.ExternalPersonService;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.tool.IntakeService;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
 import org.jasig.ssp.transferobject.PersonTO;
@@ -52,18 +55,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import javax.portlet.PortletRequest;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 /**
  * Person service implementation
@@ -78,11 +75,9 @@ public class PersonServiceImpl implements PersonService {
 
 	public static final String PERMISSION_TO_CREATE_ACCOUNT = "ROLE_CAN_CREATE";
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersonServiceImpl.class);
 
-	private static final Logger TIMING_LOGGER = LoggerFactory
-			.getLogger("timing." + PersonServiceImpl.class.getName());
+	private static final Logger TIMING_LOGGER = LoggerFactory.getLogger("timing." + PersonServiceImpl.class.getName());
 
 	@Autowired
 	private transient PersonDao dao;
@@ -94,9 +89,13 @@ public class PersonServiceImpl implements PersonService {
 	private transient ExternalPersonService externalPersonService;
 
 	@Autowired
+	private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
+
+	@Autowired
 	private transient WithTransaction withTransaction;
 
-	/**
+
+    /**
 	 * If <code>true</code>, each individual coach synchronized by
 	 * {@link #syncCoaches()} will be written in its own transaction. If false,
 	 * the entire synchronization across all coaches will be a single
@@ -109,15 +108,12 @@ public class PersonServiceImpl implements PersonService {
 
 
 	private static interface PersonAttributesLookup {
-		public PersonAttributesResult lookupPersonAttributes(String username)
-				throws ObjectNotFoundException;
+		public PersonAttributesResult lookupPersonAttributes(String username) throws ObjectNotFoundException;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public Person createUserAccount(final String username,
-			final Collection<GrantedAuthority> authorities) {
-
+	public Person createUserAccount(final String username, final Collection<GrantedAuthority> authorities) {
 		return createUserAccount(username, authorities, new PersonAttributesLookup() {
 			@Override
 			public PersonAttributesResult lookupPersonAttributes(String username)
@@ -125,7 +121,6 @@ public class PersonServiceImpl implements PersonService {
 				return personAttributesService.getAttributes(username);
 			}
 		});
-
 	}
 
 	@Override
@@ -169,14 +164,17 @@ public class PersonServiceImpl implements PersonService {
 
 		ExternalPerson byUsername = null;
 		final String username = person.getUsername();
-		if ( person.getSchoolId() == null || person.getFirstName() == null || person.getLastName() == null || person.getPrimaryEmailAddress() == null ) {
-			if ( person.getSchoolId() != null ) {
+		if ( person.getSchoolId() == null || person.getFirstName() == null || person.getLastName() == null
+                || person.getPrimaryEmailAddress() == null ) {
+
+		    if ( person.getSchoolId() != null ) {
 				try {
 					byUsername = externalPersonService.getBySchoolId(person.getSchoolId());
 				} catch ( ObjectNotFoundException e ) {
 					// handled below in the null check
 				}
 			}
+
 			if ( byUsername == null ) {
 				try {
 					byUsername = externalPersonService.getByUsername(username);
@@ -201,6 +199,7 @@ public class PersonServiceImpl implements PersonService {
 				person.setSchoolId(byUsername.getSchoolId());
 			}
 		}
+
 		if ( person.getFirstName() == null ) {
 			if ( byUsername == null || byUsername.getFirstName() == null ) {
 				person.setFirstName("Unknown");
@@ -208,6 +207,7 @@ public class PersonServiceImpl implements PersonService {
 				person.setFirstName(byUsername.getFirstName());
 			}
 		}
+
 		if ( person.getLastName() == null ) {
 			if ( byUsername == null || byUsername.getLastName() == null ) {
 				person.setLastName("Unknown");
@@ -215,6 +215,7 @@ public class PersonServiceImpl implements PersonService {
 				person.setLastName(byUsername.getLastName());
 			}
 		}
+
 		if ( person.getPrimaryEmailAddress() == null ) {
 			if ( byUsername == null || byUsername.getPrimaryEmailAddress() == null ) {
 				person.setPrimaryEmailAddress(person.getSchoolId() + "@unknown.domain");
@@ -224,10 +225,8 @@ public class PersonServiceImpl implements PersonService {
 		}
 	}
 
-	private Person createUserAccount(String username,
-			Collection<GrantedAuthority> authorities,
-			PersonAttributesLookup personAttributesLookup) {
-
+	private Person createUserAccount(String username, Collection<GrantedAuthority> authorities,
+                                                                    PersonAttributesLookup personAttributesLookup) {
 		Person person = null;
 
 		if (hasAccountCreationPermission(authorities)) {
@@ -264,18 +263,15 @@ public class PersonServiceImpl implements PersonService {
 				// added since we started. (If using SQLServer this will only
 				// work if you're running with ExtendedSQLServer*Dialect. Else
 				// getConstraintName() will always be null.)
-				if (sqlException.getConstraintName().equalsIgnoreCase(
-
-                       "uq_person_school_id")) {
+				if (sqlException.getConstraintName().equalsIgnoreCase("uq_person_school_id")) {
                      LOGGER.info("Tried to add a user that was already present");
  
                      throw new ObjectExistsException("Account with school_id "
                              + person.getSchoolId() + " already exists.");
-                 }
-				if (sqlException.getConstraintName().equalsIgnoreCase(						
-						"unique_person_username")) {
-					LOGGER.info("Tried to add a user that was already present ({})",
-							username, sqlException);
+                }
+
+                if (sqlException.getConstraintName().equalsIgnoreCase("unique_person_username")) {
+					LOGGER.info("Tried to add a user that was already present ({})",username, sqlException);
 
 					// SSP-397. Have to throw something to rollback the
 					// transaction, else Spring/Hib will attempt a commit when
@@ -284,30 +280,24 @@ public class PersonServiceImpl implements PersonService {
 					// will get an opaque HibernateJdbcException. With an
 					// PersonExistsException the client has at least some
 					// clue as to a reasonable recovery path.
-					throw new PersonExistsException("Account with user name "
-							+ username + " already exists.");
+					throw new PersonExistsException("Account with user name " + username + " already exists.");
 				}
 				// Also SSP-397
 				throw sqlException;
 
 			} catch (final Exception genException) {
-				// This exception seems to get swallowed... trying to reveal
-				// it.
-				throw new UnableToCreateAccountException( // NOPMD
-						"Unable to Create Account for login.", genException);
+				// This exception seems to get swallowed... trying to reveal it.
+				throw new UnableToCreateAccountException("Unable to Create Account for login.", genException);
 			}
 
 		} else {
-			throw new UnableToCreateAccountException( // NOPMD
-					// already know the account was not found
-					"Insufficient Permissions to create Account");
+			throw new UnableToCreateAccountException("Insufficient Permissions to create Account"); // already know the account was not found
 		}
 
 		return person;
 	}
 
-	private boolean hasAccountCreationPermission(
-			final Collection<GrantedAuthority> authorities) {
+	private boolean hasAccountCreationPermission(final Collection<GrantedAuthority> authorities) {
 		boolean permission = ALL_AUTHENTICATED_USERS_CAN_CREATE_ACCOUNT;
 
 		// if already true, skip permission check
@@ -353,65 +343,153 @@ public class PersonServiceImpl implements PersonService {
 		return dao.load(id);
 	}
 
+    /**
+     * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
+     *
+     * *NOTE*: If school_id is *not* in Person (internal), it then retrieves from external_person
+     *    if exists and converts the record to a Person. If commit is true in that scenario,
+     *     it adds the record to internal data.
+     *
+     * *WARNING*: Syncs person from external_person and syncs special_service_groups
+     *  so it may be slow. Best use is when you need a completely up-to-date person
+     *    such as in add/edit scenarios.
+     *
+     * @param schoolId
+     *            Required school identifier for the Person to retrieve. Can not
+     *            be null.
+     *            Also searches the External Database for the identifier,
+     *            creating a Person if an ExternalPerson record exists..
+     * @exception ObjectNotFoundException
+     *                If the supplied identifier does not exist in the database.
+     * @return The specified Person instance.
+     */
 	@Override
-	public Person getBySchoolId(final String schoolId,boolean commitPerson)
-			throws ObjectNotFoundException {
+	public Person getBySchoolIdOrGetFromExternalBySchoolId(final String schoolId, boolean commitPerson)
+                                                                                        throws ObjectNotFoundException {
+
+        //TODO We may possibly need a second method like this but "light" that doesn't do the sync (if commit == false)
+        //TODO  It would returns/sync core Person info username, school_id, primary_email_address only
 		try { 
 			return dao.getBySchoolId(schoolId);
+
 		} catch (final ObjectNotFoundException e) {
-			final ExternalPerson externalPerson = externalPersonService
-					.getBySchoolId(schoolId);
-			if (externalPerson == null) {
-				throw new ObjectNotFoundException( // NOPMD
-						"Unable to find person by schoolId: " + schoolId,
-						"Person");
+			final ExternalPerson externalPerson = externalPersonService.getBySchoolId(schoolId);
+
+            if (externalPerson == null) {
+				throw new ObjectNotFoundException("Unable to find person by schoolId: " + schoolId, "Person");
 			}
 
 			final Person person = new Person();
 			evict(person);
-			externalPersonService.updatePersonFromExternalPerson(person,
-					externalPerson,commitPerson);
+			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
+
+            if (commitPerson) {
+                syncSpecialServiceGroups(person); //syncs and saves SSGs
+            } else {
+                //retrieves external SSGs syncs to internal ids and sets in model as if SSG's actually were in person
+                // used for times where we load external person but don't save yet e.g. EditPerson/CaseloadAssign etc.
+                if (CollectionUtils.isNotEmpty(person.getSpecialServiceGroups())) {
+                    final Set<PersonSpecialServiceGroup> toSetForPerson = person.getSpecialServiceGroups();
+                    toSetForPerson.addAll(
+                        externalStudentSpecialServiceGroupService.getStudentsExternalSSGsSyncedAsInternalSSGs(person));
+                    person.setSpecialServiceGroups(toSetForPerson);
+
+                } else {
+                    person.setSpecialServiceGroups(externalStudentSpecialServiceGroupService.
+                        getStudentsExternalSSGsSyncedAsInternalSSGs(person));
+                }
+            }
+
 			return person;
 		}
 	}
-	
+
+	/**
+	 * Returns Person by Username
+	 * *WARNING*: Syncs person from external_person and syncs special_service_groups
+	 *  so it may be slow. Best use is when you need a completely up-to-date person
+	 *    such as in add/edit scenarios.
+	 * @param username
+	 *            Required school identifier for the Person to retrieve. Can not
+	 *            be null.
+	 *            Also searches the External Database for the identifier,
+	 *            creating a Person if an ExternalPerson record exists..
+	 * @param commitPerson
+	 * @return
+	 * @throws ObjectNotFoundException
+     */
 	@Override
-	public Person getByUsername(final String username, final Boolean commitPerson)
-			throws ObjectNotFoundException {
+	public Person getSyncedByUsername(final String username, final Boolean commitPerson) throws ObjectNotFoundException {
 
 		final Person obj = dao.fromUsername(username);
-		if(obj != null)
-			return obj;
 
+        if (obj != null) {
+            return obj;
+        }
 
-		final ExternalPerson externalPerson = externalPersonService
-				.getByUsername(username);
+		final ExternalPerson externalPerson = externalPersonService.getByUsername(username);
 		if (externalPerson == null) {
-			throw new ObjectNotFoundException( // NOPMD
-					"Unable to find person by username: " + username,
-					"Person");
+			throw new ObjectNotFoundException("Unable to find person by username: " + username, "Person");
 		}
 
 		final Person person = new Person();
 		evict(person);
-		externalPersonService.updatePersonFromExternalPerson(person,
-				externalPerson, commitPerson);
+		externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
+
+		if (commitPerson) {
+            syncSpecialServiceGroups(person);
+		}
+
 		return person;
 	}
 
+    /**
+     * Returns internal-only person by Username (Doesn't sync from external)
+     * @param username
+     * @return
+     * @throws ObjectNotFoundException
+     */
 	@Override
-	public Person personFromUsername(final String username)
-			throws ObjectNotFoundException {
+	public Person personFromUsername(final String username) throws ObjectNotFoundException {
 
 		final Person obj = dao.fromUsername(username);
 
 		if (null == obj) {
-			throw new ObjectNotFoundException(
-					"Could not find person with username: " + username,
-					"Person");
+			throw new ObjectNotFoundException("Could not find person with username: " + username, "Person");
 		}
+
 		return obj;
 	}
+
+    /**
+     * Returns internal-only person by SchoolId (Doesn't sync from external)
+     * @param schoolId
+     * @return
+     * @throws ObjectNotFoundException
+     */
+    @Override
+    public Person personFromSchoolId(final String schoolId) throws ObjectNotFoundException {
+
+        final Person obj = dao.getBySchoolId(schoolId);
+
+        if (null == obj) {
+            throw new ObjectNotFoundException("Could not find person with schoolId: " + schoolId, "Person");
+        }
+
+        return obj;
+    }
+
+    /**
+     * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
+     *  saving a Person but where getBySchoolIdOrGetFromExternalBySchoolId was run with commit == false.
+     * @param studentToSync
+     */
+    @Override
+    public void syncSpecialServiceGroups(final Person studentToSync) {
+        if (studentToSync != null && studentToSync.getId() != null) {
+            externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(studentToSync);
+        }
+    }
 
 	/**
 	 * Creates a new Person instance based on the supplied model.
@@ -530,8 +608,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public List<Person> peopleFromListOfIds(final List<UUID> personIds,
-			final SortingAndPaging sAndP) {
+	public List<Person> peopleFromListOfIds(final List<UUID> personIds, final SortingAndPaging sAndP) {
 		try {
 			final List<Person> people = dao.getPeopleInList(personIds, sAndP);
 			return people;
@@ -544,51 +621,41 @@ public class PersonServiceImpl implements PersonService {
 	 * Used for Specific Report "Address Labels"
 	 */
 	@Override
-	public List<Person> peopleFromCriteria(
-			final PersonSearchFormTO personSearchFormTO,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+	public List<Person> peopleFromCriteria(final PersonSearchFormTO personSearchFormTO, final SortingAndPaging sAndP)
+                                                                                        throws ObjectNotFoundException {
 
-		final List<Person> people = dao.getPeopleByCriteria(
-				personSearchFormTO,
-				sAndP);
-		return people;
+		final List<Person> people = dao.getPeopleByCriteria(personSearchFormTO, sAndP);
+
+        return people;
 	}
 
 	@Override
 	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP) {
 		long methodStart = new Date().getTime();
-		final Collection<String> coachUsernames =
-				getAllCoachUsernamesFromDirectory();
+		final Collection<String> coachUsernames = getAllCoachUsernamesFromDirectory();
 		long localPersonsLookupStart = new Date().getTime();
-		PagingWrapper<CoachPersonLiteTO> coaches =
-				dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP);
+		PagingWrapper<CoachPersonLiteTO> coaches = dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP);
 		long localPersonsLookupEnd = new Date().getTime();
-		TIMING_LOGGER.info("Read {} local coaches in {} ms",
-				coaches.getResults(),
-				localPersonsLookupEnd - localPersonsLookupStart);
-		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and"
-				+ " correlated them with {} local coaches in {} ms",
-				new Object[] { coachUsernames.size(), coaches.getResults(),
-						localPersonsLookupEnd - methodStart } );
-		return coaches;
+		TIMING_LOGGER.info("Read {} local coaches in {} ms", coaches.getResults(),
+                localPersonsLookupEnd - localPersonsLookupStart);
+		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and correlated them with {} local coaches in {} ms",
+				new Object[] { coachUsernames.size(), coaches.getResults(), localPersonsLookupEnd - methodStart } );
+
+        return coaches;
 	}
 	
 	@Override
 	public PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP, String HomeDepartment) {
 		long methodStart = new Date().getTime();
-		final Collection<String> coachUsernames =
-				getAllCoachUsernamesFromDirectory();
+		final Collection<String> coachUsernames =getAllCoachUsernamesFromDirectory();
 		long localPersonsLookupStart = new Date().getTime();
-		PagingWrapper<CoachPersonLiteTO> coaches =
-				dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP, HomeDepartment);
+		final PagingWrapper<CoachPersonLiteTO> coaches =
+                                            dao.getCoachPersonsLiteByUsernames(coachUsernames, sAndP, HomeDepartment);
 		long localPersonsLookupEnd = new Date().getTime();
-		TIMING_LOGGER.info("Read {} local coaches in {} ms",
-				coaches.getResults(),
-				localPersonsLookupEnd - localPersonsLookupStart);
-		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and"
-				+ " correlated them with {} local coaches in {} ms",
-				new Object[] { coachUsernames.size(), coaches.getResults(),
-						localPersonsLookupEnd - methodStart } );
+		TIMING_LOGGER.info("Read {} local coaches in {} ms", coaches.getResults(),
+                localPersonsLookupEnd - localPersonsLookupStart);
+		TIMING_LOGGER.info("Read {} PersonAttributesService coaches and correlated them with {} local coaches in {} ms",
+				new Object[] { coachUsernames.size(), coaches.getResults(), localPersonsLookupEnd - methodStart } );
 		
 		return coaches;
 	}
@@ -600,12 +667,12 @@ public class PersonServiceImpl implements PersonService {
 
 	private Collection<String> getAllCoachUsernamesFromDirectory() {
 		long pasLookupStart = new Date().getTime();
-		final Collection<String> coachUsernames = personAttributesService
-				.getCoaches();
+		final Collection<String> coachUsernames = personAttributesService.getCoaches();
 		long pasLookupEnd = new Date().getTime();
 		TIMING_LOGGER.info("Read {} coaches from PersonAttributesService in {} ms",
 				coachUsernames.size(), pasLookupEnd - pasLookupStart);
-		return coachUsernames;
+
+        return coachUsernames;
 	}
 
 	@Override
@@ -626,37 +693,39 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public SortedSet<Person> getAllCurrentCoaches(Comparator<Person> sortBy) {
 		final Collection<Person> officialCoaches = getAllCoaches(null).getRows();
-		SortedSet<Person> currentCoachesSet =
-				Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_AND_ID_COMPARATOR : sortBy);
+		final SortedSet<Person> currentCoachesSet =
+                                        Sets.newTreeSet(sortBy == null ? Person.PERSON_NAME_AND_ID_COMPARATOR : sortBy);
 		currentCoachesSet.addAll(officialCoaches);
-		final Collection<Person> assignedCoaches =
-				getAllAssignedCoaches(null).getRows();
+		final Collection<Person> assignedCoaches = getAllAssignedCoaches(null).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
-		return currentCoachesSet;
+
+        return currentCoachesSet;
 	}
 
 	@Override
 	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy) {
 		final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null).getRows();
-		SortedSet<CoachPersonLiteTO> currentCoachesSet =
+		final SortedSet<CoachPersonLiteTO> currentCoachesSet =
 				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR : sortBy);
 		currentCoachesSet.addAll(officialCoaches);
-		final Collection<CoachPersonLiteTO> assignedCoaches =
-				getAllAssignedCoachesLite(null).getRows();
+		final Collection<CoachPersonLiteTO> assignedCoaches = getAllAssignedCoachesLite(null).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
-		return currentCoachesSet;
+
+        return currentCoachesSet;
 	}
 	
 	@Override
-	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy, String homeDepartment) {
-		final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null, homeDepartment).getRows();
-		SortedSet<CoachPersonLiteTO> currentCoachesSet =
-				Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR : sortBy);
+	public SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy,
+                                                                                            String homeDepartment) {
+
+	    final Collection<CoachPersonLiteTO> officialCoaches = getAllCoachesLite(null, homeDepartment).getRows();
+		final SortedSet<CoachPersonLiteTO> currentCoachesSet =
+            Sets.newTreeSet(sortBy == null ? CoachPersonLiteTO.COACH_PERSON_LITE_TO_NAME_AND_ID_COMPARATOR : sortBy);
 		currentCoachesSet.addAll(officialCoaches);
-		final Collection<CoachPersonLiteTO> assignedCoaches =
-				getAllAssignedCoachesLite(null, homeDepartment).getRows();
+		final Collection<CoachPersonLiteTO> assignedCoaches = getAllAssignedCoachesLite(null, homeDepartment).getRows();
 		currentCoachesSet.addAll(assignedCoaches);
-		return currentCoachesSet;
+
+        return currentCoachesSet;
 	}
 
 	@Override
@@ -690,11 +759,13 @@ public class PersonServiceImpl implements PersonService {
 					@Override
 					public Object call() throws Exception {
 						long localPersonLookupStart = new Date().getTime();
-						try {
+
+                        try {
 							coach.set(personFromUsername(coachUsername));
 						} catch (final ObjectNotFoundException e) {
 							LOGGER.debug("Coach {} not found", coachUsername);
 						}
+
 						long localPersonLookupEnd = new Date().getTime();
 						TIMING_LOGGER.info("Read local coach by username {} in {} ms",
 								coachUsername, localPersonLookupEnd - localPersonLookupStart);
@@ -741,36 +812,41 @@ public class PersonServiceImpl implements PersonService {
 					}
 				});
 			} catch ( ConstraintViolationException e ) {
-				if ( "uq_person_school_id".equals(e.getConstraintName()) ) {
+
+					if ( "uq_person_school_id".equals(e.getConstraintName()) ) {
 					LOGGER.warn("Skipping coach with non-unique schoolId '{}' (username '{}')",
 							new Object[] { coach.get().getSchoolId(), coachUsername, e });
 					coach.set(null);
+
 				} else if ( "unique_person_username".equals(e.getConstraintName()) ) {
 					LOGGER.warn("Skipping coach with non-unique username '{}' (schoolId '{}')",
 							new Object[] { coachUsername, coach.get().getSchoolId(), e });
 					coach.set(null);
+
 				} else {
 					throw e;
 				}
 			}
 
-
 			if (coach.get() != null) {
 				coaches.add(coach.get());
 			}
+
 			long singlePersonEnd = new Date().getTime();
 			TIMING_LOGGER.info("SSP coach merge for username {} completed in {} ms",
-					coachUsername, singlePersonEnd - singlePersonStart);
+                    coachUsername, singlePersonEnd - singlePersonStart);
 		}
-		Long mergeLoopEnd = new Date().getTime();
+
+		final Long mergeLoopEnd = new Date().getTime();
 		TIMING_LOGGER.info("All SSP merges for {} coaches completed in {} ms. Reading: {} ms. Writing: {} ms",
 				new Object[] { coachUsernames.size(), mergeLoopEnd - mergeLoopStart,
 						timeInExternalReads.get(), timeInExternalWrites.get() });
 
-		PagingWrapper pw = new PagingWrapper<Person>(coaches);
+		final PagingWrapper pw = new PagingWrapper<Person>(coaches);
 		long methodEnd = new Date().getTime();
 		TIMING_LOGGER.info("Read and merged PersonAttributesService {} coaches in {} ms",
-				coaches.size(), methodEnd - methodStart);
+                coaches.size(), methodEnd - methodStart);
+
 		return pw;
 	}
 
@@ -786,17 +862,14 @@ public class PersonServiceImpl implements PersonService {
 		return withTransaction.withTransactionAndUncheckedExceptions(callable);
 	}
 
-	
-
 	@Override
-	public void setPersonAttributesService(
-			final PersonAttributesService personAttributesService) {
+	public void setPersonAttributesService(final PersonAttributesService personAttributesService) {
 		this.personAttributesService = personAttributesService;
 	}
 	
 	@Override
 	public PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException{
+                                                         final SortingAndPaging sAndP) throws ObjectNotFoundException {
 		return dao.getDisabilityReport(form, sAndP);
 	}
 	
@@ -805,18 +878,15 @@ public class PersonServiceImpl implements PersonService {
 	 */
 	@Override
 	public PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(
-			final PersonSearchFormTO personSearchFormTO,
-			final SortingAndPaging sAndP) throws ObjectNotFoundException {
+            final PersonSearchFormTO personSearchFormTO, final SortingAndPaging sAndP) throws ObjectNotFoundException {
 
-		final PagingWrapper<BaseStudentReportTO> people = dao.getStudentReportTOs(
-				personSearchFormTO,
-				sAndP);
-		return people;
+		final PagingWrapper<BaseStudentReportTO> people = dao.getStudentReportTOs(personSearchFormTO, sAndP);
+
+        return people;
 	}
 
 	@Override
 	public void evict(Person model) {
 		dao.removeFromSession(model);	
 	}
-
 }

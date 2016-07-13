@@ -61,4 +61,6 @@ public interface ScheduledTaskWrapperService {
 	void execBatchedTaskWithName(String taskName, BatchedTask batchedTask, boolean isStatusedTask, UUID runAs);
 
 	void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId);
+
+	public void processSpecialServiceGroupCourseWithdrawal();
 }

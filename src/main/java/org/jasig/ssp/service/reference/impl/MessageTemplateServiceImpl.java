@@ -38,6 +38,7 @@ import org.jasig.ssp.transferobject.GoalTO;
 import org.jasig.ssp.transferobject.StrengthTO;
 import org.jasig.ssp.transferobject.TaskTO;
 import org.jasig.ssp.transferobject.messagetemplate.CoachPersonLiteMessageTemplateTO;
+import org.jasig.ssp.transferobject.messagetemplate.StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO;
 import org.jasig.ssp.transferobject.messagetemplate.TaskMessageTemplateTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplateTO;
@@ -303,6 +304,14 @@ public class MessageTemplateServiceImpl extends
 	}
 
 	@Override
+	public SubjectAndBody createSpecialServiceGroupCourseWithdrawalCoachMessage(CoachPersonLiteMessageTemplateTO coach, List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students) {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("coach", coach);
+		messageParams.put("students", students);
+		return populateFromTemplate(MessageTemplate.EMAIL_SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TO_ADVISOR_ID, messageParams);
+	}
+
+	@Override
 	public <TOO extends AbstractPlanOutputTO<T, TO>, T extends AbstractPlan,TO extends AbstractPlanTO<T>> SubjectAndBody createMapPlanMatrixOutput(
 			AbstractMessageTemplateMapPrintParamsTO<TOO, T, TO> params, Map<String,Object> additionalParams) {
 		
@@ -506,6 +515,8 @@ public class MessageTemplateServiceImpl extends
 			messageParams = createTemplatePlanPrintoutMessageParams();
 		} else if (id.equals(MessageTemplate.BULK_ADD_CASELOAD_REASSIGNMENT_ID)) {
 			messageParams = createBulkAddCaseloadReassignmentMessageParams();
+		} else if (id.equals(MessageTemplate.EMAIL_SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TO_ADVISOR_ID)) {
+			messageParams = createSpecialServiceGroupCourseWithdrawalToAdvisorMessageParams();
 		} else{
 			messageParams = new HashMap<String, Object>();
 		}
@@ -747,4 +758,10 @@ public class MessageTemplateServiceImpl extends
 		return messageParams;
 	}
 
+	private Map<String,Object> createSpecialServiceGroupCourseWithdrawalToAdvisorMessageParams() {
+		final Map<String, Object> messageParams = new HashMap<String, Object>();
+		messageParams.put("coach", MessageTemplatePreviewTOBuilder.createCoachPersonLiteMessageTemplateTO());
+		messageParams.put("students", MessageTemplatePreviewTOBuilder.createStudentSpecialServiceGroupCourseWithdrawalMessageTemplateTOList());
+		return messageParams;
+	}
 }

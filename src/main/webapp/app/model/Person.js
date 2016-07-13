@@ -328,5 +328,9 @@ Ext.define('Ssp.model.Person', {
         me.set('coach', jsonData.coach);
         me.set('studentType', jsonData.studentType);
         me.set('homeCampus', jsonData.homeCampus);
+
+		if (jsonData.specialServiceGroups) {
+			me.set('specialServiceGroups', jsonData.specialServiceGroups);
+		}
     }
 });
