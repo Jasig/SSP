@@ -483,9 +483,15 @@ public class DirectoryPersonSearchDao  {
                                                                                         StringBuilder stringBuilder) {
 		if (hasSpecialServiceGroup(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" ((dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
-            stringBuilder.append(" or (esssg.schoolId = dp.schoolId and esssg.code = secondssg.code and secondssg.objectStatus = 1 and secondssg in (:specialServiceGroup) and secondssg is not null)) ");
-		}
+
+            if (personSearchRequest.getPersonTableType() == null ||
+                    !personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)) {
+                stringBuilder.append(" ((dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
+                stringBuilder.append(" or (dp.personId is null and esssg.schoolId = dp.schoolId and esssg.code = secondssg.code and secondssg.objectStatus = 1 and secondssg in (:specialServiceGroup) and secondssg is not null)) ");
+            } else {
+                stringBuilder.append(" (dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
+            }
+        }
 	}
 
 	private boolean hasSpecialServiceGroup(PersonSearchRequest personSearchRequest) {
@@ -994,8 +1000,9 @@ public class DirectoryPersonSearchDao  {
 			stringBuilder.append(", WatchStudent ws ");
 		}
 
-		if (hasSpecialServiceGroup(personSearchRequest)) {
-		    stringBuilder.append(", ExternalStudentSpecialServiceGroup esssg , SpecialServiceGroup secondssg");
+		if (hasSpecialServiceGroup(personSearchRequest) && (personSearchRequest.getPersonTableType() == null ||
+                !personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY))) {
+		    stringBuilder.append(", ExternalStudentSpecialServiceGroup esssg , SpecialServiceGroup secondssg ");
         }
 		
 		return true;
