@@ -22,13 +22,16 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PersonSpecialServiceGroupDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.PersonSpecialServiceGroupService;
+import org.jasig.ssp.util.collections.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -53,6 +56,18 @@ public class PersonSpecialServiceGroupServiceImpl extends AbstractPersonAssocAud
 			LOGGER.debug("Can't get Special Service Groups by Code for Person that is empty!");
 			return null;
 		}
+	}
+
+    /**
+     * Gets campusName and Special Service Group Names for all students internal/external with
+     *   SSGs assigned. Used for report.
+     * @param ssgs
+     * @return Map key is schoolId and stored object is a Pair<campusName, List<ssgNames>>
+     */
+	@Override
+	public Map<String, Pair<String, List<String>>> getAllSSGNamesWithCampusForInternalAndExternalStudentsWithSSGs(
+	                                                                            final List<SpecialServiceGroup> ssgs) {
+		return dao.getAllSSGNamesWithCampusForInternalAndExternalStudentsWithSSGs(ssgs);
 	}
 
 	@Override

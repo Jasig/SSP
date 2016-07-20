@@ -18,10 +18,9 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import org.jasig.ssp.util.collections.Pair;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jasig.ssp.util.collections.Pair;
 
 public class ReportListTO {
 
@@ -35,8 +34,10 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("counselingRefGuideForm","Counseling Reference Guide"));		
 		reports.add(new Pair<String,String>("counselorCaseManagementReport","Counselor Case Management Report"));
 		reports.add(new Pair<String,String>("specialServicesForm","Special Services Report"));
-		if(accomodationPermission)
-			reports.add(new Pair<String,String>("disabilityServices","Disability Services Report"));
+        reports.add(new Pair<String, String>("specialServiceCourseReport", "Special Service Course Report"));
+		if (accomodationPermission) {
+			reports.add(new Pair<String, String>("disabilityServices", "Disability Services Report"));
+		}
 		reports.add(new Pair<String,String>("studentChallenges","Student Challenges Report"));
 		reports.add(new Pair<String,String>(null,"- Early Alert Reports -"));
 		reports.add(new Pair<String,String>("earlyAlertCaseCounts","Early Alert Case Counts Report"));

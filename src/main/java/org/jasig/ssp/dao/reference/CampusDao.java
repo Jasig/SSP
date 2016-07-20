@@ -18,11 +18,15 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.reference.Campus;
 import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Data access class for the Campus reference entity.
@@ -47,5 +51,14 @@ public class CampusDao extends AbstractReferenceAuditableCrudDao<Campus>
 		return (Campus) query.uniqueResult();
 	}
 
+    public List<Campus> getByIds(List<UUID> campusIds) {
+        if (CollectionUtils.isEmpty(campusIds)) {
+            return Lists.newArrayList();
+        }
 
+        final Criteria query = createCriteria();
+        query.add(Restrictions.in("id", campusIds));
+
+        return query.list();
+    }
 }

@@ -78,7 +78,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 
     /**
      * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
-     *  saving a Person but where getBySchoolIdOrGetFromExternalBySchoolId was run with commit == false.
+     *  saving a Person but where getInternalOrExternalPersonBySchoolId was run with commit == false.
      * @param studentToSync
      */
     void syncSpecialServiceGroups(Person studentToSync);
@@ -124,26 +124,35 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 */
 	List<Person> peopleFromListOfIds(List<UUID> personIds, SortingAndPaging sAndP);
 
-	/**
-	 * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
+    /**
+     * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
+     *
+     * @param studentId
+     *            Required school identifier for the Person to retrieve. Should not be null/empty.
+     * @return The specified Person instance.
+     * @throws ObjectNotFoundException If the supplied identifier does not exist in the database at all
+     */
+	Person getInternalOrExternalPersonBySchoolIdLite(String studentId) throws ObjectNotFoundException;
+
+    /**
+     * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
      *
      * *NOTE*: If school_id is *not* in Person (internal), it then retrieves from external_person
-     *    if exists and syncs the recordd.
+     *    if exists and syncs the record.
      *
      * *WARNING*: Syncs person from external_person and syncs special_service_groups
      *  so it may be slow. Best use is when you need a completely up-to-date person
-     *    such as in add/edit scenarios.
-	 * 
-	 * @param studentId
-	 *            Required school identifier for the Person to retrieve. Can not
-	 *            be null.
-	 *            Also searches the External Database for the identifier,
-	 *            creating a Person if an ExternalPerson record exists..
-	 * @exception ObjectNotFoundException
-	 *                If the supplied identifier does not exist in the database.
-	 * @return The specified Person instance.
-	 */
-	Person getBySchoolIdOrGetFromExternalBySchoolId(String studentId,boolean commitPerson) throws ObjectNotFoundException;
+     *    such as in add/edit scenarios. Use the "light" method getInternalOrExternalPersonBySchoolIdLite instead.
+     *
+     * @param studentId
+     *            Required school identifier for the Person to retrieve. Can not be null/empty.
+     *            Also searches the External Database for the identifier, creating a Person if an ExternalPerson
+     *            record exists.
+     * @param commitPerson If true, saves the syncd person in the database.
+     * @return The specified Person instance.
+     * @throws ObjectNotFoundException If the supplied identifier does not exist in the database at all
+     */
+	Person getInternalOrExternalPersonBySchoolId(String studentId,boolean commitPerson) throws ObjectNotFoundException;
 
     /**
      * Retrieves the specified Person by their User name (userName) and syncs from external for the most up to date

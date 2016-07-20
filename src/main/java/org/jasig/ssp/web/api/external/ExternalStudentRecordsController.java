@@ -230,7 +230,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		if (courses!=null) {
 			for (ExternalStudentTranscriptCourseTO course : courses) {
 				try {
-					Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolIdOrGetFromExternalBySchoolId(course.getFacultySchoolId(), false); //TODO: getBySchoolIdOrGetFromExternalBySchoolId is slow refactor?
+					Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getInternalOrExternalPersonBySchoolId(course.getFacultySchoolId(), false); //TODO: getInternalOrExternalPersonBySchoolId is slow refactor?
 					if (person != null) {
 						course.setFacultyName(person.getFullName());
 					}
@@ -267,7 +267,7 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		
 		for(ExternalStudentTranscriptCourseTO course:courses){
 			try{
-				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getBySchoolIdOrGetFromExternalBySchoolId(course.getFacultySchoolId(),false); //TODO: getBySchoolIdOrGetFromExternalBySchoolId is slow refactor?
+				Person person = !StringUtils.isNotBlank(course.getFacultySchoolId()) ? null : personService.getInternalOrExternalPersonBySchoolId(course.getFacultySchoolId(),false); //TODO: getInternalOrExternalPersonBySchoolId is slow refactor?
 				if (person != null) {
 					course.setFacultyName(person.getFullName());
 				}

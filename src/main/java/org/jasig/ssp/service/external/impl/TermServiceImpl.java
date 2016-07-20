@@ -25,7 +25,7 @@ import org.jasig.ssp.service.external.TermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,8 +35,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class TermServiceImpl extends AbstractExternalReferenceDataService<Term>
-		implements TermService {
+public class TermServiceImpl extends AbstractExternalReferenceDataService<Term> implements TermService {
 
 	@Autowired
 	transient private TermDao dao;
@@ -78,5 +77,15 @@ public class TermServiceImpl extends AbstractExternalReferenceDataService<Term>
 	@Override
 	public List<Term> getTermsByCodes(List<String> codes){
 		return dao.getTermsByCodes(codes);
+	}
+
+	@Override
+	public List<Term> getTermsByDateRange(final Date dateFrom, final Date dateTo) {
+		return dao.getTermsByEndDateRange(dateFrom, dateTo);
+	}
+
+	@Override
+	public List<String> getTermCodesByDateRange(final Date dateFrom, final Date dateTo) {
+		return dao.getTermCodessByEndDateRange(dateFrom, dateTo);
 	}
 }

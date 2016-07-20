@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-07-21T11:47:16 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank Letter Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de052e81-a0fc-4bfe-a86d-fd593cff06df">
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.4" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="39"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="termCode" class="java.lang.String"/>
+	<parameter name="campusNames" class="java.lang.String"/>
+	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
+	<parameter name="termName" class="java.lang.String"/>
+	<parameter name="reportTitle" class="java.lang.String"/>
+	<parameter name="courseStatusCodes" class="java.lang.String"/>
+	<parameter name="courseGrades" class="java.lang.String"/>
+	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
+	<field name="formattedCourse" class="java.lang.String"/>
+	<field name="courseTitle" class="java.lang.String"/>
+	<field name="termCode" class="java.lang.String"/>
+	<field name="campusName" class="java.lang.String"/>
+	<field name="grade" class="java.lang.String"/>
+	<field name="statusCode" class="java.lang.String"/>
+	<field name="facultyName" class="java.lang.String"/>
+	<field name="schoolId" class="java.lang.String"/>
+	<field name="studentName" class="java.lang.String"/>
+	<field name="specialServiceGroupNamesForDisplay" class="java.lang.String"/>
+	<variable name="rowIndex" class="java.lang.Integer">
+		<variableExpression><![CDATA[Integer.valueOf($V{rowIndex}.intValue() + 1)]]></variableExpression>
+		<initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="103" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="265" height="20" uuid="255b284c-e962-4bd2-a35c-c07141e46079"/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="387" y="0" width="100" height="20" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Course Term]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="487" y="0" width="265" height="20" isPrintWhenDetailOverflows="true" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[($P{termName} == null) ? "Not Used" : $P{termName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="20" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Home Campus]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="100" y="20" width="265" height="20" isPrintWhenDetailOverflows="true" uuid="64aa21a8-5fbc-4465-b2c4-991e4c0e6450"/>
+				<textFieldExpression><![CDATA[$P{campusNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="387" y="20" width="100" height="20" uuid="98c9e2ab-f50f-40dc-b762-74e63b4064e4"/>
+				<text><![CDATA[Start Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="487" y="20" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="2b2d94b6-f0b8-4ded-b828-640c7df406a7"/>
+				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="387" y="40" width="100" height="20" uuid="3a2a08fe-a1a6-4857-8b87-ff440ba41dcf"/>
+				<text><![CDATA[End Date: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="487" y="40" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="de2c3b0f-7d20-4c4f-abcc-78ce1fb55e2b"/>
+				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="100" height="20" uuid="17800dac-5c0a-42b0-a9d9-e0265953420b"/>
+				<text><![CDATA[Course Status]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="100" y="40" width="265" height="20" isPrintWhenDetailOverflows="true" uuid="605318d0-257c-40fe-b8d9-f79b767e8d8d"/>
+				<textFieldExpression><![CDATA[$P{courseStatusCodes}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="100" height="20" uuid="e6b316af-3434-441b-92b3-76764e49cab0"/>
+				<text><![CDATA[Course Grade]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="" stretchType="RelativeToBandHeight" x="100" y="60" width="265" height="20" isPrintWhenDetailOverflows="true" uuid="5c789fd0-b042-4406-9244-d02da756f62c"/>
+				<textFieldExpression><![CDATA[$P{courseGrades}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="120" height="20" uuid="5d766bcb-eddb-43c9-a62b-6be8ddd831c2"/>
+				<text><![CDATA[Special Service Groups
+]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="120" y="80" width="631" height="20" isPrintWhenDetailOverflows="true" uuid="be208ea0-e947-4598-abdd-c971736c1ac2"/>
+				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="1" y="1" width="750" height="26" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="1" y="1" width="750" height="26" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Special Service Student Course Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="350" y="0" width="81" height="15" uuid="db3177cf-53a3-403d-a6e6-57a3a027363c"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Home Campus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="431" y="0" width="35" height="15" uuid="4a0c6f39-c89f-448c-8dd9-331963d7ed07"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Term]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="90" height="15" uuid="64786995-51bb-4371-825c-8bcda2736520"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Course Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="466" y="0" width="44" height="15" uuid="8f46dd95-889f-42c4-9c0c-b41c89f7da7c"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Course]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="670" y="0" width="40" height="15" uuid="64786995-51bb-4371-825c-8bcda2736520"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="710" y="0" width="41" height="15" uuid="c264d092-e7c2-4b5f-ac23-6c6156d107a1"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="70" height="15" uuid="e4c7de73-e3aa-41b7-91a6-37e451bd28bc"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Student Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="110" height="15" uuid="10184859-e165-41c2-b166-a9f6b0a647bf"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Student Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="70" height="15" uuid="ca62d70d-5c59-4c54-b459-c381ea3f8824"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Instructor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="170" height="15" uuid="975fee41-a01f-4e7a-90fa-62180146dfec"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Special Services]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="3" width="752" height="20" backcolor="#E4E4E4" uuid="2eecc840-e159-457d-817b-71dbb2771e16">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="350" y="3" width="81" height="16" isPrintWhenDetailOverflows="true" uuid="9580f064-c46f-4e74-b845-25f33c427ed6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{campusName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="431" y="3" width="35" height="16" isPrintWhenDetailOverflows="true" uuid="4cc73f34-e9a7-4b28-b4dd-c5c5ccca66b9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{termCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="510" y="3" width="90" height="16" isPrintWhenDetailOverflows="true" uuid="294ddbce-601e-4d1f-b57a-c56521042369"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{courseTitle}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="466" y="3" width="44" height="16" isPrintWhenDetailOverflows="true" uuid="2f6fc5da-c066-4fd0-accb-8259ea7f96d6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{formattedCourse}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="670" y="3" width="40" height="16" isPrintWhenDetailOverflows="true" uuid="862d9bad-4a09-4795-8539-b7789f997222"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{statusCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="710" y="3" width="41" height="16" isPrintWhenDetailOverflows="true" uuid="2c1f9a52-8b05-4b6b-aac4-ed89c066f072"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{grade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="1" y="3" width="69" height="16" isPrintWhenDetailOverflows="true" uuid="da4e5b48-745f-4c9e-8263-97a31b5cb27a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{schoolId}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="" stretchType="RelativeToBandHeight" x="600" y="3" width="70" height="16" isPrintWhenDetailOverflows="true" uuid="469047fd-3eda-47d9-b6b7-8b6f65da6bde"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{facultyName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="180" y="3" width="170" height="16" isPrintWhenDetailOverflows="true" uuid="b1b98198-c982-40ac-ae0f-c76d3da32c6f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{specialServiceGroupNamesForDisplay}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="70" y="3" width="110" height="16" isPrintWhenDetailOverflows="true" uuid="34254c21-4367-41e0-baf4-dc67d4f1e823"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{studentName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="22">
+			<textField>
+				<reportElement x="332" y="1" width="53" height="20" uuid="cf8d5f7c-5193-4420-8c22-1d2121aa6596"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="385" y="1" width="38" height="20" uuid="4960753c-8ce1-4785-a0cf-376de9ea4c62"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

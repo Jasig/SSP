@@ -21,8 +21,9 @@ package org.jasig.ssp.service.reference;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.ReferenceService;
-
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Campus service
@@ -30,6 +31,8 @@ import javax.validation.constraints.NotNull;
  * @author jon.adams
  */
 public interface CampusService extends ReferenceService<Campus> {
-    Campus getByCode(@NotNull String code)
-            throws ObjectNotFoundException;
+
+    Campus getByCode(@NotNull String code) throws ObjectNotFoundException;
+
+    List<Campus> get(List<UUID> campusIds);
 }

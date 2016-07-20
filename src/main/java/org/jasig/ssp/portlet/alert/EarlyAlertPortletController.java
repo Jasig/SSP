@@ -228,7 +228,7 @@ public final class EarlyAlertPortletController {
 			 */
 			if(StringUtils.isNotBlank(schoolId)) {
 				try {
-					student = personService.getBySchoolIdOrGetFromExternalBySchoolId(schoolId, true);  // TODO:  Handle error better??
+					student = personService.getInternalOrExternalPersonBySchoolId(schoolId, true);  // TODO:  Handle error better??
 					if ( student == null ) {
 						throw new EarlyAlertPortletControllerRuntimeException("Student not found by school ID: " + schoolId);
 					}

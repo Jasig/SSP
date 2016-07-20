@@ -219,7 +219,7 @@ public class PersonController extends AbstractBaseController {
 	PersonTO bySchoolId(final @PathVariable String id)
 			throws ObjectNotFoundException {
 
-		final Person model = service.getBySchoolIdOrGetFromExternalBySchoolId(id,false); //method is slow but proper use
+		final Person model = service.getInternalOrExternalPersonBySchoolId(id,false); //method is slow but proper use
 		if (model == null) {
 			return null;
 		}

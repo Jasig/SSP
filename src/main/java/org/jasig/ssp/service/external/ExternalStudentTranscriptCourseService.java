@@ -18,14 +18,27 @@
  */
 package org.jasig.ssp.service.external;
 
-import java.util.List;
-
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.transferobject.reports.SpecialServiceStudentCoursesTO;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public interface ExternalStudentTranscriptCourseService extends
 		ExternalDataService<ExternalStudentTranscriptCourse> {
 	
 	List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolId(String schoolId);
+
 	List<ExternalStudentTranscriptCourse> getTranscriptsBySchoolIdAndTermCode(String schoolId, String termCode);
 
+    /**
+     * Returns Special Service Student Course Report TOs based for passed schoolIds.
+     *   It is batched.
+     * @param schoolIds
+     * @param termCodes
+     * @param grades
+     * @param statuses
+     * @return
+     */
+    List<SpecialServiceStudentCoursesTO> getTranscriptCoursesBySchoolIds(
+            @NotNull List<String> schoolIds, List<String> termCodes, List<String> grades, List<String> statuses);
 }

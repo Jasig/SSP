@@ -20,7 +20,10 @@ package org.jasig.ssp.service;
 
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.util.collections.Pair;
 import java.util.List;
+import java.util.Map;
 
 public interface PersonSpecialServiceGroupService extends PersonAssocAuditableService<PersonSpecialServiceGroup> {
 
@@ -29,4 +32,13 @@ public interface PersonSpecialServiceGroupService extends PersonAssocAuditableSe
     void deleteAllForPerson(Person person);
 
     void deleteByCode(String code, Person person);
+
+    /**
+     * Gets campusName and Special Service Group Names for all students internal/external with
+     *   SSGs assigned. Used for report.
+     * @param ssgParams
+     * @return Map key is schoolId and stored object is a Pair<campusName, List<ssgNames>>
+     */
+    Map<String, Pair<String, List<String>>> getAllSSGNamesWithCampusForInternalAndExternalStudentsWithSSGs(
+            List<SpecialServiceGroup> ssgParams);
 }

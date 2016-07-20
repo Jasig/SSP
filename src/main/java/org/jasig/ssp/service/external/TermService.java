@@ -20,7 +20,7 @@ package org.jasig.ssp.service.external;
 
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
-
+import java.util.Date;
 import java.util.List;
 
 public interface TermService extends ExternalReferenceDataService<Term> {
@@ -34,5 +34,10 @@ public interface TermService extends ExternalReferenceDataService<Term> {
 	List<Term> facetSearch(String tag, String programCode);
 
 	List<Term> getTermsWithRegistrationWindowOpenIfAny();
+
 	List<Term> getTermsByCodes(List<String> codes);
+
+    List<Term> getTermsByDateRange(Date dateFrom, Date dateTo);
+
+    List<String> getTermCodesByDateRange(Date dateFrom, Date dateTo);
 }

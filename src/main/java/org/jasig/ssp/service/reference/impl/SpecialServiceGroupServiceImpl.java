@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -54,4 +55,9 @@ public class SpecialServiceGroupServiceImpl extends AbstractReferenceService<Spe
     public List<SpecialServiceGroup> getByNotifyOnWithdraw(final boolean notifyOnWithdraw) throws ObjectNotFoundException {
         return this.dao.getByNotifyOnWithdraw(notifyOnWithdraw);
     }
+
+	@Override
+	public List<SpecialServiceGroup> get(final List<UUID> specialServiceGroupIds) {
+		return this.dao.getByIds(specialServiceGroupIds);
+	}
 }

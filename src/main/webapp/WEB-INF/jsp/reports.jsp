@@ -687,6 +687,141 @@
         </div>
 
 
+        <div class="hideable-form special-service-course-report" style="display:none">
+            <h1>Special Service Student Course Report</h1>
+            <form action="/ssp/api/1/report/specialservicestudentcourses" method="get"
+                target="_blank" onSubmit="return validateForm(this);" class="alert-form">
+
+                <!-- Student Type -->
+                <!-- <div class="ea-input">
+                    <select class="input-student-type-group" id="specialServicesStudentTypeIds" name="studentTypeIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Student Type:</span>
+                </div>
+                <div class="ea-clear"></div> -->
+
+                <!-- Service Reason -->
+                <!-- <div class="ea-input">
+                    <select class="input-service-reason-group" id="specialServicesServiceReasonIds" name="serviceReasonIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Service Reason:</span>
+                </div>
+                <div class="ea-clear"></div> -->
+
+                <!-- Special Service Groups -->
+                <div class="ea-input">
+                    <select class="input-special-service-group" id="SpecialServiceGroupIds" name="specialServiceGroupIds"
+                        multiple="multiple">
+                        <option value="">${all_found}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Special Service Groups:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Home Campus -->
+                <div class="ea-input">
+                    <select class="input-home-campus-group" id="homeCampusIds" name="homeCampusIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Home Campus:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Course Status Codes -->
+                <div class="ea-input">
+                    <input type="textbox" name="specialServiceCourseStatuses" id="specialServiceCourseStatuses"
+                        value="W, WF">
+                </div>
+                <div class="ea-label">
+                    <span>Course Status: </span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Course Grades -->
+                <div class="ea-input">
+                    <input type="textbox" name="specialServiceCourseGrades" id="specialServiceCourseGrades"
+                        value="D+, D, D-, F">
+                </div>
+                <div class="ea-label">
+                    <span>Course Grade: </span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Date Range Description -->
+                <div class="ea-input"></div>
+                <div class="ea-label">
+                    <span>Course Term: </span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Semester Date Range Selection -->
+                <div class="ea-time-span">
+                    <div class="ea-term">
+                        <div class="ea-input">
+                            <select id="specialServiceCoursesTermCode" name="termCode" class="input-term-group">
+                                <option value="">${not_applicable}</option>
+                            </select>
+                        </div>
+                        <div class="ea-label">
+                            <span>Term:</span>
+                        </div>
+                        <div class="ea-clear"></div>
+                    </div>
+                    <div class="ea-date-range">
+                        <!-- Date From -->
+                        <div class="ea-input">
+                            <input class="input-calendar-type" type="textbox" name="createDateFrom" id="specialServiceCoursesCreateDateFrom">
+                        </div>
+                        <div class="ea-label">
+                            <span>Start Date (inclusive)::</span>
+                        </div>
+                        <div class="ea-clear"></div><!-- Date To -->
+                        <div class="ea-input">
+                            <input class="input-calendar-type" type="textbox" name="createDateTo" id="specialServiceCoursesCreateDateTo">
+                        </div>
+                        <div class="ea-label">
+                            <span>End Date (exclusive)::</span>
+                        </div>
+                        <div class="ea-clear"></div>
+                    </div>
+                    <div class="ea-buttons">
+                        <div>
+                            <button class="switch-date-range-type button" value="setbyrange"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- output type -->
+                <div class="ea-input">
+                    <label><span>pdf</span></label><input type="radio" name="reportType"
+                    value="pdf" checked /><br /> <label><span>csv</span></label><input
+                    type="radio" name="reportType" value="csv" />
+                </div>
+
+                <div class="ea-label">
+                    <span>Output Type:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <div class="ea-buttons">
+                    <div class="buttons">
+                        <input class="button primary button-send" type="submit" value="submit" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
         <div class="hideable-form caseLoad-form" style="display:none">
             <h1>Current Caseload Statuses Report</h1>
             <form action="/ssp/api/1/report/Caseload/" method="get"
@@ -777,63 +912,63 @@
         </div>
     </div>
 
-        <div class="hideable-form early-alert-case-counts-report" style="display:none">
-            <h1>Early Alert Case Counts Report</h1>
-            <form action="/ssp/api/1/report/earlyalertcasecounts" method="get"
-                target="_blank" onSubmit="return validateForm(this);" class="alert-form">
+    <div class="hideable-form early-alert-case-counts-report" style="display:none">
+        <h1>Early Alert Case Counts Report</h1>
+        <form action="/ssp/api/1/report/earlyalertcasecounts" method="get"
+            target="_blank" onSubmit="return validateForm(this);" class="alert-form">
 
-                <!-- Campus -->
-                <div class="ea-input">
-                    <select id="earlyAlertCaseCountsCampusName" name="campusId" class="input-campus-group">
-                        <option value="">${not_applicable}</option>
-                    </select>
-                </div>
-                <div class="ea-label">
-                    <span>Campus:</span>
-                </div>
-                <div class="ea-clear"></div>
+            <!-- Campus -->
+            <div class="ea-input">
+                <select id="earlyAlertCaseCountsCampusName" name="campusId" class="input-campus-group">
+                    <option value="">${not_applicable}</option>
+                </select>
+            </div>
+            <div class="ea-label">
+                <span>Campus:</span>
+            </div>
+            <div class="ea-clear"></div>
 
-                <!-- Roster Status
-                <div class="ea-input">
-                    <select id="earlyAlertCaseCountRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
-                        <option value="">${not_applicable}</option>
-                    </select>
-                </div>
-                <div class="ea-label">
-                    <span>Roster Status:</span>
-                </div>
-                <div class="ea-clear"></div>
-                -->
-                <!-- Term -->
-                <div class="ea-input">
-                    <select id="termCodes" multiple="multiple" name="termCodes" class="input-term-group">
-                        <option value="">${not_applicable}</option>
-                    </select>
-                </div>
-                <div class="ea-label">
-                    <span>Term:</span>
-                </div>
-                <div class="ea-clear"></div>
+            <!-- Roster Status
+            <div class="ea-input">
+                <select id="earlyAlertCaseCountRosterStatus" name="rosterStatus" class="input-roster-status-code-group">
+                    <option value="">${not_applicable}</option>
+                </select>
+            </div>
+            <div class="ea-label">
+                <span>Roster Status:</span>
+            </div>
+            <div class="ea-clear"></div
+            -->
+            <!-- Term -->
+            <div class="ea-input">
+                <select id="termCodes" multiple="multiple" name="termCodes" class="input-term-group">
+                    <option value="">${not_applicable}</option>
+                </select>
+            </div>
+            <div class="ea-label">
+                <span>Term:</span>
+            </div>
+            <div class="ea-clear"></div>
 
-                <!-- output type -->
-                <div class="ea-input">
-                    <label><span>pdf</span></label><input type="radio" name="reportType"
-                        value="pdf" checked /><br /> <label><span>csv</span></label><input
-                        type="radio" name="reportType" value="csv" />
-                </div>
+            <!-- output type -->
+            <div class="ea-input">
+                <label><span>pdf</span></label><input type="radio" name="reportType"
+                    value="pdf" checked /><br /> <label><span>csv</span></label><input
+                    type="radio" name="reportType" value="csv" />
+            </div>
 
-                <div class="ea-label">
-                    <span>Output Type:</span>
-                </div>
-                <div class="ea-clear"></div>
+            <div class="ea-label">
+                <span>Output Type:</span>
+            </div>
+            <div class="ea-clear"></div>
 
-                <div class="ea-buttons">
-                    <div class="buttons">
-                        <input class="button primary button-send" type="submit" value="submit" />
-                    </div>
+            <div class="ea-buttons">
+                <div class="buttons">
+                    <input class="button primary button-send" type="submit" value="submit" />
                 </div>
+            </div>
             </form>
-        </div>
+       </div>
 
 
         <div class="hideable-form early-alert-course-counts-report" style="display:none">
@@ -922,8 +1057,7 @@
 
                 <div class="ea-buttons">
                     <div class="buttons">
-                        <input class="button primary button-send" type="submit"
-                            value="submit" />
+                        <input class="button primary button-send" type="submit" value="submit" />
                     </div>
                 </div>
             </form>

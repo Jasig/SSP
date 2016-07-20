@@ -18,10 +18,12 @@
  */
 package org.jasig.ssp.dao.external;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -31,7 +33,9 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 
 /**
  * Data access class for the Term reference entity.
@@ -55,8 +59,7 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 		final List <Term> term = (List<Term>) query.list();
 
 		if (term == null || term.isEmpty()) {
-			throw new ObjectNotFoundException("Current Term not Defined",
-					"Term");
+			throw new ObjectNotFoundException("Current Term not Defined", "Term");
 		} else {
 			return term.get(0);
 		}
@@ -72,8 +75,7 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 		final List <Term> term = (List<Term>) query.list();
 
 		if (term == null || term.isEmpty()) {
-			throw new ObjectNotFoundException("Next Term not Defined for Date: " + termEndDate.toString(),
-					"Term");
+			throw new ObjectNotFoundException("Next Term not Defined for Date: " + termEndDate.toString(), "Term");
 		} else {
 			return term.get(0);
 		}
@@ -89,8 +91,7 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 		final List<Term> terms = (List<Term>) query.list();
 
 		if (terms == null || terms.isEmpty()) {
-			throw new ObjectNotFoundException("Could not find any terms",
-					"Term");
+			throw new ObjectNotFoundException("Could not find any terms", "Term");
 		} else {
 			return terms;
 		}
@@ -98,77 +99,115 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
 	
 	@Override
 	public PagingWrapper<Term> getAll(final SortingAndPaging sAndP) {
-		return processCriteriaWithSortingAndPaging(createCriteria(),
-				sAndP, false);
+		return processCriteriaWithSortingAndPaging(createCriteria(), sAndP, false);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Term> facetSearch(String tag, String programCode) {
-		Query hqlQuery = createHqlQuery(buildProgramSearchQuery(tag, programCode));
+		final Query hqlQuery = createHqlQuery(buildProgramSearchQuery(tag, programCode));
 		buildProgramSearchParamList(tag, programCode, hqlQuery);
-		List<Term> result = hqlQuery.list();
-		return result;	}
 
-	private void buildProgramSearchParamList(String tag, String programCode,
-			Query hqlQuery) {
-		
+        return hqlQuery.list();
+	}
+
+	private void buildProgramSearchParamList(String tag, String programCode,Query hqlQuery) {
+
 		hqlQuery.setDate("now", DateTimeUtils.midnight());
-		if(!StringUtils.isEmpty(programCode))
-		{
+		if (!StringUtils.isEmpty(programCode)) {
 			hqlQuery.setString("programCode", programCode);
 		}
-		if(!StringUtils.isEmpty(tag))
-		{
+
+		if (!StringUtils.isEmpty(tag)) {
 			hqlQuery.setString("tag", tag);
 		}			
 	}
 
 	private String buildProgramSearchQuery(String tag, String programCode) {
-		StringBuilder query = new StringBuilder();
+		final StringBuilder query = new StringBuilder();
 		query.append(" select distinct et from Term et , ExternalCourseTerm ect , ExternalCourse ec ");
-		if(!StringUtils.isEmpty(tag))
-		{
+
+        if (!StringUtils.isEmpty(tag)) {
 			query.append(" ,ExternalCourseTag ectg ");
-			
 		}
-		if(!StringUtils.isEmpty(programCode))
-		{
+
+		if (!StringUtils.isEmpty(programCode)) {
 			query.append(" ,ExternalCourseProgram ecp ");
 		}
 		query.append(" where ");
 		query.append(" et.code = ect.termCode ");
 		query.append(" and ect.courseCode = ec.code  ");
 		query.append(" and et.endDate >= :now  ");
-		if(!StringUtils.isEmpty(tag))
-		{
+
+        if (!StringUtils.isEmpty(tag)) {
 			query.append(" and ec.code = ectg.courseCode ");
 			query.append(" and ectg.tag = :tag ");
-		}	
-		if(!StringUtils.isEmpty(programCode))
-		{
+		}
+
+		if (!StringUtils.isEmpty(programCode)) {
 			query.append(" and ec.code = ecp.courseCode ");
 			query.append(" and ecp.programCode = :programCode  ");
 		}
 		query.append(" order by et.startDate ");
-		return query.toString();	
+
+        return query.toString();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Term> getTermsWithRegistrationWindowOpenIfAny() {
-		String query = "from Term term where term.registrationStartDate <= current_date() and current_date() <= term.registrationEndDate";
-		List<Term> result = createHqlQuery(query).list();
-		return result;
+		final String query = "from Term term where term.registrationStartDate <= current_date() and current_date() <= term.registrationEndDate";
+
+        return createHqlQuery(query).list();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Term> getTermsByCodes(List<String> codes) {
-		if(codes == null || codes.size() == 0)
-			return new ArrayList<Term>();
+		if (codes == null || codes.size() == 0) {
+            return new ArrayList<Term>();
+        }
 		
-		String hql = "from Term term where term.code in :codes";
-		Query query = createHqlQuery(hql);
+		final String hql = "from Term term where term.code in :codes";
+		final Query query = createHqlQuery(hql);
 		query.setParameterList("codes", codes);
-		return query.list();
+
+        return query.list();
 	}
-	
+
+    public List<Term> getTermsByEndDateRange(Date dateFrom, Date dateTo) {
+        if (dateFrom == null && dateTo == null) {
+            return Lists.newArrayList();
+        }
+
+        final Criteria query = createCriteria();
+        if (dateFrom != null) {
+            query.add(Restrictions.ge("endDate", DateTimeUtils.midnightOn(dateFrom)));
+        }
+
+        if (dateTo != null) {
+            query.add(Restrictions.le("endDate", DateTimeUtils.midnightOn(dateTo)));
+        }
+
+        query.addOrder(Order.asc("startDate"));
+
+        return query.list();
+    }
+
+    public List<String> getTermCodessByEndDateRange(Date dateFrom, Date dateTo) {
+        if (dateFrom == null && dateTo == null) {
+            return Lists.newArrayList();
+        }
+
+        final Criteria query = createCriteria();
+        if (dateFrom != null) {
+            query.add(Restrictions.ge("endDate", DateTimeUtils.midnightOn(dateFrom)));
+        }
+
+        if (dateTo != null) {
+            query.add(Restrictions.le("endDate", DateTimeUtils.midnightOn(dateTo)));
+        }
+
+        query.addOrder(Order.asc("startDate"));
+        query.setProjection((Projections.property("code")));
+
+        return query.list();
+    }
 }

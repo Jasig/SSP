@@ -211,8 +211,6 @@ var ssp = ssp || {};
 				requests--;
 			});
 		}
-		
-		
 
 		// load Forms
 		var loadForm = function() {
@@ -269,32 +267,30 @@ var ssp = ssp || {};
 			
 			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('subjectAbbreviationGroup'));
-			
-					
+
 			requests--;
 		}
 		
 		function checkIfReady() {
-		        if (requests === 0) {
-		            clearInterval(timer);
-					loadPage();
-		        }
-		 }
-		    
-		
-		var initializeDateRange = function(){
+			if (requests === 0) {
+				clearInterval(timer);
+				loadPage();
+			}
+		}
+
+		var initializeDateRange = function() {
 			var button = $('.switch-date-range-type').filter(':visible');
-			
-			if(button.length == 0)
+
+			if (button.length == 0) {
 				return;
+			}
 			var section = button.closest(".ea-time-span");
 			var term = section.find('.ea-term');
 			var dateRange = section.find('.ea-date-range');
 			var value = button.val();
-			if(value == 'setbyrange'){
+			if (value == 'setbyrange') {
 				term.show();
 				dateRange.hide();
-				
 				button.text('use date range');
 			} else {
 				term.hide();
@@ -323,7 +319,7 @@ var ssp = ssp || {};
 				var section = button.closest(".ea-time-span");
 				var term = section.find('.ea-term');
 				var dateRange = section.find('.ea-date-range');
-				if(value == 'setbyrange'){
+				if (value == 'setbyrange') {
 					term.find('[name="termCode"]').val("");
 					term.find('[name="alertTermCode"]').val("");
 					term.hide();
@@ -346,24 +342,22 @@ var ssp = ssp || {};
 			$('select[multiple="multiple"]').change(function(event){
 				var values = $(event.target).val();
 				var index = $.inArray("", values);
-				if(index >= 0){
+				if(index >= 0) {
 					$(event.target).find('option').not(":first-child").prop('selected', false);
 				}
 			});
 			
 			$('select[class="input-subject-abbreviation-group"]').change(function(event){
 				var value = $(event.target).val();
-				if(value && value.length > 0){
+				if (value && value.length > 0) {
 					loadCourseNumberInput("/ssp/api/1//reference/course/search?subjectAbbreviation=" + value, that
 							.locate('courseNumberGroup'));
-				}else{
+				} else {
 					var container = that.locate('courseNumberGroup');
 					container.html('');
 					addSelectItem("", "Not Used", container);
 				}
-				
 			});
-			
 		});
 
 		// construct the new component
@@ -377,15 +371,15 @@ var ssp = ssp || {};
 
 		var printConfForm = that.locate('printConfForm');
 		$(printConfForm).attr("href", "javascript:void( 0 )").click(
-				function() {
-					var confidentialityAgreementFormContent = that
-							.locate('confidentialityAgreementFormContent');
-					// Print the DIV.
-					$(confidentialityAgreementFormContent).print();
+			function() {
+				var confidentialityAgreementFormContent = that
+						.locate('confidentialityAgreementFormContent');
+				// Print the DIV.
+				$(confidentialityAgreementFormContent).print();
 
-					// Cancel click event.
-					return (false);
-				});
+				// Cancel click event.
+				return (false);
+			});
 
 		var loadingMessage = that.locate('loadingMessage');
 		var reportsSelect = that.locate('reportsSelect');
@@ -430,71 +424,69 @@ var ssp = ssp || {};
 		//reportsSelect
 		//.append('<option value="earlyAlertClass">Early Alert Class Report</option>');
 
-
 		reportsSelect.change(reportsSelectChange);
 	}
 
 	// defaults
 	fluid
-			.defaults(
-					'ssp.ReportSelector',
-					{
-						selectors : {
-							reportsSelect : '.reports-select',
-							reportFormBody : '.reports-form-body',
-							generalStudentForm : '.generalStudent-form',
-							specialServicesForm : '.special-services-form',
-							counselingRefGuideForm : '.counseling-reference-guide',							
-							counselorCaseManagementReport : '.counselor-case-management-report',
-							caseLoadForm : '.caseLoad-form',
-							confidentialityAgreementForm : '.confidentiality-agreement-form',
-							caseloadActivityReport : '.caseload-activity-report',
-							earlyAlertCaseCounts : '.early-alert-case-counts-report',
-                                                        earlyAlertCourseCounts : '.early-alert-course-counts-report',
-                                                        earlyAlertReasonCounts : '.early-alert-reason-counts-report',
-							earlyAlertStudent : '.early-alert-student-report',
-							earlyAlertStudentReferral : '.early-alert-student-referral-report',
-							confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
-							earlyAlertStudentProgress : '.early-alert-student-progress-report',
-							earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
-							earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
-							studentChallenges : '.student-challenges-report',
-							journalSessionDetail : '.journal-session-detail-report',
-							journalCaseNotes : '.journal-case-notes-by-student-report',
-							earlyAlertClass : '.early-alert-class-report',
-							numberCoursesInPlan : '.number-courses-in-plan-report',
-							numberPlansByOwner : '.number-plans-by-owner-report',
-							numberStudentsByStatus : '.number-students-by-status-report',
-							disabilityServices : '.disability-services-report',
-							programStatusGroup : '.input-program-status-group',
-							studentTypeGroup : '.input-student-type-group',
-							homeCampusGroup : '.input-home-campus-group',
-							specialServiceGroup : '.input-special-service-group',
-							serviceReasonGroup: '.input-service-reason-group',
-							referralSourceGroup : '.input-referral-source-group',
-							earlyAlertReferralGroup: '.input-early-alert-referral-group',
-							assignedCounselorGroup : '.input-assigned-counselor-group',
-							watcherGroup : '.input-watcher-group',
-							journalStepDetailGroup : '.input-journal-step-detail-group',
-							campusGroup: '.input-campus-group',
-							termGroup: '.input-term-group',
-							courseNumberGroup: '.input-course-number-group',
-							formattedCourseGroup: '.input-formatted-course-group',
-							subjectAbbreviationGroup: '.input-subject-abbreviation-group',
-							reportYearGroup: '.input-report-year-group',
-							earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
-							disabilityStatusGroup: '.input-disability-status-group',
-							disabilityTypeGroup: '.input-disability-type-group',
-							rosterStatusCodeGroup: '.input-roster-status-code-group',
-							homeDepartmentGroup: '.input-home-department-group',
-							calendarType : '.input-calendar-type',
-							switchDateRangeType : '.switch-date-range-type',
-							termRange : '.ea-term',
-							dateRange : '.ea-date-range',
-							hideableform : '.hideable-form',
-							printConfForm : '.print-conf-form',
-							loadingMessage: '.loading-message',
-						}
-					});
-
+		.defaults(
+			'ssp.ReportSelector', {
+				selectors : {
+					reportsSelect : '.reports-select',
+					reportFormBody : '.reports-form-body',
+					generalStudentForm : '.generalStudent-form',
+					specialServicesForm : '.special-services-form',
+					counselingRefGuideForm : '.counseling-reference-guide',
+					counselorCaseManagementReport : '.counselor-case-management-report',
+					caseLoadForm : '.caseLoad-form',
+					confidentialityAgreementForm : '.confidentiality-agreement-form',
+					caseloadActivityReport : '.caseload-activity-report',
+					earlyAlertCaseCounts : '.early-alert-case-counts-report',
+					earlyAlertCourseCounts : '.early-alert-course-counts-report',
+					earlyAlertReasonCounts : '.early-alert-reason-counts-report',
+					earlyAlertStudent : '.early-alert-student-report',
+					earlyAlertStudentReferral : '.early-alert-student-referral-report',
+					confidentialityAgreementFormContent : '.confidentiality-agreement-form-content',
+					earlyAlertStudentProgress : '.early-alert-student-progress-report',
+					earlyAlertStudentOutreach : '.early-alert-student-outreach-report',
+					earlyAlertStudentOutcome : '.early-alert-student-outcome-report',
+					studentChallenges : '.student-challenges-report',
+					journalSessionDetail : '.journal-session-detail-report',
+					journalCaseNotes : '.journal-case-notes-by-student-report',
+					earlyAlertClass : '.early-alert-class-report',
+					numberCoursesInPlan : '.number-courses-in-plan-report',
+					numberPlansByOwner : '.number-plans-by-owner-report',
+					numberStudentsByStatus : '.number-students-by-status-report',
+					disabilityServices : '.disability-services-report',
+					programStatusGroup : '.input-program-status-group',
+					studentTypeGroup : '.input-student-type-group',
+					homeCampusGroup : '.input-home-campus-group',
+					specialServiceGroup : '.input-special-service-group',
+					serviceReasonGroup: '.input-service-reason-group',
+					specialServiceCourseReport: '.special-service-course-report',
+					referralSourceGroup : '.input-referral-source-group',
+					earlyAlertReferralGroup: '.input-early-alert-referral-group',
+					assignedCounselorGroup : '.input-assigned-counselor-group',
+					watcherGroup : '.input-watcher-group',
+					journalStepDetailGroup : '.input-journal-step-detail-group',
+					campusGroup: '.input-campus-group',
+					termGroup: '.input-term-group',
+					courseNumberGroup: '.input-course-number-group',
+					formattedCourseGroup: '.input-formatted-course-group',
+					subjectAbbreviationGroup: '.input-subject-abbreviation-group',
+					reportYearGroup: '.input-report-year-group',
+					earlyAlertOutcomeGroup: '.input-early-alert-outcome-group',
+					disabilityStatusGroup: '.input-disability-status-group',
+					disabilityTypeGroup: '.input-disability-type-group',
+					rosterStatusCodeGroup: '.input-roster-status-code-group',
+					homeDepartmentGroup: '.input-home-department-group',
+					calendarType : '.input-calendar-type',
+					switchDateRangeType : '.switch-date-range-type',
+					termRange : '.ea-term',
+					dateRange : '.ea-date-range',
+					hideableform : '.hideable-form',
+					printConfForm : '.print-conf-form',
+					loadingMessage: '.loading-message'
+					}
+				});
 })(jQuery, fluid);

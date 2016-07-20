@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.dao.reference;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
@@ -29,6 +31,7 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Data access class for the SpecialServiceGroup reference entity.
@@ -68,4 +71,14 @@ public class SpecialServiceGroupDao extends AbstractReferenceAuditableCrudDao<Sp
 
 		return super.getAll(sp);
 	}
+
+    public List<SpecialServiceGroup> getByIds(List<UUID> specialServiceGroupIds) {
+    	if (CollectionUtils.isEmpty(specialServiceGroupIds)) {
+    		return Lists.newArrayList();
+		}
+
+        final Criteria query = createCriteria();
+        query.add(Restrictions.in("id", specialServiceGroupIds));
+        return query.list();
+    }
 }

@@ -209,7 +209,7 @@ public class PersonEmailServiceImpl implements PersonEmailService {
 				throw new ObjectNotFoundException(deliveryTargetIds.getId(), Person.class.getName());
 			}
 		} else {
-			student = personService.getBySchoolIdOrGetFromExternalBySchoolId(deliveryTargetIds.getSchoolId(), false); //TODO: this is slow (performs sync on schoolId if not in person) consider a refactor?
+			student = personService.getInternalOrExternalPersonBySchoolId(deliveryTargetIds.getSchoolId(), false); //TODO: this is slow (performs sync on schoolId if not in person) consider a refactor?
 			if ( student == null ) {
 				throw new ObjectNotFoundException(deliveryTargetIds.getSchoolId(), Person.class.getName());
 			}

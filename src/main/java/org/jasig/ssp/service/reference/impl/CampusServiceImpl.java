@@ -18,6 +18,10 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.reference.CampusDao;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -26,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Campus service implementation
@@ -34,9 +40,7 @@ import javax.validation.constraints.NotNull;
  */
 @Service
 @Transactional
-public class CampusServiceImpl extends
-		AbstractReferenceService<Campus>
-		implements CampusService {
+public class CampusServiceImpl extends AbstractReferenceService<Campus> implements CampusService {
 
 	@Autowired
 	transient private CampusDao dao;
@@ -61,4 +65,9 @@ public class CampusServiceImpl extends
 			throws ObjectNotFoundException {
 		return this.dao.getByCode(code);
 	}
+
+    @Override
+    public List<Campus> get(final List<UUID> campusIds) {
+        return this.dao.getByIds(campusIds);
+    }
 }

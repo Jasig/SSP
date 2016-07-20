@@ -346,29 +346,64 @@ public class PersonServiceImpl implements PersonService {
     /**
      * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
      *
+     * @param studentId
+     *            Required school identifier for the Person to retrieve. Should not be null/empty.
+     * @return The specified Person instance.
+     * @throws ObjectNotFoundException If the supplied identifier does not exist in the database at all
+     */
+	@Override
+	public Person getInternalOrExternalPersonBySchoolIdLite(final String studentId) throws ObjectNotFoundException {
+
+		try {
+			return dao.getBySchoolId(studentId);
+
+		} catch (final ObjectNotFoundException e) {
+			final ExternalPerson externalPerson = externalPersonService.getBySchoolId(studentId);
+
+			if (externalPerson == null) {
+				throw new ObjectNotFoundException("Unable to find person by schoolId: " + studentId, "Person");
+			}
+
+			final Person person = new Person();
+			evict(person);
+            person.setSchoolId(externalPerson.getSchoolId());
+            person.setFirstName(externalPerson.getFirstName());
+            person.setMiddleName(externalPerson.getMiddleName());
+            person.setLastName(externalPerson.getLastName());
+            person.setPrimaryEmailAddress(externalPerson.getPrimaryEmailAddress());
+            person.setHomePhone(externalPerson.getHomePhone());
+            person.setBirthDate(externalPerson.getBirthDate());
+            person.setUsername(externalPerson.getUsername());
+            //Add more here if necessary
+
+			return person;
+		}
+	}
+
+    /**
+     * Attempts to retrieve a specified Person by their Student ID (school_id), if not then pulls from external.
+     *
      * *NOTE*: If school_id is *not* in Person (internal), it then retrieves from external_person
      *    if exists and converts the record to a Person. If commit is true in that scenario,
      *     it adds the record to internal data.
      *
      * *WARNING*: Syncs person from external_person and syncs special_service_groups
      *  so it may be slow. Best use is when you need a completely up-to-date person
-     *    such as in add/edit scenarios.
+     *    such as in add/edit scenarios. Use the "light" method without the boolean param if
+     *     sync is not needed.
      *
      * @param schoolId
-     *            Required school identifier for the Person to retrieve. Can not
-     *            be null.
-     *            Also searches the External Database for the identifier,
-     *            creating a Person if an ExternalPerson record exists..
-     * @exception ObjectNotFoundException
-     *                If the supplied identifier does not exist in the database.
+     *            Required school identifier for the Person to retrieve. Can not be null/empty.
+     *            Also searches the External Database for the identifier, creating a Person if an ExternalPerson
+     *            record exists.
+     * @param commitPerson  If true, saves the syncd person in the database.
+     *
      * @return The specified Person instance.
+     * @throws ObjectNotFoundException If the supplied identifier does not exist in the database.
      */
 	@Override
-	public Person getBySchoolIdOrGetFromExternalBySchoolId(final String schoolId, boolean commitPerson)
+	public Person getInternalOrExternalPersonBySchoolId(final String schoolId, boolean commitPerson)
                                                                                         throws ObjectNotFoundException {
-
-        //TODO We may possibly need a second method like this but "light" that doesn't do the sync (if commit == false)
-        //TODO  It would returns/sync core Person info username, school_id, primary_email_address only
 		try { 
 			return dao.getBySchoolId(schoolId);
 
@@ -481,7 +516,7 @@ public class PersonServiceImpl implements PersonService {
 
     /**
      * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
-     *  saving a Person but where getBySchoolIdOrGetFromExternalBySchoolId was run with commit == false.
+     *  saving a Person but where getInternalOrExternalPersonBySchoolId was run with commit == false.
      * @param studentToSync
      */
     @Override
