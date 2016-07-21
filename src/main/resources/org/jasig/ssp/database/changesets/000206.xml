@@ -87,7 +87,7 @@ The following students have withdrawn from the course listed.
         </insert>
         <rollback>
             <delete tableName="message_template">
-                <where>id = 'b0e61fad-74c2-4154-9248-7ca8db867fdf'</where>
+                <where>id = '55185f25-3356-465e-9ebc-c62125bd7ca2'</where>
             </delete>
         </rollback>
     </changeSet>
