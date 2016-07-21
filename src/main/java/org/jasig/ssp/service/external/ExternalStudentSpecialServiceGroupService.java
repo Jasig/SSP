@@ -21,7 +21,9 @@ package org.jasig.ssp.service.external;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface ExternalStudentSpecialServiceGroupService extends ExternalDataService<ExternalStudentSpecialServiceGroup> {
@@ -40,6 +42,18 @@ public interface ExternalStudentSpecialServiceGroupService extends ExternalDataS
      * @return
      */
     Set<PersonSpecialServiceGroup> getStudentsExternalSSGsSyncedAsInternalSSGs(Person studentPerson);
+
+    /**
+     * Returns ssgs for a student list that can be adequately matched to internal Special Service Groups by code
+     *   on the code field.
+     * @param schoolIds
+     * @return Map with set of SSGs by schoolId as key
+     */
+    Map<String,Set<SpecialServiceGroup>> getMultipleStudentsExternalSSGsSyncedAsInternalSSGs(
+            List<String> schoolIds);
+
+
+    List<String> getAllSchoolIdsWithSpecifiedSSGs(List<SpecialServiceGroup> ssgParams);
 
     /**
      * Updates internal person ssgs from external student ssgs based on configurations and matches on code field

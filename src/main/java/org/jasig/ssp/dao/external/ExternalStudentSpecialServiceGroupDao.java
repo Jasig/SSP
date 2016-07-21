@@ -20,9 +20,11 @@ package org.jasig.ssp.dao.external;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
@@ -40,4 +42,21 @@ public class ExternalStudentSpecialServiceGroupDao extends
 		criteria.addOrder(Order.asc("code"));
 		return (List<ExternalStudentSpecialServiceGroup>)criteria.list();
 	}
+
+	public List<ExternalStudentSpecialServiceGroup> getStudentSpecialServiceGroupsBySchoolIds(List<String> schoolIds){
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.in("schoolId", schoolIds));
+		criteria.addOrder(Order.asc("schoolId"));
+
+		return (List<ExternalStudentSpecialServiceGroup>)criteria.list();
+	}
+
+    public List<String> getAllSchoolIdsWithSpecifiedSSGs(List<String> ssgCodeParams) {
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.in("code", ssgCodeParams));
+        criteria.addOrder(Order.asc("schoolId"));
+        criteria.setProjection(Projections.groupProperty("schoolId"));
+
+        return (List<String>) criteria.list();
+    }
 }

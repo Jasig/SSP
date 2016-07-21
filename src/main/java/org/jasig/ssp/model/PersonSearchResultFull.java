@@ -19,11 +19,13 @@
 package org.jasig.ssp.model;
 
 
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
+
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -695,6 +697,19 @@ public class PersonSearchResultFull {
         this.departmentName = departmentName;
         this.serviceReasons = serviceReasonNames.toString();
         this.referralSources = referralSourceNames.toString();
+        this.specialServiceGroups = specialServiceGroupNames.toString();
+    }
+
+    public void setSpecialServiceGroups(Set<SpecialServiceGroup> specialServiceGroups) {
+        final StringBuilder specialServiceGroupNames = new StringBuilder();
+
+        for (SpecialServiceGroup ssg : specialServiceGroups) {
+            if (specialServiceGroupNames.length() > 0) {
+                specialServiceGroupNames.append(", ");
+            }
+            specialServiceGroupNames.append(ssg.getName());
+        }
+
         this.specialServiceGroups = specialServiceGroupNames.toString();
     }
 

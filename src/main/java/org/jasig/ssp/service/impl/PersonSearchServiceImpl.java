@@ -29,9 +29,11 @@ import org.jasig.ssp.model.external.ExternalStudentAcademicProgram;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalStudentAcademicProgramService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
@@ -48,18 +50,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -97,6 +92,9 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 	@Autowired
 	private transient PlanService planService;
+
+    @Autowired
+    private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
 
     @Autowired
     private transient ExternalStudentFinancialAidService externalStudentFinancialAidService;
@@ -451,27 +449,37 @@ public class PersonSearchServiceImpl implements PersonSearchService {
             if (!CollectionUtils.isEmpty(personDirectoryResults)) {
                 final List<UUID> personUUIDs = Lists.newArrayList();
 				final List<String> personSchoolIds = Lists.newArrayList();
+                final List <String> externalOnlySchoolIds = Lists.newArrayList();
 
-				loadIdListsAndResultMap(personUUIDs, personSchoolIds, resultsBySchoolIdMap, personDirectoryResults);
+				loadIdListsAndResultMap(personUUIDs, personSchoolIds, externalOnlySchoolIds,
+                        resultsBySchoolIdMap, personDirectoryResults);
 
-                loadCustomizableDataForOptions(customOptions, personUUIDs, personSchoolIds, resultsBySchoolIdMap);
+                loadCustomizableDataForOptions(customOptions, personUUIDs, personSchoolIds, externalOnlySchoolIds,
+                        resultsBySchoolIdMap);
             }
             csvWriterHelper.write(resultsBySchoolIdMap.values(), -1L);
         }
     }
 
     private void loadIdListsAndResultMap(List<UUID> resultUUIDs, List<String> resultSchoolIds,
+                                         List<String> externalOnlySchoolIds,
 										 Map<String, PersonSearchResultFull> resultMap,
 										 		List<PersonSearchResultFull> results) {
         for (PersonSearchResultFull person : results) {
-			resultUUIDs.add(person.getId());
+            if (person.getId() == null) {
+                externalOnlySchoolIds.add(person.getSchoolId());
+            } else {
+                resultUUIDs.add(person.getId());
+            }
+
 			resultSchoolIds.add(person.getSchoolId());
             resultMap.put(person.getSchoolId(), person);
         }
     }
 
     private void loadCustomizableDataForOptions (Map<Integer, Boolean> customOptions, List<UUID> personUUIDs,
-										 List<String> personSchoolIds, Map<String,PersonSearchResultFull> resultMap) {
+										 List<String> personSchoolIds, List<String> externalOnlySchoolIds,
+                                                 Map<String,PersonSearchResultFull> resultMap) {
 
 		if (customOptions.get(11) || customOptions.get(5)) {
 			//sapStatus and financialAidGpa
@@ -509,9 +517,18 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 			}
 		}
 		if (customOptions.get(8) || customOptions.get(9) || customOptions.get(10) || customOptions.get(7)) {
-			//serviceReasons, referralSources, specialServiceGroups, department
-			List<Person> persons = personService.peopleFromListOfIds(personUUIDs, null);
+            //serviceReasons, referralSources, specialServiceGroups, department
 
+            //external only students
+            final Map<String, Set<SpecialServiceGroup>> externalOnlySSGsBySchoolId =
+                    externalStudentSpecialServiceGroupService.getMultipleStudentsExternalSSGsSyncedAsInternalSSGs(
+                            externalOnlySchoolIds);
+            for (String schoolId : externalOnlySSGsBySchoolId.keySet()) {
+                resultMap.get(schoolId).setSpecialServiceGroups(externalOnlySSGsBySchoolId.get(schoolId));
+            }
+
+            //internal students
+			final List<Person> persons = personService.peopleFromListOfIds(personUUIDs, null);
 			for (Person personIterator : persons) {
 				resultMap.get(personIterator.getSchoolId()).setDepartmentServiceReasonsReferralSourcesAndSpecialServiceGroups(
 						personIterator.getNullSafeDepartmentName(), personIterator.getServiceReasons(),

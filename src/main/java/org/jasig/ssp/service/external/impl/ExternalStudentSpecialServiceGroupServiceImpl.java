@@ -19,6 +19,7 @@
 package org.jasig.ssp.service.external.impl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -40,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -80,12 +82,18 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
             final List<ExternalStudentSpecialServiceGroup> essgsForStudent =
                             dao.getStudentSpecialServiceGroups(studentPerson.getSchoolId());
 
+            final Map<String, SpecialServiceGroup> ssgByCode = Maps.newHashMap();
             if (CollectionUtils.isNotEmpty(essgsForStudent)) {
                 for (ExternalStudentSpecialServiceGroup essg : essgsForStudent) {
-                    final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
-                    if (ssg != null) {
-                        internalSSGsForStudent.add(new PersonSpecialServiceGroup(studentPerson, ssg));
+
+                    if (!ssgByCode.containsKey(essg.getCode())) {
+                        final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
+                        if (ssg != null) {
+                            ssgByCode.put(ssg.getCode(), ssg);
+                        }
                     }
+                    internalSSGsForStudent.add(new PersonSpecialServiceGroup(studentPerson,
+                            ssgByCode.get(essg.getCode())));
                 }
             }
         }
@@ -93,7 +101,49 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
         return internalSSGsForStudent;
     }
 
-	@Override
+    @Override
+    public Map<String, Set<SpecialServiceGroup>> getMultipleStudentsExternalSSGsSyncedAsInternalSSGs(
+            final List<String> schoolIds) {
+
+        final Map<String, Set<SpecialServiceGroup>> results = Maps.newHashMap();
+
+        if (CollectionUtils.isNotEmpty(schoolIds)) {
+            final List<ExternalStudentSpecialServiceGroup> essgsForStudents =
+                    dao.getStudentSpecialServiceGroupsBySchoolIds(schoolIds);
+
+            final Map<String, SpecialServiceGroup> ssgByCode = Maps.newHashMap();
+            if (CollectionUtils.isNotEmpty(essgsForStudents)) {
+                for (ExternalStudentSpecialServiceGroup essg : essgsForStudents) {
+                    if (!ssgByCode.containsKey(essg.getCode())) {
+                        final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
+                        if (ssg != null) {
+                            ssgByCode.put(ssg.getCode(), ssg);
+                        }
+                    }
+
+                    if (!results.containsKey(essg.getSchoolId())) {
+                        results.put(essg.getSchoolId(), Sets.newHashSet(ssgByCode.get(essg.getCode())));
+                    } else {
+                        results.get(essg.getSchoolId()).add(ssgByCode.get(essg.getCode()));
+                    }
+                }
+            }
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<String> getAllSchoolIdsWithSpecifiedSSGs(final List<SpecialServiceGroup> ssgParams) {
+        final List<String> ssgCodes = Lists.newArrayList();
+        for (SpecialServiceGroup ssg : ssgParams) {
+            ssgCodes.add(ssg.getCode());
+        }
+
+        return dao.getAllSchoolIdsWithSpecifiedSSGs(ssgCodes);
+    }
+
+    @Override
 	public void updatePersonSSGsFromExternalPerson(final Person studentPersonToUpdate) {
         if (studentPersonToUpdate != null) {
 

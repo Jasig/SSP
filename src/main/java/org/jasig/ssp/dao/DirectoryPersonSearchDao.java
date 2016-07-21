@@ -27,6 +27,7 @@ import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.ScheduledTaskWrapperServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -49,7 +50,16 @@ import java.util.*;
 @Repository
 public class DirectoryPersonSearchDao  {
 
-	@Autowired
+	private static final String ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW = "activate_materialized_directory_person_view";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(DirectoryPersonSearchDao.class);
+
+
+    @Autowired
+    protected transient SessionFactory sessionFactory;
+
+
+    @Autowired
 	private transient ConfigService configService;
 
 	@Autowired
@@ -57,21 +67,18 @@ public class DirectoryPersonSearchDao  {
 	
 	@Autowired
 	private transient SecurityService securityService;
-	
+
 	@Autowired
 	private transient ScheduledApplicationTaskStatusService scheduledApplicationTaskService;
-	
-	@Autowired
-	protected transient SessionFactory sessionFactory;
 
-    private static final String ACTIVATE_MATERIALIZED_DIRECTORY_PERSON_VIEW = "activate_materialized_directory_person_view";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DirectoryPersonSearchDao.class);
+    @Autowired
+    private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
 
 
     public DirectoryPersonSearchDao() {
         super();
     }
+
 
 	public void refreshDirectoryPerson(){
 		
@@ -116,48 +123,131 @@ public class DirectoryPersonSearchDao  {
 			LOGGER.info("REFRESH_MV_DIRECTORY_PERSON_BLUE ended successfully");
 		}
 	}
-	
-	private Boolean isPostgresSession() {
-		try {
-			final Properties properties = System.getProperties();
-			String dialect = properties.getProperty("db_dialect");
-			if (StringUtils.isBlank(dialect)) {
-				final SessionFactoryImpl sfi = (SessionFactoryImpl) sessionFactory;
-				final Properties props = sfi.getProperties();
-				dialect = props.get("hibernate.dialect").toString();
-			}
-			return dialect.toUpperCase().contains("POSTGRES") ? true:false;
-		} catch(Exception exp) {
-		    //swallow exception
-		}
 
-		return true;
-	}
+    public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
+
+        final Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(), personSearchRequest,
+                getExternalSpecialServiceGroupSchoolIds(personSearchRequest), false);
+
+        return querySet.getFirst();
+    }
 
 	/**
 	 * Search people by the specified terms.
-	 * 
+	 *
 	 * @return List of people that match the specified filters
 	 */
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
-		final Pair<Long, Query> querySet = prepSearchQuery(
-		        sessionFactory.getCurrentSession(), personSearchRequest, false);
-		querySet.getSecond().setResultTransformer(
-		        new NamespacedAliasToBeanResultTransformer(PersonSearchResult2.class, "person_"));
 
-        return new PagingWrapper<PersonSearchResult2>(querySet.getFirst(), querySet.getSecond().list());
+		final Pair<Long, Query> querySet = prepSearchQuery(
+				sessionFactory.getCurrentSession(), personSearchRequest,
+                getExternalSpecialServiceGroupSchoolIds(personSearchRequest), false);
+
+		querySet.getSecond().setResultTransformer(
+				new NamespacedAliasToBeanResultTransformer(PersonSearchResult2.class, "person_"));
+
+
+
+		return new PagingWrapper<>(querySet.getFirst(), querySet.getSecond().list());
+	}
+
+    public void exportableSearch(CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest)
+            throws IOException {
+
+        StatelessSession openStatelessSession = null;
+
+        try {
+            openStatelessSession = sessionFactory.openStatelessSession();
+            Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, null, false);
+
+            querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+                    PersonSearchResult2.class, "person_"));
+
+            querySet.getSecond().getQueryString();
+
+            Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+
+            ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+
+            csvWriterHelper.write(results, -1L);
+        } finally {
+            if ( openStatelessSession != null ) {
+                try {
+                    openStatelessSession.close();
+                } catch (Exception e) {
+                    // nothing to do and likely harmless
+                    LOGGER.info("Failed to close Hibernate StatelessSession", e);
+                }
+            }
+        }
+    }
+
+    public List<PersonSearchResultFull> exportableCustomizableSearch(PersonSearchRequest personSearchRequest)
+            throws IOException {
+
+        StatelessSession openStatelessSession = null;
+
+        try {
+            openStatelessSession = sessionFactory.openStatelessSession();
+            Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, null, true);
+
+            querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+                    PersonSearchResultFull.class, "person_"));
+
+            querySet.getSecond().getQueryString();
+
+            Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+
+            return query.list();
+
+        } finally {
+            if ( openStatelessSession != null ) {
+                try {
+                    openStatelessSession.close();
+                } catch (Exception e) {
+                    // nothing to do and likely harmless
+                    LOGGER.info("Failed to close Hibernate StatelessSession, Customizable Exporter", e);
+                }
+            }
+        }
+    }
+
+    private List<String> getExternalSpecialServiceGroupSchoolIds(PersonSearchRequest psr) {
+        List<String> externalSSGSchoolIds = null;
+        if (psr != null && (psr.getPersonTableType() == null ||
+                !psr.getPersonTableType().equals(psr.PERSON_TABLE_TYPE_SSP_ONLY))
+                && CollectionUtils.isNotEmpty(psr.getSpecialServiceGroup())) {
+            //need to search external ssg table
+            externalSSGSchoolIds = externalStudentSpecialServiceGroupService.getAllSchoolIdsWithSpecifiedSSGs(
+                    psr.getSpecialServiceGroup());
+        }
+
+        return externalSSGSchoolIds;
+    }
+
+	//Necessary due to the pass by value nature of booleans
+	private class FilterTracker {
+		private boolean isFirstFilter = true;
+
+		public boolean isFirstFilter() {
+			return isFirstFilter;
+		}
+
+		public void setFirstFilter(boolean isFirstFilter) {
+			this.isFirstFilter = isFirstFilter;
+		}
 	}
 
 	private Pair<Long, Query> prepSearchQuery(Object session, PersonSearchRequest personSearchRequest,
-                                              boolean fullResultSearch) {
+                                              List<String> externalSchoolIdsWithSSGs, boolean fullResultSearch) {
 
 		final FilterTracker filterTracker = new FilterTracker();
-        final String hqlSelect;
-        final StringBuilder hqlWithoutSelect = new StringBuilder();
-        //Term currentTerm;
+		final String hqlSelect;
+		final StringBuilder hqlWithoutSelect = new StringBuilder();
         Map<String,Object> params = null;
 
+//        Term currentTerm;
 //        try { //TODO currentTerm in bindParams, is this needed?
 //			currentTerm = termService.getCurrentTerm();
 //		} catch(ObjectNotFoundException e) { //If there is no current term, lets degrade silently
@@ -175,21 +265,38 @@ public class DirectoryPersonSearchDao  {
 		}
 
 		buildFrom(personSearchRequest,hqlWithoutSelect);
-		
+
 		buildJoins(personSearchRequest,hqlWithoutSelect);
-		
-		buildWhere(personSearchRequest, filterTracker, hqlWithoutSelect);
-		
-		params = getBindParams(personSearchRequest); //TODO use currentTerm in bindParams here?
-		
+
+		buildWhere(personSearchRequest, externalSchoolIdsWithSSGs, filterTracker, hqlWithoutSelect);
+
+		params = getBindParams(personSearchRequest, externalSchoolIdsWithSSGs); //TODO use currentTerm in bindParams here?
+
 		Pair<Long,Query> querySet =  personSearchRequest.getSortAndPage()
-                .applySortingAndPagingToPagedQuery(
-                        session, "dp.schoolId", hqlSelect, hqlWithoutSelect, false, null, false, params);
+				.applySortingAndPagingToPagedQuery(
+						session, "dp.schoolId", hqlSelect, hqlWithoutSelect, false, null, false, params);
 
 		querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-		        PersonSearchResult2.class, "person_"));
+				PersonSearchResult2.class, "person_"));
 
 		return querySet;
+	}
+
+	private Boolean isPostgresSession() {
+		try {
+			final Properties properties = System.getProperties();
+			String dialect = properties.getProperty("db_dialect");
+			if (StringUtils.isBlank(dialect)) {
+				final SessionFactoryImpl sfi = (SessionFactoryImpl) sessionFactory;
+				final Properties props = sfi.getProperties();
+				dialect = props.get("hibernate.dialect").toString();
+			}
+			return dialect.toUpperCase().contains("POSTGRES") ? true:false;
+		} catch(Exception exp) {
+		    //swallow exception
+		}
+
+		return true;
 	}
 
 	private StringBuilder buildSelect() {
@@ -266,8 +373,9 @@ public class DirectoryPersonSearchDao  {
 		return stringBuilder;
 	}
 
-	private void buildWhere(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-                                                                                        StringBuilder stringBuilder) {
+	private void buildWhere(PersonSearchRequest personSearchRequest, List<String> ssgSchoolIds,
+                                                            FilterTracker filterTracker, StringBuilder stringBuilder) {
+
 		//person searchTerm : firstName, lastName, studentId or firstName + ' ' + lastName
 		buildPersonObjectStatus(personSearchRequest, filterTracker, stringBuilder);
 		buildSchoolId(personSearchRequest, filterTracker, stringBuilder);
@@ -327,6 +435,13 @@ public class DirectoryPersonSearchDao  {
 
         //programStatus
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
+
+        //must return records that match these schoolIds if external only since have external SSGs that match
+        if (CollectionUtils.isNotEmpty(ssgSchoolIds)) {
+            appendOrOrWhere(stringBuilder, filterTracker);
+            stringBuilder.append(" (dp.schoolId in (:ssgSchoolIds) and dp.personId is null) ");
+
+        }
 	}
 	
 	private void buildPersonObjectStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
@@ -483,14 +598,7 @@ public class DirectoryPersonSearchDao  {
                                                                                         StringBuilder stringBuilder) {
 		if (hasSpecialServiceGroup(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-
-            if (personSearchRequest.getPersonTableType() == null ||
-                    !personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)) {
-                stringBuilder.append(" ((dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
-                stringBuilder.append(" or (dp.personId is null and esssg.schoolId = dp.schoolId and esssg.code = secondssg.code and secondssg.objectStatus = 1 and secondssg in (:specialServiceGroup) and secondssg is not null)) ");
-            } else {
-                stringBuilder.append(" (dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
-            }
+			stringBuilder.append(" (dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
         }
 	}
 
@@ -508,8 +616,12 @@ public class DirectoryPersonSearchDao  {
 	}
 
 	//TODO Use currentTerm in bindParams?
-	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest) {
+	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, List<String> ssgSchoolIds) {
 		final HashMap<String,Object> params= new HashMap<String,Object>();
+
+        if (CollectionUtils.isNotEmpty(ssgSchoolIds)) {
+            params.put("ssgSchoolIds", ssgSchoolIds);
+        }
 
         if (hasSchoolId(personSearchRequest)) {
 			params.put("schoolId",personSearchRequest.getSchoolId().trim().toUpperCase());
@@ -746,7 +858,6 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-
 	private void buildGpa(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
                                                                                         StringBuilder stringBuilder) {
 		if (hasAnyGpaCriteria(personSearchRequest)) {
@@ -942,8 +1053,8 @@ public class DirectoryPersonSearchDao  {
 		}
 		
 		if (hasSpecialServiceGroup(personSearchRequest)) {
-			stringBuilder.append(" left join p.specialServiceGroups as specialServiceGroups ");
-			stringBuilder.append(" left join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
+			stringBuilder.append(" inner join p.specialServiceGroups as specialServiceGroups ");
+			stringBuilder.append(" inner join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
         }
 	}
 
@@ -960,8 +1071,8 @@ public class DirectoryPersonSearchDao  {
 	}
 	
 	private boolean personRequired(PersonSearchRequest personSearchRequest) {
-		return hasPlanExists(personSearchRequest) || hasMyPlans(personSearchRequest) ||
-                hasPlanStatus(personSearchRequest);
+		return hasSpecialServiceGroup(personSearchRequest) || hasPlanExists(personSearchRequest)
+				|| hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest);
 	}
 
 	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
@@ -977,7 +1088,7 @@ public class DirectoryPersonSearchDao  {
             return false;
         }
 		
-		if (personRequired(personSearchRequest) || hasSpecialServiceGroup(personSearchRequest)) {
+		if (personRequired(personSearchRequest)) {
 			stringBuilder.append(", Person p");
 		}
 		
@@ -999,11 +1110,6 @@ public class DirectoryPersonSearchDao  {
 		if (hasAnyWatchCriteria(personSearchRequest)) {
 			stringBuilder.append(", WatchStudent ws ");
 		}
-
-		if (hasSpecialServiceGroup(personSearchRequest) && (personSearchRequest.getPersonTableType() == null ||
-                !personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY))) {
-		    stringBuilder.append(", ExternalStudentSpecialServiceGroup esssg , SpecialServiceGroup secondssg ");
-        }
 		
 		return true;
 	}
@@ -1043,85 +1149,14 @@ public class DirectoryPersonSearchDao  {
 
 		filterTracker.setFirstFilter(false);
 	}
-	
-	//Necessary due to the pass by value nature of booleans
-	private class FilterTracker {
-		private boolean isFirstFilter = true;
 
-		public boolean isFirstFilter() {
-			return isFirstFilter;
-		}
+    private void appendOrOrWhere(StringBuilder stringBuilder, FilterTracker filterTracker) {
+        if (!filterTracker.isFirstFilter()) {
+            stringBuilder.append(" or ");
+        } else {
+            stringBuilder.append(" where ");
+        }
 
-		public void setFirstFilter(boolean isFirstFilter) {
-			this.isFirstFilter = isFirstFilter;
-		}
-	}
-
-	public List<PersonSearchResultFull> exportableCustomizableSearch(PersonSearchRequest personSearchRequest)
-                                                                                                    throws IOException {
-
-		StatelessSession openStatelessSession = null;
-
-		try {
-			openStatelessSession = sessionFactory.openStatelessSession();
-			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, true);
-
-			querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-					PersonSearchResultFull.class, "person_"));
-
-			querySet.getSecond().getQueryString();
-
-			Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
-
-			return query.list();
-
-		} finally {
-			if ( openStatelessSession != null ) {
-				try {
-					openStatelessSession.close();
-				} catch (Exception e) {
-					// nothing to do and likely harmless
-					LOGGER.info("Failed to close Hibernate StatelessSession, Customizable Exporter", e);
-				}
-			}
-		}
+        filterTracker.setFirstFilter(false);
     }
-
-	public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
-		
-		final Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(),personSearchRequest, false);
-
-		return querySet.getFirst();
-	}
-
-	public void exportableSearch(CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest)
-                                                                                                    throws IOException {
-
-		StatelessSession openStatelessSession = null;
-
-		try {
-			openStatelessSession = sessionFactory.openStatelessSession();
-			Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, false);
-
-			querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
-					PersonSearchResult2.class, "person_"));
-
-			querySet.getSecond().getQueryString();
-
-			Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
-
-			ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
-
-			csvWriterHelper.write(results, -1L);
-		} finally {
-			if ( openStatelessSession != null ) {
-				try {
-					openStatelessSession.close();
-				} catch (Exception e) {
-					// nothing to do and likely harmless
-					LOGGER.info("Failed to close Hibernate StatelessSession", e);
-				}
-			}
-		}
-	}
 }
