@@ -687,30 +687,39 @@ public class PersonSearchResultFull {
             referralSourceNames.append(referral.getReferralSource().getName());
         }
 
-        for (PersonSpecialServiceGroup service : specialServiceGroups) {
-            if (specialServiceGroupNames.length() > 0) {
-                specialServiceGroupNames.append(", ");
-            }
-            specialServiceGroupNames.append(service.getSpecialServiceGroup().getName());
-        }
+        this.setSpecialServiceGroupsFromPersonSSGs(specialServiceGroups);
 
         this.departmentName = departmentName;
         this.serviceReasons = serviceReasonNames.toString();
         this.referralSources = referralSourceNames.toString();
-        this.specialServiceGroups = specialServiceGroupNames.toString();
     }
 
     public void setSpecialServiceGroups(Set<SpecialServiceGroup> specialServiceGroups) {
         final StringBuilder specialServiceGroupNames = new StringBuilder();
 
         for (SpecialServiceGroup ssg : specialServiceGroups) {
-            if (specialServiceGroupNames.length() > 0) {
-                specialServiceGroupNames.append(", ");
+            if (specialServiceGroups.size() == 1) {
+                specialServiceGroupNames.append(ssg.getName() + "  ");
+            } else {
+                specialServiceGroupNames.append(ssg.getName() + ", ");
             }
-            specialServiceGroupNames.append(ssg.getName());
         }
 
-        this.specialServiceGroups = specialServiceGroupNames.toString();
+        this.specialServiceGroups = specialServiceGroupNames.substring(0, specialServiceGroupNames.length()-2);
+    }
+
+    public void setSpecialServiceGroupsFromPersonSSGs(Set<PersonSpecialServiceGroup> personSpecialServiceGroups) {
+        final StringBuilder specialServiceGroupNames = new StringBuilder();
+
+        for (PersonSpecialServiceGroup ssg : personSpecialServiceGroups) {
+            if (personSpecialServiceGroups.size() == 1) {
+                specialServiceGroupNames.append(ssg.getSpecialServiceGroup().getName() + "  ");
+            } else {
+                specialServiceGroupNames.append(ssg.getSpecialServiceGroup().getName() + ", ");
+            }
+        }
+
+        this.specialServiceGroups = specialServiceGroupNames.substring(0, specialServiceGroupNames.length()-2);
     }
 
     public void setMapData (String planTitle, String planProgram, String planCatalogYear, String planOwner,

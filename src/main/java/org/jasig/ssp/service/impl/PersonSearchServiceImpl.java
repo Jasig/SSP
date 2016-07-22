@@ -50,7 +50,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,8 +62,7 @@ import java.util.*;
 @Service
 public class PersonSearchServiceImpl implements PersonSearchService {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PersonSearchServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PersonSearchServiceImpl.class);
 	
 	@Autowired
 	private transient PersonSearchDao dao;
@@ -356,7 +354,18 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 		return directoryPersonDao.search(form);
 	}
 
-	
+    /**
+     * Returns full result. Probably slow, not for regular or quick searching!
+     * @param form
+     * @return
+     */
+    @Override
+    @Transactional
+    public PagingWrapper<PersonSearchResultFull> searchPersonDirectoryFull(PersonSearchRequest form) {
+        return directoryPersonDao.searchFull(form);
+    }
+
+
 	@Override
 	@Transactional
 	public void refreshDirectoryPerson(){

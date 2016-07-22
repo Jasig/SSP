@@ -21,11 +21,7 @@ package org.jasig.ssp.service;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchRequest;
-import org.jasig.ssp.model.PersonSearchResult;
-import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.CoachPersonLiteTO;
@@ -34,6 +30,7 @@ import org.jasig.ssp.util.csvwriter.CaseloadCsvWriterHelper;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
+
 
 /**
  * PersonSearch service
@@ -82,8 +79,10 @@ public interface PersonSearchService {
 	PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from);
 	
 	PagingWrapper<PersonSearchResult2> searchPersonDirectory(PersonSearchRequest from);
-	
-	void refreshDirectoryPerson();
+
+    PagingWrapper<PersonSearchResultFull> searchPersonDirectoryFull(PersonSearchRequest form);
+
+    void refreshDirectoryPerson();
 	
 	void refreshDirectoryPersonBlue();
 	

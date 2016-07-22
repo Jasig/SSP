@@ -152,6 +152,26 @@ public class DirectoryPersonSearchDao  {
 		return new PagingWrapper<>(querySet.getFirst(), querySet.getSecond().list());
 	}
 
+    /**
+     * Search people by the specified terms. Return full result.
+     *
+     * @return List of people that match the specified filters
+     */
+    @SuppressWarnings("unchecked")
+    public PagingWrapper<PersonSearchResultFull> searchFull(PersonSearchRequest personSearchRequest) {
+
+        final Pair<Long, Query> querySet = prepSearchQuery(
+                sessionFactory.getCurrentSession(), personSearchRequest,
+                getExternalSpecialServiceGroupSchoolIds(personSearchRequest), true);
+
+        querySet.getSecond().setResultTransformer(
+                new NamespacedAliasToBeanResultTransformer(PersonSearchResultFull.class, "person_"));
+
+
+
+        return new PagingWrapper<>(querySet.getFirst(), querySet.getSecond().list());
+    }
+
     public void exportableSearch(CaseloadCsvWriterHelper csvWriterHelper, PersonSearchRequest personSearchRequest)
             throws IOException {
 

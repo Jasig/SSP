@@ -22,15 +22,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonSearchService;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.PersonSpecialServiceGroupService;
+import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.CampusService;
@@ -38,8 +38,8 @@ import org.jasig.ssp.service.reference.ServiceReasonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
 import org.jasig.ssp.service.reference.StudentTypeService;
 import org.jasig.ssp.transferobject.reports.SpecialServiceStudentCoursesTO;
-import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,10 +92,13 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
     private transient PersonService personService;
 
     @Autowired
-    private transient PersonSpecialServiceGroupService personSpecialServiceGroupService;
+    private transient PersonSearchService personSearchService;
 
     @Autowired
     private transient ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
+
+    @Autowired
+    private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
 
 
     @InitBinder
@@ -124,29 +127,34 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
             throws ObjectNotFoundException, IOException {
 
         final Map<String, Object> parameters = Maps.newHashMap();
-        List<String> termCodes = Lists.newArrayList();
-        List<String> grades = Lists.newArrayList();
-        List<String> statusCodes = Lists.newArrayList();
-        List<SpecialServiceGroup> ssgList = Lists.newArrayList();
+        final List<String> termCodes = Lists.newArrayList();
+        final List<String> grades = Lists.newArrayList();
+        final List<String> statusCodes = Lists.newArrayList();
+        final List<SpecialServiceGroup> ssgList = Lists.newArrayList();
+        final PersonSearchRequest reqForm = new PersonSearchRequest();
+        final SortingAndPaging sAndP = new SortingAndPaging(null, null, null, null, null, null);
+        final Map<String, String> facultyNameBySchoolId = Maps.newHashMap();
+        final Map<String, PersonSearchResultFull> studentResultMap = Maps.newHashMap();
 
-        handleReportParameters(specialServiceCourseStatuses, specialServiceCourseGrades, termCode,
+        reqForm.setSortAndPage(sAndP);
+        handleReportParametersAndSearchForm(reqForm, specialServiceCourseStatuses, specialServiceCourseGrades, termCode,
                 createDateFrom, createDateTo, specialServiceGroupIds, homeCampusIds, parameters,
                 statusCodes, grades, termCodes, ssgList);
 
-        final Map<String, Pair<String, List<String>>> studentsWithSSGs = personSpecialServiceGroupService.
-                getAllSSGNamesWithCampusForInternalAndExternalStudentsWithSSGs(ssgList);
+        handleRetrievalOfStudents(reqForm, studentResultMap);
 
-        final List<SpecialServiceStudentCoursesTO> results = externalStudentTranscriptCourseService.
-                getTranscriptCoursesBySchoolIds(Lists.newArrayList(studentsWithSSGs.keySet()), termCodes,
+        final List<SpecialServiceStudentCoursesTO> courseResults = externalStudentTranscriptCourseService.
+                getTranscriptCoursesBySchoolIds(Lists.newArrayList(studentResultMap.keySet()), termCodes,
                         grades, statusCodes);
 
-        final Map<String, String> facultyNameBySchoolId = Maps.newHashMap();
-        for (SpecialServiceStudentCoursesTO course : results) {
+        for (SpecialServiceStudentCoursesTO course : courseResults) {
 
-            final Pair<String, List<String>> ssgNamesWithCampus = studentsWithSSGs.get(course.getSchoolId());
-            course.setCampusName(ssgNamesWithCampus.getFirst());
-            course.setSpecialServiceGroupNames(ssgNamesWithCampus.getSecond());
+            //load ssgs and campusName for student into report TO
+            final PersonSearchResultFull student = studentResultMap.get(course.getSchoolId());
+            course.setCampusName(student.getCampusName());
+            course.setSpecialServiceGroupNamesForDisplay(student.getSpecialServiceGroups());
 
+            //load course facultyName for student in report TO
             if (facultyNameBySchoolId.containsKey(course.getFacultySchoolId())) {
                 course.setFacultyName(facultyNameBySchoolId.get(course.getFacultySchoolId()));
             } else {
@@ -162,7 +170,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
             }
         }
 
-        renderReport(response,  parameters, results, REPORT_URL, reportType, REPORT_FILE_TITLE);
+        renderReport(response,  parameters, courseResults, REPORT_URL, reportType, REPORT_FILE_TITLE);
     }
 
     @Override
@@ -213,14 +221,14 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
     }
 
 
-    private void handleReportParameters(final String specialServiceCourseStatuses,
+    private void handleReportParametersAndSearchForm(final PersonSearchRequest psr,
+                                        final String specialServiceCourseStatuses,
                                         final String specialServiceCourseGrades,
                                         final String termCode, final Date createDateFrom, final Date createDateTo,
                                         final List<UUID> specialServiceGroupIds, final List<UUID> homeCampusIds,
                                         final Map<String, Object> parameters,
                                         List<String> statusCodes, List<String> grades, List<String> termCodes,
-                                        List<SpecialServiceGroup> ssgList)
-            throws ObjectNotFoundException {
+                                        List<SpecialServiceGroup> ssgList) throws ObjectNotFoundException {
 
         parameters.put("reportTitle", REPORT_TITLE);
         parameters.put("reportDate", new SimpleDateFormat(REPORT_DATE_FORMAT).format(new Date()));
@@ -275,13 +283,14 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
 
         final StringBuilder ssgNames = new StringBuilder();
         for (SpecialServiceGroup ssg : ssgList) {
-            if (ssgNames.length() > 0) {
-                ssgNames.append(ssg.getName() + ", ");
+            if (ssgList.size() == 1) {
+                ssgNames.append(ssg.getName() + "  ");
             } else {
-                ssgNames.append(ssg.getName());
+                ssgNames.append(ssg.getName() + ", ");
             }
         }
-        parameters.put("specialServiceGroupNames", ssgNames.toString());
+        parameters.put("specialServiceGroupNames", ssgNames.substring(0, ssgNames.length()-2));
+        psr.setSpecialServiceGroup(ssgList);
 
         //Home Campus Names
         if (CollectionUtils.isNotEmpty(homeCampusIds)) {
@@ -289,15 +298,52 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
 
             final StringBuilder campusNames = new StringBuilder();
             for (Campus campus : campusList) {
-                if (campusNames.length() > 0) {
-                    campusNames.append(campus.getName() + ", ");
+                if (campusList.size() == 1) {
+                    campusNames.append(campus.getName() + "  ");
                 } else {
-                    campusNames.append(campus.getName());
+                    campusNames.append(campus.getName() + ", ");
                 }
             }
-            parameters.put("campusNames", campusNames.toString());
+            parameters.put("campusNames", campusNames.substring(0, ssgNames.length()-2));
+            psr.setHomeCampus(campusList);
         } else {
             parameters.put("campusNames", NOT_USED);
         }
+    }
+
+    private void handleRetrievalOfStudents(final PersonSearchRequest psr,
+                                           final Map<String, PersonSearchResultFull> studentMap) {
+        //get students by ssg (internal/external)
+        final List<PersonSearchResultFull> students = Lists.newArrayList(
+                personSearchService.searchPersonDirectoryFull(psr));
+
+        //get list of external students (they won't have ssgs populated)
+        final List<String> externalOnlySchoolIds = Lists.newArrayList();
+        final List<UUID> internalPersonUUIDs = Lists.newArrayList();
+        for (PersonSearchResultFull person : students) {
+            if (person.getId() == null) {
+                externalOnlySchoolIds.add(person.getSchoolId());
+            } else {
+                internalPersonUUIDs.add(person.getId());
+            }
+
+            studentMap.put(person.getSchoolId(), person);
+        }
+
+        //get external only ssgs and load into result map
+        final Map<String, Set<SpecialServiceGroup>> externalOnlySSGsBySchoolId =
+                externalStudentSpecialServiceGroupService.getMultipleStudentsExternalSSGsSyncedAsInternalSSGs(
+                        externalOnlySchoolIds);
+        for (String schoolId : externalOnlySSGsBySchoolId.keySet()) {
+            studentMap.get(schoolId).setSpecialServiceGroups(externalOnlySSGsBySchoolId.get(schoolId));
+        }
+
+        //get internal only ssgs and load into result map
+        final List<Person> persons = personService.peopleFromListOfIds(internalPersonUUIDs, null);
+        for (Person personIterator : persons) {
+            studentMap.get(personIterator.getSchoolId()).setSpecialServiceGroupsFromPersonSSGs(
+                    personIterator.getSpecialServiceGroups());
+        }
+
     }
 }

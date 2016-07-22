@@ -19,19 +19,12 @@
 package org.jasig.ssp.dao;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
-import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
-import org.jasig.ssp.model.ScheduledTaskStatus;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
-import org.jasig.ssp.service.impl.ScheduledTaskWrapperServiceImpl;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -75,53 +68,6 @@ public class PersonSpecialServiceGroupDao
 
         return criteria.list();
 	}
-
-    public Map<String, Pair<String, List<String>>> getAllSSGNamesWithCampusForInternalAndExternalStudentsWithSSGs(
-                                                                            final List<SpecialServiceGroup> ssgParams) {
-
-        if (CollectionUtils.isEmpty(ssgParams)) {
-            return Maps.newHashMap();
-        }
-        
-        final ScheduledApplicationTaskStatus status = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_TASK_NAME);
-        final ScheduledApplicationTaskStatus status_blue = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME);
-
-        final StringBuilder fromClause = new StringBuilder();
-        if (status != null && status.getStatus() != null && status.getStatus().equals(ScheduledTaskStatus.COMPLETED)) {
-            fromClause.append("from MaterializedDirectoryPerson as dp, ");
-        } else if (status_blue != null && status_blue.getStatus() != null && status_blue.getStatus().equals(
-                ScheduledTaskStatus.COMPLETED)) {
-            fromClause.append("from MaterializedDirectoryPersonBlue as dp, ");
-        }
-        fromClause.append(" PersonSpecialServiceGroup as pssg, ExternalStudentSpecialServiceGroup as esssg, " +
-                "SpecialServiceGroup secondssg left join pssg.specialServiceGroup as specialServiceGroup ");
-
-        final String whereClause = "where " +
-            "((pssg.person.id = dp.personId and dp.objectStatus = :personObjectStatus and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) " +
-            "or " +
-            "(dp.personId is null and dp.schoolId = esssg.schoolId and esssg.code = secondssg.code and secondssg in (:specialServiceGroup) and secondssg is not null)) ";
-
-        final String specialServiceCourseReportHQLQuery = "select "
-                +   "dp.schoolId, "
-                +   "specialServiceGroup.name, "
-                +   "secondssg.name, "
-                +   "dp.campusName "
-                + fromClause + whereClause
-                + "order by dp.schoolId";
-
-        final Query query = createHqlQuery(specialServiceCourseReportHQLQuery);
-        query.setParameter("personObjectStatus", ObjectStatus.ACTIVE);
-        query.setParameterList("specialServiceGroup", ssgParams);
-
-        final List<Object[]> rawResults = query.list();
-
-        final Map<String, Pair<String, List<String>>> results = Maps.newHashMap();
-        for (Object[] index : rawResults) {
-            loadQueryResultMap(results, index);
-        }
-
-        return results;
-    }
 
     public void deleteAllForPerson(final UUID personId) {
         final Criteria criteria = createCriteria();

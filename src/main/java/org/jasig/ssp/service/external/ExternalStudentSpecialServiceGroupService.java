@@ -53,6 +53,13 @@ public interface ExternalStudentSpecialServiceGroupService extends ExternalDataS
             List<String> schoolIds);
 
 
+    /**
+     * Returns a list of studentIds (schoolIds) that are associated in external
+     *  student special service group with specified Special Service Groups
+     *    entered.
+     * @param ssgParams
+     * @return
+     */
     List<String> getAllSchoolIdsWithSpecifiedSSGs(List<SpecialServiceGroup> ssgParams);
 
     /**
