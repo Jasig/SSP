@@ -85,7 +85,7 @@ public class TermServiceImpl extends AbstractExternalReferenceDataService<Term> 
 	}
 
 	@Override
-	public List<String> getTermCodesByDateRange(final Date dateFrom, final Date dateTo) {
-		return dao.getTermCodessByEndDateRange(dateFrom, dateTo);
+	public List<String> getTermCodesByDateRange(final Date startDate, final Date endDate) {
+		return dao.getTermCodesByStartDateEndDateRange(startDate, endDate);
 	}
 }

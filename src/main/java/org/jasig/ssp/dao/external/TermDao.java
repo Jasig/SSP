@@ -191,18 +191,18 @@ public class TermDao extends AbstractExternalReferenceDataDao<Term> {
         return query.list();
     }
 
-    public List<String> getTermCodessByEndDateRange(Date dateFrom, Date dateTo) {
-        if (dateFrom == null && dateTo == null) {
+    public List<String> getTermCodesByStartDateEndDateRange(Date startDate, Date endDate) {
+        if (startDate == null && endDate == null) {
             return Lists.newArrayList();
         }
 
         final Criteria query = createCriteria();
-        if (dateFrom != null) {
-            query.add(Restrictions.ge("endDate", DateTimeUtils.midnightOn(dateFrom)));
+        if (startDate != null) {
+            query.add(Restrictions.gt("endDate", DateTimeUtils.midnightOn(startDate)));
         }
 
-        if (dateTo != null) {
-            query.add(Restrictions.le("endDate", DateTimeUtils.midnightOn(dateTo)));
+        if (endDate != null) {
+            query.add(Restrictions.lt("startDate", DateTimeUtils.midnightOn(endDate)));
         }
 
         query.addOrder(Order.asc("startDate"));
