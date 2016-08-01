@@ -235,7 +235,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
 
         //Course Status Codes
         if (StringUtils.isNotBlank(specialServiceCourseStatuses)) {
-            statusCodes.addAll(Lists.newArrayList(specialServiceCourseStatuses.trim().split(",")));
+            statusCodes.addAll(Lists.newArrayList(specialServiceCourseStatuses.trim().split("\\s*,\\s*")));
             parameters.put("courseStatusCodes", specialServiceCourseStatuses.trim());
         } else {
             parameters.put("courseStatusCodes", NOT_USED);
@@ -243,7 +243,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
 
         //Course Grades
         if (StringUtils.isNotBlank(specialServiceCourseGrades)) {
-            grades.addAll(Lists.newArrayList(specialServiceCourseGrades.trim().split(",")));
+            grades.addAll(Lists.newArrayList(specialServiceCourseGrades.trim().split("\\s*,\\s*")));
             parameters.put("courseGrades", specialServiceCourseGrades.trim());
         } else {
             parameters.put("courseGrades", NOT_USED);
@@ -304,7 +304,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
                     campusNames.append(campus.getName() + ", ");
                 }
             }
-            parameters.put("campusNames", campusNames.substring(0, ssgNames.length()-2));
+            parameters.put("campusNames", campusNames.substring(0, campusNames.length()-2));
             psr.setHomeCampus(campusList);
         } else {
             parameters.put("campusNames", NOT_USED);
