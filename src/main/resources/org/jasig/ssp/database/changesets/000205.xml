@@ -141,8 +141,8 @@
             <column name="name" value="special_service_group_set_from_external_data" />
             <column name="description"
                     value="Special Service Group is set from external data if true. It will overwrite any local changes." />
-            <column name="value">true</column>
-            <column name="default_value">true</column>
+            <column name="value">false</column>
+            <column name="default_value">false</column>
             <column name="created_date" valueDate="2016-06-28T12:00:00" />
             <column name="modified_date" valueDate="2016-06-28T12:00:00" />
             <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
