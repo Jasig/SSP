@@ -23,7 +23,6 @@ import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.transferobject.form.BulkProgramStatusChangeRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
-
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.UUID;
@@ -50,6 +49,15 @@ public interface PersonProgramStatusService
 	PersonProgramStatus getCurrent(@NotNull UUID personId)
 			throws ObjectNotFoundException, ValidationException;
 
+    /**
+     * Set the program status for the specified student to Active
+     *
+     * @param person
+     * @throws ObjectNotFoundException
+     * @throws ValidationException
+     */
+    void setActiveForStudent(@NotNull Person person) throws ObjectNotFoundException, ValidationException;
+
 	/**
 	 * Sets the program status for the specified student to Transitioned.
 	 * 
@@ -64,9 +72,24 @@ public interface PersonProgramStatusService
 	void setTransitionForStudent(@NotNull Person person)
 			throws ObjectNotFoundException, ValidationException;
 
+	/**
+	 * Expires any active Program Statuses for a student
+	 * @param person
+	 * @param savingStatus
+	 * @throws ValidationException
+	 */
 	void expireActive(Person person, PersonProgramStatus savingStatus)
 			throws ValidationException;
 
+    /**
+     * Bulk Changes Program Status for Several Students
+     * @param form
+     * @return
+     * @throws IOException
+     * @throws ObjectNotFoundException
+     * @throws ValidationException
+     * @throws SecurityException
+     */
 	JobTO changeInBulk(BulkProgramStatusChangeRequestForm form) throws IOException, ObjectNotFoundException,
 			ValidationException, SecurityException;
 }

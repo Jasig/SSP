@@ -18,16 +18,12 @@
  */
 package org.jasig.ssp.service.tool.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.CaseloadBulkAddReassignmentDao;
-import org.jasig.ssp.model.AuditPerson;
-import org.jasig.ssp.model.CaseloadBulkAddReassignment;
-import org.jasig.ssp.model.FileUploadResponse;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.SubjectAndBody;
-import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.dao.CaseloadDao;
+import org.jasig.ssp.model.*;
+import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.reference.MessageTemplateService;
 import org.jasig.ssp.service.tool.CaseloadService;
 import org.jasig.ssp.transferobject.BulkAddCaseloadReassignmentTO;
@@ -35,18 +31,15 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Person service implementation
@@ -61,7 +54,10 @@ public class CaseloadServiceImpl implements CaseloadService {
 			.getLogger(CaseloadServiceImpl.class);
 
 	@Autowired 
-	private CaseloadBulkAddReassignmentDao dao;
+	private CaseloadBulkAddReassignmentDao bulkReassignDao;
+
+    @Autowired
+    private transient CaseloadDao caseloadDao;
 	
 	@Autowired
 	private transient SecurityService securityService;
@@ -69,21 +65,26 @@ public class CaseloadServiceImpl implements CaseloadService {
 	@Autowired
 	private transient PersonService personService;
 
+    @Autowired
+    private transient PersonProgramStatusService personProgramStatusService;
+
 	@Autowired
 	private transient MessageService messageService;
 
 	@Autowired
 	private transient MessageTemplateService messageTemplateService;
 
-	protected CaseloadBulkAddReassignmentDao getDao() {
-		return dao;
+
+	protected CaseloadBulkAddReassignmentDao getBulkDao() {
+		return bulkReassignDao;
 	}
+
 
 	@Override
 	public void processCaseloadBulkAddReassignment() {
 		final Map<String, AuditPerson> auditPersonMap = new HashMap<String, AuditPerson>();
 		final List<String> errors = new ArrayList<String>();
-		final List<CaseloadBulkAddReassignment> list = dao.getAll();
+		final List<CaseloadBulkAddReassignment> list = bulkReassignDao.getAll();
 		String notificationEmailAddress = null;
 
         if (list.size() > 0) {
@@ -92,34 +93,49 @@ public class CaseloadServiceImpl implements CaseloadService {
 				if (notificationEmailAddress==null) {
 					notificationEmailAddress = model.getNotificationEmailAddress();
 				}
-				if (!StringUtils.isEmpty(model.getSchoolId().trim())) {
+
+				if (StringUtils.isNotBlank(model.getSchoolId())) {
 					try {
-						Person student = personService.getInternalOrExternalPersonBySchoolId(model.getSchoolId(), new Boolean(false)); //method is slow, but looks like proper use
-						if (!StringUtils.isEmpty(model.getCoachSchoolId().trim())) {
-							if (!StringUtils.isEmpty(model.getModifiedBySchoolId().trim())) {
-								final AuditPerson auditPerson = getAuditPerson(auditPersonMap, model.getModifiedBySchoolId());
-								if (auditPerson != null) {
-									try {
-										final Person coach = personService.getInternalOrExternalPersonBySchoolId(model.getCoachSchoolId(), new Boolean(false)); //method is slow, but looks like proper use
-										student.setCoach(coach);
-										student.setModifiedBy(auditPerson);
-										final Person savedPerson = personService.save(student);
-                                        personService.syncSpecialServiceGroups(savedPerson);
-										successCount++;
-									} catch (ObjectNotFoundException e) {
-										createError(errors, "Coach School Id not found for record", model);
-									}
-								} else {
-									createError(errors, "Modified By School Id not found for record", model);
-								}
-							} else {
-								createError(errors, "Modified By School Id was not set for record", model);
-							}
-						} else if (null != student.getCoach()) {
-							student = personService.getInternalOrExternalPersonBySchoolId(model.getSchoolId(), new Boolean(true)); //method is slow, but looks like proper use
-							successCount++;
+						Person student = personService.getInternalOrExternalPersonBySchoolId(model.getSchoolId(), true); //method is slow, but looks like proper use
+
+                        if (StringUtils.isNotBlank(model.getCoachSchoolId()) || student.getCoach() != null) {
+                            if (StringUtils.isBlank(student.getCurrentProgramStatusName())) {
+                                try {
+                                    personProgramStatusService.setActiveForStudent(student);
+                                } catch (ObjectNotFoundException | ValidationException onfve) {
+                                    createError(errors, "Active Program Status not found", model);
+                                }
+                            }
+
+                            Person coach = null;
+                            if (StringUtils.isNotBlank(model.getCoachSchoolId())) {
+                                try {
+                                    coach = personService.getInternalOrExternalPersonBySchoolId(model.getCoachSchoolId(), false); //method is slow, but looks like proper use
+
+                                    if (coach!= null && student.getCoach() == null) {
+                                        student.setCoach(coach);
+                                    }
+                                } catch (ObjectNotFoundException e) {
+                                    createError(errors, "Coach School Id not found for record", model);
+                                }
+                            } else {
+                                coach = student.getCoach();
+                            }
+
+                            AuditPerson auditPerson = null;
+                            if (StringUtils.isNotBlank(model.getModifiedBySchoolId())) {
+                                auditPerson = getAuditPerson(auditPersonMap, model.getModifiedBySchoolId());
+                            } else {
+                                final SspUser sspUser = (SspUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                                auditPerson = new AuditPerson(sspUser.getPerson().getId());
+                                createError(errors, "Modified By School Id not found for record, using current or system user", model);
+                            }
+
+                            caseloadDao.reassignStudentWithSpecifiedModifier(student, coach, auditPerson);
+                            successCount++;
+
 						} else {
-							createError(errors, "Student not added because the external student does not have a coach assigned for record", model);
+							createError(errors, "Student not added because student does not have a coach assigned for record nor was a coach assigned in the csv file", model);
 						}
 					} catch (ObjectNotFoundException e) {
 						createError(errors, "Student School Id not found for record", model);
@@ -128,13 +144,13 @@ public class CaseloadServiceImpl implements CaseloadService {
 					createError(errors, "Student School Id was not set for record", model);
 				}
 			}
-			dao.truncate();
+            bulkReassignDao.truncate();
 
 			if (notificationEmailAddress==null) {
 				notificationEmailAddress = securityService.currentUser().getPerson().getPrimaryEmailAddress();
 			}
 
-			SubjectAndBody subjectAndBody = messageTemplateService.createBulkAddCaseloadReassignmentMessage(successCount, errors);
+			final SubjectAndBody subjectAndBody = messageTemplateService.createBulkAddCaseloadReassignmentMessage(successCount, errors);
 			try {
 				messageService.createMessage(notificationEmailAddress, null, subjectAndBody);
 			} catch (ObjectNotFoundException e) {
@@ -146,7 +162,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 	}
 
 	private void createError(List<String> errors, String error, CaseloadBulkAddReassignment model) {
-		String message = error + " --> " + model.toString();
+		final String message = error + " --> " + model.toString();
 		errors.add(message);
 		LOGGER.warn(message);
 	}
@@ -155,7 +171,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 		AuditPerson auditPerson = map.get(schoolId);
 		if (auditPerson==null) {
 			try {
-				Person modifiedBy = personService.getInternalOrExternalPersonBySchoolId(schoolId, new Boolean(false)); //lookup can be slow, but sync/external lookup ideally won't occur
+				final Person modifiedBy = personService.getInternalOrExternalPersonBySchoolId(schoolId, false); //lookup can be slow, but sync/external lookup ideally won't occur
 				auditPerson = new AuditPerson();
 				auditPerson.setFirstName(modifiedBy.getFirstName());
 				auditPerson.setLastName(modifiedBy.getLastName());
@@ -173,20 +189,20 @@ public class CaseloadServiceImpl implements CaseloadService {
 			FileUploadResponse extjsFormResult) throws IOException,
 			ObjectNotFoundException, ValidationException {
 
-		CommonsMultipartFile file = uploadItem.getFile();
+		final CommonsMultipartFile file = uploadItem.getFile();
 		
 		validateFile(file);
 
 		//Remove all rows from the table
-		dao.truncate();
+        bulkReassignDao.truncate();
 
-		BufferedReader bReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+		final BufferedReader bReader = new BufferedReader(new InputStreamReader(file.getInputStream()));
 
 		//read file line by line
-		String line = null;
+		String line;
 		Integer count = new Integer(1);
 		while( (line = bReader.readLine()) != null){
-			CaseloadBulkAddReassignment model = createCaseloadBulkAddReassignmentFromCSVString(line, count, securityService.currentUser().getPerson().getPrimaryEmailAddress());
+			final CaseloadBulkAddReassignment model = createCaseloadBulkAddReassignmentFromCSVString(line, count, securityService.currentUser().getPerson().getPrimaryEmailAddress());
 			save(model);
 			//TODO Need to handle duplicate id exception
 		}
@@ -197,39 +213,45 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 	private CaseloadBulkAddReassignment createCaseloadBulkAddReassignmentFromCSVString(String line, Integer count, String notificationEmailAddress) throws ObjectNotFoundException {
 
-		String[] values = line.replaceAll("^\"", "").split("\"?(,|$)(?=(([^\"]*\"){2})*[^\"]*$) *\"?");
+		final String[] values = line.replaceAll("^\"", "").split("\"?(,|$)(?=(([^\"]*\"){2})*[^\"]*$) *\"?");
 
 		if (values.length < 3 || values.length > 4) {
 			throw new IllegalArgumentException("CVS file not formatted properly.  Each row must contain three or four values.  Row " + count + " is invalid.");
 		}
 
-		CaseloadBulkAddReassignment caseloadBulkAddReassignment = new CaseloadBulkAddReassignment();
+		final CaseloadBulkAddReassignment caseloadBulkAddReassignment = new CaseloadBulkAddReassignment();
 		caseloadBulkAddReassignment.setSchoolId(values[0]);
 		caseloadBulkAddReassignment.setCoachSchoolId(values[1]);
 		caseloadBulkAddReassignment.setModifiedBySchoolId(values[2]);
-		if (values.length == 4) {
+
+        if (values.length == 4) {
 			caseloadBulkAddReassignment.setJournalEntryComment(values[3]);
 		}
+
 		caseloadBulkAddReassignment.setNotificationEmailAddress(notificationEmailAddress);
 		count++;
-		return caseloadBulkAddReassignment;
+
+        return caseloadBulkAddReassignment;
 	}
 
 	public CaseloadBulkAddReassignment save(CaseloadBulkAddReassignment obj)
 			throws ObjectNotFoundException, ValidationException {
-		return dao.create(obj);
+		return bulkReassignDao.create(obj);
 	}
 
 	private synchronized void validateFile(CommonsMultipartFile file) {
 		//validate file extension 
-		String fname = file.getOriginalFilename().trim();
-		int extDelimIdx = fname.lastIndexOf(".");
+		final String fname = file.getOriginalFilename().trim();
+
+        int extDelimIdx = fname.lastIndexOf(".");
 		if ( extDelimIdx < 0 ) {
 			throw new IllegalArgumentException("File type not accepted.  Please upload a file of type 'csv'.");
 		}
+
 		if ( extDelimIdx == fname.length() - 1 ) {
 			throw new IllegalArgumentException("File type not accepted.  Please upload a file of type 'csv'.");
 		}
+
 		if ( !("csv".equals(fname.substring(extDelimIdx + 1))) ) {
 			throw new IllegalArgumentException("File type not accepted.  Please upload a file of type 'csv'.");
 		}

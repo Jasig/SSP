@@ -18,30 +18,16 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
+import com.google.common.collect.Lists;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.transferobject.CaseloadReassignmentRequestTO;
 import org.jasig.ssp.transferobject.reports.CaseLoadSearchTO;
@@ -53,8 +39,12 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
-import com.google.common.collect.Lists;
 
 @Repository
 public class CaseloadDao extends AbstractDao<Person> {
@@ -395,15 +385,32 @@ public class CaseloadDao extends AbstractDao<Person> {
 	}
 
 	public int reassignStudents(CaseloadReassignmentRequestTO obj, Person coach) {
-		String sql = "update Person p set p.coach = :coach where p.schoolId in :studentId";
-		BatchProcessor<String, Object> update = new BatchProcessor<String, Object>(Lists.newArrayList(obj.getStudentIds()));
-		do{
-			Query query = createHqlQuery( sql ).setEntity( "coach", coach );
-			List<String> currentBatchOfStudentSchoolIds = update.updateProcess(query, "studentId");
+		final String sql = "update Person p set p.coach = :coach where p.schoolId in :studentId";
+		final BatchProcessor<String, Object> update = new BatchProcessor<String, Object>(Lists.newArrayList(obj.getStudentIds()));
+
+        do {
+			final Query query = createHqlQuery( sql ).setEntity( "coach", coach );
+			final List<String> currentBatchOfStudentSchoolIds = update.updateProcess(query, "studentId");
 			personCoachAuditDao.auditBatchCoachAssignment(coach, currentBatchOfStudentSchoolIds);
 		} while(update.moreToProcess());
 
 		return update.getCount().intValue();
 	}
 
+    public boolean reassignStudentWithSpecifiedModifier(Person student, Person coach, AuditPerson modifier) {
+        if (student != null && coach != null && modifier != null) {
+
+            final String reassignSql = "update Person p set p.coach = :coach, p.modifiedBy = :modifier " +
+                    "where p.schoolId = :studentId";
+            final int result = createHqlQuery(reassignSql).setEntity("coach", coach)
+                    .setEntity("modifier", modifier).setParameter("studentId", student.getSchoolId()).executeUpdate();
+
+            if (result > 0 && (student.getCoach() == null || coach.getId() != student.getCoach().getId())) {  //only audit if coach changed
+                personCoachAuditDao.auditCoachAssignment(student.getId(), coach.getId(), modifier);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

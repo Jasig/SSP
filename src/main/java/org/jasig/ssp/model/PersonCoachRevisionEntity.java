@@ -19,11 +19,11 @@
 package org.jasig.ssp.model;
 
 
-import javax.persistence.*;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
 import org.jasig.ssp.service.PersonCoachRevisionListenerService;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -55,6 +55,13 @@ public class PersonCoachRevisionEntity implements Serializable {
 
 
     public PersonCoachRevisionEntity() {
+    }
+
+    public PersonCoachRevisionEntity(AuditPerson auditPerson) {
+        final Date currentTimestamp = new Date();
+        this.setModifiedDate(currentTimestamp);
+        this.setTimestamp(currentTimestamp.getTime());
+        this.setModifiedBy(auditPerson);
     }
 
     public int getId() {

@@ -45,7 +45,6 @@ import org.jasig.ssp.service.reference.ProgramStatusChangeReasonService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.ImmutablePersonIdentifiersTO;
 import org.jasig.ssp.transferobject.PersonProgramStatusTO;
-import org.jasig.ssp.transferobject.form.BulkEmailJobSpec;
 import org.jasig.ssp.transferobject.form.BulkProgramStatusChangeJobSpec;
 import org.jasig.ssp.transferobject.form.BulkProgramStatusChangeRequestForm;
 import org.jasig.ssp.transferobject.jobqueue.JobTO;
@@ -57,7 +56,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -73,12 +71,10 @@ import java.util.UUID;
  * 
  */
 @Service
-public class PersonProgramStatusServiceImpl extends
-		AbstractPersonAssocAuditableService<PersonProgramStatus> implements
+public class PersonProgramStatusServiceImpl extends AbstractPersonAssocAuditableService<PersonProgramStatus> implements
 		PersonProgramStatusService, InitializingBean {
 
-	private static final Logger OUTER_CLASS_LOGGER = LoggerFactory
-			.getLogger(PersonProgramStatusServiceImpl.class);
+	private static final Logger OUTER_CLASS_LOGGER = LoggerFactory.getLogger(PersonProgramStatusServiceImpl.class);
 
 	private static final ThreadLocal<Logger> CURRENT_LOGGER = new ThreadLocal<Logger>();
 
@@ -121,13 +117,16 @@ public class PersonProgramStatusServiceImpl extends
 	@Autowired
 	private transient ProgramStatusChangeReasonService serviceProgramStatusChangeReasonService;
 
+
 	private static class BulkProgramStatusChangeJobExecutionState extends BasePersonSearchBasedJobExecutionState {
 		public int personsSkippedCount; // b/c they're external or already have the requested status
 	}
 
+
 	private AbstractJobExecutor<BulkProgramStatusChangeJobSpec, BulkProgramStatusChangeJobExecutionState> bulkJobExecutor;
 
 	private AbstractPersonSearchBasedJobQueuer<BulkProgramStatusChangeRequestForm, BulkProgramStatusChangeJobSpec> bulkJobQueuer;
+
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -145,18 +144,6 @@ public class PersonProgramStatusServiceImpl extends
 			final PersonProgramStatus personProgramStatus)
 			throws ObjectNotFoundException, ValidationException {
 		return doCreate(personProgramStatus);
-	}
-
-	// private so it can be reused in non-default transaction contexts
-	private PersonProgramStatus doCreate(PersonProgramStatus personProgramStatus) throws ValidationException {
-		expireActive(personProgramStatus.getPerson(), personProgramStatus);
-
-		try {
-			return getDao().save(personProgramStatus);
-		} catch (final ConstraintViolationException exc) {
-			throw new ValidationException(
-					"Invalid data. See cause for list of violations.", exc);
-		}
 	}
 
 	@Override
@@ -225,6 +212,70 @@ public class PersonProgramStatusServiceImpl extends
 	@Transactional(rollbackFor = {ObjectNotFoundException.class, IOException.class, ValidationException.class})
 	public JobTO changeInBulk(BulkProgramStatusChangeRequestForm form) throws IOException, ObjectNotFoundException, ValidationException, SecurityException {
 		return bulkJobQueuer.enqueueJob(form);
+	}
+
+	@Override
+	public PersonProgramStatus getCurrent(final UUID personId)
+			throws ObjectNotFoundException, ValidationException {
+		return getActiveExcluding(personId, null);
+	}
+
+	@Override
+	public void setTransitionForStudent(@NotNull final Person person)
+			throws ObjectNotFoundException, ValidationException {
+		final ProgramStatus transitioned = programStatusService
+				.get(ProgramStatus.TRANSITIONED_ID);
+
+		// check if transition needs done
+		final PersonProgramStatus current = getCurrent(person.getId());
+		if (current != null && transitioned.equals(current.getProgramStatus())) {
+			// current status is already "Transitioned" - nothing to be done
+			return;
+		}
+
+		final PersonProgramStatus ps = new PersonProgramStatus();
+		ps.setEffectiveDate(new Date());
+		ps.setPerson(person);
+		ps.setProgramStatus(transitioned);
+		ps.setProgramStatusChangeReason(null);
+
+		create(ps); //TODO should expire first/use doCreate?
+	}
+
+	@Override
+	public void setActiveForStudent(@NotNull final Person person) throws ObjectNotFoundException, ValidationException {
+		final ProgramStatus activeStatus = programStatusService.getActiveStatus();
+
+		// check if transition needs to be done
+        try {
+            final PersonProgramStatus current = getCurrent(person.getId());
+            if (current != null && activeStatus.equals(current.getProgramStatus())) {
+                // current status is already "Active" - nothing to be done
+                return;
+            }
+        } catch (ObjectNotFoundException ofne) {
+            //swallow Onfe exception here
+        }
+
+		final PersonProgramStatus ps = new PersonProgramStatus();
+		ps.setEffectiveDate(new Date());
+		ps.setPerson(person);
+		ps.setProgramStatus(activeStatus);
+		ps.setProgramStatusChangeReason(null);
+
+		doCreate(ps);
+	}
+
+	// private so it can be reused in non-default transaction contexts
+	private PersonProgramStatus doCreate(PersonProgramStatus personProgramStatus) throws ValidationException {
+		expireActive(personProgramStatus.getPerson(), personProgramStatus);
+
+		try {
+			return getDao().save(personProgramStatus);
+		} catch (final ConstraintViolationException exc) {
+			throw new ValidationException(
+					"Invalid data. See cause for list of violations.", exc);
+		}
 	}
 
 	/**
@@ -324,34 +375,6 @@ public class PersonProgramStatusServiceImpl extends
 							+ " which of those to expire.");
 		}
 		return active.iterator().next();
-	}
-
-
-	@Override
-	public PersonProgramStatus getCurrent(final UUID personId)
-			throws ObjectNotFoundException, ValidationException {
-		return getActiveExcluding(personId, null);
-	}
-
-	@Override
-	public void setTransitionForStudent(@NotNull final Person person)
-			throws ObjectNotFoundException, ValidationException {
-		final ProgramStatus transitioned = programStatusService
-				.get(ProgramStatus.TRANSITIONED_ID);
-
-		// check if transition needs done
-		final PersonProgramStatus current = getCurrent(person.getId());
-		if (current != null && transitioned.equals(current.getProgramStatus())) {
-			// current status is already "Transitioned" - nothing to be done
-			return;
-		}
-
-		final PersonProgramStatus ps = new PersonProgramStatus();
-		ps.setEffectiveDate(new Date());
-		ps.setPerson(person);
-		ps.setProgramStatus(transitioned);
-		ps.setProgramStatusChangeReason(null);
-		create(ps);
 	}
 
 	private void initBulkProgramStatusTransitionJobExecutor() {

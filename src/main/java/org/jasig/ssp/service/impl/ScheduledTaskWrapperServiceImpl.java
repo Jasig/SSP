@@ -986,7 +986,7 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Override
 	@Scheduled(fixedDelay = 300000)
-	// run 2.5 minutes after the end of the last invocation
+	// run every 5 minutes
 	public void processCaseloadBulkAddReassignment() {
 		execWithTaskContext(PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_NAME, new Runnable() {
 			@Override

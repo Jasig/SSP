@@ -20,9 +20,12 @@ package org.jasig.ssp.dao;
 
 
 import com.google.common.collect.Maps;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Session;
 import org.hibernate.envers.RevisionType;
-import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.AuditPerson;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonCoachRevisionEntity;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.transferobject.PersonCoachAuditTO;
 import org.jasig.ssp.transferobject.PersonLiteTO;
@@ -30,9 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
-
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -141,12 +145,7 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
                 try {
                     final Session session = sessionFactory.getCurrentSession();
                     final UUID currentUserUUID = securityService.currentlyAuthenticatedUser().getPerson().getId();
-                    final Date currentTimestamp = new Date();
-
-                    final PersonCoachRevisionEntity revInfoEntity = new PersonCoachRevisionEntity(); //create new revinfo
-                    revInfoEntity.setTimestamp(currentTimestamp.getTime());
-                    revInfoEntity.setModifiedDate(currentTimestamp);
-                    revInfoEntity.setModifiedBy(new AuditPerson(currentUserUUID));
+                    final PersonCoachRevisionEntity revInfoEntity = new PersonCoachRevisionEntity(new AuditPerson(currentUserUUID)); //create new revinfo
 
                     session.save(revInfoEntity);  //enter new row into revision info table and return auto-generated id
 
@@ -155,16 +154,8 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
                                 .setParameterList("schoolIds", batchOfStudentSchoolIds).list();          //get UUIDS from SchoolIds for the batch
 
                         for ( UUID studentId : studentUUIDs ) {
-                            final Map<String, Object> personAuditOriginalId = Maps.newHashMap();  //creates originalId portion of Person_Coach_AUD
-                            personAuditOriginalId.put("REV", revInfoEntity);
-                            personAuditOriginalId.put("id", studentId);
-
-                            final Map<String, Object> personAuditEntity = Maps.newHashMap();    //creates the Person_Coach_AUD record
-                            personAuditEntity.put("REVTYPE", RevisionType.MOD);
-                            personAuditEntity.put("coach_id", coachToSet.getId());
-                            personAuditEntity.put("originalId", personAuditOriginalId);
-
-                            session.save("org.jasig.ssp.model.Person_AUD", personAuditEntity);
+                            session.save("org.jasig.ssp.model.Person_AUD", createPersonAudObject(revInfoEntity,
+                                    studentId, coachToSet.getId()));
                         }
 
                         session.flush();
@@ -180,5 +171,50 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
             }
         }
         return -1;
+    }
+
+    /**
+     * Normally Coach changes are automatically logged by Envers, but in certain cases,
+     *  a different modifier (AuditPerson) than the current user must be set. This method
+     *   uses HQL, which cannot be intercepted by Envers (PersonCoachRevisionListener) and
+     *   records the audit manually.
+     *
+     * @return int saved result count, (-1) on error/null parameter
+     */
+    public int auditCoachAssignment (final UUID personId, final UUID coachId, final AuditPerson auditPerson) {
+        if (personId != null && coachId != null && auditPerson != null ) {
+            try {
+                final Session session = sessionFactory.getCurrentSession();
+                final PersonCoachRevisionEntity revInfoEntity = new PersonCoachRevisionEntity(auditPerson); //create new revinfo
+
+                session.save(revInfoEntity);  //enter new row into revision info table and return auto-generated id
+
+                if ( revInfoEntity != null && revInfoEntity.getId() > -1 ) {
+                    session.save("org.jasig.ssp.model.Person_AUD", createPersonAudObject(revInfoEntity, personId, coachId));
+                 //   session.flush();
+                }
+
+                return 1;
+
+            } catch (ClassCastException | NullPointerException cne) {
+                LOGGER.error("Error inserting Coach Audit record in Custom Coach Assign!" + cne);
+            }
+        }
+
+        return -1;
+    }
+
+    private Map<String, Object> createPersonAudObject(final PersonCoachRevisionEntity revInfoEntity,
+                                                                            final UUID personId, final UUID coachId) {
+        final Map<String, Object> personAuditOriginalId = Maps.newHashMap();  //creates originalId portion of Person_Coach_AUD
+        personAuditOriginalId.put("REV", revInfoEntity);
+        personAuditOriginalId.put("id", personId);
+
+        final Map<String, Object> personAuditEntity = Maps.newHashMap();    //creates the Person_Coach_AUD record
+        personAuditEntity.put("REVTYPE", RevisionType.MOD);
+        personAuditEntity.put("coach_id", coachId);
+        personAuditEntity.put("originalId", personAuditOriginalId);
+
+        return personAuditEntity;
     }
 }
