@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet author="mike.sultzaberger" id="add config value ssg email course withdrawal add student" >
+        <insert tableName="config">
+            <column name="id" value="6e17fd05-e74b-493e-9a75-7e3b1bcca585" />
+            <column name="name" value="special_service_group_email_course_withdrawal_add_student_to_ssp" />
+            <column name="description" value="When true, adds students to SSP during the Special Service Group Email Course Withdrawal task." />
+            <column name="value" value="false" />
+            <column name="default_value" value="false" />
+            <column name="created_date" valueDate="2016-07-29T12:00:00" />
+            <column name="modified_date" valueDate="2016-07-29T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="100" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='6e17fd05-e74b-493e-9a75-7e3b1bcca585'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

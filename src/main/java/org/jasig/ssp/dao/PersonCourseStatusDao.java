@@ -23,7 +23,6 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonCourseStatus;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -41,10 +40,9 @@ public class PersonCourseStatusDao extends AbstractAuditableCrudDao<PersonCourse
 	}
 	
 	@SuppressWarnings("unchecked")
-	public PagingWrapper<PersonCourseStatus> getAllForPerson(Person person) {
+	public Collection<PersonCourseStatus> getAllForPerson(Person person) {
 		Criteria criteria = createCriteria().add(Restrictions.eq("person", person))
 						.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
-		Collection<PersonCourseStatus> rows = criteria.list();
-		return new PagingWrapper<PersonCourseStatus>(rows);
+		return criteria.list();
 	}
 }

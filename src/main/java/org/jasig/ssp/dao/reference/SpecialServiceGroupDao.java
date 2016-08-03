@@ -54,6 +54,7 @@ public class SpecialServiceGroupDao extends AbstractReferenceAuditableCrudDao<Sp
     public List<SpecialServiceGroup> getByNotifyOnWithdraw(final boolean notifyOnWithdraw) {
         final Criteria query = createCriteria();
         query.add(Restrictions.eq("notifyOnWithdraw", notifyOnWithdraw));
+		query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
         return query.list();
     }
 

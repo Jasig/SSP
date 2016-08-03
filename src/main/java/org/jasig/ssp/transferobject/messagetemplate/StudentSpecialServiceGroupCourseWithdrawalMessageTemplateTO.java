@@ -26,13 +26,16 @@ public class StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO extends
 
 	private static final long serialVersionUID = 3778851520157295145L;
 
+	private boolean studentAddedToSSP;
+
 	private List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs;
 
 	public StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO() {
 	}
 
-	public StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO(Person person, List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courses) {
+	public StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO(Person person, boolean studentAddedToSSP, List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courses) {
 		super(person);
+		this.setStudentAddedToSSP(studentAddedToSSP);
 		this.setCourses(courses);
 	}
 
@@ -42,5 +45,13 @@ public class StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO extends
 
 	public void setCourses(List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs) {
 		this.courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs;
+	}
+
+	public boolean isStudentAddedToSSP() {
+		return studentAddedToSSP;
+	}
+
+	public void setStudentAddedToSSP(boolean studentAddedToSSP) {
+		this.studentAddedToSSP = studentAddedToSSP;
 	}
 }
