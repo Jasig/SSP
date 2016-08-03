@@ -18,7 +18,6 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import java.io.Serializable;
 import java.util.List;
@@ -191,13 +190,14 @@ public class SpecialServiceStudentCoursesTO implements Serializable {
     public void setSpecialServiceGroupNames(List<String> specialServiceGroupNames) {
         this.specialServiceGroupNames = specialServiceGroupNames;
 
-        if (CollectionUtils.isNotEmpty(specialServiceGroupNames)) {
-            final StringBuilder ssgNamesForDisplay = new StringBuilder();
-            for (String ssg : specialServiceGroupNames) {
-                ssgNamesForDisplay.append(ssg + " - ");
+        final StringBuilder ssgNamesForDisplay = new StringBuilder();
+        for (String ssg : specialServiceGroupNames) {
+            if (ssgNamesForDisplay.length() > 0) {
+                ssgNamesForDisplay.append(" - ");
             }
-
-            this.specialServiceGroupNamesForDisplay = ssgNamesForDisplay.substring(0, ssgNamesForDisplay.length() - 3);
+            ssgNamesForDisplay.append(ssg);
         }
+
+        this.specialServiceGroupNamesForDisplay = ssgNamesForDisplay.toString();
     }
 }

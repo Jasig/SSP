@@ -68,11 +68,11 @@
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="387" y="0" width="100" height="20" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="387" y="40" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
 				<text><![CDATA[Course Term]]></text>
 			</staticText>
 			<textField isBlankWhenNull="false">
-				<reportElement x="487" y="0" width="265" height="20" isPrintWhenDetailOverflows="true" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="487" y="40" width="265" height="40" isPrintWhenDetailOverflows="true" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
 				<textFieldExpression><![CDATA[($P{termName} == null) ? "Not Used" : $P{termName}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -84,19 +84,19 @@
 				<textFieldExpression><![CDATA[$P{campusNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="387" y="20" width="100" height="20" uuid="98c9e2ab-f50f-40dc-b762-74e63b4064e4"/>
+				<reportElement positionType="Float" x="387" y="0" width="100" height="20" uuid="98c9e2ab-f50f-40dc-b762-74e63b4064e4"/>
 				<text><![CDATA[Start Date:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="487" y="20" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="2b2d94b6-f0b8-4ded-b828-640c7df406a7"/>
+				<reportElement positionType="Float" x="487" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="2b2d94b6-f0b8-4ded-b828-640c7df406a7"/>
 				<textFieldExpression><![CDATA[($P{startDate} == null) ? "Not Used" : $P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="387" y="40" width="100" height="20" uuid="3a2a08fe-a1a6-4857-8b87-ff440ba41dcf"/>
+				<reportElement positionType="Float" x="387" y="20" width="100" height="20" uuid="3a2a08fe-a1a6-4857-8b87-ff440ba41dcf"/>
 				<text><![CDATA[End Date: ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="487" y="40" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="de2c3b0f-7d20-4c4f-abcc-78ce1fb55e2b"/>
+				<reportElement positionType="Float" x="487" y="20" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="de2c3b0f-7d20-4c4f-abcc-78ce1fb55e2b"/>
 				<textFieldExpression><![CDATA[($P{endDate} == null) ? "Not Used" : $P{endDate}]]></textFieldExpression>
 			</textField>
 			<staticText>

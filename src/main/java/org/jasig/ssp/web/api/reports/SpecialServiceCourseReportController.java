@@ -263,11 +263,21 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
         } else if (createDateFrom != null && createDateTo != null) {
             final List<String> terms = termService.getTermCodesByDateRange(createDateFrom, createDateTo);
             final SimpleDateFormat sdf = new SimpleDateFormat("MMM-dd-yyyy");
+            final StringBuilder termNames = new StringBuilder();
+
             termCodes.addAll(terms);
 
+            for (String term : terms) {
+                if (termNames.length() > 0) {
+                  termNames.append(", ");
+                }
+                termNames.append(term);
+            }
+
+            parameters.put("termName", termNames.toString());
             parameters.put("startDate", sdf.format(createDateFrom));
             parameters.put("endDate", sdf.format(createDateTo));
-            parameters.put("termCode", NOT_USED);
+
         } else {
             parameters.put("startDate", NOT_USED);
             parameters.put("endDate", NOT_USED);
@@ -283,13 +293,13 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
 
         final StringBuilder ssgNames = new StringBuilder();
         for (SpecialServiceGroup ssg : ssgList) {
-            if (ssgList.size() == 1) {
-                ssgNames.append(ssg.getName() + "  ");
-            } else {
-                ssgNames.append(ssg.getName() + ", ");
+            if (ssgNames.length() > 0) {
+                ssgNames.append(", ");
             }
+            ssgNames.append(ssg.getName());
         }
-        parameters.put("specialServiceGroupNames", ssgNames.substring(0, ssgNames.length()-2));
+        parameters.put("specialServiceGroupNames", ssgNames.toString());
+
         psr.setSpecialServiceGroup(ssgList);
 
         //Home Campus Names
@@ -298,13 +308,13 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
 
             final StringBuilder campusNames = new StringBuilder();
             for (Campus campus : campusList) {
-                if (campusList.size() == 1) {
-                    campusNames.append(campus.getName() + "  ");
-                } else {
-                    campusNames.append(campus.getName() + ", ");
+                if (campusNames.length() > 0) {
+                    campusNames.append(", ");
                 }
+                campusNames.append(campus.getName());
             }
-            parameters.put("campusNames", campusNames.substring(0, campusNames.length()-2));
+
+            parameters.put("campusNames", campusNames.toString());
             psr.setHomeCampus(campusList);
         } else {
             parameters.put("campusNames", NOT_USED);

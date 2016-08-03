@@ -671,7 +671,6 @@ public class PersonSearchResultFull {
 
         final StringBuilder serviceReasonNames = new StringBuilder();
         final StringBuilder referralSourceNames = new StringBuilder();
-        final StringBuilder specialServiceGroupNames = new StringBuilder();
 
         for (PersonServiceReason reason : serviceReasons) {
             if (serviceReasonNames.length() > 0) {
@@ -698,28 +697,26 @@ public class PersonSearchResultFull {
         final StringBuilder specialServiceGroupNames = new StringBuilder();
 
         for (SpecialServiceGroup ssg : specialServiceGroups) {
-            if (specialServiceGroups.size() == 1) {
-                specialServiceGroupNames.append(ssg.getName() + "  ");
-            } else {
-                specialServiceGroupNames.append(ssg.getName() + ", ");
+            if (specialServiceGroupNames.length() > 0) {
+                specialServiceGroupNames.append(", ");
             }
+            specialServiceGroupNames.append(ssg.getName());
         }
 
-        this.specialServiceGroups = specialServiceGroupNames.substring(0, specialServiceGroupNames.length()-2);
+        this.specialServiceGroups = specialServiceGroupNames.toString();
     }
 
     public void setSpecialServiceGroupsFromPersonSSGs(Set<PersonSpecialServiceGroup> personSpecialServiceGroups) {
         final StringBuilder specialServiceGroupNames = new StringBuilder();
 
         for (PersonSpecialServiceGroup ssg : personSpecialServiceGroups) {
-            if (personSpecialServiceGroups.size() == 1) {
-                specialServiceGroupNames.append(ssg.getSpecialServiceGroup().getName() + "  ");
-            } else {
-                specialServiceGroupNames.append(ssg.getSpecialServiceGroup().getName() + ", ");
+            if (specialServiceGroupNames.length() > 0) {
+                specialServiceGroupNames.append(", ");
             }
+            specialServiceGroupNames.append(ssg.getSpecialServiceGroup().getName());
         }
 
-        this.specialServiceGroups = specialServiceGroupNames.substring(0, specialServiceGroupNames.length()-2);
+        this.specialServiceGroups = specialServiceGroupNames.toString();
     }
 
     public void setMapData (String planTitle, String planProgram, String planCatalogYear, String planOwner,
