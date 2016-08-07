@@ -20,6 +20,7 @@ package org.jasig.ssp.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.PersonSpecialServiceGroupDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
@@ -46,9 +47,9 @@ public class PersonSpecialServiceGroupServiceImpl extends AbstractPersonAssocAud
 	}
 
 	@Override
-	public List<String> getAllSSGCodesForPerson(final Person person) {
+	public List<String> getAllSSGCodesForPerson(final Person person, final ObjectStatus objectStatus) {
 		if (person != null) {
-			return dao.getAllCodesForPersonId(person.getId());
+			return dao.getAllCodesForPersonId(person.getId(), objectStatus);
 		} else {
 			LOGGER.debug("Can't get Special Service Groups by Code for Person that is empty!");
 			return null;

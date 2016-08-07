@@ -158,7 +158,7 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
             final List<ExternalStudentSpecialServiceGroup> externalSSGsForStudent =
                     dao.getStudentSpecialServiceGroups(studentPersonToUpdate.getSchoolId());
             final List<String> internalSSGCodes =
-                    personSpecialServiceGroupService.getAllSSGCodesForPerson(studentPersonToUpdate);
+                    personSpecialServiceGroupService.getAllSSGCodesForPerson(studentPersonToUpdate, null);
 
             if (CollectionUtils.isEmpty(internalSSGCodes)) {
                 if (CollectionUtils.isNotEmpty(externalSSGsForStudent)) {

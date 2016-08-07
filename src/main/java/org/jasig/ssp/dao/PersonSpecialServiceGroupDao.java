@@ -23,6 +23,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.util.collections.Pair;
@@ -60,9 +61,17 @@ public class PersonSpecialServiceGroupDao
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP);
 	}
 
-	public List<String> getAllCodesForPersonId(final UUID personId) {
-		final Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("person.id", personId));
+	public List<String> getAllCodesForPersonId(final UUID personId, final ObjectStatus objectStatus) {
+
+	    final Criteria criteria = createCriteria();
+
+        if (objectStatus != null) {
+            criteria.add(Restrictions.eq("objectStatus", objectStatus));
+        } else {
+            criteria.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+        }
+
+        criteria.add(Restrictions.eq("person.id", personId));
         criteria.setProjection(Projections.property("ssg.code"));
 		criteria.createAlias("specialServiceGroup", "ssg");
 
