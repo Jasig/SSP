@@ -39,42 +39,56 @@
             <column name="body"><![CDATA[<html>
 <body>
 <p>
-The following students have withdrawn from the course listed.
+The following students have withdrawn from the course listed or has been added to SSP.
 </p>
 <table cellspacing=0 cellpadding=3>
 	<tr>
 		<th>Student Id</th>
 		<th>First Name</th>
 		<th>Last Name</th>
+		<th>Added to SSP</th>
 		<th>Term</th>
 		<th>Course</th>
 		<th>Section</th>
 		<th>Current Status</th>
 		<th>Previous Status</th>
 	</tr>
-	 #foreach($student in $students)
+	#foreach($student in $students)
 	    #set ($odd = $foreach.count % 2)
-	    #foreach($course in $student.courses)
-		#if($odd==0)
-		  <tr style="background: #CCC">
-		#else
-		  <tr style="background: #FFF">
-		#end
-	    	  #if($foreach.first)
-                    <td>$student.schoolId</td>
-                    <td>$student.firstName</td>
-                    <td>$student.lastName</td>
-                  #else
-                    <td colspan=3>&nbsp;</td>
-                  #end
+	    #if($student.studentAddedToSSP)
+		     #if($odd==0)
+		       <tr style="background: #CCC">
+		     #else
+		       <tr style="background: #FFF">
+		     #end
+                  <td>$student.schoolId</td>
+                  <td>$student.firstName</td>
+                  <td>$student.lastName</td>
+               	  <td>Yes</td>
+	    #else
+	       #foreach($course in $student.courses)
+		     #if($odd==0)
+		       <tr style="background: #CCC">
+		     #else
+		       <tr style="background: #FFF">
+		     #end
+	    	 #if($foreach.first)
+                  <td>$student.schoolId</td>
+                  <td>$student.firstName</td>
+                  <td>$student.lastName</td>
+                  <td>No</td>
+             #else
+                  <td colspan=4>&nbsp;</td>
+             #end
                   <td>$course.termCode</td>
                   <td>$course.formattedCourse</td>
                   <td>$course.sectionCode</td>
                   <td style="text-align:center;">$course.statusCode</td>
                   <td style="text-align:center;">$course.previousStatusCode</td>
-              </tr>
+               </tr>
+	       #end
 	    #end
-	 #end
+	#end
 </table>
 </body>
 </html>]]>
