@@ -18,13 +18,14 @@
  */
 package org.jasig.ssp.service;
 
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import java.util.List;
 
 public interface PersonSpecialServiceGroupService extends PersonAssocAuditableService<PersonSpecialServiceGroup> {
 
-    List<String> getAllSSGCodesForPerson(Person person);
+    List<String> getAllSSGCodesForPerson(Person person, ObjectStatus objectStatus);
 
     void deleteAllForPerson(Person person);
 
