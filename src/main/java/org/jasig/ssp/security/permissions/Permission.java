@@ -18,11 +18,11 @@
  */
 package org.jasig.ssp.security.permissions;
 
+import org.apache.commons.collections.ListUtils;
+import org.jasig.ssp.transferobject.PermissionTO;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
-import org.jasig.ssp.transferobject.PermissionTO;
 
 /**
  * It is simple to mistype in an annotation. This class is an attempt to give
@@ -53,6 +53,7 @@ public class Permission { // NOPMD enum won't work for these values in
 	public static final String REFERENCE_EARLY_ALERT_WRITE = ROLE_PREFIX + "REFERENCE_EARLY_ALERT_WRITE";
 	public static final String REFERENCE_JOURNAL_WRITE = ROLE_PREFIX + "REFERENCE_JOURNAL_WRITE";
 	public static final String REFERENCE_MAIN_TOOL_WRITE = ROLE_PREFIX + "REFERENCE_MAIN_TOOL_WRITE";
+	public static final String REFERENCE_EXTERNAL_VIEW_TOOL_WRITE = ROLE_PREFIX + "REFERENCE_EXTERNAL_VIEW_TOOL_WRITE";
 	public static final String REFERENCE_MAP_WRITE = ROLE_PREFIX + "REFERENCE_MAP_WRITE";
 	public static final String REFERENCE_MYGPS_WRITE = ROLE_PREFIX + "REFERENCE_MYGPS_WRITE";
 	public static final String REFERENCE_SECURITY_WRITE = ROLE_PREFIX + "REFERENCE_SECURITY_WRITE";
@@ -110,7 +111,8 @@ public class Permission { // NOPMD enum won't work for these values in
 	public static final String SECURITY_REFERENCE_EARLY_ALERT_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_EARLY_ALERT_WRITE + END;
 	public static final String SECURITY_REFERENCE_JOURNAL_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_JOURNAL_WRITE + END;
 	public static final String SECURITY_REFERENCE_MAIN_TOOL_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_MAIN_TOOL_WRITE + END;
-	public static final String SECURITY_REFERENCE_MAP_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_MAP_WRITE + END;
+    public static final String SECURITY_REFERENCE_EXTERNAL_VIEW_TOOL_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_EXTERNAL_VIEW_TOOL_WRITE + END;
+    public static final String SECURITY_REFERENCE_MAP_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_MAP_WRITE + END;
 	public static final String SECURITY_REFERENCE_MYGPS_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_MYGPS_WRITE + END;
 	public static final String SECURITY_REFERENCE_SECURITY_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_SECURITY_WRITE + END;
 	public static final String SECURITY_REFERENCE_STUDENT_INTAKE_WRITE = HAS_ANY_ROLE + REFERENCE_WRITE + HAS_ANY_ROLE_SEPARATOR + REFERENCE_STUDENT_INTAKE_WRITE + END;

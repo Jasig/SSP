@@ -314,8 +314,18 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.ExternalViewTool",
+                    "name": "ExternalViewTool.js",
+                    "path": "/app/model/reference/"
+                },
+                {
                     "clsName": "Ssp.store.reference.EducationLevels",
                     "name": "EducationLevels.js",
+                    "path": "/app/store/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.ExternalViewTools",
+                    "name": "ExternalViewTools.js",
                     "path": "/app/store/reference/"
                 },
                 {
@@ -380,9 +390,19 @@
                     "path": "/app/view/tools/accommodation/"
                 },
                 {
-                    "clsName": "Ssp.view.tools.accommodation.DisabilityTypes",
-                    "name": "DisabilityTypes.js",
+                    "clsName": "Ssp.view.tools.accommodation.Accommodations",
+                    "name": "Accommodations.js",
                     "path": "/app/view/tools/accommodation/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.externalview.ExternalViewTool1",
+                    "name": "ExternalViewTool1.js",
+                    "path": "/app/view/tools/externalview/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.externalview.ExternalViewTool2",
+                    "name": "ExternalViewTool2.js",
+                    "path": "/app/view/tools/externalview/"
                 },
                 {
                     "clsName": "Ssp.controller.tool.map.CoursesViewController",
@@ -812,6 +832,11 @@
                 {
                     "clsName": "Ssp.service.EarlyAlertReferralService",
                     "name": "EarlyAlertReferralService.js",
+                    "path": "/app/service/"
+                },
+                {
+                    "clsName": "Ssp.service.ExternalViewService",
+                    "name": "ExternalViewService.js",
                     "path": "/app/service/"
                 },
                 {

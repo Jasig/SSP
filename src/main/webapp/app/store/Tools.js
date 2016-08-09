@@ -50,6 +50,8 @@ Ext.define('Ssp.store.Tools', {
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.documents', 'Documents'), toolType: "documents", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.notes', 'Notes'), toolType: "personnotes", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.caseloadassign', 'Caseload Reassign'), toolType: "toolcaseloadreassignment", active: true },
+			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool1', 'External View 1'), toolType: "externalviewtool1", active: true },
+			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool2', 'External View 2'), toolType: "externalviewtool2", active: true }
             ];
 
             // set the model
