@@ -473,7 +473,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 				}
 			}
 
-			MapStatusReportCourseDetails courseAnomaly = evaluateCourse(gradesSet, report, reportCourseDetails, term, mapPlanStatusReportCourse, matchedTranscriptCourse, matchedNonCourseOverride);
+			MapStatusReportCourseDetails courseAnomaly = evaluateCourse(gradesSet, report, reportCourseDetails, term, mapPlanStatusReportCourse, matchedTranscriptCourse, matchedNonCourseOverride, criteriaSet, transcript);
 
             if (courseAnomaly != null) {
 				courseReportsByTerm.get(term.getCode()).add(courseAnomaly);
@@ -606,7 +606,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 			List<MapStatusReportCourseDetails> reportCourseDetails, Term term,
 			MapPlanStatusReportCourse mapPlanStatusReportCourse,
 			ExternalStudentTranscriptCourse matchedTranscriptCourse,
-            ExternalStudentTranscriptNonCourseEntity nonCourseEntityOverride) {
+            ExternalStudentTranscriptNonCourseEntity nonCourseEntityOverride,
+			Set<String> criteriaSet, List<ExternalStudentTranscriptCourse> transcript) {
 		
 		MapStatusReportCourseDetails courseDetail = null;
 
@@ -636,9 +637,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
                     reportCourseDetails.add(courseDetail);
 
                 } else {
-                    courseDetail = new MapStatusReportCourseDetails(report, mapPlanStatusReportCourse.getTermCode(), mapPlanStatusReportCourse.getFormattedCourse(),
-                            mapPlanStatusReportCourse.getCourseCode(), "", AnomalyCode.COURSE_NOT_PASSED);
-                    reportCourseDetails.add(courseDetail);
+                	//SSP-3158 The matched course has a failing grade.  Look again for the course for a passingGrade and if not found (NULL) then add the anomaly
+                	if (findTranscriptCourseMatch(mapPlanStatusReportCourse, transcript, criteriaSet, passingGradesSet)==null) {
+						courseDetail = new MapStatusReportCourseDetails(report, mapPlanStatusReportCourse.getTermCode(), mapPlanStatusReportCourse.getFormattedCourse(),
+								mapPlanStatusReportCourse.getCourseCode(), "", AnomalyCode.COURSE_NOT_PASSED);
+						reportCourseDetails.add(courseDetail);
+					}
                 }
             }
         }
@@ -648,7 +652,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	}
 
 	private ExternalStudentTranscriptCourse findTranscriptCourseMatch(MapPlanStatusReportCourse mapPlanStatusReportCourse,
-                              List<ExternalStudentTranscriptCourse> transcriptCoursesForTerm, Set<String> criteriaSet) {
+																	  List<ExternalStudentTranscriptCourse> transcriptCoursesForTerm, Set<String> criteriaSet) {
+		return findTranscriptCourseMatch(mapPlanStatusReportCourse, transcriptCoursesForTerm, criteriaSet, null);
+	}
+
+	private ExternalStudentTranscriptCourse findTranscriptCourseMatch(MapPlanStatusReportCourse mapPlanStatusReportCourse,
+                              List<ExternalStudentTranscriptCourse> transcriptCoursesForTerm, Set<String> criteriaSet, Set<String> passingGradesSet) {
 
         if (transcriptCoursesForTerm == null || transcriptCoursesForTerm.isEmpty()) {
             return null;
@@ -681,7 +690,13 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 						match = false;
 					}			
 				}
-			}			
+			}
+
+			if (passingGradesSet!=null) {
+				if (!passingGradesSet.contains(externalStudentTranscriptCourse.getGrade().trim().toUpperCase())) {
+					match = false;
+				}
+			}
 
             if(match) {
 				return externalStudentTranscriptCourse;
