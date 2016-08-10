@@ -72,7 +72,7 @@ Ext.define('Ssp.view.tools.externalview.ExternalViewTool2', {
 
     getExternalViewFailure: function(r, scope) {
         var me = scope;
-        Ext.Msg.alert('SSP Error', 'External View Could Not Be Loaded. Please try again or contact your system administrator.');
+        Ext.Msg.alert('SSP Error', 'External View 2\'s URL couldn\'t be Loaded. Please try again or contact your system administrator.');
         me.setLoading( false );
     }
 });

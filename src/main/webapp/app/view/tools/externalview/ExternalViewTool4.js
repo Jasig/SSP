@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.tools.externalview.ExternalViewTool1', {
+Ext.define('Ssp.view.tools.externalview.ExternalViewTool4', {
     extend: 'Ext.panel.Panel',
-    alias: 'widget.externalviewtool1',
+    alias: 'widget.externalviewtool4',
     mixins: [ 'Deft.mixin.Injectable'],
     inject: {
         externalViewService: 'externalViewService',
@@ -37,7 +37,7 @@ Ext.define('Ssp.view.tools.externalview.ExternalViewTool1', {
 
         if (me.externalViewService) {
             me.setLoading(true);
-            me.externalViewService.getExternalViewWithSubstitutedUrl('b4e611a2-80d4-4448-8e38-da643a54c2ed',
+            me.externalViewService.getExternalViewWithSubstitutedUrl('956f01ba-5b05-4456-bed8-6f08f52c9a79',
                 me.person.get('id'), {
                     success: me.getExternalViewSuccess,
                     failure: me.getExternalViewFailure,
@@ -72,7 +72,7 @@ Ext.define('Ssp.view.tools.externalview.ExternalViewTool1', {
 
     getExternalViewFailure: function(r, scope) {
         var me = scope;
-        Ext.Msg.alert('SSP Error', 'External View 1\'s URL couldn\'t be Loaded. Please try again or contact your system administrator.');
+        Ext.Msg.alert('SSP Error', 'External View 4\'s URL couldn\'t be Loaded. Please try again or contact your system administrator.');
         me.setLoading( false );
     }
 });

@@ -25,7 +25,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
-        ltiSspUserFieldNamesStore: 'ltiSspUserFieldNamesStore',
+        sspUserFieldNamesStore: 'sspUserFieldNamesStore',
         confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
        	authenticatedPerson: 'authenticatedPerson',
         textStore: 'sspTextStore'
@@ -1026,7 +1026,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             required: false,
                             field: {
                                 xtype: 'combo',
-                                store: me.ltiSspUserFieldNamesStore,
+                                store: me.sspUserFieldNamesStore,
                                 valueField: 'code',
                                 displayField: 'displayValue',
                                 forceSelection: false,
@@ -1040,7 +1040,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                             required: false,
                             field: {
                                 xtype: 'combo',
-                                store: me.ltiSspUserFieldNamesStore,
+                                store: me.sspUserFieldNamesStore,
                                 valueField: 'code',
                                 displayField: 'displayValue',
                                 forceSelection: false,
@@ -1051,7 +1051,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                         }, {
                             header: 'Embed in Tool View',
                             required: true,
-                            dataIndex: 'isEmbedded',
+                            dataIndex: 'embedded',
                             flex: 0.15,
                             renderer: me.columnRendererUtils.renderFriendlyBoolean,
                             field: {

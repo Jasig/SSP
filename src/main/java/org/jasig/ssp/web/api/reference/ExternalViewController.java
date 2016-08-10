@@ -144,7 +144,7 @@ public class ExternalViewController extends AbstractAuditableReferenceController
 	}
 
     @RequestMapping(value = "/{externalViewId}/{studentId}", method = RequestMethod.GET)
-    public @ResponseBody ExternalViewTO getClientTimeout(@PathVariable final UUID externalViewId,
+    public @ResponseBody ExternalViewTO getSubstitutedUrl(@PathVariable final UUID externalViewId,
                                                          @PathVariable final UUID studentId) throws ObjectNotFoundException {
 
         final ExternalView model = service.get(externalViewId);

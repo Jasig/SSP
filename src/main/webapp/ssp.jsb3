@@ -405,6 +405,16 @@
                     "path": "/app/view/tools/externalview/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.externalview.ExternalViewTool3",
+                    "name": "ExternalViewTool3.js",
+                    "path": "/app/view/tools/externalview/"
+                },
+                {
+                    "clsName": "Ssp.view.tools.externalview.ExternalViewTool4",
+                    "name": "ExternalViewTool4.js",
+                    "path": "/app/view/tools/externalview/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.map.CoursesViewController",
                     "name": "CoursesViewController.js",
                     "path": "/app/controller/tool/map/"
@@ -3294,6 +3304,11 @@
                     "clsName": "Ssp.store.LtiSspUserFieldNames",
                     "name": "LtiSspUserFieldNames.js",
                     "path": "/app/store/"
+                },
+                {
+                  "clsName": "Ssp.store.SspUserFieldNames",
+                  "name": "SspUserFieldNames.js",
+                  "path": "/app/store/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.apikey.lticonsumer.EditLTIConsumerAdminViewController",

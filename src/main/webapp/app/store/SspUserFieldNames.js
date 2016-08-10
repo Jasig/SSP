@@ -16,12 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.model.reference.ExternalViewTool', {
-	extend: 'Ssp.model.reference.AbstractReference',
-    fields: [
-        {name:'url',type:'string'},
-        {name:'variableStudentIdentifier',type:'string'},
-        {name:'variableUserIdentifier',type:'string'},
-        {name:'embedded', type:'boolean'}
-    ]
+Ext.define('Ssp.store.SspUserFieldNames', {
+    extend: 'Ext.data.Store',
+    mixins: [ 'Deft.mixin.Injectable'],
+    model: 'Ssp.model.FilterDiscreteValues',
+    autoLoad: false,
+    constructor: function(){
+        var me=this;
+        me.callParent( arguments );
+		Ext.apply(this, { proxy: '' ,
+			  autoLoad: false });
+		me.load();
+        return me;
+    },
+    load: function() {
+        var me=this;
+        var values = [{ displayValue:'', code: ''},
+                      { displayValue:'username', code: 'username'},
+                      { displayValue:'schoolId', code: 'schoolId'},
+                      { displayValue: 'primaryEmailAddress', code: 'primaryEmailAddress'}
+        ];
+        // set the model
+        me.loadData( values );
+        return me;
+    }
 });

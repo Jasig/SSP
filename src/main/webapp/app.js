@@ -181,6 +181,8 @@ Ext.require([
     //EXTERNAL VIEW TOOLS
     'Ssp.view.tools.externalview.ExternalViewTool1',
     'Ssp.view.tools.externalview.ExternalViewTool2',
+    'Ssp.view.tools.externalview.ExternalViewTool3',
+    'Ssp.view.tools.externalview.ExternalViewTool4',
 
     //STUDENT DOCUMENTS TOOL
 	'Ssp.view.tools.documents.Documents',
@@ -2117,10 +2119,11 @@ Ext.onReady(function(){
 			        ltiConsumersStore: 'Ssp.store.LTIConsumers',
 			        ltiSspUserFieldNamesStore: 'Ssp.store.LtiSspUserFieldNames',
 			        permissionsStore: 'Ssp.store.Permissions',
+                    sspUserFieldNamesStore: 'Ssp.store.SspUserFieldNames',
 
-			        
-			        	
-			        // SERVICES
+
+
+                    // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
 			        assessmentService: 'Ssp.service.AssessmentService',
 			        campusService: 'Ssp.service.CampusService',

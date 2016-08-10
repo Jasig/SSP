@@ -55,11 +55,11 @@
             </column>
             <column name="modified_date" type="datetime" />
             <column name="created_by" type="uuid">
-                <constraints nullable="false" foreignKeyName="career_status_created_by_person_id"
+                <constraints nullable="false" foreignKeyName="external_view_created_by_person_id"
                              references="person(id)" />
             </column>
             <column name="modified_by" type="uuid">
-                <constraints nullable="true" foreignKeyName="career_status_modified_by_person_id"
+                <constraints nullable="true" foreignKeyName="external_view_modified_by_person_id"
                              references="person(id)" />
             </column>
             <column name="object_status" type="int">
@@ -104,6 +104,38 @@
                 <where>id = '22cdbc52-e771-4e37-acdd-8f0a3a587b6c'</where>
             </delete>
         </rollback>
+
+        <insert tableName="external_view">
+            <column name="id" value="fd773fea-b949-469d-9857-0bd4f5d4306c" />
+            <column name="name" value="External View 3" />
+            <column name="description" value="External View #4  Enter a URL like http://www.someplace2.com/example/USERID/studentexample/STUDENTID  If embedded set to true, website will show in the Tool view (if external site allows). Otherwise if false, opens a new tab. Variables USERID and/or STUDENTID can be placed in url." />
+            <column name="created_date" valueDate="2016-07-30T10:00:00" />
+            <column name="modified_date" valueDate="2016-07-30T10:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="external_view">
+                <where>id = 'fd773fea-b949-469d-9857-0bd4f5d4306c'</where>
+            </delete>
+        </rollback>
+
+        <insert tableName="external_view">
+            <column name="id" value="956f01ba-5b05-4456-bed8-6f08f52c9a79" />
+            <column name="name" value="External View 4" />
+            <column name="description" value="External View #4  Enter a URL like http://www.someplace2.com/example/USERID/studentexample/STUDENTID  If embedded set to true, website will show in the Tool view (if external site allows). Otherwise if false, opens a new tab. Variables USERID and/or STUDENTID can be placed in url." />
+            <column name="created_date" valueDate="2016-07-30T10:00:00" />
+            <column name="modified_date" valueDate="2016-07-30T10:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="external_view">
+                <where>id = '956f01ba-5b05-4456-bed8-6f08f52c9a79'</where>
+            </delete>
+        </rollback>
     </changeSet>
 
     <changeSet author='paul.spaude' id='add external view blurbs'>
@@ -124,6 +156,7 @@
                 <where>id = '993afade-7b14-42e0-80bc-7a630eb508eb'</where>
             </delete>
         </rollback>
+
         <insert tableName="blurb">
             <column name="id" value="3cf3a8fb-a324-47b7-84d1-c22e5d034c42" />
             <column name="name" value="External View Tool 2" />
@@ -139,6 +172,42 @@
         <rollback>
             <delete tableName="blurb">
                 <where>id = '3cf3a8fb-a324-47b7-84d1-c22e5d034c42'</where>
+            </delete>
+        </rollback>
+
+        <insert tableName="blurb">
+            <column name="id" value="b6a2ff7d-89e1-4f53-a681-940b2eb1920c" />
+            <column name="name" value="External View Tool 3" />
+            <column name="code" value="ssp.label.tools.externalviewtool3"/>
+            <column name="value" value="External View Tool 3"/>
+            <column name="description" value="External View Tool #3" />
+            <column name="created_date" valueDate="2016-07-26T00:00:00" />
+            <column name="modified_date" valueDate="2016-07-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="blurb">
+                <where>id = 'b6a2ff7d-89e1-4f53-a681-940b2eb1920c'</where>
+            </delete>
+        </rollback>
+
+        <insert tableName="blurb">
+            <column name="id" value="8113c9db-9e88-4085-af93-46caeef867d8" />
+            <column name="name" value="External View Tool 4" />
+            <column name="code" value="ssp.label.tools.externalviewtool4"/>
+            <column name="value" value="External View Tool 4"/>
+            <column name="description" value="External View Tool #4" />
+            <column name="created_date" valueDate="2016-07-26T00:00:00" />
+            <column name="modified_date" valueDate="2016-07-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="blurb">
+                <where>id = '8113c9db-9e88-4085-af93-46caeef867d8'</where>
             </delete>
         </rollback>
     </changeSet>

@@ -51,8 +51,10 @@ Ext.define('Ssp.store.Tools', {
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.notes', 'Notes'), toolType: "personnotes", active: true },
 				{ group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.caseloadassign', 'Caseload Reassign'), toolType: "toolcaseloadreassignment", active: true },
 			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool1', 'External View 1'), toolType: "externalviewtool1", active: true },
-			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool2', 'External View 2'), toolType: "externalviewtool2", active: true }
-            ];
+			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool2', 'External View 2'), toolType: "externalviewtool2", active: true },
+			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool3', 'External View 3'), toolType: "externalviewtool3", active: true },
+			    { group:'rc1', name: me.textStore.getValueByCode('ssp.label.tools.externalviewtool4', 'External View 4'), toolType: "externalviewtool4", active: true }
+		];
 
             // set the model
             me.loadData( me.applySecurity( sspTools ) );

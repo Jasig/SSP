@@ -61,7 +61,7 @@ Ext.define('Ssp.controller.AdminViewController', {
         journalStepsStore: 'journalStepsStore',
         journalTracksAllStore: 'journalTracksAllStore',
         lassisStore: 'lassisStore',
-        ltiSspUserFieldNamesStore: 'ltiSspUserFieldNamesStore',
+		sspUserFieldNamesStore: 'sspUserFieldNamesStore',
     	maritalStatusesAllStore: 'maritalStatusesAllStore',
     	militaryAffiliationsAllStore: 'militaryAffiliationsAllStore',
     	courseworkHoursAllStore: 'courseworkHoursAllStore',
