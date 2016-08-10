@@ -25,6 +25,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
         colorsUnpagedStore: 'colorsUnpagedStore',
         colorsAllStore: 'colorsAllStore',
         colorsAllUnpagedStore: 'colorsAllUnpagedStore',
+        ltiSspUserFieldNamesStore: 'ltiSspUserFieldNamesStore',
         confidentialityLevelOptionsStore: 'confidentialityLevelOptionsStore',
        	authenticatedPerson: 'authenticatedPerson',
         textStore: 'sspTextStore'
@@ -877,53 +878,50 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                     }]
-                },{
-                    text: 'Main Tool',
-                    title: 'Main Tool',
-                    form: '',
-                    securityRole: 'REFERENCE_MAIN_TOOL_WRITE',
-                    expanded: false,
-                    children: [{
-                        text: 'SAP Statuses',
-                        title: 'SAP Statuses',
-                        store: 'sapStatusesAll',
-                        interfaceOptions: {
-                            addButtonVisible: true,
-                            deleteButtonVisible: false,
-                            columnOverrides: [
-                            {
-                                header: 'SAP Code',
-                                required: true,
-                                dataIndex: 'code',
-                                editor:{
-                                    allowBlank: false
-                                },
-                                field: {
-                                    xtype: 'textfield',
-                                    allowBlank: false,
-                                    maxLength: 10
-                                },
-                                flex: 25,
-                                sortOrder: 40
-                            }
-                        ],
+            },{
+                text: 'Main Tool',
+                title: 'Main Tool',
+                form: '',
+                securityRole: 'REFERENCE_MAIN_TOOL_WRITE',
+                expanded: false,
+                children: [{
+                    text: 'SAP Statuses',
+                    title: 'SAP Statuses',
+                    store: 'sapStatusesAll',
+                    interfaceOptions: {
+                        addButtonVisible: true,
+                        deleteButtonVisible: false,
+                        columnOverrides: [{
+                            header: 'SAP Code',
+                            required: true,
+                            dataIndex: 'code',
+                            editor:{
+                                allowBlank: false
+                            },
+                            field: {
+                                xtype: 'textfield',
+                                allowBlank: false,
+                                maxLength: 10
+                            },
+                            flex: 25,
+                            sortOrder: 40
+                        }],
                         columnFieldOverrides: {
                             description: {
                                 maxLength: 150
                             }
                         }
-	                },
-					form: 'AbstractReferenceAdmin',
-	                leaf: true
-	            }, {
-					text: 'Financial Aid Files',
-	                title: 'Financial Aid Files',
-	                store: 'financialAidFilesAll',
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
+                }, {
+                    text: 'Financial Aid Files',
+                    title: 'Financial Aid Files',
+                    store: 'financialAidFilesAll',
                     interfaceOptions: {
                         addButtonVisible: true,
                         deleteButtonVisible: false,
-                        columnOverrides: [
-                            {
+                        columnOverrides: [{
                                 header: 'File Code',
                                 required: true,
                                 dataIndex: 'code',
@@ -937,14 +935,13 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                 },
                                 flex: 25,
                                 sortOrder: 40
-                            }
-                        ],
+                            }],
                         columnFieldOverrides: {
                             description: {
                                 maxLength: 150
                             }
                         }
-	                },
+                    },
                     form: 'AbstractReferenceAdmin',
                     leaf: true
                 }, {
@@ -974,13 +971,108 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                 maxLength: 150
                             }
                         }
-	                },
-					form: 'AbstractReferenceAdmin',
-	                leaf: true
+                    },
+                    form: 'AbstractReferenceAdmin',
+                    leaf: true
                 }, {
                     text: 'Success Indicators',
                     title: 'Success Indicators',
                     form: 'successindicatoradmin',
+                    leaf: true
+                }]
+            },{
+                text: 'External View',
+                title: 'External View',
+                form: '',
+                securityRole: 'REFERENCE_EXTERNAL_VIEW_TOOLS_WRITE',
+                expanded: false,
+                children: [{
+                    text: 'External View Tools',
+                    title: 'External View Tools',
+                    store: 'externalViewTools',
+                    interfaceOptions: {
+                        headerInstructions: "Double-click to edit.",
+                        addButtonVisible: false,
+                        deleteButtonVisible: false,
+                        hasPagingToolbar: false,
+                        columnOverrides: [{
+                            dataIndex: 'objectStatus',
+                            rowEditable: false,
+                            flex: 0.05
+                        }, {
+                            dataIndex: 'name',
+                            rowEditable: false,
+                            flex: 0.2
+                        }, {
+                            dataIndex: 'description',
+                            rowEditable: false,
+                            flex: 0.3
+                        }, {
+                            header: 'External URL',
+                            dataIndex: 'url',
+                            required: true,
+                            flex: 0.4,
+                            field: {
+                                xtype: 'textfield',
+                                allowBlank: true,
+                                fieldStyle: "margin-bottom:12px;",
+                                minLength: 0,
+                                maxLength: 2083
+                            },
+                            sortOrder: 40
+                        }, {
+                            header: 'Student Identifier',
+                            dataIndex: 'variableStudentIdentifier',
+                            required: false,
+                            field: {
+                                xtype: 'combo',
+                                store: me.ltiSspUserFieldNamesStore,
+                                valueField: 'code',
+                                displayField: 'displayValue',
+                                forceSelection: false,
+                                allowBlank: true
+                            },
+                            flex: 0.2,
+                            sortOrder: 40
+                        }, {
+                            header: 'User Identifier',
+                            dataIndex: 'variableUserIdentifier',
+                            required: false,
+                            field: {
+                                xtype: 'combo',
+                                store: me.ltiSspUserFieldNamesStore,
+                                valueField: 'code',
+                                displayField: 'displayValue',
+                                forceSelection: false,
+                                allowBlank: true
+                            },
+                            flex: 0.2,
+                            sortOrder: 40
+                        }, {
+                            header: 'Embed in Tool View',
+                            required: true,
+                            dataIndex: 'isEmbedded',
+                            flex: 0.15,
+                            renderer: me.columnRendererUtils.renderFriendlyBoolean,
+                            field: {
+                                xtype: 'checkbox',
+                                fieldStyle: "margin-bottom:12px;"
+                            },
+                            sortOrder: 40
+                        }],
+                        columnFieldOverrides: {
+                            objectStatus: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            name: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            },
+                            description: {
+                                fieldStyle: "margin-bottom:12px;" // workaround for presence of combobox field
+                            }
+                         }
+                    },
+                    form: 'AbstractReferenceAdmin',
                     leaf: true
                 }]
 	        },{

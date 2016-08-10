@@ -174,11 +174,15 @@ Ext.require([
 	'Ssp.view.tools.map.CoursesGridPanel',
 	'Ssp.view.tools.map.StudentCourseHistory',
 
-	
-	
+
 	//PERSON NOTES TOOL
 	'Ssp.view.tools.notes.Notes',
-	
+
+    //EXTERNAL VIEW TOOLS
+    'Ssp.view.tools.externalview.ExternalViewTool1',
+    'Ssp.view.tools.externalview.ExternalViewTool2',
+
+    //STUDENT DOCUMENTS TOOL
 	'Ssp.view.tools.documents.Documents',
 	'Ssp.view.tools.documents.UploadDocuments',
     
@@ -465,6 +469,7 @@ Ext.require([
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
     'Ssp.store.reference.CaseloadActions',
+    'Ssp.store.reference.ExternalViewTools',
     'Ssp.store.PlanStatus',
     'Ssp.store.PlanExists',
     'Ssp.store.StudentsSearch',
@@ -563,6 +568,7 @@ var apiUrls = [
   {name: 'educationLevel', url: 'reference/educationLevel'},
   {name: 'elective', url: 'reference/elective'},
   {name: 'ethnicity', url: 'reference/ethnicity'},
+  {name: 'externalviewtool', url: 'reference/externalview'},
   {name: 'race', url: 'reference/race'},
   {name: 'sapstatus', url: 'reference/sapstatus'},
   {name: 'financialAidFile', url: 'reference/financialAidFile'},
@@ -1628,6 +1634,15 @@ Ext.onReady(function(){
 						},
 						singleton: true
 					},
+                    externalViewToolsStore: {
+                        fn: function(){
+                            return Ext.create('Ssp.store.reference.ExternalViewTools', {
+                                storeId: 'externalViewToolsStore',
+                                extraParams: {status: "ALL"}
+                            });
+                        },
+                        singleton: true
+                    },
 					racesAllStore: {
 						fn: function(){
 							return Ext.create('Ssp.store.reference.Races', {
@@ -2117,7 +2132,8 @@ Ext.onReady(function(){
 			        earlyAlertService: 'Ssp.service.EarlyAlertService',
 			        earlyAlertReferralService: 'Ssp.service.EarlyAlertReferralService',
 			        earlyAlertResponseService: 'Ssp.service.EarlyAlertResponseService',
-			        journalEntryService: 'Ssp.service.JournalEntryService',
+                    externalViewService: 'Ssp.service.ExternalViewService',
+                    journalEntryService: 'Ssp.service.JournalEntryService',
 			        personService: 'Ssp.service.PersonService',
 			        placementService: 'Ssp.service.PlacementService',
 					personNoteService: 'Ssp.service.PersonNoteService',

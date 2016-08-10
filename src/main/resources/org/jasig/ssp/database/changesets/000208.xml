@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="paul.spaude" id="create external view table" >
+        <createTable tableName="external_view">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="${nvarchar.type}(80)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="text" />
+            <column name="url" type="${nvarchar.type}(2084)">
+                <constraints nullable="true" />
+            </column>
+            <column name="variable_student_identifier" type="${nvarchar.type}(35)">
+                <constraints nullable="true" />
+            </column>
+            <column name="variable_user_identifier" type="${nvarchar.type}(35)">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_embedded" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false" foreignKeyName="career_status_created_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true" foreignKeyName="career_status_modified_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <sql>grant all on external_view to ${database.app.username}</sql>
+        <rollback>
+            <dropTable tableName="external_view" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Add default external view tools" author="paul.spaude">
+        <insert tableName="external_view">
+            <column name="id" value="b4e611a2-80d4-4448-8e38-da643a54c2ed" />
+            <column name="name" value="External View 1" />
+            <column name="description" value="External View #1  Enter a URL like http://www.someplace1.com/example/USERID/studentexample/STUDENTID  If embedded set to true, website will show in the Tool view (if external site allows). Otherwise if false, opens in a new tab. Variables USERID and/or STUDENTID can be placed in url." />
+            <column name="created_date" valueDate="2016-07-30T10:00:00" />
+            <column name="modified_date" valueDate="2016-07-30T10:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="external_view">
+                <where>id = 'b4e611a2-80d4-4448-8e38-da643a54c2ed'</where>
+            </delete>
+        </rollback>
+
+        <insert tableName="external_view">
+            <column name="id" value="22cdbc52-e771-4e37-acdd-8f0a3a587b6c" />
+            <column name="name" value="External View 2" />
+            <column name="description" value="External View #2  Enter a URL like http://www.someplace2.com/example/USERID/studentexample/STUDENTID  If embedded set to true, website will show in the Tool view (if external site allows). Otherwise if false, opens a new tab. Variables USERID and/or STUDENTID can be placed in url." />
+            <column name="created_date" valueDate="2016-07-30T10:00:00" />
+            <column name="modified_date" valueDate="2016-07-30T10:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="external_view">
+                <where>id = '22cdbc52-e771-4e37-acdd-8f0a3a587b6c'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author='paul.spaude' id='add external view blurbs'>
+        <insert tableName="blurb">
+            <column name="id" value="993afade-7b14-42e0-80bc-7a630eb508eb" />
+            <column name="name" value="External View Tool 1" />
+            <column name="code" value="ssp.label.tools.externalviewtool1"/>
+            <column name="value" value="External View Tool 1"/>
+            <column name="description" value="External View Tool #1" />
+            <column name="created_date" valueDate="2016-07-26T00:00:00" />
+            <column name="modified_date" valueDate="2016-07-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="blurb">
+                <where>id = '993afade-7b14-42e0-80bc-7a630eb508eb'</where>
+            </delete>
+        </rollback>
+        <insert tableName="blurb">
+            <column name="id" value="3cf3a8fb-a324-47b7-84d1-c22e5d034c42" />
+            <column name="name" value="External View Tool 2" />
+            <column name="code" value="ssp.label.tools.externalviewtool2"/>
+            <column name="value" value="External View Tool 2"/>
+            <column name="description" value="External View Tool #2" />
+            <column name="created_date" valueDate="2016-07-26T00:00:00" />
+            <column name="modified_date" valueDate="2016-07-26T00:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+        <rollback>
+            <delete tableName="blurb">
+                <where>id = '3cf3a8fb-a324-47b7-84d1-c22e5d034c42'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
