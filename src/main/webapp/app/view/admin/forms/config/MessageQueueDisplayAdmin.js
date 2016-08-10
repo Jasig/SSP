@@ -79,19 +79,10 @@ Ext.define('Ssp.view.admin.forms.config.MessageQueueDisplayAdmin', {
                 pageSize: me.apiProperties.getPagingSize()
             }, {
                 xtype: 'toolbar',
-                items: [{
-                    text: 'Details',
-     		                   iconCls: 'icon-edit',
-     		                   xtype: 'button',
-     		                   action: 'displayDetails',
-     		                   itemId: 'detailsButton'
-                }]
-            }, {
-                xtype: 'toolbar',
                 dock: 'top',
                 items: [{
                     xtype: 'label',
-                    text: 'Click on a Message to view Details.'
+                    text: 'Double-click on a Message to view Details.'
                 }]
             }]
         });

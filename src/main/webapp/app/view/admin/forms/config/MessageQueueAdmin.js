@@ -31,13 +31,11 @@ Ext.define('Ssp.view.admin.forms.config.MessageQueueAdmin', {
     },
     initComponent: function(){
 		Ext.apply(this,{
-	          items: [
-	                  {
-	                  	xtype: 'messagequeuedisplayadmin',
-	                    anchor: '100%',
-	                  	flex: 1
-	                  }
-	                 ]});
+		items: [{
+			xtype: 'messagequeuedisplayadmin',
+			anchor: '100%',
+			flex: 1
+	  	}]});
     	return this.callParent(arguments);
     }
 });

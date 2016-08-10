@@ -37,7 +37,7 @@ public class MessageTO extends AbstractAuditableTO<Message>
     private String sentReplyToAddress;
     private Date sentDate;
     private Integer retryCount;
-    private boolean sent;
+    private boolean sent;    //TODO better way of indicating queued, sent, retrying, and failed
 
 	
 	public MessageTO() {

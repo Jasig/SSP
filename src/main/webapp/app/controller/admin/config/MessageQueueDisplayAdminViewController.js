@@ -33,8 +33,8 @@ Ext.define('Ssp.controller.admin.config.MessageQueueDisplayAdminViewController',
     	formToDisplay: 'messagequeuedetails'
     },
     control: {
-    	'detailsButton': {
-			click: 'onDetailsClick'
+		view: {
+			itemdblclick: 'onDetailsClick'
 		}
     },       
 	init: function() {
@@ -52,12 +52,8 @@ Ext.define('Ssp.controller.admin.config.MessageQueueDisplayAdminViewController',
 		return me.callParent(arguments);
     },
 
-    onDetailsClick: function(button) {
+    onDetailsClick: function(view, record, item, index, event, eventListenerOpts) {
 		var me = this;
-   		var grid, record, idx;
-   		grid = button.up('grid');
-   		record = grid.getView().getSelectionModel().getSelection()[0];
-
    		this.adminSelectedIndex.set('value', -1);
 
         if (record) {

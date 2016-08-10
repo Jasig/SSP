@@ -38,9 +38,15 @@ Ext.define('Ssp.view.admin.forms.config.MessageQueueDetails', {
             },
             defaults: {
                 minWidth: 80,
-                labelWidth: 150
+                labelWidth: 150,
+                padding: '5 0 0 5'
             },
             items: [{
+                xtype: 'displayfield',
+                fieldLabel: 'Id',
+                name: 'id',
+                value: me.message.get('id')
+            }, {
                 xtype: 'displayfield',
                 fieldLabel: 'Sent',
                 name: 'sent',
