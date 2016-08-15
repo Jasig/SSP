@@ -18,19 +18,13 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
-import java.util.List;
-
 import org.jasig.ssp.dao.reference.BlurbDao;
-import org.jasig.ssp.dao.reference.EnrollmentStatusDao;
 import org.jasig.ssp.model.reference.Blurb;
-import org.jasig.ssp.model.reference.EnrollmentStatus;
 import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.service.reference.EnrollmentStatusService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,12 +70,12 @@ public class BlurbServiceImpl extends
 	@Override
 	public PagingWrapper<Blurb> getAll(
 			SortingAndPaging sAndP, String code, String langCode) {
-		if (langCode==null) {
-			langCode = configService.getByNameNullOrDefaultValue(ConfigService.DEFAULT_LANGUAGE);
-		}
-		if (langCode==null) {
-			langCode = "eng";
-		}
+//		if (langCode==null) {
+//			langCode = configService.getByNameNullOrDefaultValue(ConfigService.DEFAULT_LANGUAGE);
+//		}
+//		if (langCode==null) {
+//			langCode = "eng";
+//		}
 		return dao.getAll(sAndP,code,langCode);
 	}
 

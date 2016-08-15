@@ -25,7 +25,7 @@ Ext.define('Ssp.view.admin.forms.map.MapElectiveCourses', {
     inject: {
         mapEventUtils: 'mapEventUtils',
         currentMapPlan: 'currentMapPlan',
-        textStore: 'textStore'
+        textStore: 'sspTextStore'
 	},
     title: 'Edit Template Elective Courses',
     floating: true,

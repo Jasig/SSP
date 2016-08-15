@@ -1853,13 +1853,12 @@ Ext.onReady(function(){
 			    	{
 						fn: function(){
 							return Ext.create('Ssp.store.reference.Texts', {
-								storeId: 'textStore',
-								extraParams: {status: "ALL", limit: -1, start: null}
+								extraParams: {status: "ALL", limit: -1, start: null, lang: "ALL"}
 							});
 						},
 						singleton: true
 					},
-			    	sspTextStore: 
+			    	sspTextStore:
 			    	{
 						fn: function(){
 							return Ext.create('Ssp.store.reference.Texts', {

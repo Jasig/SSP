@@ -18,15 +18,11 @@
  */
 package org.jasig.ssp.dao.reference;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
-import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
@@ -49,9 +45,10 @@ public class BlurbDao extends AbstractReferenceAuditableCrudDao<Blurb>
 			code = code.replace('*', '%');
 			criteria.add(Restrictions.like("code", code));
 		}
-		if (langCode != null) {
-			criteria.add(Restrictions.eq("lang", langCode));
-		}
+
+//		if (langCode != null) {
+//			criteria.add(Restrictions.eq("lang", langCode));
+//		}
 		return super.processCriteriaWithStatusSortingAndPaging(criteria,
 				sAndP);
 	}

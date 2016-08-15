@@ -24,14 +24,10 @@ Ext.define('Ssp.store.reference.Texts', {
     inject: {
     	apiUrlStore: 'apiUrlStore'
     },
-    constructor: function(){
-    	me = this;
+    constructor: function(arguments){
+    	var me = this;
 
-    	var url = this.getItemUrl('blurb');
-    	if (Ext.util.Cookies.get('defaultLangCode') != null) {
-    		url = url + "?langCode=" + Ext.util.Cookies.get('defaultLangCode')
-    	}
-
+    	var url = this.getItemUrl('blurb', arguments.extraParams);
 		Ext.apply(me, {
 							proxy: me.getProxy(url),
 							autoLoad: false,
@@ -44,7 +40,7 @@ Ext.define('Ssp.store.reference.Texts', {
 							}
 						}
 		);
-    	return me.callParent(arguments);
+		return me.callParent(arguments);
     },
     getValueByCode:function(code, defaultVal, data)
     {
@@ -79,17 +75,33 @@ Ext.define('Ssp.store.reference.Texts', {
 	 * @itemName - the name of the item to locate.
 	 * 	the returned item is returned by name from the apiUrlStore.
 	 */
-	getItemUrl: function( itemName ){
+	getItemUrl: function( itemName, extraParams ){
+	    var me = this;
 		var index = this.apiUrlStore.findExact('name', itemName);
 		if(index == undefined || index < 0 )
 			return "";
 		var record = this.apiUrlStore.getAt(index);
 		var url = "";
-		if (record != null)
+		if (record != null) {
 			url = record.get('url');
+		}
+    	if (!extraParams || (extraParams.lang!='ALL')) {
+       		url = url + "?langCode=" + me.getDefaultLangCode();
+       	}
 		return url;
 	},
+	getDefaultLangCode: function() {
+	    var me = this;
+	    if (Ext.util.Cookies.get('defaultLangCode') != null) {
+	        return Ext.util.Cookies.get('defaultLangCode');
+	    }
+	    return 'eng';
+	},
 	createUrl: function(value){
+	    var me = this;
+        if (!value) {
+            value = me.getItemUrl('blurb');
+        }
 		return Ssp.mixin.ApiProperties.getBaseApiUrl() + value;
 	},
 	getProxy: function(url){

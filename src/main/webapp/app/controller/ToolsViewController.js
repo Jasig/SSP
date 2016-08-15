@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.ToolsViewController', {
 		person: 'currentPerson',
 		personService:'personService',
         toolsStore: 'toolsStore',
-        textStore: 'textStore',
+        textStore: 'sspTextStore',
         isTemplateFlag: 'isTemplateMode'
     },
     control: {
