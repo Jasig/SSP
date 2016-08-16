@@ -85,9 +85,9 @@ Ext.define('Ssp.store.reference.Texts', {
 		if (record != null) {
 			url = record.get('url');
 		}
-    	if (!extraParams || (extraParams.lang!='ALL')) {
-       		url = url + "?langCode=" + me.getDefaultLangCode();
-       	}
+//    	if (!extraParams || (extraParams.lang!='ALL')) {
+//       		url = url + "?langCode=" + me.getDefaultLangCode();
+//       	}
 		return url;
 	},
 	getDefaultLangCode: function() {
