@@ -117,7 +117,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	
 	private static String CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE = "COURSE_CODE";
 
-    private static final Logger LOGGER = LoggerFactory
+	private static String CONFIGURABLE_MATCH_COURSE_ANY_PASSING_COURSE = "map_plan_status_use_any_passing_course";
+
+	private static final Logger LOGGER = LoggerFactory
             .getLogger(MapStatusReportServiceImpl.class);
 
 
@@ -638,10 +640,18 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
                 } else {
                 	//SSP-3158 The matched course has a failing grade.  Look again for the course for a passingGrade and if not found (NULL) then add the anomaly
-                	if (findTranscriptCourseMatch(mapPlanStatusReportCourse, transcript, criteriaSet, passingGradesSet)==null) {
-						courseDetail = new MapStatusReportCourseDetails(report, mapPlanStatusReportCourse.getTermCode(), mapPlanStatusReportCourse.getFormattedCourse(),
-								mapPlanStatusReportCourse.getCourseCode(), "", AnomalyCode.COURSE_NOT_PASSED);
-						reportCourseDetails.add(courseDetail);
+					if (configService.getByNameOrDefaultValue(CONFIGURABLE_MATCH_COURSE_ANY_PASSING_COURSE)) {
+						if (findTranscriptCourseMatch(mapPlanStatusReportCourse, transcript, criteriaSet, passingGradesSet) == null) {
+							courseDetail = new MapStatusReportCourseDetails(report, mapPlanStatusReportCourse.getTermCode(), mapPlanStatusReportCourse.getFormattedCourse(),
+									mapPlanStatusReportCourse.getCourseCode(), "", AnomalyCode.COURSE_NOT_PASSED);
+							reportCourseDetails.add(courseDetail);
+						}
+					} else {
+						if (findLastTranscriptCourseMatch(mapPlanStatusReportCourse, transcript, criteriaSet, passingGradesSet) == null) {
+							courseDetail = new MapStatusReportCourseDetails(report, mapPlanStatusReportCourse.getTermCode(), mapPlanStatusReportCourse.getFormattedCourse(),
+									mapPlanStatusReportCourse.getCourseCode(), "", AnomalyCode.COURSE_NOT_PASSED);
+							reportCourseDetails.add(courseDetail);
+						}
 					}
                 }
             }
@@ -649,6 +659,36 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
 		//will be null if no anomaly is found
 		return courseDetail;
+	}
+	private ExternalStudentTranscriptCourse findLastTranscriptCourseMatch(MapPlanStatusReportCourse mapPlanStatusReportCourse,
+																	  List<ExternalStudentTranscriptCourse> transcriptCoursesForTerm, Set<String> criteriaSet, Set<String> passingGradesSet) {
+		if (transcriptCoursesForTerm == null || transcriptCoursesForTerm.isEmpty()) {
+			return null;
+		}
+
+		ExternalStudentTranscriptCourse lastExternalStudentTranscriptCourse = null;
+		for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : transcriptCoursesForTerm) {
+			if (isCourseMatch(mapPlanStatusReportCourse, externalStudentTranscriptCourse, criteriaSet)) {
+				if (lastExternalStudentTranscriptCourse==null) {
+					lastExternalStudentTranscriptCourse = externalStudentTranscriptCourse;
+				} else {
+					if (compareTerms(lastExternalStudentTranscriptCourse.getTermCode(), externalStudentTranscriptCourse.getTermCode()) == 1) {
+						lastExternalStudentTranscriptCourse = externalStudentTranscriptCourse;
+					}
+				}
+			}
+
+		}
+		if (lastExternalStudentTranscriptCourse!=null) {
+			if (passingGradesSet!=null) {
+				if (passingGradesSet.contains(lastExternalStudentTranscriptCourse.getGrade().trim().toUpperCase())) {
+					return lastExternalStudentTranscriptCourse;
+				}
+			} else {
+				return lastExternalStudentTranscriptCourse;
+			}
+		}
+		return null;
 	}
 
 	private ExternalStudentTranscriptCourse findTranscriptCourseMatch(MapPlanStatusReportCourse mapPlanStatusReportCourse,
@@ -662,35 +702,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
         if (transcriptCoursesForTerm == null || transcriptCoursesForTerm.isEmpty()) {
             return null;
         }
-		
+
 		for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : transcriptCoursesForTerm) {
-			boolean match = true;
-			if (!mapPlanStatusReportCourse.getFormattedCourse().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getFormattedCourse().trim())) {
-				match = false;
-			}
-
-			//The default matching criteria is term_code + formatted_course.  There may be schools where this isn't good enough
-			//so these additional search criteria are configurable in case schools need something more detailed.
-			if (criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE)) {
-				if (!mapPlanStatusReportCourse.getCourseTitle().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getTitle().trim())) {
-					match = false;
-				}
-			}
-
-			if (criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS)) {
-				if (!mapPlanStatusReportCourse.getCreditHours().equals(externalStudentTranscriptCourse.getCreditEarned())) {
-					match = false;
-				}			
-			}
-
-			if (criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE)) {
-				//its quite possible that course code may not be on the transcript.  If this is true, we shouldn't consider course_code at all
-				if (mapPlanStatusReportCourse.getCourseCode() != null && externalStudentTranscriptCourse.getCourseCode() != null) {
-					if (!mapPlanStatusReportCourse.getCourseCode().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getCourseCode().trim())) {
-						match = false;
-					}			
-				}
-			}
+			boolean match = isCourseMatch(mapPlanStatusReportCourse, externalStudentTranscriptCourse, criteriaSet);
 
 			if (passingGradesSet!=null) {
 				if (!passingGradesSet.contains(externalStudentTranscriptCourse.getGrade().trim().toUpperCase())) {
@@ -704,6 +718,58 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		}
 
 		return null;
+	}
+
+	private boolean isCourseMatch(MapPlanStatusReportCourse mapPlanStatusReportCourse,
+								  ExternalStudentTranscriptCourse externalStudentTranscriptCourse, Set<String> criteriaSet){
+		boolean match = true;
+		if (!mapPlanStatusReportCourse.getFormattedCourse().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getFormattedCourse().trim())) {
+			match = false;
+		}
+
+		//The default matching criteria is term_code + formatted_course.  There may be schools where this isn't good enough
+		//so these additional search criteria are configurable in case schools need something more detailed.
+		if (criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE)) {
+			if (!mapPlanStatusReportCourse.getCourseTitle().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getTitle().trim())) {
+				match = false;
+			}
+		}
+
+		if (criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_CREDIT_HOURS)) {
+			if (!mapPlanStatusReportCourse.getCreditHours().equals(externalStudentTranscriptCourse.getCreditEarned())) {
+				match = false;
+			}
+		}
+
+		if (criteriaSet.contains(MapStatusReportServiceImpl.CONFIGURABLE_MATCH_CRITERIA_COURSE_CODE)) {
+			//its quite possible that course code may not be on the transcript.  If this is true, we shouldn't consider course_code at all
+			if (mapPlanStatusReportCourse.getCourseCode() != null && externalStudentTranscriptCourse.getCourseCode() != null) {
+				if (!mapPlanStatusReportCourse.getCourseCode().trim().equalsIgnoreCase(externalStudentTranscriptCourse.getCourseCode().trim())) {
+					match = false;
+				}
+			}
+		}
+
+		return match;
+	}
+
+	private int compareTerms(String firstTermCode, String secondTermCode) {
+		Date firstTermEndDate = null;
+		Date secondTermEndDate = null;
+		try {
+			firstTermEndDate = termService.getByCode(firstTermCode).getEndDate();
+		} catch (ObjectNotFoundException e) {}
+		try {
+			secondTermEndDate = termService.getByCode(secondTermCode).getEndDate();
+		} catch (ObjectNotFoundException e) {}
+
+		if (firstTermEndDate!=null && secondTermEndDate!=null ) {
+			return secondTermEndDate.compareTo(firstTermEndDate);
+		}
+		if (secondTermEndDate!=null) {
+			return 1;
+		}
+		return -1;
 	}
 
     private ExternalStudentTranscriptNonCourseEntity findTranscriptCourseMatchOverrideCourse(MapPlanStatusReportCourse mapPlanStatusReportCourse,
