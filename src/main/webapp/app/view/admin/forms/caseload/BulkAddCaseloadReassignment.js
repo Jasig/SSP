@@ -30,16 +30,23 @@ Ext.define('Ssp.view.admin.forms.caseload.BulkAddCaseloadReassignment', {
     },
 	initComponent: function() {
 		var me=this;
-		var defaultWarningMessage = 'Warning:  If a large number students are being added or caseload reassigned, the performance of SSP '
-		                    + 'could be impacted and this action should be done off hours.';
+		var defaultWarningMessage = '<br/>Warning:  If a large number students are being added or caseload reassigned, the performance of SSP '
+		                    + 'could be impacted and this action should be done off hours. <br/><br/>'
+		                    + 'The format is csv without headers including student school_id, coach school_id, person requesting school_id. Two examples are below showing: <br/><br/>'
+		                    + '1) Adding a student with school_id = rjones210 and assign to the coach defined in the external database tables. If no coach is assigned in '
+		                    + 'the external database table, the coach value must be provided.<br/><br/>'
+                            + '&nbsp;&nbsp;&nbsp;&nbsp;rjones210,,admin<br/><br/>'
+                            + '2) Changing the coach for student mbrown51 to coach2.<br/><br/>'
+                            + '&nbsp;&nbsp;&nbsp;&nbsp;mbrown51,coach2,admin';
         Ext.applyIf(me, {
             autoScroll: true,
             border: 0,
             padding: 0,
             items: [{
-                xtype: 'label',
-                anchor: '100%',
-                text: me.textStore.getValueByCode('ssp.label.bulk-add-reassign.warning-message', defaultWarningMessage)
+                xtype: 'panel',
+                html: me.textStore.getValueByCode('ssp.label.bulk-add-reassign.warning-message', defaultWarningMessage),
+                border: false,
+                flex: 1
             }, {
                 xtype: 'tbspacer',
                 height: 10
