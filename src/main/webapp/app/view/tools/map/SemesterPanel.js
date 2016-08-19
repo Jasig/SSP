@@ -157,14 +157,6 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 width:160,
                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
                     var me=this;
-                    if (me.columns[colIndex].editor) {
-                        if (record.get('planElectiveCourseElectives')) {
-                            var store = new Ssp.store.PlanElectiveCourse();
-                            store.loadData(record.get('planElectiveCourseElectives'));
-                            me.columns[colIndex].editor.store = store;
-                        }
-                        value = value; //+ '&nbsp;&nbsp;&nbsp;' + me.columnRendererUtils.renderPhotoIcon(Ssp.util.Constants.ADD_TERM_NOTE_ICON_PATH);
-                    }
                     if (me.invalidRecord(record)) {
                         metaData.style = 'font-style:italic;color:#FF0000';
                         metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.concerns','Concerns:') + record.get("invalidReasons") + '"';
@@ -180,9 +172,21 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                     displayField: 'formattedCourse',
                     valueField: 'formattedCourse',
                     listeners: {
+                        focus: function(comboBox, eObj, eOpts) {
+                            var me = comboBox;
+                            var selectedModel = me.up('grid').getSelectionModel().getSelection()[0];
+                            var store = new Ssp.store.PlanElectiveCourse();
+                            if (selectedModel.get('planElectiveCourseElectives')) {
+                                store.loadData(selectedModel.get('planElectiveCourseElectives'));
+                            } else {
+                                // make sure we don't leave a stale store binding
+                                store.loadData([]);
+                            }
+                            comboBox.bindStore(store);
+                        },
                         change : function(comboBox, newValue, oldValue, e) {
                             var me = this;
-                            var selectedModel = this.up('grid').getSelectionModel().getSelection()[0];
+                            var selectedModel = me.up('grid').getSelectionModel().getSelection()[0];
                             if (selectedModel && selectedModel.data.planElectiveCourseElectives) {
                                 for (i = 0; i < selectedModel.data.planElectiveCourseElectives.length; i++) {
                                     if (selectedModel.data.planElectiveCourseElectives[i].formattedCourse == newValue ) {
