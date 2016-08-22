@@ -19,7 +19,6 @@
 package org.jasig.ssp.dao;
 
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.TemplateCourse;
 import org.springframework.stereotype.Repository;
@@ -41,18 +40,19 @@ public class TemplateCourseDao extends
 	}
 
 	public List<TemplateCourse> getAllCoursesForTemplate (final UUID id) {
-		List<Object[]> list = createCriteria()
+		List<TemplateCourse> list = createCriteria()
 				.add(Restrictions.eq("template.id", id))
-				.setProjection(
-					Projections.projectionList()
-						.add(Projections.min("id"))
-						.add(Projections.groupProperty("formattedCourse"))
-				).list();
+				.list();
 
+		//Loop through the list to get a distinct set of formatted course for a template.  At this point, we don't care
+		// which templateCourse.id is used as long it is unique
 		List<UUID> uuidList = new ArrayList<>();
-		for (Object[] o : list) {
-			UUID uuid = (UUID) o [0];
-			uuidList.add(uuid);
+		List<String> formattedCourseList = new ArrayList<>();
+		for (TemplateCourse templateCourse : list) {
+			if (!formattedCourseList.contains(templateCourse.getFormattedCourse())) {
+				uuidList.add(templateCourse.getId());
+				formattedCourseList.add(templateCourse.getFormattedCourse());
+			}
 		}
 		return createCriteria().add(Restrictions.in("id", uuidList)).addOrder(Order.asc("formattedCourse")).list();
 	}

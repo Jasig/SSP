@@ -162,24 +162,4 @@
             <dropColumn tableName="map_plan_course" columnName="original_formatted_course"/>
         </rollback>
     </changeSet>
-    <changeSet dbms="postgresql" id="Add min(uuid) AGGREGATE and min(uuid,uuid) FUNCTION" author="michael.sultzaberger">
-        <sql ><![CDATA[
-            CREATE OR REPLACE FUNCTION min_uuid(uuid, uuid)
-            RETURNS uuid AS
-            $BODY$
-               SELECT CAST ( CASE WHEN ($2 IS NULL OR $1 < $2) THEN $1 ELSE $2 END AS uuid)
-            $BODY$
-              LANGUAGE sql VOLATILE
-              COST 100;
-            ALTER FUNCTION min_uuid(uuid, uuid)
-              OWNER TO sspadmin;
-
-            CREATE AGGREGATE min(uuid) (
-                sfunc = min_uuid,
-                stype = uuid
-            );
-            ALTER AGGREGATE min(uuid)
-              OWNER TO sspadmin;
-        ]]></sql>
-    </changeSet>
 </databaseChangeLog>
