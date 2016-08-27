@@ -19,6 +19,8 @@
 package org.jasig.ssp.service.external.impl;
 
 import com.google.common.collect.Maps;
+import org.hibernate.FlushMode;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -75,6 +77,9 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 	@Autowired
 	private WithTransaction withTransaction;
+
+	@Autowired
+	protected transient SessionFactory sessionFactory;
 
 	private transient long nextPersonIndex = 0;
 
@@ -231,6 +236,8 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 	}
 
 	protected Pair<Long,Long> syncWithPerson(final SortingAndPaging sAndP) throws InterruptedException {
+
+		sessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
 
 		// Use InterruptedExceptions instead of manipulating return value b/c
 		// the return value actually means "total number of possible processable"
