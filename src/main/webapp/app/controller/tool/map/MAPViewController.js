@@ -939,8 +939,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 
 	onCurrentMapPlanChange: function(){
 	    var me = this;
+        var planTemplateFunctionality = me.configStore.getConfigByName('map_plan_template_options');
 
-		if ( me.currentMapPlan.get('isTemplate') == true || (isTemplateFlag && me.currentMapPlan.get('isTemplate') == false) ) {
+		if ( me.currentMapPlan.get('isTemplate') == true || (!planTemplateFunctionality && isTemplateFlag && me.currentMapPlan.get('isTemplate') == false) ) {
 			if((me.currentMapPlan.get('id') || me.currentMapPlan.get('id') != "") ) {
 				me.getSaveTemplateButton().show();
 			}
@@ -988,7 +989,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 			me.getMovePlanButton().setTooltip(me.textStore.getValueByCode('ssp.tooltip.map.view.move-plan-button',"Move Plan"));
 		}
 		me.setPlanNotesButtonIcon();
-        me.handleTemplateAndMapToolsModalChange();
+        me.handleTemplateAndMapToolsModalChange(planTemplateFunctionality);
         me.getView().setLoading(false);
 	},
 	
@@ -1058,9 +1059,8 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 	    return me.callParent( arguments );
 	},
 
-    handleTemplateAndMapToolsModalChange: function() {
+    handleTemplateAndMapToolsModalChange: function(planTemplateFunctionality) {
 	    var me = this;
-        var planTemplateFunctionality = me.configStore.getConfigByName('map_plan_template_options');
 
         if (!isTemplateFlag || (planTemplateFunctionality && me.personLite != null && me.personLite.get('id'))) {
             if (!planTemplateFunctionality) {
