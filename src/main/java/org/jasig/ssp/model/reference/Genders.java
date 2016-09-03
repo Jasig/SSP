@@ -18,9 +18,10 @@
  */
 package org.jasig.ssp.model.reference;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
+
 
 @JsonSerialize(using = CodeAndPropertySerializer.class)
 public enum Genders implements CodeAndProperty {

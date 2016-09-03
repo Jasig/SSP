@@ -22,20 +22,21 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.JsonMappingException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 
 public class DateOnlyDeserializer extends JsonDeserializer<Date> {
 	@Override
 	public Date deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
-		String text = jp.getText();
+
+	    String text = jp.getText();
 		SimpleDateFormat formatter = DateOnlyFormatting.dateFormatter();
+
 		try {
 			return formatter.parse(text);
 		} catch (ParseException e) {

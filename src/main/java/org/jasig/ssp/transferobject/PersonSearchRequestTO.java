@@ -18,19 +18,14 @@
  */
 package org.jasig.ssp.transferobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 /**

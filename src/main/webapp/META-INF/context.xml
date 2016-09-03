@@ -19,7 +19,7 @@
     under the License.
 
 -->
-<Context crossContext="true">
+<Context crossContext="true" sessionCookiePath="/">
 	<!-- :TODO This is an attempt to cut down on some of the configuration of ssp. 
 		Need to follow through, and either remove this file (just use env var) or 
 		use it and remove the env var. -->

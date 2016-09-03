@@ -18,13 +18,14 @@
  */
 package org.jasig.ssp.transferobject;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanCourse;
 import org.jasig.ssp.model.PlanElectiveCourse;
 import org.jasig.ssp.model.TermNote;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  */

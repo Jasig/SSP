@@ -18,11 +18,11 @@
  */
 package org.jasig.ssp.transferobject.form;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jasig.ssp.transferobject.PersonProgramStatusTO;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
-
 import java.io.Serializable;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BulkProgramStatusChangeRequestForm implements Serializable, HasPersonSearchRequest {

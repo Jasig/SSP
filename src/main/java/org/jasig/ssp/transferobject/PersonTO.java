@@ -18,39 +18,25 @@
  */
 package org.jasig.ssp.transferobject; // NOPMD
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.PersonProgramStatus;
-import org.jasig.ssp.model.PersonReferralSource;
-import org.jasig.ssp.model.PersonServiceReason;
-import org.jasig.ssp.model.PersonSpecialServiceGroup;
-import org.jasig.ssp.model.Task;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
-import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.ConfidentialityLevel;
-import org.jasig.ssp.model.reference.ReferralSource;
-import org.jasig.ssp.model.reference.ServiceReason;
-import org.jasig.ssp.model.reference.SpecialServiceGroup;
-import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.reference.*;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
 import org.jasig.ssp.util.DateTimeUtils;
 import org.jasig.ssp.util.collections.Pair;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
 
 /**
  * Person transfer object

@@ -18,21 +18,16 @@
  */
 package org.jasig.ssp.transferobject.external;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.Size;
-
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.FinancialFileStatus;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
 
 public class ExternalStudentFinancialAidTO implements Serializable,
 		ExternalDataTO<ExternalStudentFinancialAid> {

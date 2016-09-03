@@ -18,16 +18,15 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.Date;
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.UUID;
+
 
 /**
  * Caseload record transfer object

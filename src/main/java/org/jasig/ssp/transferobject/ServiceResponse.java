@@ -18,15 +18,11 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.transferobject.jsonserializer.BooleanPrimitiveToStringSerializer;
@@ -34,9 +30,12 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 // NON_NULL preserves backward compatibility with any clients which might
 // not be prepared to accept the "detail" field

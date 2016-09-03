@@ -21,13 +21,11 @@ package org.jasig.ssp.transferobject.reference;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jasig.ssp.model.reference.Tag;
 import org.jasig.ssp.transferobject.TransferObject;
-import org.jasig.ssp.model.ObjectStatus;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import com.google.common.collect.Lists;
+
 
 /**
  *Tag transfer object
@@ -57,8 +55,6 @@ public class TagTO
 		super(id, name, description);
 	}
 
-	
-
 	@Override
 	public final void from(final Tag model) {
 		/*if (model == null) {
@@ -69,8 +65,6 @@ public class TagTO
 		code = model.getCode();
 		
 	}
-
-	
 
 	public static List<TagTO> toTOList(
 			final Collection<Tag> models) {
@@ -89,6 +83,4 @@ public class TagTO
 	public void setCode(String code){
 		this.code = code;
 	}
-	
-	
 }

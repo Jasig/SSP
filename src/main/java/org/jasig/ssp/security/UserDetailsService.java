@@ -18,13 +18,9 @@
  */
 package org.jasig.ssp.security;
 
-import java.util.Collection;
-
-import org.codehaus.plexus.util.StringUtils;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonExistsException;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.security.exception.EmailNotFoundException;
 import org.jasig.ssp.security.exception.UnableToCreateAccountException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -40,6 +36,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Collection;
+
 
 @Service
 @Transactional

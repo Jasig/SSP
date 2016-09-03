@@ -21,11 +21,11 @@
  */
 package org.jasig.ssp.util.collections;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Maps;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import java.util.Map;
+
 
 /**
  * A pair of two data items, a.k.a. a binary tuple.

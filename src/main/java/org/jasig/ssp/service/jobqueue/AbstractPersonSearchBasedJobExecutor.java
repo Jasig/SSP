@@ -18,10 +18,9 @@
  */
 package org.jasig.ssp.service.jobqueue;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
@@ -34,12 +33,12 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.transaction.PlatformTransactionManager;
-
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 
 /**
  * Class purpose described in method Javadoc for:

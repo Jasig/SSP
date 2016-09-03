@@ -18,14 +18,14 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.transferobject.TransferObject;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
 
 /**
  *Tag transfer object

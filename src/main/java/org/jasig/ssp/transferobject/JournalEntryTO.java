@@ -18,19 +18,10 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.Sets;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.reference.JournalSource;
 import org.jasig.ssp.model.reference.JournalTrack;
@@ -38,8 +29,10 @@ import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 import org.jasig.ssp.transferobject.reference.ReferenceLiteTO;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.*;
 
-import com.google.common.collect.Sets;
 
 /**
  * JournalEntry transfer object

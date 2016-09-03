@@ -18,21 +18,15 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.Lists;
+import org.jasig.ssp.model.reference.Elective;
+import org.jasig.ssp.transferobject.TransferObject;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.Color;
-import org.jasig.ssp.model.reference.Elective;
-import org.jasig.ssp.transferobject.TransferObject;
-import org.jasig.ssp.web.api.reference.AbstractAuditableReferenceController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Lists;
 
 /**
  * The <code>@JsonIgnoreProperties(ignoreUnknown = true)</code> is here b/c

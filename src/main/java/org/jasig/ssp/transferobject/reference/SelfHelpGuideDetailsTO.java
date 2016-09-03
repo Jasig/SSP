@@ -18,17 +18,14 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.codehaus.jackson.annotate.JsonManagedReference;
+import com.google.common.collect.Lists;
 import org.jasig.mygps.model.transferobject.SelfHelpGuideQuestionTO;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
 import org.jasig.ssp.transferobject.TransferObject;
+import java.util.List;
 
-import com.google.common.collect.Lists;
 
 public class SelfHelpGuideDetailsTO extends SelfHelpGuideTO implements TransferObject<SelfHelpGuide> {
 

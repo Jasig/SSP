@@ -18,10 +18,6 @@
  */
 package org.jasig.ssp.web.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
@@ -33,6 +29,9 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Handles return values of types used in the SSP API, and interpreting them as

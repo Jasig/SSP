@@ -18,21 +18,21 @@
  */
 package org.jasig.ssp.transferobject.jsonserializer;
 
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
 
-public class DateOnlySerializer extends SerializerBase<Date>  {
+public class DateOnlySerializer extends StdSerializer<Date>  {
 
 	public DateOnlySerializer() {
 		super(Date.class);
 	}
+
 	@Override
 	public void serialize(Date value, JsonGenerator jgen,
 						  SerializerProvider provider)
@@ -44,5 +44,4 @@ public class DateOnlySerializer extends SerializerBase<Date>  {
 			jgen.writeString(formatter.format(value));
 		}
 	}
-
 }

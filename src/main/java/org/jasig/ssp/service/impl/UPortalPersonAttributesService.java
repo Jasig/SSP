@@ -18,8 +18,8 @@
  */
 package org.jasig.ssp.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.portal.api.sso.SsoPersonLookupService;
 import org.jasig.portlet.utils.rest.CrossContextRestApiInvoker;
 import org.jasig.portlet.utils.rest.RestResponse;
@@ -37,7 +37,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.request.async.WebAsyncUtils;
-
 import javax.portlet.PortletRequest;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +47,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class UPortalPersonAttributesService
 		implements PersonAttributesService, ServletContextAware {

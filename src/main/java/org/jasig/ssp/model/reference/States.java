@@ -18,9 +18,10 @@
  */
 package org.jasig.ssp.model.reference;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
 import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
+
 
 /**
  * Enumeration of the States in the USA

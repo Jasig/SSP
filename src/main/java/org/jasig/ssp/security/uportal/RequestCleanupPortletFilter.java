@@ -19,23 +19,21 @@
 package org.jasig.ssp.security.uportal;
 
 
-import java.io.IOException;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletException;
-import javax.portlet.PortletSession;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.filter.FilterChain;
-import javax.portlet.filter.FilterConfig;
-import javax.portlet.filter.RenderFilter;
-
-import org.apache.poi.util.NullLogger;
 import org.jasig.ssp.service.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.portlet.context.PortletApplicationContextUtils;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.filter.FilterChain;
+import javax.portlet.filter.FilterConfig;
+import javax.portlet.filter.RenderFilter;
+import java.io.IOException;
+
 
 public class RequestCleanupPortletFilter implements RenderFilter {
 

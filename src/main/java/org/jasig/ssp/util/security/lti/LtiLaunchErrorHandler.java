@@ -18,9 +18,8 @@
  */
 package org.jasig.ssp.util.security.lti;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.security.exception.UserNotAuthorizedException;
 import org.jasig.ssp.security.exception.UserNotEnabledException;
 import org.jasig.ssp.service.impl.PersonAttributesSearchException;
@@ -38,7 +37,6 @@ import org.springframework.security.oauth.provider.InvalidOAuthParametersExcepti
 import org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +44,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.UUID;
+
 
 /**
  * Centralized error handling for both the LTI OAuth filter and processing that occurs downstream.

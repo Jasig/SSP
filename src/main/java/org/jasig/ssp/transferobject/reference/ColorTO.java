@@ -18,16 +18,14 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.Lists;
+import org.jasig.ssp.model.reference.Color;
+import org.jasig.ssp.transferobject.TransferObject;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.jasig.ssp.model.reference.Color;
-import org.jasig.ssp.transferobject.TransferObject;
-import org.jasig.ssp.model.ObjectStatus;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import com.google.common.collect.Lists;
 
 /**
  *Color transfer object

@@ -18,25 +18,25 @@
  */
 package org.jasig.ssp.transferobject.jsonserializer;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
-
 import java.io.IOException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
 
 /**
  * Outputs Java booleans as JSON strings, i.e. "true" or "false", <em>with</em>
  * the wrapping quotes. Exists mainly to preserve backward compatibility
  * in classes which previously hand-rolled their own JSON serialization.
  */
-public class BooleanPrimitiveToStringSerializer extends SerializerBase<Boolean> {
+public class BooleanPrimitiveToStringSerializer extends StdSerializer<Boolean> {
 	public BooleanPrimitiveToStringSerializer() {
 		super(Boolean.TYPE);
 	}
+
 	@Override
-	public void serialize(Boolean value, JsonGenerator jgen,
-						  SerializerProvider provider)
+	public void serialize(Boolean value, JsonGenerator jgen, SerializerProvider provider)
 			throws IOException, JsonProcessingException {
 		if ( value == null ) {
 			jgen.writeString("false");

@@ -18,24 +18,16 @@
  */
 package org.jasig.ssp.transferobject.reference;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.Lists;
 import org.jasig.ssp.model.reference.Challenge;
 import org.jasig.ssp.model.reference.ChallengeChallengeReferral;
 import org.jasig.ssp.model.reference.SelfHelpGuideQuestion;
-import org.jasig.ssp.transferobject.NamedTOComparator;
 import org.jasig.ssp.transferobject.TransferObject;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.*;
 
-import com.google.common.collect.Lists;
 
 /**
  * Challenge transfer object

@@ -18,9 +18,9 @@
  */
 package org.jasig.ssp.service.jobqueue;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.model.jobqueue.Job;
 import org.jasig.ssp.service.jobqueue.JobExecutionBookkeepingException;
 import org.jasig.ssp.service.jobqueue.JobExecutionException;
@@ -36,10 +36,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-
 import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 /**
  * (Hopefully) generically useful common behavior for any {@link JobExecutor}

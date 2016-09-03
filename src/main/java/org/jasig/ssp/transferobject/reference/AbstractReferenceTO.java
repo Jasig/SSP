@@ -19,15 +19,14 @@
 package org.jasig.ssp.transferobject.reference;
 
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.Auditable;
 import org.jasig.ssp.model.reference.AbstractReference;
 import org.jasig.ssp.transferobject.AbstractAuditableTO;
 import org.jasig.ssp.transferobject.NamedTO;
+
 
 /**
  * Transfer object with basic properties for all reference types.
@@ -35,7 +34,7 @@ import org.jasig.ssp.transferobject.NamedTO;
  * @param <T>
  *            Any {@link Auditable} model type.
  */
-@JsonIgnoreProperties(ignoreUnknown = true) 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class AbstractReferenceTO<T extends AbstractReference>
 		extends AbstractAuditableTO<T> implements NamedTO {
 

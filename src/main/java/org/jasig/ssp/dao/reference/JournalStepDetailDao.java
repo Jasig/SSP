@@ -18,12 +18,6 @@
  */
 package org.jasig.ssp.dao.reference;
 
-import java.util.UUID;
-
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStepDetail;
@@ -31,9 +25,12 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import java.util.UUID;
+
 
 /**
  * Data access class for the JournalStepDetail reference entity.
@@ -46,7 +43,7 @@ public class JournalStepDetailDao extends
 	@Autowired
 	private JournalStepDao journalStepDao;
 	
-	private Logger logger = Logger.getLogger(JournalStepDetailDao.class);
+	private Logger LOGGER = LoggerFactory.getLogger(JournalStepDetailDao.class);
 	
 	public JournalStepDetailDao() {
 		super(JournalStepDetail.class);

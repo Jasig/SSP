@@ -18,18 +18,15 @@
  */
 package org.jasig.ssp.transferobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.jasig.ssp.model.Auditable;
+import org.jasig.ssp.model.ObjectStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
-import org.jasig.ssp.model.Auditable;
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.Person;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Transfer object for copy to and from equivalent Auditable models.
@@ -37,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * @param <T>
  *            Any {@link Auditable} model type.
  */
-@JsonIgnoreProperties(ignoreUnknown = true) 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class AbstractAuditableTO<T extends Auditable>
 		implements TransferObject<T> {
 	

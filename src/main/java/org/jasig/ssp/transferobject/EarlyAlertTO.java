@@ -18,15 +18,8 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Sets;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.EarlyAlertReason;
@@ -34,8 +27,9 @@ import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
 import org.jasig.ssp.transferobject.reference.CampusTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertReasonTO;
 import org.jasig.ssp.transferobject.reference.EarlyAlertSuggestionTO;
+import java.io.Serializable;
+import java.util.*;
 
-import com.google.common.collect.Sets;
 
 /**
  * Early Alert transfer object

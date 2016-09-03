@@ -18,16 +18,6 @@
  */
 package org.jasig.ssp.security.uportal;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -42,9 +32,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
 import org.springframework.util.Assert;
 import org.springframework.web.filter.GenericFilterBean;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 
 /**
  * UPortal pre-authenticated processing filter.
@@ -79,8 +77,8 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 			final FilterChain chain)
 			throws IOException, ServletException {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Checking secure context token: "
+		if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Checking secure context token: "
 					+ SecurityContextHolder.getContext().getAuthentication());
 		}
 
@@ -133,7 +131,7 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 
 		if (checkForPrincipalChanges &&
 				!currentUser.getName().equalsIgnoreCase((String)preAuthToken.getPrincipal())) {
-			logger.debug("Pre-authenticated principal has changed to "
+            LOGGER.debug("Pre-authenticated principal has changed to "
 					+ preAuthToken.getPrincipal()
 					+ " and will be reauthenticated");
 
@@ -141,7 +139,7 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 				final HttpSession session = request.getSession(false);
 
 				if (session != null) {
-					logger.debug("Invalidating existing session");
+                    LOGGER.debug("Invalidating existing session");
 					session.invalidate();
 				}
 			}
@@ -160,12 +158,12 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 			final PreAuthenticatedAuthenticationToken preAuthToken) {
 
 		if (preAuthToken == null) {
-			logger.debug("No preauth token found in session");
+            LOGGER.debug("No preauth token found in session");
 			return;
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("preAuthenticatedPrincipal = "
+		if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("preAuthenticatedPrincipal = "
 					+ preAuthToken.getPrincipal()
 					+ ", trying to authenticate");
 		}
@@ -191,8 +189,8 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 	 */
 	protected void successfulAuthentication(final HttpServletRequest request,
 			final HttpServletResponse response, final Authentication authResult) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Authentication success: " + authResult);
+		if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Authentication success: " + authResult);
 		}
 
 		SecurityContextHolder.getContext().setAuthentication(authResult);
@@ -213,7 +211,7 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 			final AuthenticationException failed) {
 		SecurityContextHolder.clearContext();
 
-		logger.warn("Cleared security context due to exception", failed);
+        LOGGER.warn("Cleared security context due to exception", failed);
 
 		request.getSession().setAttribute(
 				WebAttributes.AUTHENTICATION_EXCEPTION, failed);

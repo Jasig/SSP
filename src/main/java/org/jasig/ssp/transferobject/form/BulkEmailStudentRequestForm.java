@@ -18,20 +18,15 @@
  */
 package org.jasig.ssp.transferobject.form;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BulkEmailStudentRequestForm implements Serializable, HasPersonSearchRequest {

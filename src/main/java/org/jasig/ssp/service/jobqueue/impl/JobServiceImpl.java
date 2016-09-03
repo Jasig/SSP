@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.dao.jobqueue.JobDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.jobqueue.Job;
@@ -55,6 +54,7 @@ import org.springframework.core.task.TaskRejectedException;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class JobServiceImpl implements JobService, ApplicationContextAware, BeanNameAware {

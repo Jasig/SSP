@@ -18,17 +18,14 @@
  */
 package org.jasig.ssp.transferobject;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
+import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.jasig.ssp.model.CoachCaseloadRecordCountForProgramStatus;
-import org.jasig.ssp.transferobject.CoachPersonLiteTO.CoachPersonLiteTONameComparator;
-import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
-import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 
 public class RecentActivityTO {
 	

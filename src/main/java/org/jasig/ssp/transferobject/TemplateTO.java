@@ -18,18 +18,14 @@
  */
 package org.jasig.ssp.transferobject;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.jasig.ssp.model.MapTemplateVisibility;
-import org.jasig.ssp.model.Template;
-import org.jasig.ssp.model.TemplateCourse;
-import org.jasig.ssp.model.TemplateElectiveCourse;
-import org.jasig.ssp.model.TermNote;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jasig.ssp.model.*;
 import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
 import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 
 /**
  */

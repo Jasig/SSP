@@ -18,19 +18,17 @@
  */
 package org.jasig.ssp.transferobject; // NOPMD
 
-import java.util.UUID;
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jasig.ssp.model.PersonDisability;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
 import org.jasig.ssp.util.DateTimeUtils;
-import org.jasig.ssp.util.SspTimeZones;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.UUID;
+
 
 public class PersonDisabilityTO
 		extends AbstractAuditableTO<PersonDisability>

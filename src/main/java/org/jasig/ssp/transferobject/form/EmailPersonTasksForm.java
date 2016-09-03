@@ -18,12 +18,12 @@
  */
 package org.jasig.ssp.transferobject.form;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.UUID;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Command Object for the email method of the PersonTaskController.

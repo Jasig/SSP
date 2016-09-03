@@ -18,22 +18,17 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TaskMessageEnqueue;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlyDeserializer;
 import org.jasig.ssp.transferobject.jsonserializer.DateOnlySerializer;
-import org.jasig.ssp.transferobject.reference.ConfidentialityLevelLiteTO;
 import org.jasig.ssp.transferobject.reference.ConfidentialityLevelTO;
+import java.io.Serializable;
+import java.util.*;
+
 
 /**
  * Task transfer object

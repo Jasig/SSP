@@ -18,45 +18,32 @@
  */
 package org.jasig.ssp.web.api.reference;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-import javax.validation.Valid;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jasig.ssp.factory.TOFactory;
 import org.jasig.ssp.factory.reference.ElectiveTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.Elective;
-import org.jasig.ssp.model.reference.JournalStep;
-import org.jasig.ssp.model.reference.JournalTrack;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.AuditableCrudService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ElectiveService;
-import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.ServiceResponse;
 import org.jasig.ssp.transferobject.reference.ElectiveTO;
-import org.jasig.ssp.transferobject.reference.JournalStepTO;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 @Controller
 @RequestMapping("/1/reference/elective")

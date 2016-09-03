@@ -18,11 +18,8 @@
  */
 package org.jasig.ssp.service.reference.impl;
 
-import java.io.IOException;
-import java.util.Locale;
-
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.plexus.util.StringUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.reference.ConfigDao;
 import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -34,6 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.io.IOException;
+import java.util.Locale;
+
 
 /**
  * Configuration (Config) service implementation
@@ -154,7 +154,7 @@ public class ConfigServiceImpl extends
 		if (config == null) {
 			return null;
 		}
-		if (StringUtils.isEmpty(config.getValue())) {
+		if (StringUtils.isBlank(config.getValue())) {
 			LOGGER.warn("Using default value for:" + name);
 			return config.getDefaultValue();
 		}
@@ -180,7 +180,7 @@ public class ConfigServiceImpl extends
 		if (config == null) {
 			throw new ConfigException(name);
 		}
-		if (StringUtils.isEmpty(config.getValue())
+		if (StringUtils.isBlank(config.getValue())
 				|| !StringUtils.isNumeric(config.getValue())) {
 			LOGGER.warn("Using default value for:" + name);
 			if (StringUtils.isNumeric(config.getDefaultValue())) {

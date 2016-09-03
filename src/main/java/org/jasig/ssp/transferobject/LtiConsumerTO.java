@@ -19,10 +19,10 @@
 package org.jasig.ssp.transferobject;
 
 import java.util.UUID;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jasig.ssp.model.security.lti.LtiConsumer;
+
 
 public class LtiConsumerTO extends AbstractAuditableTO<LtiConsumer>
 	implements TransferObject<LtiConsumer> {

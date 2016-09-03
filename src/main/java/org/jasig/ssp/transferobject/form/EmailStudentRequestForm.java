@@ -20,11 +20,11 @@ package org.jasig.ssp.transferobject.form;
 
 import java.io.Serializable;
 import java.util.UUID;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jasig.ssp.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EmailStudentRequestForm extends AbstractEmailForm implements Serializable {

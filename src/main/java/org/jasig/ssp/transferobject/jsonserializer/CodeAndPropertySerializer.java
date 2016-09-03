@@ -19,11 +19,11 @@
 package org.jasig.ssp.transferobject.jsonserializer;
 
 import java.io.IOException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
 
 /**
  * Serialization helper for model enums.
@@ -32,7 +32,7 @@ public class CodeAndPropertySerializer extends JsonSerializer<CodeAndProperty> {
 
 	@Override
 	public void serialize(final CodeAndProperty value,
-			final JsonGenerator generator, final SerializerProvider provider)
+                          final JsonGenerator generator, final SerializerProvider provider)
 			throws IOException, JsonProcessingException {
 		generator.writeStartObject();
 		generator.writeFieldName("code");

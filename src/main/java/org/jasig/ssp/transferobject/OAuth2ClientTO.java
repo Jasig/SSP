@@ -20,13 +20,12 @@ package org.jasig.ssp.transferobject;
 
 import java.util.List;
 import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jasig.ssp.model.security.PersistentGrantedAuthority;
 import org.jasig.ssp.model.security.oauth2.OAuth2Client;
-
 import com.google.common.collect.Lists;
+
 
 public class OAuth2ClientTO extends AbstractAuditableTO<OAuth2Client>
 	implements TransferObject<OAuth2Client> {

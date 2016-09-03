@@ -18,18 +18,16 @@
  */
 package org.jasig.ssp.transferobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.Lists;
+import org.jasig.ssp.model.AuditPerson;
+import org.jasig.ssp.model.Person;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.jasig.ssp.model.AuditPerson;
-import org.jasig.ssp.model.Person;
-
-import com.google.common.collect.Lists;
 
 /**
  * Encapsulate simple Person properties.

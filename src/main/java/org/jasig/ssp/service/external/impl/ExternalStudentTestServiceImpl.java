@@ -24,9 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jasig.ssp.dao.external.ExternalDataDao;
 import org.jasig.ssp.dao.external.ExternalStudentTestDao;
 import org.jasig.ssp.model.Person;
@@ -35,12 +34,12 @@ import org.jasig.ssp.model.reference.Config;
 import org.jasig.ssp.security.BasicAuthenticationRestTemplate;
 import org.jasig.ssp.service.external.ExternalStudentTestService;
 import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.transferobject.external.ExternalStudentTestTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
+
 
 @Service
 @Transactional
