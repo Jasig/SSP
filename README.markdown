@@ -28,7 +28,7 @@
 and if a solution can't be found, the ssp email lists in [SSP Email Lists] (https://wiki.jasig.org/display/SSP/SSP+Email+Lists)
 
 #### Requirements                                                                
-*  JDK 1.7.X - Just a JRE may not be sufficient, a full JDK is recommended
+*  JDK 1.8.X - Just a JRE may not be sufficient, a full JDK is recommended
 *  Servlet 3.1 Container - Tomcat 8.0 is recommended
 *  Maven 2.2.1 or later
 *  Sencha Tools 2.0.0 or later

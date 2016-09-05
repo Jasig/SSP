@@ -20,12 +20,12 @@ package org.jasig.ssp.config;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jasig.ssp.service.reference.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 /**
  * Class used to determine the recipients for Early Alert Response reminders.  Uses ConfigService and the "ear_reminder_recipients" config.

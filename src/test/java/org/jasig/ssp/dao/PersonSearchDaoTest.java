@@ -18,15 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
-import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.UUID;
-
+import com.google.common.collect.Lists;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSearchRequest;
@@ -45,8 +37,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.UUID;
+import static org.jasig.ssp.util.assertions.SspAssert.assertNotEmpty;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("dao-testConfig.xml")
@@ -221,7 +218,7 @@ public class PersonSearchDaoTest {
 			final Person turing = personService.get(UUID
 					.fromString("252de4a0-7c06-4254-b7d8-4ffc02fe81ff"));
 			personSearchRequest.setCoach(turing);
-			personSearchRequest.setCurrentlyRegistered(true);
+			personSearchRequest.setCurrentlyRegistered(Lists.newArrayList("true"));
 			personSearchRequest.setDeclaredMajor("HIST");
 			personSearchRequest.setGpaEarnedMax(new BigDecimal(5.0));
 			personSearchRequest.setGpaEarnedMin(new BigDecimal(1.0));
@@ -230,5 +227,4 @@ public class PersonSearchDaoTest {
 			
 			dao.search(personSearchRequest);
 	}
-
 }
