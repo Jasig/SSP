@@ -23,23 +23,20 @@ import org.jasig.portlet.utils.rest.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriUtils;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+
 
 /**
  * Addresses <a href="https://issues.jasig.org/browse/SSP-2451">SSP-2451</a>.
@@ -206,7 +203,7 @@ public class PatchedSimpleCrossContextRestApiInvoker implements CrossContextRest
 						"getWriter, but not both";
 				throw new IllegalStateException(msg);
 			}
-			outputStream = new ServletOutputStreamImpl();
+			outputStream = new ServletOutputStreamImpl(null);
 			return outputStream;
 		}
 
@@ -432,6 +429,11 @@ public class PatchedSimpleCrossContextRestApiInvoker implements CrossContextRest
 	private static final class ServletOutputStreamImpl extends ServletOutputStream {
 
 		private final ByteArrayOutputStream enclosed = new ByteArrayOutputStream();
+		private final ServletOutputStream servletOutputStream;
+
+		private ServletOutputStreamImpl(ServletOutputStream servletOutputStream) {
+			this.servletOutputStream = servletOutputStream;
+		}
 
 		@Override
 		public void write(int b) throws IOException {
@@ -443,6 +445,20 @@ public class PatchedSimpleCrossContextRestApiInvoker implements CrossContextRest
 			return enclosed.toString();
 		}
 
+		@Override
+		public boolean isReady() {
+			if (servletOutputStream != null) {
+				return servletOutputStream.isReady();
+			}
+			return true;
+		}
+
+		@Override
+		public void setWriteListener(WriteListener writeListener) {
+			if (servletOutputStream != null) {
+				servletOutputStream.setWriteListener(writeListener);
+			}
+		}
 	}
 
 	private static final class UriTuple {
