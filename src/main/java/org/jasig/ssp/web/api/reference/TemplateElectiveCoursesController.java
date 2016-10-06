@@ -55,7 +55,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/1/reference/map/electiveCourses")
-@PreAuthorize(Permission.SECURITY_REFERENCE_MAP_WRITE)
+@PreAuthorize(Permission.SECURITY_REFERENCE_TEMPLATE_WRITE)
 public class TemplateElectiveCoursesController
         extends AbstractBaseController {
 

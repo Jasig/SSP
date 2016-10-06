@@ -52,7 +52,7 @@ import java.util.UUID;
  */
 @Controller
 @RequestMapping("/1/reference/mapTemplateTag")
-@PreAuthorize(Permission.SECURITY_REFERENCE_MAP_WRITE)
+@PreAuthorize(Permission.SECURITY_REFERENCE_TEMPLATE_WRITE)
 public class MapTemplateTagController
 		extends
 		AbstractAuditableReferenceController<MapTemplateTag, MapTemplateTagTO> {
