@@ -371,10 +371,11 @@ Ext.define('Ssp.service.MapPlanService', {
 		if (isTemplate) {
 			plan.set("personId","");
 			plan.setIsTemplate(isTemplate);
-			if (!plan.get('planElectiveCourses')) {
-				plan.set('planElectiveCourses', []);
-			}
             url = me.getTemplateBaseUrl();
+        }
+
+        if (!plan.get('planElectiveCourses')) {
+            plan.set('planElectiveCourses', []);
         }
 
 	    var success = function( response ){
