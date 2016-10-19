@@ -773,6 +773,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                 securityRole: 'REFERENCE_SYSTEM_CONFIG_WRITE',
                 expanded: false,
                 children: [{
+                    text: 'Background Jobs',
+                    title: 'Background Jobs',
+                    store: 'backgroundJobs',
+                    form: 'backgroundjobadmin',
+                    leaf: true
+                }, {
                     text: 'Configuration Options',
                     title: 'Configuration Options',
                     store: 'configurationOptions',

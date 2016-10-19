@@ -252,6 +252,9 @@ Ext.require([
     'Ssp.view.admin.forms.config.MessageQueueAdmin',
     'Ssp.view.admin.forms.config.MessageQueueDisplayAdmin',
     'Ssp.view.admin.forms.config.MessageQueueDetails',
+    'Ssp.view.admin.forms.config.BackgroundJobAdmin',
+    'Ssp.view.admin.forms.config.BackgroundJobDisplayAdmin',
+    'Ssp.view.admin.forms.config.BackgroundJobDetails',
 
     //OAUTH2 ADMIN VIEWS
     'Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin',
@@ -304,6 +307,7 @@ Ext.require([
 	'Ssp.model.FilterDiscreteValues',
 	'Ssp.model.MessageTemplates',
     'Ssp.model.Message',
+    'Ssp.model.BackgroundJob',
 	'Ssp.model.OAuth2Client',
 	'Ssp.model.LTIConsumer',
 	'Ssp.model.Permission',
@@ -487,6 +491,7 @@ Ext.require([
     'Ssp.service.AbstractService',
     'Ssp.service.AppointmentService',
     'Ssp.service.AssessmentService',
+    'Ssp.service.BackgroundJobService',
     'Ssp.service.CaseloadService',
     'Ssp.service.WatchListService',
     'Ssp.service.CampusService',
@@ -541,6 +546,7 @@ Ext.require([
 ]);
 
 var apiUrls = [
+  {name: 'executebackgroundjob', url: 'backgroundjob'},
   {name: 'campus', url: 'reference/campus'},
   {name: 'campusEarlyAlertRouting', url: 'reference/campus/{id}/earlyAlertRouting'},
   {name: 'campusService', url: 'reference/campusService'},
@@ -1157,6 +1163,12 @@ Ext.onReady(function(){
                     currentMessage:{
                         fn: function(){
                             return new Ssp.model.Message({id:""});
+                        },
+                        singleton: true
+                    },
+                    currentBackgroundJob:{
+                        fn: function(){
+                            return new Ssp.model.BackgroundJob({id:""});
                         },
                         singleton: true
                     },
@@ -1886,7 +1898,8 @@ Ext.onReady(function(){
 					},
 					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
                     messageQueueStore: 'Ssp.store.Messages',
-			    	personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
+                    backgroundJobStore: 'Ssp.store.BackgroundJobs',
+                    personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',
 			    	planStore: 'Ssp.store.Plan',			    	
 					programStatusesStore: 'Ssp.store.reference.ProgramStatuses',
@@ -2125,7 +2138,8 @@ Ext.onReady(function(){
                     // SERVICES
 			        appointmentService: 'Ssp.service.AppointmentService',
 			        assessmentService: 'Ssp.service.AssessmentService',
-			        campusService: 'Ssp.service.CampusService',
+                    backgroundJobService: 'Ssp.service.BackgroundJobService',
+                    campusService: 'Ssp.service.CampusService',
 			        campusEarlyAlertRoutingService: 'Ssp.service.CampusEarlyAlertRoutingService',
 			        caseloadService: 'Ssp.service.CaseloadService',
 			        watchListService: 'Ssp.service.WatchListService',

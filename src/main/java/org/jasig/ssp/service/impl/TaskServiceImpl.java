@@ -388,6 +388,10 @@ public class TaskServiceImpl
 		return (List<Task>) getAllForPerson(person, requester, sAndP).getRows();
 	}
 
+	/**
+	 * Used by ScheduledTaskWrapperService default 2 a.m.
+	 * Sends message of overdue tasks to students.
+	 */
 	@Override
 	public void sendAllTaskReminderNotifications() {
 

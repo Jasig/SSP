@@ -91,6 +91,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 @Service
 public class ScheduledTaskWrapperServiceImpl
 		implements ScheduledTaskWrapperService, InitializingBean {
@@ -114,7 +115,8 @@ public class ScheduledTaskWrapperServiceImpl
 
 	private static final String EVERY_DAY_10_PM = "0 0 22 * * *";
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
-	private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
+    private static final String EVERY_DAY_2_AM = "0 0 2 * * *";
+    private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
 	private static final String EVERY_DAY_4_AM = "0 0 4 * * *";
 	private static final String EVERY_DAY_5_AM = "0 0 5 * * *";
 	private static final String EVERY_15_SECONDS_WITH_30_SECOND_DELAY = "15000/30000";
@@ -168,6 +170,7 @@ public class ScheduledTaskWrapperServiceImpl
 
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
+
 
 	@Autowired
 	private transient ExternalPersonSyncTask externalPersonSyncTask;
@@ -229,6 +232,7 @@ public class ScheduledTaskWrapperServiceImpl
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 
+
 	@Value("#{configProperties.scheduled_coach_sync_enabled}")
 	private boolean scheduledCoachSyncEnabled;
 
@@ -240,12 +244,19 @@ public class ScheduledTaskWrapperServiceImpl
 
 	private HashMap<String, Task> tasks;
 
+
+    /**
+     * Helper method to run init and update tasks
+     */
 	@Override
 	public void afterPropertiesSet() {
 		initTasks();
 		updateTasks();
 	}
 
+    /**
+     * Initializes tasks
+     */
 	protected synchronized void initTasks() {
 		this.tasks = new LinkedHashMap<String, Task>();
         if (!backGroundJobsEnabled) {
@@ -362,6 +373,9 @@ public class ScheduledTaskWrapperServiceImpl
         }
 	}
 
+    /**
+     * Updates tasks
+     */
 	public synchronized void updateTasks() {
 		if ( Thread.currentThread().isInterrupted() ){
 			LOGGER.info("Skipping task scheduling updates because of thread interruption");
@@ -451,6 +465,10 @@ public class ScheduledTaskWrapperServiceImpl
 		task.defaultTrigger = parseTriggerConfig(task.defaultTriggerExpression);
 	}
 
+    /**
+     * Tries to reschedule task
+     * @param task
+     */
 	protected void maybeReschedule(Task task) {
 		Pair<String,Trigger> configuredOrDefault = configuredOrDefaultTrigger(task);
 		Pair<String,Trigger> newTrigger = null;
@@ -491,6 +509,10 @@ public class ScheduledTaskWrapperServiceImpl
 		schedule(task, newTrigger);
 	}
 
+    /**
+     * Cancels execution of task
+     * @param task
+     */
 	protected void cancel(Task task) {
 		if ( task.execution != null ) {
 			LOGGER.info("Attempting task [{}] cancellation", task.id);
@@ -502,6 +524,11 @@ public class ScheduledTaskWrapperServiceImpl
 		task.executingTriggerExpression = null;
 	}
 
+    /**
+     * Schedules task
+     * @param task
+     * @param triggerAndExpression
+     */
 	protected void schedule(Task task, Pair<String,Trigger> triggerAndExpression) {
 		if ( triggerAndExpression == null ) {
 			throw new IllegalArgumentException("Must specify a Trigger and its expression");
@@ -513,6 +540,11 @@ public class ScheduledTaskWrapperServiceImpl
 		task.executingTrigger = triggerAndExpression.getSecond();
 	}
 
+    /**
+     * Helper method to return configured trigger or if misconfiguration or invalid, uses default.
+     * @param task
+     * @return
+     */
 	protected Pair<String,Trigger> configuredOrDefaultTrigger(Task task) {
 		if ( task.configuredTrigger == null || task.configuredTrigger instanceof BadConfigTrigger ) {
 			return new Pair<String,Trigger>(task.defaultTriggerExpression, task.defaultTrigger);
@@ -520,6 +552,12 @@ public class ScheduledTaskWrapperServiceImpl
 		return new Pair<String,Trigger>(task.configuredTriggerExpression, task.configuredTrigger);
 	}
 
+    /**
+     * Reads trigger config checking if invalid.
+     * @param configName
+     * @return
+     * @throws BadTriggerConfigException
+     */
 	protected Pair<String,Trigger> readNewTriggerConfig(String configName)
 	throws BadTriggerConfigException {
 		final String configValue = StringUtils.trimToNull(configService.getByNameNullOrDefaultValue(configName));
@@ -539,6 +577,12 @@ public class ScheduledTaskWrapperServiceImpl
 		return new Pair<String,Trigger>(configValue, parseTriggerConfig(configValue));
 	}
 
+    /**
+     * Parses trigger config checking for mis-configuration periodic vs cron
+     * @param configValue
+     * @return
+     * @throws BadTriggerConfigException
+     */
 	protected Trigger parseTriggerConfig(String configValue)
 	throws BadTriggerConfigException {
 
@@ -563,6 +607,12 @@ public class ScheduledTaskWrapperServiceImpl
 						+ badCronTiggerException.getMessage() + "]", configValue);
 	}
 
+    /**
+     * Used above for checking if trigger is periodic
+     * @param configValue
+     * @return
+     * @throws BadTriggerConfigException
+     */
 	protected Trigger tryExpressionAsPeriodicTrigger(String configValue)
 	throws BadTriggerConfigException {
 		BadTriggerConfigException longParseException = null;
@@ -636,6 +686,12 @@ public class ScheduledTaskWrapperServiceImpl
 
 	}
 
+    /**
+     * Used above to check if trigger is cron
+     * @param configValue
+     * @return
+     * @throws BadTriggerConfigException
+     */
 	protected Trigger tryExpressionAsCronTrigger(String configValue)
 	throws BadTriggerConfigException {
 		try {
@@ -789,6 +845,12 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
+    /**
+     * Helper method to call as sudo see above withSudo method
+     * @param work
+     * @return
+     * @throws AuthenticationException
+     */
 	protected Runnable withSudo(Runnable work) throws AuthenticationException {
 		return withSudo(work, null);
 	}
@@ -815,6 +877,12 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
+    /**
+     * Joins existing hibernate session or creates a new
+     *  one when a task needs to run and cleanup.
+     * @param work
+     * @return
+     */
 	protected Runnable withHibernateSession(final Runnable work) {
 		return new Runnable() {
 			@Override
@@ -852,6 +920,13 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
+    /**
+     * Helper method for job scheduling and threading
+     * @param taskName
+     * @param work
+     * @param isStatusedTask
+     * @return
+     */
 	protected Runnable withTaskName(final String taskName, final Runnable work, final boolean isStatusedTask) {
 		return new Runnable() {
 			@Override
@@ -915,6 +990,15 @@ public class ScheduledTaskWrapperServiceImpl
         }
     }
 
+    /**
+     * Wraps the given {@code Runnable} in the "standard" decorators you'd
+     * typically need for execution of a background task, and then
+     * executed the result. Please see {@link #withSudo(Runnable)} in particular
+     * for why it's important to have a non-anonymous current
+     * {@link Authentication} before actually executing a background task.
+     * @param taskName
+     * @param work
+     */
 	public void execWithTaskContext(String taskName, Runnable work) {
 		execWithTaskContext(taskName, work, true, null);
 	}
@@ -966,6 +1050,13 @@ public class ScheduledTaskWrapperServiceImpl
 		};
 	}
 
+    /**
+     * Used to run a batched task checking if background jobs turned off or not for this server
+     * @param taskName
+     * @param batchedTask
+     * @param isStatusedTask
+     * @param runAsId
+     */
 	@Override
 	public void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask, final boolean isStatusedTask, final UUID runAsId) {
         if ( !backGroundJobsEnabled ) {
@@ -980,10 +1071,19 @@ public class ScheduledTaskWrapperServiceImpl
         }
     }
 
+    /**
+     * Helper method to execute Scheduled Task using above execBatchedTaskWithName method above.
+     * @param taskName
+     * @param batchedTask
+     */
 	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
 		execBatchedTaskWithName(taskName, batchedTask, true, null);
 	}
 
+    /**
+     * Runs in batches a bulk add of external-only students into SSP
+     * Not scheduled through config fires every 2.5 minutes after completion
+     */
 	@Override
 	@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
@@ -1002,6 +1102,10 @@ public class ScheduledTaskWrapperServiceImpl
 		});
 	}
 
+    /**
+     * Checks and sends emails from message queue
+     * Not scheduled through config fires every 2.5 minutes after completion
+     */
 	@Override
 	@Scheduled(fixedDelay = 150000)
 	// run 2.5 minutes after the end of the last invocation
@@ -1013,6 +1117,11 @@ public class ScheduledTaskWrapperServiceImpl
         }
 	}
 
+    /**
+     * Syncs Coaches with current external list of coaches using the coach query.
+     *  Typically this is ldap through SSP-Platform looking for SSP_COACH mapping or group.
+     *  Not scheduled through config fires every 5 minutes after completion
+     */
 	@Override
 	@Scheduled(fixedDelay = 300000)
 	// run every 5 minutes
@@ -1031,10 +1140,14 @@ public class ScheduledTaskWrapperServiceImpl
 			}
 		});
 	}
-	
+
+    /**
+     * Sends Action Plan Task reminders to students on overdue tasks.
+     * Not scheduled through config. runs at 2 am every day
+     */
 	@Override
-	@Scheduled(cron = "0 0 1 * * *")
-	// run at 1 am every day
+	@Scheduled(cron = "0 0 2 * * *")
+	// run at 2 am every day
 	public void sendTaskReminders() {
 		execWithTaskContext(SEND_TASK_REMINDERS_TASK_NAME, new Runnable() {
 			@Override
@@ -1049,6 +1162,10 @@ public class ScheduledTaskWrapperServiceImpl
 	}
 
 	/**
+     * Syncs updated external_person data with data in person table. Also, syncs
+     *   other data such as external SSG. By default runs nightly at 1 a.m., but
+     *    can be scheduled in config.
+     *
 	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
 	 * config polling job.
 	 */
@@ -1058,6 +1175,11 @@ public class ScheduledTaskWrapperServiceImpl
 	}
 
 	/**
+     * Runs the special service group course withdrawal notification to advisor task.
+     *  This emails advisors if a student has withdrawn from a current course and is
+     *   assigned to a configured SSG that has notify turned on. Default is nightly at
+     *    5 a.m., but can be scheduled in config.
+     *
 	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
 	 * config polling job.
 	 */
@@ -1065,26 +1187,62 @@ public class ScheduledTaskWrapperServiceImpl
 	public void processSpecialServiceGroupCourseWithdrawal() {
 		execBatchedTaskWithName(SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_NAME, specialServiceGroupCourseWithdrawalAdvisorEmailTask);
 	}
+
+    /**
+     * Refreshes the mv_directory_person materialized view used for Person Search.
+     * This is ran after syncExternalPersons() default nightly after 1 a.m.
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override 
 	public void refreshDirectoryPerson(){
 		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_TASK_NAME, directoryPersonRefreshTask);
 	}
-	
-	//Reset Tasks schedule where used for control if possiblity completion is interrupted by termination
+
+    /**
+     * Reset Tasks schedule where used for control if possiblity completion is interrupted by termination
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override 
 	public void resetTaskStatus(){
 		taskStatusService.completeTask(REFRESH_DIRECTORY_PERSON_TASK_NAME);
 	}
-	
+
+    /**
+     * This is the same as refreshDirectoryPerson except for the alternate view which
+     *  is used when the main view is being refreshed. Again updated nightly after
+     *   person sync.
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override 
 	public void refreshDirectoryPersonBlue(){
 		execBatchedTaskWithName(REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME, directoryPersonRefreshBlueTask);
 	}
 
+    /**
+     * Calculates the MAP status calculation task which calculates active student's active
+     *  plans against the trasncript and other data and marks them On or Off plan.
+     *  Runs default 3 a.m. nightly, but can be scheduled in config.
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override
 	public void calcMapStatusReports() {
 		execBatchedTaskWithName(CALC_MAP_STATUS_REPORTS_TASK_NAME, mapStatusReportCalcTask);
 	}
+
+    /**
+     * Schedules queued jobs to be ran.
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override
 	public void scheduledQueuedJobs() {
 		execWithTaskContext(BULK_JOB_QUEUE_TASK_NAME, new Runnable() {
@@ -1092,12 +1250,29 @@ public class ScheduledTaskWrapperServiceImpl
 				jobService.scheduleQueuedJobs();
 			}
 		});
-	}	
-	
+	}
+
+    /**
+     * Prunes the Message queue task which archives Messages in the
+     *   message table after 30 days to an archive table.
+     *   Runs default nightly at 10 p.m, but can be scheduled in config.
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override
 	public void pruneMessageQueue() {
 		execBatchedTaskWithName(MESSAGE_QUEUE_PRUNING_TASK_NAME,pruneMessageQueueTask );
 	}
+
+    /**
+     * Sends Early Alert reminders which notifies coaches if an
+     *   alert hasn't been responded to in configured a timeframe (default 2 days).
+     *   Runs default nightly at 4 a.m, but can be scheduled in config.
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
 	@Override
 	public void sendEarlyAlertReminders() {
 		execWithTaskContext(SEND_EARLY_ALERT_REMINDERS_TASK_NAME, new Runnable() {
@@ -1108,6 +1283,12 @@ public class ScheduledTaskWrapperServiceImpl
 		});
 	}
 
+    /**
+     * Removes all nonces that are expired in order to keep the nonce table at a reasonable size
+     *
+     * Not {@code @Scheduled} b/c its scheduling is now handled by the
+     * config polling job.
+     */
     @Override
     public void cullOAuth1Nonces() {
         execWithTaskContext(OAUTH1_CULL_NONCE_TABLE_TASK_NAME, new Runnable() {
@@ -1118,6 +1299,9 @@ public class ScheduledTaskWrapperServiceImpl
         });
     }
 
+    /**
+     * A Task in the context of ScheduledTaskWrapper (not Action Plan Task)
+     */
 	protected static class Task {
 
 		public String id;
@@ -1148,6 +1332,9 @@ public class ScheduledTaskWrapperServiceImpl
 		}
 	}
 
+    /**
+     * A Disabled Trigger
+     */
 	protected static class DisabledTrigger implements Trigger {
 		@Override
 		public Date nextExecutionTime(TriggerContext triggerContext) {
@@ -1168,7 +1355,10 @@ public class ScheduledTaskWrapperServiceImpl
 			return DisabledTrigger.class.getName().hashCode();
 		}
 	}
-	
+
+    /**
+     * OnStartUp Trigger
+     */
 	protected static class OnStartUpTrigger implements Trigger {
 		boolean hasRun = false;
 		@Override
@@ -1196,6 +1386,9 @@ public class ScheduledTaskWrapperServiceImpl
 		}
 	}
 
+    /**
+     * BadConfigTrigger
+     */
 	protected static class BadConfigTrigger extends DisabledTrigger {
 		public String config;
 		public Throwable cause;
@@ -1231,6 +1424,9 @@ public class ScheduledTaskWrapperServiceImpl
 		}
 	}
 
+    /**
+     * BadTriggerConfigException
+     */
 	protected static class BadTriggerConfigException extends NestedRuntimeException {
 		private String config;
 		public BadTriggerConfigException(String message, String config, Throwable cause) {
