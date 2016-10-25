@@ -79,7 +79,7 @@
     <changeSet author="paul.spaude" id="add code and notify to special service group reference table" >
         <addColumn tableName="special_service_group">
             <column name="code" type="${nvarchar.type}(50)"
-                    valueComputed="left(name,5) ${concat.type} right(cast(id as ${nvarchar.type}(36)),5)"/>
+                    valueComputed="cast(id as ${nvarchar.type}(36))"/>
             <column name="notify_on_withdraw" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
