@@ -46,13 +46,14 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                 },
                 items: [{
                 	xtype: 'image',
+                	alt: me.textStore.getValueByCode('ssp.label.main.coach.coach-photo','Coach Photo'),
                     fieldLabel: '',
                     src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
                     itemId: 'coachPhotoUrl',
                     width:150,
                     height:150
                 }, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -110,7 +111,7 @@ Ext.define('Ssp.view.tools.profile.Coach', {
                     
                     }*/]
                 }, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     fieldLabel: '',
                     border: 0,
                     defaultType: 'displayfield',

@@ -65,7 +65,7 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                             },
                             items: [
                                     {
-                                        xtype: 'fieldset',
+                                        xtype: 'container',
                                         border: 0,
                                         title: '',
                                         defaultType: 'displayfield',
@@ -89,7 +89,7 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                 				    }
                                 				    ]},
                                 				    {
-                                                        xtype: 'fieldset',
+                                                        xtype: 'container',
                                                         border: 1,
                                                         title: '',
                                                         defaultType: 'displayfield',
@@ -127,7 +127,7 @@ Ext.define('Ssp.view.tools.map.CourseDetails', {
                                 				    
                                 				    ]},
                                 				    {
-                                                        xtype: 'fieldset',
+                                                        xtype: 'container',
                                                         border: 1,
                                                         title: '',
                                                         defaultType: 'displayfield',

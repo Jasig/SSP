@@ -36,6 +36,11 @@ Ext.define('Ssp.view.SearchTab', {
             collapsible: true,
             collapseDirection: 'left',
             listeners: {
+                afterrender: {
+                    fn: function(c){
+                        c.collapseTool.el.dom.firstChild.setAttribute('alt', me.textStore.getValueByCode('ssp.label.expand-collapse', 'Expand / Collapse'));
+                    }
+                },
                 beforecollapse: function() {
                     me.appEventsController.loadMaskOn();
                 },

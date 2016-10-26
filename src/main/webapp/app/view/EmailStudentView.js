@@ -41,7 +41,13 @@ Ext.define('Ssp.view.EmailStudentView', {
                     isBulk: me.getIsBulk(),
                     bulkCriteria: me.getBulkCriteria()
                 }
-            ]});
+            ],
+            listeners: {
+                afterrender: function(c){
+                    c.el.dom.setAttribute('role', 'dialog');
+                }
+            }
+        });
 
     	me.callParent(arguments);
     }

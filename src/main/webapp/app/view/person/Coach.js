@@ -44,7 +44,7 @@ Ext.define('Ssp.view.person.Coach', {
 			        labelWidth: 100
 			    },	
 				items: [{
-			            xtype: 'fieldset',
+			            xtype: 'container',
 			            border: 0,
 			            padding: 0,
 			            title: '',

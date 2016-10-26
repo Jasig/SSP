@@ -240,7 +240,7 @@ Ext.define('Ssp.controller.tool.map.SemesterPanelContainerViewController', {
 			if (termSet) {
 
 					yearView = new Ssp.view.tools.map.PersistentFieldSet({
-						xtype : 'fieldset',
+						xtype : 'container',
 						border: 0,
 						title : '',
 						padding : '2 2 2 2',

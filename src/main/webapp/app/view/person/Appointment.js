@@ -42,7 +42,7 @@ Ext.define('Ssp.view.person.Appointment', {
             border: 0,
             padding: 0,
             items: [{
-                xtype: 'fieldset',
+                xtype: 'container',
                 border: 0,
                 padding: 0,
                 title: '',
@@ -77,7 +77,7 @@ Ext.define('Ssp.view.person.Appointment', {
                     showToday: false,
                     hidden: me.instantCaseloadAssignment == true ? true:false
                 }, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     title: '',
                     layout: {
                         align: 'stretch',

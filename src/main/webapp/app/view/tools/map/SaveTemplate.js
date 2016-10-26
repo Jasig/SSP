@@ -58,7 +58,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                 autoScroll: true,
                 items: [
                         {
-                            xtype: 'fieldset',
+                            xtype: 'container',
                             border: 0,
                             title: '',
                             layout: 'hbox',
@@ -102,7 +102,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 						    		}
                 			    ]},
                 			{
-                                    xtype: 'fieldset',
+                                    xtype: 'container',
                                     border: 0,
                                     title: '',
                                     defaultType: 'displayfield',
@@ -293,8 +293,12 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                     }]
             }
             
-            ]
-            
+            ],
+            listeners: {
+                 afterrender: function(c){
+                     c.el.dom.setAttribute('role', 'dialog');
+                 }
+            }
         });
         
         return me.callParent(arguments);

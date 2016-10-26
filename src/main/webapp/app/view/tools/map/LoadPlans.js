@@ -70,7 +70,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                         style: 'font-weight: bold'
                         } ,
                         {
-                            xtype: 'fieldset',
+                            xtype: 'container',
                             border: 0,
                             title: '',
                             margin: '0 0 0 2',
@@ -92,7 +92,7 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                                 ]
                         },
                         {
-                            xtype: 'fieldset',
+                            xtype: 'container',
                             border: 0,
                             title: '',
                             margin: '0 0 0 2',
@@ -160,7 +160,12 @@ Ext.define('Ssp.view.tools.map.LoadPlans', {
                     }]
                 
                
-            }]
+            }],
+            listeners: {
+                afterrender: function(c){
+                    c.el.dom.setAttribute('role', 'dialog');
+                }
+            }
         });
         
         return me.callParent(arguments);

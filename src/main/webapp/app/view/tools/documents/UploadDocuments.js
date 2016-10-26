@@ -58,7 +58,12 @@ Ext.define('Ssp.view.tools.documents.UploadDocuments', {
                     allowBlank: me.model.get('id'),
                     flex: 1,
                     labelAlign: 'top',
-                    padding: 5
+                    padding: 5,
+                    listeners: {
+                        afterrender: function(c){
+                             c.fileInputEl.dom.setAttribute('title', me.textStore.getValueByCode('ssp.tooltip.documents.file','Select a File'));
+                        }
+                    }
                 }]
             }, {
                 xtype: 'textfield',

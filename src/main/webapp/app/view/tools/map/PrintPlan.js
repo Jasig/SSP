@@ -54,7 +54,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                 itemId: 'faPrintPlan',
                 items: [
                 {
-                	xtype: 'fieldset',
+                	xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'radio',
@@ -76,7 +76,7 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                         itemId: 'matrixFormat'
                     }]
                     },
-                    {xtype: 'fieldset',
+                    {xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'checkbox',
@@ -145,7 +145,12 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                         }]
                 }
                 
-                ]
+                ],
+                listeners: {
+                     afterrender: function(c){
+                         c.el.dom.setAttribute('role', 'dialog');
+                     }
+                }
         });
         
         return me.callParent(arguments);

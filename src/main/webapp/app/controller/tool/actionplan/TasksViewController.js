@@ -138,8 +138,9 @@ Ext.define('Ssp.controller.tool.actionplan.TasksViewController', {
     },
     
     onEditTask: function(){
-		 this.editTaskFormPopUp = Ext.create('Ssp.view.tools.actionplan.EditTaskForm', {});
+	    this.editTaskFormPopUp = Ext.create('Ssp.view.tools.actionplan.EditTaskForm', {});
         this.editTaskFormPopUp.show();
+        this.editTaskFormPopUp.el.dom.setAttribute('role','dialog');
     },
     
     onCloseTask: function(){

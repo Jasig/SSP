@@ -133,7 +133,7 @@ Ext.define('Ssp.util.Constants',{
    		COURSE_ELECTIVES_ICON_PATH: '/ssp/images/pencil.png',
 
         // CAN BE APPLIED TO THE LABEL OF A FIELD TO SHOW A RED REQUIRED ASTERISK
-        REQUIRED_ASTERISK_DISPLAY: '<span style="color: rgb(255, 0, 0); padding-left: 2px;">*</span>',
+        REQUIRED_ASTERISK_DISPLAY: '<span style="color: #d30000; padding-left: 2px;">*</span>',
 
         // CAN BE APPLIED TO THE LABEL OF A FIELD OR CONTAINER TO ALTER THE LABEL STYLE
         SSP_LABEL_STYLE: "color:#04408c;",

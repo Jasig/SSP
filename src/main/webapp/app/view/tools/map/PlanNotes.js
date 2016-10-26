@@ -103,8 +103,13 @@ Ext.define('Ssp.view.tools.map.PlanNotes', {
 							}
 		                }]
 		            
-		            }]
-		            }]
+		              }]
+		            }],
+                    listeners: {
+                          afterrender: function(c){
+                              c.el.dom.setAttribute('role', 'dialog');
+                        }
+                    }
 				});
 		
 		return me.callParent(arguments);

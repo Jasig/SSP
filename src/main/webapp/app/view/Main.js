@@ -71,9 +71,6 @@ Ext.define('Ssp.view.Main', {
                     xtype: 'tbspacer',
                     flex: 1
                 }, {
-                    id: 'report',
-                    xtype: 'sspreport'
-                }, {
                     xtype: 'tbspacer',
                     flex: 1
 //                },{

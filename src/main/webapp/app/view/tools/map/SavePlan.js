@@ -59,7 +59,7 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 itemId: 'faSavePlan',
                 items: [
                         {
-                            xtype: 'fieldset',
+                            xtype: 'container',
                             defaultType: 'checkbox',
                             border: 0,
                             title: '',
@@ -257,7 +257,12 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                     }]
             }
             
-            ]
+            ],
+            listeners: {
+                 afterrender: function(c){
+                     c.el.dom.setAttribute('role', 'dialog');
+                 }
+            }
             
         });
         return me.callParent(arguments);

@@ -158,8 +158,8 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
                     var me=this;
                     if (me.invalidRecord(record)) {
-                        metaData.style = 'font-style:italic;color:#FF0000';
-                        metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.concerns','Concerns:') + record.get("invalidReasons") + '"';
+                        metaData.style = 'font-style:italic;color:#d30000';
+                        metaData.tdAttr = 'data-qtip="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.concerns','Concerns: ') + record.get("invalidReasons") + '"';
                     }
                     return value;
                 },
@@ -208,7 +208,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
                     if (record.get('hasElectiveCourses')) {
                       // metaData.style = 'background-color: #0000FF; background-image: none; margin:2px 2px 2px 2px;';
-                        return me.columnRendererUtils.renderPhotoIcon(Ssp.util.Constants.COURSE_ELECTIVES_ICON_PATH);
+                        return me.columnRendererUtils.renderPhotoIcon(Ssp.util.Constants.COURSE_ELECTIVES_ICON_PATH, me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.course_electives-alt-text','Course has electives'));
                     }
                 }
             }, {
@@ -219,7 +219,7 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
                     var me=this;
                     if (me.invalidRecord(record)) {
-                        metaData.style = 'font-style:italic;color:#FF0000';
+                        metaData.style = 'font-style:italic;color:#d30000';
                     }
                     return value;
                 }
@@ -264,10 +264,10 @@ Ext.define('Ssp.view.tools.map.SemesterPanel', {
 
                         metaData.tdAttr += 'data-qtip="' + tooltip + '"';
 
-                        return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" />'
+                        return '<img src="/ssp/images/' + Ssp.util.Constants.EDIT_COURSE_NOTE_NAME + '" alt="' + me.textStore.getValueByCode('ssp.tooltip.map.semester-panel.edit-course-notes', 'Edit Course Notes') + '" />'
                     }
                     if (me.invalidRecord(record)) {
-                        metaData.style = 'font-style:italic;color:#FF0000';
+                        metaData.style = 'font-style:italic;color:#d30000';
                     }
                     return "";
                 }

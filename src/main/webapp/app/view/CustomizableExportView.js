@@ -153,14 +153,18 @@ Ext.define('Ssp.view.CustomizableExportView', {
                     xtype: 'button',
                     itemId: 'exportButton',
                     text: this.textStore.getValueByCode('ssp.label.export-button','Export')
-
                 }, '-', {
                     xtype: 'button',
                     itemId: 'cancelButton',
                     text: this.textStore.getValueByCode('ssp.label.cancel-button','Cancel')
                 }]
 
-            }]
+            }],
+            listeners: {
+                 afterrender: function(c){
+                     c.el.dom.setAttribute('role', 'dialog');
+                 }
+            }
         });
         return me.callParent(arguments);
     }

@@ -76,35 +76,53 @@ Ext.define('Ssp.view.SearchForm',{
 			    	 enableKeyEvents:true
 			},
             items: [{
-               layout:'column',
+               layout: 'column',
 			   border: false,
 	           manageOverflow: 3,
 			   items:[{
 				// Not doing relative column widths on these things b/c it makes us susceptible to wrapping
 				// which makes the form scroll vertically on small resolutions, but something is wrong with visibility
 				// calculations and you then can't scroll the entire form into view (as discussed at length above)
-                   xtype: 'checkboxfield',
-			       fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-plans', 'My Plans'),
-			       name: 'myPlans',
-			       itemId: 'myPlans',
-			       labelWidth: 60
-			    }, {
+                    xtype: 'checkboxfield',
+			        fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-plans', 'My Plans'),
+			        name: 'myPlans',
+			        itemId: 'myPlans',
+			        labelWidth: 60,
+				    listeners: {
+                        afterrender: function(c) {
+                            c.inputEl.dom.setAttribute('aria-label',c.fieldLabel);
+                            c.inputEl.dom.setAttribute('title',c.fieldLabel);
+                        }
+                    }
+                 }, {
 			        xtype: 'checkboxfield',
 			        fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-watches', 'My Watches'),
 			        name: 'myWatchList',
 				    itemId: 'myWatchList',
 				    enableKeyEvents:true,
 				    labelWidth: 80,
-				    labelAlign: 'right'
-			    }, {
+				    labelAlign: 'right',
+				    listeners: {
+                        afterrender: function(c) {
+                            c.inputEl.dom.setAttribute('aria-label',c.fieldLabel);
+                            c.inputEl.dom.setAttribute('title',c.fieldLabel);
+                        }
+                    }
+                 }, {
 			        xtype: 'checkboxfield',
 			        fieldLabel: me.textStore.getValueByCode('ssp.label.search.my-caseload', 'My Caseload'),
 			        name: 'myCaseload',
 				    itemId: 'myCaseload',
 				    enableKeyEvents:true,
 				    labelWidth: 80,
-				    labelAlign: 'right'
-			    }]
+				    labelAlign: 'right',
+				    listeners: {
+                        afterrender: function(c) {
+                            c.inputEl.dom.setAttribute('aria-label',c.fieldLabel);
+                            c.inputEl.dom.setAttribute('title',c.fieldLabel);
+                        }
+                    }
+			     }]
 			}, {
 				xtype: 'textfield',
 				fieldLabel: me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'),

@@ -19,11 +19,15 @@
 Ext.define('Ssp.view.Report',{
 	extend: 'Ext.Component',
 	alias: 'widget.sspreport',
+    mixins: ['Deft.mixin.Injectable'],
 	height: 0,
 	width: 0,
     config: {
     	downloadForm: null,
     	downloadFrame: null
+    },
+    inject: {
+        textStore:'sspTextStore'
     },
     autoEl: {tag: 'iframe', cls: 'x-hidden', src: Ext.SSL_SECURE_URL},
     initComponent: function(){
@@ -34,12 +38,14 @@ Ext.define('Ssp.view.Report',{
 			id: 'sspPortletReportform',
 			target: 'sspPortletIFrame'
 		});
-    	
+		me.downloadForm.dom.setAttribute('aria-hidden', true);
+
     	me.downloadFrame = Ext.getBody().createChild({
     		tag: 'iframe',
 			cls: 'x-hidden',
 			id: 'sspPortletIFrame',
 			name: 'iframe',
+			title: me.textStore.getValueByCode('ssp.message.reports.iframe-title','SSP Report Wrapper Frame'),
 			src: Ext.SSL_SECURE_URL
 		});
 

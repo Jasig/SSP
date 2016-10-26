@@ -48,7 +48,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
                 width: '100%',
                 height: '100%',
                 items: [{
-				    xtype: 'fieldset',
+				    xtype: 'container',
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
@@ -81,7 +81,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'programCancel'
 				    }]
 				}, {
-				    xtype: 'fieldset',
+				    xtype: 'container',
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
@@ -114,7 +114,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'tagCancel'
 				    }]
 				}, {
-				    xtype: 'fieldset',
+				    xtype: 'container',
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
@@ -147,7 +147,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'termCancel'
 				    }]
 				}, {
-				    xtype: 'fieldset',
+				    xtype: 'container',
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
@@ -182,7 +182,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				    }]
 				},
                 {
-				    xtype: 'fieldset',
+				    xtype: 'container',
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
@@ -216,7 +216,7 @@ Ext.define('Ssp.view.tools.map.CoursesView', {
 				        itemId: 'divisionCancel'
 				    }]
 				}, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'textfield',

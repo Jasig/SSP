@@ -2264,6 +2264,12 @@ Ext.onReady(function(){
 				    	    }
 				    	});	    	
 
+                        Ext.override(Ext.Button, {
+                            tooltipType: 'title'
+                        });
+                        Ext.override(Ext.panel.Tool, {
+                            tooltipType: 'title'
+                        });
 				    	/*
 				    	 * Per Animal, http://www.extjs.com/forum/showthread.php?p=450116#post450116
 				    	 * Override component so that the first invalid field

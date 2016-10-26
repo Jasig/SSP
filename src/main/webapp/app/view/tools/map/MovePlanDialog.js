@@ -126,7 +126,7 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 			                flex: 1
 			            },
 						{
-			                xtype: 'fieldset',
+			                xtype: 'container',
 			                border: 0,
 			                padding: '0 0 0 0',
 			                title: '',
@@ -145,7 +145,12 @@ Ext.define('Ssp.view.tools.map.MovePlanDialog', {
 			    	     }]}]
        
 		            }]
-		     }]
+		     }],
+		     listeners: {
+                  afterrender: function(c){
+                      c.el.dom.setAttribute('role', 'dialog');
+                  }
+		     }
 		});
 		
 		return me.callParent(arguments);

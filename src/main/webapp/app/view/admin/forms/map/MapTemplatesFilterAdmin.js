@@ -76,7 +76,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 			                    margin: '0 0 0 5',
 			                    items: [ 
 			                             {
-									    xtype: 'fieldset',
+									    xtype: 'container',
 									    border: 0,
 									    title: '',
 									    margin: '0 0 0 0',

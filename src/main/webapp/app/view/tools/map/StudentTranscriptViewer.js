@@ -35,11 +35,15 @@ Ext.define('Ssp.view.tools.map.StudentTranscriptViewer', {
         Ext.apply(this,
 		{
 			title: me.textStore.getValueByCode('ssp.label.map.student-trans-viewer.title','Student Course History'),
-			items: [
-					{
+			items: [{
 					xtype: 'studentcoursehistory'
-					}
-		]});
+			}],
+            listeners: {
+                 afterrender: function(c){
+                     c.el.dom.setAttribute('role', 'dialog');
+                 }
+            }
+		});
 
         return this.callParent(arguments);
     }

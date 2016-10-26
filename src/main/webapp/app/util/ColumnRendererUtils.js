@@ -154,8 +154,8 @@ Ext.define('Ssp.util.ColumnRendererUtils',{
 	    return strHtml;		
 	},	
 	
-	renderPhotoIcon: function(val) {
-	    return '<img src="' + val + '">';
+	renderPhotoIcon: function(val, alt) {
+   	    return '<img src="' + val + '" alt="' + alt +'">';
 	},
 
 	renderCoachName: function(val, metaData, record) {

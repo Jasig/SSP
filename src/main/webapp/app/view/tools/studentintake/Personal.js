@@ -52,7 +52,7 @@ Ext.define('Ssp.view.tools.studentintake.Personal', {
                 labelWidth: 200
             },
             items: [{
-                xtype: 'fieldset',
+                xtype: 'container',
                 border: 0,
                 title: '',
                 defaultType: 'textfield',

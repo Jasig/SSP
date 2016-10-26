@@ -106,8 +106,13 @@ Ext.define('Ssp.view.tools.map.TermNotes', {
 		                }]
 		            
 		            }]
-		            }]
-				});
+		        }],
+                listeners: {
+                    afterrender: function(c){
+                        c.el.dom.setAttribute('role', 'dialog');
+                    }
+                }
+            });
 		
 		return me.callParent(arguments);
 	}

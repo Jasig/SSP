@@ -46,6 +46,11 @@ Ext.define('Ssp.view.StudentRecord', {
                 },
                 expand: function() {
                     me.appEventsController.loadMaskOff();
+                },
+                afterrender: {
+                    fn: function(c){
+                        c.collapseTool.el.dom.firstChild.setAttribute('alt', "Expand / Collapse");
+                    }
                 }
             },
             cls: 'studentpanel',
@@ -66,7 +71,7 @@ Ext.define('Ssp.view.StudentRecord', {
             },                    
 			
 			{
-                
+                tooltip: me.textStore.getValueByCode('ssp.tooltip.email-coach', 'Email Coach'),
                 text: '',
                 width: 170,
                 height: 20,
@@ -74,7 +79,7 @@ Ext.define('Ssp.view.StudentRecord', {
                 itemId: 'emailCoachButton',
 				cls: "makeTransparent x-btn-link"
             },
-			
+
 			{
                 tooltip: me.textStore.getValueByCode('ssp.tooltip.coaching-history', 'Coaching History'),
                 text: me.textStore.getValueByCode('ssp.label.coaching-history', 'Coaching History'),
@@ -84,7 +89,7 @@ Ext.define('Ssp.view.StudentRecord', {
 				cls: "makeTransparent x-btn-link",
 				hidden: !me.authenticatedPerson.hasAccess('PRINT_HISTORY_BUTTON'),
                 itemId: 'viewCoachingHistoryButton'
-            }, 
+            },
 			{
                 xtype: 'button',
                 itemId: 'studentRecordEditButton',

@@ -53,7 +53,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                     msgTarget: 'side'
                 },
                 items: [{
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -129,7 +129,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
             		}]
                 
                 }, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -145,7 +145,7 @@ Ext.define('Ssp.view.tools.journal.EditJournal', {
                         padding: '5 0 5 0',
 						style: 'color: blue'
                     }, {
-                        xtype: 'fieldset',
+                        xtype: 'container',
                         border: 0,
                         title: '',
                         layout: 'hbox',

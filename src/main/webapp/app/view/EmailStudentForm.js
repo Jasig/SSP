@@ -184,6 +184,7 @@ Ext.define('Ssp.view.EmailStudentForm', {
             }, {
                 xtype: 'ssphtmleditor',
                 name: 'emailBody',
+                title: 'Body',
                 allowBlank: false,
                 fieldLabel: me.textStore.getValueByCode('ssp.label.email-student.body', 'Body'),
                 itemId: 'emailBody',
@@ -205,8 +206,12 @@ Ext.define('Ssp.view.EmailStudentForm', {
                     text: me.textStore.getValueByCode('ssp.label.cancel-button', 'Cancel')
                 }]
             
-            }]
-        
+            }],
+            listeners: {
+                 afterrender: function(c){
+                     c.el.dom.setAttribute('role', 'dialog');
+                 }
+            }
         
         });
         

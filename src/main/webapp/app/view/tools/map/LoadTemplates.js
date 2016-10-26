@@ -85,7 +85,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     margin: '0 0 0 0',
                     
                     items: [{
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -95,7 +95,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                     margin: '0 0 0 5',
                     items: [ 
                              {
-						    xtype: 'fieldset',
+						    xtype: 'container',
 						    border: 0,
 						    title: '',
 						    margin: '0 0 0 0',
@@ -130,7 +130,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							    }]
 							},
 							{
-							    xtype: 'fieldset',
+							    xtype: 'container',
 							    border: 0,
 							    title: '',
 							    margin: '0 0 0 0',
@@ -164,7 +164,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'departmentCancel'
                                 }]
 							},{
-							    xtype: 'fieldset',
+							    xtype: 'container',
 							    border: 0,
 							    title: '',
 							    margin: '0 0 0 0',
@@ -198,7 +198,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'divisionCancel'
                                 }]
 							},{
-							    xtype: 'fieldset',
+							    xtype: 'container',
 							    border: 0,
 							    title: '',
 							    margin: '0 0 0 0',
@@ -232,7 +232,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'catalogYearCancel'
                                 }]
 							},{
-							    xtype: 'fieldset',
+							    xtype: 'container',
 							    border: 0,
 							    title: '',
 							    margin: '0 0 0 0',
@@ -266,7 +266,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 							        itemId: 'mapTemplateTagCancel'
                                 }]
 							},{
-						    xtype: 'fieldset',
+						    xtype: 'container',
 						    border: 0,
 						    title: '',
 						    margin: '0 0 0 0',
@@ -300,7 +300,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                     width: 290
 						    		}]
 								},{
-					    	xtype: 'fieldset',
+					    	xtype: 'container',
 					    	border: 0,
 					    	title: '',
 					    	margin: '0 0 0 0',
@@ -335,7 +335,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 				    			}]
 							},
 							{
-                            xtype: 'fieldset',
+                            xtype: 'container',
 					    	border: 0,
 					    	title: '',
 					    	margin: '0 0 0 0',
@@ -460,7 +460,12 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 				 });
 			 }
 		 }
-         ]}]
+         ]}],
+          listeners: {
+              afterrender: function(c){
+                  c.el.dom.setAttribute('role', 'dialog');
+              }
+          }
         });
         
         return me.callParent(arguments);

@@ -17,6 +17,6 @@
  * under the License.
  */
 Ext.define('Ssp.view.tools.map.PersistentFieldSet', {
-    extend: 'Ext.form.FieldSet',
+    extend: 'Ext.container.Container',
     alias: 'widget.persistentfieldset'
 });

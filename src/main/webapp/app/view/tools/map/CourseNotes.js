@@ -113,7 +113,7 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 
                     },
 					{
-				    xtype: 'fieldset',
+				    xtype: 'container',
 				    border: 0,
 				    title: '',
 				    margin: '0 0 0 0',
@@ -191,7 +191,12 @@ Ext.define('Ssp.view.tools.map.CourseNotes', {
 		                }]
 		            
 		            }]
-		            }]
+		            }],
+                  listeners: {
+                      afterrender: function(c){
+                          c.el.dom.setAttribute('role', 'dialog');
+                      }
+                  }
 				});
 		
 		return me.callParent(arguments);

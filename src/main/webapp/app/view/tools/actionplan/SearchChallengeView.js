@@ -50,7 +50,7 @@ Ext.define('Ssp.view.tools.actionplan.SearchChallengeView', {
                 width: '100%',
                 height: '100%',
                 items: [{
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     margin: '0 0 5 0',

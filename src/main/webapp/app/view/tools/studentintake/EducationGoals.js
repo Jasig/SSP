@@ -53,7 +53,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				    },
 				    defaultType: "radiogroup",
 				    items: [{
-				            xtype: "fieldset",
+				            xtype: "container",
 				            border: 0,
 				            title: "",
 				            id: 'StudentIntakeEducationGoalsFieldSet',
@@ -69,7 +69,7 @@ Ext.define("Ssp.view.tools.studentintake.EducationGoals", {
 				            columns: 1
 				        }]
 				    },{
-			            xtype: "fieldset",
+			            xtype: "container",
 			            border: 0,
 			            title: '',
 			            defaultType: "textfield",

@@ -46,7 +46,7 @@ Ext.define('Ssp.view.person.EditPerson', {
                 labelWidth: 150
             },
             items: [{
-                xtype: 'fieldset',
+                xtype: 'container',
                 border: 0,
                 title: '',
                 defaultType: 'textfield',

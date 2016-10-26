@@ -391,12 +391,16 @@ display: none;
     color: white;
 }
 
+.success-indicator.default {
+    background: #767676;
+}
+
 .success-indicator.high {
-    background: #009900;
+    background: #008a00;
 }
 
 .success-indicator.medium {
-    background: #999900;
+    background: #7a7a00;
 }
 
 .success-indicator.low {

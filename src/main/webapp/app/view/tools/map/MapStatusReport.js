@@ -202,8 +202,13 @@ Ext.define('Ssp.view.tools.map.MapStatusReport', {
 					            viewConfig: {
 					                markDirty: false
 					            }
-					         }			         
-		]});
+				   }],
+                   listeners: {
+                        afterrender: function(c){
+                            c.el.dom.setAttribute('role', 'dialog');
+                        }
+                   }
+		});
         return this.callParent(arguments);
     }
 });

@@ -46,11 +46,12 @@ Ext.define('Ssp.view.tools.profile.Person', {
             items: [{
                 xtype: 'image',
                 fieldLabel: '',
+                alt: me.textStore.getValueByCode('ssp.label.main.dashboard.student-type', 'Student Photo'),
                 src: Ssp.util.Constants.DEFAULT_NO_STUDENT_PHOTO_URL,
                 itemId: 'studentPhoto',
                 width: 160
             }, {
-                xtype: 'fieldset',
+                xtype: 'container',
                 border: 0,
                 padding: '0 0 0 5',
                 title: '',

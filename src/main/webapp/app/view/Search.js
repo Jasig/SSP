@@ -203,6 +203,14 @@ Ext.define('Ssp.view.Search', {
                             this.setType('down');
                             panel.hide();
                         }
+                    },
+                    listeners: {
+                      afterrender: {
+                          fn: function(c){
+                              c.toolEl.dom.setAttribute('alt', "Expand / Collapse");
+                          }
+                      }
+
                     }
                 }, {
 

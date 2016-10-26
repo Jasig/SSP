@@ -272,7 +272,7 @@ Ext.define('Ssp.util.FormRendererUtils',{
 		    	// add a fieldset if additional fields exist for this item
 		    	if (additionalFieldsArr.length>0)
 		    	{
-			    	var fields = {xtype: 'fieldset', padding: 0, border: 0, layout: { type: 'auto' },title: ''};
+			    	var fields = {xtype: 'container', padding: 0, border: 0, layout: { type: 'auto' },title: ''};
 			    	Ext.Array.insert(fieldsArr, 1, additionalFieldsArr);
 			    	Ext.apply(fields, {items: fieldsArr});
 		    	}

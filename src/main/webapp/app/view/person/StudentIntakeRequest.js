@@ -35,7 +35,7 @@ Ext.define('Ssp.view.person.StudentIntakeRequest', {
             border: 0,
             padding: 0,
             items: [{
-                xtype: 'fieldset',
+                xtype: 'container',
                 border: 0,
                 padding: 0,
                 title: '',

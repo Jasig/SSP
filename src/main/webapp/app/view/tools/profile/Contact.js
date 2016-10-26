@@ -49,7 +49,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                     labelWidth: 100
                 },
                 items: [{
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
@@ -81,7 +81,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                             itemId: 'address'
                         }]
                     }, {
-                        xtype: 'fieldset',
+                        xtype: 'container',
                         border: 0,
                         title: '',
                         flex: 0.80,
@@ -125,13 +125,13 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         }]
                     }]
                 }, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     
                     flex: 0.05
                 
                 }, {
-                    xtype: 'fieldset',
+                    xtype: 'container',
                     border: 0,
                     title: '',
                     defaultType: 'displayfield',
