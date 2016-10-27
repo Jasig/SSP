@@ -46,6 +46,9 @@ Ext.define('Ssp.model.reference.SuccessIndicator', {
         {name: 'noDataExistsEvaluation', type: 'string', defaultValue: 'DEFAULT'},
         {name: 'noDataMatchesEvaluation', type: 'string', defaultValue: 'DEFAULT'},
 
-        {name: 'sortOrder', type: 'int', defaultValue: 0}
+        {name: 'sortOrder', type: 'int', defaultValue: 0},
+
+        {name: 'showInCaseloadWatchlist', type: 'boolean'},
+        {name: 'generateEarlyAlert', type: 'boolean'}
     ]
 });

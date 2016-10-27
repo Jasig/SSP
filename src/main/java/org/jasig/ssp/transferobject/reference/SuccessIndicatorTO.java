@@ -23,9 +23,9 @@ import org.jasig.ssp.model.SuccessIndicatorGroup;
 import org.jasig.ssp.model.reference.SuccessIndicator;
 import org.jasig.ssp.transferobject.SuccessIndicatorEvaluation;
 import org.jasig.ssp.transferobject.TransferObject;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+
 
 public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
         implements TransferObject<SuccessIndicator> {
@@ -48,6 +48,9 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
     private SuccessIndicatorEvaluation noDataExistsEvaluation;
     private SuccessIndicatorEvaluation noDataMatchesEvaluation;
     private Integer sortOrder;
+    private boolean showInCaseloadWatchlist;
+    private boolean generateEarlyAlert;
+
 
     public SuccessIndicatorTO() {
         super();
@@ -57,6 +60,7 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
                               final String description) {
         super(id, name, description);
     }
+
 
     @Override
     public void from(final SuccessIndicator model) {
@@ -79,6 +83,8 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
         setNoDataExistsEvaluation(model.getNoDataExistsEvaluation());
         setNoDataMatchesEvaluation(model.getNoDataMatchesEvaluation());
         setSortOrder(model.getSortOrder());
+        setShowInCaseloadWatchlist(model.isShowInCaseloadWatchlist());
+        setGenerateEarlyAlert(model.isGenerateEarlyAlert());
     }
 
     public String getModelCode() {
@@ -223,5 +229,21 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
 
     public void setSortOrder(Integer sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public boolean isShowInCaseloadWatchlist() {
+        return showInCaseloadWatchlist;
+    }
+
+    public void setShowInCaseloadWatchlist(boolean showInCaseloadWatchlist) {
+        this.showInCaseloadWatchlist = showInCaseloadWatchlist;
+    }
+
+    public boolean isGenerateEarlyAlert() {
+        return generateEarlyAlert;
+    }
+
+    public void setGenerateEarlyAlert(boolean generateEarlyAlert) {
+        this.generateEarlyAlert = generateEarlyAlert;
     }
 }

@@ -22,7 +22,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.SuccessIndicatorEvaluationType;
 import org.jasig.ssp.model.SuccessIndicatorGroup;
 import org.jasig.ssp.transferobject.SuccessIndicatorEvaluation;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,6 +31,7 @@ import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -101,6 +101,12 @@ public class SuccessIndicator extends AbstractReference {
     @Column(nullable = false)
     private SuccessIndicatorEvaluation noDataMatchesEvaluation;
 
+    @Column(nullable = false)
+    private boolean showInCaseloadWatchlist;
+
+    @Column(nullable = false)
+    private boolean generateEarlyAlert;
+
     // we have a mix of int and short sortOrders in other models... perf gains from short probably aren't worth
     // the potential mismatches with API clients who don't support the int/short distinction.
     @Column(nullable = false)
@@ -111,6 +117,7 @@ public class SuccessIndicator extends AbstractReference {
     protected int hashPrime() {
         return 1987;
     }
+
 
     public String getModelCode() {
         return modelCode;
@@ -263,4 +270,19 @@ public class SuccessIndicator extends AbstractReference {
                 * hashField("code", code);
     }
 
+    public boolean isShowInCaseloadWatchlist() {
+        return showInCaseloadWatchlist;
+    }
+
+    public void setShowInCaseloadWatchlist(boolean showInCaseloadWatchlist) {
+        this.showInCaseloadWatchlist = showInCaseloadWatchlist;
+    }
+
+    public boolean isGenerateEarlyAlert() {
+        return generateEarlyAlert;
+    }
+
+    public void setGenerateEarlyAlert(boolean generateEarlyAlert) {
+        this.generateEarlyAlert = generateEarlyAlert;
+    }
 }
