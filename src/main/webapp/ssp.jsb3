@@ -339,6 +339,11 @@
                     "path": "/app/model/reference/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.AdminItemAssociationViewController",
+                    "name": "AdminItemAssociationViewController.js",
+                    "path": "/app/controller/admin/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.accommodation.GeneralViewController",
                     "name": "GeneralViewController.js",
                     "path": "/app/controller/tool/accommodation/"
@@ -802,6 +807,11 @@
                 {
                     "clsName": "Ssp.service.AssessmentService",
                     "name": "AssessmentService.js",
+                    "path": "/app/service/"
+                },
+                {
+                    "clsName": "Ssp.service.BackgroundJobService",
+                    "name": "BackgroundJobService.js",
                     "path": "/app/service/"
                 },
                 {
@@ -1575,6 +1585,16 @@
                     "path": "/app/controller/admin/map/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.map.AssociateElectiveCoursesAdminViewController",
+                    "name": "AssociateElectiveCoursesAdminViewController.js",
+                    "path": "/app/controller/admin/map/"
+                },
+                {
+                  "clsName": "Ssp.controller.admin.map.MapElectiveCoursesViewController",
+                  "name": "MapElectiveCoursesViewController.js",
+                  "path": "/app/controller/admin/map/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.map.MapStatusReportController",
                     "name": "MapStatusReportController.js",
                     "path": "/app/controller/tool/map/"
@@ -1673,11 +1693,6 @@
                     "clsName": "Ssp.model.FilterDiscreteValues",
                     "name": "FilterDiscreteValues.js",
                     "path": "/app/model/"
-                },                
-                {
-                    "clsName": "Ssp.controller.admin.AdminItemAssociationViewController",
-                    "name": "AdminItemAssociationViewController.js",
-                    "path": "/app/controller/admin/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.journal.AssociateJournalAdminViewController",
@@ -2310,6 +2325,16 @@
                     "path": "/app/model/tool/map/"
                 },
                 {
+                    "clsName": "Ssp.model.tool.map.PlanElectiveCourse",
+                    "name": "PlanElectiveCourse.js",
+                    "path": "/app/model/tool/map/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.map.PlanElectiveCourseElective",
+                    "name": "PlanElectiveCourseElective.js",
+                    "path": "/app/model/tool/map/"
+                },
+                {
                     "clsName": "Ssp.model.tool.map.Plan",
                     "name": "Plan.js",
                     "path": "/app/model/tool/map/"
@@ -2351,8 +2376,8 @@
                     "path": "/app/store/"
                 },
                 {
-                    "clsName": "Ssp.store.Plan",
-                    "name": "Plan.js",
+                    "clsName": "Ssp.store.PlanElectiveCourse",
+                    "name": "PlanElectiveCourse.js",
                     "path": "/app/store/"
                 },
                 {
@@ -3106,6 +3131,16 @@
                     "path": "/app/view/admin/forms/map/"
                 },
                 {
+                    "clsName": "Ssp.view.admin.forms.map.MapElectiveCourses",
+                    "name": "MapElectiveCourses.js",
+                    "path": "/app/view/admin/forms/map/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.map.AssociateElectiveCoursesAdmin",
+                    "name": "AssociateElectiveCoursesAdmin.js",
+                    "path": "/app/view/admin/forms/map/"
+                },
+                {
                     "clsName": "Ssp.view.admin.forms.map.MapTemplatesListAdmin",
                     "name": "MapTemplatesListAdmin.js",
                     "path": "/app/view/admin/forms/map/"
@@ -3161,6 +3196,26 @@
                     "path": "/app/controller/admin/config/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.config.MessageQueueAdminViewController",
+                    "name": "MessageQueueAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.BackgroundJobAdminViewController",
+                    "name": "BackgroundJobAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                  "clsName": "Ssp.controller.admin.config.BackgroundJobDisplayAdminViewController",
+                  "name": "BackgroundJobDisplayAdminViewController.js",
+                  "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.MessageQueueDisplayAdminViewController",
+                    "name": "MessageQueueDisplayAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
                     "clsName": "Ssp.controller.admin.config.MessageTemplateDetailsAdminViewController",
                     "name": "MessageTemplateDetailsAdminViewController.js",
                     "path": "/app/controller/admin/config/"
@@ -3178,6 +3233,16 @@
                 {
                     "clsName": "Ssp.model.MessageTemplates",
                     "name": "MessageTemplates.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.Message",
+                    "name": "Message.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.BackgroundJob",
+                    "name": "BackgroundJob.js",
                     "path": "/app/model/"
                 },
                 {
@@ -3221,6 +3286,16 @@
                     "path": "/app/store/reference/"
                 },
                 {
+                    "clsName": "Ssp.store.Messages",
+                    "name": "Messages.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.BackgroundJobs",
+                    "name": "BackgroundJobs.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.view.admin.forms.config.ConfigurationOptionsAdmin",
                     "name": "ConfigurationOptionsAdmin.js",
                     "path": "/app/view/admin/forms/config/"
@@ -3248,6 +3323,41 @@
                 {
                     "clsName": "Ssp.view.admin.forms.config.MessageTemplatesDisplayAdmin",
                     "name": "MessageTemplatesDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.MessageQueueDetails",
+                    "name": "MessageQueueDetails.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.MessageQueueAdmin",
+                    "name": "MessageQueueAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                  "clsName": "Ssp.store.Messages",
+                  "name": "Messages.js",
+                  "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.MessageQueueDisplayAdmin",
+                    "name": "MessageQueueDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.BackgroundJobDetails",
+                    "name": "BackgroundJobDetails.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.BackgroundJobAdmin",
+                    "name": "BackgroundJobAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.BackgroundJobDisplayAdmin",
+                    "name": "BackgroundJobDisplayAdmin.js",
                     "path": "/app/view/admin/forms/config/"
                 },
                 {
