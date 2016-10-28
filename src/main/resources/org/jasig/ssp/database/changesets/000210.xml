@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="add participation success indicator" author="paul.spaude">
+        <insert tableName="success_indicator">
+            <column name="id" value="ff8777e5-cabf-4237-bf42-0500c39ec8dc" />
+            <column name="model_code" value="system.intervention" />
+            <column name="model_name" value="Intervention Indicators" />
+            <column name="indicator_group" value="INTERVENTION" />
+            <column name="code" value="system.intervention.participation" />
+            <column name="name" value="Participation" />
+            <column name="description" value="Lowest course participation in current schedule" />
+            <column name="instruction" value="Shows the lowest value found in external student transcript course table for the current term using the participation value. " />
+            <column name="evaluation_type" value="SCALE" />
+            <column name="scale_evaluation_high_from" value="85.00" />
+            <column name="scale_evaluation_high_to" value="100.00" />
+            <column name="scale_evaluation_medium_from" value="50.00" />
+            <column name="scale_evaluation_medium_to" value="84.00" />
+            <column name="scale_evaluation_low_from" value="0.00" />
+            <column name="scale_evaluation_low_to" value="49.00" />
+
+            <!-- leave these null and rely on defaults -->
+            <!--column name="string_evaluation_high" value="" /--> <!-- leave null -->
+            <!--<column name="string_evaluation_medium" value="" />--> <!-- leave null -->
+            <!--column name="string_evaluation_low" value="" /--> <!-- leave null -->
+
+            <!-- Shouldn't happen -->
+            <column name="no_data_exists_evaluation" value="DEFAULT" />
+            <!-- Redundant since default low_to has no value -->
+            <column name="no_data_matches_evaluation" value="DEFAULT" />
+            <column name="sort_order" value="90" />
+
+            <column name="created_date" valueDate="2016-10-21T12:00:00" />
+            <column name="modified_date" valueDate="2016-10-21T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="Add boolean columns to success indicators" author="paul.spaude">
+        <addColumn tableName="success_indicator">
+            <column name="show_in_caseload_watchlist" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="success_indicator">
+            <column name="generate_early_alert" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="success_indicator" columnName="show_in_caseload_watchlist" />
+            <dropColumn tableName="success_indicator" columnName="generate_early_alert" />
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

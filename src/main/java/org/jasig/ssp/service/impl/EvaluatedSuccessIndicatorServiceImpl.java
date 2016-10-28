@@ -28,26 +28,15 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
-import org.jasig.ssp.model.external.ExternalStudentRiskIndicator;
-import org.jasig.ssp.model.external.ExternalStudentTranscript;
-import org.jasig.ssp.model.external.PlanStatus;
-import org.jasig.ssp.model.external.RegistrationStatusByTerm;
-import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.model.reference.SuccessIndicator;
-import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
 import org.jasig.ssp.service.MapStatusService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.TaskService;
-import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
-import org.jasig.ssp.service.external.ExternalStudentRiskIndicatorService;
-import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
-import org.jasig.ssp.service.external.RegistrationStatusByTermService;
-import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.service.reference.SuccessIndicatorService;
 import org.jasig.ssp.transferobject.EvaluatedSuccessIndicatorTO;
@@ -67,7 +56,6 @@ import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.PatternMatchUtils;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -80,8 +68,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static org.jasig.ssp.util.sort.SortingAndPaging.allActive;
+
 
 @Service
 public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessIndicatorService {
@@ -135,6 +123,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     private static final String FINANCIAL_AID_INDICATOR_METRIC_KEY = "FINANCIAL_AID";
     private static final String EXTERNAL_RISK_INDICATOR_METRIC_KEY = "EXTERNAL_RISK";
     private static final String EVALUATION_DISPLAY_NAMES_KEY = "DISPLAY_NAMES";
+    private static final String CURRENT_TERM_KEY = "CURRENT_TERM";
     private static final String BLURB_SEPARATOR = ".";
     private static final String EVALUATION_DISPLAY_NAMES_BLURB_PREFIX = "ssp.success.indicator.evaluation";
     private static final String EVALUATION_DISPLAY_NAMES_BLURB_QUERY = EVALUATION_DISPLAY_NAMES_BLURB_PREFIX
@@ -160,12 +149,6 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     private TaskService taskService;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
-    private EarlyAlertService earlyAlertService;
-
-    @Autowired
     private MapStatusService mapStatusService;
 
     @Autowired
@@ -173,6 +156,9 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
     @Autowired
     private ExternalStudentRiskIndicatorService externalStudentRiskIndicatorService;
+
+    @Autowired
+    private transient ExternalStudentTranscriptCourseService externalStudentTranscriptCourseService;
 
     @Autowired
     private BlurbService blurbService;
@@ -751,12 +737,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             currentAndFutureTermsByCode.put(term.getCode(), term);
         }
 
-        Term currentTerm = null;
-        try {
-            currentTerm = termService.getCurrentTerm();
-        } catch ( ObjectNotFoundException e ) {
-            // nothing to be done - missing terms handled below
-        }
+        Term currentTerm = findCurrentTerm(); // if nothing found, nothing to be done - missing terms handled below
 
         final boolean isCurrentTerm = currentTerm != null;
 
@@ -850,6 +831,8 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                 return findOpenAlertsMetric(successIndicator, person);
             case "system.intervention.mapstatus":
                 return findMapStatusMetric(successIndicator, person);
+            case "system.intervention.participation":
+                return findParticipationStatusMetric(successIndicator, person);
             default:
                 throw new UnsupportedOperationException("Unrecognized intervention indicator code [" +
                         successIndicator.getCode() + "] in success indicator [" +
@@ -924,6 +907,31 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         final PlanStatus status = statusReport == null ? null : statusReport.getStatus();
         return new SuccessIndicatorMetric((status == null ? null : status.name()),
                 (status == null ? null : status.getDisplayName()), null,
+                successIndicator.getCode(), successIndicator.getName());
+    }
+
+    private SuccessIndicatorMetric findParticipationStatusMetric(@Nonnull SuccessIndicator successIndicator,
+                                                 @Nonnull Person person) {
+        final Term currentTerm = findCurrentTerm();
+
+        final List<ExternalStudentTranscriptCourse> scheduleCourses = externalStudentTranscriptCourseService.
+                getTranscriptsBySchoolIdAndTermCode(person.getSchoolId(), currentTerm.getCode());
+
+        Double lowestParticipationScore = null;
+        for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
+            try {
+                double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
+                if (lowestParticipationScore == null) {
+                    lowestParticipationScore = new Double(participationToEvaluate);
+                } else if (lowestParticipationScore > participationToEvaluate) {
+                    lowestParticipationScore = participationToEvaluate;
+                }
+            } catch (NumberFormatException nfe) {
+                //ignore for now, likely one or more records not a number
+            }
+        }
+
+        return new SuccessIndicatorMetric(lowestParticipationScore, (lowestParticipationScore == null ? null : lowestParticipationScore.toString()), null,
                 successIndicator.getCode(), successIndicator.getName());
     }
 
@@ -1093,6 +1101,28 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             blurbMap = (Map<String,Blurb>) cache.get(EVALUATION_DISPLAY_NAMES_KEY);
         }
         return evaluationDisplayNameFor(evaluation, blurbMap);
+    }
+
+    private Term findCurrentTerm() {
+        final Map<String, Object> cache = evaluationResourceCache.get();
+        Term currentTerm = null;
+
+        if ( cache == null || !(cache.containsKey(CURRENT_TERM_KEY)) ) {
+            try {
+                currentTerm = termService.getCurrentTerm();
+            } catch(ObjectNotFoundException e) {
+                LOGGER.error("ERROR: CURRENT TERM NOT SET");
+            }
+
+            if ( cache != null && currentTerm != null ) {
+                cache.put(CURRENT_TERM_KEY, currentTerm);
+            }
+
+        } else {
+            return (Term) cache.get(CURRENT_TERM_KEY);
+        }
+
+        return currentTerm;
     }
 
     private String evaluationDisplayNameFor(@Nonnull SuccessIndicatorEvaluation evaluation, @Nonnull Map<String, Blurb> blurbMap) {
