@@ -20,13 +20,11 @@ package org.jasig.ssp.model.external;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -37,9 +35,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ExternalStudentTranscriptCourse extends AbstractExternalData
 		implements ExternalData, Serializable {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 5886830169590147558L;
 
 	@Column(nullable = false, length = 50)
@@ -135,6 +131,11 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	@Column(nullable = true, length = 50)
 	@Size(max = 50)
 	private String courseCode;
+
+	@Column(nullable = true, length = 15)
+	@Size(max = 15)
+	private String participation;
+
 
 	/**
 	 * @return the schoolId
@@ -407,4 +408,12 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	public void setCourseCode(String courseCode) {
 		this.courseCode = courseCode;
 	}
+
+    public String getParticipation() {
+        return participation;
+    }
+
+    public void setParticipation(String participation) {
+        this.participation = participation;
+    }
 }

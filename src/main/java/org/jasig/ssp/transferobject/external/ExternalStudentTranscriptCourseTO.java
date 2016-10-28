@@ -20,80 +20,57 @@ package org.jasig.ssp.transferobject.external;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+
 
 public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<ExternalStudentTranscriptCourse>,
 		Serializable {
 
+    private String schoolId;
+    private String subjectAbbreviation;
+    private String number;
+    private String formattedCourse;
+    private String sectionNumber;
+    private String title;
+    private String description;
+    private String grade;
+    private BigDecimal creditEarned;
+    private String termCode;
+    private String creditType;
+
+    private String sectionCode;
+    private String audited;
+    private String statusCode;
+
+    private String firstName;
+    private String lastName;
+    private String middleName;
+
+    private String facultySchoolId;
+    private String facultyName;
+
+    private String participation;
+
+
+    /**
+     * No args constructor calls super
+     */
+    public ExternalStudentTranscriptCourseTO() {
+        super();
+    }
+
+    /**
+     * Constructor uses model calls from method
+     * @param model
+     */
+    public ExternalStudentTranscriptCourseTO(ExternalStudentTranscriptCourse model) {
+        super();
+        from(model);
+    }
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6238162986848364288L;
-	@Override
-	public void from(ExternalStudentTranscriptCourse model) {
-		schoolId = model.getSchoolId();
-		subjectAbbreviation = model.getSubjectAbbreviation();
-		number = model.getNumber();
-		formattedCourse = model.getFormattedCourse();
-		sectionNumber = model.getSectionNumber();
-		title = model.getTitle();
-		description = model.getDescription();
-		grade = model.getGrade();
-		creditEarned = model.getCreditEarned();
-		termCode = model.getTermCode();
-		creditType = model.getCreditType();
-		
-		sectionCode = model.getSectionCode();
-		audited = model.getAudited();
-		statusCode = model.getStatusCode();
-		
-		firstName = model.getFirstName();
-		lastName = model.getLastName();
-		middleName = model.getMiddleName();
-		facultySchoolId = model.getFacultySchoolId();		
-	}
-	
-	public ExternalStudentTranscriptCourseTO(ExternalStudentTranscriptCourse model)
-	{
-		super();
-		from(model);
-	}
-	
-	public ExternalStudentTranscriptCourseTO()
-	{
-		super();
-	}
-	private String schoolId;
-	private String subjectAbbreviation;
-	private String number;
-	private String formattedCourse;
-	private String sectionNumber;
-	private String title;
-	private String description;
-	private String grade;
-	private BigDecimal creditEarned;
-	private String termCode;
-	private String creditType;
-
-	private String sectionCode;
-	private String audited;
-	private String statusCode;
-	
-	private String firstName;
-	private String lastName;
-	private String middleName;
-	
-	private String facultySchoolId;
-	private String facultyName;
-	
-	/**
+     * Constructor
+     *
 	 * @param schoolId
 	 * @param subjectAbbreviation
 	 * @param number
@@ -106,7 +83,8 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	 * @param termCode
 	 * @param creditType
 	 */
-	public ExternalStudentTranscriptCourseTO(final String schoolId, 	
+	public ExternalStudentTranscriptCourseTO(
+	        final String schoolId,
 			final String firstName,
 			final String middleName,
 			final String lastName,
@@ -122,8 +100,9 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 			final String creditType, 
 			final String sectionCode,
 			final String facultySchoolId,
-	final String audited,
-	final String statusCode) {
+	        final String audited,
+	        final String statusCode,
+            final String participation) {
 		
 		super();
 		this.schoolId = schoolId;
@@ -145,133 +124,187 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 		this.lastName = lastName;
 		this.middleName = middleName;
 		this.facultySchoolId = facultySchoolId;
+
+		this.setParticipation(participation);
 	}
+
+	/**
+     *  From override sets TO from model
+     */
+    private static final long serialVersionUID = -6238162986848364288L;
+    @Override
+    public void from(ExternalStudentTranscriptCourse model) {
+        schoolId = model.getSchoolId();
+        subjectAbbreviation = model.getSubjectAbbreviation();
+        number = model.getNumber();
+        formattedCourse = model.getFormattedCourse();
+        sectionNumber = model.getSectionNumber();
+        title = model.getTitle();
+        description = model.getDescription();
+        grade = model.getGrade();
+        creditEarned = model.getCreditEarned();
+        termCode = model.getTermCode();
+        creditType = model.getCreditType();
+
+        sectionCode = model.getSectionCode();
+        audited = model.getAudited();
+        statusCode = model.getStatusCode();
+
+        firstName = model.getFirstName();
+        lastName = model.getLastName();
+        middleName = model.getMiddleName();
+        facultySchoolId = model.getFacultySchoolId();
+        setParticipation(model.getParticipation());
+    }
+
+
 	/**
 	 * @return the schoolId
 	 */
 	public String getSchoolId() {
 		return schoolId;
 	}
+
 	/**
 	 * @param schoolId the schoolId to set
 	 */
 	public void setSchoolId(final String schoolId) {
 		this.schoolId = schoolId;
 	}
+
 	/**
 	 * @return the subjectAbbreviation
 	 */
 	public String getSubjectAbbreviation() {
 		return subjectAbbreviation;
 	}
+
 	/**
 	 * @param subjectAbbreviation the subjectAbbreviation to set
 	 */
 	public void setSubjectAbbreviation(final String subjectAbbreviation) {
 		this.subjectAbbreviation = subjectAbbreviation;
 	}
+
 	/**
 	 * @return the number
 	 */
 	public String getNumber() {
 		return number;
 	}
+
 	/**
 	 * @param number the number to set
 	 */
 	public void setNumber(final String number) {
 		this.number = number;
 	}
+
 	/**
 	 * @return the formattedCourse
 	 */
 	public String getFormattedCourse() {
 		return formattedCourse;
 	}
+
 	/**
 	 * @param formattedCourse the formattedCourse to set
 	 */
 	public void setFormattedCourse(final String formattedCourse) {
 		this.formattedCourse = formattedCourse;
 	}
+
 	/**
 	 * @return the sectionNumber
 	 */
 	public String getSectionNumber() {
 		return sectionNumber;
 	}
+
 	/**
 	 * @param sectionNumber the sectionNumber to set
 	 */
 	public void setSectionNumber(final String sectionNumber) {
 		this.sectionNumber = sectionNumber;
 	}
+
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
 		return title;
 	}
+
 	/**
 	 * @param title the title to set
 	 */
 	public void setTitle(final String title) {
 		this.title = title;
 	}
+
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
 		return description;
 	}
+
 	/**
 	 * @param description the description to set
 	 */
 	public void setDescription(final String description) {
 		this.description = description;
 	}
+
 	/**
 	 * @return the grade
 	 */
 	public String getGrade() {
 		return grade;
 	}
+
 	/**
 	 * @param grade the grade to set
 	 */
 	public void setGrade(final String grade) {
 		this.grade = grade;
 	}
+
 	/**
 	 * @return the creditEarned
 	 */
 	public BigDecimal getCreditEarned() {
 		return creditEarned;
 	}
+
 	/**
 	 * @param creditEarned the creditEarned to set
 	 */
 	public void setCreditEarned(final BigDecimal creditEarned) {
 		this.creditEarned = creditEarned;
 	}
+
 	/**
 	 * @return the termCode
 	 */
 	public String getTermCode() {
 		return termCode;
 	}
+
 	/**
 	 * @param termCode the termCode to set
 	 */
 	public void setTermCode(final String termCode) {
 		this.termCode = termCode;
 	}
+
 	/**
 	 * @return the creditType
 	 */
 	public String getCreditType() {
 		return creditType;
 	}
+
 	/**
 	 * @param creditType the creditType to set
 	 */
@@ -390,4 +423,18 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	public void setFacultyName(String facultyName) {
 		this.facultyName = facultyName;
 	}
+
+    /**
+     * @return participation
+     */
+    public String getParticipation() {
+        return participation;
+    }
+
+    /**
+     * @param participation the participation to set
+     */
+    public void setParticipation(String participation) {
+        this.participation = participation;
+    }
 }

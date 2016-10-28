@@ -35,8 +35,7 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
             //store: me.store,
             xtype: 'gridcolumn',
           	title: this.textStore.getValueByCode('ssp.label.main.current-schedule.title','Current Schedule'),
-            columns: [
-			{
+            columns: [{
                 dataIndex: 'termCode',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.term-code','Term'),
                 flex: 0.10
@@ -44,42 +43,37 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
                 dataIndex: 'formattedCourse',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.formatted-course','Course'),
 				flex: 0.14
-            }, 
-			{
+            }, {
                 dataIndex: 'sectionNumber',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.section-number','Section'),
 				flex: 0.10
-            },  
-			{
-            
+            }, {
                 dataIndex: 'title',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.course-title','Course Title'),
 				flex: 0.25
-            },
-			{
+            }, {
                 xtype: 'numbercolumn',
                 dataIndex: 'creditEarned',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.credit-earned','Cr Hrs'),
                 format: '0.00',
 				flex: 0.07
-            },
-			{
-            
+            }, {
                 dataIndex: 'facultyName',
                 text: this.textStore.getValueByCode('ssp.label.main.current-schedule.faculty-name','Instructor'),
                 flex: 0.20
             }, {
-            
                 dataIndex: 'statusCode',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.status-code','Status'),
                 flex: 0.07
             }, {
-            
                 dataIndex: 'audited',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.audited','Audited'),
                 flex: 0.07
-            }
-			],
+            }, {
+                dataIndex: 'participation',
+                text: me.textStore.getValueByCode('ssp.label.main.current-schedule.participation','Participation'),
+                flex: 0.07
+            }],
             viewConfig: {}
         });
         

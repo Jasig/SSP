@@ -31,5 +31,6 @@ Ext.define('Ssp.model.CourseTranscript', {
         {name: 'statusCode', type: 'string'},
         {name: 'subjectAbbreviation', type: 'string'},
         {name: 'sectionNumber', type: 'string'},
-		{name: 'termStartDate', type: 'date', dateFormat: 'time'}]
+		{name: 'termStartDate', type: 'date', dateFormat: 'time'},
+        {name: 'participation', type: 'string'}]
 });
