@@ -23,29 +23,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.MapStatusReportDao;
 import org.jasig.ssp.dao.PersonAssocAuditableCrudDao;
-import org.jasig.ssp.dao.PlanElectiveCourseDao;
 import org.jasig.ssp.dao.external.ExternalSubstitutableCourseDao;
-import org.jasig.ssp.model.AbstractMapElectiveCourse;
-import org.jasig.ssp.model.AnomalyCode;
-import org.jasig.ssp.model.MapStatusReport;
-import org.jasig.ssp.model.MapStatusReportCourseDetails;
-import org.jasig.ssp.model.MapStatusReportOverrideDetails;
-import org.jasig.ssp.model.MapStatusReportSubstitutionDetails;
-import org.jasig.ssp.model.MapStatusReportTermDetails;
-import org.jasig.ssp.model.Person;
-import org.jasig.ssp.model.Plan;
-import org.jasig.ssp.model.PlanElectiveCourse;
-import org.jasig.ssp.model.SubstitutionCode;
-import org.jasig.ssp.model.TermStatus;
-import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
-import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
-import org.jasig.ssp.model.external.ExternalSubstitutableCourse;
-import org.jasig.ssp.model.external.PlanStatus;
-import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
 import org.jasig.ssp.service.MapStatusReportService;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptNonCourseEntityService;
@@ -61,17 +44,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
 
 /**
  * Person service implementation
@@ -87,9 +62,6 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	private MapStatusReportDao dao;
 
 	@Autowired
-	private transient PersonService personService;
-	
-	@Autowired 
 	private transient PlanService planService;
 	
 	@Autowired 
@@ -107,9 +79,6 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 	@Autowired 
 	private transient ExternalSubstitutableCourseDao externalSubstitutableCourseDao;
 
-	@Autowired
-	private transient PlanElectiveCourseDao planElectiveCourseDao;
-	
 
 	private static String CONFIGURABLE_MATCH_CRITERIA_COURSE_TITLE = "COURSE_TITLE";
 	
@@ -119,9 +88,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
 	private static String CONFIGURABLE_MATCH_COURSE_ANY_PASSING_COURSE = "map_plan_status_use_any_passing_course";
 
-	private static final Logger LOGGER = LoggerFactory
-            .getLogger(MapStatusReportServiceImpl.class);
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(MapStatusReportServiceImpl.class);
 
 
 	@Override
@@ -439,10 +406,10 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
             if (matchedTranscriptCourse == null) {
 
                 //First if no term match found check for override
-                matchedNonCourseOverride = findTranscriptCourseMatchOverrideCourse(mapPlanStatusReportCourse, allNonCourseEntities);
+                matchedNonCourseOverride = findCourseMatchOverrideCourse(mapPlanStatusReportCourse.getFormattedCourse(), mapPlanStatusReportCourse.getTermCode(), allNonCourseEntities);
                 if (matchedNonCourseOverride != null) {
-                    //TODO? matchedTranscriptCourse == mantchedNonCourseOverride?
-					reportOverrideDetails.add(createOverrideEntry(matchedNonCourseOverride, mapPlanStatusReportCourse, report));
+                    //TODO? matchedTranscriptCourse == matchedNonCourseOverride?
+					reportOverrideDetails.add(createOverrideEntry(matchedNonCourseOverride, mapPlanStatusReportCourse.getTermCode(), report));
                 } else {
 
 					//Second try to find term unbounded match
@@ -464,13 +431,25 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 					//If we find a transcript match, it must have a passing grade before we log it
 					if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
 						reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse,mapPlanStatusReportCourse,SubstitutionCode.SUBSTITUTABLE_COURSE,report));
-					}
+					} else {
+					    //check if there is an override for the substitutable course
+                        matchedNonCourseOverride = findCourseMatchOverrideCourse(matchedTranscriptCourse.getFormattedCourse(), matchedTranscriptCourse.getTermCode(), allNonCourseEntities);
+                        if (matchedNonCourseOverride != null) {
+                            reportOverrideDetails.add(createOverrideEntry(matchedNonCourseOverride, matchedTranscriptCourse.getTermCode(), report));
+                        }
+                    }
 				} else if (mapPlanStatusReportCourse.getOriginalFormattedCourse()!=null) {
 					matchedTranscriptCourse = findTranscriptCourseMatchElectiveCourse(planAndPersonInfo, mapPlanStatusReportCourse, transcript, criteriaSet);
 					if (matchedTranscriptCourse != null) {
 						if (gradesSet.contains(matchedTranscriptCourse.getGrade().trim())) {
 							reportSubstitutionDetails.add(createSubstitutionEntry(matchedTranscriptCourse, mapPlanStatusReportCourse, SubstitutionCode.ELECTIVE_COURSE, report));
-						}
+                        } else {
+                            //check if there is an override for the elective course
+                            matchedNonCourseOverride = findCourseMatchOverrideCourse(matchedTranscriptCourse.getFormattedCourse(), matchedTranscriptCourse.getTermCode(), allNonCourseEntities);
+                            if (matchedNonCourseOverride != null) {
+                                reportOverrideDetails.add(createOverrideEntry(matchedNonCourseOverride, matchedTranscriptCourse.getTermCode(), report));
+                            }
+                        }
 					}
 				}
 			}
@@ -505,12 +484,12 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
 	private MapStatusReportOverrideDetails createOverrideEntry(
 			ExternalStudentTranscriptNonCourseEntity matchedTranscriptNonCourse,
-			MapPlanStatusReportCourse mapPlanStatusReportCourse,
+			String termCode,
 			MapStatusReport report) {
 
 		MapStatusReportOverrideDetails detail = new MapStatusReportOverrideDetails();
 		detail.setNonCourseCode(matchedTranscriptNonCourse.getNonCourseCode());
-		detail.setTermCode(mapPlanStatusReportCourse.getTermCode());
+		detail.setTermCode(termCode);
 		detail.setTargetFormattedCourse(matchedTranscriptNonCourse.getTargetFormattedCourse());
 		detail.setDescription(matchedTranscriptNonCourse.getDescription());
 		detail.setOverrideNote(" ");
@@ -550,8 +529,9 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 							&& (substitutableCourse.getTermCode() == null || transcriptCourse.getTermCode().trim().equalsIgnoreCase(substitutableCourse.getTermCode().trim()))
 							&& (substitutableCourse.getProgramCode() == null || planAndPersonInfo.getProgramCode().trim().equalsIgnoreCase(substitutableCourse.getProgramCode().trim())
 							&& (substitutableCourse.getCatalogYearCode() == null || planAndPersonInfo.getCatalogYearCode().trim().equalsIgnoreCase(substitutableCourse.getCatalogYearCode().trim())))
-							)
-					return transcriptCourse;
+							) {
+                        return transcriptCourse;
+                    }
 				}
 			}			
 		}
@@ -772,7 +752,7 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 		return -1;
 	}
 
-    private ExternalStudentTranscriptNonCourseEntity findTranscriptCourseMatchOverrideCourse(MapPlanStatusReportCourse mapPlanStatusReportCourse,
+    private ExternalStudentTranscriptNonCourseEntity findCourseMatchOverrideCourse(String formattedCourse, String termCode,
                                                                       Collection<ExternalStudentTranscriptNonCourseEntity> allNonCourseEntities) {
 
         if (allNonCourseEntities == null || allNonCourseEntities.isEmpty()) {
@@ -781,8 +761,8 @@ public class MapStatusReportServiceImpl extends AbstractPersonAssocAuditableServ
 
         for (ExternalStudentTranscriptNonCourseEntity externalStudentTranscriptNonCourseEntity : allNonCourseEntities) {
 
-            if (mapPlanStatusReportCourse.getFormattedCourse().trim().equalsIgnoreCase(externalStudentTranscriptNonCourseEntity.getTargetFormattedCourse().trim())
-                     && mapPlanStatusReportCourse.getTermCode().trim().equalsIgnoreCase(externalStudentTranscriptNonCourseEntity.getTermCode().trim())) {
+            if (formattedCourse.trim().equalsIgnoreCase(externalStudentTranscriptNonCourseEntity.getTargetFormattedCourse().trim())
+                     && termCode.trim().equalsIgnoreCase(externalStudentTranscriptNonCourseEntity.getTermCode().trim())) {
                 return externalStudentTranscriptNonCourseEntity;
             }
         }
