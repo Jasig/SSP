@@ -102,7 +102,7 @@ public class SuccessIndicator extends AbstractReference {
     private SuccessIndicatorEvaluation noDataMatchesEvaluation;
 
     @Column(nullable = false)
-    private boolean showInCaseloadWatchlist;
+    private boolean showInCaseload;
 
     @Column(nullable = false)
     private boolean generateEarlyAlert;
@@ -270,12 +270,12 @@ public class SuccessIndicator extends AbstractReference {
                 * hashField("code", code);
     }
 
-    public boolean isShowInCaseloadWatchlist() {
-        return showInCaseloadWatchlist;
+    public boolean isShowInCaseload() {
+        return showInCaseload;
     }
 
-    public void setShowInCaseloadWatchlist(boolean showInCaseloadWatchlist) {
-        this.showInCaseloadWatchlist = showInCaseloadWatchlist;
+    public void setShowInCaseload(boolean showInCaseloadWatchlist) {
+        this.showInCaseload = showInCaseloadWatchlist;
     }
 
     public boolean isGenerateEarlyAlert() {

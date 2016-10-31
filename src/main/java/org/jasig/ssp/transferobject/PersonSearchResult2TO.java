@@ -76,7 +76,11 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 	private String currentProgramStatusName;
 
 	private String campusName;
-					
+
+	private Integer numberOfLowConfiguredSuccessIndicators;
+
+	private Integer numberOfMediumConfiguredSuccessIndicators;
+
 
 	public PersonSearchResult2TO(final PersonSearchResult2 record) {
 		super();
@@ -108,7 +112,9 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 		setCurrentProgramStatusName(model.getCurrentProgramStatusName());
 		setNumberEarlyAlertResponsesRequired(model.getNumberEarlyAlertResponsesRequired());
 		setCampusName(model.getCampusName());
-	}
+        setNumberOfLowConfiguredSuccessIndicators(model.getConfiguredSuccessIndicatorsLow());
+        setNumberOfMediumConfiguredSuccessIndicators(model.getConfiguredSuccessIndicatorsMedium());
+    }
 
 	public UUID getPersonId() {
 		return personId;
@@ -267,4 +273,20 @@ public class PersonSearchResult2TO implements TransferObject<PersonSearchResult2
 	public void setCampusName(String campusName) {
 		this.campusName = campusName;
 	}
+
+    public Integer getNumberOfLowConfiguredSuccessIndicators() {
+        return numberOfLowConfiguredSuccessIndicators;
+    }
+
+    public void setNumberOfLowConfiguredSuccessIndicators(Integer numberOfLowConfiguredSuccessIndicators) {
+        this.numberOfLowConfiguredSuccessIndicators = numberOfLowConfiguredSuccessIndicators;
+    }
+
+    public Integer getNumberOfMediumConfiguredSuccessIndicators() {
+        return numberOfMediumConfiguredSuccessIndicators;
+    }
+
+    public void setNumberOfMediumConfiguredSuccessIndicators(Integer numberOfMediumConfiguredSuccessIndicators) {
+        this.numberOfMediumConfiguredSuccessIndicators = numberOfMediumConfiguredSuccessIndicators;
+    }
 }

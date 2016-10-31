@@ -18,24 +18,16 @@
  */
 package org.jasig.ssp.service;
 
-
-import org.jasig.ssp.model.ObjectStatus;
-import org.jasig.ssp.model.reference.SuccessIndicator;
-import org.jasig.ssp.transferobject.EvaluatedSuccessIndicatorTO;
-import java.util.List;
-import java.util.UUID;
+import org.jasig.ssp.service.external.BatchedTask;
+import org.jasig.ssp.util.collections.Pair;
 
 
-public interface EvaluatedSuccessIndicatorService {
-
-    /**
-     * Evaluates Success Indicators for given person.
-     * @param personId
-     * @param status
-     * @param indicators  if null all indicators will be evaluated for person
-     * @return
-     * @throws ObjectNotFoundException
-     */
-    List<EvaluatedSuccessIndicatorTO> getForPerson(UUID personId, ObjectStatus status,
-                                     List<SuccessIndicator> indicators) throws ObjectNotFoundException;
+/**
+ * Implements the Success Indicators background job that examines
+ *   only configured success indicators for students inside of
+ *   SSP. Depending on the config set it can store a count
+ *   of High, Medium, and Low indicators and/or creates an
+ *   Early Alert on Low.
+ */
+public interface SuccessIndicatorsTask extends BatchedTask<Pair<Long,Long>> {
 }

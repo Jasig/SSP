@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearchResultFull> {
 
-	private static String[] colHeaders = new String[56];
+	private static String[] colHeaders = new String[58];
 
 	private static String COL_PERSON_ID = "PERSON_ID";
 	private static String COL_SCHOOL_ID = "SCHOOL_ID";
@@ -86,6 +86,8 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
     private static String COL_LAST_REVISED_DATE = "LAST_REVISED_DATE";
     private static String COL_FINANCIAL_AID_GPA = "FINANCIAL_AID_GPA";
     private static String COL_HOME_CAMPUS = "HOME_CAMPUS";
+    private static String COL_NUM_CONFIGURED_SUCCESS_INDICATORS_LOW = "LOW_SUCCESS_INDICATORS";
+    private static String COL_NUM_CONFIGURED_SUCCESS_INDICATORS_MEDIUM = "MEDIUM_SUCCESS_INDICATORS";
 
     static {
 		colHeaders[0] = COL_PERSON_ID;
@@ -144,7 +146,9 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
         colHeaders[53] = COL_LAST_REVISED_DATE;
         colHeaders[54] = COL_FINANCIAL_AID_GPA;
         colHeaders[55] = COL_HOME_CAMPUS;
-	}
+        colHeaders[56] = COL_NUM_CONFIGURED_SUCCESS_INDICATORS_LOW;
+        colHeaders[57] = COL_NUM_CONFIGURED_SUCCESS_INDICATORS_MEDIUM;
+    }
 
     private final Map<Integer, Boolean> customOptions;
     private final List<String> columns;
@@ -173,6 +177,8 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
             columns.add(colHeaders[19]);
             columns.add(colHeaders[20]);
             columns.add(colHeaders[55]); //homecampus
+            columns.add(colHeaders[56]); //config success indicators low
+            columns.add(colHeaders[57]); //config success indicators med
 
 
             if ( customOptions.get(0) ) {
@@ -273,6 +279,8 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
         bodyRowsToReturn.add(model.getCoachFirstName());
         bodyRowsToReturn.add(model.getCoachLastName());
         bodyRowsToReturn.add(model.getCampusName());
+        bodyRowsToReturn.add(formatInt(model.getConfiguredSuccessIndicatorsLow()));
+        bodyRowsToReturn.add(formatInt(model.getConfiguredSuccessIndicatorsMedium()));
 
 
         if ( customOptions.get(0) ) {

@@ -28,17 +28,7 @@ import org.jasig.portal.api.permissions.PermissionsService;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.uportal.UPortalSecurityFilter;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.PruneMessageQueueTask;
-import org.jasig.ssp.service.RefreshDirectoryPersonBlueTask;
-import org.jasig.ssp.service.RefreshDirectoryPersonTask;
-import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
-import org.jasig.ssp.service.ScheduledTaskWrapperService;
-import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.SendQueuedMessagesTask;
-import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.BatchedTask;
 import org.jasig.ssp.service.external.ExternalPersonSyncTask;
 import org.jasig.ssp.service.external.MapStatusReportCalcTask;
@@ -92,6 +82,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * Exists just to give us a non-transactional location in which to launch
+ * a relatively static set of scheduled jobs and clean up after them
+ *
+ * NOTE: When adding background jobs on a scheduler, make sure they are added to
+ *   BackgroundJobController.java and BackgroundJobs.js if you want end-users
+ *    to be able to manually run them. TODO: Refactor jobs to db
+ */
 @Service
 public class ScheduledTaskWrapperServiceImpl
 		implements ScheduledTaskWrapperService, InitializingBean {
@@ -112,8 +110,9 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SEND_EARLY_ALERT_REMINDERS_TASK_NAME = "send-early-alert-reminders";
     public static final String OAUTH1_CULL_NONCE_TABLE_TASK_NAME = "cull-oauth1-nonces";
 	public static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_NAME = "special-service-group-course-withdrawal";
+    public static final String CALC_SUCCESS_INDICATORS_TASK_NAME = "count-success-indicators";
 
-	private static final String EVERY_DAY_10_PM = "0 0 22 * * *";
+    private static final String EVERY_DAY_10_PM = "0 0 22 * * *";
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
     private static final String EVERY_DAY_2_AM = "0 0 2 * * *";
     private static final String EVERY_DAY_3_AM = "0 0 3 * * *";
@@ -164,9 +163,13 @@ public class ScheduledTaskWrapperServiceImpl
     private static final String OAUTH1_CULL_NONCE_TASK_TRIGGER_CONFIG_NAME = "task_scheduler_oauth_nonce_cull_trigger";
     private static final String OAUTH1_CULL_NONCE_TASK_DEFAULT_TRIGGER = EVERY_DAY_4_AM;
 
-	private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_ID = "task_special_service_group_course_withdrawal";
-	private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_TRIGGER_CONFIG_NAME = "task_special_service_group_email_course_withdrawal_trigger";
-	private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_DEFAULT_TRIGGER = EVERY_DAY_5_AM;
+    private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_ID = "task_special_service_group_course_withdrawal";
+    private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_TRIGGER_CONFIG_NAME = "task_special_service_group_email_course_withdrawal_trigger";
+    private static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_DEFAULT_TRIGGER = EVERY_DAY_5_AM;
+
+    private static final String CALC_SUCCESS_INDICATORS_TASK_ID = "task_count_success_indicators";
+    private static final String CALC_SUCCESS_INDICATORS_TASK_TRIGGER_CONFIG_NAME = "task_count_success_indicators_trigger";
+    private static final String CALC_SUCCESS_INDICATORS_TASK_DEFAULT_TRIGGER = EVERY_DAY_3_AM; //no real good time to put this, but want it before EA notify
 
 	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
@@ -195,6 +198,9 @@ public class ScheduledTaskWrapperServiceImpl
 
 	@Autowired
 	private transient SendQueuedMessagesTask sendQueuedMessagesTask;
+
+    @Autowired
+    private transient SuccessIndicatorsTask successIndicatorsTask;
 
 	@Autowired
 	private transient PersonService personService;
@@ -365,6 +371,17 @@ public class ScheduledTaskWrapperServiceImpl
 					},
 					SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_DEFAULT_TRIGGER,
 					SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_TRIGGER_CONFIG_NAME));
+
+            this.tasks.put(CALC_SUCCESS_INDICATORS_TASK_ID, new Task(CALC_SUCCESS_INDICATORS_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            processConfiguredSuccessIndicators();
+                        }
+                    },
+                    CALC_SUCCESS_INDICATORS_TASK_DEFAULT_TRIGGER,
+                    CALC_SUCCESS_INDICATORS_TASK_TRIGGER_CONFIG_NAME));
+
             // Can't interrupt this on cancel b/c it's responsible for rescheduling
             // itself. A scheduling attempt on an interrupted thread is very
             // likely to be refused when using java.util.concurrent schedulers
@@ -1297,6 +1314,16 @@ public class ScheduledTaskWrapperServiceImpl
 				oAuth1NonceServiceMaintenance.removeExpired();
             }
         });
+    }
+
+    /**
+     * If there are Success Indicators with either Send Early Alerts or
+     *  use in Caseload/Watchlist count set, this process will store a count
+     *   of low, medium and high or create an EA on low for students inside of SSP.
+     */
+    @Override
+    public void processConfiguredSuccessIndicators() {
+        execBatchedTaskWithName(CALC_SUCCESS_INDICATORS_TASK_NAME, successIndicatorsTask);
     }
 
     /**

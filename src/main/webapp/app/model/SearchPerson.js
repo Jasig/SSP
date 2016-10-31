@@ -35,6 +35,21 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'campusName', type: 'string'},
              {name: 'currentAppointmentStartDate', type: 'date', dateFormat: 'time'},
              {name: 'numberOfEarlyAlerts', type: 'string'},
+             {name: 'numberOfLowConfiguredSuccessIndicators', type: 'string'},
+             {name: 'numberOfMediumConfiguredSuccessIndicators', type: 'string'},
+             {name: 'numberOfLowMediumConfiguredSuccessIndicators',
+              convert: function(value, record) {
+                  if (record.get('numberOfLowConfiguredSuccessIndicators') && record.get('numberOfMediumConfiguredSuccessIndicators')) {
+                      return record.get('numberOfLowConfiguredSuccessIndicators') + '/' + record.get('numberOfMediumConfiguredSuccessIndicators');
+                  } else if (!record.get('numberOfLowConfiguredSuccessIndicators') && record.get('numberOfMediumConfiguredSuccessIndicators')) {
+                      return '0/' + record.get('numberOfMediumConfiguredSuccessIndicators');
+                  } else if (record.get('numberOfLowConfiguredSuccessIndicators') && !record.get('numberOfMediumConfiguredSuccessIndicators')) {
+                      return record.get('numberOfLowConfiguredSuccessIndicators') + '/0';
+                  } else {
+                      return '';
+                  }
+              }
+             },
              {name: 'numberEarlyAlertResponsesRequired', type: 'int'},
              {name: 'studentIntakeComplete', type: 'boolean'},
              {name: 'currentAppointmentStartTime', type: 'date', dateFormat: 'time'},

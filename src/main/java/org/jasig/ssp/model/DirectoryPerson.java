@@ -23,7 +23,6 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.AbstractExternalData;
 import org.jasig.ssp.model.external.ExternalData;
-
 import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -45,9 +44,6 @@ import java.util.UUID;
 public abstract class DirectoryPerson extends AbstractExternalData implements ExternalData, Serializable { // NOPMD
 
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7348180045637529279L;
 
 	/**
@@ -457,6 +453,13 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@Column(length = 80, name = "campus_name")
 	@Size(max = 80)
 	private String campusName;
+
+	@Nullable
+	private Integer configLowIndicatorsCount;
+
+	@Nullable
+	private Integer configMedIndicatorsCount;
+
 
 	/**
 	 * Initialize a Person.
@@ -922,6 +925,59 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 		this.campusName = campusName;
 	}
 
+    public Number getConfigLowIndicatorsCount() {
+        return configLowIndicatorsCount;
+    }
+
+    public void setConfigLowIndicatorsCount(Integer lowIndicatorsCount) {
+        this.configLowIndicatorsCount = lowIndicatorsCount;
+    }
+
+    public Number getConfigMedIndicatorsCount() {
+        return configMedIndicatorsCount;
+    }
+
+    public void setConfigMedIndicatorsCount(Integer medIndicatorsCount) {
+        this.configMedIndicatorsCount = medIndicatorsCount;
+    }
+
+    /**
+     * @return the residencyCounty
+     */
+    public String getResidencyCounty() {
+        return residencyCounty;
+    }
+
+    /**
+     * @param residencyCounty the residencyCounty to set
+     */
+    public void setResidencyCounty(String residencyCounty) {
+        this.residencyCounty = residencyCounty;
+    }
+
+    /**
+     * @return the f1Status
+     */
+    public String getF1Status() {
+        return f1Status;
+    }
+
+    /**
+     * @param f1Status the f1Status to set
+     */
+    public void setF1Status(String f1Status) {
+        this.f1Status = f1Status;
+    }
+
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
+    }
+
+    public void setObjectStatus(ObjectStatus objectStatus) {
+        this.objectStatus = objectStatus;
+    }
+
+
 	protected int hashPrime() {
 		return 3;
 	}
@@ -981,6 +1037,7 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 		return result;
 	}
+
 	protected final int hashField(final String name, final UUID value) {
 		return (value == null ? name.hashCode() : value.hashCode());
 	}
@@ -1018,42 +1075,4 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 		return "Name: \"" + firstName + " " + lastName + "\" Id: "
 				+ super.toString();
 	}
-
-	/**
-	 * @return the residencyCounty
-	 */
-	public String getResidencyCounty() {
-		return residencyCounty;
-	}
-
-	/**
-	 * @param residencyCounty the residencyCounty to set
-	 */
-	public void setResidencyCounty(String residencyCounty) {
-		this.residencyCounty = residencyCounty;
-	}
-
-	/**
-	 * @return the f1Status
-	 */
-	public String getF1Status() {
-		return f1Status;
-	}
-
-	/**
-	 * @param f1Status the f1Status to set
-	 */
-	public void setF1Status(String f1Status) {
-		this.f1Status = f1Status;
-	}
-
-	public ObjectStatus getObjectStatus() {
-		return objectStatus;
-	}
-
-	public void setObjectStatus(ObjectStatus objectStatus) {
-		this.objectStatus = objectStatus;
-	}
-
-
 }

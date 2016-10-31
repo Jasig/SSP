@@ -44,7 +44,7 @@ Ext.define('Ssp.store.BackgroundJobs', {
             { name:'externalpersonsync', displayName: 'external_person_sync',
                 description: 'Executes the external person sync task which syncs added students with any updated values in v_external_person.',
                 defaultTime: 'Nightly at 1 a.m.', configName: 'task_external_person_sync_trigger', running: '', executable: 'true'},
-            { name:'directorypersonrefresh1', displayName: 'directory_person_refresh',
+            { name:'directorypersonrefresh', displayName: 'directory_person_refresh',
                 description: 'Executes the mv_directory_person refresh task which re-builds the view for Caseload, Watchlist and Person Search tabs. This runs automatically after the external person sync task.',
                 defaultTime: 'Nightly after external_person_sync', configName: 'N/A', running: '', executable: 'true'},
             //{ name:'directorypesonrefreshblue', displayName: 'directory_person_refresh_blue',
@@ -67,6 +67,11 @@ Ext.define('Ssp.store.BackgroundJobs', {
                 description: 'Executes the special service group course withdrawal notification to advisor task. ' +
                 'This emails advisors if a student has withdrawn from a current course and is assigned to a configured SSG that has notify turned on.',
                 defaultTime: 'Nightly at 5 a.m.', configName: 'task_scheduler_map_plan_status_calculation_trigger', running: '', executable: 'true'},
+            { name:'successindicatorcountalert', displayName: 'process_success_indicator_count_and_alert',
+                description: 'Executes the success indicator background  task. This task examines Success Indicators that are Active and have one or ' +
+                'both configurations set. Those configurations are: display a count of low and medium in Caseload/Watchlist/Search or Generate an Early ' +
+                'Alert on Low. If one or both or those are set, this task runs against students inside of SSP. ',
+                defaultTime: 'Nightly at 3 a.m.', configName: 'task_count_success_indicators_trigger', running: '', executable: 'true'},
             { name:'culloauth1nonces', displayName: 'cull_oauth1_nonces',
                 description: 'Culls expired Oauth1 Nonces',
                 defaultTime: 'Every 2 hours', configName: 'task_scheduler_oauth_nonce_cull_trigger', running: '', executable: 'false'}

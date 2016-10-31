@@ -27,7 +27,6 @@ import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.PersonSearchController;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +75,13 @@ public class PersonSearchRequest {
 
 	public static final String CURRENTLY_REGISTERED_NOT_NEXT_TERM = "NOT_REGISTERED_NEXT";
 
-	// id of the person
+    public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_LOW = "LOW";
+
+    public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_MEDIUM = "MEDIUM";
+
+
+
+    // id of the person
 	private String schoolId;
 
 	private List<ProgramStatus> programStatus;
@@ -134,6 +139,8 @@ public class PersonSearchRequest {
 	private SortingAndPaging sortAndPage;
 
 	private List<Campus> homeCampus;
+
+	private List<String> configuredSuccessIndicator;
 
     public PersonSearchRequest() {
 		super();
@@ -567,5 +574,13 @@ public class PersonSearchRequest {
 
     public void setProgramGpaMax (final BigDecimal programGpaMax) {
         this.programGpaMax = programGpaMax;
+    }
+
+    public List<String> getConfiguredSuccessIndicator() {
+        return configuredSuccessIndicator;
+    }
+
+    public void setConfiguredSuccessIndicator(List<String> configuredSuccessIndicator) {
+        this.configuredSuccessIndicator = configuredSuccessIndicator;
     }
 }

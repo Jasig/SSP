@@ -341,7 +341,9 @@ public class DirectoryPersonSearchDao  {
 				"dp.coachLastName as person_coachLastName, " +
 				"dp.coachId as person_coachId, " +
 				"dp.photoUrl as person_photoUrl, " +
-				"dp.campusName as person_campusName");
+				"dp.campusName as person_campusName, " +
+				"dp.configLowIndicatorsCount as person_configuredSuccessIndicatorsLow, " +
+				"dp.configMedIndicatorsCount as person_configuredSuccessIndicatorsMedium");
 
         return stringBuilder;
 	}
@@ -388,7 +390,9 @@ public class DirectoryPersonSearchDao  {
 				"dp.coachId as person_coachId, " +
 				"dp.coachSchoolId as person_coachSchoolId, " +
 				"dp.photoUrl as person_photoUrl, " +
-				"dp.campusName as person_campusName");
+				"dp.campusName as person_campusName, " +
+                "dp.configLowIndicatorsCount as person_configuredSuccessIndicatorsLow, " +
+                "dp.configMedIndicatorsCount as person_configuredSuccessIndicatorsMedium");
 
 		return stringBuilder;
 	}
@@ -452,6 +456,9 @@ public class DirectoryPersonSearchDao  {
 
 		//homeCampus
 		buildHomeCampus(personSearchRequest, filterTracker, stringBuilder);
+
+        //success indicator count
+        buildSuccessIndicatorCount(personSearchRequest, filterTracker, stringBuilder);
 
         //programStatus
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
@@ -606,9 +613,40 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-	private boolean hasHomeCampus(PersonSearchRequest personSearchRequest) {
-		return (CollectionUtils.isNotEmpty(personSearchRequest.getHomeCampus()));
-	}
+    private boolean hasHomeCampus(PersonSearchRequest personSearchRequest) {
+        return (CollectionUtils.isNotEmpty(personSearchRequest.getHomeCampus()));
+    }
+
+    private void buildSuccessIndicatorCount(PersonSearchRequest psr, FilterTracker filterTracker,
+                                 StringBuilder stringBuilder) {
+
+	    if (hasSuccessIndicatorCount(psr)) {
+            if (psr.getConfiguredSuccessIndicator().size() > 1 &&
+                    (psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_MEDIUM)
+                        || psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_LOW))) {
+
+                appendAndOrWhere(stringBuilder, filterTracker);
+                stringBuilder.append(" dp.configLowIndicatorsCount > 0 or dp.configMedIndicatorsCount > 0 ");
+
+            } else if (psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_LOW)) {
+
+                appendAndOrWhere(stringBuilder, filterTracker);
+                stringBuilder.append(" dp.configLowIndicatorsCount > 0 ");
+
+            } else if (psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_MEDIUM)) {
+
+                appendAndOrWhere(stringBuilder, filterTracker);
+                stringBuilder.append(" dp.configMedIndicatorsCount > 0 ");
+
+            } else {
+                //do nothing not valid value
+            }
+        }
+    }
+
+    private boolean hasSuccessIndicatorCount(PersonSearchRequest personSearchRequest) {
+        return (CollectionUtils.isNotEmpty(personSearchRequest.getConfiguredSuccessIndicator()));
+    }
 
 	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest) {
 		return StringUtils.isNotBlank(personSearchRequest.getPersonTableType());
@@ -792,7 +830,7 @@ public class DirectoryPersonSearchDao  {
 		if (hasHomeCampus(personSearchRequest)) {
 			params.put("homeCampusName", personSearchRequest.getHomeCampusNames());
 		}
-		
+
 		if (hasSpecialServiceGroup(personSearchRequest)) {
 			params.put("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
 		}

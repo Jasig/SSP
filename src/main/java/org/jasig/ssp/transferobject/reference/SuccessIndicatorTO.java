@@ -48,7 +48,7 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
     private SuccessIndicatorEvaluation noDataExistsEvaluation;
     private SuccessIndicatorEvaluation noDataMatchesEvaluation;
     private Integer sortOrder;
-    private boolean showInCaseloadWatchlist;
+    private boolean showInCaseload;
     private boolean generateEarlyAlert;
 
 
@@ -83,7 +83,7 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
         setNoDataExistsEvaluation(model.getNoDataExistsEvaluation());
         setNoDataMatchesEvaluation(model.getNoDataMatchesEvaluation());
         setSortOrder(model.getSortOrder());
-        setShowInCaseloadWatchlist(model.isShowInCaseloadWatchlist());
+        setShowInCaseload(model.isShowInCaseload());
         setGenerateEarlyAlert(model.isGenerateEarlyAlert());
     }
 
@@ -231,12 +231,12 @@ public class SuccessIndicatorTO extends AbstractReferenceTO<SuccessIndicator>
         this.sortOrder = sortOrder;
     }
 
-    public boolean isShowInCaseloadWatchlist() {
-        return showInCaseloadWatchlist;
+    public boolean isShowInCaseload() {
+        return showInCaseload;
     }
 
-    public void setShowInCaseloadWatchlist(boolean showInCaseloadWatchlist) {
-        this.showInCaseloadWatchlist = showInCaseloadWatchlist;
+    public void setShowInCaseload(boolean showInCaseload) {
+        this.showInCaseload = showInCaseload;
     }
 
     public boolean isGenerateEarlyAlert() {

@@ -88,14 +88,24 @@ public interface ScheduledTaskWrapperService {
 	public void sendEarlyAlertReminders();
 
     /**
-     * Reset Tasks schedule where used for control if possibility, completion is interrupted by termination
-     */
-	public void resetTaskStatus();
-
-    /**
      * Removes all nonces that are expired in order to keep the nonce table at a reasonable size
      */
     public void cullOAuth1Nonces();
+
+    /**
+     * Runs the special service group course withdrawal notification to advisor task.
+     *  This emails advisors if a student has withdrawn from a current course and is
+     *   assigned to a configured SSG that has notify turned on. Default is nightly at
+     *    5 a.m., but can be scheduled in config.
+     */
+    public void processSpecialServiceGroupCourseWithdrawal();
+
+    /**
+     * If there are Success Indicators with either Send Early Alerts or
+     *  use in Caseload/Watchlist count set, this process will store a count
+     *   of low, medium and high or create an EA on low for students inside of SSP.
+     */
+    public void processConfiguredSuccessIndicators();
 
     /**
      * Prunes the Message queue task which archives Messages in the
@@ -103,6 +113,11 @@ public interface ScheduledTaskWrapperService {
      *   Runs default nightly at 10 p.m, but can be scheduled in config.
      */
 	void pruneMessageQueue();
+
+    /**
+     * Reset Tasks schedule where used for control if possibility, completion is interrupted by termination
+     */
+    public void resetTaskStatus();
 
     /**
      * Schedules queued jobs to be ran.
@@ -129,12 +144,4 @@ public interface ScheduledTaskWrapperService {
      * @param runAsId
      */
 	void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId);
-
-    /**
-     * Runs the special service group course withdrawal notification to advisor task.
-     *  This emails advisors if a student has withdrawn from a current course and is
-     *   assigned to a configured SSG that has notify turned on. Default is nightly at
-     *    5 a.m., but can be scheduled in config.
-     */
-	public void processSpecialServiceGroupCourseWithdrawal();
 }

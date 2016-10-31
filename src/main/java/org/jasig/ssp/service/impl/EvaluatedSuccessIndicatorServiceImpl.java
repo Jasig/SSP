@@ -61,13 +61,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import static org.jasig.ssp.util.sort.SortingAndPaging.allActive;
 
@@ -171,7 +165,8 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
 
 
     @Override
-    public List<EvaluatedSuccessIndicatorTO> getForPerson(final UUID personId, final ObjectStatus status) throws ObjectNotFoundException {
+    public List<EvaluatedSuccessIndicatorTO> getForPerson(final UUID personId, final ObjectStatus status, final
+                                    List<SuccessIndicator> indicators) throws ObjectNotFoundException {
 
         // Elaborate transaction management workaround b/c we can't avoid opening a transaction, but any exception
         // that crosses a transactional boundary in the code will mark the transaction as rollback only, which is
@@ -189,7 +184,7 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                 @Override
                 protected void doInTransactionWithoutResult(TransactionStatus txnStatus) {
                     try {
-                        getForPersonInTransaction(personId, status, rsltHolder);
+                        getForPersonInTransaction(personId, status, indicators, rsltHolder);
                     } catch ( ObjectNotFoundException e ) {
                         onfeHolder.set(e);
                         throw new RuntimeException("Rolling back transaction", e);
@@ -211,13 +206,17 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         return rsltHolder.get();
     }
 
-    private void getForPersonInTransaction(UUID personId, ObjectStatus status,
+    private void getForPersonInTransaction(UUID personId, ObjectStatus status, List<SuccessIndicator> possibleSubsetOfIndicators,
                                            AtomicReference<List<EvaluatedSuccessIndicatorTO>> rsltHolder) throws ObjectNotFoundException {
 
         final Person person = findPersonOrFail(personId);
 
-        final PagingWrapper<SuccessIndicator> successIndicators =
-                successIndicatorService.getAll(allActive());
+        final PagingWrapper<SuccessIndicator> successIndicators;
+        if (CollectionUtils.isEmpty(possibleSubsetOfIndicators)) {
+            successIndicators = successIndicatorService.getAll(allActive());
+        } else {
+            successIndicators = new PagingWrapper<>(possibleSubsetOfIndicators);
+        }
 
         if ( successIndicators.getResults() <= 0L ) {
             rsltHolder.set(Lists.<EvaluatedSuccessIndicatorTO>newArrayListWithCapacity(0));

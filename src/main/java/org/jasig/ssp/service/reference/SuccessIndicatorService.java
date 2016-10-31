@@ -24,6 +24,8 @@ import org.jasig.ssp.service.ReferenceService;
 import org.jasig.ssp.transferobject.reference.SuccessIndicatorTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 
+import java.util.List;
+
 public interface SuccessIndicatorService extends ReferenceService<SuccessIndicator> {
 
     /**
@@ -51,4 +53,10 @@ public interface SuccessIndicatorService extends ReferenceService<SuccessIndicat
      */
     SuccessIndicator save(SuccessIndicatorTO obj) throws ObjectNotFoundException, ValidationException;
 
+    List<SuccessIndicator> getByShowInCaseload(final boolean showInCaseload);
+    List<SuccessIndicator> getByGenerateEarlyAlert(final boolean generateEarlyAlert);
+    List<SuccessIndicator> getWithShowInCaseloadOrGenerateEarlyAlert(final boolean showInCaseload, final boolean generateEarlyAlert);
 }
+
+
+

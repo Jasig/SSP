@@ -171,6 +171,23 @@ public class BackgroundJobController extends AbstractBaseController {
         return new ServiceResponse(true, "success");
     }
 
+    /**
+     * Executes the success indicator background  task.
+     *  This task examines Success Indicators that are Active and have one or both configurations set.
+     *  Those configurations are: display a count of low and medium in Caseload/Watchlist/Search or
+     *  Generate an Early Alert on Low. If one or both or those are set,
+     *  this task runs against students inside of SSP. Default is nightly at 3 a.m.
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/successindicatorcountalert", method = RequestMethod.GET)
+    public ServiceResponse runConfiguredSuccessIndicatorCountOrEarlyAlertTask(HttpServletRequest  request) {
+        LOGGER.debug("Manually running processConfiguredSuccessIndicators... ");
+        scheduledTaskWrapperService.processConfiguredSuccessIndicators();
+        return new ServiceResponse(true, "success");
+    }
+
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;

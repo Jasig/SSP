@@ -32,6 +32,8 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+
 
 @Service
 public class SuccessIndicatorServiceImpl extends AbstractReferenceService<SuccessIndicator>
@@ -42,6 +44,7 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
 
     @Autowired
     private SuccessIndicatorDao dao;
+
 
     @Override
     protected AbstractReferenceAuditableCrudDao<SuccessIndicator> getDao() {
@@ -229,8 +232,26 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
         model.setNoDataExistsEvaluation(spec.getNoDataExistsEvaluation() == null ? SuccessIndicatorEvaluation.DEFAULT : spec.getNoDataExistsEvaluation());
         model.setObjectStatus(spec.getObjectStatus());
         model.setSortOrder(spec.getSortOrder());
+        model.setShowInCaseload(spec.isShowInCaseload());
+        model.setGenerateEarlyAlert(spec.isGenerateEarlyAlert());
 
         return dao.save(model);
 
+    }
+
+    @Override
+    public List<SuccessIndicator> getByShowInCaseload(final boolean showInCaseload) {
+        return dao.getByShowInCaseload(showInCaseload);
+    }
+
+    @Override
+    public List<SuccessIndicator> getByGenerateEarlyAlert(final boolean generateEarlyAlert) {
+        return dao.getByGenerateEarlyAlert(generateEarlyAlert);
+    }
+
+    @Override
+    public List<SuccessIndicator> getWithShowInCaseloadOrGenerateEarlyAlert
+            (final boolean showInCaseload, final boolean generateEarlyAlert) {
+        return dao.getWithShowInCaseloadOrGenerateEarlyAlert(showInCaseload, generateEarlyAlert);
     }
 }

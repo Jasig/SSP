@@ -37,6 +37,9 @@ import java.util.UUID;
  * DAO layer to pull all fields from DirectoryPerson and also
  * by the service layer to aggregate additional external data for the
  * Custom Caseload/Search Export
+ *
+ * NOTE: When adding things here, make sure CustomizableCaseloadCsvWriterHelper.java
+ *   is updated as well
  */
 public class PersonSearchResultFull {
 
@@ -121,6 +124,10 @@ public class PersonSearchResultFull {
     private BigDecimal creditHoursEarned;
 
     private String campusName;
+
+    private Integer configuredSuccessIndicatorsLow;
+
+    private Integer configuredSuccessIndicatorsMedium;
 
     //Below added for CustomExport
     private String sapStatus;
@@ -503,6 +510,22 @@ public class PersonSearchResultFull {
         this.campusName = campusName;
     }
 
+    public Integer getConfiguredSuccessIndicatorsLow() {
+        return configuredSuccessIndicatorsLow;
+    }
+
+    public void setConfiguredSuccessIndicatorsLow(Integer configuredSuccessIndicatorsLow) {
+        this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+    }
+
+    public Integer getConfiguredSuccessIndicatorsMedium() {
+        return configuredSuccessIndicatorsMedium;
+    }
+
+    public void setConfiguredSuccessIndicatorsMedium(Integer configuredSuccessIndicatorsMedium) {
+        this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+    }
+
     //***End Directory Person getters/setters ***
 
 
@@ -622,7 +645,7 @@ public class PersonSearchResultFull {
     }
 
     public boolean getPlanRequiredForFinancialAidSap () {
-        return planRequiredForFinancialAidSap;
+        return isPlanRequiredForFinancialAidSap();
     }
 
     public void setPlanRequiredForFinancialAidSap (boolean planRequiredForFinancialAidSap) {
@@ -630,7 +653,7 @@ public class PersonSearchResultFull {
     }
 
     public boolean getPlanRequiredForF1Visa () {
-        return planRequiredForF1Visa;
+        return isPlanRequiredForF1Visa();
     }
 
     public void setPlanRequiredForF1Visa (boolean planRequiredForF1Visa) {
@@ -730,6 +753,14 @@ public class PersonSearchResultFull {
         this.planRequiredForF1Visa = planRequiredForF1Visa;
         this.lastRevisedBy = lastRevisedBy;
         this.lastRevisedDate = lastRevisedDate;
+    }
+
+    public boolean isPlanRequiredForFinancialAidSap() {
+        return planRequiredForFinancialAidSap;
+    }
+
+    public boolean isPlanRequiredForF1Visa() {
+        return planRequiredForF1Visa;
     }
 
     //***End added for CustomExportSearch ***

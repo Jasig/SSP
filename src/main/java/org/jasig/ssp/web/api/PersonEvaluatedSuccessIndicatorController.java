@@ -56,6 +56,6 @@ public class PersonEvaluatedSuccessIndicatorController extends AbstractBaseContr
     public @ResponseBody List<EvaluatedSuccessIndicatorTO> getForPerson(final @PathVariable UUID personId,
                                                                         final @RequestParam(required = false) ObjectStatus status)
             throws ObjectNotFoundException {
-        return evaluatedSuccessIndicatorService.getForPerson(personId, status);
+        return evaluatedSuccessIndicatorService.getForPerson(personId, status, null); //null is all active Success Indicators evaluated for person
     }
 }

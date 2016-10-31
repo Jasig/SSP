@@ -18,10 +18,14 @@
  */
 package org.jasig.ssp.dao.reference;
 
-
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.dao.AuditableCrudDao;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.SuccessIndicator;
 import org.springframework.stereotype.Repository;
+import java.util.List;
+
 
 @Repository
 public class SuccessIndicatorDao extends AbstractReferenceAuditableCrudDao<SuccessIndicator>
@@ -29,5 +33,28 @@ public class SuccessIndicatorDao extends AbstractReferenceAuditableCrudDao<Succe
 
     public SuccessIndicatorDao() {
         super(SuccessIndicator.class);
+    }
+
+    public List<SuccessIndicator> getByShowInCaseload(final boolean showInCaseload) {
+        final Criteria query = createCriteria();
+        query.add(Restrictions.eq("showInCaseload", showInCaseload));
+        query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+        return query.list();
+    }
+
+    public List<SuccessIndicator> getByGenerateEarlyAlert(final boolean generateEarlyAlert) {
+        final Criteria query = createCriteria();
+        query.add(Restrictions.eq("generateEarlyAlert", generateEarlyAlert));
+        query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+        return query.list();
+    }
+
+    public List<SuccessIndicator> getWithShowInCaseloadOrGenerateEarlyAlert
+            (final boolean showInCaseload, final boolean generateEarlyAlert) {
+        final Criteria query = createCriteria();
+        query.add(Restrictions.or(Restrictions.eq("showInCaseload", showInCaseload),
+                 Restrictions.eq("generateEarlyAlert", generateEarlyAlert)));
+        query.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+        return query.list();
     }
 }

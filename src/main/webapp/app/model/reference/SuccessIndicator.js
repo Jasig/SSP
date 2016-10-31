@@ -48,7 +48,7 @@ Ext.define('Ssp.model.reference.SuccessIndicator', {
 
         {name: 'sortOrder', type: 'int', defaultValue: 0},
 
-        {name: 'showInCaseloadWatchlist', type: 'boolean'},
+        {name: 'showInCaseload', type: 'boolean'},
         {name: 'generateEarlyAlert', type: 'boolean'}
     ]
 });

@@ -214,12 +214,12 @@ Ext.define('Ssp.view.admin.forms.successindicator.EditSuccessIndicator', {
                             checked: true,
                             name: 'objectStatus'
                         }, {
-                            xtype: 'oscheckbox',
-                            fieldLabel: 'Show In Caseload/Watchlist',
+                            xtype: 'checkbox',
+                            fieldLabel: 'Show In Caseload',
                             checked: false,
-                            name: 'showInCaseloadWatchlist'
+                            name: 'showInCaseload'
                         }, {
-                            xtype: 'oscheckbox',
+                            xtype: 'checkbox',
                             fieldLabel: 'Generate Early Alert on Low',
                             checked: false,
                             name: 'generateEarlyAlert'

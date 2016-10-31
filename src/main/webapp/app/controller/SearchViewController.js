@@ -561,8 +561,9 @@ Ext.define('Ssp.controller.SearchViewController', {
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.student-id', 'Student Id'), dataIndex: 'schoolId', flex: me.getIsExpanded() ? 0.5:1},
 				  { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.email', 'Email'), dataIndex: 'primaryEmailAddress', flex: 0.8},
 	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.program-status', 'Status'), dataIndex: 'currentProgramStatusName', flex: 0.2},
-	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.number-of-early-alerts', 'Alerts'), dataIndex: 'numberOfEarlyAlerts', flex: 0.2}
-	              ];
+	              { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.number-of-early-alerts', 'Alerts'), dataIndex: 'numberOfEarlyAlerts', flex: 0.2},
+		          { sortable: sortableColumns, header: me.textStore.getValueByCode('ssp.label.number-of-success-indicators', 'Risk'), dataIndex: 'numberOfLowMediumConfiguredSuccessIndicators', flex: 0.2}
+				];
 
 		grid.getView().getRowClass = function(row, index) {
 			var cls = "";

@@ -20,8 +20,8 @@ package org.jasig.ssp.model;
 
 import java.util.Date;
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
+
 
 /**
  * Caseload record
@@ -30,6 +30,9 @@ import javax.validation.constraints.NotNull;
  * There isn't a 'Caseload' table/model, but this psuedo-model is used by the
  * DAO layer to store aggregate data for use by the Caseload controller and
  * service layers.
+ *
+ * NOTE: When adding things here make sure it makes it to PersonSearchResultFull.java,
+ *   and CaseloadCsvWriterHelper.java and CustomizableCaseloadCsvWriterHelper.java
  */
 public class PersonSearchResult2 {
 
@@ -77,6 +80,12 @@ public class PersonSearchResult2 {
     private String actualStartTerm;
 
 	private String campusName;
+
+	private Integer configuredSuccessIndicatorsLow;
+
+	private Integer configuredSuccessIndicatorsMedium;
+
+
 
 	public UUID getPersonId() {
 		return personId;
@@ -276,5 +285,21 @@ public class PersonSearchResult2 {
 
 	public void setCampusName(String campusName) {
 		this.campusName = campusName;
+	}
+
+	public Integer getConfiguredSuccessIndicatorsLow() {
+		return configuredSuccessIndicatorsLow;
+	}
+
+	public void setConfiguredSuccessIndicatorsLow(Integer configuredSuccessIndicatorsLow) {
+		this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+	}
+
+	public Integer getConfiguredSuccessIndicatorsMedium() {
+		return configuredSuccessIndicatorsMedium;
+	}
+
+	public void setConfiguredSuccessIndicatorsMedium(Integer configuredSuccessIndicatorsMedium) {
+		this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
 	}
 }

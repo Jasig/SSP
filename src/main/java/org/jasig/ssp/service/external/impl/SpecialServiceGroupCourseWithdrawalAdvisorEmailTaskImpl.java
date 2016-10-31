@@ -50,13 +50,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
+
 
 @Service
 public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements SpecialServiceGroupCourseWithdrawalAdvisorEmailTask {
@@ -182,7 +182,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 
 				if ( DEFAULT_MAX_BATCHES_PER_EXECUTION > 0 && batch >= DEFAULT_MAX_BATCHES_PER_EXECUTION ) {
 					LOGGER.debug("No more batches allowed for this execution."
-							+ " Exiting person sync task. Will resume at"
+							+ " Exiting Special Service Group Course Withdrawal Advisor Email Task. Will resume at"
 							+ " index [{}] on next execution.", nextCoachIndex);
 					break;
 				}
@@ -190,8 +190,8 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 				if ( nextCoachIndex >= processedOfTotal.getSecond() ) {
 					nextCoachIndex = 0;
 					LOGGER.debug("Reached the end of the list of candidate"
-							+ " coaches for sync. More batches are allowed, so"
-							+ " starting over at index 0.");
+							+ " coaches for Special Service Group Course Withdrawal Advisor Email Task. " +
+							"More batches are allowed, so starting over at index 0.");
 					// no break!!
 				}
 
@@ -209,7 +209,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 				if ( nextCoachIndex > Integer.MAX_VALUE ) {
 					LOGGER.warn("Cannot process more than {} total persons,"
 									+ " even across executions. Abandoning and"
-									+ " resetting sync task.",
+									+ " resetting Special Service Group Course Withdrawal Advisor Email Task.",
 							Integer.MAX_VALUE);
 					nextCoachIndex = 0;
 					break;

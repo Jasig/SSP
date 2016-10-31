@@ -254,7 +254,7 @@ public class PersonHistoryReportController extends ReportBaseController<StudentH
 				taskTOMap, journalEntryTOs);
 
         final List<EvaluatedSuccessIndicatorTO> evaluatedSuccessIndicators =
-                evaluatedSuccessIndicatorService.getForPerson(personId, ObjectStatus.ACTIVE);
+                evaluatedSuccessIndicatorService.getForPerson(personId, ObjectStatus.ACTIVE, null); //null is all for student
 
         final List<EvaluatedSuccessIndicatorTO> studentEvaluatedSuccessIndicators =
                 filteredAndSortedIndicators(evaluatedSuccessIndicators, SuccessIndicatorGroup.STUDENT);
