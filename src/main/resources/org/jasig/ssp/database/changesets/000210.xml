@@ -43,9 +43,9 @@
             <column name="scale_evaluation_high_from" value="85.00" />
             <column name="scale_evaluation_high_to" value="100.00" />
             <column name="scale_evaluation_medium_from" value="50.00" />
-            <column name="scale_evaluation_medium_to" value="84.00" />
+            <column name="scale_evaluation_medium_to" value="84.999" />
             <column name="scale_evaluation_low_from" value="0.00" />
-            <column name="scale_evaluation_low_to" value="49.00" />
+            <column name="scale_evaluation_low_to" value="49.999" />
 
             <!-- leave these null and rely on defaults -->
             <!--column name="string_evaluation_high" value="" /--> <!-- leave null -->

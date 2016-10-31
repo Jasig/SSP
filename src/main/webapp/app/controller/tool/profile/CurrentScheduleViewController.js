@@ -27,6 +27,9 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
         termsStore: 'termsStore',
         textStore: 'sspTextStore'
     },
+    config: {
+        participationIndicatorConfig: ''
+    },
 
     init: function() {
         var me = this;
@@ -37,18 +40,43 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
             me.getView().setLoading(true);
             
             if (me.termsStore.getTotalCount() <= 0) {
-                me.termsStore.addListener("load", me.termStoreLoaded, me, {
+                me.termsStore.addListener("load", me.getParticipationIndicatorConfig, me, {
                     single: true
                 });
                 me.termsStore.load();
             }
             else {
-                me.termStoreLoaded();
+                me.getParticipationIndicatorConfig();
             }
         }
         return this.callParent(arguments);
     },
-    
+
+    getParticipationIndicatorConfig: function () {
+        var me = this;
+        //NOTE: uuid is hard-coded in liquibase, TODO: in the future consider re-factor schedule and participation server-side
+        var url = me.apiProperties.createUrl(me.apiProperties.getItemUrl('successIndicator') + '/ff8777e5-cabf-4237-bf42-0500c39ec8dc');
+        me.apiProperties.makeRequest({
+            url: url,
+            method: 'GET',
+            successFunc: me.getParticipationIndicatorSuccess,
+            failureFunc: me.termStoreLoaded,
+            scope: me
+        });
+    },
+
+    getParticipationIndicatorSuccess: function(r, scope) {
+        var me = this;
+
+        if (r && r.responseText) {
+            r = Ext.decode(r.responseText);
+            if (r) {
+                me.participationIndicatorConfig = Ext.create('Ssp.model.reference.SuccessIndicator', r);
+            }
+        }
+        me.termStoreLoaded();
+    },
+
     termStoreLoaded: function() {
         var me = this;
         var personId = me.personLite.get('id');
@@ -60,7 +88,7 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
             });
         }
     },
-    
+
     getScheduleSuccess: function(r, scope) {
         var me = scope;
         var courseSchedules = [];
@@ -76,7 +104,11 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
                     if (termIndex >= 0) {
                         var term = me.termsStore.getCurrentAndFutureTermsStore(true).getAt(termIndex);
                         courseTranscript.set("termStartDate", term.get("startDate"));
-                    
+
+                        if (me.participationIndicatorConfig && me.participationIndicatorConfig.get('objectStatus') == 'ACTIVE' && courseTranscript.get('participation')) {
+                            courseTranscript.set("evaluatedParticipationIndicator",
+                                me.evaluateCourseParticipationScore(courseTranscript.get('participation')));
+                        }
                         courseSchedules.push(courseTranscript);
                     }
                 });
@@ -117,5 +149,57 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
     getScheduleFailure: function(response, scope) {
         var me = scope;
         me.getView().setLoading(false);
+    },
+
+    evaluateCourseParticipationScore: function(participation) {
+        var me = this;
+
+        if (me.participationIndicatorConfig && participation) {
+            var participationMaybeDecimal = parseFloat(participation.trim());
+
+            if (participationMaybeDecimal && participationMaybeDecimal != 'Nan' &&
+                me.participationIndicatorConfig.get('evaluationType').trim() === 'SCALE') {
+
+                //numeric (basic numeric range calc only
+                if (me.participationIndicatorConfig.get('scaleEvaluationHighTo') &&
+                    participationMaybeDecimal >= me.participationIndicatorConfig.get('scaleEvaluationHighFrom') &&
+                    participationMaybeDecimal <= me.participationIndicatorConfig.get('scaleEvaluationHighTo')) {
+
+                    return 2;
+
+                } else if (me.participationIndicatorConfig.get('scaleEvaluationMediumTo') &&
+                    participationMaybeDecimal >= me.participationIndicatorConfig.get('scaleEvaluationMediumFrom') &&
+                        participationMaybeDecimal <= me.participationIndicatorConfig.get('scaleEvaluationMediumTo')) {
+
+                    return 1;
+
+                } else if (me.participationIndicatorConfig.get('scaleEvaluationLowTo') &&
+                    participationMaybeDecimal >= me.participationIndicatorConfig.get('scaleEvaluationLowFrom') &&
+                    participationMaybeDecimal <= me.participationIndicatorConfig.get('scaleEvaluationLowTo')) {
+
+                    return 0;
+                }
+            } else if (me.participationIndicatorConfig.get('evaluationType').trim() === 'STRING' &&
+                me.participationIndicatorConfig.get('stringEvaluationHigh')) {
+
+                //string (we're just doing basic here, no comma separated arrays etc.)
+                if (me.participationIndicatorConfig.get('stringEvaluationHigh') &&
+                    participation.trim() === me.participationIndicatorConfig.get('stringEvaluationHigh').trim()) {
+
+                    return 2;
+
+                } else if (me.participationIndicatorConfig.get('stringEvaluationMedium') &&
+                    participation.trim() === me.participationIndicatorConfig.get('stringEvaluationMedium').trim()) {
+
+                    return 1;
+
+                } else if (me.participationIndicatorConfig.get('stringEvaluationLow') &&
+                    participation.trim() === me.participationIndicatorConfig.get('stringEvaluationLow').trim()) {
+
+                    return 0;
+                }
+            }
+        }
+        return -1; //-1 is error, no data, or default
     }
 });

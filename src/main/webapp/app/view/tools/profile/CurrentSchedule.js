@@ -31,8 +31,8 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
     autoScroll: true,
     initComponent: function(){
         var me = this;
+
         Ext.applyIf(me, {
-            //store: me.store,
             xtype: 'gridcolumn',
           	title: this.textStore.getValueByCode('ssp.label.main.current-schedule.title','Current Schedule'),
             columns: [{
@@ -72,9 +72,40 @@ Ext.define('Ssp.view.tools.profile.CurrentSchedule', {
             }, {
                 dataIndex: 'participation',
                 text: me.textStore.getValueByCode('ssp.label.main.current-schedule.participation','Participation'),
-                flex: 0.07
+                flex: 0.10
+            }, {
+                dataIndex: 'evaluatedParticipationIndicator',
+                text: '',
+                flex: 0.001,
+                renderer: function(value, metaData) {
+                   if (value == 2) {
+                       metaData.tdAttr = 'data-qtip="Course Participation is High"';
+                       metaData.style = 'background-color: #008a00; background-image: none; margin:0px 0px 0px 0px;';
+                       return '<i class="fa fa-check-circle" style="color: #FFF"></i>';
+
+                   } else if (value == 1) {
+                       metaData.tdAttr = 'data-qtip="Course Participation is Medium"';
+                       metaData.style = 'background-color: #7a7a00; background-image: none; margin:0px 0px 0px 0px;';
+                       return '<i class="fa fa-minus-circle" style="color: #FFF"></i>';
+
+                   } else if (value == 0) {
+                       metaData.tdAttr = 'data-qtip="Course Participation is Low"';
+                       metaData.style = 'background-color: #990000; background-image: none; margin:0px 0px 0px 0px;';
+                       return '<i class="fa fa-times-circle" style="color: #FFF"></i>';
+
+                   } else if (value == -1) {
+                       metaData.tdAttr = 'data-qtip="Course Participation is Not Available"';
+                       metaData.style = 'background-color: #767676; background-image: none; margin:0px 0px 0px 0px;';
+                       return '<i class="fa fa-ban" style="color: #FFF"></i>';
+
+                   } else {
+                       //do nothing here because participation indicator may be disabled
+                   }
+                }
             }],
-            viewConfig: {}
+            viewConfig: {
+                markDirty:false
+            }
         });
         
         me.callParent(arguments);
