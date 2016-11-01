@@ -28,6 +28,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.SuccessIndicatorEvaluationType;
 import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.Blurb;
 import org.jasig.ssp.model.reference.SuccessIndicator;
@@ -910,28 +911,72 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                 successIndicator.getCode(), successIndicator.getName());
     }
 
+    /**
+     * This works differently then all other evaluations because we need to find the lowest/worst
+     *  value in the student's current schedule. Essentially, we find the lowest value or match
+     *    before sending to evaluate.
+     *
+     *    TODO: if we can speed wise, re-factor this to use the evaluation method for each course participation value
+     * @param successIndicator
+     * @param person
+     * @return
+     */
     private SuccessIndicatorMetric findParticipationStatusMetric(@Nonnull SuccessIndicator successIndicator,
                                                  @Nonnull Person person) {
         final Term currentTerm = findCurrentTerm();
-
         final List<ExternalStudentTranscriptCourse> scheduleCourses = externalStudentTranscriptCourseService.
                 getTranscriptsBySchoolIdAndTermCode(person.getSchoolId(), currentTerm.getCode());
+        String worstParticipationScore = null; //used for default null and string comparisons
 
-        Double lowestParticipationScore = null;
-        for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
-            try {
-                double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
-                if (lowestParticipationScore == null) {
-                    lowestParticipationScore = new Double(participationToEvaluate);
-                } else if (lowestParticipationScore > participationToEvaluate) {
-                    lowestParticipationScore = participationToEvaluate;
+        if (successIndicator.getEvaluationType().equals(SuccessIndicatorEvaluationType.SCALE)) {
+            Double lowestParticipationScore = null; //used only for scale/decimal comparison
+
+            //take lowest value found
+            for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
+                try {
+                    double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
+                    if (lowestParticipationScore == null) {
+                        lowestParticipationScore = new Double(participationToEvaluate);
+                    } else if (lowestParticipationScore > participationToEvaluate) {
+                        lowestParticipationScore = participationToEvaluate;
+                    }
+                } catch (NumberFormatException nfe) {
+                    //ignore for now, likely one or more records not a number
                 }
-            } catch (NumberFormatException nfe) {
-                //ignore for now, likely one or more records not a number
+            }
+
+            return new SuccessIndicatorMetric(lowestParticipationScore, (lowestParticipationScore == null ? null : lowestParticipationScore.toString()), null,
+                    successIndicator.getCode(), successIndicator.getName());
+
+        } else if (successIndicator.getEvaluationType().equals(SuccessIndicatorEvaluationType.STRING)) {
+
+            //take worst string value
+            for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
+                final String participationToEvaluate = courseToEvaluate.getParticipation();
+                if (StringUtils.isNotBlank(participationToEvaluate)) {
+
+                    if (StringUtils.isNotBlank(successIndicator.getStringEvaluationLow()) &&
+                            participationToEvaluate.equals(successIndicator.getStringEvaluationLow())) {
+
+                        worstParticipationScore = successIndicator.getStringEvaluationLow();
+                        break;
+
+                    } else if (StringUtils.isNotBlank(successIndicator.getStringEvaluationMedium()) &&
+                            participationToEvaluate.equals(successIndicator.getStringEvaluationMedium())) {
+
+                        worstParticipationScore = successIndicator.getStringEvaluationMedium();
+
+                    } else if (StringUtils.isBlank(worstParticipationScore) &&
+                            StringUtils.isNotBlank(successIndicator.getStringEvaluationHigh()) &&
+                            participationToEvaluate.equals(successIndicator.getStringEvaluationHigh())) {
+
+                        worstParticipationScore = successIndicator.getStringEvaluationHigh();
+                    }
+                }
             }
         }
 
-        return new SuccessIndicatorMetric(lowestParticipationScore, (lowestParticipationScore == null ? null : lowestParticipationScore.toString()), null,
+        return new SuccessIndicatorMetric(worstParticipationScore, (worstParticipationScore == null ? null : worstParticipationScore.toString()), null,
                 successIndicator.getCode(), successIndicator.getName());
     }
 
