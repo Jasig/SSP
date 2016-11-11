@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+    <changeSet dbms="postgresql" id="create directory person view functions postgres" author="michael.sultzaberger">
+        <sql ><![CDATA[
+create or replace function ${schema}.NEXT_TERM_CODE() RETURNS CHARACTER VARYING as $$
+select code from external_term next_term where next_term.start_date > (select max(term.end_date) from external_term term where term.start_date < current_date and term.end_date > current_date) order by next_term.start_date asc limit 1
+$$ LANGUAGE SQL STRICT;
+        ]]></sql>
+    </changeSet>
+
+    <changeSet dbms="mssql" id="create directory person view functions sqlserver" author="michael.sultzaberger">
+        <sql><![CDATA[
+ALTER FUNCTION ${schema}.NEXT_TERM_CODE() RETURNS VARCHAR(25)
+AS BEGIN
+   DECLARE @code VARCHAR(25)
+   set @code = (
+select top 1 code from external_term next_term where next_term.start_date > (select max(term.end_date) from external_term term where term.start_date < GetDate() and term.end_date > GetDate()) order by next_term.start_date asc
+   )
+RETURN @code
+END;
+        ]]></sql>
+    </changeSet>
+</databaseChangeLog>
