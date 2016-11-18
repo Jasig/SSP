@@ -621,26 +621,25 @@ public class DirectoryPersonSearchDao  {
                                  StringBuilder stringBuilder) {
 
 	    if (hasSuccessIndicatorCount(psr)) {
-            if (psr.getConfiguredSuccessIndicator().size() > 1 &&
-                    (psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_MEDIUM)
-                        || psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_LOW))) {
-
-                appendAndOrWhere(stringBuilder, filterTracker);
-                stringBuilder.append(" dp.configLowIndicatorsCount > 0 or dp.configMedIndicatorsCount > 0 ");
-
-            } else if (psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_LOW)) {
-
-                appendAndOrWhere(stringBuilder, filterTracker);
-                stringBuilder.append(" dp.configLowIndicatorsCount > 0 ");
-
-            } else if (psr.getConfiguredSuccessIndicator().get(0).equals(psr.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_MEDIUM)) {
-
-                appendAndOrWhere(stringBuilder, filterTracker);
-                stringBuilder.append(" dp.configMedIndicatorsCount > 0 ");
-
-            } else {
-                //do nothing not valid value
-            }
+			appendAndOrWhere(stringBuilder, filterTracker);
+			StringBuilder sb = new StringBuilder("(");
+			boolean first = true;
+			for (String successIndicator : psr.getConfiguredSuccessIndicator()) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append(" or ");
+				}
+				if (successIndicator.equals(PersonSearchRequest.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_GOOD)) {
+					sb.append(" ((dp.configLowIndicatorsCount is null or dp.configLowIndicatorsCount = 0) and (dp.configMedIndicatorsCount is null or dp.configMedIndicatorsCount = 0)) ");
+				} else if (successIndicator.equals(PersonSearchRequest.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_OKAY)) {
+					sb.append(" dp.configMedIndicatorsCount > 0 ");
+				} else if (successIndicator.equals(PersonSearchRequest.CONFIGURED_SUCCESS_INDICATOR_EVALUATION_POOR)) {
+					sb.append(" dp.configLowIndicatorsCount > 0 ");
+				}
+			}
+			sb.append(")");
+			stringBuilder.append(sb);
         }
     }
 

@@ -38,7 +38,8 @@ Ext.define('Ssp.view.SearchForm',{
         specialServiceGroupsActiveUnpagedStore: 'specialServiceGroupsActiveUnpagedStore',
         textStore:'sspTextStore',
         termsStore: 'termsStore',
-        campusesStore: 'campusesAllUnpagedStore'
+        campusesStore: 'campusesAllUnpagedStore',
+        riskLevels: 'riskLevels'
     },
     collapsible: true,
 	hideCollapseTool: true,
@@ -222,7 +223,7 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 			    border: false,
-			    items: [           
+			    items: [
 			            {
 		   		    xtype: 'combobox',
 		   		    multiSelect: true,
@@ -253,17 +254,35 @@ Ext.define('Ssp.view.SearchForm',{
 		   		    //tpl: comboTPLDisplayValueDisplay
                 }]
 			}, {
-				xtype: 'combobox',
-				multiSelect: true,
-			    fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus','Home Campus'),
-				emptyText: me.textStore.getValueByCode('ssp.empty-text.search.home-campus', 'Select Home Campus'),
-				store: me.campusesStore,
-				valueField: 'id',
-				displayField: 'name',
-				width:100,
-				itemId: 'homeCampus',
-				name: 'homeCampus',
-				editable: false
+				layout: 'column',
+				border: false,
+				items: [{
+                    xtype: 'combobox',
+                    multiSelect: true,
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.home-campus','Home Campus'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.home-campus', 'Select Home Campus'),
+                    store: me.campusesStore,
+                    valueField: 'id',
+                    displayField: 'name',
+                    columnWidth: 0.5,
+                    itemId: 'homeCampus',
+                    name: 'homeCampus',
+                    editable: false
+                },{
+                    xtype: 'combobox',
+                    multiSelect: true,
+                    fieldLabel: me.textStore.getValueByCode('ssp.label.search.risk-indicator', 'Risk Indicator'),
+                    emptyText: me.textStore.getValueByCode('ssp.empty-text.search.risk', 'Any'),
+					columnWidth: 0.5,
+                    name: 'successIndicator',
+                    itemId: 'successIndicator',
+					labelAlign: 'right',
+					labelWidth:100,
+                    store: me.riskLevels,
+                    valueField: 'code',
+                    displayField: 'displayValue',
+                    editable: false
+                }]
 			}, {
 				xtype: 'combobox',
 				multiSelect: true,
@@ -379,6 +398,7 @@ Ext.define('Ssp.view.SearchForm',{
 					displayField: 'displayValue',
 			   		editable: false
 			   		//tpl: comboTPLDisplayValueDisplay
+
 				}]
 			}, {
 				layout: {

@@ -90,6 +90,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	private List<UUID> homeCampus;
 
+	private List<String> successIndicator;
+
 	
 	public String getSchoolId() {
 		return schoolId;
@@ -470,4 +472,23 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
     public void setProgramGpaMax (final BigDecimal programGpaMax) {
         this.programGpaMax = programGpaMax;
     }
+
+	public List<String> getSuccessIndicator() {
+		return successIndicator;
+	}
+
+	public void setSuccessIndicator(List<String> successIndicator) {
+		this.successIndicator = successIndicator;
+	}
+	//comma separated string of successIndicator
+	public void setSuccessIndicators(String successIndicatorsIn) {
+		if (StringUtils.isNotBlank(successIndicatorsIn)) {
+			List<String> items = Arrays.asList(successIndicatorsIn.split("\\s*,\\s*"));
+			ArrayList<String> successIndicators = new ArrayList<String>();
+			for (String item: items) {
+				successIndicators.add(item);
+			}
+			this.successIndicator = successIndicators;
+		}
+	}
 }

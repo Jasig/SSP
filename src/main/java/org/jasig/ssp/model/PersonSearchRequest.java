@@ -75,11 +75,11 @@ public class PersonSearchRequest {
 
 	public static final String CURRENTLY_REGISTERED_NOT_NEXT_TERM = "NOT_REGISTERED_NEXT";
 
-    public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_LOW = "LOW";
+    public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_POOR = "POOR";
 
-    public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_MEDIUM = "MEDIUM";
+    public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_OKAY = "OKAY";
 
-
+	public static final String CONFIGURED_SUCCESS_INDICATOR_EVALUATION_GOOD = "GOOD";
 
     // id of the person
 	private String schoolId;

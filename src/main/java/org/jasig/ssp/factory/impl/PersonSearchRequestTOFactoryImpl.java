@@ -135,6 +135,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setEarlyAlertResponseLate(to.getEarlyAlertResponseLate());
 		model.setPersonTableType(to.getPersonTableType());
 		model.setSortAndPage(to.getSortAndPage());
+		model.setConfiguredSuccessIndicator(to.getSuccessIndicator());
 
         return model;
 	}
@@ -171,7 +172,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
             BigDecimal programGpaMin, BigDecimal programGpaMax,
             String currentlyRegistered,String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists, Boolean myCaseload, Boolean myPlans,
-			Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType, String homeCampus, SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+			Boolean myWatchList, Date birthDate, String actualStartTerm, String personTableType, String homeCampus, String successIndicator, SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
@@ -213,6 +214,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		//comma separated set of UUIDs as a String
 		to.setHomeCampuses(homeCampus);
 
+		to.setSuccessIndicators(successIndicator);
 		return from(to);
 	}
 	

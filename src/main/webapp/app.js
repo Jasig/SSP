@@ -2132,6 +2132,7 @@ Ext.onReady(function(){
 			        ltiSspUserFieldNamesStore: 'Ssp.store.LtiSspUserFieldNames',
 			        permissionsStore: 'Ssp.store.Permissions',
                     sspUserFieldNamesStore: 'Ssp.store.SspUserFieldNames',
+                    riskLevels: 'Ssp.store.RiskLevels',
 
 
 

@@ -128,6 +128,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		},
 		'homeCampus':{
 			specialkey: "specialKeyPressed"
+		},
+		'successIndicator':{
+			specialkey: "specialKeyPressed"
 		}
     },
 
@@ -274,6 +277,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=actualStartTerm]')[0].value,
 				me.getView().query('combobox[name=personTableType]')[0].value,
 				me.getView().query('combobox[name=homeCampus]')[0].value,
+				me.getView().query('combobox[name=successIndicator]')[0].value,
 				{
 				success: me.searchSuccess,
 				failure: me.searchFailure,
@@ -960,7 +964,8 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,
 				birthDate: me.dateFieldValueFromName('birthDate'),
 				personTableType: me.getView().query('combobox[name=personTableType]')[0].value,
-				homeCampus: me.getView().query('combobox[name=homeCampus]')[0].value
+				homeCampus: me.getView().query('combobox[name=homeCampus]')[0].value,
+				successIndicator: me.getView().query('combobox[name=successIndicator]')[0].value
 			}
 
 			me.searchService.searchCountWithParams(criteria,
