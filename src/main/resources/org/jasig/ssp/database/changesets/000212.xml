@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet id="create person_success_indicator_alert table" author="michael.sultzaberger">
+        <createTable tableName="person_success_indicator_alert">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="created_date" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="modified_date" type="datetime" />
+            <column name="created_by" type="uuid">
+                <constraints nullable="false" foreignKeyName="person_success_indicator_alert_created_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="modified_by" type="uuid">
+                <constraints nullable="true" foreignKeyName="person_success_indicator_alert_modified_by_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="object_status" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="person_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="person_success_indicator_alert_person_id"
+                             references="person(id)" />
+            </column>
+            <column name="success_indicator_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="person_success_indicator_alert_success_ind_id"
+                             references="success_indicator(id)" />
+            </column>
+        </createTable>
+        <sql>grant all on person_success_indicator_alert to ${database.app.username}</sql>
+        <rollback>
+            <dropTable tableName="person_success_indicator_alert" />
+        </rollback>
+    </changeSet>
+    <changeSet author="michael.sultzaberger" id="add config success indicator ea campus code" >
+        <insert tableName="config">
+            <column name="id" value="a4266294-fd36-494b-8cf7-d19bc8777c3b" />
+            <column name="name" value="task_success_indicator_early_alert_campus_code" />
+            <column name="description"
+                    value="Early Alert Campus Code used for creating early alerts when the student has a LOW success indicator" />
+            <column name="value">MAIN</column>
+            <column name="default_value">MAIN</column>
+            <column name="created_date" valueDate="2016-10-28T12:00:00" />
+            <column name="modified_date" valueDate="2016-10-28T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="207" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='a4266294-fd36-494b-8cf7-d19bc8777c3b'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

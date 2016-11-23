@@ -23,16 +23,20 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.dao.PersonSuccessIndicatorAlertDao;
 import org.jasig.ssp.dao.PersonSuccessIndicatorCountDao;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSuccessIndicatorAlert;
 import org.jasig.ssp.model.PersonSuccessIndicatorCount;
 import org.jasig.ssp.model.reference.SuccessIndicator;
+import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SuccessIndicatorsTask;
+import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.SuccessIndicatorService;
 import org.jasig.ssp.transferobject.EvaluatedSuccessIndicatorTO;
@@ -43,13 +47,17 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 
@@ -72,6 +80,7 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
     private static final String BATCH_SIZE_CONFIG_NAME = "task_external_person_sync_batch_size";
     private static final int DEFAULT_BATCH_SIZE = 100;
     private static final String MAX_BATCHES_PER_EXECUTION_CONFIG_NAME = "task_external_person_sync_max_batches_per_exec";
+    private static final String EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME = "task_success_indicator_early_alert_campus_code";
     private static final int DEFAULT_MAX_BATCHES_PER_EXECUTION = -1; // unlimited
 
     @Autowired
@@ -87,8 +96,17 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
     private EvaluatedSuccessIndicatorService evaluatedSuccessIndicatorService;
 
     @Autowired
+    private EarlyAlertService earlyAlertService;
+
+    @Autowired
+    private CampusService campusService;
+
+    @Autowired
     private PersonSuccessIndicatorCountDao personSuccessIndicatorCountDao;
-	
+
+    @Autowired
+    private PersonSuccessIndicatorAlertDao personSuccessIndicatorAlertDao;
+
 	@Autowired
 	private transient WithTransaction withTransaction;
 
@@ -382,6 +400,7 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
         int medCount = 0;
         int highCount = 0;
         int lowCountsAlertedOn = 0;
+        Map<UUID, Boolean> lowMap = getPersonSuccessIndicatorAlertMap(person);
 
         for (final EvaluatedSuccessIndicatorTO evaluatedIndicator : evaluatedSuccessIndicators) {
             if (configuredSuccessIndicatorsByCode.containsKey(evaluatedIndicator.getIndicatorCode())) {
@@ -415,6 +434,7 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
                     if (evaluatedIndicator.getEvaluation().equals(SuccessIndicatorEvaluation.LOW)) {
                         LOGGER.trace("EA CREATE: [" + evaluatedIndicator.getEvaluation().toString() + "]");
                         lowCountsAlertedOn++;
+                        updateLowMap(lowMap,evaluatedIndicator.getIndicatorId());
                     } else {
                         LOGGER.trace("EA NOT CREATED: [" + evaluatedIndicator.getEvaluation().toString() + "]");
                     }
@@ -436,5 +456,61 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
         countResult.setLowAlertCount(lowCountsAlertedOn);
         personSuccessIndicatorCountDao.save(countResult); //save the new or updated count
 
+        processEarlyAlert(person, lowMap);
+
     } //end processEvaluatedSuccessIndicators
+
+    private Map<UUID, Boolean> getPersonSuccessIndicatorAlertMap (Person person) {
+        Map<UUID, Boolean> map = new HashMap<>();
+        for (PersonSuccessIndicatorAlert personSuccessIndicatorAlert: personSuccessIndicatorAlertDao.get(person)) {
+            map.put(personSuccessIndicatorAlert.getSuccessIndicator().getId(), new Boolean(false));
+        }
+        return map;
+    }
+
+    private void updateLowMap(Map<UUID, Boolean> map, UUID id) {
+        map.put(id, new Boolean(true));
+    }
+
+    private void processEarlyAlert(Person person, Map<UUID, Boolean> map) {
+        for (UUID id : map.keySet()) {
+            SuccessIndicator successIndicator = getSuccessIndicator(id);
+            PersonSuccessIndicatorAlert personSuccessIndicatorAlert = personSuccessIndicatorAlertDao.get(person, successIndicator);
+            Boolean hasLowSuccessInd = map.get(id);
+            if (hasLowSuccessInd && personSuccessIndicatorAlert == null) {
+                createEarlyAlert(person, successIndicator);
+                personSuccessIndicatorAlert = new PersonSuccessIndicatorAlert();
+                personSuccessIndicatorAlert.setPerson(person);
+                personSuccessIndicatorAlert.setSuccessIndicator(successIndicator);
+                personSuccessIndicatorAlertDao.save(personSuccessIndicatorAlert);
+            } else if (!hasLowSuccessInd) {
+                personSuccessIndicatorAlertDao.delete(personSuccessIndicatorAlert);
+            }
+        }
+    }
+
+    private SuccessIndicator getSuccessIndicator (UUID id) {
+        try {
+            return successIndicatorService.get(id);
+        } catch (ObjectNotFoundException onfe) {
+            LOGGER.info("Abandoning success indicator task impl because success indicator: {} was not found", id);
+            throw new RuntimeException(onfe);
+        }
+
+    }
+    private void createEarlyAlert(Person person, SuccessIndicator successIndicator) {
+        try {
+            EarlyAlert earlyAlert = new EarlyAlert();
+            earlyAlert.setPerson(person);
+            earlyAlert.setCampus(campusService.getByCode(configService.getByNameException(EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME)));
+            earlyAlert.setComment("Low Success Indicator Alert: " + successIndicator.getName() + " - " + successIndicator.getDescription());
+            earlyAlertService.create(earlyAlert);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.info("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
+            LOGGER.info("Low Success Indicator Alert Error", e);
+        } catch (ValidationException e) {
+            LOGGER.info("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
+            LOGGER.info("Low Success Indicator Alert Error", e);
+        }
+    }
 }
