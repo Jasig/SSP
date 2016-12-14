@@ -18,13 +18,6 @@
  */
 package org.jasig.ssp.service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import javax.mail.SendFailedException;
-import javax.validation.constraints.NotNull;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
@@ -33,11 +26,24 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.transferobject.EarlyAlertSearchResultTO;
 import org.jasig.ssp.transferobject.PagedResponse;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
-import org.jasig.ssp.transferobject.reports.*;
+import org.jasig.ssp.transferobject.reports.EarlyAlertCourseCountsTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertReasonCountsTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.util.collections.Triple;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.validation.ValidationException;
+
+import javax.mail.SendFailedException;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * EarlyAlert service
@@ -164,6 +170,8 @@ public interface EarlyAlertService
 	Long getStudentCountForEarlyAlertCreatedDateRange(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, String rosterStatus);
 
     List<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+
+	Long getStudentEarlyAlertCountSetPerCoursesTotalStudents(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
     List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(Campus campus, String termCode, Date createdDateFrom, Date createdDateTo, ObjectStatus status);
 

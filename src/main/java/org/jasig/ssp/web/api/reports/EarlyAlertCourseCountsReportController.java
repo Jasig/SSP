@@ -19,18 +19,20 @@
 package org.jasig.ssp.web.api.reports;
 
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.Campus;
+import org.jasig.ssp.security.permissions.Permission;
+import org.jasig.ssp.service.EarlyAlertService;
+import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.transferobject.reports.EarlyAlertCourseCountsTO;
 import org.jasig.ssp.util.DateTerm;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
-import org.jasig.ssp.util.sort.PagingWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import javax.servlet.http.HttpServletResponse;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,13 +43,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.transferobject.reports.EarlyAlertCourseCountsTO;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -61,6 +67,7 @@ public class EarlyAlertCourseCountsReportController extends ReportBaseController
 
     private static String REPORT_URL = "/reports/earlyAlertCourseCountsReport.jasper";
     private static String REPORT_FILE_TITLE = "Early_Alert_Course_Counts_Report";
+    private static String TOTAL_STUDENTS = "totalStudents";
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EarlyAlertCourseCountsReportController.class);
@@ -112,6 +119,7 @@ public class EarlyAlertCourseCountsReportController extends ReportBaseController
         SearchParameters.addDateTermToMap(dateTerm, parameters);
 
         List<EarlyAlertCourseCountsTO> results = earlyAlertService.getStudentEarlyAlertCountSetPerCourses(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
+        parameters.put(TOTAL_STUDENTS, earlyAlertService.getStudentEarlyAlertCountSetPerCoursesTotalStudents(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus));
 
         if ( results == null) {
              results = new ArrayList<EarlyAlertCourseCountsTO>();

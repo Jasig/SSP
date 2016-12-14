@@ -18,18 +18,14 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import javax.validation.constraints.NotNull;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.*;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -44,7 +40,13 @@ import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.transferobject.form.EarlyAlertSearchForm;
-import org.jasig.ssp.transferobject.reports.*;
+import org.jasig.ssp.transferobject.reports.EarlyAlertCourseCountsTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertReasonCountsTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentReportTO;
+import org.jasig.ssp.transferobject.reports.EarlyAlertStudentSearchTO;
+import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
+import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
+import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.util.collections.Triple;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
@@ -54,7 +56,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.google.common.collect.Maps;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -642,8 +652,7 @@ public class EarlyAlertDao extends
 
 	}
 
-
-    public List<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
+	public List<EarlyAlertCourseCountsTO> getStudentEarlyAlertCountSetPerCourses(
             String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
         final StringBuilder courseCountHQLQuery = new StringBuilder("select "
@@ -669,8 +678,25 @@ public class EarlyAlertDao extends
         return (List<EarlyAlertCourseCountsTO>) query.list();
     }
 
+	public Long getStudentEarlyAlertCountSetPerCoursesTotalStudents(
+			String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
-    public List<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
+		final StringBuilder courseCountHQLQuery = new StringBuilder("select count(distinct ea.person)"
+				+ "from EarlyAlert as ea, Term as t "
+				+ "inner join ea.campus as c "
+				+ "where ea.courseTermCode=t.code "
+				+   createEarlyAlertReportHQLWhereClause(termCode, createdDateFrom, createdDateTo, campus, objectStatus).replace("where", "and")
+		);
+
+		final Query query = createHqlQuery(courseCountHQLQuery.toString());
+
+		bindEarlyAlertReportHQLParams(query, termCode, createdDateFrom, createdDateTo, campus, objectStatus);
+
+		return (Long) query.uniqueResult();
+	}
+
+
+	public List<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(
             String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
 
         final String reasonCountHQLQuery = "select "

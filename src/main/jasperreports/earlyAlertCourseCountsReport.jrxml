@@ -36,6 +36,7 @@
 	<parameter name="startDate" class="java.lang.String"/>
 	<parameter name="endDate" class="java.lang.String"/>
 	<parameter name="termName" class="java.lang.String"/>
+	<parameter name="totalStudents" class="java.lang.Long"/>
 	<field name="totalStudentsReported" class="java.lang.Long"/>
 	<field name="totalAlerts" class="java.lang.Long"/>
 	<field name="courseName" class="java.lang.String"/>
@@ -253,7 +254,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{totalStudents}  == null ? "0" : $V{totalStudents}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{totalStudents} == null) ? "0" : $P{totalStudents}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
 				<reportElement uuid="22d791ee-fe06-4256-ae9c-a874db47f606" mode="Opaque" x="649" y="9" width="102" height="16" isRemoveLineWhenBlank="true"/>
