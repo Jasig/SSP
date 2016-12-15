@@ -113,7 +113,7 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 								<textElement textAlignment="Center" verticalAlignment="Top">
 									<font isBold="true"/>
 								</textElement>
-								<text><![CDATA[Totals]]></text>
+								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:tableFooter>
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
@@ -136,22 +136,14 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="90" uuid="43829015-8a1e-4cb0-9dc8-8e212626b0d1">
-						<jr:tableFooter style="table_TH" height="30" rowSpan="1">
-							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="14" width="80" height="16" uuid="4ca86e96-e1c0-44fe-a104-d6da0cb45ac4"/>
-								<textElement textAlignment="Center" verticalAlignment="Top">
-									<font isBold="true"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$P{totalStudentsParam}]]></textFieldExpression>
-							</textField>
-						</jr:tableFooter>
+						<jr:tableFooter style="table_TH" height="30" rowSpan="1"/>
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="90" height="30" uuid="a7677c51-210c-4a14-ab85-0799b3b1fbcd"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
-								<text><![CDATA[Occurrences / Students]]></text>
+								<text><![CDATA[# Students]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
@@ -180,7 +172,7 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
-								<text><![CDATA[ Alerts]]></text>
+								<text><![CDATA[Total Alerts]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
