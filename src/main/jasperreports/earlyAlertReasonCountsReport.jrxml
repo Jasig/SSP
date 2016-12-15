@@ -50,6 +50,7 @@
 		</box>
 	</style>
 	<subDataset name="Table Dataset" uuid="be43ce74-c7e5-48bb-9e55-2f61365d6e2f">
+		<parameter name="totalStudentsParam" class="java.lang.Long"/>
 		<field name="left" class="java.lang.String"/>
 		<field name="middle" class="java.lang.Long"/>
 		<field name="right" class="java.lang.Long"/>
@@ -68,6 +69,7 @@
 	<parameter name="termName" class="java.lang.String"/>
 	<parameter name="campusName" class="java.lang.String"/>
 	<parameter name="reasonTotals" class="java.util.List"/>
+	<parameter name="totalStudents" class="java.lang.Long"/>
 	<field name="schoolId" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolId]]></fieldDescription>
 	</field>
@@ -98,6 +100,9 @@
 				<reportElement key="table" style="table" x="423" y="0" width="289" height="130" uuid="f68164f7-fe5e-4f34-9db6-757cd9d5ca38"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
 					<datasetRun subDataset="Table Dataset" uuid="233770c2-d00a-4810-aac6-4b3b68ad8ffd">
+						<datasetParameter name="totalStudentsParam">
+							<datasetParameterExpression><![CDATA[$P{totalStudents}]]></datasetParameterExpression>
+						</datasetParameter>
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.
 data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 					</datasetRun>
@@ -137,16 +142,16 @@ data.JRBeanCollectionDataSource($P{reasonTotals})]]></dataSourceExpression>
 								<textElement textAlignment="Center" verticalAlignment="Top">
 									<font isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{totalStudents}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{totalStudentsParam}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="90" height="16" uuid="a7677c51-210c-4a14-ab85-0799b3b1fbcd"/>
+								<reportElement x="0" y="0" width="90" height="30" uuid="a7677c51-210c-4a14-ab85-0799b3b1fbcd"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
-								<text><![CDATA[Occurrences]]></text>
+								<text><![CDATA[Occurrences / Students]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">

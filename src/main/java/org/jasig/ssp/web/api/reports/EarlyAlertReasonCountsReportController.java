@@ -19,7 +19,6 @@
 package org.jasig.ssp.web.api.reports;
 
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.ObjectStatus;
@@ -32,12 +31,8 @@ import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.EarlyAlertReasonService;
 import org.jasig.ssp.transferobject.reports.EarlyAlertReasonCountsTO;
 import org.jasig.ssp.util.DateTerm;
-import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.collections.Triple;
 import org.jasig.ssp.util.csvwriter.AbstractCsvWriterHelper;
-import org.jasig.ssp.util.sort.PagingWrapper;
-import org.jasig.ssp.util.sort.SortDirection;
-import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +40,22 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -64,6 +70,7 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
     private static String REPORT_URL = "/reports/earlyAlertReasonCountsReport.jasper";
     private static String REPORT_FILE_TITLE = "Early_Alert_Reason_Counts_Report";
     private static final String REASON_TOTALS = "reasonTotals";
+    private static final String TOTAL_STUDENTS = "totalStudents";
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EarlyAlertReasonCountsReportController.class);
@@ -120,6 +127,7 @@ public class EarlyAlertReasonCountsReportController extends ReportBaseController
         List<Triple<String, Long, Long>> reasonTotals = earlyAlertService.getEarlyAlertReasonTypeCountByCriteria(campus, dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), objectStatus);
 
         List<EarlyAlertReasonCountsTO> results = earlyAlertService.getStudentEarlyAlertReasonCountByCriteria(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus);
+        parameters.put(TOTAL_STUDENTS, earlyAlertService.getStudentEarlyAlertReasonCountByCriteriaTotalStudents(dateTerm.getTermCodeNullPossible(), dateTerm.getStartDate(), dateTerm.getEndDate(), campus, objectStatus));
 
         if ( results == null) {
             results = new ArrayList<>();

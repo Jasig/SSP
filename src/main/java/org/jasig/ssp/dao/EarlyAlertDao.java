@@ -729,7 +729,26 @@ public class EarlyAlertDao extends
         return (List<EarlyAlertReasonCountsTO>) query.list();
     }
 
-    public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
+	public Long getStudentEarlyAlertReasonCountByCriteriaTotalStudents(
+			String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+
+		final String reasonCountHQLQuery = "select  count(distinct ea.person)"
+				+ "from EarlyAlert as ea, Term as t "
+				+ "inner join ea.person as p "
+				+ "inner join ea.createdBy as f "
+				+ "inner join ea.campus as c "
+				+ "left join ea.earlyAlertReasonIds as er "
+				+ "where ea.courseTermCode=t.code "
+				+   createEarlyAlertReportHQLWhereClause(termCode, createdDateFrom, createdDateTo, campus, objectStatus).replace("where", "and");
+
+		final Query query = createHqlQuery(reasonCountHQLQuery);
+
+		bindEarlyAlertReportHQLParams(query, termCode, createdDateFrom, createdDateTo, campus, objectStatus);
+
+		return (Long) query.uniqueResult();
+	}
+
+	public  List<Triple<String, Long, Long>> getEarlyAlertReasonTypeCountByCriteria(
             Campus campus, String termCode, Date createdDateFrom, Date createdDateTo, ObjectStatus objectStatus) {
         final Criteria criteria = createCriteria();
 

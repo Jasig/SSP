@@ -177,6 +177,8 @@ public interface EarlyAlertService
 
     List<EarlyAlertReasonCountsTO> getStudentEarlyAlertReasonCountByCriteria(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
 
+	Long getStudentEarlyAlertReasonCountByCriteriaTotalStudents(String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus);
+
 	Long getEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm);
 
 	PagingWrapper<EarlyAlertStudentReportTO> getStudentsEarlyAlertCountSetForCriteria(EarlyAlertStudentSearchTO searchForm, SortingAndPaging createForSingleSort);

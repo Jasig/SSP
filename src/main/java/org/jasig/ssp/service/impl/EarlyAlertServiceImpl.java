@@ -810,8 +810,14 @@ public class EarlyAlertServiceImpl extends // NOPMD
         return dao.getStudentEarlyAlertReasonCountByCriteria(termCode, createdDateFrom, createdDateTo, campus, objectStatus);
     }
 
+	@Override
+	public Long getStudentEarlyAlertReasonCountByCriteriaTotalStudents(
+			String termCode, Date createdDateFrom, Date createdDateTo, Campus campus, ObjectStatus objectStatus) {
+		return dao.getStudentEarlyAlertReasonCountByCriteriaTotalStudents(termCode, createdDateFrom, createdDateTo, campus, objectStatus);
+	}
 
-    @Override
+
+	@Override
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertCountByCoaches(EntityCountByCoachSearchForm form) {
 		return dao.getStudentEarlyAlertCountByCoaches(form);
 	}
