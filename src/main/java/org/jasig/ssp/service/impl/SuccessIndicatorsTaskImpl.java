@@ -25,11 +25,13 @@ import org.hibernate.FlushMode;
 import org.hibernate.SessionFactory;
 import org.jasig.ssp.dao.PersonSuccessIndicatorAlertDao;
 import org.jasig.ssp.dao.PersonSuccessIndicatorCountDao;
+import org.jasig.ssp.dao.external.TermDao;
 import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSuccessIndicatorAlert;
 import org.jasig.ssp.model.PersonSuccessIndicatorCount;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.SuccessIndicator;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
@@ -54,6 +56,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +109,9 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
 
     @Autowired
     private PersonSuccessIndicatorAlertDao personSuccessIndicatorAlertDao;
+
+    @Autowired
+    private TermDao termDao;
 
 	@Autowired
 	private transient WithTransaction withTransaction;
@@ -504,6 +510,7 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
             earlyAlert.setPerson(person);
             earlyAlert.setCampus(campusService.getByCode(configService.getByNameException(EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME)));
             earlyAlert.setComment("Low Success Indicator Alert: " + successIndicator.getName() + " - " + successIndicator.getDescription());
+            earlyAlert.setCourseTermCode(getCurrentOrNextTerm());
             earlyAlertService.create(earlyAlert);
         } catch (ObjectNotFoundException e) {
             LOGGER.info("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
@@ -511,6 +518,18 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
         } catch (ValidationException e) {
             LOGGER.info("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
             LOGGER.info("Low Success Indicator Alert Error", e);
+        }
+    }
+
+    private String getCurrentOrNextTerm () throws ObjectNotFoundException {
+        Term term = termDao.getCurrentTerm();
+        if (term == null) {
+            term = termDao.getNextTerm(new Date());
+        }
+        if (term != null) {
+            return term.getCode();
+        } else {
+            return null;
         }
     }
 }
