@@ -223,23 +223,23 @@
 				<text><![CDATA[Reponse End Date:]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement key="table" style="table" x="515" y="11" width="199" height="117" uuid="f68164f7-fe5e-4f34-9db6-757cd9d5ca38"/>
+				<reportElement key="table" style="table" x="489" y="11" width="250" height="116" uuid="f68164f7-fe5e-4f34-9db6-757cd9d5ca38"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
 					<datasetRun subDataset="Table Dataset" uuid="233770c2-d00a-4810-aac6-4b3b68ad8ffd">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.
 data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="120" uuid="c881a348-bbc9-4cf7-aa05-1bb3f072514b">
+					<jr:column width="190" uuid="c881a348-bbc9-4cf7-aa05-1bb3f072514b">
 						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
 							<textField isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="120" height="16" uuid="7f13a7d6-1858-47cb-bfd9-674f04a4458c"/>
+								<reportElement x="0" y="0" width="190" height="16" uuid="7f13a7d6-1858-47cb-bfd9-674f04a4458c"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("columnTitle")]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="120" height="16" uuid="fa14ca6f-a096-4a31-991e-f09cb91e443f"/>
+								<reportElement x="0" y="0" width="190" height="16" uuid="fa14ca6f-a096-4a31-991e-f09cb91e443f"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="10"/>
 								</textElement>
@@ -247,17 +247,17 @@ data.JRBeanCollectionDataSource($P{outcomeTotals})]]></dataSourceExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="90" uuid="43829015-8a1e-4cb0-9dc8-8e212626b0d1">
+					<jr:column width="60" uuid="43829015-8a1e-4cb0-9dc8-8e212626b0d1">
 						<jr:columnHeader style="table_CH" height="16" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="90" height="16" uuid="a7677c51-210c-4a14-ab85-0799b3b1fbcd"/>
+								<reportElement x="0" y="0" width="60" height="16" uuid="a7677c51-210c-4a14-ab85-0799b3b1fbcd"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="16" rowSpan="1">
 							<textField evaluationTime="Auto" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="90" height="16" uuid="6f86c836-c815-4fed-9063-b43a8955deae"/>
+								<reportElement x="0" y="0" width="60" height="16" uuid="6f86c836-c815-4fed-9063-b43a8955deae"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<paragraph rightIndent="10"/>
 								</textElement>

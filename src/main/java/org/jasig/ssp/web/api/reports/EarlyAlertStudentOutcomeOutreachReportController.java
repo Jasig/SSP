@@ -19,16 +19,8 @@
 package org.jasig.ssp.web.api.reports; // NOPMD
 
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import javax.servlet.http.HttpServletResponse;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
@@ -66,8 +58,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -255,11 +256,11 @@ public class EarlyAlertStudentOutcomeOutreachReportController extends ReportBase
 		
 	
 		// Add a blank line to the table
-		outcomeTotals.add(new Pair<String,Long>(" ", null));
+//		outcomeTotals.add(new Pair<String,Long>(" ", null));
 		
 		searchForm.setOutcomeIds(cleanOutcomeIds);
 		outcomeTotals.add(
-				new Pair<String,Long>("Total Early Alerts",earlyAlertResponseService.
+				new Pair<String,Long>("Total Early Alerts with a Response",earlyAlertResponseService.
 						getEarlyAlertCountByOutcomeCriteria(searchForm)));
 		
 		SearchParameters.addDateTermToMap(dateTerm, parameters);
