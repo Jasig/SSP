@@ -377,6 +377,8 @@ public class ScheduledTaskWrapperServiceImpl
                         @Override
                         public void run () {
                             processConfiguredSuccessIndicators();
+							refreshDirectoryPersonBlue();
+							refreshDirectoryPerson();
                         }
                     },
                     CALC_SUCCESS_INDICATORS_TASK_DEFAULT_TRIGGER,
