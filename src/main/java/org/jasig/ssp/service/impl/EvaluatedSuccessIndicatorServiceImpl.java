@@ -948,26 +948,29 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
                     successIndicator.getCode(), successIndicator.getName());
 
         } else if (successIndicator.getEvaluationType().equals(SuccessIndicatorEvaluationType.STRING)) {
+            final String lowEval = successIndicator.getStringEvaluationLow().trim().toLowerCase();
+            final String medEval = successIndicator.getStringEvaluationMedium().trim().toLowerCase();
+            final String highEval = successIndicator.getStringEvaluationHigh().trim().toLowerCase();
 
             //take worst string value
             for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
-                final String participationToEvaluate = courseToEvaluate.getParticipation();
-                if (StringUtils.isNotBlank(participationToEvaluate)) {
+                if (StringUtils.isNotBlank(courseToEvaluate.getParticipation())) {
+                    final String participationToEvaluate = courseToEvaluate.getParticipation().trim().toLowerCase();
 
                     if (StringUtils.isNotBlank(successIndicator.getStringEvaluationLow()) &&
-                            participationToEvaluate.equals(successIndicator.getStringEvaluationLow())) {
+                            participationToEvaluate.equals(lowEval)) {
 
                         worstParticipationScore = successIndicator.getStringEvaluationLow();
                         break;
 
                     } else if (StringUtils.isNotBlank(successIndicator.getStringEvaluationMedium()) &&
-                            participationToEvaluate.equals(successIndicator.getStringEvaluationMedium())) {
+                            participationToEvaluate.equals(medEval)) {
 
                         worstParticipationScore = successIndicator.getStringEvaluationMedium();
 
                     } else if (StringUtils.isBlank(worstParticipationScore) &&
                             StringUtils.isNotBlank(successIndicator.getStringEvaluationHigh()) &&
-                            participationToEvaluate.equals(successIndicator.getStringEvaluationHigh())) {
+                            participationToEvaluate.equals(highEval)) {
 
                         worstParticipationScore = successIndicator.getStringEvaluationHigh();
                     }
