@@ -19,19 +19,9 @@
 package org.jasig.ssp.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Arrays;
-
+import java.util.*;
 import javax.validation.constraints.NotNull;
-
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AbstractPlanDao;
 import org.jasig.ssp.model.AbstractPlan;
@@ -39,10 +29,7 @@ import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
-import org.jasig.ssp.model.external.ExternalCourseRequisite;
-import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
-import org.jasig.ssp.model.external.RequisiteCode;
-import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
@@ -61,8 +48,8 @@ import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Lists;
+
 
 /**
  * 
@@ -103,8 +90,13 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	private transient ExternalProgramService externalProgramService;
 
 	@Autowired
+    private transient ExternalStudentTranscriptNonCourseEntityService externalStudentTranscriptNonCourseEntityService;
+
+	@Autowired
 	private transient ConfigService configService;
-	
+
+
+
 	@Override
 	public T save(T obj) {
 		return getDao().save(obj);
@@ -222,9 +214,10 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 	}
 	
 	private TO validatePrerequisites(TO model) throws ObjectNotFoundException{
-		List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
-		List<String> requiringCourseCodes = new ArrayList<String>();
-		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
+
+	    final List<? extends AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courses = model.getCourses();
+		final List<String> requiringCourseCodes = new ArrayList<String>();
+		for (AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses) {
 			requiringCourseCodes.add(course.getCourseCode());
 			// Only clear validation fields this method controls exclusively. Fields that might be set by validate(),
 			// e.g. plan.isValid and course.isValidInTerm, need to be cleared in that method.
@@ -233,27 +226,25 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			course.setDuplicateOfTranscript(false);
 		}
 		
-		List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
-		Map<String, ExternalStudentTranscriptCourse> transcriptedCoursesByFormattedCourseCode = new HashMap<String,ExternalStudentTranscriptCourse>();
-
-		String studentSchoolId = getSchoolIdPlannedFor(model);
-
-		if(StringUtils.isNotBlank(studentSchoolId)){
-			List<ExternalStudentTranscriptCourse> transcriptedCourses = studentTranscriptService.getTranscriptsBySchoolId(studentSchoolId);
-			for(ExternalStudentTranscriptCourse transcriptedCourse:transcriptedCourses){
+		final List<String> transcriptedCourseCodeCourse = new ArrayList<String>();
+		final Map<String, ExternalStudentTranscriptCourse> transcriptedCoursesByFormattedCourseCode = new HashMap<String,ExternalStudentTranscriptCourse>();
+		final String studentSchoolId = getSchoolIdPlannedFor(model);
+		if (StringUtils.isNotBlank(studentSchoolId)) {
+			final List<ExternalStudentTranscriptCourse> transcriptedCourses = studentTranscriptService.getTranscriptsBySchoolId(studentSchoolId);
+			for (ExternalStudentTranscriptCourse transcriptedCourse:transcriptedCourses) {
 				transcriptedCourseCodeCourse.add(transcriptedCourse.getFormattedCourse());
 				transcriptedCoursesByFormattedCourseCode.put(transcriptedCourse.getFormattedCourse(), transcriptedCourse);
 			}
 		}
 
 		final Set<String> passingGrades = new HashSet<String>(Arrays.asList(configService.getByNameNullOrDefaultValue("map_plan_status_passing_grades").replaceAll(" ", "").split(",")));
-		Map<String, Term> termCodeTerm = new HashMap<String, Term>();
-		Map<String, String> courseCodeTermCode = new HashMap<String,String>();
-		Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
-		List<ExternalCourseRequisite> requisiteCourses = getCourseRequisiteService().getRequisitesForCourses(requiringCourseCodes);
-		for(AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
+		final Map<String, Term> termCodeTerm = new HashMap<String, Term>();
+		final Map<String, String> courseCodeTermCode = new HashMap<String,String>();
+		final Map<String, AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>> courseCodeCourse = new HashMap<String,AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>>();
+		final List<ExternalCourseRequisite> requisiteCourses = getCourseRequisiteService().getRequisitesForCourses(requiringCourseCodes);
+		for (AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>>  course: courses){
 			
-			if(!termCodeTerm.containsKey(course.getTermCode())){
+			if (!termCodeTerm.containsKey(course.getTermCode())) {
 				try {
 					termCodeTerm.put(course.getTermCode(), getTermService().getByCode(course.getTermCode()));
 				} catch ( ObjectNotFoundException e ) {
@@ -267,9 +258,9 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 			courseCodeCourse.put(course.getCourseCode(), course);
 
 			// This section sets isTranscript and duplicateOfTranscript since course may be from client.
-			if(transcriptedCoursesByFormattedCourseCode.containsKey(course.getFormattedCourse())){
-				ExternalStudentTranscriptCourse transcriptCourse = transcriptedCoursesByFormattedCourseCode.get(course.getFormattedCourse());
-				if (passingGrades.contains(transcriptCourse.getGrade())){
+			if (transcriptedCoursesByFormattedCourseCode.containsKey(course.getFormattedCourse())) {
+				final ExternalStudentTranscriptCourse transcriptCourse = transcriptedCoursesByFormattedCourseCode.get(course.getFormattedCourse());
+                if (passingGrades.contains(transcriptCourse.getGrade())) {
 					course.setIsTranscript(true);
 					if (!transcriptCourse.getTermCode().equals(course.getTermCode())) {
 						course.setDuplicateOfTranscript(true);
@@ -280,51 +271,60 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 				}
 			}
 		}
-		
-		for(ExternalCourseRequisite  requisiteCourse: requisiteCourses){
-			if(transcriptedCourseCodeCourse.contains(requisiteCourse.getRequiredFormattedCourse())){
+
+        final Collection<ExternalStudentTranscriptNonCourseEntity> nonCourses = externalStudentTranscriptNonCourseEntityService.getNonCourseTranscriptsBySchoolId(studentSchoolId);
+        final Map<String, String> nonCourseByFormattedCourses = Maps.newHashMap();
+        for (ExternalStudentTranscriptNonCourseEntity index : nonCourses) {
+            nonCourseByFormattedCourses.put(index.getTargetFormattedCourse().trim(), index.getNonCourseCode()); //load non course by formatted course map
+        }
+        for (ExternalCourseRequisite  requisiteCourse: requisiteCourses) {
+			if (transcriptedCourseCodeCourse.contains(requisiteCourse.getRequiredFormattedCourse())) {
 				continue;
 			}
-			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiringCourse = courseCodeCourse.get(requisiteCourse.getRequiringCourseCode());
-			AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiredCourse = courseCodeCourse.get(requisiteCourse.getRequiredCourseCode());
-			if(courseCodeTermCode.containsKey(requisiteCourse.getRequiredCourseCode())){
-				String requiredTermCode = courseCodeTermCode.get(requisiteCourse.getRequiredCourseCode());
-				String requireingTermCode = courseCodeTermCode.get(requisiteCourse.getRequiringCourseCode());
-				Term requiredTerm = termCodeTerm.get(requiredTermCode);
-				Term requireingTerm = termCodeTerm.get(requireingTermCode);
-				if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)){
-					if(!requiredTermCode.equals(requireingTermCode)){
+
+			final AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiringCourse = courseCodeCourse.get(requisiteCourse.getRequiringCourseCode());
+			final AbstractPlanCourseTO<T, ? extends AbstractPlanCourse<T>> requiredCourse = courseCodeCourse.get(requisiteCourse.getRequiredCourseCode());
+			if (nonCourseByFormattedCourses.containsKey(requisiteCourse.getRequiredFormattedCourse().trim())) {
+			    continue; //matching non-course bypasses requisite check below and should give no warnings
+
+            } else if (courseCodeTermCode.containsKey(requisiteCourse.getRequiredCourseCode())) {
+				final String requiredTermCode = courseCodeTermCode.get(requisiteCourse.getRequiredCourseCode());
+				final String requireingTermCode = courseCodeTermCode.get(requisiteCourse.getRequiringCourseCode());
+				final Term requiredTerm = termCodeTerm.get(requiredTermCode);
+				final Term requireingTerm = termCodeTerm.get(requireingTermCode);
+
+				if (requisiteCourse.getRequisiteCode().equals(RequisiteCode.CO)) {
+					if (!requiredTermCode.equals(requireingTermCode)) {
 						requiringCourse.setHasCorequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Corequisite " + requiredCourse.getFormattedCourse() + " is not in same term.");
-					}		
-				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE_CO)){
-					if(requiredTermCode.equals(requireingTermCode)){
+					}
+				} else if (requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE_CO)) {
+					if (requiredTermCode.equals(requireingTermCode)) {
 						continue;
 					}
-					if ( requiredTerm == null || requireingTerm == null ) {
+					if (requiredTerm == null || requireingTerm == null) {
 						// no guarantee that we can resolve term codes
 						continue;
 					}
-					if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
+					if (requireingTerm.getStartDate().before(requiredTerm.getStartDate())) {
 						requiringCourse.setHasCorequisites(false);
 						requiringCourse.setHasPrerequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Pre/Corequisite " + requiredCourse.getFormattedCourse() + " is not in previous term.");
 					}
-				}else if(requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE)){
-					if(requiredTermCode.equals(requireingTermCode)){
+				} else if (requisiteCourse.getRequisiteCode().equals(RequisiteCode.PRE)) {
+					if (requiredTermCode.equals(requireingTermCode)) {
 						requiringCourse.setHasPrerequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Prerequisite " + requiredCourse.getFormattedCourse() + " is in same term.");
-					}else if(requireingTerm.getStartDate().before(requiredTerm.getStartDate())){
+					} else if (requireingTerm.getStartDate().before(requiredTerm.getStartDate())) {
 						requiringCourse.setHasPrerequisites(false);
 						model.setIsValid(false);
 						requiringCourse.setInvalidReasons(" Prerequisite " + requiredCourse.getFormattedCourse() + " is not in previous term.");
 					}
 				}
-				
-			}else{
+			} else {
 				requiringCourse.setHasCorequisites(false);
 				requiringCourse.setHasPrerequisites(false);
 				model.setIsValid(false);
