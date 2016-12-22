@@ -32,6 +32,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSuccessIndicatorAlert;
 import org.jasig.ssp.model.PersonSuccessIndicatorCount;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.SuccessIndicator;
 import org.jasig.ssp.service.EarlyAlertService;
 import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
@@ -39,6 +40,7 @@ import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SuccessIndicatorsTask;
 import org.jasig.ssp.service.reference.CampusService;
+import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.SuccessIndicatorService;
 import org.jasig.ssp.transferobject.EvaluatedSuccessIndicatorTO;
@@ -49,7 +51,6 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
-import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -484,11 +485,12 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
             PersonSuccessIndicatorAlert personSuccessIndicatorAlert = personSuccessIndicatorAlertDao.get(person, successIndicator);
             Boolean hasLowSuccessInd = map.get(id);
             if (hasLowSuccessInd && personSuccessIndicatorAlert == null) {
-                createEarlyAlert(person, successIndicator);
-                personSuccessIndicatorAlert = new PersonSuccessIndicatorAlert();
-                personSuccessIndicatorAlert.setPerson(person);
-                personSuccessIndicatorAlert.setSuccessIndicator(successIndicator);
-                personSuccessIndicatorAlertDao.save(personSuccessIndicatorAlert);
+                if (createEarlyAlert(person, successIndicator)) {
+                    personSuccessIndicatorAlert = new PersonSuccessIndicatorAlert();
+                    personSuccessIndicatorAlert.setPerson(person);
+                    personSuccessIndicatorAlert.setSuccessIndicator(successIndicator);
+                    personSuccessIndicatorAlertDao.save(personSuccessIndicatorAlert);
+                }
             } else if (!hasLowSuccessInd) {
                 personSuccessIndicatorAlertDao.delete(personSuccessIndicatorAlert);
             }
@@ -504,21 +506,33 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
         }
 
     }
-    private void createEarlyAlert(Person person, SuccessIndicator successIndicator) {
+    private boolean createEarlyAlert(Person person, SuccessIndicator successIndicator) {
         try {
             EarlyAlert earlyAlert = new EarlyAlert();
             earlyAlert.setPerson(person);
-            earlyAlert.setCampus(campusService.getByCode(configService.getByNameException(EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME)));
+            Campus campus = getCampus(person);
+            if (campus == null) {
+                throw new ConfigException("Error creating Low Success Indicator Early Alert. The Early Alert campus must" +
+                        " be set either as the person's home campus or in Admin/Administrative Tools/System Configuration/Configuration Options: "
+                        + EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME);
+            }
+            earlyAlert.setCampus(campus);
             earlyAlert.setComment("Low Success Indicator Alert: " + successIndicator.getName() + " - " + successIndicator.getDescription());
             earlyAlert.setCourseTermCode(getCurrentOrNextTerm());
             earlyAlertService.create(earlyAlert);
-        } catch (ObjectNotFoundException e) {
-            LOGGER.info("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
-            LOGGER.info("Low Success Indicator Alert Error", e);
-        } catch (ValidationException e) {
-            LOGGER.info("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
-            LOGGER.info("Low Success Indicator Alert Error", e);
+            return true;
+        } catch (Exception e) {
+            LOGGER.error("Error creating Low Success Indicator Alert for person {} and success indicator {}", person.getId(), successIndicator.getId());
+            LOGGER.error("Low Success Indicator Alert Error", e);
         }
+        return false;
+    }
+
+    private Campus getCampus(Person person) throws ObjectNotFoundException {
+        if (null != person.getHomeCampus()) {
+            return person.getHomeCampus();
+        }
+        return campusService.getByCode(configService.getByNameException(EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME));
     }
 
     private String getCurrentOrNextTerm () throws ObjectNotFoundException {
