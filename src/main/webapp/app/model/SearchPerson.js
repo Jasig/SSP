@@ -40,11 +40,11 @@ Ext.define('Ssp.model.SearchPerson', {
              {name: 'numberOfLowMediumConfiguredSuccessIndicators',
               convert: function(value, record) {
                   if (record.get('numberOfLowConfiguredSuccessIndicators') && record.get('numberOfMediumConfiguredSuccessIndicators')) {
-                      return record.get('numberOfLowConfiguredSuccessIndicators') + '/' + record.get('numberOfMediumConfiguredSuccessIndicators');
+                      return record.get('numberOfLowConfiguredSuccessIndicators') + '-' + record.get('numberOfMediumConfiguredSuccessIndicators');
                   } else if (!record.get('numberOfLowConfiguredSuccessIndicators') && record.get('numberOfMediumConfiguredSuccessIndicators')) {
-                      return '0/' + record.get('numberOfMediumConfiguredSuccessIndicators');
+                      return '0-' + record.get('numberOfMediumConfiguredSuccessIndicators');
                   } else if (record.get('numberOfLowConfiguredSuccessIndicators') && !record.get('numberOfMediumConfiguredSuccessIndicators')) {
-                      return record.get('numberOfLowConfiguredSuccessIndicators') + '/0';
+                      return record.get('numberOfLowConfiguredSuccessIndicators') + '-0';
                   } else {
                       return '';
                   }
