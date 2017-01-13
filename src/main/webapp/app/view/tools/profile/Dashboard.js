@@ -25,25 +25,18 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
 		authenticatedPerson: 'authenticatedPerson',
 		textStore: 'sspTextStore'
     },
-    width: '100%',
-    height: '100%',
-    
     initComponent: function(){
         var me = this;
-		
         Ext.apply(me, {
             border: 0,
             bodyPadding: 10,
             defaults: {
                 layout: {
-                    type: 'hbox',
-                    align: 'stretch'
+                    type: 'hbox'
                 },
-                flex: 1,
                 padding: 0,
                 border: 0
             },
-            
             items: [{
                 xtype: 'container',
                 margin: 0,
@@ -73,8 +66,6 @@ Ext.define('Ssp.view.tools.profile.Dashboard', {
                 xtype: 'evaluatedsuccessindicatorgroups'
             }]
         });
-        
         return me.callParent(arguments);
     }
-    
 });

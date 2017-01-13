@@ -24,7 +24,6 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
         textStore: 'sspTextStore'
     },
     controller: 'Ssp.controller.tool.profile.EvaluatedSuccessIndicatorGroupsController',
-
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -36,7 +35,6 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
                     itemId: 'studentSuccessIndicatorGroup',
-                    maxHeight: 340,
                     overflowY: 'auto',
                     flex: 1
                 }]
@@ -50,7 +48,6 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
                     itemId: 'interventionSuccessIndicatorGroup',
-                    maxHeight: 340,
                     overflowY: 'auto',
                     flex: 1
                 }]
@@ -64,7 +61,6 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
                 items: [{
                     xtype: 'evaluatedsuccessindicatorgroup',
                     itemId: 'riskSuccessIndicatorGroup',
-                    maxHeight: 340,
                     overflowY: 'auto',
                     flex: 1
                 }]
@@ -72,5 +68,4 @@ Ext.define('Ssp.view.tools.profile.EvaluatedSuccessIndicatorGroups', {
         });
         return me.callParent(arguments);
     }
-
 });

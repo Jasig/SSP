@@ -24,8 +24,6 @@ Ext.define("Ssp.view.tools.profile.Profile", {
         textStore: 'sspTextStore'
     },
     controller: "Ssp.controller.tool.profile.ProfileToolViewController",
-    width: "100%",
-    height: "100%",
     initComponent: function() {
         var me = this;
         Ext.apply(me, {
@@ -35,8 +33,6 @@ Ext.define("Ssp.view.tools.profile.Profile", {
             border: 0,
             preventHeader: true,
             items: [ Ext.createWidget("tabpanel", {
-                width: "100%",
-                height: "100%",
                 activeTab: 0,
                 itemId: "profileTabs",
                 items: [ {
