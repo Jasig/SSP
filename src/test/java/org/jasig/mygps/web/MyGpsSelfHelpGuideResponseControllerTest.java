@@ -31,7 +31,6 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.poi.util.StringUtil;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SelfHelpGuideResponse;
 import org.jasig.ssp.model.reference.SelfHelpGuide;
