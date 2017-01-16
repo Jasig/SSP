@@ -21,16 +21,8 @@
  */
 package org.jasig.ssp.service.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.UnsupportedEncodingException;
-
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
-
 import org.jasig.ssp.config.MockMailService;
 import org.jasig.ssp.dao.MessageDao;
 import org.jasig.ssp.model.Message;
@@ -51,8 +43,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.mail.SendFailedException;
+import java.io.UnsupportedEncodingException;
+import static org.junit.Assert.*;
+
 
 /**
  * @author jon.adams
@@ -106,12 +100,19 @@ public class MessageServiceTest {
 		assertFalse("Faux mail server should be running but was not.",
 				smtpServer.isStopped());
 
-		final Message message =
-				service.createMessage("to@email.com", "cc@invalid domain",
-						new SubjectAndBody("Subject", "Message"));
-		service.sendMessage(message);
-		assertNotNull("Message not flagged as sent",
-				messageDao.get(message.getId()).getSentDate());
+        final Message message;
+        try {
+            message = service.createMessage("to@email.com", "cc@invalid domain",
+                    new SubjectAndBody("Subject", "Message"));
+            service.sendMessage(message);
+
+            assertNotNull("Message not flagged as sent",
+                    messageDao.get(message.getId()).getSentDate());
+
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+
 		assertEquals("Message wasn't actually sent.", 1,
 				smtpServer.getReceivedEmailSize());
 		final SmtpMessage receivedMessage = (SmtpMessage) smtpServer
@@ -178,16 +179,20 @@ public class MessageServiceTest {
 		// errored batches)
 		Message validMsg = null;
 		for ( int i = 0; i < 26; i++ ) {
-			if ( i == 25 ) {
-				// valid message
-				validMsg =
-						service.createMessage("to@email.com", null,
-								new SubjectAndBody("Subject " + i, "Message " + i));
-			} else {
-				// invalid message
-				service.createMessage("to@invalid domain", null,
-								new SubjectAndBody("Subject " + i, "Message " + i));
-			}
+            try {
+                if ( i == 25 ) {
+                    // valid message
+                    validMsg =
+                        service.createMessage("to@email.com", null,
+                            new SubjectAndBody("Subject " + i, "Message " + i));
+                } else {
+                    // invalid message
+                    service.createMessage("to@invalid domain", null,
+                                    new SubjectAndBody("Subject " + i, "Message " + i));
+                }
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            }
 		}
 
 		// intentionally call twice. see comments above.
