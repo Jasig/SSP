@@ -22,7 +22,12 @@ Ext.define('Ssp.controller.admin.caseload.BulkAddCaseloadReassignmentViewControl
     inject: {
     	apiProperties: 'apiProperties',
        	authenticatedPerson: 'authenticatedPerson',
+       	formUtils: 'formRendererUtils',
        	textStore: 'sspTextStore'
+    },
+    config: {
+        containerToLoadInto: 'adminforms',
+        formToDisplay: 'bulkaddcaseloadreassignment'
     },
     control: {
 		'saveButton': {
@@ -96,5 +101,9 @@ Ext.define('Ssp.controller.admin.caseload.BulkAddCaseloadReassignmentViewControl
                 }
             });
         }
-	}
+	},
+    displayMain: function(){
+        var me = this;
+        var comp = me.formUtils.loadDisplay(me.getContainerToLoadInto(), me.getFormToDisplay(), true, {});
+    }
 });
