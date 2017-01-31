@@ -31,26 +31,20 @@ Ext.define(
             apiProperties: 'apiProperties',
             authenticatedPerson: 'authenticatedPerson',
             columnRendererUtils: 'columnRendererUtils',
-            store: 'confidentialityDisclosureAgreementsStore',
+            store: 'confidentialityDisclosureAgreementsStore'
         },
         height: '100%',
         width: '100%',
         itemId: 'cdaListPanel',
-
-
         initComponent: function() {
             var me = this;
             Ext.apply(
                 me, {
-                    viewConfig: {
-
-                    },
                     autoScroll: true,
                     selType: 'rowmodel',
                     enableDragDrop: false,
                     cls: 'configgrid',
-                    columns: [
-                        {
+                    columns: [{
                             name: 'isCDAEnabled',
                             id: 'isCDAEnabled',
                             xtype: 'checkcolumn',
@@ -78,9 +72,7 @@ Ext.define(
                             dataIndex: 'description',
                             sortable: true
                         }
-
                     ],
-
                     dockedItems: [{
                         xtype: 'toolbar',
                         dock: 'top',
@@ -91,7 +83,7 @@ Ext.define(
                             hidden: !me.authenticatedPerson.hasAccess('ABSTRACT_REFERENCE_ADMIN_ADD_BUTTON'),
                             action: 'add',
                             itemId: 'addButton'
-                        }, '-', ]
+                        }, '-' ]
                     }, {
                         xtype: 'toolbar',
                         dock: 'top',

@@ -28,7 +28,7 @@ Ext.define('Ssp.controller.admin.caseload.CaseloadReassignmentViewController', {
     	    afterlayout: {
     		    fn: 'onAfterLayout',
     			single: true
-    		},
+    		}
         }
     },
 	init: function() {

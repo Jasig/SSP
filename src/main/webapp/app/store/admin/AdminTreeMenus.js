@@ -1299,7 +1299,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'mapTemplateTagsAll',
                     interfaceOptions: {
                         addButtonVisible: true,
-                        deleteButtonVisible: false,
+                        deleteButtonVisible: false
                     },
                     form: 'AbstractReferenceAdmin',
                     leaf: true

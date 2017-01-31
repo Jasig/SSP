@@ -143,9 +143,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 				width: 125,
 				dataIndex: 'modifiedDate',
 				sortable: true,
-				renderer: Ext.util.Format
-					.dateRenderer('Y-m-d g:i A')
-
+				renderer: Ext.util.Format.dateRenderer('Y-m-d g:i A')
 			}, {
 				text: 'Owner',
 				width: 120,

@@ -69,11 +69,11 @@ Ext.define('Ssp.view.admin.forms.campus.CampusAdmin', {
 	                      },
 						  { header: 'Name',  
     		                  dataIndex: 'name',
-    		                  flex: .95
+    		                  flex: 0.95
     		              },
     		              { header: 'Description',
     		                  dataIndex: 'description',
-    		                  flex: .95
+    		                  flex: 0.95
     		              },
     		              { header: 'Campus Code',
     		                  dataIndex: 'code'

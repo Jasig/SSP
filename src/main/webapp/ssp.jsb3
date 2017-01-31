@@ -385,6 +385,11 @@
                     "path": "/app/view/tools/accommodation/"
                 },
                 {
+                    "clsName": "Ssp.view.tools.accommodation.DisabilityTypes",
+                    "name": "DisabilityTypes.js",
+                    "path": "/app/view/tools/accommodation/"
+                },
+                {
                     "clsName": "Ssp.view.tools.accommodation.Accommodation",
                     "name": "Accommodation.js",
                     "path": "/app/view/tools/accommodation/"
@@ -705,6 +710,21 @@
                     "path": "/app/model/tool/studentintake/"
                 },
                 {
+                    "clsName": "Ssp.model.tool.studentintake.PersonEducationLevel",
+                    "name": "PersonEducationLevel.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.studentintake.PersonChallenge",
+                    "name": "PersonChallenge.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.studentintake.PersonFundingSource",
+                    "name": "PersonFundingSource.js",
+                    "path": "/app/model/tool/studentintake/"
+                },
+                {
                     "clsName": "Ssp.model.tool.journal.JournalEntryDetail",
                     "name": "JournalEntryDetail.js",
                     "path": "/app/model/tool/journal/"
@@ -747,6 +767,11 @@
                 {
                     "clsName": "Ssp.util.TreeRendererUtils",
                     "name": "TreeRendererUtils.js",
+                    "path": "/app/util/"
+                },
+                {
+                    "clsName": "Ssp.util.TemplateDataUtil",
+                    "name": "TemplateDataUtil.js",
                     "path": "/app/util/"
                 },
                 {
@@ -1510,6 +1535,11 @@
                     "path": "/app/controller/tool/sis/"
                 },
                 {
+                    "clsName": "Ssp.controller.tool.sis.AssessmentViewController",
+                    "name": "AssessmentViewController.js",
+                    "path": "/app/controller/tool/sis/"
+                },
+                {
                     "clsName": "Ssp.controller.tool.map.StudentCourseHistoryViewController",
                     "name": "StudentCourseHistoryViewController.js",
                     "path": "/app/controller/tool/map/"
@@ -1563,6 +1593,11 @@
                     "clsName": "Ssp.controller.admin.crg.EditReferralViewController",
                     "name": "EditReferralViewController.js",
                     "path": "/app/controller/admin/crg/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.cda.CDAAdminViewController",
+                    "name": "CDAAdminViewController.js",
+                    "path": "/app/controller/admin/cda/"
                 },
                 {
                     "clsName": "Ssp.controller.admin.cda.CDAEditViewController",
@@ -1690,8 +1725,28 @@
                     "path": "/app/model/"
                 },
                 {
+                    "clsName": "Ssp.model.reference.SelfHelpGuideQuestion",
+                    "name": "SelfHelpGuideQuestion.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.SelfHelpGuide",
+                    "name": "SelfHelpGuide.js",
+                    "path": "/app/model/reference/"
+                },
+                {
                     "clsName": "Ssp.model.FilterDiscreteValues",
                     "name": "FilterDiscreteValues.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.ApplicationForm",
+                    "name": "ApplicationForm.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.model.WatchStudent",
+                    "name": "WatchStudent.js",
                     "path": "/app/model/"
                 },
                 {
@@ -2359,13 +2414,12 @@
                     "name": "MapStatusTermDetail.js",
                     "path": "/app/model/tool/map/"
                 },                                                         
-                 {
+                {
                     "clsName": "Ssp.store.SemesterCourses",
                     "name": "SemesterCourses.js",
                     "path": "/app/store/"
                 },
-                
-                 {
+                {
                     "clsName": "Ssp.store.RegistrationStatusByTerm",
                     "name": "RegistrationStatusByTerm.js",
                     "path": "/app/store/"
@@ -2408,6 +2462,21 @@
                 {
                     "clsName": "Ssp.store.SearchChallengeReferral",
                     "name": "SearchChallengeReferral.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.RiskLevels",
+                    "name": "RiskLevels.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.PlanTemplates",
+                    "name": "PlanTemplates.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.store.ApplicationForms",
+                    "name": "ApplicationForms.js",
                     "path": "/app/store/"
                 },
                 {
@@ -2641,8 +2710,18 @@
                     "path": "/app/controller/admin/crg/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.crg.EditChallengeCategoryViewController",
+                    "name": "EditChallengeCategoryViewController.js",
+                    "path": "/app/controller/admin/crg/"
+                },
+                {
                     "clsName": "Ssp.model.tool.caseload.CaseloadReassignmentRequest",
                     "name": "CaseloadReassignmentRequest.js",
+                    "path": "/app/model/tool/caseload/"
+                },
+                {
+                    "clsName": "Ssp.model.tool.caseload.CaseloadReassignmentRequestStudent",
+                    "name": "CaseloadReassignmentRequestStudent.js",
                     "path": "/app/model/tool/caseload/"
                 },
                 {
@@ -2654,7 +2733,12 @@
                     "clsName": "Ssp.controller.tool.caseload.CaseloadReassignmentTargetViewController",
                     "name": "CaseloadReassignmentTargetViewController.js",
                     "path": "/app/controller/tool/caseload/"
-                },                
+                },
+                {
+                 "clsName": "Ssp.controller.admin.caseload.BulkAddCaseloadReassignmentViewController",
+                 "name": "BulkAddCaseloadReassignmentViewController.js",
+                 "path": "/app/controller/admin/caseload/"
+                },
                 {
                     "clsName": "Ssp.controller.admin.caseload.CaseloadReassignmentSourceViewController",
                     "name": "CaseloadReassignmentSourceViewController.js",
@@ -2668,6 +2752,11 @@
                 {
                     "clsName": "Ssp.view.admin.forms.caseload.CaseloadReassignmentTarget",
                     "name": "CaseloadReassignmentTarget.js",
+                    "path": "/app/view/admin/forms/caseload/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.caseload.BulkAddCaseloadReassignment",
+                    "name": "BulkAddCaseloadReassignment.js",
                     "path": "/app/view/admin/forms/caseload/"
                 },
                 {
@@ -3228,6 +3317,21 @@
                 {
                     "clsName": "Ssp.controller.admin.config.MessageTemplatesDisplayAdminViewController",
                     "name": "MessageTemplatesDisplayAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.EnrollmentStatusAdminViewController",
+                    "name": "EnrollmentStatusAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.CourseWorkHoursAdminViewController",
+                    "name": "CourseWorkHoursAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.RegistrationLoadAdminViewController",
+                    "name": "RegistrationLoadAdminViewController.js",
                     "path": "/app/controller/admin/config/"
                 },
                 {

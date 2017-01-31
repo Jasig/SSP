@@ -53,11 +53,11 @@ Ext.define('Ssp.view.admin.forms.config.MessageTemplatePreview', {
                 fieldLabel: 'Body',
                 name: 'body'
             }, {
-                xtype: 'panel'
-                ,id: 'bodyPanel'
-                ,html: me.getMessageTemplatePreviewData().get('body')
-                ,autoScroll: true
-                ,flex: 1
+                xtype: 'panel',
+                id: 'bodyPanel',
+                html: me.getMessageTemplatePreviewData().get('body'),
+                autoScroll: true,
+                flex: 1
             }],
             dockedItems: [{
                 xtype: 'toolbar',

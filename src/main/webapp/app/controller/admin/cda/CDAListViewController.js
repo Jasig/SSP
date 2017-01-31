@@ -26,7 +26,6 @@ Ext.define('Ssp.controller.admin.cda.CDAListViewController', {
         service: 'confidentialityDisclosureAgreementService',
         authenticatedPerson: 'authenticatedPerson'
     },
-
     control: {
         'isCDAEnabled': {
             listeners: {
@@ -38,18 +37,15 @@ Ext.define('Ssp.controller.admin.cda.CDAListViewController', {
         },
         'addButton': {
             click: 'addEditForm'
-        },
+        }
     },
-
     init: function() {
         this.store.load({
-            scope: this,
+            scope: this
         });
 
         return this.callParent(arguments);
     },
-
-
 
     //CDAListView double click event
     doubleClick: function(grid, record, item, index, e, eOpts) {
@@ -64,7 +60,7 @@ Ext.define('Ssp.controller.admin.cda.CDAListViewController', {
             closable: true,
             defaultType: 'textfield',
             bodyPadding: 10,
-            renderTo: Ext.getBody(),
+            renderTo: Ext.getBody()
         });
 
         popWindow.loadRecord(record);

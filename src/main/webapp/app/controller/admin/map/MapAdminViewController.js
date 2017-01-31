@@ -26,7 +26,7 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
         currentTemplate: 'currentMapPlan'
     },
     config: {
-        containerToLoadInto: 'adminforms',
+        containerToLoadInto: 'adminforms'
     },
     refs: [
            {
