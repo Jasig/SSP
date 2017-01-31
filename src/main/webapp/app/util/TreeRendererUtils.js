@@ -23,7 +23,6 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     	apiProperties: 'apiProperties',
     	treeStore: 'treeStore'
     },
-
 	initComponent: function() {
 		return this.callParent(arguments);
     },
@@ -116,16 +115,15 @@ Ext.define('Ssp.util.TreeRendererUtils',{
     createNodesFromJson: function(records, isLeaf, nodeType, enableCheckSelection, expanded, expandable, includeToolTip, toolTipFieldName, sortFunction){
 	    var me = this;
     	var nodeIdentifier = "";
-    	var enableCheckSelection = enableCheckSelection;
     	var nodes = [];
     	var nodeName = nodeType || "";
-    	if (nodeName != "")
-    	{
+    	if (nodeName != "") {
     		nodeIdentifier = '_' + nodeName;
     	}
 		
-		if(sortFunction && sortFunction != null)
+		if (sortFunction && sortFunction != null) {
     		records.sort(sortFunction);
+        }
 
     	Ext.each(records, function(name, index) {
     		var nodeData = {
@@ -138,8 +136,9 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 					qtitle: records[index].objectStatus
         	      };
         	
-        	if (enableCheckSelection && isLeaf==true)
+        	if (enableCheckSelection && isLeaf==true) {
         		nodeData['checked']=false;
+            }
         	
     		nodes.push( nodeData );
     	});
@@ -149,17 +148,16 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 
    setObsoleteText: function(record){
        var txt = "";
-		if(typeof record.extraObsoleteText !== "undefined"){
-		  if(record.objectStatus !== 'ACTIVE' && record.extraObsoleteText.length == 0){
+		if (typeof record.extraObsoleteText !== "undefined") {
+		  if (record.objectStatus !== 'ACTIVE' && record.extraObsoleteText.length == 0) {
 			  txt = ' (Inactive)';
-		  }else{
+		  } else {
 		     txt += record.extraObsoleteText;
 		  }
 		}
 		return txt;
 	}, 
-   
- 
+
     /*
      * Retrieves items to populate the tree store.
      * @args.url - The url for the request to get items
@@ -199,8 +197,7 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    	var r = Ext.decode(response.responseText);
 		    	var records = r.rows;
 		    	var nodes = [];
-		    	if (records.length > 0)
-		    	{
+		    	if (records.length > 0) {
 					if ( responseFilter ) {
 						records = responseFilter.apply(callbackScope, [records]);
 					};
@@ -214,18 +211,19 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 							toolTipFieldName,
 							sortFunction);
 		    		me.appendChildren( nodeToAppendTo, nodes);
-		    	}else{
+		    	} else {
 		    		me.appendChildren( nodeToAppendTo, []);
-		    		if (removeParentWhenNoChildrenExist==true)
-		    		{
+		    		if (removeParentWhenNoChildrenExist==true) {
 		    			nodeToAppendTo.remove(true);
 		    		}
 		    	}
 		    	
-	    		if (callbackFunc != null && callbackFunc != "")
+	    		if (callbackFunc != null && callbackFunc != "") {
 	    			callbackFunc( callbackScope, node );
+                }
 			}
 		});
+
 		return 1;
     },   
  
@@ -263,13 +261,12 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 			method: 'GET',
 			jsonData: '',
 			params: params,
-			successFunc: function(response,view){
+			successFunc: function(response,view) {
 		    	var r = Ext.decode(response.responseText);
 		    	var records = r.rows;
 				
 		    	var nodes = [];
-		    	if (records.length > 0)
-		    	{
+		    	if (records.length > 0) {
 		    		nodes = me.createNodesFromJson(records, 
 								isLeaf, 
 								nodeType, 
@@ -282,18 +279,19 @@ Ext.define('Ssp.util.TreeRendererUtils',{
 		    		
 					me.appendChildren( nodeToAppendTo, nodes);
 					
-		    	}else{
+		    	} else {
 		    		me.appendChildren( nodeToAppendTo, []);
-		    		if (removeParentWhenNoChildrenExist==true)
-		    		{
+		    		if (removeParentWhenNoChildrenExist==true) {
 		    			nodeToAppendTo.remove(true);
 		    		}
 		    	}
 		    	
-	    		if (callbackFunc != null && callbackFunc != "")
+	    		if (callbackFunc != null && callbackFunc != "") {
 	    			callbackFunc( callbackScope , node);
+                }
 			}
 		});
+
 		return 1;
     }
 });

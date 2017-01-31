@@ -36,7 +36,7 @@ Ext.define('Ssp.store.reference.Texts', {
 							params : {
 								page : 0,
 								start : 0,
-								limit : -1,
+								limit : -1
 							}
 						}
 		);

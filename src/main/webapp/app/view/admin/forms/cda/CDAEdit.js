@@ -28,14 +28,9 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
     inject: {
         apiProperties: 'apiProperties',
         authenticatedPerson: 'authenticatedPerson',
-
-
-
         formUtils: 'formRendererUtils',
         store: 'confidentialityDisclosureAgreementsStore',
-        service: 'confidentialityDisclosureAgreementService',
-
-
+        service: 'confidentialityDisclosureAgreementService'
     },
     initComponent: function() {
         var me = this;
@@ -58,8 +53,8 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                 fieldLabel: 'Active',
                 defaultType: 'checkboxfield',
                 items: [{
-                    //                    boxLabel  : '',
-                    name: 'enabled',
+                    //boxLabel  : '',
+                    name: 'enabled'
                 }]
             }, {
                 fieldLabel: 'Name',
@@ -85,7 +80,6 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                 anchor: '95% 80%',
                 name: 'text'
             }],
-
             dockedItems: [{
                 xtype: 'toolbar',
                 items: [{
@@ -94,7 +88,7 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                     hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
                     action: 'save',
                     //formBind: true,
-                    itemId: 'saveButton',
+                    itemId: 'saveButton'
                     //handler: this.savett
 
                 },'-',{
@@ -103,9 +97,8 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
                     hidden: !me.authenticatedPerson.hasAccess('CONFIDENTIALITY_AGREEMENT_ADMIN_SAVE_BUTTON'),
                     action: 'Cancel',
                     //formBind: true,
-                    itemId: 'cancelButton',
+                    itemId: 'cancelButton'
                     //handler: this.savett
-
                 }, {
                     xtype: 'label',
                     html: Ssp.util.Constants.DATA_SAVE_SUCCESS_MESSAGE,
@@ -153,7 +146,6 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
         var view = me.getEditFormView();
         view.setLoading(false);
 
-
         //reload the form
         me.store.load();
         me.formUtils.displaySaveSuccessMessage(me.getSaveSuccessMessage());
@@ -164,6 +156,5 @@ Ext.define('Ssp.view.admin.forms.cda.CDAEdit', {
         var view = me.getEditFormView();
         view.setLoading(false);
         me.getView().setLoading(false);
-    },
-
+    }
 });

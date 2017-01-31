@@ -26,23 +26,19 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
         service: 'confidentialityDisclosureAgreementService',
         authenticatedPerson: 'authenticatedPerson'
     },
-
     control: {
         'saveButton': {
             click: 'save'
         },
-        
 		'cancelButton': {
             click: 'closeWindow'
         },
-        
-
         saveSuccessMessage: '#saveSuccessMessage'
     },
 
     init: function() {
         this.store.load({
-            scope: this,
+            scope: this
         });
 
         return this.callParent(arguments);
@@ -60,7 +56,6 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
         var view = me.getEditFormView();
         view.loadRecord(model);
     },
-
 
     save: function(button, scope) {
         var record, jsonData;
@@ -89,7 +84,7 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
 		//Get the active window
 		var win = Ext.WindowManager.getActive();
 		if (win) {
-		win.close();
+		   win.close();
 		}
 	},
 
@@ -97,7 +92,6 @@ Ext.define('Ssp.controller.admin.cda.CDAEditViewController', {
         var me = scope;
         var view = me.getEditFormView();
         view.setLoading(false);
-
 
         //reload the form
         me.store.load();
