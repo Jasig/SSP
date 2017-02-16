@@ -26,6 +26,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+    <property name="schema" value="${database.schema}" />
     <property name="nvarchar.type" value="character varying" dbms="postgresql" />
     <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
 
@@ -271,8 +272,8 @@
 		            oldSchoolId = OLD.school_id;
 		        END IF;
 
-                IF (TG_OP = 'UPDATE') OR EXISTS (SELECT 1 FROM public.mv_directory_person WHERE school_id = NEW.school_id) THEN
-                    UPDATE public.mv_directory_person SET
+                IF (TG_OP = 'UPDATE') OR EXISTS (SELECT 1 FROM ${schema}.mv_directory_person WHERE school_id = NEW.school_id) THEN
+                    UPDATE ${schema}.mv_directory_person SET
                         id =                        subquery.id,
                         person_id =                 subquery.person_id,
                         object_status =             subquery.object_status,
@@ -365,10 +366,10 @@
                             vpd.next_term_registration_status,
                             vpd.config_low_indicators_count,
                             vpd.config_med_indicators_count
-                        FROM  public.v_directory_person AS vpd WHERE vpd.id=NEW.school_id) AS subquery
-                        WHERE public.mv_directory_person.id=oldSchoolId;
-                ELSIF NOT EXISTS (SELECT 1 FROM public.mv_directory_person WHERE school_id = NEW.school_id) THEN
-                    INSERT INTO public.mv_directory_person(
+                        FROM  ${schema}.v_directory_person AS vpd WHERE vpd.id=NEW.school_id) AS subquery
+                        WHERE ${schema}.mv_directory_person.id=oldSchoolId;
+                ELSIF NOT EXISTS (SELECT 1 FROM ${schema}.mv_directory_person WHERE school_id = NEW.school_id) THEN
+                    INSERT INTO ${schema}.mv_directory_person(
                         id,
                         person_id,
                         object_status,
@@ -460,7 +461,7 @@
                         vpd.next_term_registration_status,
                         vpd.config_low_indicators_count,
                         vpd.config_med_indicators_count
-                    FROM  public.v_directory_person AS vpd WHERE vpd.id=NEW.school_id);
+                    FROM  ${schema}.v_directory_person AS vpd WHERE vpd.id=NEW.school_id);
                 END IF;
                 RETURN NULL;
             END;
@@ -478,7 +479,7 @@
             CREATE OR REPLACE FUNCTION ${schema}.update_directory_person_from_view_where_person_id()
             RETURNS TRIGGER AS $$
             BEGIN
-		        IF EXISTS (SELECT 1 FROM public.mv_directory_person WHERE person_id = NEW.person_id) THEN
+		        IF EXISTS (SELECT 1 FROM ${schema}.mv_directory_person WHERE person_id = NEW.person_id) THEN
                     UPDATE ${schema}.mv_directory_person SET
                         id =                        subquery.id,
                         object_status =             subquery.object_status,
@@ -573,8 +574,8 @@
                         vpd.config_med_indicators_count
                     FROM  ${schema}.v_directory_person AS vpd WHERE vpd.person_id=NEW.person_id) AS subquery
                     WHERE ${schema}.mv_directory_person.person_id=NEW.person_id;
-                ELSIF NOT EXISTS (SELECT 1 FROM public.mv_directory_person WHERE person_id = NEW.person_id) THEN
-                    INSERT INTO public.mv_directory_person(
+                ELSIF NOT EXISTS (SELECT 1 FROM ${schema}.mv_directory_person WHERE person_id = NEW.person_id) THEN
+                    INSERT INTO ${schema}.mv_directory_person(
                         id,
                         person_id,
                         object_status,
@@ -666,7 +667,7 @@
                         vpd.next_term_registration_status,
                         vpd.config_low_indicators_count,
                         vpd.config_med_indicators_count
-                    FROM  public.v_directory_person AS vpd WHERE vpd.person_id=NEW.person_id);
+                    FROM  ${schema}.v_directory_person AS vpd WHERE vpd.person_id=NEW.person_id);
                 END IF;
                 RETURN NULL;
             END;
@@ -681,7 +682,7 @@
             DECLARE new_person_id uuid;
             BEGIN
                 new_person_id = (SELECT ea.person_id FROM early_alert ea WHERE ea.id = NEW.early_alert_id);
-		        IF EXISTS (SELECT 1 FROM public.mv_directory_person WHERE person_id = new_person_id) THEN
+		        IF EXISTS (SELECT 1 FROM ${schema}.mv_directory_person WHERE person_id = new_person_id) THEN
                     UPDATE ${schema}.mv_directory_person SET
                     id =                        subquery.id,
                     object_status =             subquery.object_status,
@@ -777,8 +778,8 @@
                     FROM  ${schema}.v_directory_person AS vpd
                         WHERE vpd.person_id=new_person_id) AS subquery
                     WHERE ${schema}.mv_directory_person.person_id=new_person_id;
-                ELSIF NOT EXISTS (SELECT 1 FROM public.mv_directory_person WHERE person_id = new_person_id) THEN
-                    INSERT INTO public.mv_directory_person(
+                ELSIF NOT EXISTS (SELECT 1 FROM ${schema}.mv_directory_person WHERE person_id = new_person_id) THEN
+                    INSERT INTO ${schema}.mv_directory_person(
                         id,
                         person_id,
                         object_status,
@@ -870,7 +871,7 @@
                         vpd.next_term_registration_status,
                         config_low_indicators_count,
                         config_med_indicators_count
-                    FROM  public.v_directory_person AS vpd WHERE vpd.person_id=new_person_id);
+                    FROM  ${schema}.v_directory_person AS vpd WHERE vpd.person_id=new_person_id);
                 END IF;
                 RETURN NULL;
             END;
