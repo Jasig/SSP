@@ -59,7 +59,6 @@ Ext.define('Ssp.view.admin.forms.map.AssociateElectiveCoursesAdmin', {
      				            tooltip: 'Delete elective course association',
      				            text: 'Delete',
      				            xtype: 'button',
-     				            hidden: !me.authenticatedPerson.hasAccess('STEP_DETAIL_ASSOCIATION_ADMIN_DELETE_BUTTON'),
      				            itemId: 'deleteAssociationButton'
      				        }]
      		    	    }]
