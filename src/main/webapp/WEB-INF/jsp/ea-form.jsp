@@ -38,7 +38,7 @@
 <c:set var="n"><portlet:namespace/></c:set>
 
 <script src="<c:url value="/js/libs/json2.js" />" type="text/javascript"></script>
-<script src="<rs:resourceURL value="/rs/jquery/1.6.1/jquery-1.6.1.min.js"/>" type="text/javascript"></script>
+<script src="<rs:resourceURL value="/rs/jquery/1.11.0/jquery-1.11.0.min.js"/>" type="text/javascript"></script>
 <script src="<rs:resourceURL value="/rs/jqueryui/1.8.13/jquery-ui-1.8.13.min.js"/>" type="text/javascript"></script>
 <script src="<c:url value="/js/early-alert-shared.js" />" type="text/javascript"></script>
 <script src="<c:url value="/js/early-alert-form.js" />" type="text/javascript"></script>
