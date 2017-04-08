@@ -22,6 +22,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.ObjectExistsException;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.PersonExistsException;
@@ -87,6 +88,9 @@ public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	private transient ExternalPersonService externalPersonService;
+
+    @Autowired
+    private transient DirectoryPersonSearchDao directoryPersonSearchDao;
 
 	@Autowired
 	private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
@@ -385,7 +389,9 @@ public class PersonServiceImpl implements PersonService {
      *
      * *NOTE*: If school_id is *not* in Person (internal), it then retrieves from external_person
      *    if exists and converts the record to a Person. If commit is true in that scenario,
-     *     it adds the record to internal data.
+     *     it adds the record to internal data. If commit is true it also if username
+     *      conflict is discovered (different school_ids between person and external_person
+     *      but the same username) it will resolve that issue.
      *
      * *WARNING*: Syncs person from external_person and syncs special_service_groups
      *  so it may be slow. Best use is when you need a completely up-to-date person
@@ -408,14 +414,28 @@ public class PersonServiceImpl implements PersonService {
 			return dao.getBySchoolId(schoolId);
 
 		} catch (final ObjectNotFoundException e) {
-			final ExternalPerson externalPerson = externalPersonService.getBySchoolId(schoolId);
+		    final ExternalPerson externalPerson = externalPersonService.getBySchoolId(schoolId);
 
             if (externalPerson == null) {
 				throw new ObjectNotFoundException("Unable to find person by schoolId: " + schoolId, "Person");
 			}
 
-			final Person person = new Person();
-			evict(person);
+            Person person = null;
+            //Check if internal/external records have same username but different school_id;
+            //  left unhandled will cause error below in updatePersonFromExternalPerson if commit is true.
+            try {
+                person = dao.getByUsername(externalPerson.getUsername());
+            } catch (ObjectNotFoundException ofne) {
+                //continue no mismatch/or external-only
+            }
+
+            if (person == null) {
+                person = new Person(); //no mismatch/or external-only
+                evict(person);
+            } else {
+                directoryPersonSearchDao.purgeDuplicateRecord(externalPerson.getSchoolId(), externalPerson.getUsername()); //duplicate found purge from mv directory person otherwise will block update
+            }
+
 			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
 
             if (commitPerson) {

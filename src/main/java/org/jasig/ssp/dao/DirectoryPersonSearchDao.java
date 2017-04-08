@@ -132,6 +132,22 @@ public class DirectoryPersonSearchDao  {
         return querySet.getFirst();
     }
 
+	public void purgeDuplicateRecord(final String schoolId, final String username) {
+        LOGGER.info("Purging Duplicate Username Student Record with username:{} and school_id:{}", username, schoolId);
+        try {
+            final Query query = sessionFactory.getCurrentSession().createSQLQuery(
+            		"delete from mv_directory_person where username = \'" + username +
+							"\' and  school_id = \'" + schoolId + "\' and id = \'" + schoolId + "\';");
+            if (query.executeUpdate() > 0) {
+                LOGGER.debug("Purging Duplicate in DirectoryPerson Complete!");
+            } else {
+                LOGGER.debug("Purging Duplicate in DirectoryPerson Failed, no record found!");
+            }
+        } catch(Exception exp) {
+            LOGGER.debug("ERROR Purging Duplicate in DirecctoryPerson: ", exp.getMessage());
+        }
+	}
+
 	/**
 	 * Search people by the specified terms.
 	 *

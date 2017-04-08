@@ -114,6 +114,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 			LOGGER.info("Abandoning Special Service Group Course Withdrawal Advisor Email Task because of thread interruption");
 			return;
 		}
+
 		int recordsProcessed = 0;
 		int batch = 0;
 		Exception error = null;
@@ -230,34 +231,37 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 	public Pair<Long, Long> processCoach(SortingAndPaging sAndP) {
 		long coachCnt = 0;
 		final PagingWrapper<Person> coaches = personService.getAllAssignedCoaches(null);
+
 		for (final Person coach : coaches.getRows()) {
 			coachCnt++;
-			String courseEnrollmentStatusCodesChanges = configService.getByNameEmpty(CONFIG_COURSE_ENROLLMENT_STATUS_CODE_CHANGES).trim();
+			final String courseEnrollmentStatusCodesChanges = configService.getByNameEmpty(CONFIG_COURSE_ENROLLMENT_STATUS_CODE_CHANGES).trim();
 			if (courseEnrollmentStatusCodesChanges.equals("")) {
 				LOGGER.info("Special Service Group Course Withdrawal Advisor Email Task will not execute because the property course_enrollment_status_code_changes is not set");
 				return new Pair(0L, 0L);
 			}
 
-			String[] courseEnrollmentStatusCodesChangesArray = courseEnrollmentStatusCodesChanges.split(",");
+			final String[] courseEnrollmentStatusCodesChangesArray = courseEnrollmentStatusCodesChanges.split(",");
 
 			LOGGER.info("BEGIN : SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
+			final Calendar startTime = Calendar.getInstance();
 
-			Calendar startTime = Calendar.getInstance();
-
-			List<SpecialServiceGroup> specialServiceGroups = getSpecialServiceGroupsToNotify();
+			final List<SpecialServiceGroup> specialServiceGroups = getSpecialServiceGroupsToNotify();
 			if (specialServiceGroups.size() > 0) {
-				List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students = new ArrayList<>();
+
+				final List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students = new ArrayList<>();
 				for (PersonSearchResult2 personSearchResult2 : getAllStudentsForCoach(coach, specialServiceGroups, configService.getByNameOrDefaultValue(CONFIG_ADD_STUDENT_SSG_COURSE_WITHDRAWAL_EMAIL))) {
 					try {
-						List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
-						Person person = personService.getInternalOrExternalPersonBySchoolId(personSearchResult2.getSchoolId(), false);
+						final List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
+						Person person = personService.getInternalOrExternalPersonBySchoolIdLite(personSearchResult2.getSchoolId());
+
 						boolean studentAddedToSSP = false;
 						if (person.getId()==null) {
-							person = personService.getInternalOrExternalPersonBySchoolId(personSearchResult2.getSchoolId(), true);
+							person = personService.getInternalOrExternalPersonBySchoolId(personSearchResult2.getSchoolId(), true); //valid use since adding external to ssp
 
 							studentAddedToSSP = true;
 						}
-						Collection<PersonCourseStatus> personCourseStatuses = personCourseStatusDao.getAllForPerson(person);
+
+						final Collection<PersonCourseStatus> personCourseStatuses = personCourseStatusDao.getAllForPerson(person);
 						for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : externalStudentTranscriptCourseService.getTranscriptsBySchoolId(person.getSchoolId())) {
 							PersonCourseStatus personCourseStatus = getPersonCourseStatus(externalStudentTranscriptCourse, personCourseStatuses);
 							if (personCourseStatus != null) {
@@ -289,7 +293,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 				LOGGER.info("No special service groups to notify on withdrawal found in SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
 			}
 
-			Calendar endTime = Calendar.getInstance();
+			final Calendar endTime = Calendar.getInstance();
 			LOGGER.info("SpecialServiceGroupCourseWithdrawalAdvisorEmailTask REPORT RUNTIME: " + (endTime.getTimeInMillis() - startTime.getTimeInMillis()) + " ms.");
 			LOGGER.info("END : SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
 		}
@@ -297,24 +301,27 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 	}
 
 	private PersonCourseStatus createPersonCourseStatus(ExternalStudentTranscriptCourse externalStudentTranscriptCourse, Person person) {
-		PersonCourseStatus personCourseStatus = new PersonCourseStatus();
+		final PersonCourseStatus personCourseStatus = new PersonCourseStatus();
 		personCourseStatus.setPerson(person);
 		personCourseStatus.setObjectStatus(ObjectStatus.ACTIVE);
 		personCourseStatus.setTermCode(externalStudentTranscriptCourse.getTermCode());
 		personCourseStatus.setFormattedCourse(externalStudentTranscriptCourse.getFormattedCourse());
 		personCourseStatus.setSectionCode(externalStudentTranscriptCourse.getSectionCode());
 		personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode());
+
 		return personCourseStatus;
 	}
 
 	private PersonCourseStatus getPersonCourseStatus(ExternalStudentTranscriptCourse externalStudentTranscriptCourse, Collection<PersonCourseStatus> personCourseStatuses) {
-		for (PersonCourseStatus personCourseStatus : personCourseStatuses) {
+		for (final PersonCourseStatus personCourseStatus : personCourseStatuses) {
 			if (externalStudentTranscriptCourse.getTermCode().equals(personCourseStatus.getTermCode()) &&
 				externalStudentTranscriptCourse.getFormattedCourse().equals(personCourseStatus.getFormattedCourse()) &&
 				externalStudentTranscriptCourse.getSectionCode().equals(personCourseStatus.getSectionCode())) {
+
 				return personCourseStatus;
 			}
 		}
+
 		return null;
 	}
 
@@ -324,21 +331,25 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 		} catch (ObjectNotFoundException e) {
 			LOGGER.info("Special Service Group Course Withdrawal Advisor Email Task has no special service groups to notify.");
 		}
+
 		return null;
 	}
 
 	private Collection<PersonSearchResult2> getAllStudentsForCoach (Person coach, List<SpecialServiceGroup> specialServiceGroups, boolean addStudentToSSP) {
-		PersonSearchRequest personSearchRequest = new PersonSearchRequest();
+		final PersonSearchRequest personSearchRequest = new PersonSearchRequest();
 		personSearchRequest.setCoach(coach);
 		personSearchRequest.setSpecialServiceGroup(specialServiceGroups);
+
 		if (addStudentToSSP) {
 			personSearchRequest.setPersonTableType(PersonSearchRequest.PERSON_TABLE_TYPE_ANYWHERE);
 		} else {
 			personSearchRequest.setPersonTableType(PersonSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY);
 		}
+
 		personSearchRequest.setSortAndPage(SortingAndPaging
 				.createForSingleSortWithPaging(ObjectStatus.ALL, 0, -1, "dp.lastName",
 						SortDirection.ASC.toString(), null));
+
 		return personSearchService.searchPersonDirectory(personSearchRequest).getRows();
 	}
 
@@ -348,11 +359,13 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	private void sendEmail(Person coach, List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students) {
-		SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
+		final SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
+
 		try {
 			messageService.createMessage(coach.getPrimaryEmailAddress(), null, subjectAndBody);
 		} catch ( ObjectNotFoundException | ValidationException e) {
