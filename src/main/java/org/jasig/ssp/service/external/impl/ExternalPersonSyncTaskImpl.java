@@ -21,6 +21,7 @@ package org.jasig.ssp.service.external.impl;
 import com.google.common.collect.Maps;
 import org.hibernate.FlushMode;
 import org.hibernate.SessionFactory;
+import org.jasig.ssp.dao.DirectoryPersonSearchDao;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -74,6 +75,9 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
 	@Autowired
 	private transient ExternalPersonDao dao;
+
+	@Autowired
+    private transient DirectoryPersonSearchDao directoryPersonSearchDao;
 
 	@Autowired
 	private WithTransaction withTransaction;
@@ -310,7 +314,47 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 
             // update person special service groups from external student special service groups
             externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
+
+            //remove from internal set (used below)
+            internalPeopleSchoolIds.remove(person.getSchoolId());
 		}
+
+		//process people not found by school_id to hopefully find them by username
+		if (internalPeopleSchoolIds.size() > 0) {
+		    LOGGER.debug("There were " + (peopleBySchoolId.size() - externalPeople.getResults()) +
+                    " internal people not found in external records!");
+
+            final Map<String, Person> peopleByUsername = Maps.newHashMap();
+            for (String schoolId : internalPeopleSchoolIds) {
+                peopleByUsername.put(peopleBySchoolId.get(schoolId).getUsername(), peopleBySchoolId.get(schoolId));
+            }
+
+            // fetch external people by username
+            final PagingWrapper<ExternalPerson> externalPeopleByUsername =
+                    dao.getByUsernames(peopleByUsername.keySet(),SortingAndPaging.createForSingleSortWithPaging(
+                            ObjectStatus.ACTIVE, 0, sAndP.getMaxResults(),"schoolId",
+                            SortDirection.ASC.toString(), null));
+
+            for (final ExternalPerson externalPerson2 : externalPeopleByUsername) {
+                if ( Thread.currentThread().isInterrupted() ) {
+                    LOGGER.info("Abandoning external person sync because of thread interruption on person {}",
+                            externalPerson2.getUsername());
+                    throw new InterruptedException();
+                }
+
+                LOGGER.debug("Looking for internal person by external person username since not found by schoolId {}", externalPerson2.getUsername());
+                final Person person2 = peopleByUsername.get(externalPerson2.getUsername());
+
+                if (person2 != null) {
+                    internalPeopleSchoolIds.remove(person2.getSchoolId());
+                    directoryPersonSearchDao.purgeDuplicateRecord(externalPerson2.getSchoolId(), externalPerson2.getUsername()); //duplicate found purge from mv directory person otherwise will block update
+                    externalPersonService.updatePersonFromExternalPerson(person2, externalPerson2, true);
+                    externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person2);
+                }
+            }
+
+            LOGGER.trace("Couldn't find the following by schoolId or username in external person: {" + internalPeopleSchoolIds.toString() + "}");
+        }
 
 		return new Pair(peopleCnt, people.getResults());
 	}

@@ -281,8 +281,7 @@ public class PersonEarlyAlertController extends
 		try {
 			personId = UUID.fromString(studentId); // NOPMD by jon.adams
 		} catch (final IllegalArgumentException exc) {
-			final Person person = personService.getInternalOrExternalPersonBySchoolId(studentId,false); //TODO: Method is slow (full sync) refactor?
-
+			final Person person = personService.getInternalOrExternalPersonBySchoolId(studentId, true); //Changing this to add an external-only student and sync
 			if (person == null) {
 				throw new ObjectNotFoundException(
 						null, "Person", exc);
