@@ -727,8 +727,8 @@
                     current_registration_status = subquery.current_registration_status,
                     campus_name =               subquery.campus_name,
                     next_term_registration_status = subquery.next_term_registration_status,
-                    config_low_indicators_count = subquery.vpd.config_low_indicators_count,
-                    config_med_indicators_count = subquery.vpd.config_med_indicators_count
+                    config_low_indicators_count = subquery.config_low_indicators_count,
+                    config_med_indicators_count = subquery.config_med_indicators_count
                     FROM (SELECT
                         vpd.id,
                         vpd.object_status,
