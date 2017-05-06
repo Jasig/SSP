@@ -236,7 +236,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 		for (final Person coach : coaches.getRows()) {
 			coachCnt++;
 			final String courseEnrollmentStatusCodesChanges = configService.getByNameEmpty(CONFIG_COURSE_ENROLLMENT_STATUS_CODE_CHANGES).trim();
-			if (courseEnrollmentStatusCodesChanges.equals("")) {
+			if (StringUtils.isBlank(courseEnrollmentStatusCodesChanges)) {
 				LOGGER.info("Special Service Group Course Withdrawal Advisor Email Task will not execute because the property course_enrollment_status_code_changes is not set");
 				return new Pair(0L, 0L);
 			}
@@ -267,24 +267,32 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 						for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : externalStudentTranscriptCourseService.getTranscriptsBySchoolId(person.getSchoolId())) {
 							PersonCourseStatus personCourseStatus = getPersonCourseStatus(externalStudentTranscriptCourse, personCourseStatuses);
 							if (personCourseStatus != null) {
-								if (isCourseWithdrawn(externalStudentTranscriptCourse, personCourseStatus, courseEnrollmentStatusCodesChangesArray)) {
-									LOGGER.trace("Found withdrawn course!");
-								    courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs
-											.add(new CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(externalStudentTranscriptCourse, personCourseStatus.getStatusCode()));
-								}
-								if (!personCourseStatus.getStatusCode().equals(externalStudentTranscriptCourse.getStatusCode())) {
-									LOGGER.trace("Updating existing PersonCourseStatus Record... ");
-								    personCourseStatus.setPreviousStatusCode(personCourseStatus.getStatusCode());
-									personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode());
-									personCourseStatusDao.save(personCourseStatus);
-								}
+							    if (StringUtils.isNotBlank(externalStudentTranscriptCourse.getStatusCode())) {
+                                    if (isCourseWithdrawn(externalStudentTranscriptCourse, personCourseStatus, courseEnrollmentStatusCodesChangesArray)) {
+                                        LOGGER.trace("Found withdrawn course!");
+                                        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs
+                                                .add(new CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(externalStudentTranscriptCourse, personCourseStatus.getStatusCode()));
+                                    }
+                                    if (!personCourseStatus.getStatusCode().equals(externalStudentTranscriptCourse.getStatusCode().trim())) {
+                                        LOGGER.trace("Updating existing PersonCourseStatus Record... ");
+                                        personCourseStatus.setPreviousStatusCode(personCourseStatus.getStatusCode());
+                                        personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode().trim());
+                                        personCourseStatusDao.save(personCourseStatus);
+                                    }
+                                } else {
+                                    LOGGER.debug("Can't update an existing Person Course Status record since the external transcript course status_code is missing for:" +
+                                            " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
+                                            "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
+                                            "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
+                                            "]!");
+                                }
 							} else {
 							    LOGGER.trace("Creating new PersonCourseStatus Record...");
 								personCourseStatus = createPersonCourseStatus(externalStudentTranscriptCourse, person);
 								if (personCourseStatus != null) {
                                     personCourseStatusDao.save(personCourseStatus);
                                 } else {
-                                    LOGGER.debug("Can't record Course Status since external record is incomplete for:" +
+                                    LOGGER.debug("Can't record a new Person Course Status since the external transcript course record is incomplete for:" +
                                             " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
                                             "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
                                             "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
@@ -323,10 +331,10 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
             final PersonCourseStatus personCourseStatus = new PersonCourseStatus();
             personCourseStatus.setPerson(person);
             personCourseStatus.setObjectStatus(ObjectStatus.ACTIVE);
-            personCourseStatus.setTermCode(externalStudentTranscriptCourse.getTermCode());
-            personCourseStatus.setFormattedCourse(externalStudentTranscriptCourse.getFormattedCourse());
-            personCourseStatus.setSectionCode(externalStudentTranscriptCourse.getSectionCode());
-            personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode());
+            personCourseStatus.setTermCode(externalStudentTranscriptCourse.getTermCode().trim());
+            personCourseStatus.setFormattedCourse(externalStudentTranscriptCourse.getFormattedCourse().trim());
+            personCourseStatus.setSectionCode(externalStudentTranscriptCourse.getSectionCode().trim());
+            personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode().trim());
 
             return personCourseStatus;
 
@@ -380,9 +388,15 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 
 	private boolean isCourseWithdrawn(ExternalStudentTranscriptCourse externalStudentTranscriptCourse, PersonCourseStatus personCourseStatus, String[] courseEnrollmentStatusCodesChanges) {
 		for (String courseEnrollmentStatusCodeChange : courseEnrollmentStatusCodesChanges) {
-			if ((personCourseStatus.getStatusCode() + "|" + externalStudentTranscriptCourse.getStatusCode()).equals(courseEnrollmentStatusCodeChange.trim()) ) {
-				return true;
-			}
+			if (StringUtils.isNotBlank(courseEnrollmentStatusCodeChange) && courseEnrollmentStatusCodeChange.contains("|")) {
+                if ((personCourseStatus.getStatusCode() + "|" + externalStudentTranscriptCourse.getStatusCode().trim()).equals(courseEnrollmentStatusCodeChange.trim())) {
+                    return true;
+                }
+            } else {
+			    LOGGER.info("WARN: Possible error in configuration: [" + CONFIG_COURSE_ENROLLMENT_STATUS_CODE_CHANGES + "] " +
+                        "for value: [" + courseEnrollmentStatusCodeChange + "]. Make sure each value is of format X|Y and " +
+                        "multiple elements are separated by commas.");
+            }
 		}
 
 		return false;
