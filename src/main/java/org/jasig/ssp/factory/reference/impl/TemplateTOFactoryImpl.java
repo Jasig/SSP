@@ -131,6 +131,8 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 		MapTemplateTagTO mapTemplateTagTO = tObject.getMapTemplateTag();
 		if (mapTemplateTagTO!=null) {
 			model.setMapTemplateTag(getMapTemplateTagTOFactory().from(tObject.getMapTemplateTag()));
+		} else {
+			model.setMapTemplateTag(null);
 		}
 		return model;
 	}

@@ -286,6 +286,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			simpleData.visibility = me.get('visibility');
 			if (me.get('mapTemplateTag')) {
     			simpleData.mapTemplateTag = me.get('mapTemplateTag').getData();
+			} else {
+			    simpleData.mapTemplateTag = null;
 			}
 		}else{
 			simpleData.personId = me.get('personId');
