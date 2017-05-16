@@ -78,6 +78,9 @@ Ext.define('Ssp.model.tool.map.Plan', {
 	hasMany:[{model: 'Ssp.model.tool.map.PlanCourse',
 				name: 'planCourses',
 				associationKey: 'planCourses'},
+			{model: 'Ssp.model.tool.map.PlanElectiveCourse',
+   				name: 'planElectiveCourses',
+   				associationKey: 'planElectiveCourses'},
 			{model: 'Ssp.model.tool.map.PlanCourse',
 		    	name: 'templateCourses',
 		    	associationKey: 'templateCourses'},
@@ -275,14 +278,14 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.catalogYearCode = me.get('catalogYearCode');
 		simpleData.planCourses = me.get('planCourses');
 		simpleData.planElectiveCourses = me.get('planElectiveCourses');
-		
+
 		if(me.get('isTemplate')){
 			simpleData.departmentCode = me.get('departmentCode');
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
 			if (me.get('mapTemplateTag')) {
-    			simpleData.mapTemplateTag = me.get('mapTemplateTag');
+    			simpleData.mapTemplateTag = me.get('mapTemplateTag').getData();
 			}
 		}else{
 			simpleData.personId = me.get('personId');
