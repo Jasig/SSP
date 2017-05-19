@@ -1632,7 +1632,7 @@ Ext.onReady(function(){
 					planTemplatesStore: {
 						fn: function(){
 							return Ext.create('Ssp.store.PlanTemplates', {
-							     storeId: 'planTemplatesSummaryStore'
+							     storeId: 'planTemplatesStore'
 							});
 						},
 						singleton: true

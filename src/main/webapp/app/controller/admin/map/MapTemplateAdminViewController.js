@@ -16,33 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-
-Ext.define('Ssp.view.admin.forms.map.MapTemplatesAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.maptemplatesadmin',
-	title: 'MAP Templates',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.admin.map.MapTemplateAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'hbox',
-        align: 'stretch'
+Ext.define('Ssp.controller.admin.map.MapTemplateAdminViewController', {
+    extend: 'Deft.mvc.ViewController',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+    	planTemplatesStore: 'planTemplatesStore'
     },
-    initComponent: function(){
-		Ext.apply(this,{
-	          items: [
-	                  {
-							xtype: 'maptemplatesfilteradmin',
-							flex: 0.4
-	                  },
-	                  {
-		                  	xtype: 'maptemplateslistadmin', 
-		                  	flex: 0.6
-		              }
-	          ]});
-    	return this.callParent(arguments);
+	init: function() {
+        var me = this;
+//        me.planTemplatesStore.load();
+		return me.callParent(arguments);
     }
 });

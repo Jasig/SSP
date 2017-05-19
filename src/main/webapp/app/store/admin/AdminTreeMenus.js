@@ -1308,8 +1308,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     title: 'Template Manager',
                     store: 'planTemplatesSummary',
                     form: 'maptemplatesadmin',
-                    leaf: true,
-                    addButtonVisible: false
+                    leaf: true
                 }]
             }]
         };

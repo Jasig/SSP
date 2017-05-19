@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
+Ext.define('Ssp.controller.admin.map.MapTemplateListAdminViewController', {
     extend: 'Deft.mvc.ViewController',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties',
-		store: 'planTemplatesStore',
+		store: 'planTemplatesSummaryStore',
         formUtils: 'formRendererUtils',
         currentTemplate: 'currentMapPlan'
     },
@@ -100,8 +100,8 @@ Ext.define('Ssp.controller.admin.map.MapAdminViewController', {
     displayEditor: function(){
         var comp = this.formUtils.loadDisplay(this.getContainerToLoadInto(), this.getFormToDisplay(), true, {});
     },
-    
-    onGetTemplateSuccess: function(response, t) {    	
+
+    onGetTemplateSuccess: function(response, t) {
     	var me = t;
     	var callbacks = new Object();
     	callbacks.success = me.onLoadCompleteSuccess;
