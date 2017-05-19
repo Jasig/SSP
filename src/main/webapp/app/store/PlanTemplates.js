@@ -19,11 +19,11 @@
 Ext.define('Ssp.store.PlanTemplates', {
     extend: 'Ext.data.Store',
     model: 'Ssp.model.tool.map.Plan',
-    groupField: 'visibility',
     mixins: [ 'Deft.mixin.Injectable' ],
     inject: {
         apiProperties: 'apiProperties'
     },
+	remoteSort: true,
 	constructor: function(args){
         var me = this;
 		Ext.apply(me, {
@@ -36,13 +36,6 @@ Ext.define('Ssp.store.PlanTemplates', {
                 start : 0,
                 limit : me.apiProperties.getPagingSize()
             },
-            sorters: [{
-             property: 'name',
-             direction: 'ASC'
-            }, {
-             property: 'modifiedDate',
-             direction: 'DESC'
-            }],
             extraParams: this.extraParams
 		});
 

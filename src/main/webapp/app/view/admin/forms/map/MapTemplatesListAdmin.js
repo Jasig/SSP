@@ -25,7 +25,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 	title : 'MAP Templates Admin (Select checkboxes to Activate/DeActivate)',
 	mixins : [ 'Deft.mixin.Injectable',
 			'Deft.mixin.Controllable' ],
-	controller : 'Ssp.controller.admin.map.MapAdminViewController',
+	controller : 'Ssp.controller.admin.map.MapTemplateListAdminViewController',
 	inject : {
 		apiProperties : 'apiProperties',
 		authenticatedPerson : 'authenticatedPerson',
@@ -34,7 +34,8 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 		departmentsStore: 'departmentsStore',
 		divisionsStore: 'divisionsStore',
 		catalogYearsStore: 'catalogYearsStore',
-		textStore: 'sspTextStore'
+		textStore: 'sspTextStore',
+		store: 'planTemplatesSummaryStore'
 	},
 	height : '100%',
 	width : '100%',
@@ -152,11 +153,11 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 
 			}],
 			dockedItems: [{
-				xtype: 'pagingtoolbar',
-				dock: 'bottom',
-				displayInfo: true,
-				pageSize: me.apiProperties.getPagingSize()
-			}, {
+//				xtype: 'pagingtoolbar',
+//				dock: 'bottom',
+//				displayInfo: true,
+//				pageSize: me.apiProperties.getPagingSize()
+//			}, {
 				xtype: 'toolbar',
 				items: [{
 					text: 'Edit Template Elective Courses',
