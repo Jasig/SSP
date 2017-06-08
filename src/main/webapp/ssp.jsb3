@@ -1615,8 +1615,13 @@
                     "path": "/app/controller/admin/map/"
                 },
                 {
-                    "clsName": "Ssp.controller.admin.map.MapAdminViewController",
-                    "name": "MapAdminViewController.js",
+                    "clsName": "Ssp.controller.admin.map.MapTemplateAdminViewController",
+                    "name": "MapTemplateAdminViewController.js",
+                    "path": "/app/controller/admin/map/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.map.MapTemplateListAdminViewController",
+                    "name": "MapTemplateListAdminViewController.js",
                     "path": "/app/controller/admin/map/"
                 },
                 {
