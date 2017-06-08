@@ -164,7 +164,7 @@ public class PersonSearchRequest {
 	}
 	
 	public List<String> getProgramStatusNames() {
-		ArrayList<String> retVal = new ArrayList<String>();
+		final List<String> retVal = Lists.newArrayList();
 		for(ProgramStatus ps: programStatus) {
 			retVal.add(ps.getName());
 		}
@@ -181,8 +181,9 @@ public class PersonSearchRequest {
 	
 	public void setProgramStatus(ProgramStatus programStatus) {
 		if (programStatus != null) {
-            ArrayList<ProgramStatus> psList = new ArrayList<ProgramStatus>();
+            final List<ProgramStatus> psList = Lists.newArrayList();
             psList.add(programStatus);
+
             this.programStatus = psList;
         }
 	}
@@ -192,7 +193,7 @@ public class PersonSearchRequest {
 	}
 
 	public List<String> getHomeCampusNames() {
-		ArrayList<String> retVal = new ArrayList<String>();
+		final ArrayList<String> retVal = Lists.newArrayList();
 		for(Campus ps: homeCampus) {
 			retVal.add(ps.getName());
 		}
@@ -209,8 +210,9 @@ public class PersonSearchRequest {
 
 	public void setHomeCampus(Campus homeCampus) {
 		if (homeCampus != null) {
-			ArrayList<Campus> psList = new ArrayList<Campus>();
+			final List<Campus> psList = Lists.newArrayList();
 			psList.add(homeCampus);
+
 			this.homeCampus = psList;
 		}
 	}
@@ -228,8 +230,9 @@ public class PersonSearchRequest {
 	
 	public void setSpecialServiceGroup(SpecialServiceGroup specialServiceGroup) {
 		if (specialServiceGroup != null) {
-            List<SpecialServiceGroup> specialServiceGroupList = new ArrayList<SpecialServiceGroup>();
+            final List<SpecialServiceGroup> specialServiceGroupList = Lists.newArrayList();
             specialServiceGroupList.add(specialServiceGroup);
+
             this.specialServiceGroup = specialServiceGroupList;
         }
 	}
@@ -248,8 +251,9 @@ public class PersonSearchRequest {
 
     public void setCoach(Person coach) {
         if (coach != null) {
-            List<Person> coachList = Lists.newArrayList();
+            final List<Person> coachList = Lists.newArrayList();
             coachList.add(coach) ;
+
             this.coach = coachList;
         }
     }
@@ -268,11 +272,13 @@ public class PersonSearchRequest {
 	
 	public void setDeclaredMajor(String declaredMajor) {
 		if (StringUtils.isNotEmpty(declaredMajor)) {
-			List<String> items = Arrays.asList(declaredMajor.split("\\s*,\\s*"));
-			ArrayList<String> declaredMajorList = new ArrayList<String>();
+			final List<String> items = Arrays.asList(declaredMajor.split("\\s*,\\s*"));
+			final List<String> declaredMajorList = Lists.newArrayList();
+
 			for (String item: items) {
 				declaredMajorList.add(item);
 			}
+
 			this.declaredMajor = declaredMajorList;
 		}
 	}	
@@ -480,7 +486,45 @@ public class PersonSearchRequest {
 
 
 	public void setPersonTableType(String personTableType) {
-		this.personTableType = personTableType;
+        if (StringUtils.isNotEmpty(personTableType)) {
+            final List<String> items = Arrays.asList(personTableType.split("\\s*,\\s*"));
+            boolean externalOnly = false;
+            boolean internalOnly = false;
+            boolean anywhere = false;
+
+            for (String item: items) {
+                if (item.trim().toUpperCase().equals(PERSON_TABLE_TYPE_ANYWHERE)) {
+                    anywhere = true;
+                    break; //trying to determine if a combo equals anywhere, so break if anywhere found first
+                } else if (item.trim().toUpperCase().equals(PERSON_TABLE_TYPE_SSP_ONLY)) {
+                    if (externalOnly) {
+                        anywhere = true;
+                        break;
+                    } else {
+                        internalOnly = true;
+                    }
+                } else if (item.trim().toUpperCase().equals(PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
+                    if (internalOnly) {
+                        anywhere = true;
+                        break;
+                    } else {
+                        externalOnly = true;
+                    }
+                } else {
+                    anywhere = true; //default if string doesn't match
+                }
+            }
+
+            if (internalOnly && !anywhere && !externalOnly) {
+                this.personTableType = PERSON_TABLE_TYPE_SSP_ONLY;
+            } else if (externalOnly && !anywhere && !internalOnly) {
+                this.personTableType = PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY;
+            } else {
+                this.personTableType = PERSON_TABLE_TYPE_ANYWHERE; //currently the default
+            }
+        } else {
+            this.personTableType = PERSON_TABLE_TYPE_ANYWHERE; //if null or empty set to anywhere the default
+        }
 	}
 
 
