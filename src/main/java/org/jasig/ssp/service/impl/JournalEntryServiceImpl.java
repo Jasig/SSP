@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.JournalEntryDao;
 import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.model.JournalEntry;
@@ -126,26 +127,29 @@ public class JournalEntryServiceImpl
 	
  	@Override
  	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) throws ObjectNotFoundException{
- 		 List<JournalCaseNotesStudentReportTO> personsWithJournalEntries = dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm, sAndP);
- 		 Map<String, JournalCaseNotesStudentReportTO> map = new HashMap<String, JournalCaseNotesStudentReportTO>();
+ 		 final List<JournalCaseNotesStudentReportTO> personsWithJournalEntries = dao.getJournalCaseNoteStudentReportTOsFromCriteria(personSearchForm, sAndP);
+ 		 final Map<String, JournalCaseNotesStudentReportTO> map = new HashMap<String, JournalCaseNotesStudentReportTO>();
+
  		 for(JournalCaseNotesStudentReportTO entry:personsWithJournalEntries){
  			 map.put(entry.getSchoolId(), entry);
  		 }
-		 SortingAndPaging personSAndP = SortingAndPaging.createForSingleSortAll(ObjectStatus.ACTIVE, "lastName", "DESC") ;
-		 
- 		 PagingWrapper<BaseStudentReportTO> persons = personDao.getStudentReportTOs(personSearchForm, personSAndP);
+
+ 		 final SortingAndPaging personSAndP = SortingAndPaging.createForSingleSortAll(ObjectStatus.ACTIVE, "lastName", "DESC") ;
+ 		 final PagingWrapper<BaseStudentReportTO> persons = personDao.getStudentReportTOs(personSearchForm, personSAndP);
  		
- 		 if(persons == null) {
+ 		 if (persons == null) {
  			 return personsWithJournalEntries;
  		 }
- 		 for(BaseStudentReportTO person:persons){
-			 if(!map.containsKey(person.getSchoolId()) && person.getCoachSchoolId() != null){
- 				 JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
+
+ 		 for (BaseStudentReportTO person:persons) {
+			 if (!map.containsKey(person.getSchoolId()) && StringUtils.isNotBlank(person.getCoachSchoolId())) {
+ 				 final JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
 				 personsWithJournalEntries.add(entry);
 				 map.put(entry.getSchoolId(), entry);
  			}
  		 }
 		 sortByStudentName(personsWithJournalEntries);
+
  		 return personsWithJournalEntries;
  	}
  		 
