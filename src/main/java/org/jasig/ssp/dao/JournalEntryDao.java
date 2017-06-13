@@ -18,15 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.google.common.collect.Lists;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
@@ -40,7 +32,6 @@ import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.transferobject.reference.ReferenceCounterTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.JournalCaseNotesStudentReportTO;
@@ -55,7 +46,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Repository
 public class JournalEntryDao
@@ -297,7 +295,6 @@ public class JournalEntryDao
             }
 
             criteria.createAlias("person","person");
-            criteria.add(Restrictions.in("person.id", personUUIDS));
 
             ProjectionList projections = Projections.projectionList();
             criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
@@ -324,7 +321,7 @@ public class JournalEntryDao
                     new NamespacedAliasToBeanResultTransformer(
                             JournalCaseNotesStudentReportTO.class, "journalentry_"));
 
-            processor.process(criteria, "id");
+            processor.process(criteria, "person.id");
 
         } while(processor.moreToProcess());
 
