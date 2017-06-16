@@ -161,16 +161,17 @@
 		<property name="basicDataSourcePrototypeName" value="sspDataSourcePrototype" />
 	</bean>
 
-	<bean id="sspDataSourcePrototype" class="org.apache.commons.dbcp.BasicDataSource"
+	<bean id="sspDataSourcePrototype" class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close" scope="prototype">
 		<property name="driverClassName" value="#{configProperties.db_driver_class}" />
 		<property name="url" value="#{configProperties.db_url}" />
 		<property name="username" value="#{configProperties.db_username}" />
 		<property name="password" value="#{configProperties.db_password}" />
 		<property name="validationQuery" value="select 1" />
-		<property name="maxActive" value="10" />
+		<property name="maxTotal" value="10" />
 		<property name="maxIdle" value="5" />
-		<property name="maxWait" value="10000" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="defaultQueryTimeout" value="600" />
 	</bean>
 
 	<bean id="velocityEngine"
