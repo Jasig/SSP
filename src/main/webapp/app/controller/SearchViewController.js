@@ -1399,7 +1399,8 @@ Ext.define('Ssp.controller.SearchViewController', {
 		var me = this;
 		if ( me.getCaseloadStatusCombo() ) {
             if ( !(me.getCaseloadStatusCombo().getValue()) ) {
-                return Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID;
+                 var defaultProgramStatusConfigValue = me.configStore.getConfigByName('my_caseload_watchlist_default_program_status');
+                return me.translateMyCaseloadWatchlistProgramStatusConfigValueToDomainId(defaultProgramStatusConfigValue);
             } else if ( me.getCaseloadStatusCombo().getValue() === 'All' ) {
                 return null;
             } else {
@@ -1475,6 +1476,24 @@ Ext.define('Ssp.controller.SearchViewController', {
 		}
 	},
 
+	translateMyCaseloadWatchlistProgramStatusConfigValueToDomainId: function(configValue) {
+    	switch (configValue) {
+            case Ssp.util.Constants.MY_CASELOAD_WATCHLIST_ALL_PROGRAM_STATUS_CONFIG_VALUE:
+                return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_ALL_PROGRAM_STATUS_ID;
+            case Ssp.util.Constants.MY_CASELOAD_WATCHLIST_ACTIVE_PROGRAM_STATUS_CONFIG_VALUE:
+                return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_ACTIVE_PROGRAM_STATUS_ID;
+            case Ssp.util.Constants.MY_CASELOAD_WATCHLIST_INACTIVE_PROGRAM_STATUS_CONFIG_VALUE:
+                return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_INACTIVE_PROGRAM_STATUS_ID;
+            case Ssp.util.Constants.MY_CASELOAD_WATCHLIST_NON_PARTICIPATING_PROGRAM_STATUS_CONFIG_VALUE:
+                return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_NON_PARTICIPATING_PROGRAM_STATUS_ID;
+            case Ssp.util.Constants.MY_CASELOAD_WATCHLIST_NON_SHOW_PROGRAM_STATUS_CONFIG_VALUE:
+                return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_NON_SHOW_PROGRAM_STATUS_ID;
+            case Ssp.util.Constants.MY_CASELOAD_WATCHLIST_TRANSITIONED_PROGRAM_STATUS_CONFIG_VALUE:
+                return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_TRANSITIONED_PROGRAM_STATUS_ID;
+		}
+		return Ssp.util.Constants.MY_CASELOAD_WATCHLIST_ACTIVE_PROGRAM_STATUS_ID;
+	},
+
 	getProgramStatuses: function() {
 		var me=this;
 		me.programStatusService.getAll({
@@ -1489,7 +1508,8 @@ Ext.define('Ssp.controller.SearchViewController', {
     	var activeProgramStatusId = "";
     	var programStatus;
     	if (me.programStatusesStore && me.getCaseloadStatusCombo() && me.programStatusesStore.getCount() > 0) {
-			me.getCaseloadStatusCombo().setValue(Ssp.util.Constants.ACTIVE_PROGRAM_STATUS_ID);
+    	        var defaultProgramStatusConfigValue = me.configStore.getConfigByName('my_caseload_watchlist_default_program_status');
+    			me.getCaseloadStatusCombo().setValue(me.translateMyCaseloadWatchlistProgramStatusConfigValueToDomainId(defaultProgramStatusConfigValue));
     	}
     },
 
