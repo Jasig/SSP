@@ -125,9 +125,9 @@ public class PersonSearchResultFull {
 
     private String campusName;
 
-    private Integer configuredSuccessIndicatorsLow;
+    private Integer configuredSuccessIndicatorsLow = 0;
 
-    private Integer configuredSuccessIndicatorsMedium;
+    private Integer configuredSuccessIndicatorsMedium = 0;
 
     //Below added for CustomExport
     private String sapStatus;
@@ -515,7 +515,9 @@ public class PersonSearchResultFull {
     }
 
     public void setConfiguredSuccessIndicatorsLow(Integer configuredSuccessIndicatorsLow) {
-        this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+        if(configuredSuccessIndicatorsLow != null) {
+            this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+        }
     }
 
     public Integer getConfiguredSuccessIndicatorsMedium() {
@@ -523,7 +525,9 @@ public class PersonSearchResultFull {
     }
 
     public void setConfiguredSuccessIndicatorsMedium(Integer configuredSuccessIndicatorsMedium) {
-        this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+        if(configuredSuccessIndicatorsMedium != null) {
+            this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+        }
     }
 
     //***End Directory Person getters/setters ***
