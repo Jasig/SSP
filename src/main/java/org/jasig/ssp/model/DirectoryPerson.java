@@ -19,13 +19,19 @@
 package org.jasig.ssp.model; // NOPMD
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.AbstractExternalData;
 import org.jasig.ssp.model.external.ExternalData;
+import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+
 import javax.annotation.Nullable;
 import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -36,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -459,6 +466,18 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	@Nullable
 	private Integer configMedIndicatorsCount;
+
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "schoolId")
+	@ForeignKey(name = "none")
+	private Set<ExternalStudentSpecialServiceGroup> externalStudentSpecialServiceGroups;
+
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id", referencedColumnName="personId")
+	@ForeignKey(name = "none")
+	private Set<PersonSpecialServiceGroup> personSpecialServiceGroups;
 
 
 	/**
@@ -977,6 +996,23 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
         this.objectStatus = objectStatus;
     }
 
+	@Nullable
+	public Set<ExternalStudentSpecialServiceGroup> getExternalStudentSpecialServiceGroups() {
+		return externalStudentSpecialServiceGroups;
+	}
+
+	public void setExternalStudentSpecialServiceGroups(@Nullable Set<ExternalStudentSpecialServiceGroup> externalStudentSpecialServiceGroups) {
+		this.externalStudentSpecialServiceGroups = externalStudentSpecialServiceGroups;
+	}
+
+	@Nullable
+	public Set<PersonSpecialServiceGroup> getPersonSpecialServiceGroups() {
+		return personSpecialServiceGroups;
+	}
+
+	public void setPersonSpecialServiceGroups(@Nullable Set<PersonSpecialServiceGroup> personSpecialServiceGroups) {
+		this.personSpecialServiceGroups = personSpecialServiceGroups;
+	}
 
 	protected int hashPrime() {
 		return 3;
@@ -1075,4 +1111,5 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 		return "Name: \"" + firstName + " " + lastName + "\" Id: "
 				+ super.toString();
 	}
+
 }

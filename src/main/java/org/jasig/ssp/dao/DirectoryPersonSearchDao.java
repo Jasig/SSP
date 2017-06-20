@@ -21,9 +21,19 @@ package org.jasig.ssp.dao;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.*;
+import org.hibernate.Query;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.PersonSearchResultFull;
+import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
+import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
@@ -40,8 +50,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 
 
 /**
@@ -635,7 +650,7 @@ public class DirectoryPersonSearchDao  {
             }
 
             if (internalAndExternal || externalPersonOnly(psr)) {
-                stringBuilder.append("esssg.schoolId = dp.schoolId and esssg.code in (:ssgCodes)");
+				stringBuilder.append("esssg.code in (:ssgCodes)");
             }
 
             if (internalAndExternal) {
@@ -643,11 +658,8 @@ public class DirectoryPersonSearchDao  {
             }
 
             if (internalAndExternal || sspPersonOnly(psr)) {
-                stringBuilder.append("dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroups) and specialServiceGroup is not null");
+                stringBuilder.append("pssg.objectStatus = 1 and pssg.specialServiceGroup.id in (:ssgIds)");
 
-                if (!personRequired(psr)) {
-                    stringBuilder.append(" and dp.programStatusName is not null and dp.programStatusName <> '' and dp.personId = p.id "); //ssg is special may need this when others don't
-                }
             }
 
             if (internalAndExternal) {
@@ -666,7 +678,7 @@ public class DirectoryPersonSearchDao  {
 		if (hasAnyWatchCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ws.person.id = :watcherId ");
-			stringBuilder.append(" and ws.student.id = dp.personId ");			
+			stringBuilder.append(" and ws.student.id = dp.personId ");
 		}
 	}
 
@@ -825,8 +837,12 @@ public class DirectoryPersonSearchDao  {
 		}
 
 		if (hasSpecialServiceGroup(personSearchRequest)) {
-		    if (!externalPersonOnly(personSearchRequest)) {
-                params.put("specialServiceGroups", personSearchRequest.getSpecialServiceGroup());
+			final List<UUID> ssgIds = Lists.newArrayList();
+			for (SpecialServiceGroup ssg : personSearchRequest.getSpecialServiceGroup()) {
+				ssgIds.add(ssg.getId());
+			}
+			if (!externalPersonOnly(personSearchRequest)) {
+		    	params.put("ssgIds", ssgIds);
             }
 
             if (!sspPersonOnly(personSearchRequest)) {
@@ -1100,7 +1116,7 @@ public class DirectoryPersonSearchDao  {
 	}
 
 	private void buildJoins(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
-		
+
 		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)) {
 			if ( hasPlanExists(personSearchRequest) &&
                                     PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
@@ -1112,13 +1128,12 @@ public class DirectoryPersonSearchDao  {
 
 		if (hasSpecialServiceGroup(personSearchRequest)) {
             if (internalAndExternalPerson(personSearchRequest)) {
-                stringBuilder.append(" left join p.specialServiceGroups as specialServiceGroups ");
-                stringBuilder.append(" left join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
-            } else if (sspPersonOnly(personSearchRequest)) {
-                stringBuilder.append(" inner join p.specialServiceGroups as specialServiceGroups ");
-                stringBuilder.append(" inner join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
+                stringBuilder.append(" left join dp.personSpecialServiceGroups as pssg ");
+				stringBuilder.append(" left join dp.externalStudentSpecialServiceGroups as esssg ");
+			} else if (sspPersonOnly(personSearchRequest)) {
+				stringBuilder.append(" inner join dp.personSpecialServiceGroups as pssg ");
             } else {
-                //do nothing at this time external only
+				stringBuilder.append(" inner join dp.externalStudentSpecialServiceGroups as esssg ");
             }
         }
 	}
@@ -1156,16 +1171,6 @@ public class DirectoryPersonSearchDao  {
 			stringBuilder.append(", Person p");
 		}
 
-        if (hasSpecialServiceGroup(personSearchRequest)) {
-            if (!externalPersonOnly(personSearchRequest) && !personRequired(personSearchRequest)) {
-                stringBuilder.append(", Person p"); //ssg is special criteria needs Person when others may not
-            }
-
-            if (!sspPersonOnly(personSearchRequest)) {
-                stringBuilder.append(", ExternalStudentSpecialServiceGroup esssg ");
-            }
-        }
-		
 		if (hasDeclaredMajor(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
 		}
