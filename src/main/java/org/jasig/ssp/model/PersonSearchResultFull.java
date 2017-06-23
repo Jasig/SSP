@@ -109,7 +109,7 @@ public class PersonSearchResultFull {
 
     private String actualStartTerm;
 
-    private Integer actualStartYear;
+    private Integer actualStartYear = 0;
 
     private String f1Status;
 
@@ -119,7 +119,7 @@ public class PersonSearchResultFull {
 
     private BigDecimal programGpa;
 
-    private Integer currentRegistrationStatus;
+    private Integer currentRegistrationStatus = 0;
 
     private BigDecimal creditHoursEarned;
 
@@ -427,7 +427,9 @@ public class PersonSearchResultFull {
     }
 
     public void setActualStartYear (Integer actualStartYear) {
-        this.actualStartYear = actualStartYear;
+        if (actualStartYear != null) {
+            this.actualStartYear = actualStartYear;
+        }
     }
 
     public String getF1Status () {
@@ -467,7 +469,9 @@ public class PersonSearchResultFull {
     }
 
     public void setCurrentRegistrationStatus (Integer currentRegistrationStatus) {
-        this.currentRegistrationStatus = currentRegistrationStatus;
+        if (currentRegistrationStatus != null) {
+            this.currentRegistrationStatus = currentRegistrationStatus;
+        }
     }
 
     public BigDecimal getCreditHoursEarned () {
