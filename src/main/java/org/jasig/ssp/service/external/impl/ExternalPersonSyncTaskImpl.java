@@ -273,7 +273,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 		final Map<String, Person> peopleBySchoolId = Maps.newHashMap();
 		long peopleCnt = 0;
 		for (final Person person : people) {
-			peopleBySchoolId.put(person.getSchoolId(), person);
+			peopleBySchoolId.put(person.getSchoolId().toLowerCase(), person);
 			peopleCnt++;
 		}
 
@@ -307,7 +307,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 			LOGGER.debug("Looking for internal person by external person schoolId {}", externalPerson.getSchoolId());
 
             // get the previously fetched person
-			final Person person = peopleBySchoolId.get(externalPerson.getSchoolId());
+			final Person person = peopleBySchoolId.get(externalPerson.getSchoolId().toLowerCase());
 
             // update person from external person
 			externalPersonService.updatePersonFromExternalPerson(person, externalPerson,true);
