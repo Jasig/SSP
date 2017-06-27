@@ -18,7 +18,11 @@
  */
 package org.jasig.ssp.service.external.impl;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.FlushMode;
+import org.hibernate.SessionFactory;
 import org.jasig.ssp.dao.PersonCourseStatusDao;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
@@ -46,13 +50,11 @@ import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortDirection;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.util.transaction.WithTransaction;
-import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -62,11 +64,9 @@ import java.util.concurrent.Callable;
 @Service
 public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements SpecialServiceGroupCourseWithdrawalAdvisorEmailTask {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl.class);
 
-	private static final Class<Pair<Long, Long>> BATCH_RETURN_TYPE =
-			(Class<Pair<Long, Long>>) new Pair<Long,Long>(null,null).getClass();
+	private static final Class<Pair<Long, Long>> BATCH_RETURN_TYPE = (Class<Pair<Long, Long>>) new Pair<Long,Long>(null,null).getClass();
 
 	private static final int DEFAULT_MAX_BATCHES_PER_EXECUTION = -1; // unlimited
 	private static final int DEFAULT_BATCH_SIZE = 10;
@@ -101,11 +101,17 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 	@Autowired
 	private WithTransaction withTransaction;
 
+    @Autowired
+    protected transient SessionFactory sessionFactory;
+
 	public Class<Pair<Long, Long>> getBatchExecReturnType() {
 		return BATCH_RETURN_TYPE;
 	}
 
 	private transient long nextCoachIndex = 0;
+	private transient String courseEnrollmentStatusCodesChanges;
+	private transient String[] courseEnrollmentStatusCodesChangesArray;
+
 
 	// intentionally not transactional... this is the main loop, each iteration
 	// of which should be its own transaction.
@@ -115,6 +121,8 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 			LOGGER.info("Abandoning Special Service Group Course Withdrawal Advisor Email Task because of thread interruption");
 			return;
 		}
+
+		LOGGER.info("BEGIN : SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
 
 		int recordsProcessed = 0;
 		int batch = 0;
@@ -218,6 +226,7 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 				}
 			}
 		}
+		LOGGER.info("END : SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
 	}
 
 	protected Pair<Long, Long> processCoachInTransaction(final SortingAndPaging sAndP) throws Exception {
@@ -229,98 +238,202 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 		});
 	}
 
-	public Pair<Long, Long> processCoach(SortingAndPaging sAndP) {
-		long coachCnt = 0;
-		final PagingWrapper<Person> coaches = personService.getAllAssignedCoaches(null);
+	public Pair<Long, Long> processCoach(SortingAndPaging sAndP) throws InterruptedException {
 
+        final Calendar startTime = Calendar.getInstance();
+        sessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
+
+        if (StringUtils.isBlank(courseEnrollmentStatusCodesChanges)) {
+            courseEnrollmentStatusCodesChanges = configService.getByNameEmpty(CONFIG_COURSE_ENROLLMENT_STATUS_CODE_CHANGES).trim();
+
+            if (StringUtils.isBlank(courseEnrollmentStatusCodesChanges)) {
+                courseEnrollmentStatusCodesChanges = "NULL";
+            } else {
+                courseEnrollmentStatusCodesChangesArray = courseEnrollmentStatusCodesChanges.split(",");
+            }
+        }
+
+        if (courseEnrollmentStatusCodesChanges.equals("NULL")) {
+            LOGGER.info("Special Service Group Course Withdrawal Advisor Email Task will not execute because the property course_enrollment_status_code_changes is not set");
+            return new Pair(0L, 0L);
+        }
+
+        final List<SpecialServiceGroup> specialServiceGroups = getSpecialServiceGroupsToNotify();
+        if (CollectionUtils.isEmpty(specialServiceGroups)) {
+            LOGGER.info("No special service groups to notify on withdrawal found in SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
+            return new Pair(0L, 0L);
+        }
+
+        if ( Thread.currentThread().isInterrupted() ) {
+            LOGGER.info("Abandoning Special Service Group Course Withdrawal task because of thread interruption");
+            throw new InterruptedException();
+        }
+
+        LOGGER.info("Special Service Group Course Withdrawal task selecting [{}] records starting at [{}]", sAndP.getMaxResults(), nextCoachIndex);
+		final PagingWrapper<Person> coaches = personService.getAllAssignedCoaches(sAndP);
+
+        if ( coaches.getRows().isEmpty() ) {
+            LOGGER.info("Special Service Group Course Withdrawal task found 0 records starting at [{}]", nextCoachIndex);
+            return new Pair(0L, coaches.getResults());
+        }
+
+        if ( Thread.currentThread().isInterrupted() ) {
+            LOGGER.info("Abandoning Special Service Group Course Withdrawal task because of thread interruption");
+            throw new InterruptedException();
+        }
+
+        long coachCnt = 0;
 		for (final Person coach : coaches.getRows()) {
-			coachCnt++;
-			final String courseEnrollmentStatusCodesChanges = configService.getByNameEmpty(CONFIG_COURSE_ENROLLMENT_STATUS_CODE_CHANGES).trim();
-			if (StringUtils.isBlank(courseEnrollmentStatusCodesChanges)) {
-				LOGGER.info("Special Service Group Course Withdrawal Advisor Email Task will not execute because the property course_enrollment_status_code_changes is not set");
-				return new Pair(0L, 0L);
-			}
+            if ( Thread.currentThread().isInterrupted() ) {
+                LOGGER.info("Abandoning Special Service Group Course Withdrawal task because of thread interruption on person {}",
+                        coach.getSchoolId());
+                throw new InterruptedException();
+            }
 
-			final String[] courseEnrollmentStatusCodesChangesArray = courseEnrollmentStatusCodesChanges.split(",");
+            coachCnt++;
+            LOGGER.debug("Processing SSG student withdrawals for coach: {}", coach.getSchoolId());
 
-			LOGGER.info("BEGIN : SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
-			final Calendar startTime = Calendar.getInstance();
+		    if (StringUtils.isBlank(coach.getPrimaryEmailAddress()) && StringUtils.isBlank(coach.getSecondaryEmailAddress())) {
+                LOGGER.info("No student withdrawals will be processed for coach: {} because the coach's email addresses are empty!", coach.getSchoolId());
+		    } else {
 
-			final List<SpecialServiceGroup> specialServiceGroups = getSpecialServiceGroupsToNotify();
-			if (specialServiceGroups.size() > 0) {
+                final List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> studentWithdrawalEmails = Lists.newArrayList();
+                final Collection<PersonSearchResult2> coachAssignedStudents = getAllStudentsForCoach(coach, specialServiceGroups, configService.getByNameOrDefaultValue(CONFIG_ADD_STUDENT_SSG_COURSE_WITHDRAWAL_EMAIL));
+                if (CollectionUtils.isEmpty(coachAssignedStudents)) {
+                    LOGGER.debug("No students were found that were assigned to coach {}", coach.getSchoolId());
+                } else {
+                    LOGGER.debug("Processing {} students for coach {}", coachAssignedStudents.size(), coach.getSchoolId());
+                }
 
-				final List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students = new ArrayList<>();
-				for (PersonSearchResult2 personSearchResult2 : getAllStudentsForCoach(coach, specialServiceGroups, configService.getByNameOrDefaultValue(CONFIG_ADD_STUDENT_SSG_COURSE_WITHDRAWAL_EMAIL))) {
-					try {
-						final List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = new ArrayList<>();
-						Person person = personService.getInternalOrExternalPersonBySchoolIdLite(personSearchResult2.getSchoolId());
+                for (PersonSearchResult2 personSearchResult2 : coachAssignedStudents) {
+                    if ( Thread.currentThread().isInterrupted() ) {
+                        LOGGER.info("Abandoning Special Service Group Course Withdrawal task because of thread interruption for coach {} on student {}",
+                                coach.getSchoolId(), personSearchResult2.getSchoolId());
+                        throw new InterruptedException();
+                    }
 
-						boolean studentAddedToSSP = false;
-						if (person.getId()==null) {
-							person = personService.getInternalOrExternalPersonBySchoolId(personSearchResult2.getSchoolId(), true); //valid use since adding external to ssp
+                    LOGGER.trace("Processing student: {}", personSearchResult2.getSchoolId());
+                    Person person = null;
+                    boolean studentAddedToSSP = false;
+                    try {
+                        person = personService.getInternalOrExternalPersonBySchoolIdLite(personSearchResult2.getSchoolId());
 
-							studentAddedToSSP = true;
-						}
+                        if (person.getId() == null) {
+                            LOGGER.trace("Internal person couldn't be found for {} attempting to add external student.", personSearchResult2.getSchoolId());
+                            person = personService.getInternalOrExternalPersonBySchoolId(personSearchResult2.getSchoolId(), true, true); //valid use since adding external to ssp
+                            studentAddedToSSP = true;
+                        }
 
-						LOGGER.trace("Evaluation transcripts for: {}...", person.getSchoolId());
-						final Collection<PersonCourseStatus> personCourseStatuses = personCourseStatusDao.getAllForPerson(person);
-						for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : externalStudentTranscriptCourseService.getTranscriptsBySchoolId(person.getSchoolId())) {
-							PersonCourseStatus personCourseStatus = getPersonCourseStatus(externalStudentTranscriptCourse, personCourseStatuses);
-							if (personCourseStatus != null) {
-							    if (StringUtils.isNotBlank(externalStudentTranscriptCourse.getStatusCode())) {
-                                    if (isCourseWithdrawn(externalStudentTranscriptCourse, personCourseStatus, courseEnrollmentStatusCodesChangesArray)) {
-                                        LOGGER.trace("Found withdrawn course!");
-                                        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs
-                                                .add(new CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(externalStudentTranscriptCourse, personCourseStatus.getStatusCode()));
-                                    }
-                                    if (!personCourseStatus.getStatusCode().equals(externalStudentTranscriptCourse.getStatusCode().trim())) {
-                                        LOGGER.trace("Updating existing PersonCourseStatus Record... ");
-                                        personCourseStatus.setPreviousStatusCode(personCourseStatus.getStatusCode());
-                                        personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode().trim());
-                                        personCourseStatusDao.save(personCourseStatus);
-                                    }
-                                } else {
-                                    LOGGER.debug("Can't update an existing Person Course Status record since the external transcript course status_code is missing for:" +
-                                            " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
-                                            "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
-                                            "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
-                                            "]!");
-                                }
-							} else {
-							    LOGGER.trace("Creating new PersonCourseStatus Record...");
-								personCourseStatus = createPersonCourseStatus(externalStudentTranscriptCourse, person);
-								if (personCourseStatus != null) {
-                                    personCourseStatusDao.save(personCourseStatus);
-                                } else {
-                                    LOGGER.debug("Can't record a new Person Course Status since the external transcript course record is incomplete for:" +
-                                            " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
-                                            "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
-                                            "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
-                                            "]!");
-                                }
-							}
-						}
-						if (courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.size() > 0 || studentAddedToSSP) {
-							students.add(new StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO(person, studentAddedToSSP, courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs));
-						}
-					} catch (ObjectNotFoundException e) {
-						LOGGER.info("Person record not found for search result person id: " + personSearchResult2.getId());
-					}
-				}
-				if (students.size() > 0) {
-				    LOGGER.trace("Sending Special Service Group Course Withdrawal Emails on {} students...", students.size());
-					sendEmail(coach, students);
-				}
-			} else {
-				LOGGER.info("No special service groups to notify on withdrawal found in SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
-			}
+                    } catch (ObjectNotFoundException e) {
+                        LOGGER.info("Person record not found for search result person id: " + personSearchResult2.getId());
+                    }
 
-			final Calendar endTime = Calendar.getInstance();
-			LOGGER.info("SpecialServiceGroupCourseWithdrawalAdvisorEmailTask REPORT RUNTIME: " + (endTime.getTimeInMillis() - startTime.getTimeInMillis()) + " ms.");
-			LOGGER.info("END : SpecialServiceGroupCourseWithdrawalAdvisorEmailTask");
-		}
-		return new Pair(coachCnt, coaches.getResults());
+                    if (person == null || StringUtils.isBlank(person.getSchoolId())) {
+                        LOGGER.info("Failed to retrieve or add internal person by school_id: {}", personSearchResult2.getSchoolId());
+                        break;
+                    } else {
+                        LOGGER.trace("Found person object for search result {} with internal school_id {}", personSearchResult2.getSchoolId(), person.getSchoolId());
+                    }
+
+                    LOGGER.debug("Evaluating courses for student: {}...", person.getSchoolId());
+                    final Collection<PersonCourseStatus> personCourseStatuses = personCourseStatusDao.getAllForPerson(person);
+                    final List<ExternalStudentTranscriptCourse> transcriptCourses = externalStudentTranscriptCourseService.getTranscriptsBySchoolId(person.getSchoolId());
+
+                    if ( Thread.currentThread().isInterrupted() ) {
+                        LOGGER.info("Abandoning Special Service Group Course Withdrawal task because of thread interruption for coach {} on student {}",
+                                coach.getSchoolId(), personSearchResult2.getSchoolId());
+                        throw new InterruptedException();
+                    }
+
+                    if (CollectionUtils.isEmpty(transcriptCourses)) {
+                        LOGGER.debug("No transcript courses found, ssg course history will not be recorded!");
+                        break;
+                    }
+
+                    addOrUpdatePersonCourseHistory(person, transcriptCourses, personCourseStatuses, studentAddedToSSP, studentWithdrawalEmails);
+                }
+
+                if (studentWithdrawalEmails.size() > 0) {
+                    LOGGER.trace("Sending Special Service Group Course Withdrawal Emails on {} students for coach {}...", studentWithdrawalEmails.size(), coach.getSchoolId());
+                    sendEmail(coach, studentWithdrawalEmails);
+                }
+            }
+		} //end loop for coaches
+
+        final Calendar endTime = Calendar.getInstance();
+        LOGGER.info("SpecialServiceGroupCourseWithdrawalAdvisorEmailTask BATCH RUNTIME: " + (endTime.getTimeInMillis() - startTime.getTimeInMillis()) + " ms.");
+
+        return new Pair(coachCnt, coaches.getResults());
 	}
+
+	private void addOrUpdatePersonCourseHistory(final Person student,
+                    final List<ExternalStudentTranscriptCourse> transcriptCourses,
+                    final Collection<PersonCourseStatus> personCourseStatuses, final boolean studentAddedToSSP,
+                    final List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> studentWithdrawalEmails) {
+
+	    LOGGER.trace("Processing {} transcripts for course status and history...", transcriptCourses.size());
+	    final List<CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO> courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs = Lists.newArrayList();
+        for (ExternalStudentTranscriptCourse externalStudentTranscriptCourse : transcriptCourses) {
+            PersonCourseStatus personCourseStatus = getPersonCourseStatus(externalStudentTranscriptCourse, personCourseStatuses);
+
+            if (personCourseStatus != null) {
+                if (StringUtils.isNotBlank(externalStudentTranscriptCourse.getStatusCode())) {
+                    if (isCourseWithdrawn(externalStudentTranscriptCourse, personCourseStatus, courseEnrollmentStatusCodesChangesArray)) {
+                        LOGGER.trace("Found withdrawn course adding to email list!");
+                        courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs
+                                .add(new CourseSpecialServiceGroupCourseWithdrawalMessageTemplateTO(externalStudentTranscriptCourse, personCourseStatus.getStatusCode()));
+                    }
+
+                    if (!personCourseStatus.getStatusCode().equals(externalStudentTranscriptCourse.getStatusCode().trim())) {
+                        LOGGER.trace("Updating existing PersonCourseStatus Record... ");
+                        personCourseStatus.setPreviousStatusCode(personCourseStatus.getStatusCode());
+                        personCourseStatus.setStatusCode(externalStudentTranscriptCourse.getStatusCode().trim());
+                        personCourseStatusDao.save(personCourseStatus);
+                    }
+
+                } else {
+                    LOGGER.debug("DATA ERROR: Can't update an existing Person Course Status record since the external transcript course status_code is missing for:" +
+                            " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
+                            "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
+                            "] sectionCode: [" + externalStudentTranscriptCourse.getSectionCode() +
+                            "] termCode: [" + externalStudentTranscriptCourse.getTermCode() +
+                            "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
+                            "]!");
+                }
+            } else {
+                LOGGER.trace("No previous course history found for: " +
+                        " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
+                        "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
+                        "] sectionCode: [" + externalStudentTranscriptCourse.getSectionCode() +
+                        "] termCode: [" + externalStudentTranscriptCourse.getTermCode() +
+                        "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
+                        "]!");
+
+                LOGGER.trace("Creating new PersonCourseStatus Record...");
+                personCourseStatus = createPersonCourseStatus(externalStudentTranscriptCourse, student);
+
+                if (personCourseStatus != null) {
+                    LOGGER.trace("Attempting to save personCourseStatus... ");
+                    personCourseStatusDao.save(personCourseStatus);
+                } else {
+                    LOGGER.debug("DATA ERROR: Can't record a new Person Course Status since the external transcript course record is incomplete for:" +
+                            " schoolId: [" + externalStudentTranscriptCourse.getSchoolId() +
+                            "] formattedCourse: [" + externalStudentTranscriptCourse.getFormattedCourse() +
+                            "] sectionCode: [" + externalStudentTranscriptCourse.getSectionCode() +
+                            "] termCode: [" + externalStudentTranscriptCourse.getTermCode() +
+                            "] and statusCode: [" + externalStudentTranscriptCourse.getStatusCode() +
+                            "]!");
+                }
+            }
+        }
+
+        if (courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.size() > 0 || studentAddedToSSP) {
+            LOGGER.debug("Found " + courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs.size() +
+                    " courses are withdrawn or student was added to SSP. Adding " + student.getSchoolId() +
+                    " to email notification.");
+            studentWithdrawalEmails.add(new StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO(student, studentAddedToSSP, courseSpecialServiceGroupCourseWithdrawalMessageTemplateTOs));
+        }
+    }
 
 	private PersonCourseStatus createPersonCourseStatus(ExternalStudentTranscriptCourse externalStudentTranscriptCourse, Person person) {
 		if (StringUtils.isNotBlank(externalStudentTranscriptCourse.getTermCode()) &&
@@ -345,9 +458,9 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 
 	private PersonCourseStatus getPersonCourseStatus(ExternalStudentTranscriptCourse externalStudentTranscriptCourse, Collection<PersonCourseStatus> personCourseStatuses) {
 		for (final PersonCourseStatus personCourseStatus : personCourseStatuses) {
-			if (externalStudentTranscriptCourse.getTermCode().equals(personCourseStatus.getTermCode()) &&
-				externalStudentTranscriptCourse.getFormattedCourse().equals(personCourseStatus.getFormattedCourse()) &&
-				externalStudentTranscriptCourse.getSectionCode().equals(personCourseStatus.getSectionCode())) {
+			if (externalStudentTranscriptCourse.getTermCode().trim().equals(personCourseStatus.getTermCode()) &&
+				externalStudentTranscriptCourse.getFormattedCourse().trim().equals(personCourseStatus.getFormattedCourse()) &&
+				externalStudentTranscriptCourse.getSectionCode().trim().equals(personCourseStatus.getSectionCode())) {
 
 				return personCourseStatus;
 			}
@@ -402,15 +515,27 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 		return false;
 	}
 
-	private void sendEmail(Person coach, List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students) {
-		final SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
+	private void sendEmail(final Person coach, final List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students) {
 
-		try {
-			messageService.createMessage(coach.getPrimaryEmailAddress(), null, subjectAndBody);
-			LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
-		} catch ( ObjectNotFoundException | ValidationException e) {
-			LOGGER.error("Failed to send Special Service Group Course Withdrawal Advisor Email to coach at address {}",
-					new Object[] {coach.getPrimaryEmailAddress(), e});
-		}
+	    String emailAddress = null;
+	    if (StringUtils.isNotBlank(coach.getPrimaryEmailAddress())) {
+            emailAddress = coach.getPrimaryEmailAddress();
+        } else if (StringUtils.isNotBlank(coach.getSecondaryEmailAddress())) {
+	        emailAddress = coach.getSecondaryEmailAddress();
+        } else {
+	        LOGGER.info("No email address found for coach: {} can't send notification!", coach.getSchoolId());
+        }
+
+        if (emailAddress != null) {
+            final SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
+
+            try {
+                messageService.createMessage(coach.getPrimaryEmailAddress(), null, subjectAndBody);
+                LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
+            } catch (Exception e) {
+                LOGGER.error("Failed to send Special Service Group Course Withdrawal Advisor Email to coach {} at address {}",
+                        new Object[]{coach.getSchoolId(), coach.getPrimaryEmailAddress(), e});
+            }
+        }
 	}
 }
