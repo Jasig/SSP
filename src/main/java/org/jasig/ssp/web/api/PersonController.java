@@ -219,7 +219,7 @@ public class PersonController extends AbstractBaseController {
 	PersonTO bySchoolId(final @PathVariable String id)
 			throws ObjectNotFoundException {
 
-		final Person model = service.getInternalOrExternalPersonBySchoolId(id,false); //method is slow but proper use
+		final Person model = service.getInternalOrExternalPersonBySchoolId(id,false, true); //method is slow but proper use
 		if (model == null) {
 			return null;
 		}
@@ -264,7 +264,7 @@ public class PersonController extends AbstractBaseController {
 					createdModel = service.create(model);
 					if (null != createdModel) {
 						// syncing newly created person to external person table
-						externalPersonService.updatePersonFromExternalPerson(createdModel);
+						externalPersonService.updatePersonFromExternalPerson(createdModel, true);
 						return new PersonTO(createdModel);
 					}
 				} catch ( PersonExistsException e ) {

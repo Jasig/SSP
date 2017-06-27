@@ -23,15 +23,18 @@ import org.jasig.ssp.dao.external.ExternalDataDao;
 import org.jasig.ssp.dao.external.ExternalPersonDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonDemographics;
+import org.jasig.ssp.model.PersonProgramStatus;
 import org.jasig.ssp.model.PersonStaffDetails;
 import org.jasig.ssp.model.external.ExternalPerson;
 import org.jasig.ssp.model.reference.*;
 import org.jasig.ssp.service.ObjectNotFoundException;
+import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PersonStaffDetailsService;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.*;
+import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +79,9 @@ public class ExternalPersonServiceImpl
 	@Autowired
 	private transient CampusService campusService;
 
+	@Autowired
+    private transient PersonProgramStatusService personProgramStatusService;
+
 	@Override
 	public ExternalPerson getBySchoolId(final String schoolId)
 			throws ObjectNotFoundException {
@@ -89,7 +95,7 @@ public class ExternalPersonServiceImpl
 	}
 
 	@Override
-	public void updatePersonFromExternalPerson(final Person person) {
+	public void updatePersonFromExternalPerson(final Person person, final boolean isStudent) {
 		ExternalPerson externalPerson = null;
 		final String schoolId = person.getSchoolId();
 		final String username = person.getUsername();
@@ -105,7 +111,7 @@ public class ExternalPersonServiceImpl
 		}
 
 		if ( externalPerson != null ) {
-			updatePersonFromExternalPerson(person,externalPerson,true);
+			updatePersonFromExternalPerson(person, externalPerson,true, isStudent);
 		} else {
 			LOGGER.debug("Skipping external data sync for "
 					+ "person [id: {}] [schoolId: {}] [username: {}]  because "
@@ -124,8 +130,8 @@ public class ExternalPersonServiceImpl
 	 *            person
 	 */
 	@Override
-	public void updatePersonFromExternalPerson(final Person person,
-			final ExternalPerson externalPerson,boolean commit) {
+	public void updatePersonFromExternalPerson(final Person person, final ExternalPerson externalPerson, boolean commit,
+                                               boolean isStudent) {
 
 		LOGGER.debug(
 				"Person and ExternalPerson Sync.  Person school id {}, username {}",
@@ -367,8 +373,27 @@ public class ExternalPersonServiceImpl
 
 		try {
 			if (commit) {
-				personService.save(person);
+				final Person savedPerson = personService.save(person);
+
+				if (isStudent && savedPerson != null) {
+                    PersonProgramStatus personProgramStatus = null;
+                    try {
+                        personProgramStatus = personProgramStatusService.getCurrent(savedPerson.getId());
+
+                    } catch (ObjectNotFoundException | ValidationException e) {
+                        //swallow
+                    }
+
+                    try {
+                        if (personProgramStatus == null) {
+                            personProgramStatusService.setActiveForStudent(savedPerson);
+                        }
+                    } catch (ObjectNotFoundException | ValidationException onfve) {
+                        LOGGER.info("Couldn't set program status for schoolId: {} error is ", person.getSchoolId(), onfve.getStackTrace());
+                    }
+                }
 			}
+
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.error("person failed to save", e);
 		}
@@ -419,7 +444,7 @@ public class ExternalPersonServiceImpl
 
 	private Person getCoach(final String coachId) {
 		try {
-			return personService.getInternalOrExternalPersonBySchoolId(coachId,true); //this adds the coach if only exists externally, otherwise retrieves the internal record
+			return personService.getInternalOrExternalPersonBySchoolId(coachId,true, false); //this adds the coach if only exists externally, otherwise retrieves the internal record
 		} catch (final ObjectNotFoundException e) {
 			LOGGER.warn("Coach referenced in external table not available in system", e);
 			return null;

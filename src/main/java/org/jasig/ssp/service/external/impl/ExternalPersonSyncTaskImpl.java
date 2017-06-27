@@ -310,7 +310,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
 			final Person person = peopleBySchoolId.get(externalPerson.getSchoolId().toLowerCase());
 
             // update person from external person
-			externalPersonService.updatePersonFromExternalPerson(person, externalPerson,true);
+			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, true, true); //this might add a program status to a coach, but should be rare
 
             // update person special service groups from external student special service groups
             externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person);
@@ -348,7 +348,7 @@ public class ExternalPersonSyncTaskImpl implements ExternalPersonSyncTask {
                 if (person2 != null) {
                     internalPeopleSchoolIds.remove(person2.getSchoolId());
                     directoryPersonSearchDao.purgeDuplicateRecord(externalPerson2.getSchoolId(), externalPerson2.getUsername()); //duplicate found purge from mv directory person otherwise will block update
-                    externalPersonService.updatePersonFromExternalPerson(person2, externalPerson2, true);
+                    externalPersonService.updatePersonFromExternalPerson(person2, externalPerson2, true, true); //this might add a program status to a coach, but should be rare
                     externalStudentSpecialServiceGroupService.updatePersonSSGsFromExternalPerson(person2);
                 }
             }

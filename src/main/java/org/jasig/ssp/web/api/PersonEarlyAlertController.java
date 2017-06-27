@@ -180,17 +180,8 @@ public class PersonEarlyAlertController extends
 
 	private void setProgramStatusToActiveIfNotAlready(final UUID personId)
 			throws ObjectNotFoundException, ValidationException {
-		Person student = personService.load(personId);
-		ProgramStatus activeStatus = programStatusService.getActiveStatus();
-		if(!activeStatus.getName().equals(student.getCurrentProgramStatusName()))
-		{
-			PersonProgramStatus personProgramStatus = new PersonProgramStatus();
-			personProgramStatus.setPerson(student);
-			personProgramStatus.setProgramStatus(activeStatus);
-			personProgramStatus.setEffectiveDate(Calendar.getInstance().getTime());
-			personProgramStatusService.expireActive(student,personProgramStatus); 
-			student.getProgramStatuses().add(personProgramStatus);
-		}
+		final Person student = personService.load(personId);
+		personProgramStatusService.setActiveForStudent(student);
 	}
 
 	@Override
@@ -281,7 +272,7 @@ public class PersonEarlyAlertController extends
 		try {
 			personId = UUID.fromString(studentId); // NOPMD by jon.adams
 		} catch (final IllegalArgumentException exc) {
-			final Person person = personService.getInternalOrExternalPersonBySchoolId(studentId, true); //Changing this to add an external-only student and sync
+			final Person person = personService.getInternalOrExternalPersonBySchoolId(studentId, true, true); //Changing this to add an external-only student and sync
 			if (person == null) {
 				throw new ObjectNotFoundException(
 						null, "Person", exc);

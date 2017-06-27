@@ -34,8 +34,8 @@ public interface ExternalPersonService extends
 	ExternalPerson getByUsername(String username)
 			throws ObjectNotFoundException;
 
-	void updatePersonFromExternalPerson(final Person person,
-			final ExternalPerson externalPerson,boolean commit);
+	void updatePersonFromExternalPerson(final Person person, final ExternalPerson externalPerson, final boolean commit,
+										final boolean isStudent);
 
 	/**
 	 * Sync external data, if any, into the given Person instance. Will exit
@@ -43,7 +43,7 @@ public interface ExternalPersonService extends
 	 *
 	 * @param person
 	 */
-	void updatePersonFromExternalPerson(final Person person);
+	void updatePersonFromExternalPerson(final Person person, final boolean isStudent);
 	
 	List<String> getAllDepartmentNames();
 }

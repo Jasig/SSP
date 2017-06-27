@@ -249,7 +249,7 @@ public class PersonServiceImpl implements PersonService {
 
 				ensureRequiredFieldsForDirectoryPerson(person);
 				person = create(person);
-				externalPersonService.updatePersonFromExternalPerson(person);
+				externalPersonService.updatePersonFromExternalPerson(person, false);
 				LOGGER.info("Successfully Created Account for {}", username);
 
 			} catch (final ObjectNotFoundException onfe) {
@@ -408,8 +408,8 @@ public class PersonServiceImpl implements PersonService {
      * @throws ObjectNotFoundException If the supplied identifier does not exist in the database.
      */
 	@Override
-	public Person getInternalOrExternalPersonBySchoolId(final String schoolId, boolean commitPerson)
-                                                                                        throws ObjectNotFoundException {
+	public Person getInternalOrExternalPersonBySchoolId(final String schoolId, final boolean commitPerson,
+														final boolean isStudent) throws ObjectNotFoundException {
 		try { 
 			return dao.getBySchoolId(schoolId);
 
@@ -436,7 +436,7 @@ public class PersonServiceImpl implements PersonService {
                 directoryPersonSearchDao.purgeDuplicateRecord(externalPerson.getSchoolId(), externalPerson.getUsername()); //duplicate found purge from mv directory person otherwise will block update
             }
 
-			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
+			externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson, isStudent);
 
             if (commitPerson) {
                 syncSpecialServiceGroups(person); //syncs and saves SSGs
@@ -474,7 +474,8 @@ public class PersonServiceImpl implements PersonService {
 	 * @throws ObjectNotFoundException
      */
 	@Override
-	public Person getSyncedByUsername(final String username, final Boolean commitPerson) throws ObjectNotFoundException {
+	public Person getSyncedByUsername(final String username, final boolean commitPerson,
+                                      final boolean isStudent) throws ObjectNotFoundException {
 
 		final Person obj = dao.fromUsername(username);
 
@@ -489,7 +490,7 @@ public class PersonServiceImpl implements PersonService {
 
 		final Person person = new Person();
 		evict(person);
-		externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson);
+		externalPersonService.updatePersonFromExternalPerson(person, externalPerson, commitPerson, isStudent);
 
 		if (commitPerson) {
             syncSpecialServiceGroups(person);
@@ -848,7 +849,7 @@ public class PersonServiceImpl implements PersonService {
 
 								coach.set(new Person()); // NOPMD
 								externalPersonService.updatePersonFromExternalPerson(
-										coach.get(), externalPerson,true);
+										coach.get(), externalPerson,true, false);
 
 								long externalPersonSyncEnd = new Date().getTime();
 								long externalPersonSyncElapsed = externalPersonSyncEnd -
