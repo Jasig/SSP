@@ -24,7 +24,6 @@ import org.jasig.ssp.factory.reference.MapTemplateTagTOFactory;
 import org.jasig.ssp.factory.reference.TemplateLiteTOFactory;
 import org.jasig.ssp.model.MapTemplateVisibility;
 import org.jasig.ssp.model.Template;
-import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.transferobject.TemplateLiteTO;
@@ -80,9 +79,8 @@ public class TemplateLiteTOFactoryImpl extends AbstractAuditableTOFactory<Templa
 			model.setIsPrivate(false);
 		model.setVisibility(tObject.getVisibility());
 		model.setProgramCode(tObject.getProgramCode());
-		MapTemplateTagTO mapTemplateTagTO = tObject.getMapTemplateTag();
-		if (mapTemplateTagTO!=null) {
-			model.setMapTemplateTag(getMapTemplateTagTOFactory().from(tObject.getMapTemplateTag()));
+		for (MapTemplateTagTO mapTemplateTagTO : tObject.getMapTemplateTags()) {
+			model.getMapTemplateTags().add(getMapTemplateTagTOFactory().from(mapTemplateTagTO));
 		}
 	return model;
 	}

@@ -257,8 +257,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 									maxLength: 2000
                 			    },{
 									xtype: 'combobox',
-									name: 'mapTemplateTagId',
-									itemId: 'mapTemplateTagId',
+									name: 'mapTemplateTagsId',
+									itemId: 'mapTemplateTagsId',
 									id: 'mapTemplateTagId',
 									store: me.mapTemplateTagsStore,
 									fieldLabel: me.textStore.getValueByCode('ssp.label.map-template-tag',"Template Tag"),
@@ -269,7 +269,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 									queryMode: 'local',
 									typeAhead: false,
    									editable: false,
-									allowBlank: true
+									allowBlank: true,
+                                    multiSelect: true
 								}
 
             			    ]

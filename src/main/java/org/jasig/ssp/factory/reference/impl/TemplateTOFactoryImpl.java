@@ -128,11 +128,9 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 			templateElectiveCourse.setTemplate(model);
 			model.getPlanElectiveCourses().add(templateElectiveCourse);
 		}
-		MapTemplateTagTO mapTemplateTagTO = tObject.getMapTemplateTag();
-		if (mapTemplateTagTO!=null) {
-			model.setMapTemplateTag(getMapTemplateTagTOFactory().from(tObject.getMapTemplateTag()));
-		} else {
-			model.setMapTemplateTag(null);
+		model.getMapTemplateTags().clear();
+		for (MapTemplateTagTO mapTemplateTagTO : tObject.getMapTemplateTags()) {
+			model.getMapTemplateTags().add(getMapTemplateTagTOFactory().from(mapTemplateTagTO));
 		}
 		return model;
 	}

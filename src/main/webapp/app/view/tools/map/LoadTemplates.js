@@ -440,10 +440,20 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 			 text: me.textStore.getValueByCode('ssp.label.map.load-template.template-tag-column',"Template Tag"),
 			 width: 200,
 			 sortable: true,
-			 dataIndex: 'mapTemplateTag',
+			 dataIndex: 'mapTemplateTags',
 			 renderer: function(value, metadata, record) {
-				if (record != null && record.get('mapTemplateTag') != null) {
-					return record.get('mapTemplateTag').name;
+				if (record != null && record.get('mapTemplateTags') != null) {
+				    var mapTemplateTags = record.get('mapTemplateTags');
+				    if (mapTemplateTags.length > 0) {
+				        var rtn = '';
+				        for (i=0; i < mapTemplateTags.length; i++) {
+				            if (i > 0) {
+				                rtn = rtn + ', ';
+				            }
+				            rtn = rtn + mapTemplateTags[i].name
+				        }
+				        return rtn;
+				    }
 				}
 			 },
 			 doSort: function(state) {
@@ -453,8 +463,8 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 					 property: field,
 					 direction: state,
 					 sorterFn: function(v1, v2){
-							v1 = (v1.get('mapTemplateTag') ? v1.get('mapTemplateTag').name : '');
-							v2 = (v2.get('mapTemplateTag') ? v2.get('mapTemplateTag').name : '');
+							v1 = (v1.get('mapTemplateTags')[0] ? v1.get('mapTemplateTags')[0].name : '');
+							v2 = (v2.get('mapTemplateTags')[0] ? v2.get('mapTemplateTags')[0].name : '');
 							return v1.localeCompare(v2);
 					 }
 				 });

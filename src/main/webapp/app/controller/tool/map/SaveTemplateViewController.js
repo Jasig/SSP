@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			click: 'onCancelClick'
 		},
 		visibilityField: '#visibility',
-		mapTemplateTagField: '#mapTemplateTagId'
+		mapTemplateTagsField: '#mapTemplateTagsId'
 
 	},
 	init: function() {
@@ -246,10 +246,16 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 				me.currentMapPlan.set('id', '');
 				me.currentMapPlan.setIsTemplate(true);
 			} else {
-       			var mapTemplateTagId = me.getView().query('combobox[name="mapTemplateTagId"]')[0].getValue();
-	   			var record = me.mapTemplateTagsStore.findRecord('id',mapTemplateTagId, 0, false, false, true);
-
-   				me.currentMapPlan.set('mapTemplateTag', record);
+       			var mapTemplateTagIds = me.getView().query('combobox[name="mapTemplateTagsId"]')[0].getValue();
+                var records = new Array();
+                var j=0;
+                for (var i=0; i < mapTemplateTagIds.length; i++) {
+                    var record = me.mapTemplateTagsStore.findRecord('id',mapTemplateTagIds[i], 0, false, false, true);
+                    if (record != null) {
+                        records[j++] = record;
+                    }
+                }
+   				me.currentMapPlan.set('mapTemplateTags', records);
 			}
 	    	me.mapEventUtils.saveTemplate(me.getView().saveAs);
     	}else if(btnId == 'no'){
@@ -264,7 +270,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     },
     onShow: function(){
     	var me=this;
-		
+
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 		
@@ -285,10 +291,13 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    }
 		me.checkForContactInfo();
 
-		if (me.currentMapPlan.get('mapTemplateTag')) {
-			var mapTemplateTagId = me.currentMapPlan.get('mapTemplateTag').id;
-			me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,mapTemplateTagId);
-			me.getMapTemplateTagField().setValue(mapTemplateTagId);
+        var mapTemplateTags = me.currentMapPlan.get('mapTemplateTags');
+		if (mapTemplateTags) {
+		    var mapTemplateTagIds = new Array(mapTemplateTags.length);
+            for (var i=0; i < mapTemplateTags.length; i++) {
+                mapTemplateTagIds[i] = mapTemplateTags[i].id;
+            }
+   			me.getMapTemplateTagsField().setValue(mapTemplateTagIds);
 		} else {
 			me.formUtils.applyActiveOnlyFilter(me.mapTemplateTagsStore);
 		}

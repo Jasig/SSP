@@ -18,15 +18,14 @@
  */
 package org.jasig.ssp.transferobject;
 
-import java.util.List;
-
 import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.MapTemplateVisibility;
-import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.Template;
-import org.jasig.ssp.model.TemplateCourse;
-import org.jasig.ssp.model.TermNote;
+import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TO for /summary API call.  In early phases of development this will not hold a lot of meaningful data.
@@ -45,7 +44,7 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 	
 	private MapTemplateVisibility visibility;
 
-	private MapTemplateTagTO mapTemplateTag;
+	private List<MapTemplateTagTO> mapTemplateTags = new ArrayList<>();
 	
 	/**
 	 * Empty constructor.
@@ -69,8 +68,8 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 		this.setDepartmentCode(model.getDepartmentCode());
 		this.setDivisionCode(model.getDivisionCode());
 		this.setProgramCode(model.getProgramCode());
-		if (model.getMapTemplateTag()!=null) {
-			this.setMapTemplateTag(new MapTemplateTagTO(model.getMapTemplateTag()));
+		for (MapTemplateTag mapTemplateTag : model.getMapTemplateTags()) {
+			this.getMapTemplateTags().add(new MapTemplateTagTO(mapTemplateTag));
 		}
 	}
 	
@@ -109,11 +108,11 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 		this.visibility = visibility;
 	}
 
-	public MapTemplateTagTO getMapTemplateTag() {
-		return mapTemplateTag;
+	public List<MapTemplateTagTO> getMapTemplateTags() {
+		return mapTemplateTags;
 	}
 
-	public void setMapTemplateTag(MapTemplateTagTO mapTemplateTag) {
-		this.mapTemplateTag = mapTemplateTag;
+	public void setMapTemplateTags(List<MapTemplateTagTO> mapTemplateTags) {
+		this.mapTemplateTags = mapTemplateTags;
 	}
 }
