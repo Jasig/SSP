@@ -150,22 +150,34 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
         for (SpecialServiceStudentCoursesTO course : courseResults) {
 
             //load ssgs and campusName for student into report TO
-            final PersonSearchResultFull student = studentResultMap.get(course.getSchoolId());
-            course.setCampusName(student.getCampusName());
-            course.setSpecialServiceGroupNamesForDisplay(student.getSpecialServiceGroups());
+            if (StringUtils.isNotBlank(course.getSchoolId())) {
+                final PersonSearchResultFull student = studentResultMap.get(course.getSchoolId());
+                if (student != null) {
+                    course.setCampusName(student.getCampusName());
+                    course.setSpecialServiceGroupNamesForDisplay(student.getSpecialServiceGroups());
 
-            //load course facultyName for student in report TO
-            if (facultyNameBySchoolId.containsKey(course.getFacultySchoolId())) {
-                course.setFacultyName(facultyNameBySchoolId.get(course.getFacultySchoolId()));
-            } else {
-                try {
-                    final Person instructor = personService.getInternalOrExternalPersonBySchoolIdLite(
-                            course.getFacultySchoolId());
-                    course.setFacultyName(instructor.getFullName());
-                    facultyNameBySchoolId.put(course.getFacultySchoolId(), instructor.getFullName());
+                    //load course facultyName for student in report TO
+                    Person instructor = null;
+                    if (StringUtils.isNotBlank(course.getFacultySchoolId())) {
+                        if (facultyNameBySchoolId.containsKey(course.getFacultySchoolId())) {
+                            course.setFacultyName(facultyNameBySchoolId.get(course.getFacultySchoolId()));
+                        } else {
+                            try {
+                                instructor = personService.getInternalOrExternalPersonBySchoolIdLite(
+                                        course.getFacultySchoolId());
+                            } catch (ObjectNotFoundException ofne) {
+                                //Skip exception here already logged
+                                facultyNameBySchoolId.put(course.getFacultySchoolId(), "");
+                            }
+                        }
+                    }
 
-                } catch (ObjectNotFoundException ofne) {
-                    //Skip exception here already logged
+                    if (instructor != null) {
+                        course.setFacultyName(instructor.getFullName());
+                        facultyNameBySchoolId.put(course.getFacultySchoolId(), instructor.getFullName());
+                    } else {
+                        course.setFacultyName("");
+                    }
                 }
             }
         }
