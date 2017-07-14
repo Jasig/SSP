@@ -204,7 +204,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                 field: {
                                     xtype: 'textfield',
                                     allowBlank: false,
-                                    maxLength: 10
+                                    maxLength: 50
                                 },
                                 flex: 0.25,
                                 sortOrder: 50
