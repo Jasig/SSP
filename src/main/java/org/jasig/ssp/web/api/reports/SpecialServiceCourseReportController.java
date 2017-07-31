@@ -132,7 +132,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
         final List<String> statusCodes = Lists.newArrayList();
         final List<SpecialServiceGroup> ssgList = Lists.newArrayList();
         final PersonSearchRequest reqForm = new PersonSearchRequest();
-        final SortingAndPaging sAndP = new SortingAndPaging(null, null, null, null, null, null);
+        final SortingAndPaging sAndP = new SortingAndPaging(null, null, null, null);
         final Map<String, String> facultyNameBySchoolId = Maps.newHashMap();
         final Map<String, PersonSearchResultFull> studentResultMap = Maps.newHashMap();
 
@@ -142,10 +142,12 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
                 statusCodes, grades, termCodes, ssgList);
 
         handleRetrievalOfStudents(reqForm, studentResultMap);
+        LOGGER.trace("Found " + studentResultMap.keySet().size() + " students.");
 
         final List<SpecialServiceStudentCoursesTO> courseResults = externalStudentTranscriptCourseService.
                 getTranscriptCoursesBySchoolIds(Lists.newArrayList(studentResultMap.keySet()), termCodes,
                         grades, statusCodes);
+        LOGGER.trace("Found " + courseResults.size() + " courses.");
 
         for (SpecialServiceStudentCoursesTO course : courseResults) {
 
@@ -181,6 +183,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
                 }
             }
         }
+        LOGGER.debug("Rendering SSG Course Report on {} records. " + courseResults.size());
 
         renderReport(response,  parameters, courseResults, REPORT_URL, reportType, REPORT_FILE_TITLE);
     }
