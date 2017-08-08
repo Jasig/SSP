@@ -199,6 +199,10 @@ public class JournalEntryDao
 					personSearchForm.getJournalCreateDateTo()));
 		}
 
+		if (personSearchForm.getJournalSourceIds()!=null && personSearchForm.getJournalSourceIds().size() > 0) {
+			criteria.add(Restrictions.in("journalSource.id", personSearchForm.getJournalSourceIds()));
+		}
+
 		if (personSearchForm.getGetStepDetails()) {
 			JoinType joinType = JoinType.INNER_JOIN;
 			criteria.createAlias("journalEntryDetails", "journalEntryDetails", joinType);
@@ -362,6 +366,10 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as("journalentry_studentTypeName"));
 		projections.add(Projections.groupProperty("studentType.code").as("journalentry_studentTypeCode"));
+
+
+		criteria.createAlias("journalSource", "journalSource");
+		projections.add(Projections.groupProperty("journalSource.name").as("journalentry_journalSourceName"));
 
 		setCoachProjections(projections);
 

@@ -18,12 +18,6 @@
  */
 package org.jasig.ssp.web.api.reports;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.JournalStepDetail;
@@ -31,6 +25,7 @@ import org.jasig.ssp.service.JournalEntryService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.external.TermService;
+import org.jasig.ssp.service.reference.JournalSourceService;
 import org.jasig.ssp.service.reference.JournalStepDetailService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
@@ -44,10 +39,17 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 @Service
 public class JournalReportParameters {
 	
 	private static String JOURNAL_SESSION_DETAILS = "journalSessionDetails";
+	private static String JOURNAL_SOURCES = "journalSourceNames";
 
 	@Autowired
 	private transient PersonService personService;
@@ -67,7 +69,10 @@ public class JournalReportParameters {
 	protected transient ServiceReasonService serviceReasonService;	
 	
 	@Autowired
-	protected transient JournalStepDetailService journalEntryStepDetailService;	
+	protected transient JournalStepDetailService journalEntryStepDetailService;
+
+	@Autowired
+	protected transient JournalSourceService journalSourceService;
 	
 	@Autowired
 	protected transient JournalEntryService journalEntryService;	
@@ -82,6 +87,7 @@ public class JournalReportParameters {
 			final List<UUID> studentTypeIds,
 			final List<UUID> serviceReasonIds,
 			final List<UUID> journalStepDetailIds,
+			final List<UUID> journalSourceIds,
 			final Date createJounalEntryDateFrom,
 			final Date createJournalEntryDateTo,
 			final String termCode,
@@ -117,13 +123,21 @@ public class JournalReportParameters {
 				personSearchForm, 
 				programStatusService, 
 				null);
+
+		List<UUID> cleanJournalSourceIds = SearchParameters.cleanUUIDListOfNulls(journalSourceIds);
+		SearchParameters.addUUIDSToMap(JOURNAL_SOURCES,
+				SearchParameters.NOT_USED,
+				cleanJournalSourceIds,
+				parameters,
+				journalSourceService);
+		personSearchForm.setJournalSourceIds(cleanJournalSourceIds);
+
 		List<UUID> cleanJournalStepDetailIds = SearchParameters.cleanUUIDListOfNulls(journalStepDetailIds);
-		SearchParameters.addUUIDSToMap(JOURNAL_SESSION_DETAILS, 
+		SearchParameters.addUUIDSToMap(JOURNAL_SESSION_DETAILS,
 				SearchParameters.ALL, 
-				cleanJournalStepDetailIds, 
-				parameters, 
+				cleanJournalStepDetailIds,
+				parameters,
 				journalEntryStepDetailService);
-		
 		
 		if((cleanJournalStepDetailIds == null || cleanJournalStepDetailIds.isEmpty())){
 			cleanJournalStepDetailIds = new ArrayList<UUID>();
@@ -133,7 +147,7 @@ public class JournalReportParameters {
 			}
 		}
 		personSearchForm.setJournalStepDetailIds(cleanJournalStepDetailIds);
-		
+
 		personSearchForm.setHasStepDetails(hasStepDetails);
 	}
 	

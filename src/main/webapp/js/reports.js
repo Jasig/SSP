@@ -268,6 +268,9 @@ var ssp = ssp || {};
 			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('subjectAbbreviationGroup'));
 
+			loadGroupInput("/ssp/api/1/reference/journalSource/?sort=name&start=0&limit=-1&sortDirection=ASC", that
+					.locate('journalSourceGroup'));
+
 			requests--;
 		}
 		
@@ -486,7 +489,8 @@ var ssp = ssp || {};
 					dateRange : '.ea-date-range',
 					hideableform : '.hideable-form',
 					printConfForm : '.print-conf-form',
-					loadingMessage: '.loading-message'
+					loadingMessage: '.loading-message',
+					journalSourceGroup : '.input-journal-source-group'
 					}
 				});
 })(jQuery, fluid);

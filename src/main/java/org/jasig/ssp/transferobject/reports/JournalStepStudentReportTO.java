@@ -29,6 +29,8 @@ public class JournalStepStudentReportTO extends BaseStudentReportTO {
 	String journalStepDetailName;
 	UUID journalEntryDetailId;
 
+	String journalSourceName;
+
 	/**
 	 * 
 	 */
@@ -65,5 +67,13 @@ public class JournalStepStudentReportTO extends BaseStudentReportTO {
 
 	public void setJournalEntryDetailId(UUID journalEntryDetailId) {
 		this.journalEntryDetailId = journalEntryDetailId;
+	}
+
+	public String getJournalSourceName() {
+		return journalSourceName;
+	}
+
+	public void setJournalSourceName(String journalSourceName) {
+		this.journalSourceName = journalSourceName;
 	}
 }
