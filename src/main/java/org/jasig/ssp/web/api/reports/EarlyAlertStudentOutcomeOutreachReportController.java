@@ -243,7 +243,7 @@ public class EarlyAlertStudentOutcomeOutreachReportController extends ReportBase
 		
 		List<Pair<String,Long>> outcomeTotals = null;
 		
-		SortingAndPaging sAndP = new SortingAndPaging(status == null ? ObjectStatus.ALL:status, null, null, sortFields, null, SortDirection.ASC);
+		SortingAndPaging sAndP = new SortingAndPaging(status == null ? ObjectStatus.ALL:status, sortFields, null, SortDirection.ASC);
 		if(outcomeType.equals(EARLY_ALERT_OUTCOME)){
 			outcomeTotals = getOutcomes(cleanOutcomeIds,  searchForm, sAndP);
 		}else if(outcomeType.equals(EARLY_ALERT_OUTREACH)){

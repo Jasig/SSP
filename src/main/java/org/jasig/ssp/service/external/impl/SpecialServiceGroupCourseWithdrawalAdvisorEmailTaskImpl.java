@@ -305,14 +305,16 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
                     LOGGER.debug("Processing {} students for coach {}", coachAssignedStudents.size(), coach.getSchoolId());
                 }
 
+                int studentCount = 0;
                 for (PersonSearchResult2 personSearchResult2 : coachAssignedStudents) {
+                    LOGGER.trace("Processing student: {}", personSearchResult2.getSchoolId());
+
                     if ( Thread.currentThread().isInterrupted() ) {
                         LOGGER.info("Abandoning Special Service Group Course Withdrawal task because of thread interruption for coach {} on student {}",
                                 coach.getSchoolId(), personSearchResult2.getSchoolId());
                         throw new InterruptedException();
                     }
 
-                    LOGGER.trace("Processing student: {}", personSearchResult2.getSchoolId());
                     Person person = null;
                     boolean studentAddedToSSP = false;
                     try {
@@ -347,11 +349,13 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 
                     if (CollectionUtils.isEmpty(transcriptCourses)) {
                         LOGGER.debug("No transcript courses found, ssg course history will not be recorded!");
-                        break;
+                    } else {
+                        addOrUpdatePersonCourseHistory(person, transcriptCourses, personCourseStatuses, studentAddedToSSP, studentWithdrawalEmails);
                     }
-
-                    addOrUpdatePersonCourseHistory(person, transcriptCourses, personCourseStatuses, studentAddedToSSP, studentWithdrawalEmails);
+                    studentCount++;
                 }
+
+                LOGGER.trace("Coach: " + coach.getSchoolId() + " complete! Processed: " + studentCount + " out of " + coachAssignedStudents.size() + " students.");
 
                 if (studentWithdrawalEmails.size() > 0) {
                     LOGGER.trace("Sending Special Service Group Course Withdrawal Emails on {} students for coach {}...", studentWithdrawalEmails.size(), coach.getSchoolId());
