@@ -4,7 +4,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="title"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.3" value="columnHeader"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="3"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
@@ -45,11 +45,11 @@
 				<text><![CDATA[Home Department:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="46" width="119" height="15" isPrintWhenDetailOverflows="true" uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec"/>
+				<reportElement positionType="Float" x="107" y="45" width="119" height="15" isPrintWhenDetailOverflows="true" uuid="9f2796d0-86f4-4520-af01-8ad5a5faefec"/>
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="31" width="119" height="15" isPrintWhenDetailOverflows="true" uuid="7addf57b-228e-402f-84d4-d875bcb42603"/>
+				<reportElement positionType="Float" x="107" y="30" width="119" height="15" isPrintWhenDetailOverflows="true" uuid="7addf57b-228e-402f-84d4-d875bcb42603"/>
 				<textFieldExpression><![CDATA[$P{coachName}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -57,7 +57,7 @@
 				<text><![CDATA[Coach:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="77" width="117" height="15" isPrintWhenDetailOverflows="true" uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d"/>
+				<reportElement positionType="Float" x="107" y="75" width="693" height="15" isPrintWhenDetailOverflows="true" uuid="a6cd924f-0cb9-4bf8-b1e2-463d95ac377d"/>
 				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -65,7 +65,7 @@
 				<text><![CDATA[Student Type:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="62" width="429" height="15" isPrintWhenDetailOverflows="true" uuid="85310786-589b-44e8-944a-2f6361cc98ef"/>
+				<reportElement positionType="Float" x="107" y="60" width="693" height="15" isPrintWhenDetailOverflows="true" uuid="85310786-589b-44e8-944a-2f6361cc98ef"/>
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -73,7 +73,7 @@
 				<text><![CDATA[Program Status:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="91" width="429" height="15" isPrintWhenDetailOverflows="true" uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72"/>
+				<reportElement positionType="Float" x="107" y="90" width="693" height="15" isPrintWhenDetailOverflows="true" uuid="6d2788b3-18ca-44f6-837f-6df32f3e8b72"/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -81,31 +81,31 @@
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement x="0" y="0" width="100" height="15" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="0" width="164" height="16" uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7"/>
+				<reportElement positionType="Float" x="107" y="0" width="164" height="15" uuid="f308e252-c794-4c7d-aca2-86ceb422a4f7"/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="347" y="0" width="64" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
+				<reportElement x="339" y="0" width="64" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
 				<text><![CDATA[Start Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="347" y="17" width="64" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
+				<reportElement x="339" y="15" width="64" height="15" uuid="d162ca32-53b6-40ba-a5a5-53a35d56c86b"/>
 				<text><![CDATA[End Date:]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="EEE, MMM d, yyyy" isBlankWhenNull="false">
-				<reportElement isPrintRepeatedValues="false" x="411" y="0" width="100" height="15" uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3"/>
+				<reportElement isPrintRepeatedValues="false" x="403" y="0" width="100" height="15" uuid="b719af16-2c41-404e-8239-40d8dbc3fcb3"/>
 				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement x="411" y="17" width="100" height="15" uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e"/>
+				<reportElement x="403" y="15" width="100" height="15" uuid="d0d47b1c-5cf4-475a-b3f7-ac8d94fbb49e"/>
 				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="115" y="105" width="429" height="16" uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="107" y="105" width="693" height="15" isPrintWhenDetailOverflows="true" uuid="1ca8c5e0-8d6e-4de9-aa97-373049b1348a"/>
 				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -113,38 +113,38 @@
 				<text><![CDATA[Service Reasons:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="115" y="17" width="177" height="15" uuid="10fb108b-9907-4acb-90bc-b110773f246b"/>
+				<reportElement x="107" y="15" width="177" height="15" uuid="10fb108b-9907-4acb-90bc-b110773f246b"/>
 				<textFieldExpression><![CDATA[$P{journalStepNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="17" width="100" height="15" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<reportElement x="0" y="16" width="100" height="15" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
 				<text><![CDATA[Journal Steps:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="120" width="100" height="15" uuid="e869f98d-7f5e-4040-b65b-079e9c23fac1"/>
+				<reportElement x="0" y="121" width="100" height="15" uuid="e869f98d-7f5e-4040-b65b-079e9c23fac1"/>
 				<text><![CDATA[Actual Start Term:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="120" width="91" height="15" isPrintWhenDetailOverflows="true" uuid="a5ca34ee-f1e9-41a0-b02c-81f69c12c960"/>
+				<reportElement positionType="Float" x="107" y="120" width="91" height="15" isPrintWhenDetailOverflows="true" uuid="a5ca34ee-f1e9-41a0-b02c-81f69c12c960"/>
 				<textFieldExpression><![CDATA[$P{actualStartTerm}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="134" width="100" height="15" uuid="a4e164b9-9ce5-4b74-bcb4-11571f3ae5a2"/>
+				<reportElement x="0" y="136" width="100" height="15" uuid="a4e164b9-9ce5-4b74-bcb4-11571f3ae5a2"/>
 				<text><![CDATA[Journal Sources:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="115" y="133" width="429" height="16" uuid="fce5e28f-315e-4342-97bf-0a58c6487e17"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="107" y="135" width="693" height="15" isPrintWhenDetailOverflows="true" uuid="fce5e28f-315e-4342-97bf-0a58c6487e17"/>
 				<textFieldExpression><![CDATA[$P{journalSourceNames}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="31" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement x="0" y="0" width="802" height="28" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
+				<reportElement x="0" y="2" width="802" height="28" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="0" width="800" height="28" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
+				<reportElement x="0" y="2" width="800" height="28" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>

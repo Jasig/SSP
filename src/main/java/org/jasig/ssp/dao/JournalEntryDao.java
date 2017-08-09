@@ -298,6 +298,10 @@ public class JournalEntryDao
                         personSearchForm.getJournalCreateDateTo()));
             }
 
+			if (personSearchForm.getJournalSourceIds()!=null && personSearchForm.getJournalSourceIds().size() > 0) {
+				criteria.add(Restrictions.in("journalSource.id", personSearchForm.getJournalSourceIds()));
+			}
+
             criteria.createAlias("person","person");
 
             ProjectionList projections = Projections.projectionList();
@@ -319,7 +323,8 @@ public class JournalEntryDao
 
             projections.add(Projections.groupProperty("person.createdDate").as("journalentry_createdDate")).add(Projections.countDistinct("id").as("journalentry_caseNoteEntries"));
             setCoachProjections(projections);
-            criteria.setProjection(projections);
+
+			criteria.setProjection(projections);
 
             criteria.setResultTransformer(
                     new NamespacedAliasToBeanResultTransformer(

@@ -49,4 +49,13 @@ public class JournalCaseNotesStudentReportTO extends BaseStudentReportTO {
 		this.caseNoteEntries = caseNoteEntries;
 	}
 
+	String journalSourceName;
+
+	public String getJournalSourceName() {
+		return journalSourceName;
+	}
+
+	public void setJournalSourceName(String journalSourceName) {
+		this.journalSourceName = journalSourceName;
+	}
 }
