@@ -18,14 +18,6 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.JournalEntryDao;
 import org.jasig.ssp.dao.PersonDao;
@@ -49,6 +41,14 @@ import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -143,9 +143,17 @@ public class JournalEntryServiceImpl
 
  		 for (BaseStudentReportTO person:persons) {
 			 if (!map.containsKey(person.getSchoolId()) && StringUtils.isNotBlank(person.getCoachSchoolId())) {
- 				 final JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
-				 personsWithJournalEntries.add(entry);
-				 map.put(entry.getSchoolId(), entry);
+				 boolean addStudent = true;
+				 if (personSearchForm.getJournalSourceIds()!=null) {
+					if (getDao().getJournalCountForPersonForJournalSourceIds(person.getId(), personSearchForm.getJournalSourceIds()) == 0) {
+						addStudent = false;
+					}
+				 }
+			 	 if (addStudent) {
+					 final JournalCaseNotesStudentReportTO entry = new JournalCaseNotesStudentReportTO(person);
+					 personsWithJournalEntries.add(entry);
+					 map.put(entry.getSchoolId(), entry);
+				 }
  			}
  		 }
 		 sortByStudentName(personsWithJournalEntries);

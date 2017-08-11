@@ -90,6 +90,19 @@ public class JournalEntryDao
 		return totalRows;
 	}
 
+	public Long getJournalCountForPersonForJournalSourceIds(UUID studentId, List<UUID> journalSourceIds) {
+
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("person.id", studentId));
+		criteria.add(Restrictions.in("journalSource.id", journalSourceIds));
+
+		// item count
+		Long totalRows = (Long) criteria.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+
 	public Long getStudentJournalCountForCoach(Person coach, Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds) {
 
 		final Criteria query = createCriteria();
