@@ -62,6 +62,12 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 
 		me.mapTemplateTagsStore.clearFilter(true);
        	me.mapTemplateTagsStore.load({callback:me.afterMapTemplateTagStoreLoaded,scope:me,single:true})
+        var mapTemplateTags = me.currentMapPlan.get('mapTemplateTags');
+        var ids = [];
+        for(var i = 0; i < mapTemplateTags.length; i++){
+            ids[i] = mapTemplateTags[i].id;
+        }
+        me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,ids);
 
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getVisibilityField().setValue('PRIVATE');
@@ -69,7 +75,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		}else{
 			me.getVisibilityField().setDisabled(false);
 		}
-		
+
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
    		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
