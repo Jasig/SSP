@@ -159,7 +159,9 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 		params.setLastModifiedBy(personService.get(templateOutputDataTO.getPlan().getModifiedBy().getId()));
 
 		if(templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_FORMAT_MATRIX)) {
-			output = createMatrixOutput(params);
+			output = createMatrixOutput(params, false);
+		} else if (templateOutputDataTO.getOutputFormat().equals(TemplateService.OUTPUT_SHORT_MATRIX)){
+			output = createMatrixOutput(params, true);
 		} else{
 			output = createFullOutput(templateOutputDataTO);
 		}
@@ -190,7 +192,7 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 
 	@Override
 	public SubjectAndBody createMatrixOutput(
-			MessageTemplatePlanTemplatePrintParamsTO outputPlan)
+			MessageTemplatePlanTemplatePrintParamsTO outputPlan, boolean organizeTermsByReportYear)
 			throws ObjectNotFoundException {
 		List<TermCourses<Template,TemplateTO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
 		outputPlan.setTermCourses(courses);
@@ -200,7 +202,11 @@ TemplateTO,TemplateOutputTO, MessageTemplatePlanTemplatePrintParamsTO> implement
 		params.put("departmentName", outputPlan.getDepartmentName());
 		params.put("divisionName", outputPlan.getDivisionName());
 		params.put("programName", outputPlan.getProgramName());
-		
+
+		if (organizeTermsByReportYear) {
+			params.put("termCoursesByReportYear", organizeTermsCoursesByReportYear(courses));
+		}
+
 		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, params);
 		return subjectAndBody;
 	}

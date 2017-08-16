@@ -18,9 +18,7 @@
  */
 package org.jasig.ssp.service.impl;
 
-import java.math.BigDecimal;
-import java.util.*;
-import javax.validation.constraints.NotNull;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.AbstractPlanDao;
@@ -29,14 +27,23 @@ import org.jasig.ssp.model.AbstractPlanCourse;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
-import org.jasig.ssp.model.external.*;
+import org.jasig.ssp.model.external.ExternalCourseRequisite;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.external.ExternalStudentTranscriptNonCourseEntity;
+import org.jasig.ssp.model.external.RequisiteCode;
+import org.jasig.ssp.model.external.Term;
 import org.jasig.ssp.model.reference.Elective;
 import org.jasig.ssp.service.AbstractAuditableCrudService;
 import org.jasig.ssp.service.AbstractPlanService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.external.*;
+import org.jasig.ssp.service.external.ExternalCourseRequisiteService;
+import org.jasig.ssp.service.external.ExternalCourseService;
+import org.jasig.ssp.service.external.ExternalProgramService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
+import org.jasig.ssp.service.external.ExternalStudentTranscriptNonCourseEntityService;
+import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.ElectiveService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
@@ -48,7 +55,20 @@ import org.jasig.ssp.transferobject.TermNoteTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import com.google.common.collect.Lists;
+
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -464,5 +484,23 @@ public  abstract class AbstractPlanServiceImpl<T extends AbstractPlan,
 
 	public void setCourseService(ExternalCourseRequisiteService courseRequisiteService) {
 		this.courseRequisiteService = courseRequisiteService;
+	}
+
+	protected List<List<TermCourses<T,TO>>> organizeTermsCoursesByReportYear(List<TermCourses<T,TO>> termCoursesList) {
+		List<List<TermCourses<T,TO>>> termCoursesByReportYear = new ArrayList<>();
+
+		List<TermCourses<T,TO>> newTermCourses = new ArrayList();
+		int previousReportYear = 0;
+		for (TermCourses<T,TO> termCourses : termCoursesList) {
+			if (previousReportYear != 0 && termCourses.getTerm().getReportYear() != previousReportYear) {
+				termCoursesByReportYear.add(newTermCourses);
+				newTermCourses = new ArrayList();
+			}
+			newTermCourses.add(termCourses);
+			previousReportYear = termCourses.getTerm().getReportYear();
+		}
+		termCoursesByReportYear.add(newTermCourses);
+
+		return  termCoursesByReportYear;
 	}
 }

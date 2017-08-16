@@ -36,6 +36,12 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
     	   listeners: {
             change: 'onemailmatrixFormatClick'
            }
+        },
+        'shortMatrixFormat': {
+    	   selector: '#shortMatrixFormat',
+    	   listeners: {
+            change: 'onemailShortMatrixFormatClick'
+           }
         }
     },
 
@@ -115,6 +121,13 @@ Ext.define('Ssp.controller.tool.map.EmailPlanController', {
         }
     },
 	
+    onemailShortMatrixFormatClick: function(cb, nv, ov) {
+        var me=this;
+        if (nv) {
+            me.getOptionsEmailView().hide();
+        }
+    },
+
 	handleNull: function(value, defaultValue) {
 		if (defaultValue == null || defaultValue == undefined) {
 			defaultValue = "";

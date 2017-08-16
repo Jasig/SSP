@@ -505,6 +505,8 @@ public class MessageTemplateServiceImpl extends
 			messageParams = createMapPlanFullPrintoutMessageParams();
 		} else if (id.equals(MessageTemplate.OUTPUT_MAP_PLAN_MATRIX_ID)) {
 			messageParams = createMapPlanPrintoutMessageParams();
+		} else if (id.equals(MessageTemplate.OUTPUT_MAP_PLAN_SHORT_MATRIX_ID)) {
+			messageParams = createMapPlanShortPrintoutMessageParams();
 		} else if (id.equals(MessageTemplate.MAP_STATUS_REPORT_ID)) {
 			messageParams = createMapStatusCalculationRunReportMessageParams();
 		} else if (id.equals(MessageTemplate.MYGPS_WELCOME_MESSAGE_ID)) {
@@ -697,6 +699,14 @@ public class MessageTemplateServiceImpl extends
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("programName", "ProgramName");
 		messageParams.put("printParams",params);
+		return messageParams;
+	}
+
+	private Map<String,Object> createMapPlanShortPrintoutMessageParams() {
+		Map<String,Object> messageParams = createMapPlanPrintoutMessageParams();
+
+		((Map) messageParams.get("printParams")).put("termCoursesByReportYear", MessageTemplatePreviewTOBuilder.createTermCoursesByReportYear());
+
 		return messageParams;
 	}
 

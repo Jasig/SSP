@@ -128,6 +128,12 @@ Ext.define('Ssp.view.tools.map.EmailPlan', {
                             name: 'outputFormat',
                             inputValue: 'matrixFormat',
                             itemId: 'matrixFormat'
+                    }, {
+                            checked: false,
+                            boxLabel: me.textStore.getValueByCode('ssp.label.map.email-plan.matrix-format','Email MAP in Short Matrix Format'),
+                            name: 'outputFormat',
+                            inputValue: 'shortMatrixFormat',
+                            itemId: 'shortMatrixFormat'
                     }]
                 }, {
                     xtype: 'container',

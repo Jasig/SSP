@@ -129,23 +129,28 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	public SubjectAndBody createOutput(PlanOutputTO planOutputDataTO) throws ObjectNotFoundException {
 		SubjectAndBody output = null;
 
-		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
+		if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX) || planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_SHORT_MATRIX)) {
 			MessageTemplatePlanPrintParams params = new MessageTemplatePlanPrintParams();
-			params.setMessageTemplateId(planOutputDataTO.getMessageTemplateMatrixId());
 			params.setOutputPlan(planOutputDataTO);
 			params.setInstitutionName(getInstitutionName());
-			if(StringUtils.isNotBlank(planOutputDataTO.getPlan().getOwnerId())){
+			if (StringUtils.isNotBlank(planOutputDataTO.getPlan().getOwnerId())) {
 				params.setOwner(personService.get(
 						UUID.fromString(planOutputDataTO.getPlan().getOwnerId())));
 			}
-			
-			if(StringUtils.isNotBlank(planOutputDataTO.getPlan().getPersonId())){
+
+			if (StringUtils.isNotBlank(planOutputDataTO.getPlan().getPersonId())) {
 				params.setStudent(personService.get(
 						UUID.fromString(planOutputDataTO.getPlan().getPersonId())));
 			}
 			params.setLastModifiedBy(personService.get(planOutputDataTO.getPlan().getModifiedBy().getId()));
-			output = createMatrixOutput(params);
-		} else{
+			if(planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_FORMAT_MATRIX)) {
+				params.setMessageTemplateId(planOutputDataTO.getMessageTemplateMatrixId());
+				output = createMatrixOutput(params, false);
+			} else if (planOutputDataTO.getOutputFormat().equals(PlanService.OUTPUT_SHORT_MATRIX)) {
+				params.setMessageTemplateId(planOutputDataTO.getMessageTemplateShortMatrixId());
+				output = createMatrixOutput(params, true);
+			}
+		} else {
 			UUID personID = UUID.fromString(planOutputDataTO.getPlan().getPersonId());
 			String schoolId = personService.get(personID).getSchoolId();
 			ExternalStudentFinancialAid fa = externalStudentFinancialAidService.getStudentFinancialAidBySchoolId(schoolId);
@@ -220,18 +225,22 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 
 	@Override
 	public SubjectAndBody createMatrixOutput(
-			MessageTemplatePlanPrintParams outputPlan)
+			MessageTemplatePlanPrintParams outputPlan, boolean organizeTermsByReportYear)
 			throws ObjectNotFoundException {
 
-			List<TermCourses<Plan,PlanTO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
-			outputPlan.setTermCourses(courses);
-			outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
+		List<TermCourses<Plan,PlanTO>> courses = collectTermCourses(outputPlan.getOutputPlan().getNonOutputTO());
+		outputPlan.setTermCourses(courses);
+		outputPlan.setTotalPlanCreditHours(calculateTotalPlanHours(courses));
 
-			Map<String,Object> params = new HashMap<String,Object>();
-			String programCode = outputPlan.getOutputPlan().getNonOutputTO().getProgramCode();
-			if (programCode != null && programCode.trim() != "") {
-				params.put("programName", getExternalProgramName(programCode));
-			}
+		Map<String,Object> params = new HashMap<String,Object>();
+		String programCode = outputPlan.getOutputPlan().getNonOutputTO().getProgramCode();
+		if (programCode != null && programCode.trim() != "") {
+			params.put("programName", getExternalProgramName(programCode));
+		}
+
+		if (organizeTermsByReportYear) {
+			params.put("termCoursesByReportYear", organizeTermsCoursesByReportYear(courses));
+		}
 
 		SubjectAndBody subjectAndBody = getMessageTemplateService().createMapPlanMatrixOutput(outputPlan, params);
 			return subjectAndBody;
