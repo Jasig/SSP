@@ -1068,6 +1068,9 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
                 me.getSaveTemplateButton().hide();
             }
         } else {
+            if (me.personLite == null || !me.personLite.get('id')) {
+                me.getSavePlanButton().hide();
+            }
             me.getCreateNewPlanButton().hide();
             me.getLoadSavedPlanButton().hide();
             me.getSavePlanAsButton().hide();
