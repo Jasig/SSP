@@ -338,6 +338,16 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'ACTIVE'){
 			return 'ACTIVE';
 		}	
+
+		if (me.get('isTemplate')) {
+            if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'OBSOLETE'){
+                return 'OBSOLETE';
+            }
+            if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'DELETED'){
+                return 'DELETED';
+            }
+		}
+
 		return 'INACTIVE';
 	},
 	

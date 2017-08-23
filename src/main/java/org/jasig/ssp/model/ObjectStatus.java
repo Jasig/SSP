@@ -18,10 +18,10 @@
  */
 package org.jasig.ssp.model;
 
+import com.google.common.collect.Lists;
+
 import java.util.Collection;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 /**
  * Enumeration for soft delete functionality.
@@ -60,8 +60,16 @@ public enum ObjectStatus {
 	 * ObjectStatus should be set to {@link #INACTIVE} instead of
 	 * {@link #DELETED}.
 	 */
-	@Deprecated
-	DELETED;
+	DELETED,
+
+	/**
+	 * Object is marked as obsolete (integer: 4)
+	 *
+	 * <p>
+	 * ObjectStatus should be set to {@link #INACTIVE} instead of
+	 * {@link #DELETED}.
+	 */
+	OBSOLETE;;
 
 	/**
 	 * Filter a collection to return only those that have the specified status.

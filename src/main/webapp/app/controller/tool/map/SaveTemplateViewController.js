@@ -247,7 +247,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 				me.currentMapPlan.set('isPrivate', true);
 			}
 
-			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
+			me.currentMapPlan.set('objectStatus', me.getView().query('combobox[name=objectStatus]')[0].getValue());
 			if(!me.currentMapPlan.get('isTemplate')){
 				me.currentMapPlan.set('id', '');
 				me.currentMapPlan.setIsTemplate(true);
@@ -280,13 +280,13 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 		
-	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
+	    var activenessCheckbox = me.getView().query('combobox[name=objectStatus]')[0];
 	    if (!me.currentMapPlan.get('id') || !(me.currentMapPlan.get('isTemplate')) || me.getView().saveAs) {
-	        activenessCheckbox.setValue(false); // Create mode. New Templates intentionally
+	        activenessCheckbox.setValue("INACTIVE"); // Create mode. New Templates intentionally
 	                                             // inactive by default (https://issues.jasig.org/browse/SSP-1828)
 	    } else {
 	        // Edit mode. Preserve current state as the default.
-	        activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+	        activenessCheckbox.setValue(me.currentMapPlan.get('objectStatus'));
 	    }
 	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 	    	me.getVisibilityField().setValue('PRIVATE');
