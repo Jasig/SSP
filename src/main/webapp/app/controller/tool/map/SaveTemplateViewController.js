@@ -64,10 +64,12 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
        	me.mapTemplateTagsStore.load({callback:me.afterMapTemplateTagStoreLoaded,scope:me,single:true})
         var mapTemplateTags = me.currentMapPlan.get('mapTemplateTags');
         var ids = [];
-        for(var i = 0; i < mapTemplateTags.length; i++){
-            ids[i] = mapTemplateTags[i].id;
+        if (mapTemplateTags!=null) {
+            for(var i = 0; i < mapTemplateTags.length; i++){
+                ids[i] = mapTemplateTags[i].id;
+            }
+            me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,ids);
         }
-        me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,ids);
 
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getVisibilityField().setValue('PRIVATE');
