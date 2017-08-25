@@ -354,18 +354,26 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 allowBlank:true,
                                 labelWidth:80,
 								width: 290,
-								enableKeyEvents:true,
-								listeners:{
-									keyup: function(textField, e, eOpts) {
-										var me = this;
-				                        var searchString = textField.getValue().trim();
-				                        var templatesGrid = me.findParentByType('loadtemplates').query('#allPlansTemplateGridPanel')[0];
-										templatesGrid.getStore().filterBy(getFilterRecord(['name'], searchString)); 
-				                    }
-								}
-                            }]}
-                            
-            
+								enableKeyEvents:true
+                            }]},
+                            {
+                                xtype: 'container',
+                                border: 0,
+                                title: '',
+                                width: '100%',
+                                layout: {
+                                    type: 'hbox'
+                                },
+                                items: [{
+                                    xtype: 'button',
+                                    tooltip: me.textStore.getValueByCode('ssp.tooltip.map.search-templates-button','Search for Templates'),
+                                    text: me.textStore.getValueByCode('ssp.label.search-button','Search'),
+                                    itemId: 'searchTemplates',
+                                    margins: '10 0 0 125',
+                                    width: 80
+                                }]
+                            }
+
             ]}]
          }]
 		},	{

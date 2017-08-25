@@ -36,11 +36,11 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesAdmin', {
 	          items: [
 	                  {
 							xtype: 'maptemplatesfilteradmin',
-							flex: 0.4
+							flex: 0.35
 	                  },
 	                  {
 		                  	xtype: 'maptemplateslistadmin', 
-		                  	flex: 0.6
+		                  	flex: 0.65
 		              }
 	          ]});
     	return this.callParent(arguments);

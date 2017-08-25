@@ -18,8 +18,6 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.UUID;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.LogicalExpression;
@@ -35,6 +33,8 @@ import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public class TemplateDao extends AbstractPlanDao<Template> implements
 		AuditableCrudDao<Template> {
@@ -48,17 +48,17 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 	public PagingWrapper<Template> getAll(
 			SortingAndPaging sNp,
 			TemplateSearchTO searchTO) {
-		
+
 				Criteria criteria = createCriteria(sNp);
 				LogicalExpression isPrivate =null;
 				SimpleExpression anonymous =  Restrictions.eq("visibility", MapTemplateVisibility.ANONYMOUS);
 				SimpleExpression authenticated =Restrictions.eq("visibility", MapTemplateVisibility.AUTHENTICATED);
-				
+
 				if(searchTO.visibilityAll() || searchTO.getVisibility().equals( MapTemplateVisibility.PRIVATE)){
-					 isPrivate =  Restrictions.and(Restrictions.eq("visibility", MapTemplateVisibility.PRIVATE), 
+					 isPrivate =  Restrictions.and(Restrictions.eq("visibility", MapTemplateVisibility.PRIVATE),
 						Restrictions.eq("owner", getSecurityService().currentlyAuthenticatedUser().getPerson()));
 				}
-				
+
 				if(searchTO.visibilityAll()){
 					criteria.add(Restrictions.or(Restrictions.or(authenticated, anonymous), isPrivate));
 				} else if(searchTO.getVisibility().equals( MapTemplateVisibility.PRIVATE)){
@@ -68,8 +68,8 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 				}else if(searchTO.getVisibility().equals( MapTemplateVisibility.ANONYMOUS)){
 					criteria.add(anonymous);
 				}
-				
-				
+
+
 				if(!StringUtils.isEmpty(searchTO.getProgramCode()))
 				{
 					criteria.add(Restrictions.eq("programCode", searchTO.getProgramCode()));
@@ -77,7 +77,7 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 				if(!StringUtils.isEmpty(searchTO.getDivisionCode()))
 				{
 					criteria.add(Restrictions.eq("divisionCode", searchTO.getDivisionCode()));
-				}					
+				}
 				if(!StringUtils.isEmpty(searchTO.getDepartmentCode()))
 				{
 					criteria.add(Restrictions.eq("departmentCode", searchTO.getDepartmentCode()));
@@ -92,7 +92,7 @@ public class TemplateDao extends AbstractPlanDao<Template> implements
 				}
 				if(!StringUtils.isEmpty(searchTO.getName()))
 				{
-					criteria.add(Restrictions.like("name", "%" + searchTO.getName() + "%"));
+					criteria.add(Restrictions.like("name", "%" + searchTO.getName() + "%").ignoreCase());
 				}
 				return processCriteriaWithStatusSortingAndPaging(criteria,
 				 				sNp);

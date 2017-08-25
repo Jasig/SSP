@@ -36,10 +36,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     },
 	control: {
         'name': {
-            selector: '#templateNameFilter',
-            listeners: {
-                keyup: 'ontemplateNameKeyUp'
-            }
+            selector: '#templateNameFilter'
         },
         'program': {
            selector: '#program',
@@ -111,8 +108,18 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
                 select: 'onObjectStatusFilterSelect'
             }
         },
+		'templateNameFilter':{
+            selector: '#templateNameFilter',
+            hidden: false
+        },
         view: {
             show: 'onShow'
+        },
+        'searchTemplates':{
+           selector: '#searchTemplates',
+           listeners: {
+                click: 'onSearchTemplatesClick'
+           }
         }
 	},
 
@@ -232,11 +239,11 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         me.handleSelect(me);
     },
 
-    ontemplateNameKeyUp: function(){
+    onSearchTemplatesClick: function(button){
         var me=this;
-		me.handleSelect(me);
-    },   
-    
+        me.handleSelect(me);
+    },
+
     handleSelect: function(mte){
 		var grid = Ext.getCmp("templatePanel");
     	var params = {};

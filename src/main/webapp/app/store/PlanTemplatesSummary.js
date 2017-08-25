@@ -25,7 +25,7 @@ Ext.define('Ssp.store.PlanTemplatesSummary', {
     },
 	constructor: function(){
 		Ext.apply(this, { proxy: this.apiProperties.getProxy( this.apiProperties.getItemUrl('templatePlan') + '/summary' ),
-			  			  autoLoad: true,
+			  			  autoLoad: false,
 						     sorters: [{
 						         property: 'name',
 						         direction: 'ASC'

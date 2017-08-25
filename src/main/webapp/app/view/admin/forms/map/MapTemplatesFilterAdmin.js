@@ -307,7 +307,23 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 			                                labelWidth:80,
 											width: 290,
 											enableKeyEvents:true											
-			                            }]}
+			                            }]},
+                                        {
+                                            xtype: 'container',
+                                            border: 0,
+                                            title: '',
+                                            layout: {
+                                                type: 'hbox'
+                                            },
+                                            items: [{
+                                                xtype: 'button',
+                                                tooltip: me.textStore.getValueByCode('ssp.tooltip.map.search-templates-button','Search for Templates'),
+                                                text: me.textStore.getValueByCode('ssp.label.search-button','Search'),
+                                                itemId: 'searchTemplates',
+                                                margins: '10 0 0 125',
+                                                width: 80
+                                            }]
+                                        }
 			            ]}]
 			         }],
 					    
