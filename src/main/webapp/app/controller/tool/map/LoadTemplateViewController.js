@@ -123,11 +123,21 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
                 select: 'onTypeFilterSelect'
             }
         },
+		'templateNameFilter':{
+            selector: '#templateNameFilter',
+            hidden: false
+        },
         view: {
             show: 'onShow'
         },
         'allPlansTemplateGridPanel':{
             itemdblclick: 'onItemDblClick'
+        },
+        'searchTemplates':{
+           selector: '#searchTemplates',
+           listeners: {
+                click: 'onSearchTemplatesClick'
+           }
         }
 	},
 
@@ -158,12 +168,9 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     loadTemplates: function() {
         var me = this;
         me.getView().setLoading(true);
-        me.store.load(); 
-
-        me.store.filter([{
-			property: 'objectStatus',
-			value: 'ACTIVE'
-		}]);
+    	var params = {};
+		params["objectStatus"] = "ACTIVE";
+		me.store.load({params: params});
 		// callback registered in init()
     },
     
@@ -300,6 +307,11 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
         me.handleSelect(me);
     },
 
+    onSearchTemplatesClick: function(button){
+        var me=this;
+        me.handleSelect(me);
+    },
+
     handleSelect: function(me){
     	var params = {};
     	me.setParam(params, me.getProgram(), 'programCode');
@@ -307,14 +319,12 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     	me.setParam(params, me.getDivision(), 'divisionCode');
     	me.setParam(params, me.getCatalogYear(), 'catalogYearCode');
     	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
-		params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
-    	me.store.on('load', me.onLoadComplete, this, {single: true});
+    	me.setParam(params, me.getObjectStatusFilter(), 'objectStatus');
+    	if (me.getTypeFilter().getValue()!='ALL') {
+    	    me.setParam(params, me.getTypeFilter(), 'visibility');
+    	}
+    	me.setParam(params, me.getTemplateNameFilter(), 'name');
     	me.store.load({params: params});
-    },
-    
-    onLoadComplete: function(){
-		var me = this;
-    	me.onObjectStatusFilterSelect();
     },
     
     setParam: function(params, field, fieldName){
@@ -324,38 +334,14 @@ Ext.define('Ssp.controller.tool.map.LoadTemplateViewController', {
     },
 
 	onTypeFilterSelect:function(){
-		var me = this;
-		me.onObjectStatusFilterSelect();
-	},
+        var me=this;
+		me.handleSelect(me);	},
 	
 	onObjectStatusFilterSelect:function(){
-			var me = this;
-			me.values = {};
-			me.values.objectStatus = me.getObjectStatusFilter().getValue();
-			me.values.typeValue = me.getTypeFilter().getValue();
-			me.store.clearFilter(false);
-			me.store.filterBy(me.typeStatusFilter, me);
+        var me=this;
+		me.handleSelect(me);
 	},
 
-	typeStatusFilter: function(record){
-		var me = this;
-		if (me.values.objectStatus != null && me.values.objectStatus != undefined && me.values.objectStatus != 'ALL') {
-			if (record.get("objectStatus") != me.values.objectStatus) {
-                return false;
-            }
-		}
-		var visibilityMatch = false;
-		var typeValue = me.getTypeFilter().getValue();
-
-        if (typeValue == 'ALL') {
-            visibilityMatch = true;
-        } else if (record.get("visibility") == typeValue) {
-            visibilityMatch = true;
-        }
-				
-		return visibilityMatch;
-	},
-	
 	destroy:function(){
 	    var me=this;
 	    me.store.clearFilter(false);
