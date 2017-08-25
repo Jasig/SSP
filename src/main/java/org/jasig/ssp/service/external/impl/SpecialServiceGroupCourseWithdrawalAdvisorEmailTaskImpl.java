@@ -391,12 +391,13 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 	private void sendEmail(Person coach, List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students) {
 		final SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
 
-		try {
-			messageService.createMessage(coach.getPrimaryEmailAddress(), null, subjectAndBody);
-			LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
-		} catch ( ObjectNotFoundException | ValidationException e) {
-			LOGGER.error("Failed to send Special Service Group Course Withdrawal Advisor Email to coach at address {}",
-					new Object[] {coach.getPrimaryEmailAddress(), e});
-		}
+            try {
+                messageService.createMessage(emailAddress, null, subjectAndBody);
+                LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
+            } catch (Exception e) {
+                LOGGER.error("Failed to send Special Service Group Course Withdrawal Advisor Email to coach {} at address {}",
+                        new Object[]{coach.getSchoolId(), emailAddress, e});
+            }
+        }
 	}
 }
