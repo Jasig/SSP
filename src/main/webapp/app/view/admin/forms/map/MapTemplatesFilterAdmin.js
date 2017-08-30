@@ -193,6 +193,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 												},
 											items: [{
 												xtype: 'combobox',
+												id: 'catalogYear',
 												name: 'catalogYear',
 												store: me.catalogYearsStore,
 												fieldLabel: 'Catalog Year',
@@ -227,6 +228,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 												},
 											items: [{
 												xtype: 'combobox',
+												id: 'mapTemplateTag',
 												name: 'mapTemplateTag',
 												store: me.mapTemplateTagsStore,
 												fieldLabel: (me.textStore.getValueByCode('ssp.label.map-template-tag') ? me.textStore.getValueByCode('ssp.label.map-template-tag') : "Template Tag"),
@@ -271,7 +273,9 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesFilterAdmin', {
 														data : [
 																{"value":"ALL","name":"ALL"},
 																{"value":"ACTIVE","name":"ACTIVE"},
-																{"value":"INACTIVE","name":"INACTIVE"}
+																{"value":"INACTIVE","name":"INACTIVE"},
+																{"value":"OBSOLETE","name":"OBSOLETE"},
+																{"value":"DELETED","name":"DELETED"}
 															]
 												}),
 												valueField: 'name',

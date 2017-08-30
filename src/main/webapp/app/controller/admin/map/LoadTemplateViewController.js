@@ -242,6 +242,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     onSearchTemplatesClick: function(button){
         var me=this;
         me.handleSelect(me);
+        me.handleSelect(me);
     },
 
     handleSelect: function(mte){
@@ -255,8 +256,8 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     	me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
     	me.setParam(params, me.getCatalogYear(), 'catalogYearCode');
     	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
+    	me.setParam(params, Ext.getCmp('objectStatusFilter'), 'objectStatus');
 
-        params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
     	grid.store.on('load', me.onLoadComplete, this, {single: true});
     	grid.store.load({params: params});
     },
