@@ -534,11 +534,11 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
             final SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
 
             try {
-                messageService.createMessage(coach.getPrimaryEmailAddress(), null, subjectAndBody);
+                messageService.createMessage(emailAddress, null, subjectAndBody);
                 LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
             } catch (Exception e) {
                 LOGGER.error("Failed to send Special Service Group Course Withdrawal Advisor Email to coach {} at address {}",
-                        new Object[]{coach.getSchoolId(), coach.getPrimaryEmailAddress(), e});
+                        new Object[]{coach.getSchoolId(), emailAddress, e});
             }
         }
 	}
