@@ -41,9 +41,13 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 	width : '100%',
 	initComponent : function() {
 		var me = this;
+        var cellEditor = Ext.create('Ext.grid.plugin.CellEditing', {
+            clicksToEdit: 1
+        });
 		Ext.apply(me, {
 			autoScroll: true,
 			selType: 'rowmodel',
+            plugins: cellEditor,
 			enableDragDrop: false,
 			cls: 'configgrid',
 			columns: [{
