@@ -151,13 +151,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         var me = this;
 
         me.getView().setLoading(true);
-        me.store.load(); 
-		me.store.filter([
-		{
-			property: 'objectStatus',
-			value: 'ACTIVE'
-		}
-		]);
+        me.store.load();
 		// callback registered in init()
     },
     
@@ -242,7 +236,6 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     onSearchTemplatesClick: function(button){
         var me=this;
         me.handleSelect(me);
-        me.handleSelect(me);
     },
 
     handleSelect: function(mte){
@@ -258,29 +251,17 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
     	me.setParam(params, Ext.getCmp('objectStatusFilter'), 'objectStatus');
 
-    	grid.store.on('load', me.onLoadComplete, this, {single: true});
     	grid.store.load({params: params});
     },
     
-    onLoadComplete: function(){
-		var me = this;
-    	me.onObjectStatusFilterSelect();
-    },
-
     setParam: function(params, field, fieldName){
     	if(field.getValue() && field.getValue().length > 0)
     		params[fieldName] = field.getValue();
     },
 
 	onObjectStatusFilterSelect:function(){
-		var me = this;	
-		var grid = Ext.getCmp("templatePanel");
-		var objectStatus = Ext.getCmp('objectStatusFilter').getRawValue();	
-		grid.store.clearFilter(false);
-
-        if(objectStatus!='ALL'){
-			grid.store.filter('objectStatus', Ext.getCmp('objectStatusFilter').getRawValue());
-		}
+        var me=this;
+        me.handleSelect(me);
 	},
 	
 	destroy:function(){

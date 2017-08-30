@@ -289,12 +289,8 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
         me.setParam(params, Ext.getCmp('mapTemplateTag'), 'objectStatus');
         me.setParam(params, Ext.getCmp('objectStatusFilter'), 'objectStatusFilter');
 
-        grid.store.on('load', me.onLoadComplete, this, {single: true});
         grid.store.load({params: params});
 
-    },
-
-    onLoadComplete: function(){
     },
 
     setParam: function(params, field, fieldName){
