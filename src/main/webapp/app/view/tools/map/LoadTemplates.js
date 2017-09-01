@@ -29,12 +29,28 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsStore',
         store: 'planTemplatesSummaryStore',
-        textStore: 'sspTextStore'
+        textStore: 'sspTextStore',
+        authenticatedPerson: 'authenticatedPerson'
     },
     height: 600,
     width: 900,
     resizable: true,
     modal: true,
+    getObjectStatusStore: function() {
+        var me = this;
+        var validStatuses = [{"value":"ALL","name":"ALL"},
+                             {"value":"ACTIVE","name":"ACTIVE"},
+                             {"value":"INACTIVE","name":"INACTIVE"},
+                             {"value":"OBSOLETE","name":"OBSOLETE"}];
+        if (me.authenticatedPerson.hasAccess('TEMPLATE_TOOL')) {
+            validStatuses[4] = {"value":"DELETED","name":"DELETED"};
+        }
+
+        return Ext.create('Ext.data.Store', {
+            fields: ['value', 'name'],
+                data : validStatuses
+        })
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -315,14 +331,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 				        		fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.status','Status'),
 								labelWidth:80,
 				        		emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.status','Filter by Status'),
-								store: Ext.create('Ext.data.Store', {
-								    fields: ['value', 'name'],
-								    	data : [
-									        	{"value":"ALL","name":"ALL"},
-									        	{"value":"ACTIVE","name":"ACTIVE"},
-									        	{"value":"INACTIVE","name":"INACTIVE"}
-									    	]
-								}),
+								store: me.getObjectStatusStore(),
 				        		valueField: 'name',
 				        		displayField: 'name',
 								defaultValue: "ACTIVE",
@@ -354,18 +363,26 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 allowBlank:true,
                                 labelWidth:80,
 								width: 290,
-								enableKeyEvents:true,
-								listeners:{
-									keyup: function(textField, e, eOpts) {
-										var me = this;
-				                        var searchString = textField.getValue().trim();
-				                        var templatesGrid = me.findParentByType('loadtemplates').query('#allPlansTemplateGridPanel')[0];
-										templatesGrid.getStore().filterBy(getFilterRecord(['name'], searchString)); 
-				                    }
-								}
-                            }]}
-                            
-            
+								enableKeyEvents:true
+                            }]},
+                            {
+                                xtype: 'container',
+                                border: 0,
+                                title: '',
+                                width: '100%',
+                                layout: {
+                                    type: 'hbox'
+                                },
+                                items: [{
+                                    xtype: 'button',
+                                    tooltip: me.textStore.getValueByCode('ssp.tooltip.map.search-templates-button','Search for Templates'),
+                                    text: me.textStore.getValueByCode('ssp.label.search-button','Search'),
+                                    itemId: 'searchTemplates',
+                                    margins: '10 0 0 125',
+                                    width: 80
+                                }]
+                            }
+
             ]}]
          }]
 		},	{
@@ -479,5 +496,5 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         });
         
         return me.callParent(arguments);
-    }   
+    }
 });

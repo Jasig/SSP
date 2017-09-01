@@ -41,9 +41,13 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 	width : '100%',
 	initComponent : function() {
 		var me = this;
+        var cellEditor = Ext.create('Ext.grid.plugin.CellEditing', {
+            clicksToEdit: 1
+        });
 		Ext.apply(me, {
 			autoScroll: true,
 			selType: 'rowmodel',
+            plugins: cellEditor,
 			enableDragDrop: false,
 			cls: 'configgrid',
 			columns: [{
@@ -53,22 +57,56 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 				sortable: true,
 				renderer: me.columnRendererUtils.renderTemplateVisibility
 			}, {
-				name: 'isTemplateActive',
-				id: 'isTemplateActive',
-				xtype: 'checkcolumn',
-				text: 'Active',
-				width: 55,
-				dataIndex: 'objectStatus',
-				inputValue: 'ACTIVE',
-				uncheckedValue: 'INACTIVE',
-				sortable: true,
-				renderer: function (value) {
-					var text = '<input type="checkbox" ';
-					if (value == 'ACTIVE') {
-						text += ' checked="checked"';
-					}
-					return text + '/>';
-				}
+                header: 'Active',
+                dataIndex: 'objectStatus',
+                id: 'objectStatusColumn',
+                name: 'objectStatusColumn',
+                xtype: 'gridcolumn',
+                required: true,
+                width: 80,
+                editable: true,
+                editor: {
+                    xtype: 'combo',
+    			    name: 'objectStatusCombo',
+	    		    id: 'objectStatusCombo',
+                    store: Ext.create('Ext.data.Store', {
+                        fields: ['value', 'name'],
+                            data : [
+                                    {"value":"ACTIVE","name":"ACTIVE"},
+                                    {"value":"INACTIVE","name":"INACTIVE"},
+                                    {"value":"OBSOLETE","name":"OBSOLETE"},
+                                    {"value":"DELETED","name":"DELETED"}
+                                ]
+                    }),
+                    valueField: 'value',
+                    displayField: 'name',
+                    forceSelection: false,
+                    editable: true,
+                    allowBlank: false,
+                    listeners: {
+                        change : function(comboBox, newValue, oldValue, e) {
+                            var plan = this.up('grid').getSelectionModel().getSelection()[0];
+                            var mapPlanService = Ext.create('Ssp.service.MapPlanService');
+
+                            var callbacks = new Object();
+                            if (newValue=='ACTIVE') {
+                                callbacks.success = me.onGetTemplateACTIVESuccess;
+                            } else if (newValue=='INACTIVE') {
+                                callbacks.success = me.onGetTemplateINACTIVESuccess;
+                            } else if (newValue=='OBSOLETE') {
+                                callbacks.success = me.onGetTemplateOBSOLETESuccess;
+                            } else if (newValue=='DELETED') {
+                                callbacks.success = me.onGetTemplateDELETEDSuccess;
+                            }
+                            callbacks.failure = me.onLoadCompleteFailure;
+                            callbacks.scope = me;
+
+                            mapPlanService.getTemplate(plan.get('id'), callbacks);
+                        }
+                    }
+
+                },
+                sortOrder: 40
 			}, {
 				text: 'Template Title',
 				width: 200,
@@ -189,5 +227,78 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesListAdmin', {
 		});
 
 		return me.callParent(arguments);
-	}
+	},
+
+    onGetTemplateACTIVESuccess: function(response, t) {
+        return t.onGetTemplateSuccess(response, t, 'ACTIVE');
+	},
+    onGetTemplateINACTIVESuccess: function(response, t) {
+        return t.onGetTemplateSuccess(response, t, 'INACTIVE');
+	},
+    onGetTemplateOBSOLETESuccess: function(response, t) {
+        return t.onGetTemplateSuccess(response, t, 'OBSOLETE');
+	},
+    onGetTemplateDELETEDSuccess: function(response, t) {
+        return t.onGetTemplateSuccess(response, t, 'DELETED');
+	},
+
+    onGetTemplateSuccess: function(response, t, objectStatus) {
+        var me = t;
+        var callbacks = new Object();
+        callbacks.success = me.onLoadCompleteSuccess;
+        callbacks.failure = me.onLoadCompleteFailure;
+        callbacks.scope = me;
+        var mapPlanService = Ext.create('Ssp.service.MapPlanService');
+        var plan = Ext.create('Ssp.model.tool.map.Plan');
+        var grid = Ext.getCmp("templatePanel");
+        var planfromResponse = Ext.decode(response.responseText);
+        planfromResponse.objectStatus = objectStatus;
+
+        plan.loadFromServer(planfromResponse);
+        plan.set('isTemplate', true);
+
+        var planCourses = plan.get('planCourses');
+        for(var k = 0; k < planCourses.length; k++){
+            course = planCourses[k];
+            course.id=null;
+        }
+
+        var url = me.apiProperties.createUrl( me.apiProperties.getItemUrl('templatePlan') );
+
+        // update
+        me.apiProperties.makeRequest({
+            url: url+'/'+ plan.get('id'),
+            method: 'PUT',
+            jsonData: plan.getSimpleJsonData(),
+            successFunc: callbacks.success,
+            failureFunc: callbacks.failure,
+            scope: me
+        });
+    },
+
+    onLoadCompleteSuccess: function(response, t) {
+     	var grid = Ext.getCmp("templatePanel");
+     	var params = {};
+     	var me = this;
+
+        me.setParam(params, Ext.getCmp('program'), 'programCode');
+        me.setParam(params, Ext.getCmp('department'), 'departmentCode');
+        me.setParam(params, Ext.getCmp('division'), 'divisionCode');
+        me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
+        me.setParam(params, Ext.getCmp('catalogYear'), 'catalogYearCode');
+        me.setParam(params, Ext.getCmp('mapTemplateTag'), 'objectStatus');
+        me.setParam(params, Ext.getCmp('objectStatusFilter'), 'objectStatusFilter');
+
+        grid.store.load({params: params});
+
+    },
+
+    setParam: function(params, field, fieldName){
+    	if(field.getValue() && field.getValue().length > 0)
+    		params[fieldName] = field.getValue();
+    },
+
+    onLoadCompleteFailure: function(response, t) {
+     	alert('failure: ' + response + ' '+ t);
+    }
 });

@@ -298,7 +298,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
             simpleData.mapTemplateTags = [];
             if(Array.isArray(mapTemplateTags)){
                 Ext.Array.forEach(mapTemplateTags, function(mapTemplateTag) {
-                    simpleData.mapTemplateTags.push(mapTemplateTag.getData());
+                    simpleData.mapTemplateTags.push(mapTemplateTag);
                 });
             }
 		}else{
@@ -338,6 +338,16 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'ACTIVE'){
 			return 'ACTIVE';
 		}	
+
+		if (me.get('isTemplate')) {
+            if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'OBSOLETE'){
+                return 'OBSOLETE';
+            }
+            if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'DELETED'){
+                return 'DELETED';
+            }
+		}
+
 		return 'INACTIVE';
 	},
 	
