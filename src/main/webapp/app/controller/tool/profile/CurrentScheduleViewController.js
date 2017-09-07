@@ -157,7 +157,7 @@ Ext.define('Ssp.controller.tool.profile.CurrentScheduleViewController', {
         if (me.participationIndicatorConfig && participation) {
             var participationMaybeDecimal = parseFloat(participation.trim());
 
-            if (participationMaybeDecimal && participationMaybeDecimal != 'Nan' &&
+            if (!isNaN(participationMaybeDecimal) &&
                 me.participationIndicatorConfig.get('evaluationType').trim() === 'SCALE') {
 
                 //numeric (basic numeric range calc only
