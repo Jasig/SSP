@@ -35,12 +35,14 @@ import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
 import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
 import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -77,13 +79,20 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 
 	public List<Plan> getActivePlanForStudents(List<UUID> ids)
 	{
-		List<Plan> activePlansForStudents = (List<Plan>) createCriteria()
-				.add(Restrictions.in("person.id", ids))
-				.add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE))
-				.list();
-		return activePlansForStudents;
+		if ( ids == null || ids.size() < 1 ) {
+			return new <Plan>ArrayList();
+		}
+
+		final BatchProcessor<UUID, Plan> processor = new BatchProcessor<>(ids);
+		do {
+			final Criteria criteria = createCriteria().add(Restrictions.eq("objectStatus", ObjectStatus.ACTIVE));
+			processor.process(criteria, "person.id");
+
+		} while ( processor.moreToProcess() );
+
+		return processor.getUnsortedUnpagedResultsAsList();
 	}
-	
+
 	public PagingWrapper<Plan> getAllForStudent(final SortingAndPaging sAndP,UUID personId) {
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("person.id",personId));
