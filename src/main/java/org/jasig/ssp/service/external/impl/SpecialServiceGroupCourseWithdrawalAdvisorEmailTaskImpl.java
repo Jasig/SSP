@@ -390,7 +390,16 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 
 	private void sendEmail(Person coach, List<StudentSpecialServiceGroupCourseWithdrawalMessageTemplateTO> students) {
 		final SubjectAndBody subjectAndBody = messageTemplateService.createSpecialServiceGroupCourseWithdrawalCoachMessage(new CoachPersonLiteMessageTemplateTO(coach), students);
+		String emailAddress = null;
+		if (StringUtils.isNotBlank(coach.getPrimaryEmailAddress())) {
+			emailAddress = coach.getPrimaryEmailAddress();
+		} else if (StringUtils.isNotBlank(coach.getSecondaryEmailAddress())) {
+			emailAddress = coach.getSecondaryEmailAddress();
+		} else {
+			LOGGER.info("No email address found for coach: {} can't send notification!", coach.getSchoolId());
+		}
 
+		if (emailAddress != null) {
             try {
                 messageService.createMessage(emailAddress, null, subjectAndBody);
                 LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
