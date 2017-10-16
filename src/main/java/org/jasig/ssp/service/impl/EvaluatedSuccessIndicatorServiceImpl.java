@@ -933,11 +933,13 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             //take lowest value found
             for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
                 try {
-                    double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
-                    if (lowestParticipationScore == null) {
-                        lowestParticipationScore = new Double(participationToEvaluate);
-                    } else if (lowestParticipationScore > participationToEvaluate) {
-                        lowestParticipationScore = participationToEvaluate;
+                    if (StringUtils.isNotBlank(courseToEvaluate.getParticipation())) {
+                        double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
+                        if (lowestParticipationScore == null) {
+                            lowestParticipationScore = new Double(participationToEvaluate);
+                        } else if (lowestParticipationScore > participationToEvaluate) {
+                            lowestParticipationScore = participationToEvaluate;
+                        }
                     }
                 } catch (NumberFormatException nfe) {
                     //ignore for now, likely one or more records not a number
