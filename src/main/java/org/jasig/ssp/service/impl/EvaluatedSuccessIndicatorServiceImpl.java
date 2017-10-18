@@ -845,7 +845,16 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         Date intakeSubmissionDate = person.getStudentIntakeCompleteDate();
         // Doesn't go for all boolean indicators you could imagine, but for this one there is no conceptual distinction
         // between 'no data' and 'false'
-        return new SuccessIndicatorMetric(new Boolean(intakeSubmissionDate != null),
+        if (intakeSubmissionDate!=null) {
+            return new SuccessIndicatorMetric(new Boolean(true),
+                    formatIntakeSubmissionDateForDisplay(intakeSubmissionDate), null,
+                    successIndicator.getCode(), successIndicator.getName());
+        } else if (person.getStudentIntakeRequestDate()!=null) {
+            return new SuccessIndicatorMetric(new Boolean(false),
+                    "INCOMPLETE", null,
+                    successIndicator.getCode(), successIndicator.getName());
+        }
+        return new SuccessIndicatorMetric(null,
                 formatIntakeSubmissionDateForDisplay(intakeSubmissionDate), null,
                 successIndicator.getCode(), successIndicator.getName());
     }
