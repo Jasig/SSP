@@ -30,7 +30,8 @@ public class JournalStepSearchFormTO extends PersonSearchFormTO {
 	private static final long serialVersionUID = -2006828374589398077L;
 	
 	private List<UUID> journalStepDetailIds;
-	
+
+	private List<UUID> journalSourceIds;
 	
 	private Boolean hasStepDetails;
 	
@@ -95,4 +96,11 @@ public class JournalStepSearchFormTO extends PersonSearchFormTO {
 				journalCreateDateTo.getTime());
 	}
 
+	public List<UUID> getJournalSourceIds() {
+		return journalSourceIds;
+	}
+
+	public void setJournalSourceIds(List<UUID> journalSourceIds) {
+		this.journalSourceIds = journalSourceIds;
+	}
 }

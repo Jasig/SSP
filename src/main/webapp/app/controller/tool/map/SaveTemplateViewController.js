@@ -45,7 +45,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 			click: 'onCancelClick'
 		},
 		visibilityField: '#visibility',
-		mapTemplateTagField: '#mapTemplateTagId'
+		mapTemplateTagsField: '#mapTemplateTagsId'
 
 	},
 	init: function() {
@@ -62,6 +62,14 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 
 		me.mapTemplateTagsStore.clearFilter(true);
        	me.mapTemplateTagsStore.load({callback:me.afterMapTemplateTagStoreLoaded,scope:me,single:true})
+        var mapTemplateTags = me.currentMapPlan.get('mapTemplateTags');
+        var ids = [];
+        if (mapTemplateTags!=null) {
+            for(var i = 0; i < mapTemplateTags.length; i++){
+                ids[i] = mapTemplateTags[i].id;
+            }
+            me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,ids);
+        }
 
 		if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 			me.getVisibilityField().setValue('PRIVATE');
@@ -69,7 +77,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		}else{
 			me.getVisibilityField().setDisabled(false);
 		}
-		
+
 		me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
    		me.appEventsController.removeEvent({eventName: 'doAfterSaveFailure', callBackFunc: me.doAfterSaveFailure, scope: me});
 		me.appEventsController.assignEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
@@ -241,15 +249,21 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 				me.currentMapPlan.set('isPrivate', true);
 			}
 
-			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].getValue()) ? 'ACTIVE' : 'INACTIVE');
+			me.currentMapPlan.set('objectStatus', me.getView().query('combobox[name=objectStatus]')[0].getValue());
 			if(!me.currentMapPlan.get('isTemplate')){
 				me.currentMapPlan.set('id', '');
 				me.currentMapPlan.setIsTemplate(true);
 			} else {
-       			var mapTemplateTagId = me.getView().query('combobox[name="mapTemplateTagId"]')[0].getValue();
-	   			var record = me.mapTemplateTagsStore.findRecord('id',mapTemplateTagId, 0, false, false, true);
-
-   				me.currentMapPlan.set('mapTemplateTag', record);
+       			var mapTemplateTagIds = me.getView().query('combobox[name="mapTemplateTagsId"]')[0].getValue();
+                var records = new Array();
+                var j=0;
+                for (var i=0; i < mapTemplateTagIds.length; i++) {
+                    var record = me.mapTemplateTagsStore.findRecord('id',mapTemplateTagIds[i], 0, false, false, true);
+                    if (record != null) {
+                        records[j++] = record;
+                    }
+                }
+   				me.currentMapPlan.set('mapTemplateTags', records);
 			}
 	    	me.mapEventUtils.saveTemplate(me.getView().saveAs);
     	}else if(btnId == 'no'){
@@ -264,17 +278,17 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     },
     onShow: function(){
     	var me=this;
-		
+
 		me.resetForm();
 	    me.getView().query('form')[0].loadRecord( me.currentMapPlan );
 		
-	    var activenessCheckbox = me.getView().query('checkbox[name=objectStatus]')[0];
+	    var activenessCheckbox = me.getView().query('combobox[name=objectStatus]')[0];
 	    if (!me.currentMapPlan.get('id') || !(me.currentMapPlan.get('isTemplate')) || me.getView().saveAs) {
-	        activenessCheckbox.setValue(false); // Create mode. New Templates intentionally
+	        activenessCheckbox.setValue("INACTIVE"); // Create mode. New Templates intentionally
 	                                             // inactive by default (https://issues.jasig.org/browse/SSP-1828)
 	    } else {
 	        // Edit mode. Preserve current state as the default.
-	        activenessCheckbox.setValue(me.currentMapPlan.getAsBoolean('objectStatus',"ACTIVE"));
+	        activenessCheckbox.setValue(me.currentMapPlan.get('objectStatus'));
 	    }
 	    if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
 	    	me.getVisibilityField().setValue('PRIVATE');
@@ -285,10 +299,13 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 	    }
 		me.checkForContactInfo();
 
-		if (me.currentMapPlan.get('mapTemplateTag')) {
-			var mapTemplateTagId = me.currentMapPlan.get('mapTemplateTag').id;
-			me.formUtils.applyAssociativeStoreFilter(me.mapTemplateTagsStore,mapTemplateTagId);
-			me.getMapTemplateTagField().setValue(mapTemplateTagId);
+        var mapTemplateTags = me.currentMapPlan.get('mapTemplateTags');
+		if (mapTemplateTags) {
+		    var mapTemplateTagIds = new Array(mapTemplateTags.length);
+            for (var i=0; i < mapTemplateTags.length; i++) {
+                mapTemplateTagIds[i] = mapTemplateTags[i].id;
+            }
+   			me.getMapTemplateTagsField().setValue(mapTemplateTagIds);
 		} else {
 			me.formUtils.applyActiveOnlyFilter(me.mapTemplateTagsStore);
 		}

@@ -72,7 +72,10 @@ public class MessageTemplate
 	
 	public static final UUID OUTPUT_MAP_PLAN_MATRIX_ID = UUID
 			.fromString("aa2e0356-46df-4acd-ab3e-b96a6aa943d3");
-	
+
+	public static final UUID OUTPUT_MAP_PLAN_SHORT_MATRIX_ID = UUID
+			.fromString("f66d95ed-7696-4a0d-bcd5-7997d73fa972");
+
 	public static final UUID OUTPUT_TEMPLATE_PLAN_MATRIX_ID = UUID
 			.fromString("bcc180b0-3a8b-11e3-aa6e-0800200c9a66");
 	

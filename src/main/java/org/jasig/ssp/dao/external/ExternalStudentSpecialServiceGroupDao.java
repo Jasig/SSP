@@ -23,6 +23,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,19 +46,30 @@ public class ExternalStudentSpecialServiceGroupDao extends
 	}
 
 	public List<ExternalStudentSpecialServiceGroup> getStudentSpecialServiceGroupsBySchoolIds(List<String> schoolIds){
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.in("schoolId", schoolIds));
-		criteria.addOrder(Order.asc("schoolId"));
+		final BatchProcessor<String, ExternalStudentSpecialServiceGroup> processor =  new BatchProcessor<String,ExternalStudentSpecialServiceGroup>(schoolIds, null);
 
-		return (List<ExternalStudentSpecialServiceGroup>)criteria.list();
+		do {
+			final Criteria criteria = createCriteria();
+			criteria.addOrder(Order.asc("schoolId"));
+			processor.process(criteria, "schoolId");
+
+		} while (processor.moreToProcess());
+
+		return processor.getSortedAndPagedResultsAsList();
 	}
 
     public List<String> getAllSchoolIdsWithSpecifiedSSGs(List<String> ssgCodeParams) {
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.in("code", ssgCodeParams));
-        criteria.addOrder(Order.asc("schoolId"));
-        criteria.setProjection(Projections.groupProperty("schoolId"));
 
-        return (List<String>) criteria.list();
+		final BatchProcessor<String, String> processor =  new BatchProcessor<String, String>(ssgCodeParams, null);
+
+		do {
+			final Criteria criteria = createCriteria();
+			criteria.addOrder(Order.asc("schoolId"));
+			criteria.setProjection(Projections.groupProperty("schoolId"));
+			processor.process(criteria, "code");
+
+		} while (processor.moreToProcess());
+
+		return processor.getSortedAndPagedResultsAsList();
     }
 }

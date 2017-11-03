@@ -20,6 +20,7 @@ package org.jasig.ssp.transferobject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.reference.MapTemplateTag;
 import org.jasig.ssp.transferobject.reference.MapTemplateTagTO;
 import org.jasig.ssp.transferobject.reference.TemplateElectiveCourseTO;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 	
 	private List<TemplateCourseTO> planCourses = new ArrayList<TemplateCourseTO>();
 
-	private MapTemplateTagTO mapTemplateTag;
+	private List<MapTemplateTagTO> mapTemplateTags = new ArrayList<MapTemplateTagTO>();
 
 	private List<TemplateElectiveCourseTO> planElectiveCourses = new ArrayList<TemplateElectiveCourseTO>();
 
@@ -85,8 +86,8 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 			TemplateElectiveCourseTO templateElectiveCourseTO = new TemplateElectiveCourseTO(planElectiveCourse);
 			this.getPlanElectiveCourses().add(templateElectiveCourseTO);
 		}
-		if (model.getMapTemplateTag()!=null) {
-			this.setMapTemplateTag(new MapTemplateTagTO(model.getMapTemplateTag()));
+		for (MapTemplateTag mapTemplateTag : model.getMapTemplateTags()) {
+			this.getMapTemplateTags().add(new MapTemplateTagTO(mapTemplateTag));
 		}
 	}
 
@@ -146,12 +147,12 @@ public class TemplateTO extends AbstractPlanTO<Template> {
 		this.visibility = visibility;
 	}
 
-	public MapTemplateTagTO getMapTemplateTag() {
-		return mapTemplateTag;
+	public List<MapTemplateTagTO> getMapTemplateTags() {
+		return mapTemplateTags;
 	}
 
-	public void setMapTemplateTag(MapTemplateTagTO mapTemplateTag) {
-		this.mapTemplateTag = mapTemplateTag;
+	public void setMapTemplateTags(List<MapTemplateTagTO> mapTemplateTags) {
+		this.mapTemplateTags = mapTemplateTags;
 	}
 
 	public List<TemplateElectiveCourseTO> getPlanElectiveCourses() {

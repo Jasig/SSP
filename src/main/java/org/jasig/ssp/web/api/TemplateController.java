@@ -176,7 +176,7 @@ public class TemplateController  extends AbstractBaseController {
 		TemplateTO to = validatePlan(new TemplateTO(model));
 		if(to != null ){
 			if(to.getVisibility().equals(MapTemplateVisibility.PRIVATE) && currentUser != null){
-				if(!to.getCreatedBy().getId().equals(currentUser.getPerson().getId()))
+				if(!to.getOwnerId().equals(currentUser.getPerson().getId().toString()))
 					throw new AccessDeniedException("Insufficient permissions to view private template.");
 			}else if ((currentUser == null || !getSecurityService().isAuthenticated()) && !to.getVisibility().equals(MapTemplateVisibility.ANONYMOUS))
 				throw new AccessDeniedException("Insufficient permissions to view requested template.");

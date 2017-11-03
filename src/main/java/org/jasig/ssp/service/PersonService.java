@@ -152,7 +152,8 @@ public interface PersonService extends AuditableCrudService<Person> {
      * @return The specified Person instance.
      * @throws ObjectNotFoundException If the supplied identifier does not exist in the database at all
      */
-	Person getInternalOrExternalPersonBySchoolId(String studentId,boolean commitPerson) throws ObjectNotFoundException;
+	Person getInternalOrExternalPersonBySchoolId(final String studentId, final boolean commitPerson,
+												 final boolean isStudent) throws ObjectNotFoundException;
 
     /**
      * Retrieves the specified Person by their User name (userName) and syncs from external for the most up to date
@@ -171,7 +172,8 @@ public interface PersonService extends AuditableCrudService<Person> {
      *                If the supplied identifier does not exist in the database.
      * @return The specified Person instance.
      */
-    Person getSyncedByUsername(final String username, final Boolean commit) throws ObjectNotFoundException;
+    Person getSyncedByUsername(final String username, final boolean commit, final boolean isStudent)
+            throws ObjectNotFoundException;
 
     /**
 	 * Gets a list of {@link Person} objects based on specified criteria

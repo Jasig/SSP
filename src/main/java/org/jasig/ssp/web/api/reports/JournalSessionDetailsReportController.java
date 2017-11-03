@@ -18,19 +18,9 @@
  */
 package org.jasig.ssp.web.api.reports;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.sf.jasperreports.engine.JRException;
-
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.JournalEntryService;
@@ -51,8 +41,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/1/report/journalsessiondetail")
@@ -92,6 +89,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 			final @RequestParam(required = false) List<UUID> studentTypeIds,
 			final @RequestParam(required = false) List<UUID> serviceReasonIds,
 			final @RequestParam(required = false) List<UUID> journalStepDetailIds,
+			final @RequestParam(required = false) List<UUID> journalSourceIds,
 			final @RequestParam(required = false) Date createJournalEntryDateFrom,
 			final @RequestParam(required = false) Date createJournalEntryDateTo,
 			final @RequestParam(required = false) String termCode,
@@ -112,6 +110,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				studentTypeIds,
 				serviceReasonIds,
 				journalStepDetailIds,
+				journalSourceIds,
 				createJournalEntryDateFrom,
 				createJournalEntryDateTo,
 				termCode,
@@ -141,6 +140,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				"STUDENT_LAST_NAME",
 				"COACH_FIRST_NAME",
 				"COACH_LAST_NAME",
+				"JOURNAL_SOURCE_NAME",
 				"JOURNAL_DETAIL"
 		};
 	}
@@ -156,6 +156,7 @@ public class JournalSessionDetailsReportController extends ReportBaseController<
 				reportResultElement.getLastName(),
 				reportResultElement.getCoachFirstName(),
 				reportResultElement.getCoachLastName(),
+				reportResultElement.getJournalSourceName(),
 				reportResultElement.getJournalStepDetailName()
 		});
 	}

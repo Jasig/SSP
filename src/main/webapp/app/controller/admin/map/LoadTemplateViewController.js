@@ -36,10 +36,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     },
 	control: {
         'name': {
-            selector: '#templateNameFilter',
-            listeners: {
-                keyup: 'ontemplateNameKeyUp'
-            }
+            selector: '#templateNameFilter'
         },
         'program': {
            selector: '#program',
@@ -111,8 +108,18 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
                 select: 'onObjectStatusFilterSelect'
             }
         },
+		'templateNameFilter':{
+            selector: '#templateNameFilter',
+            hidden: false
+        },
         view: {
             show: 'onShow'
+        },
+        'searchTemplates':{
+           selector: '#searchTemplates',
+           listeners: {
+                click: 'onSearchTemplatesClick'
+           }
         }
 	},
 
@@ -144,13 +151,7 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         var me = this;
 
         me.getView().setLoading(true);
-        me.store.load(); 
-		me.store.filter([
-		{
-			property: 'objectStatus',
-			value: 'ACTIVE'
-		}
-		]);
+        me.store.load();
 		// callback registered in init()
     },
     
@@ -232,11 +233,11 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
         me.handleSelect(me);
     },
 
-    ontemplateNameKeyUp: function(){
+    onSearchTemplatesClick: function(button){
         var me=this;
-		me.handleSelect(me);
-    },   
-    
+        me.handleSelect(me);
+    },
+
     handleSelect: function(mte){
 		var grid = Ext.getCmp("templatePanel");
     	var params = {};
@@ -248,31 +249,19 @@ Ext.define('Ssp.controller.admin.map.LoadTemplateViewController', {
     	me.setParam(params, Ext.getCmp('templateNameFilter'), 'name');
     	me.setParam(params, me.getCatalogYear(), 'catalogYearCode');
     	me.setParam(params, me.getMapTemplateTag(), 'mapTemplateTagId');
+    	me.setParam(params, Ext.getCmp('objectStatusFilter'), 'objectStatus');
 
-        params["objectStatus"] = "ALL"; //Object status and object type filtered client side.
-    	grid.store.on('load', me.onLoadComplete, this, {single: true});
     	grid.store.load({params: params});
     },
     
-    onLoadComplete: function(){
-		var me = this;
-    	me.onObjectStatusFilterSelect();
-    },
-
     setParam: function(params, field, fieldName){
     	if(field.getValue() && field.getValue().length > 0)
     		params[fieldName] = field.getValue();
     },
 
 	onObjectStatusFilterSelect:function(){
-		var me = this;	
-		var grid = Ext.getCmp("templatePanel");
-		var objectStatus = Ext.getCmp('objectStatusFilter').getRawValue();	
-		grid.store.clearFilter(false);
-
-        if(objectStatus!='ALL'){
-			grid.store.filter('objectStatus', Ext.getCmp('objectStatusFilter').getRawValue());
-		}
+        var me=this;
+        me.handleSelect(me);
 	},
 	
 	destroy:function(){

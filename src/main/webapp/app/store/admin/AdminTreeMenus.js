@@ -204,7 +204,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                                 field: {
                                     xtype: 'textfield',
                                     allowBlank: false,
-                                    maxLength: 10
+                                    maxLength: 50
                                 },
                                 flex: 0.25,
                                 sortOrder: 50
@@ -1308,8 +1308,7 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     title: 'Template Manager',
                     store: 'planTemplatesSummary',
                     form: 'maptemplatesadmin',
-                    leaf: true,
-                    addButtonVisible: false
+                    leaf: true
                 }]
             }]
         };

@@ -24,7 +24,7 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesAdmin', {
 	title: 'MAP Templates',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-    controller: 'Ssp.controller.AdminViewController',
+    controller: 'Ssp.controller.admin.map.MapTemplateAdminViewController',
 	height: '100%',
 	width: '100%',
 	layout: {
@@ -35,12 +35,12 @@ Ext.define('Ssp.view.admin.forms.map.MapTemplatesAdmin', {
 		Ext.apply(this,{
 	          items: [
 	                  {
-							xtype: 'maptemplatesfilteradmin', 
-							flex: 0.4
+							xtype: 'maptemplatesfilteradmin',
+							flex: 0.35
 	                  },
 	                  {
 		                  	xtype: 'maptemplateslistadmin', 
-		                  	flex: 0.6
+		                  	flex: 0.65
 		              }
 	          ]});
     	return this.callParent(arguments);

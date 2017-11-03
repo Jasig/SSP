@@ -132,7 +132,7 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
         final List<String> statusCodes = Lists.newArrayList();
         final List<SpecialServiceGroup> ssgList = Lists.newArrayList();
         final PersonSearchRequest reqForm = new PersonSearchRequest();
-        final SortingAndPaging sAndP = new SortingAndPaging(null, null, null, null, null, null);
+        final SortingAndPaging sAndP = new SortingAndPaging(null, null, null, null);
         final Map<String, String> facultyNameBySchoolId = Maps.newHashMap();
         final Map<String, PersonSearchResultFull> studentResultMap = Maps.newHashMap();
 
@@ -142,33 +142,48 @@ public class SpecialServiceCourseReportController extends ReportBaseController<S
                 statusCodes, grades, termCodes, ssgList);
 
         handleRetrievalOfStudents(reqForm, studentResultMap);
+        LOGGER.trace("Found " + studentResultMap.keySet().size() + " students.");
 
         final List<SpecialServiceStudentCoursesTO> courseResults = externalStudentTranscriptCourseService.
                 getTranscriptCoursesBySchoolIds(Lists.newArrayList(studentResultMap.keySet()), termCodes,
                         grades, statusCodes);
+        LOGGER.trace("Found " + courseResults.size() + " courses.");
 
         for (SpecialServiceStudentCoursesTO course : courseResults) {
 
             //load ssgs and campusName for student into report TO
-            final PersonSearchResultFull student = studentResultMap.get(course.getSchoolId());
-            course.setCampusName(student.getCampusName());
-            course.setSpecialServiceGroupNamesForDisplay(student.getSpecialServiceGroups());
+            if (StringUtils.isNotBlank(course.getSchoolId())) {
+                final PersonSearchResultFull student = studentResultMap.get(course.getSchoolId());
+                if (student != null) {
+                    course.setCampusName(student.getCampusName());
+                    course.setSpecialServiceGroupNamesForDisplay(student.getSpecialServiceGroups());
 
-            //load course facultyName for student in report TO
-            if (facultyNameBySchoolId.containsKey(course.getFacultySchoolId())) {
-                course.setFacultyName(facultyNameBySchoolId.get(course.getFacultySchoolId()));
-            } else {
-                try {
-                    final Person instructor = personService.getInternalOrExternalPersonBySchoolIdLite(
-                            course.getFacultySchoolId());
-                    course.setFacultyName(instructor.getFullName());
-                    facultyNameBySchoolId.put(course.getFacultySchoolId(), instructor.getFullName());
+                    //load course facultyName for student in report TO
+                    Person instructor = null;
+                    if (StringUtils.isNotBlank(course.getFacultySchoolId())) {
+                        if (facultyNameBySchoolId.containsKey(course.getFacultySchoolId())) {
+                            course.setFacultyName(facultyNameBySchoolId.get(course.getFacultySchoolId()));
+                        } else {
+                            try {
+                                instructor = personService.getInternalOrExternalPersonBySchoolIdLite(
+                                        course.getFacultySchoolId());
+                            } catch (ObjectNotFoundException ofne) {
+                                //Skip exception here already logged
+                                facultyNameBySchoolId.put(course.getFacultySchoolId(), "");
+                            }
+                        }
+                    }
 
-                } catch (ObjectNotFoundException ofne) {
-                    //Skip exception here already logged
+                    if (instructor != null) {
+                        course.setFacultyName(instructor.getFullName());
+                        facultyNameBySchoolId.put(course.getFacultySchoolId(), instructor.getFullName());
+                    } else {
+                        course.setFacultyName("");
+                    }
                 }
             }
         }
+        LOGGER.debug("Rendering SSG Course Report on {} records. " + courseResults.size());
 
         renderReport(response,  parameters, courseResults, REPORT_URL, reportType, REPORT_FILE_TITLE);
     }

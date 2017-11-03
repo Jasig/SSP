@@ -74,6 +74,13 @@ Ext.define('Ssp.view.tools.map.PrintPlan', {
                         name: 'outputFormat',
                         inputValue: 'matrixFormat',
                         itemId: 'matrixFormat'
+                    },
+                    {
+                        checked: false,
+                        boxLabel: me.textStore.getValueByCode('ssp.label.map.print-plan.print-map-matrix-format','Print MAP in Short Matrix Format'),
+                        name: 'outputFormat',
+                        inputValue: 'shortMatrixFormat',
+                        itemId: 'shortMatrixFormat'
                     }]
                     },
                     {xtype: 'container',

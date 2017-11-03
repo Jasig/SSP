@@ -39,6 +39,13 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
     	   listeners: {
             change: 'onprintmatrixFormatClick'
            }
+        },
+
+        'shortMatrixFormat': {
+    	   selector: '#shortMatrixFormat',
+    	   listeners: {
+            change: 'onprintShortMatrixFormatClick'
+           }
         }
     },
     
@@ -57,6 +64,13 @@ Ext.define('Ssp.controller.tool.map.PrintPlanController', {
     },
     
     onprintmatrixFormatClick: function(cb, nv, ov){
+        var me=this;
+        if (nv){
+        me.getOptionsPrintView().hide();
+        }
+    },
+
+    onprintShortMatrixFormatClick: function(cb, nv, ov){
         var me=this;
         if (nv){
         me.getOptionsPrintView().hide();

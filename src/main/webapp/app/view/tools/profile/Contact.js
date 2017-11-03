@@ -86,7 +86,7 @@ Ext.define('Ssp.view.tools.profile.Contact', {
                         title: '',
                         flex: 0.80,
                         defaultType: 'displayfield',
-                        padding: '0 0 10 0',
+                        padding: '0 0 40 0',
                         defaults: {
                             anchor: '100%'
                         },

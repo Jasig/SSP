@@ -51,6 +51,9 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
             implements ExternalStudentSpecialServiceGroupService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExternalStudentSpecialServiceGroupServiceImpl.class);
+	private static Boolean SSG_SET_FROM_EXTERNAL = null;
+	private static Boolean SSG_UNSET_FROM_EXTERNAL = null;
+	private static Map<String, SpecialServiceGroup> SSG_BY_CODE = Maps.newHashMap();
 
     @Autowired
     private transient ConfigService configService;
@@ -68,7 +71,7 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
 	protected ExternalDataDao<ExternalStudentSpecialServiceGroup> getDao() {
 		return dao;
 	}
-	
+
 	@Override
 	public List<ExternalStudentSpecialServiceGroup> getStudentExternalSpecialServiceGroups(String schoolId) {
 		return dao.getStudentSpecialServiceGroups(schoolId);
@@ -82,18 +85,12 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
             final List<ExternalStudentSpecialServiceGroup> essgsForStudent =
                             dao.getStudentSpecialServiceGroups(studentPerson.getSchoolId());
 
-            final Map<String, SpecialServiceGroup> ssgByCode = Maps.newHashMap();
             if (CollectionUtils.isNotEmpty(essgsForStudent)) {
                 for (ExternalStudentSpecialServiceGroup essg : essgsForStudent) {
-
-                    if (!ssgByCode.containsKey(essg.getCode())) {
-                        final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
-                        if (ssg != null) {
-                            ssgByCode.put(ssg.getCode(), ssg);
-                        }
+                    final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
+                    if (ssg != null) {
+                        internalSSGsForStudent.add(new PersonSpecialServiceGroup(studentPerson, ssg));
                     }
-                    internalSSGsForStudent.add(new PersonSpecialServiceGroup(studentPerson,
-                            ssgByCode.get(essg.getCode())));
                 }
             }
         }
@@ -111,20 +108,15 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
             final List<ExternalStudentSpecialServiceGroup> essgsForStudents =
                     dao.getStudentSpecialServiceGroupsBySchoolIds(schoolIds);
 
-            final Map<String, SpecialServiceGroup> ssgByCode = Maps.newHashMap();
             if (CollectionUtils.isNotEmpty(essgsForStudents)) {
                 for (ExternalStudentSpecialServiceGroup essg : essgsForStudents) {
-                    if (!ssgByCode.containsKey(essg.getCode())) {
-                        final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
-                        if (ssg != null) {
-                            ssgByCode.put(ssg.getCode(), ssg);
+                    final SpecialServiceGroup ssg = getInternalSpecialServiceGroupCode(essg.getCode().trim());
+                    if (ssg != null) {
+                        if (!results.containsKey(essg.getSchoolId())) {
+                            results.put(essg.getSchoolId(), Sets.newHashSet(SSG_BY_CODE.get(essg.getCode())));
+                        } else {
+                            results.get(essg.getSchoolId()).add(SSG_BY_CODE.get(essg.getCode()));
                         }
-                    }
-
-                    if (!results.containsKey(essg.getSchoolId())) {
-                        results.put(essg.getSchoolId(), Sets.newHashSet(ssgByCode.get(essg.getCode())));
-                    } else {
-                        results.get(essg.getSchoolId()).add(ssgByCode.get(essg.getCode()));
                     }
                 }
             }
@@ -147,8 +139,12 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
 	public void updatePersonSSGsFromExternalPerson(final Person studentPersonToUpdate) {
         if (studentPersonToUpdate != null) {
 
-            if (configService.getByNameNullOrDefaultValue("special_service_group_set_from_external_data")
-                    .equalsIgnoreCase("false")) {
+            if (SSG_SET_FROM_EXTERNAL == null && SSG_UNSET_FROM_EXTERNAL == null) {
+                SSG_SET_FROM_EXTERNAL = configService.getByNameNullOrDefaultValue("special_service_group_set_from_external_data").equalsIgnoreCase("false");
+                SSG_UNSET_FROM_EXTERNAL = configService.getByNameNullOrDefaultValue("special_service_group_unset_from_external_data").equalsIgnoreCase("true");
+            }
+
+            if (SSG_SET_FROM_EXTERNAL) {
                 LOGGER.debug("SSG_SYNC: Skipping all Special Service Group processing for person "
                         + "schoolId '{}' because that operation has been disabled "
                         + "via configuration.", studentPersonToUpdate.getSchoolId());
@@ -169,8 +165,7 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
                 }// else ignore
             } else {
                 if (CollectionUtils.isEmpty(externalSSGsForStudent)) {
-                    if ( configService.getByNameNullOrDefaultValue("special_service_group_unset_from_external_data")
-                            .equalsIgnoreCase("true") ) {
+                    if (SSG_UNSET_FROM_EXTERNAL) {
                         LOGGER.debug("SSG_SYNC: Deleting internal SSGs for person schoolId '{}' because unset is true",
                                 studentPersonToUpdate.getSchoolId());
                         personSpecialServiceGroupService.deleteAllForPerson(studentPersonToUpdate); //delete all existing non external
@@ -191,8 +186,7 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
                         }// else equals, so ignore
                     }
 
-                    if (configService.getByNameNullOrDefaultValue("special_service_group_unset_from_external_data")
-                            .equalsIgnoreCase("true")) {
+                    if (SSG_UNSET_FROM_EXTERNAL) {
                         for (String code : internalSSGCodes) {
                             if (!externalCodes.contains(code)) {
                                 LOGGER.debug("SSG_SYNC: Deleting internal SSG '{}' for person schoolId '{}' " +
@@ -231,12 +225,19 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
     }
 
     private SpecialServiceGroup getInternalSpecialServiceGroupCode(final String specialServiceGroupCode) {
-        try {
-            return specialServiceGroupService.getByCode(specialServiceGroupCode);
-        } catch (final ObjectNotFoundException e) {
-            LOGGER.debug("Special Service Group " + specialServiceGroupCode +" referenced in external table not "
-                    + "available internally. ", e);
-            return null;
+        if (SSG_BY_CODE.containsKey(specialServiceGroupCode)) {
+            return SSG_BY_CODE.get(specialServiceGroupCode);
+        } else {
+            try {
+                final SpecialServiceGroup ssg = specialServiceGroupService.getByCode(specialServiceGroupCode);
+                SSG_BY_CODE.put(ssg.getCode(), ssg);
+                return ssg;
+
+            } catch (final ObjectNotFoundException e) {
+                LOGGER.debug("Special Service Group " + specialServiceGroupCode + " referenced in external table not "
+                        + "available internally. ", e);
+                return null;
+            }
         }
     }
 }

@@ -56,6 +56,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_PTH.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_PTH.put("name", "Pathways to Completion");
         SPECIAL_SERVICE_GROUP_PTH.put("description", "Student participating in Pathways to Completion");
+        SPECIAL_SERVICE_GROUP_PTH.put("code", "005");
 
         SPECIAL_SERVICE_GROUP_LEARN = new JSONObject();
         SPECIAL_SERVICE_GROUP_LEARN.put("id", "0a640a2a-409d-1271-8140-d0c0fc9600fc");
@@ -66,6 +67,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_LEARN.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_LEARN.put("name", "Learning Community");
         SPECIAL_SERVICE_GROUP_LEARN.put("description", "Learning Community");
+        SPECIAL_SERVICE_GROUP_LEARN.put("code", "006");
 
         SPECIAL_SERVICE_GROUP_DEI = new JSONObject();
         SPECIAL_SERVICE_GROUP_DEI.put("id", "0a640a2a-409d-1271-8140-d0c138a100fd");
@@ -76,6 +78,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_DEI.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_DEI.put("name", "DEI Focus Group");
         SPECIAL_SERVICE_GROUP_DEI.put("description", "DEI Focus Group");
+        SPECIAL_SERVICE_GROUP_DEI.put("code", "007");
 
         SPECIAL_SERVICE_GROUP_ATD = new JSONObject();
         SPECIAL_SERVICE_GROUP_ATD.put("id", "0a640a2a-409d-1271-8140-d0c1692a00fe");
@@ -86,6 +89,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_ATD.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_ATD.put("name", "ATD Pilot");
         SPECIAL_SERVICE_GROUP_ATD.put("description", "ATD Pilot");
+        SPECIAL_SERVICE_GROUP_ATD.put("code", "008");
 
         SPECIAL_SERVICE_GROUP_STS = new JSONObject();
         SPECIAL_SERVICE_GROUP_STS.put("id", "0a640a2a-409d-1271-8140-d0c1cdf500ff");
@@ -96,6 +100,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_STS.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_STS.put("name", "Seniors to Sophmores");
         SPECIAL_SERVICE_GROUP_STS.put("description", "Seniors to Sophmores");
+        SPECIAL_SERVICE_GROUP_STS.put("code", "009");
 
         SPECIAL_SERVICE_GROUP_STU = new JSONObject();
         SPECIAL_SERVICE_GROUP_STU.put("id", "0a640a2a-409d-1271-8140-d0c224f20100");
@@ -106,6 +111,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_STU.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_STU.put("name", "State U Dual Admission");
         SPECIAL_SERVICE_GROUP_STU.put("description", "State U Dual Admission");
+        SPECIAL_SERVICE_GROUP_STU.put("code", "010");
 
         SPECIAL_SERVICE_GROUP_UAAI = new JSONObject();
         SPECIAL_SERVICE_GROUP_UAAI.put("id", "0a640a2a-409d-1271-8140-d0c31c810101");
@@ -116,6 +122,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_UAAI.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_UAAI.put("name", "UAAI");
         SPECIAL_SERVICE_GROUP_UAAI.put("description", "Urban African American Intiative");
+        SPECIAL_SERVICE_GROUP_UAAI.put("code", "011");
 
         SPECIAL_SERVICE_GROUP_PSEO = new JSONObject();
         SPECIAL_SERVICE_GROUP_PSEO.put("id", "0a640a2a-409d-1271-8140-d0c3ceb80102");
@@ -126,6 +133,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_PSEO.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_PSEO.put("name", "Pseo");
         SPECIAL_SERVICE_GROUP_PSEO.put("description", "PSEO Student");
+        SPECIAL_SERVICE_GROUP_PSEO.put("code", "012");
 
         SPECIAL_SERVICE_GROUP_HON = new JSONObject();
         SPECIAL_SERVICE_GROUP_HON.put("id", "40b6b8aa-bca1-11e1-9344-037cb4088c72");
@@ -136,6 +144,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_HON.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_HON.put("name", "Honor Student");
         SPECIAL_SERVICE_GROUP_HON.put("description", "Students who are part of the Honors Program");
+        SPECIAL_SERVICE_GROUP_HON.put("code", "003");
 
         SPECIAL_SERVICE_GROUP_DIS = new JSONObject();
         SPECIAL_SERVICE_GROUP_DIS.put("id", "8563dbee-1326-11e2-8e53-406c8f22c3ce");
@@ -146,6 +155,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_DIS.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_DIS.put("name", "Displaced Worker");
         SPECIAL_SERVICE_GROUP_DIS.put("description", "This group is typically focused on vocational retraining.");
+        SPECIAL_SERVICE_GROUP_DIS.put("code", "001");
 
         SPECIAL_SERVICE_GROUP_SA = new JSONObject();
         SPECIAL_SERVICE_GROUP_SA.put("id", "856a3600-1326-11e2-9b79-406c8f22c3ce");
@@ -156,6 +166,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_SA.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_SA.put("name", "Student Athlete");
         SPECIAL_SERVICE_GROUP_SA.put("description", "Student Athletes often face significant schedule balancing challenges.");
+        SPECIAL_SERVICE_GROUP_SA.put("code", "002");
 
         SPECIAL_SERVICE_GROUP_DL = new JSONObject();
         SPECIAL_SERVICE_GROUP_DL.put("id", "f6201a04-bb31-4ca5-b606-609f3ad09f87");
@@ -166,6 +177,7 @@ public class SpecialServiceGroupIT extends AbstractReferenceTest {
         SPECIAL_SERVICE_GROUP_DL.put("objectStatus", "ACTIVE");
         SPECIAL_SERVICE_GROUP_DL.put("name", "Distance Learning");
         SPECIAL_SERVICE_GROUP_DL.put("description", "Student is primarily a distance learner");
+        SPECIAL_SERVICE_GROUP_DL.put("code", "004");
 
         SPECIAL_SERVICE_GROUP_ROWS = new JSONArray();
         SPECIAL_SERVICE_GROUP_ROWS.add(SPECIAL_SERVICE_GROUP_ATD);

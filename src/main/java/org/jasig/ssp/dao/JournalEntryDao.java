@@ -18,15 +18,7 @@
  */
 package org.jasig.ssp.dao;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.google.common.collect.Lists;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.ProjectionList;
@@ -40,7 +32,6 @@ import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.JournalEntry;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
-import org.jasig.ssp.transferobject.reference.ReferenceCounterTO;
 import org.jasig.ssp.transferobject.reports.EntityCountByCoachSearchForm;
 import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
 import org.jasig.ssp.transferobject.reports.JournalCaseNotesStudentReportTO;
@@ -55,7 +46,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Repository
 public class JournalEntryDao
@@ -87,6 +85,19 @@ public class JournalEntryDao
 
 		// item count
 		Long totalRows = (Long) query.setProjection(Projections.rowCount())
+				.uniqueResult();
+
+		return totalRows;
+	}
+
+	public Long getJournalCountForPersonForJournalSourceIds(UUID studentId, List<UUID> journalSourceIds) {
+
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("person.id", studentId));
+		criteria.add(Restrictions.in("journalSource.id", journalSourceIds));
+
+		// item count
+		Long totalRows = (Long) criteria.setProjection(Projections.rowCount())
 				.uniqueResult();
 
 		return totalRows;
@@ -201,6 +212,10 @@ public class JournalEntryDao
 					personSearchForm.getJournalCreateDateTo()));
 		}
 
+		if (personSearchForm.getJournalSourceIds()!=null && personSearchForm.getJournalSourceIds().size() > 0) {
+			criteria.add(Restrictions.in("journalSource.id", personSearchForm.getJournalSourceIds()));
+		}
+
 		if (personSearchForm.getGetStepDetails()) {
 			JoinType joinType = JoinType.INNER_JOIN;
 			criteria.createAlias("journalEntryDetails", "journalEntryDetails", joinType);
@@ -275,53 +290,64 @@ public class JournalEntryDao
 	@SuppressWarnings("unchecked")
 	public List<JournalCaseNotesStudentReportTO> getJournalCaseNoteStudentReportTOsFromCriteria(
 			JournalStepSearchFormTO personSearchForm, SortingAndPaging sAndP) {
+
+		final List<UUID> personUUIDS = personDao.getStudentUUIDs(personSearchForm);
 		
-		
-		List<UUID> personUUIDS = personDao.getStudentUUIDs(personSearchForm);
-		
-		if(CollectionUtils.isEmpty(personUUIDS)){
-			return new ArrayList<JournalCaseNotesStudentReportTO>();
-		}
-		
-		final Criteria criteria = createCriteria(sAndP);
-		
-		if (personSearchForm.getJournalCreateDateFrom()!= null) {
-			criteria.add(Restrictions.ge("createdDate",
-					personSearchForm.getJournalCreateDateFrom()));
+		if (CollectionUtils.isEmpty(personUUIDS)){
+			return Lists.newArrayList();
 		}
 
-		if (personSearchForm.getJournalCreateDateTo() != null) {
-			criteria.add(Restrictions.le("createdDate",
-					personSearchForm.getJournalCreateDateTo()));
-		}
-		
-		criteria.createAlias("person","person");
-		criteria.add(Restrictions.in("person.id", personUUIDS));
-		
-		ProjectionList projections = Projections.projectionList();
-		criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
-		criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
-		
-		criteria.createAlias("person.coach", "coach", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
-		projections.add(Projections.groupProperty("programStatus.name").as("journalentry_programStatusName"));
-		projections.add(Projections.groupProperty("personProgramStatuses.id").as("journalentry_programStatusId"));
-		projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("journalentry_programStatusExpirationDate"));
+        final BatchProcessor<UUID, JournalCaseNotesStudentReportTO> processor = new BatchProcessor<>(personUUIDS, sAndP);
+        do {
+            final Criteria criteria = createCriteria(sAndP);
 
-		projections.add(Projections.groupProperty("person.firstName").as("journalentry_firstName"));
-		projections.add(Projections.groupProperty("person.middleName").as("journalentry_middleName"));
-		projections.add(Projections.groupProperty("person.lastName").as("journalentry_lastName"));
-		projections.add(Projections.groupProperty("person.schoolId").as("journalentry_schoolId"));
-		projections.add(Projections.groupProperty("person.primaryEmailAddress").as("journalentry_primaryEmailAddress"));
-		projections.add(Projections.groupProperty("person.id").as("journalentry_id"));
-		
-		projections.add(Projections.groupProperty("person.createdDate").as("journalentry_createdDate")).add(Projections.countDistinct("id").as("journalentry_caseNoteEntries"));
-		setCoachProjections(projections);
-		criteria.setProjection(projections);
-		criteria.setResultTransformer(
-				new NamespacedAliasToBeanResultTransformer(
-						JournalCaseNotesStudentReportTO.class, "journalentry_"));
-		return  (List<JournalCaseNotesStudentReportTO>)criteria.list();
+            if (personSearchForm.getJournalCreateDateFrom()!= null) {
+                criteria.add(Restrictions.ge("createdDate",
+                        personSearchForm.getJournalCreateDateFrom()));
+            }
+
+            if (personSearchForm.getJournalCreateDateTo() != null) {
+                criteria.add(Restrictions.le("createdDate",
+                        personSearchForm.getJournalCreateDateTo()));
+            }
+
+			if (personSearchForm.getJournalSourceIds()!=null && personSearchForm.getJournalSourceIds().size() > 0) {
+				criteria.add(Restrictions.in("journalSource.id", personSearchForm.getJournalSourceIds()));
+			}
+
+            criteria.createAlias("person","person");
+
+            ProjectionList projections = Projections.projectionList();
+            criteria.createAlias("person.programStatuses", "personProgramStatuses", JoinType.LEFT_OUTER_JOIN);
+            criteria.add(Restrictions.isNull("personProgramStatuses.expirationDate"));
+
+            criteria.createAlias("person.coach", "coach", JoinType.LEFT_OUTER_JOIN);
+            criteria.createAlias("personProgramStatuses.programStatus", "programStatus");
+            projections.add(Projections.groupProperty("programStatus.name").as("journalentry_programStatusName"));
+            projections.add(Projections.groupProperty("personProgramStatuses.id").as("journalentry_programStatusId"));
+            projections.add(Projections.groupProperty("personProgramStatuses.expirationDate").as("journalentry_programStatusExpirationDate"));
+
+            projections.add(Projections.groupProperty("person.firstName").as("journalentry_firstName"));
+            projections.add(Projections.groupProperty("person.middleName").as("journalentry_middleName"));
+            projections.add(Projections.groupProperty("person.lastName").as("journalentry_lastName"));
+            projections.add(Projections.groupProperty("person.schoolId").as("journalentry_schoolId"));
+            projections.add(Projections.groupProperty("person.primaryEmailAddress").as("journalentry_primaryEmailAddress"));
+            projections.add(Projections.groupProperty("person.id").as("journalentry_id"));
+
+            projections.add(Projections.groupProperty("person.createdDate").as("journalentry_createdDate")).add(Projections.countDistinct("id").as("journalentry_caseNoteEntries"));
+            setCoachProjections(projections);
+
+			criteria.setProjection(projections);
+
+            criteria.setResultTransformer(
+                    new NamespacedAliasToBeanResultTransformer(
+                            JournalCaseNotesStudentReportTO.class, "journalentry_"));
+
+            processor.process(criteria, "person.id");
+
+        } while(processor.moreToProcess());
+
+		return  processor.getSortedAndPagedResultsAsList();
 	}
 	
 private ProjectionList addBasicStudentProperties(ProjectionList projections, Criteria criteria){		
@@ -358,6 +384,10 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 		// add StudentTypeName Column
 		projections.add(Projections.groupProperty("studentType.name").as("journalentry_studentTypeName"));
 		projections.add(Projections.groupProperty("studentType.code").as("journalentry_studentTypeCode"));
+
+
+		criteria.createAlias("journalSource", "journalSource");
+		projections.add(Projections.groupProperty("journalSource.name").as("journalentry_journalSourceName"));
 
 		setCoachProjections(projections);
 

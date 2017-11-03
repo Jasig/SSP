@@ -559,6 +559,10 @@ Ext.define('Ssp.controller.SearchFormViewController', {
             me.customizableExportPopup.destroy();
         }
 
+        if (criteria.limit === undefined || criteria.limit === null) {
+            criteria.limit = -1;
+        }
+
         me.customizableExportPopup = Ext.create('Ssp.view.CustomizableExportView', {
             bulkCriteria: criteria
         });

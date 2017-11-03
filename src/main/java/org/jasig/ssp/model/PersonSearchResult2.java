@@ -18,9 +18,9 @@
  */
 package org.jasig.ssp.model;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -81,9 +81,9 @@ public class PersonSearchResult2 {
 
 	private String campusName;
 
-	private Integer configuredSuccessIndicatorsLow;
+	private Integer configuredSuccessIndicatorsLow = 0;
 
-	private Integer configuredSuccessIndicatorsMedium;
+	private Integer configuredSuccessIndicatorsMedium = 0;
 
 
 
@@ -292,7 +292,9 @@ public class PersonSearchResult2 {
 	}
 
 	public void setConfiguredSuccessIndicatorsLow(Integer configuredSuccessIndicatorsLow) {
-		this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+		if (configuredSuccessIndicatorsLow != null) {
+			this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+		}
 	}
 
 	public Integer getConfiguredSuccessIndicatorsMedium() {
@@ -300,6 +302,8 @@ public class PersonSearchResult2 {
 	}
 
 	public void setConfiguredSuccessIndicatorsMedium(Integer configuredSuccessIndicatorsMedium) {
-		this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+		if (configuredSuccessIndicatorsMedium != null) {
+			this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+		}
 	}
 }

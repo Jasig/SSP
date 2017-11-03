@@ -72,18 +72,29 @@ Ext.define('Ssp.model.tool.map.Plan', {
     	       		return data;
     	       	}
             },
-            {name:'mapTemplateTag', type:'auto'}
+            {name:'mapTemplateTags', type:'auto',
+				convert: function(data,model){
+					data = (data && !Ext.isArray(data) ) ? [data] : data;
+					return data;
+				}
+            }
 	],
 			
 	hasMany:[{model: 'Ssp.model.tool.map.PlanCourse',
 				name: 'planCourses',
 				associationKey: 'planCourses'},
+			{model: 'Ssp.model.tool.map.PlanElectiveCourse',
+   				name: 'planElectiveCourses',
+   				associationKey: 'planElectiveCourses'},
 			{model: 'Ssp.model.tool.map.PlanCourse',
 		    	name: 'templateCourses',
 		    	associationKey: 'templateCourses'},
 			{model: 'Ssp.model.tool.map.TermNote',
         		name: 'termNotes',
-        		associationKey: 'termNotes'
+        		associationKey: 'termNotes'},
+            {model: 'Ssp.model.tool.map.mapTemplateTag',
+                name: 'mapTemplateTags',
+                associationKey: 'mapTemplateTags'
 			}
 	],
 
@@ -206,9 +217,9 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.dirty = false;
 		me.planStatus = null;
 		me.planStatusDetails = null;
-		me.set('mapTemplateTag', null);
+		me.set('mapTemplateTags', new Array());
 	},
-			
+
 	loadFromServer : function(objectData){
 		var me = this;
 		isTemplate = me.get('isTemplate');
@@ -275,15 +286,21 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.catalogYearCode = me.get('catalogYearCode');
 		simpleData.planCourses = me.get('planCourses');
 		simpleData.planElectiveCourses = me.get('planElectiveCourses');
-		
+
 		if(me.get('isTemplate')){
 			simpleData.departmentCode = me.get('departmentCode');
 			simpleData.divisionCode = me.get('divisionCode');
 			simpleData.isPrivate = me.getBoolean('isPrivate');
 			simpleData.visibility = me.get('visibility');
-			if (me.get('mapTemplateTag')) {
-    			simpleData.mapTemplateTag = me.get('mapTemplateTag');
-			}
+   			simpleData.mapTemplateTags = me.get('mapTemplateTags');
+
+            var mapTemplateTags = me.get('mapTemplateTags')
+            simpleData.mapTemplateTags = [];
+            if(Array.isArray(mapTemplateTags)){
+                Ext.Array.forEach(mapTemplateTags, function(mapTemplateTag) {
+                    simpleData.mapTemplateTags.push(mapTemplateTag);
+                });
+            }
 		}else{
 			simpleData.personId = me.get('personId');
 		}
@@ -321,6 +338,16 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'ACTIVE'){
 			return 'ACTIVE';
 		}	
+
+		if (me.get('isTemplate')) {
+            if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'OBSOLETE'){
+                return 'OBSOLETE';
+            }
+            if(me.getBoolean('objectStatus') || me.get('objectStatus') == 'DELETED'){
+                return 'DELETED';
+            }
+		}
+
 		return 'INACTIVE';
 	},
 	

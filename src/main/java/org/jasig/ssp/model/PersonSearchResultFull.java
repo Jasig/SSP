@@ -109,7 +109,7 @@ public class PersonSearchResultFull {
 
     private String actualStartTerm;
 
-    private Integer actualStartYear;
+    private Integer actualStartYear = 0;
 
     private String f1Status;
 
@@ -119,15 +119,15 @@ public class PersonSearchResultFull {
 
     private BigDecimal programGpa;
 
-    private Integer currentRegistrationStatus;
+    private Integer currentRegistrationStatus = 0;
 
     private BigDecimal creditHoursEarned;
 
     private String campusName;
 
-    private Integer configuredSuccessIndicatorsLow;
+    private Integer configuredSuccessIndicatorsLow = 0;
 
-    private Integer configuredSuccessIndicatorsMedium;
+    private Integer configuredSuccessIndicatorsMedium = 0;
 
     //Below added for CustomExport
     private String sapStatus;
@@ -427,7 +427,9 @@ public class PersonSearchResultFull {
     }
 
     public void setActualStartYear (Integer actualStartYear) {
-        this.actualStartYear = actualStartYear;
+        if (actualStartYear != null) {
+            this.actualStartYear = actualStartYear;
+        }
     }
 
     public String getF1Status () {
@@ -467,7 +469,9 @@ public class PersonSearchResultFull {
     }
 
     public void setCurrentRegistrationStatus (Integer currentRegistrationStatus) {
-        this.currentRegistrationStatus = currentRegistrationStatus;
+        if (currentRegistrationStatus != null) {
+            this.currentRegistrationStatus = currentRegistrationStatus;
+        }
     }
 
     public BigDecimal getCreditHoursEarned () {
@@ -515,7 +519,9 @@ public class PersonSearchResultFull {
     }
 
     public void setConfiguredSuccessIndicatorsLow(Integer configuredSuccessIndicatorsLow) {
-        this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+        if(configuredSuccessIndicatorsLow != null) {
+            this.configuredSuccessIndicatorsLow = configuredSuccessIndicatorsLow;
+        }
     }
 
     public Integer getConfiguredSuccessIndicatorsMedium() {
@@ -523,7 +529,9 @@ public class PersonSearchResultFull {
     }
 
     public void setConfiguredSuccessIndicatorsMedium(Integer configuredSuccessIndicatorsMedium) {
-        this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+        if(configuredSuccessIndicatorsMedium != null) {
+            this.configuredSuccessIndicatorsMedium = configuredSuccessIndicatorsMedium;
+        }
     }
 
     //***End Directory Person getters/setters ***

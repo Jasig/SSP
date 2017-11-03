@@ -845,7 +845,16 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
         Date intakeSubmissionDate = person.getStudentIntakeCompleteDate();
         // Doesn't go for all boolean indicators you could imagine, but for this one there is no conceptual distinction
         // between 'no data' and 'false'
-        return new SuccessIndicatorMetric(new Boolean(intakeSubmissionDate != null),
+        if (intakeSubmissionDate!=null) {
+            return new SuccessIndicatorMetric(new Boolean(true),
+                    formatIntakeSubmissionDateForDisplay(intakeSubmissionDate), null,
+                    successIndicator.getCode(), successIndicator.getName());
+        } else if (person.getStudentIntakeRequestDate()!=null) {
+            return new SuccessIndicatorMetric(new Boolean(false),
+                    "INCOMPLETE", null,
+                    successIndicator.getCode(), successIndicator.getName());
+        }
+        return new SuccessIndicatorMetric(null,
                 formatIntakeSubmissionDateForDisplay(intakeSubmissionDate), null,
                 successIndicator.getCode(), successIndicator.getName());
     }
@@ -933,11 +942,13 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
             //take lowest value found
             for (ExternalStudentTranscriptCourse courseToEvaluate : scheduleCourses) {
                 try {
-                    double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
-                    if (lowestParticipationScore == null) {
-                        lowestParticipationScore = new Double(participationToEvaluate);
-                    } else if (lowestParticipationScore > participationToEvaluate) {
-                        lowestParticipationScore = participationToEvaluate;
+                    if (StringUtils.isNotBlank(courseToEvaluate.getParticipation())) {
+                        double participationToEvaluate = Double.parseDouble(courseToEvaluate.getParticipation());
+                        if (lowestParticipationScore == null) {
+                            lowestParticipationScore = new Double(participationToEvaluate);
+                        } else if (lowestParticipationScore > participationToEvaluate) {
+                            lowestParticipationScore = participationToEvaluate;
+                        }
                     }
                 } catch (NumberFormatException nfe) {
                     //ignore for now, likely one or more records not a number

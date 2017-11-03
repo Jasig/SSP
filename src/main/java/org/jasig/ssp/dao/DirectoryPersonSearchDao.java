@@ -21,13 +21,23 @@ package org.jasig.ssp.dao;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.*;
+import org.hibernate.Query;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.PersonSearchRequest;
+import org.jasig.ssp.model.PersonSearchResult2;
+import org.jasig.ssp.model.PersonSearchResultFull;
+import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
+import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
+import org.jasig.ssp.model.reference.SpecialServiceGroup;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
-import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.impl.ScheduledTaskWrapperServiceImpl;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -40,8 +50,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 
 
 /**
@@ -70,10 +85,6 @@ public class DirectoryPersonSearchDao  {
 
 	@Autowired
 	private transient ScheduledApplicationTaskStatusService scheduledApplicationTaskService;
-
-    @Autowired
-    private transient ExternalStudentSpecialServiceGroupService externalStudentSpecialServiceGroupService;
-
 
     public DirectoryPersonSearchDao() {
         super();
@@ -126,11 +137,26 @@ public class DirectoryPersonSearchDao  {
 
     public Long getCaseloadCountFor(PersonSearchRequest personSearchRequest, SortingAndPaging buildSortAndPage) {
 
-        final Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(), personSearchRequest,
-                getExternalSpecialServiceGroupSchoolIds(personSearchRequest), false);
+        final Pair<Long, Query> querySet = prepSearchQuery(sessionFactory.getCurrentSession(), personSearchRequest, false);
 
         return querySet.getFirst();
     }
+
+	public void purgeDuplicateRecord(final String schoolId, final String username) {
+        LOGGER.info("Purging Duplicate Username Student Record with username:{} and school_id:{}", username, schoolId);
+        try {
+            final Query query = sessionFactory.getCurrentSession().createSQLQuery(
+            		"delete from mv_directory_person where username = \'" + username +
+							"\' and  school_id = \'" + schoolId + "\' and id = \'" + schoolId + "\';");
+            if (query.executeUpdate() > 0) {
+                LOGGER.debug("Purging Duplicate in DirectoryPerson Complete!");
+            } else {
+                LOGGER.debug("Purging Duplicate in DirectoryPerson Failed, no record found!");
+            }
+        } catch(Exception exp) {
+            LOGGER.debug("ERROR Purging Duplicate in DirecctoryPerson: ", exp.getMessage());
+        }
+	}
 
 	/**
 	 * Search people by the specified terms.
@@ -140,14 +166,11 @@ public class DirectoryPersonSearchDao  {
 	@SuppressWarnings("unchecked")
 	public PagingWrapper<PersonSearchResult2> search(PersonSearchRequest personSearchRequest) {
 
-		final Pair<Long, Query> querySet = prepSearchQuery(
-				sessionFactory.getCurrentSession(), personSearchRequest,
-                getExternalSpecialServiceGroupSchoolIds(personSearchRequest), false);
+        final Pair<Long, Query> querySet = prepSearchQuery(
+				sessionFactory.getCurrentSession(), personSearchRequest,false);
 
-		querySet.getSecond().setResultTransformer(
+        querySet.getSecond().setResultTransformer(
 				new NamespacedAliasToBeanResultTransformer(PersonSearchResult2.class, "person_"));
-
-
 
 		return new PagingWrapper<>(querySet.getFirst(), querySet.getSecond().list());
 	}
@@ -161,13 +184,10 @@ public class DirectoryPersonSearchDao  {
     public PagingWrapper<PersonSearchResultFull> searchFull(PersonSearchRequest personSearchRequest) {
 
         final Pair<Long, Query> querySet = prepSearchQuery(
-                sessionFactory.getCurrentSession(), personSearchRequest,
-                getExternalSpecialServiceGroupSchoolIds(personSearchRequest), true);
+                sessionFactory.getCurrentSession(), personSearchRequest, true);
 
         querySet.getSecond().setResultTransformer(
                 new NamespacedAliasToBeanResultTransformer(PersonSearchResultFull.class, "person_"));
-
-
 
         return new PagingWrapper<>(querySet.getFirst(), querySet.getSecond().list());
     }
@@ -179,18 +199,17 @@ public class DirectoryPersonSearchDao  {
 
         try {
             openStatelessSession = sessionFactory.openStatelessSession();
-            Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, null, false);
+            final Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, false);
 
             querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
                     PersonSearchResult2.class, "person_"));
 
-            querySet.getSecond().getQueryString();
+            final Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
 
-            Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
-
-            ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+            final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
 
             csvWriterHelper.write(results, -1L);
+
         } finally {
             if ( openStatelessSession != null ) {
                 try {
@@ -210,14 +229,12 @@ public class DirectoryPersonSearchDao  {
 
         try {
             openStatelessSession = sessionFactory.openStatelessSession();
-            Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, null, true);
+            final Pair<Long, Query> querySet = prepSearchQuery(openStatelessSession, personSearchRequest, true);
 
             querySet.getSecond().setResultTransformer(new NamespacedAliasToBeanResultTransformer(
                     PersonSearchResultFull.class, "person_"));
 
-            querySet.getSecond().getQueryString();
-
-            Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
+            final Query query = querySet.getSecond().setFetchSize(10).setReadOnly(true);
 
             return query.list();
 
@@ -233,19 +250,6 @@ public class DirectoryPersonSearchDao  {
         }
     }
 
-    private List<String> getExternalSpecialServiceGroupSchoolIds(PersonSearchRequest psr) {
-        List<String> externalSSGSchoolIds = null;
-        if (psr != null && (psr.getPersonTableType() == null ||
-                !psr.getPersonTableType().equals(psr.PERSON_TABLE_TYPE_SSP_ONLY))
-                && CollectionUtils.isNotEmpty(psr.getSpecialServiceGroup())) {
-            //need to search external ssg table
-            externalSSGSchoolIds = externalStudentSpecialServiceGroupService.getAllSchoolIdsWithSpecifiedSSGs(
-                    psr.getSpecialServiceGroup());
-        }
-
-        return externalSSGSchoolIds;
-    }
-
 	//Necessary due to the pass by value nature of booleans
 	private class FilterTracker {
 		private boolean isFirstFilter = true;
@@ -259,8 +263,7 @@ public class DirectoryPersonSearchDao  {
 		}
 	}
 
-	private Pair<Long, Query> prepSearchQuery(Object session, PersonSearchRequest personSearchRequest,
-                                              List<String> externalSchoolIdsWithSSGs, boolean fullResultSearch) {
+	private Pair<Long, Query> prepSearchQuery(Object session, PersonSearchRequest personSearchRequest, boolean fullResultSearch) {
 
 		final FilterTracker filterTracker = new FilterTracker();
 		final String hqlSelect;
@@ -288,9 +291,9 @@ public class DirectoryPersonSearchDao  {
 
 		buildJoins(personSearchRequest,hqlWithoutSelect);
 
-		buildWhere(personSearchRequest, externalSchoolIdsWithSSGs, filterTracker, hqlWithoutSelect);
+		buildWhere(personSearchRequest, filterTracker, hqlWithoutSelect);
 
-		params = getBindParams(personSearchRequest, externalSchoolIdsWithSSGs); //TODO use currentTerm in bindParams here?
+		params = getBindParams(personSearchRequest); //TODO use currentTerm in bindParams here?
 
 		Pair<Long,Query> querySet =  personSearchRequest.getSortAndPage()
 				.applySortingAndPagingToPagedQuery(
@@ -397,8 +400,7 @@ public class DirectoryPersonSearchDao  {
 		return stringBuilder;
 	}
 
-	private void buildWhere(PersonSearchRequest personSearchRequest, List<String> ssgSchoolIds,
-                                                            FilterTracker filterTracker, StringBuilder stringBuilder) {
+	private void buildWhere(PersonSearchRequest personSearchRequest, FilterTracker filterTracker, StringBuilder stringBuilder) {
 
 		//person searchTerm : firstName, lastName, studentId or firstName + ' ' + lastName
 		buildPersonObjectStatus(personSearchRequest, filterTracker, stringBuilder);
@@ -462,40 +464,32 @@ public class DirectoryPersonSearchDao  {
 
         //programStatus
 		addProgramStatusRequired(personSearchRequest, filterTracker, stringBuilder);
-
-        //must return records that match these schoolIds if external only since have external SSGs that match
-        if (CollectionUtils.isNotEmpty(ssgSchoolIds)) {
-            appendOrOrWhere(stringBuilder, filterTracker);
-            stringBuilder.append(" (dp.schoolId in (:ssgSchoolIds) and dp.personId is null) ");
-
+	}
+	
+	private void buildPersonObjectStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if (sspPersonOnly(personSearchRequest)) {
+            appendAndOrWhere(stringBuilder,filterTracker);
+            stringBuilder.append(" dp.objectStatus = :personObjectStatus ");
+        } else {
+            appendAndOrWhere(stringBuilder,filterTracker);
+            stringBuilder.append(" (dp.objectStatus = :personObjectStatus or dp.objectStatus is NULL) ");
         }
 	}
 	
-	private void buildPersonObjectStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-                                                                                        StringBuilder stringBuilder) {
-		if (requiresObjectStatus(personSearchRequest)) {
-			if (sspPersonOnly(personSearchRequest)) {
-				appendAndOrWhere(stringBuilder,filterTracker);
-				stringBuilder.append(" dp.objectStatus = :personObjectStatus ");
-			} else {
-				appendAndOrWhere(stringBuilder,filterTracker);
-				stringBuilder.append(" (dp.objectStatus = :personObjectStatus or dp.objectStatus is NULL) ");
-			}
-		}
-	}
-	
-	private Boolean sspPersonOnly(PersonSearchRequest personSearchRequest) {
-		return (personSearchRequest.getPersonTableType() != null &&
+	private boolean sspPersonOnly(PersonSearchRequest personSearchRequest) {
+		return (StringUtils.isNotBlank(personSearchRequest.getPersonTableType()) &&
                 personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY));
 	}
 
-	private Boolean requiresObjectStatus(PersonSearchRequest personSearchRequest){
-		if (personSearchRequest.getPersonTableType() != null &&
-            personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
-            return false;
-        }
-		return true;
-	}
+    private boolean externalPersonOnly(PersonSearchRequest personSearchRequest) {
+        return (StringUtils.isNotBlank(personSearchRequest.getPersonTableType()) &&
+                personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY));
+    }
+
+    private boolean internalAndExternalPerson(PersonSearchRequest personSearchRequest) {
+	    return (StringUtils.isBlank(personSearchRequest.getPersonTableType()) ||
+                personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_ANYWHERE));
+    }
 
 	private void buildBirthDate(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
                                                                                         StringBuilder stringBuilder) {
@@ -579,18 +573,14 @@ public class DirectoryPersonSearchDao  {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getSapStatusCode()));
 	}
 	
-	private void buildPersonTableType(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-                                      StringBuilder stringBuilder) {
-		if (hasPersonTableType(personSearchRequest)) {
-			if (personSearchRequest.getPersonTableType().equals(personSearchRequest.PERSON_TABLE_TYPE_SSP_ONLY)) {
-				appendAndOrWhere(stringBuilder,filterTracker);
-				stringBuilder.append(" dp.personId IS NOT NULL ");
-			} else if(personSearchRequest.getPersonTableType().equals(
-                                                        personSearchRequest.PERSON_TABLE_TYPE_EXTERNAL_DATA_ONLY)) {
-				appendAndOrWhere(stringBuilder,filterTracker);
-				stringBuilder.append(" dp.personId IS NULL ");
-			}
-		}
+	private void buildPersonTableType(PersonSearchRequest personSearchRequest, FilterTracker filterTracker, StringBuilder stringBuilder) {
+        if (sspPersonOnly(personSearchRequest)) {
+            appendAndOrWhere(stringBuilder,filterTracker);
+            stringBuilder.append(" dp.personId IS NOT NULL ");
+        } else if(externalPersonOnly(personSearchRequest)) {
+            appendAndOrWhere(stringBuilder,filterTracker);
+            stringBuilder.append(" dp.personId IS NULL ");
+        }
 	}
 
 	private void buildProgramStatus(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
@@ -647,15 +637,36 @@ public class DirectoryPersonSearchDao  {
         return (CollectionUtils.isNotEmpty(personSearchRequest.getConfiguredSuccessIndicator()));
     }
 
-	private boolean hasPersonTableType(PersonSearchRequest personSearchRequest) {
-		return StringUtils.isNotBlank(personSearchRequest.getPersonTableType());
-	}
-	
-	private void buildSpecialServiceGroup(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-                                                                                        StringBuilder stringBuilder) {
-		if (hasSpecialServiceGroup(personSearchRequest)) {
-			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" (dp.personId = p.id and specialServiceGroups.objectStatus = 1 and specialServiceGroup in (:specialServiceGroup) and specialServiceGroup is not null) ");
+	private void buildSpecialServiceGroup(PersonSearchRequest psr, FilterTracker filterTracker, StringBuilder stringBuilder) {
+		if (hasSpecialServiceGroup(psr)) {
+            final boolean internalAndExternal = internalAndExternalPerson(psr);
+
+            appendAndOrWhere(stringBuilder, filterTracker);
+
+            if (internalAndExternal) {
+                stringBuilder.append(" ((");
+            } else {
+                stringBuilder.append(" (");
+            }
+
+            if (internalAndExternal || externalPersonOnly(psr)) {
+				stringBuilder.append("esssg.code in (:ssgCodes)");
+            }
+
+            if (internalAndExternal) {
+                stringBuilder.append(") or (");
+            }
+
+            if (internalAndExternal || sspPersonOnly(psr)) {
+                stringBuilder.append("pssg.objectStatus = 1 and pssg.specialServiceGroup.id in (:ssgIds)");
+
+            }
+
+            if (internalAndExternal) {
+                stringBuilder.append(")) ");
+            } else {
+                stringBuilder.append(") ");
+            }
         }
 	}
 
@@ -663,22 +674,17 @@ public class DirectoryPersonSearchDao  {
 		return (CollectionUtils.isNotEmpty(personSearchRequest.getSpecialServiceGroup()));
 	}
 	
-	private void buildWatchList(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
-                                                                                        StringBuilder stringBuilder) {
+	private void buildWatchList(PersonSearchRequest personSearchRequest, FilterTracker filterTracker, StringBuilder stringBuilder) {
 		if (hasAnyWatchCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ws.person.id = :watcherId ");
-			stringBuilder.append(" and ws.student.id = dp.personId ");			
+			stringBuilder.append(" and ws.student.id = dp.personId ");
 		}
 	}
 
 	//TODO Use currentTerm in bindParams?
-	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest, List<String> ssgSchoolIds) {
+	private Map<String, Object> getBindParams(PersonSearchRequest personSearchRequest) {
 		final HashMap<String,Object> params= new HashMap<String,Object>();
-
-        if (CollectionUtils.isNotEmpty(ssgSchoolIds)) {
-            params.put("ssgSchoolIds", ssgSchoolIds);
-        }
 
         if (hasSchoolId(personSearchRequest)) {
 			params.put("schoolId",personSearchRequest.getSchoolId().trim().toUpperCase());
@@ -831,7 +837,22 @@ public class DirectoryPersonSearchDao  {
 		}
 
 		if (hasSpecialServiceGroup(personSearchRequest)) {
-			params.put("specialServiceGroup", personSearchRequest.getSpecialServiceGroup());
+			final List<UUID> ssgIds = Lists.newArrayList();
+			for (SpecialServiceGroup ssg : personSearchRequest.getSpecialServiceGroup()) {
+				ssgIds.add(ssg.getId());
+			}
+			if (!externalPersonOnly(personSearchRequest)) {
+		    	params.put("ssgIds", ssgIds);
+            }
+
+            if (!sspPersonOnly(personSearchRequest)) {
+                final List<String> ssgCodes = Lists.newArrayList();
+                for (SpecialServiceGroup ssg : personSearchRequest.getSpecialServiceGroup()) {
+                    ssgCodes.add(ssg.getCode());
+                }
+
+                params.put("ssgCodes", ssgCodes);
+            }
 		}
 		
 		if (hasFinancialAidStatus(personSearchRequest)) {
@@ -846,9 +867,7 @@ public class DirectoryPersonSearchDao  {
 			params.put("birthDate", personSearchRequest.getBirthDate());
 		}
 		
-		if (requiresObjectStatus(personSearchRequest)) {
-			params.put("personObjectStatus", ObjectStatus.ACTIVE);
-		}
+		params.put("personObjectStatus", ObjectStatus.ACTIVE);
 
         if (hasActualStartTerm(personSearchRequest)) {
             params.put("actualStartTerm", personSearchRequest.getActualStartTerm());
@@ -980,13 +999,11 @@ public class DirectoryPersonSearchDao  {
 	}
 
 	private void buildCoach(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
-                                                                                        StringBuilder stringBuilder) {
-		LOGGER.debug("HAS COACH");
+							StringBuilder stringBuilder) {
 		if (hasCoach(personSearchRequest) || hasMyCaseload(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" dp.coachId in (:coachId) ");
 		}
-		LOGGER.debug("END HAS COACH");
 	}
 
 	private boolean hasMyCaseload(PersonSearchRequest personSearchRequest) {
@@ -1099,7 +1116,7 @@ public class DirectoryPersonSearchDao  {
 	}
 
 	private void buildJoins(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
-		
+
 		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)) {
 			if ( hasPlanExists(personSearchRequest) &&
                                     PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
@@ -1108,10 +1125,16 @@ public class DirectoryPersonSearchDao  {
 				stringBuilder.append(" join p.plans as plan ");
 			}
 		}
-		
+
 		if (hasSpecialServiceGroup(personSearchRequest)) {
-			stringBuilder.append(" inner join p.specialServiceGroups as specialServiceGroups ");
-			stringBuilder.append(" inner join specialServiceGroups.specialServiceGroup as specialServiceGroup ");
+            if (internalAndExternalPerson(personSearchRequest)) {
+                stringBuilder.append(" left join dp.personSpecialServiceGroups as pssg ");
+				stringBuilder.append(" left join dp.externalStudentSpecialServiceGroups as esssg ");
+			} else if (sspPersonOnly(personSearchRequest)) {
+				stringBuilder.append(" inner join dp.personSpecialServiceGroups as pssg ");
+            } else {
+				stringBuilder.append(" inner join dp.externalStudentSpecialServiceGroups as esssg ");
+            }
         }
 	}
 
@@ -1128,8 +1151,7 @@ public class DirectoryPersonSearchDao  {
 	}
 	
 	private boolean personRequired(PersonSearchRequest personSearchRequest) {
-		return hasSpecialServiceGroup(personSearchRequest) || hasPlanExists(personSearchRequest)
-				|| hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest);
+		return (hasPlanExists(personSearchRequest) || hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest));
 	}
 
 	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
@@ -1148,13 +1170,12 @@ public class DirectoryPersonSearchDao  {
 		if (personRequired(personSearchRequest)) {
 			stringBuilder.append(", Person p");
 		}
-		
+
 		if (hasDeclaredMajor(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
 		}
 		
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(
-                                                    configService.getByNameEmpty("calculate_map_plan_status").trim());
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
 
 		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
 			stringBuilder.append(", ExternalPersonPlanStatus esps ");

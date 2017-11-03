@@ -27,8 +27,8 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.5" value="columnFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.6" value="summary"/>
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="116"/>
+	<property name="ireport.x" value="41"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="programStatusName" class="java.lang.String"/>
 	<parameter name="specialServiceGroupNames" class="java.lang.String"/>
 	<parameter name="homeDepartment" class="java.lang.String"/>
@@ -39,6 +39,7 @@
 	<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="term" class="java.lang.String"/>
 	<parameter name="serviceReasonGroupNames" class="java.lang.String"/>
+	<parameter name="journalSourceNames" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String">
 		<fieldDescription><![CDATA[firstName]]></fieldDescription>
 	</field>
@@ -66,21 +67,21 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="115" splitType="Stretch">
+		<band height="126" splitType="Stretch">
 			<staticText>
 				<reportElement x="347" y="17" width="64" height="15" uuid="566bffd7-abd7-42b2-9957-c7a39b735c2d"/>
 				<text><![CDATA[Start Date:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="113" y="96" width="431" height="16" uuid="ec1b0a5a-e05e-4302-92b7-218a399c9bed"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="114" y="92" width="637" height="16" isPrintWhenDetailOverflows="true" uuid="ec1b0a5a-e05e-4302-92b7-218a399c9bed"/>
 				<textFieldExpression><![CDATA[$P{serviceReasonGroupNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="77" width="429" height="15" isPrintWhenDetailOverflows="true" uuid="dc0cf691-b76c-4965-9a32-b594f7922662"/>
+				<reportElement positionType="Float" x="114" y="77" width="637" height="15" isPrintWhenDetailOverflows="true" uuid="dc0cf691-b76c-4965-9a32-b594f7922662"/>
 				<textFieldExpression><![CDATA[$P{specialServiceGroupNames}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="62" width="429" height="15" isPrintWhenDetailOverflows="true" uuid="7adab618-eeb5-4ce5-8bf3-4b462c6b29b3"/>
+				<reportElement positionType="Float" x="114" y="62" width="637" height="15" isPrintWhenDetailOverflows="true" uuid="7adab618-eeb5-4ce5-8bf3-4b462c6b29b3"/>
 				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -88,7 +89,7 @@
 				<text><![CDATA[Student Type:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="115" y="47" width="117" height="15" isPrintWhenDetailOverflows="true" uuid="81c4311b-faea-46a0-85aa-2f4a8e220ee2"/>
+				<reportElement positionType="Float" x="114" y="47" width="117" height="15" isPrintWhenDetailOverflows="true" uuid="81c4311b-faea-46a0-85aa-2f4a8e220ee2"/>
 				<textFieldExpression><![CDATA[$P{studentTypeNames}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -104,7 +105,7 @@
 				<text><![CDATA[Home Department:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="77" width="113" height="15" uuid="b51fedbf-d8c6-4401-b20d-43121be1ed03"/>
+				<reportElement x="0" y="77" width="113" height="15" uuid="b51fedbf-d8c6-4401-b20d-43121be1ed03"/>
 				<text><![CDATA[Special Service Groups:]]></text>
 			</staticText>
 			<staticText>
@@ -124,31 +125,39 @@
 				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="96" width="98" height="16" uuid="6a0930c5-0da4-484f-a3be-c85fd419752f"/>
+				<reportElement x="0" y="92" width="98" height="16" uuid="6a0930c5-0da4-484f-a3be-c85fd419752f"/>
 				<text><![CDATA[Service Reasons:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="113" y="0" width="164" height="16" uuid="3a499a3b-161b-4eb8-8c83-2ea14a115282"/>
+				<reportElement positionType="Float" x="114" y="0" width="164" height="16" uuid="3a499a3b-161b-4eb8-8c83-2ea14a115282"/>
 				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="113" y="17" width="119" height="15" isPrintWhenDetailOverflows="true" uuid="0a457e5b-f4f5-44b6-a284-a31adcbff415"/>
+				<reportElement positionType="Float" x="114" y="17" width="119" height="15" isPrintWhenDetailOverflows="true" uuid="0a457e5b-f4f5-44b6-a284-a31adcbff415"/>
 				<textFieldExpression><![CDATA[$P{homeDepartment}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="100" height="16" uuid="0371ac41-80a1-4d4b-ba6a-a378f7409c2a"/>
 				<text><![CDATA[Report Date:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="108" width="98" height="16" uuid="a1d6b13a-a60b-419b-b9b1-5092f0f9d25f"/>
+				<text><![CDATA[Journal Sources:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="114" y="108" width="637" height="16" isPrintWhenDetailOverflows="true" uuid="40dd6996-89d0-4dde-b094-0ac5ae62af1e"/>
+				<textFieldExpression><![CDATA[$P{journalSourceNames}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="31" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement x="0" y="3" width="751" height="28" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
+				<reportElement x="0" y="2" width="751" height="28" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="290" y="8" width="191" height="20" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
-				<textElement>
+				<reportElement x="13" y="7" width="723" height="20" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
+				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Journal Case Notes By Student]]></text>

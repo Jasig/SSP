@@ -2934,6 +2934,18 @@
                 </div>
                 <div class="ea-clear"></div>
 
+                <!-- Journal Source -->
+                <div class="ea-input">
+                    <select  class="input-journal-source-group" id="journalSessionJournalSourceIds"
+                        name="journalSourceIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Journal Source:</span>
+                </div>
+                <div class="ea-clear"></div>
+
                 <!-- Date Range Description -->
                 <div class="ea-input"></div>
                 <div class="ea-label">
@@ -3284,6 +3296,18 @@
                 </div>
                 <div class="ea-label">
                     <span>Special Service Groups:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Journal Source -->
+                <div class="ea-input">
+                    <select  class="input-journal-source-group" id="journalSessionJournalSourceIds"
+                        name="journalSourceIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Journal Source:</span>
                 </div>
                 <div class="ea-clear"></div>
 

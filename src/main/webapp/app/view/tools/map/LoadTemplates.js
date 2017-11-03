@@ -29,12 +29,28 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsStore',
         store: 'planTemplatesSummaryStore',
-        textStore: 'sspTextStore'
+        textStore: 'sspTextStore',
+        authenticatedPerson: 'authenticatedPerson'
     },
     height: 600,
     width: 900,
     resizable: true,
     modal: true,
+    getObjectStatusStore: function() {
+        var me = this;
+        var validStatuses = [{"value":"ALL","name":"ALL"},
+                             {"value":"ACTIVE","name":"ACTIVE"},
+                             {"value":"INACTIVE","name":"INACTIVE"},
+                             {"value":"OBSOLETE","name":"OBSOLETE"}];
+        if (me.authenticatedPerson.hasAccess('TEMPLATE_TOOL')) {
+            validStatuses[4] = {"value":"DELETED","name":"DELETED"};
+        }
+
+        return Ext.create('Ext.data.Store', {
+            fields: ['value', 'name'],
+                data : validStatuses
+        })
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -315,14 +331,7 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 				        		fieldLabel: me.textStore.getValueByCode('ssp.label.map.load-template.status','Status'),
 								labelWidth:80,
 				        		emptyText: me.textStore.getValueByCode('ssp.empty-text.map.load-template.status','Filter by Status'),
-								store: Ext.create('Ext.data.Store', {
-								    fields: ['value', 'name'],
-								    	data : [
-									        	{"value":"ALL","name":"ALL"},
-									        	{"value":"ACTIVE","name":"ACTIVE"},
-									        	{"value":"INACTIVE","name":"INACTIVE"}
-									    	]
-								}),
+								store: me.getObjectStatusStore(),
 				        		valueField: 'name',
 				        		displayField: 'name',
 								defaultValue: "ACTIVE",
@@ -354,18 +363,26 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
                                 allowBlank:true,
                                 labelWidth:80,
 								width: 290,
-								enableKeyEvents:true,
-								listeners:{
-									keyup: function(textField, e, eOpts) {
-										var me = this;
-				                        var searchString = textField.getValue().trim();
-				                        var templatesGrid = me.findParentByType('loadtemplates').query('#allPlansTemplateGridPanel')[0];
-										templatesGrid.getStore().filterBy(getFilterRecord(['name'], searchString)); 
-				                    }
-								}
-                            }]}
-                            
-            
+								enableKeyEvents:true
+                            }]},
+                            {
+                                xtype: 'container',
+                                border: 0,
+                                title: '',
+                                width: '100%',
+                                layout: {
+                                    type: 'hbox'
+                                },
+                                items: [{
+                                    xtype: 'button',
+                                    tooltip: me.textStore.getValueByCode('ssp.tooltip.map.search-templates-button','Search for Templates'),
+                                    text: me.textStore.getValueByCode('ssp.label.search-button','Search'),
+                                    itemId: 'searchTemplates',
+                                    margins: '10 0 0 125',
+                                    width: 80
+                                }]
+                            }
+
             ]}]
          }]
 		},	{
@@ -440,10 +457,20 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 			 text: me.textStore.getValueByCode('ssp.label.map.load-template.template-tag-column',"Template Tag"),
 			 width: 200,
 			 sortable: true,
-			 dataIndex: 'mapTemplateTag',
+			 dataIndex: 'mapTemplateTags',
 			 renderer: function(value, metadata, record) {
-				if (record != null && record.get('mapTemplateTag') != null) {
-					return record.get('mapTemplateTag').name;
+				if (record != null && record.get('mapTemplateTags') != null) {
+				    var mapTemplateTags = record.get('mapTemplateTags');
+				    if (mapTemplateTags.length > 0) {
+				        var rtn = '';
+				        for (i=0; i < mapTemplateTags.length; i++) {
+				            if (i > 0) {
+				                rtn = rtn + ', ';
+				            }
+				            rtn = rtn + mapTemplateTags[i].name
+				        }
+				        return rtn;
+				    }
 				}
 			 },
 			 doSort: function(state) {
@@ -453,8 +480,8 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
 					 property: field,
 					 direction: state,
 					 sorterFn: function(v1, v2){
-							v1 = (v1.get('mapTemplateTag') ? v1.get('mapTemplateTag').name : '');
-							v2 = (v2.get('mapTemplateTag') ? v2.get('mapTemplateTag').name : '');
+							v1 = (v1.get('mapTemplateTags')[0] ? v1.get('mapTemplateTags')[0].name : '');
+							v2 = (v2.get('mapTemplateTags')[0] ? v2.get('mapTemplateTags')[0].name : '');
 							return v1.localeCompare(v2);
 					 }
 				 });
@@ -469,5 +496,5 @@ Ext.define('Ssp.view.tools.map.LoadTemplates', {
         });
         
         return me.callParent(arguments);
-    }   
+    }
 });

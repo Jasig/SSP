@@ -21,7 +21,10 @@ package org.jasig.ssp.dao.external;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
+import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -38,8 +41,17 @@ public class ExternalStudentFinancialAidDao extends AbstractExternalDataDao<Exte
 	}
 
 	public List<ExternalStudentFinancialAid> getStudentFinancialAidBySchoolIds(List<String> schoolIds){
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.in("schoolId", schoolIds));
-		return (List<ExternalStudentFinancialAid>) criteria.list();
+		if ( schoolIds == null || schoolIds.size() < 1 ) {
+			return new <ExternalStudentFinancialAid>ArrayList();
+		}
+
+		final BatchProcessor<String, ExternalStudentFinancialAid> processor = new BatchProcessor<>(schoolIds);
+		do {
+			final Criteria criteria = createCriteria();
+			processor.process(criteria, "schoolId");
+
+		} while ( processor.moreToProcess() );
+
+		return processor.getUnsortedUnpagedResultsAsList();
 	}
 }

@@ -63,7 +63,7 @@ public class SpecialServiceGroupDao extends AbstractReferenceAuditableCrudDao<Sp
 			final SortingAndPaging sAndP) {
 		SortingAndPaging sp = sAndP;
 		if (sp == null) {
-			sp = new SortingAndPaging(ObjectStatus.ACTIVE);
+			sp = new SortingAndPaging(ObjectStatus.ACTIVE, null, null, null);
 		}
 
 		if (!sp.isSorted()) {

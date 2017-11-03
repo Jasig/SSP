@@ -101,6 +101,9 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             me.programStatusChangeReasonsStore.load();
         }
 
+        me.appEventsController.assignEvent({eventName: 'onPrintCurrentMapPlan', callBackFunc: me.onPrintCurrentMapPlan, scope: me});
+        me.appEventsController.assignEvent({eventName: 'onEmailCurrentMapPlan', callBackFunc: me.onEmailCurrentMapPlan, scope: me});
+
         return me.callParent(arguments);
     },
     
@@ -584,9 +587,85 @@ Ext.define('Ssp.controller.tool.profile.ProfilePersonDetailsViewController', {
             window.location = 'mailto:' + me.person.getCoachPrimaryEmailAddress();
         }
     },
-    
+
+	onEmailCurrentMapPlan: function(metaData){
+		var me = this;
+		me.getView().setLoading(true);
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            };
+		me.mapPlanService.emailCurrent(null, metaData, {
+            success: me.newServiceSuccessHandler('emailMap', me.emailMapPlanServiceSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('emailMap', me.emailMapPlanServiceFailure, serviceResponses),
+            scope: me,
+            isPrivate: true
+        });
+	},
+
+	 emailMapPlanServiceSuccess: function(serviceResponses) {
+	        var me = this;
+	        var mapResponse = serviceResponses.successes.emailMap;
+	       	me.onEmailComplete(mapResponse.responseText);
+			me.getView().setLoading(false);
+	 },
+
+	emailMapPlanServiceFailure: function() {
+		var me = this;
+		me.getView().setLoading(false);
+	},
+
+	onEmailComplete: function(responseText){
+	    var me=this;
+		Ext.Msg.alert(
+				me.textStore.getValueByCode('ssp.message.ssp-email-service.title','SSP Email Service'),
+				me.textStore.getValueByCode('ssp.message.ssp-email-service.body','%RESPONSE-TEXT%',{'%RESPONSE-TEXT%':responseText})
+			);
+	},
+
+	onPrintCurrentMapPlan: function(metaData){
+		var me = this;
+		me.getView().setLoading(true);
+		var serviceResponses = {
+                failures: {},
+                successes: {},
+                responseCnt: 0,
+                expectedResponseCnt: 1
+            }
+		me.mapPlanService.printCurrent(null, metaData, {
+            success: me.newServiceSuccessHandler('printMap', me.printMapPlanServiceSuccess, serviceResponses),
+            failure: me.newServiceFailureHandler('printMap', me.printMapPlanServiceFailure, serviceResponses),
+            scope: me,
+            isPrivate: true
+        });
+	},
+
+	 printMapPlanServiceSuccess: function(serviceResponses) {
+	        var me = this;
+	        var mapResponse = serviceResponses.successes.printMap;
+	       	me.onPrintComplete(mapResponse.responseText);
+			me.getView().setLoading(false);
+	 },
+
+	printMapPlanServiceFailure: function() {
+		var me = this;
+		me.getView().setLoading(false);
+	},
+
+	onPrintComplete: function(htmlPrint){
+    	var targetElement = Ext.getCmp('PrintablePanelId');
+        var myWindow = window.open('', '', 'width=500,height=600,scrollbars=yes');
+        myWindow.document.write(htmlPrint);
+        myWindow.print();
+	},
+
     destroy: function(){
         var me = this;
+
+		me.appEventsController.removeEvent({eventName: 'onPrintCurrentMapPlan', callBackFunc: me.onPrintCurrentMapPlan, scope: me});
+		me.appEventsController.removeEvent({eventName: 'onEmailCurrentMapPlan', callBackFunc: me.onEmailCurrentMapPlan, scope: me});
 
         me.personRegistrationStatusByTermStore.removeListener("load", me.onRegStoreLoaded, me);
         me.appEventsController.removeEvent({

@@ -109,6 +109,17 @@ public class ExternalPersonDao extends AbstractExternalDataDao<ExternalPerson> {
 				
 		return processor.getSortedAndPagedResults();
 	}
+
+	public PagingWrapper<ExternalPerson> getByUsernames(@NotNull final Collection<String> usernames,
+                                                        final SortingAndPaging sAndP) {
+		BatchProcessor<String, ExternalPerson> processor =  new BatchProcessor<String,ExternalPerson>(usernames, sAndP);
+
+		do{
+			processor.process(createCriteria(), "username");
+		}while(processor.moreToProcess());
+
+		return processor.getSortedAndPagedResults();
+	}
 	
 	@SuppressWarnings("unchecked")
 	public List<String> getAllDepartmentNames(){

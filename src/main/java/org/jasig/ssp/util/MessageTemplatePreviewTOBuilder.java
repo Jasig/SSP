@@ -384,6 +384,13 @@ public class MessageTemplatePreviewTOBuilder {
         return planTO;
     }
 
+    public static List<List<TermCourses<Plan,PlanTO>>> createTermCoursesByReportYear() {
+        List<List<TermCourses<Plan,PlanTO>>> termCoursesByReportYear = new ArrayList<>();
+        termCoursesByReportYear.add(createTermCourses());
+        termCoursesByReportYear.add(createTermCourses());
+        termCoursesByReportYear.add(createTermCourses());
+        return termCoursesByReportYear;
+    }
     public static List<TermCourses<Plan, PlanTO>> createTermCourses() {
         List<TermCourses<Plan, PlanTO>> termCourses = new ArrayList<TermCourses<Plan, PlanTO>>();
         termCourses.add(createTermCourse("_1"));

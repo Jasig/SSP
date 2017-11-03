@@ -31,7 +31,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -75,10 +76,12 @@ public class Template extends AbstractPlan implements Cloneable{
 	@Cascade({ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
 	private List<TemplateElectiveCourse> planElectiveCourses = new ArrayList<TemplateElectiveCourse>(0);
 
-	@Nullable
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "map_template_tag_id", nullable = true)
-	private MapTemplateTag mapTemplateTag;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "map_template_template_tag",
+			joinColumns = @JoinColumn(name = "template_id"),
+			inverseJoinColumns = @JoinColumn(name = "map_template_tag_id"))
+	@OrderBy(value="name")
+	private List<MapTemplateTag> mapTemplateTags = new ArrayList<MapTemplateTag>(0);
 
 
 	public String getDivisionCode() {
@@ -122,12 +125,12 @@ public class Template extends AbstractPlan implements Cloneable{
 	}
 
 	@Nullable
-	public MapTemplateTag getMapTemplateTag() {
-		return mapTemplateTag;
+	public List<MapTemplateTag> getMapTemplateTags() {
+		return mapTemplateTags;
 	}
 
-	public void setMapTemplateTag(@Nullable MapTemplateTag mapTemplateTag) {
-		this.mapTemplateTag = mapTemplateTag;
+	public void setMapTemplateTag(List<MapTemplateTag> mapTemplateTags) {
+		this.mapTemplateTags = mapTemplateTags;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -162,7 +165,10 @@ public class Template extends AbstractPlan implements Cloneable{
 			termNoteClone.setTemplate(clone);
 			clone.getTermNotes().add(termNoteClone);
 		}
-		clone.setMapTemplateTag(this.getMapTemplateTag().clone());
+		for (MapTemplateTag mapTemplateTag : this.getMapTemplateTags()) {
+			MapTemplateTag mapTemplateTagClone = mapTemplateTag.clone();
+			clone.getMapTemplateTags().add(mapTemplateTagClone);
+		}
 		return clone;
 	}
 

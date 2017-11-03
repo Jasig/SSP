@@ -18,16 +18,15 @@
  */
 package org.jasig.ssp.service;
 
-import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
 import org.jasig.ssp.model.AbstractPlan;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.transferobject.AbstractPlanOutputTO;
 import org.jasig.ssp.transferobject.AbstractPlanTO;
 import org.jasig.ssp.transferobject.reference.AbstractMessageTemplateMapPrintParamsTO;
+
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 public interface AbstractPlanService<T extends AbstractPlan,TO extends AbstractPlanTO<T>,
 TOO extends AbstractPlanOutputTO<T,TO>,
@@ -36,8 +35,10 @@ TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>> extends Audita
 	static final public String OUTPUT_FORMAT_MATRIX = "matrixFormat";
 	
 	static final public String OUTPUT_FULL_MATRIX = "fullFormat";
-	
-	@Override
+
+    static final public String OUTPUT_SHORT_MATRIX = "shortMatrixFormat";
+
+    @Override
 	public T get(@NotNull final UUID id) throws ObjectNotFoundException;
 
 	public T copyAndSave(T model, Person newOwner) throws CloneNotSupportedException;
@@ -48,7 +49,7 @@ TOOMT extends AbstractMessageTemplateMapPrintParamsTO<TOO, T,TO>> extends Audita
 	
 	public TO validate(TO model) throws ObjectNotFoundException;
 
-	SubjectAndBody createMatrixOutput(TOOMT outputPlan)
+	SubjectAndBody createMatrixOutput(TOOMT outputPlan, boolean organizeCoursesByReportYear)
 			throws ObjectNotFoundException;
 	
 	Person getOwnerForPlan(UUID id);

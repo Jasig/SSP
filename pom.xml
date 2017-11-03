@@ -484,9 +484,9 @@
 
 		<!-- Persistence -->
 		<dependency>
-			<groupId>postgresql</groupId>
+			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.1-901.jdbc4</version>
+			<version>42.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -505,9 +505,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.transaction</groupId>

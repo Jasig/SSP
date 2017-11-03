@@ -35,6 +35,20 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
     width: 850,
     resizable: true,
     modal: true,
+    getObjectStatusStore: function() {
+        var me = this;
+        var validStatuses = [{"value":"ACTIVE","name":"ACTIVE"},
+                             {"value":"INACTIVE","name":"INACTIVE"},
+                             {"value":"OBSOLETE","name":"OBSOLETE"}];
+        if (me.authenticatedPerson.hasAccess('TEMPLATE_TOOL')) {
+            validStatuses[3] = {"value":"DELETED","name":"DELETED"};
+        }
+
+        return Ext.create('Ext.data.Store', {
+            fields: ['value', 'name'],
+                data : validStatuses
+        })
+    },
     initComponent: function(){
         var me = this;
         Ext.apply(me, {
@@ -68,12 +82,20 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
                             width: '100%',
                             height: 100,
                             items: [{
-                				    xtype:'checkbox',
-                			    	fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.object-status','Active Template'),
+                				    xtype:'combobox',
+                			    	fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.object-status','Template Status'),
                 			    	name: 'objectStatus',
+                			    	labelWidth: 125,
+                			    	store: me.getObjectStatusStore(),
+                			    	valueField: 'value',
+                                    displayField: 'name',
+                                    value: "ACTIVE",
+                                    mode: 'local',
+                                    queryMode: 'local',
+                                    allowBlank: false,
 									itemId: 'objectStatus',
-                			    	labelWidth: 95,
-                			    	checked: true
+                                    width: 290
+
                 			    },
                 			    {
                                     xtype: 'tbspacer',
@@ -257,8 +279,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 									maxLength: 2000
                 			    },{
 									xtype: 'combobox',
-									name: 'mapTemplateTagId',
-									itemId: 'mapTemplateTagId',
+									name: 'mapTemplateTagsId',
+									itemId: 'mapTemplateTagsId',
 									id: 'mapTemplateTagId',
 									store: me.mapTemplateTagsStore,
 									fieldLabel: me.textStore.getValueByCode('ssp.label.map-template-tag',"Template Tag"),
@@ -269,7 +291,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 									queryMode: 'local',
 									typeAhead: false,
    									editable: false,
-									allowBlank: true
+									allowBlank: true,
+                                    multiSelect: true
 								}
 
             			    ]

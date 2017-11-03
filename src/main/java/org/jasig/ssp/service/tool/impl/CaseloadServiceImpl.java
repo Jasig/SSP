@@ -96,7 +96,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 
 				if (StringUtils.isNotBlank(model.getSchoolId())) {
 					try {
-						Person student = personService.getInternalOrExternalPersonBySchoolId(model.getSchoolId(), true); //method is slow, but looks like proper use
+						Person student = personService.getInternalOrExternalPersonBySchoolId(model.getSchoolId(), true, true); //slow, but need to add external only students
 
                         if (StringUtils.isNotBlank(model.getCoachSchoolId()) || student.getCoach() != null) {
                             if (StringUtils.isBlank(student.getCurrentProgramStatusName())) {
@@ -110,7 +110,7 @@ public class CaseloadServiceImpl implements CaseloadService {
                             Person coach = null;
                             if (StringUtils.isNotBlank(model.getCoachSchoolId())) {
                                 try {
-                                    coach = personService.getInternalOrExternalPersonBySchoolId(model.getCoachSchoolId(), false); //method is slow, but looks like proper use
+                                    coach = personService.getInternalOrExternalPersonBySchoolId(model.getCoachSchoolId(), true, false); //slow, but very rare need to add external only coach
 
                                     if (coach!= null && student.getCoach() == null) {
                                         student.setCoach(coach);
@@ -139,6 +139,8 @@ public class CaseloadServiceImpl implements CaseloadService {
 						}
 					} catch (ObjectNotFoundException e) {
 						createError(errors, "Student School Id not found for record", model);
+					} catch (Exception e) {
+						createError(errors, "Error saving the student for bulk add/reassign: " + e.getMessage(), model);
 					}
 				} else {
 					createError(errors, "Student School Id was not set for record", model);
@@ -171,7 +173,7 @@ public class CaseloadServiceImpl implements CaseloadService {
 		AuditPerson auditPerson = map.get(schoolId);
 		if (auditPerson==null) {
 			try {
-				final Person modifiedBy = personService.getInternalOrExternalPersonBySchoolId(schoolId, false); //lookup can be slow, but sync/external lookup ideally won't occur
+				final Person modifiedBy = personService.getInternalOrExternalPersonBySchoolId(schoolId, true, false); //slow, but external lookup ideally won't occur. Plus need to add external only in order to set person.id
 				auditPerson = new AuditPerson();
 				auditPerson.setFirstName(modifiedBy.getFirstName());
 				auditPerson.setLastName(modifiedBy.getLastName());

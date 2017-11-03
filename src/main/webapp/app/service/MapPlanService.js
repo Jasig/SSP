@@ -256,12 +256,12 @@ Ext.define('Ssp.service.MapPlanService', {
 	    };
 
 	    var failure = function( response ){
-	    	me.apiProperties.handleError( response );	 
+	    	me.apiProperties.handleError( response );
 	    	callbacks.failure( response, callbacks.scope );
 	    };
 		
 	    me.updateCurrentMap(semesterStores);
-	    
+
 		// save
 		if ((!me.currentMapPlan.get('id') || me.currentMapPlan.get('id') == '') || saveAs || currentMapPlan.get('isTemplate') == false ) {
 
@@ -284,7 +284,7 @@ Ext.define('Ssp.service.MapPlanService', {
     			failureFunc: failure,
     			scope: me
     		});	
-		}	
+		}
     },
     
     print: function(semesterStores, outputData, callbacks, planType){
@@ -376,6 +376,10 @@ Ext.define('Ssp.service.MapPlanService', {
 
         if (!plan.get('planElectiveCourses')) {
             plan.set('planElectiveCourses', []);
+        }
+
+        if (!plan.get('mapTemplateTags')) {
+            plan.set('mapTemplateTags', []);
         }
 
 	    var success = function( response ){
