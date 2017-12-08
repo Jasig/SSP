@@ -904,13 +904,12 @@ public class DirectoryPersonSearchDao  {
 
 		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" esps.status = :planStatus and esps.schoolId = dp.schoolId ");
+			stringBuilder.append(" esps.status = :planStatus ");
 		}
 		
 		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
 			appendAndOrWhere(stringBuilder,filterTracker);
-			stringBuilder.append(" msr.plan in elements(p.plans) ");
-			stringBuilder.append(" and msr.planStatus = :planStatus and msr.person.id = dp.personId ");
+			stringBuilder.append(" msr.planStatus = :planStatus ");
 		}
 	}
 
@@ -1136,6 +1135,17 @@ public class DirectoryPersonSearchDao  {
 				stringBuilder.append(" inner join dp.externalStudentSpecialServiceGroups as esssg ");
             }
         }
+
+		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
+
+		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
+			stringBuilder.append(" inner join dp.externalPersonPlanStatuses esps ");
+		}
+
+		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
+			stringBuilder.append(" inner join dp.mapStatusReports msr ");
+		}
+
 	}
 
 	private boolean hasPlanExists(PersonSearchRequest personSearchRequest) {
@@ -1151,7 +1161,7 @@ public class DirectoryPersonSearchDao  {
 	}
 	
 	private boolean personRequired(PersonSearchRequest personSearchRequest) {
-		return (hasPlanExists(personSearchRequest) || hasMyPlans(personSearchRequest) || hasPlanStatus(personSearchRequest));
+		return (hasPlanExists(personSearchRequest) || hasMyPlans(personSearchRequest));
 	}
 
 	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
@@ -1173,16 +1183,6 @@ public class DirectoryPersonSearchDao  {
 
 		if (hasDeclaredMajor(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
-		}
-		
-		boolean calculateMapPlanStatus = Boolean.parseBoolean(configService.getByNameEmpty("calculate_map_plan_status").trim());
-
-		if (hasPlanStatus(personSearchRequest) && !calculateMapPlanStatus) {
-			stringBuilder.append(", ExternalPersonPlanStatus esps ");
-		}
-
-		if (hasPlanStatus(personSearchRequest) && calculateMapPlanStatus) {
-			stringBuilder.append(", MapStatusReport msr ");
 		}
 
 		if (hasAnyWatchCriteria(personSearchRequest)) {

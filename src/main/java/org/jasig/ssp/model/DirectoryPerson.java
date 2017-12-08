@@ -24,6 +24,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasig.ssp.model.external.AbstractExternalData;
 import org.jasig.ssp.model.external.ExternalData;
+import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
 
 import javax.annotation.Nullable;
@@ -479,6 +480,17 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@ForeignKey(name = "none")
 	private Set<PersonSpecialServiceGroup> personSpecialServiceGroups;
 
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "schoolId")
+	@ForeignKey(name = "none")
+	private Set<ExternalPersonPlanStatus> externalPersonPlanStatuses;
+
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id", referencedColumnName="personId")
+	@ForeignKey(name = "none")
+	private Set<MapStatusReport> mapStatusReports;
 
 	/**
 	 * Initialize a Person.
@@ -1012,6 +1024,24 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	public void setPersonSpecialServiceGroups(@Nullable Set<PersonSpecialServiceGroup> personSpecialServiceGroups) {
 		this.personSpecialServiceGroups = personSpecialServiceGroups;
+	}
+
+	@Nullable
+	public Set<ExternalPersonPlanStatus> getExternalPersonPlanStatuses() {
+		return externalPersonPlanStatuses;
+	}
+
+	public void setExternalPersonPlanStatuses(@Nullable Set<ExternalPersonPlanStatus> externalPersonPlanStatuses) {
+		this.externalPersonPlanStatuses = externalPersonPlanStatuses;
+	}
+
+	@Nullable
+	public Set<MapStatusReport> getMapStatusReports() {
+		return mapStatusReports;
+	}
+
+	public void setMapStatusReports(@Nullable Set<MapStatusReport> mapStatusReports) {
+		this.mapStatusReports = mapStatusReports;
 	}
 
 	protected int hashPrime() {
