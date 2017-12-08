@@ -991,7 +991,6 @@ public class DirectoryPersonSearchDao  {
 		if(hasDeclaredMajor(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" esap.programCode in (:programCode) ");
-			stringBuilder.append(" and esap.schoolId = dp.id ");
 		}
 	}
 
@@ -1144,6 +1143,10 @@ public class DirectoryPersonSearchDao  {
 			stringBuilder.append(" inner join dp.mapStatusReports msr ");
 		}
 
+		if (hasDeclaredMajor(personSearchRequest)) {
+			stringBuilder.append(" inner join dp.externalStudentAcademicPrograms esap ");
+		}
+
 	}
 
 	private boolean hasPlanExists(PersonSearchRequest personSearchRequest) {
@@ -1170,10 +1173,6 @@ public class DirectoryPersonSearchDao  {
 		} else {
             return false;
         }
-		
-		if (hasDeclaredMajor(personSearchRequest)) {
-			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
-		}
 
 		if (hasAnyWatchCriteria(personSearchRequest)) {
 			stringBuilder.append(", WatchStudent ws ");

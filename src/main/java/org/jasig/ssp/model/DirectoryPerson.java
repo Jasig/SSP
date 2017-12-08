@@ -22,10 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.jasig.ssp.model.external.AbstractExternalData;
-import org.jasig.ssp.model.external.ExternalData;
-import org.jasig.ssp.model.external.ExternalPersonPlanStatus;
-import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+import org.jasig.ssp.model.external.*;
 
 import javax.annotation.Nullable;
 import javax.persistence.Column;
@@ -497,6 +494,12 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@JoinColumn(name = "person_id", referencedColumnName="personId")
 	@ForeignKey(name = "none")
 	private Set<Plan> plans;
+
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "schoolId")
+	@ForeignKey(name = "none")
+	private Set<ExternalStudentAcademicProgram> externalStudentAcademicPrograms;
 
 	/**
 	 * Initialize a Person.
@@ -1057,6 +1060,15 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	public void setMapStatusReports(@Nullable Set<MapStatusReport> mapStatusReports) {
 		this.mapStatusReports = mapStatusReports;
+	}
+
+	@Nullable
+	public Set<ExternalStudentAcademicProgram> getExternalStudentAcademicPrograms() {
+		return externalStudentAcademicPrograms;
+	}
+
+	public void setExternalStudentAcademicPrograms(@Nullable Set<ExternalStudentAcademicProgram> externalStudentAcademicPrograms) {
+		this.externalStudentAcademicPrograms = externalStudentAcademicPrograms;
 	}
 
 	protected int hashPrime() {
