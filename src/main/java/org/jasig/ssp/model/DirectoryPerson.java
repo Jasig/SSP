@@ -492,6 +492,12 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@ForeignKey(name = "none")
 	private Set<MapStatusReport> mapStatusReports;
 
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id", referencedColumnName="personId")
+	@ForeignKey(name = "none")
+	private Set<Plan> plans;
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -1033,6 +1039,15 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	public void setExternalPersonPlanStatuses(@Nullable Set<ExternalPersonPlanStatus> externalPersonPlanStatuses) {
 		this.externalPersonPlanStatuses = externalPersonPlanStatuses;
+	}
+
+	@Nullable
+	public Set<Plan> getPlans() {
+		return plans;
+	}
+
+	public void setPlans(@Nullable Set<Plan> plans) {
+		this.plans = plans;
 	}
 
 	@Nullable

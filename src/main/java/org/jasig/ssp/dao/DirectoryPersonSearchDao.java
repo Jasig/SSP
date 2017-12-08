@@ -551,10 +551,8 @@ public class DirectoryPersonSearchDao  {
 	
 	private void addProgramStatusRequired(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
                                                                                         StringBuilder stringBuilder) {
-		if (personRequired(personSearchRequest)) {
-			appendAndOrWhere(stringBuilder,filterTracker);
-            stringBuilder.append(" dp.programStatusName is not null and dp.programStatusName <> '' and dp.personId = p.id ");
-        }
+        appendAndOrWhere(stringBuilder,filterTracker);
+        stringBuilder.append(" dp.programStatusName is not null and dp.programStatusName <> '' ");
 	}
 
 	private boolean hasMyPlans(PersonSearchRequest personSearchRequest) {
@@ -886,7 +884,7 @@ public class DirectoryPersonSearchDao  {
 			appendAndOrWhere(stringBuilder,filterTracker);
 
             if ( PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
-				stringBuilder.append(" not exists elements(p.plans) ");
+				stringBuilder.append(" not exists elements(dp.plans) ");
 			} else {
 				stringBuilder.append(" plan.objectStatus = :planObjectStatus and plan.person.id = dp.personId ");
 			}
@@ -1119,9 +1117,9 @@ public class DirectoryPersonSearchDao  {
 		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)) {
 			if ( hasPlanExists(personSearchRequest) &&
                                     PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
-				stringBuilder.append(" left join p.plans as plan ");
+				stringBuilder.append(" left join dp.plans as plan ");
 			} else {
-				stringBuilder.append(" join p.plans as plan ");
+				stringBuilder.append(" join dp.plans as plan ");
 			}
 		}
 
@@ -1160,10 +1158,6 @@ public class DirectoryPersonSearchDao  {
 		return personSearchRequest.getHoursEarnedMax() != null || personSearchRequest.getHoursEarnedMin() != null;
 	}
 	
-	private boolean personRequired(PersonSearchRequest personSearchRequest) {
-		return (hasPlanExists(personSearchRequest) || hasMyPlans(personSearchRequest));
-	}
-
 	private Boolean buildFrom(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 		ScheduledApplicationTaskStatus status = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_TASK_NAME);
 		ScheduledApplicationTaskStatus status_blue = scheduledApplicationTaskService.getByName(ScheduledTaskWrapperServiceImpl.REFRESH_DIRECTORY_PERSON_BLUE_TASK_NAME);
@@ -1177,10 +1171,6 @@ public class DirectoryPersonSearchDao  {
             return false;
         }
 		
-		if (personRequired(personSearchRequest)) {
-			stringBuilder.append(", Person p");
-		}
-
 		if (hasDeclaredMajor(personSearchRequest)) {
 			stringBuilder.append(", ExternalStudentAcademicProgram esap ");
 		}
