@@ -501,6 +501,12 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 	@ForeignKey(name = "none")
 	private Set<ExternalStudentAcademicProgram> externalStudentAcademicPrograms;
 
+	@Nullable
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "student_id", referencedColumnName="personId")
+	@ForeignKey(name = "none")
+	private Set<WatchStudent> watchStudents;
+
 	/**
 	 * Initialize a Person.
 	 * 
@@ -1069,6 +1075,15 @@ public abstract class DirectoryPerson extends AbstractExternalData implements Ex
 
 	public void setExternalStudentAcademicPrograms(@Nullable Set<ExternalStudentAcademicProgram> externalStudentAcademicPrograms) {
 		this.externalStudentAcademicPrograms = externalStudentAcademicPrograms;
+	}
+
+	@Nullable
+	public Set<WatchStudent> getWatchStudents() {
+		return watchStudents;
+	}
+
+	public void setWatchStudents(@Nullable Set<WatchStudent> watchStudents) {
+		this.watchStudents = watchStudents;
 	}
 
 	protected int hashPrime() {
