@@ -676,7 +676,6 @@ public class DirectoryPersonSearchDao  {
 		if (hasAnyWatchCriteria(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" ws.person.id = :watcherId ");
-			stringBuilder.append(" and ws.student.id = dp.personId ");
 		}
 	}
 
@@ -1147,6 +1146,10 @@ public class DirectoryPersonSearchDao  {
 			stringBuilder.append(" inner join dp.externalStudentAcademicPrograms esap ");
 		}
 
+		if (hasAnyWatchCriteria(personSearchRequest)) {
+			stringBuilder.append(" inner join dp.watchStudents ws ");
+		}
+
 	}
 
 	private boolean hasPlanExists(PersonSearchRequest personSearchRequest) {
@@ -1174,10 +1177,6 @@ public class DirectoryPersonSearchDao  {
             return false;
         }
 
-		if (hasAnyWatchCriteria(personSearchRequest)) {
-			stringBuilder.append(", WatchStudent ws ");
-		}
-		
 		return true;
 	}
 
