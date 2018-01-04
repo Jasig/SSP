@@ -46,7 +46,7 @@ Ext.define('Ssp.service.JournalEntryService', {
 	    };
 	    
 		me.apiProperties.makeRequest({
-			url: me.getBaseUrl( personId ),
+			url: me.getBaseUrl( personId ) + "?limit=-1&status=ALL",
 			method: 'GET',
 			successFunc: success,
 			failureFunc: failure,
