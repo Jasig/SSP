@@ -21,6 +21,6 @@ Ext.define('Ssp.store.reference.CaseloadProgramStatuses', {
     model: 'Ssp.model.reference.ProgramStatus',
     constructor: function(){
     	this.callParent(arguments);
-    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('programStatus')});
+    	Ext.apply(this.getProxy(),{url: this.getProxy().url + this.apiProperties.getItemUrl('programStatus') + "?limit=-1&status=ALL"});
     }
 });

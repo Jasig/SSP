@@ -91,7 +91,7 @@ public class SelfHelpGuideQuestionController
 		final PagingWrapper<SelfHelpGuideQuestion> data =service.getAllForParent(
 				SortingAndPaging.createForSingleSortWithPaging(
 						ObjectStatus.ACTIVE , null,
-						null, null, null, "questionNumber"),selfReferenceGuideId);
+						-1, null, null, "questionNumber"),selfReferenceGuideId);
 
 		PagedResponse<SelfHelpGuideQuestionTO> pagedResponse = new PagedResponse<SelfHelpGuideQuestionTO>(true, data.getResults(), getFactory()
 				.asTOList(data.getRows()));

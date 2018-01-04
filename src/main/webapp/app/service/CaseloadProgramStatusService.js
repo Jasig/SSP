@@ -29,7 +29,7 @@ Ext.define('Ssp.service.CaseloadProgramStatusService', {
     
     getBaseUrl: function(){
 		var me=this;
-		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('programStatus') );
+		var baseUrl = me.apiProperties.createUrl( me.apiProperties.getItemUrl('programStatus') + "?limit=-1&status=ALL");
     	return baseUrl;
     },
 
