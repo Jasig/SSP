@@ -537,7 +537,11 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements Audit
 
 		// don't bring back any non-students, there will likely be a better way
 		// to do this later
-		criteria.add(Restrictions.isNotNull("studentType"));
+		//criteria.add(Restrictions.isNotNull("studentType"));
+        Criterion notNullStudentType =  Restrictions.isNotNull("studentType");
+        Criterion notNullCoach = Restrictions.isNotNull("coach");
+		Criterion notNullProgramStatus = Restrictions.isNotEmpty("programStatuses");
+		criteria.add(Restrictions.or(notNullStudentType, Restrictions.and(notNullCoach, notNullProgramStatus)));
 
         return criteria;
 	}
