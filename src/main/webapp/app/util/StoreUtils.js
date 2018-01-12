@@ -29,6 +29,7 @@ Ext.define('Ssp.util.StoreUtils',{
 		var me = this;
 		// selectStoreToModel requires following params: unpagedStore, store, model, propertyName, grid
 		me.appEventsController.assignEvent({eventName: 'selectStoreToModel', callBackFunc: this.onStoreUpdate, scope: this});
+        return me.callParent( arguments );
 	},
 	
 	onStoreUpdate: function(ps){
