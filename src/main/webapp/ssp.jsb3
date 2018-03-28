@@ -3553,6 +3553,16 @@
                   "clsName": "Ssp.view.SearchTab",
                   "name": "SearchTab.js",
                   "path": "/app/view/"
+                },
+                {
+                    "clsName": "Ssp.model.reference.TransferGoal",
+                    "name": "TransferGoal.js",
+                    "path": "/app/model/reference/"
+                },
+                {
+                    "clsName": "Ssp.store.reference.TransferGoals",
+                    "name": "TransferGoals.js",
+                    "path": "/app/store/reference/"
                 }
 			]
         },

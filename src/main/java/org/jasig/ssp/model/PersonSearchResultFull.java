@@ -162,6 +162,8 @@ public class PersonSearchResultFull {
 
     private boolean planRequiredForF1Visa;
 
+    private String planTransferGoal;
+
     private String lastRevisedBy;
 
     private Date lastRevisedDate;
@@ -668,6 +670,14 @@ public class PersonSearchResultFull {
         this.planRequiredForF1Visa = planRequiredForF1Visa;
     }
 
+    public String getPlanTransferGoal() {
+        return planTransferGoal;
+    }
+
+    public void setPlanTransferGoal(String planTransferGoal) {
+        this.planTransferGoal = planTransferGoal;
+    }
+
     public String getLastRevisedBy () {
         return lastRevisedBy;
     }
@@ -752,13 +762,14 @@ public class PersonSearchResultFull {
 
     public void setMapData (String planTitle, String planProgram, String planCatalogYear, String planOwner,
                             Boolean planRequiredForFinancialAidSap, Boolean planRequiredForF1Visa,
-                                String lastRevisedBy, Date lastRevisedDate) {
+                                String lastRevisedBy, Date lastRevisedDate, String planTransferGoal) {
         this.planTitle = planTitle;
         this.planProgram = planProgram;
         this.planCatalogYear = planCatalogYear;
         this.planOwner = planOwner;
         this.planRequiredForFinancialAidSap = planRequiredForFinancialAidSap;
         this.planRequiredForF1Visa = planRequiredForF1Visa;
+        this.planTransferGoal = planTransferGoal;
         this.lastRevisedBy = lastRevisedBy;
         this.lastRevisedDate = lastRevisedDate;
     }

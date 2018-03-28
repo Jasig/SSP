@@ -18,6 +18,7 @@
  */
 package org.jasig.ssp.factory.reference.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.dao.TemplateDao;
 import org.jasig.ssp.factory.AbstractAuditableTOFactory;
 import org.jasig.ssp.factory.reference.MapTemplateTagTOFactory;
@@ -31,6 +32,7 @@ import org.jasig.ssp.model.TemplateElectiveCourse;
 import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.service.reference.TransferGoalService;
 import org.jasig.ssp.transferobject.TemplateCourseTO;
 import org.jasig.ssp.transferobject.TemplateTO;
 import org.jasig.ssp.transferobject.TermNoteTO;
@@ -70,7 +72,10 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 
 	@Autowired
 	private MapTemplateTagTOFactory mapTemplateTagTOFactory;
-	
+
+	@Autowired
+	private TransferGoalService transferGoalService;
+
 	@Override
 	protected TemplateDao getDao() {
 		return dao;
@@ -131,6 +136,11 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 		model.getMapTemplateTags().clear();
 		for (MapTemplateTagTO mapTemplateTagTO : tObject.getMapTemplateTags()) {
 			model.getMapTemplateTags().add(getMapTemplateTagTOFactory().from(mapTemplateTagTO));
+		}
+		if (StringUtils.isNotBlank(tObject.getTransferGoalId())) {
+			model.setTransferGoal(this.transferGoalService.get(UUID.fromString(tObject.getTransferGoalId())));
+		} else {
+			model.setTransferGoal(null);
 		}
 		return model;
 	}

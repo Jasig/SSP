@@ -548,9 +548,11 @@ public class PlanController  extends AbstractBaseController {
 				if (planElectiveCourseTO!=null && planCourseTO.getFormattedCourse().equals(planElectiveCourseTO.getFormattedCourse())) {
 					setElectiveCourseData(planCourseTO, planElectiveCourseTO);
 				} else {
-					PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO = findPlanElectiveCourseElective(planCourseTO.getFormattedCourse(), planElectiveCourseTO.getPlanElectiveCourseElectives());
-					if (planElectiveCourseElectiveTO!=null) {
-						setElectiveCourseData(planCourseTO, planElectiveCourseElectiveTO);
+					if (planElectiveCourseTO!=null) {
+						PlanElectiveCourseElectiveTO planElectiveCourseElectiveTO = findPlanElectiveCourseElective(planCourseTO.getFormattedCourse(), planElectiveCourseTO.getPlanElectiveCourseElectives());
+						if (planElectiveCourseElectiveTO != null) {
+							setElectiveCourseData(planCourseTO, planElectiveCourseElectiveTO);
+						}
 					}
 				}
 			} else {

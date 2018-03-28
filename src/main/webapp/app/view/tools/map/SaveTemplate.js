@@ -29,7 +29,8 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         divisionsStore: 'divisionsStore',
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsAllStore',
-        textStore: 'sspTextStore'
+        textStore: 'sspTextStore',
+        transferGoalsStore: 'transferGoalsActiveUnpagedStore'
     },
     height: 580,
     width: 850,
@@ -201,7 +202,7 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
         	                        typeAhead: true,
         	                        allowBlank: true,
         	                        width: 190
-        	                    }        	                    
+        	                    }
         	                    ]},
         			    	{
                             xtype: 'container',
@@ -221,8 +222,20 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 									itemId: 'name',
             				        maxLength: 50,
             				        allowBlank:false
-            				        
-            				    },{
+                                },{
+        	                        xtype: 'combobox',
+									name: 'transferGoalId',
+									store: me.transferGoalsStore,
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.transfer-goal','Transfer Goal'),
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-template.transfer-goal','None Specified'),
+        	                        valueField: 'id',
+        	                        displayField: 'name',
+        	                        mode: 'local',
+									queryMode: 'local',
+        	                        typeAhead: false,
+                                    editable: false,
+        	                        allowBlank: true
+        	                    },{
             				        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-template.contact-name','Contact Name'),
             				        name: 'contactName',
 									itemId: 'contactName',

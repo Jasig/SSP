@@ -471,6 +471,7 @@ Ext.require([
 	'Ssp.store.reference.Tags',
 	'Ssp.store.reference.FacetedTags',
 	'Ssp.store.reference.MapTemplateTags',
+	'Ssp.store.reference.TransferGoals',
     'Ssp.store.Tools',
     'Ssp.store.reference.VeteranStatuses',
     'Ssp.store.reference.YesNo',
@@ -673,7 +674,8 @@ var apiUrls = [
   {name: 'weeklyCourseWorkHourRanges', url: 'reference/config/?name=weekly_course_work_hour_ranges'},
   {name: 'successIndicator', url: 'reference/successIndicator'},
   {name: 'personCoachHistory', url: 'person/{id}/coachHistory'},
-  {name: 'electiveCourses', url: 'reference/map/electiveCourses'}
+  {name: 'electiveCourses', url: 'reference/map/electiveCourses'},
+  {name: 'transferGoal', url: 'reference/transferGoal'}
 ];
 
 Ext.onReady(function(){	
@@ -1892,6 +1894,33 @@ Ext.onReady(function(){
 			    		fn: function(){
 					    	return Ext.create('Ssp.store.reference.MapTemplateTags', {
 							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},
+					transferGoalsStore: {
+                        fn: function(){
+                            return Ext.create('Ssp.store.reference.TransferGoals', {
+							     storeId: 'transferGoalsStore',
+                                 extraParams: {status: "ACTIVE"}
+                             });
+                        },
+                        singleton: true
+                    },
+					transferGoalsAllStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.TransferGoals', {
+							     storeId: 'transferGoalsAllStore',
+							     extraParams: {status: "ALL"}
+							 });
+					    },
+					    singleton: true
+					},
+					transferGoalsActiveUnpagedStore: {
+			    		fn: function(){
+					    	return Ext.create('Ssp.store.reference.TransferGoals', {
+							     storeId: 'transferGoalsActiveUnpagedStore',
+							     extraParams: {status: "ACTIVE", limit: "-1"}
 							 });
 					    },
 					    singleton: true

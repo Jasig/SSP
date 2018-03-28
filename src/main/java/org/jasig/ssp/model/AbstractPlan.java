@@ -19,11 +19,9 @@
 package org.jasig.ssp.model;
 
 import org.hibernate.annotations.Immutable;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import org.jasig.ssp.model.reference.TransferGoal;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -101,7 +99,11 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	private transient Boolean isValid = true;
 	
 	@Transient
-	private Boolean isDirty = false;	
+	private Boolean isDirty = false;
+
+	@ManyToOne()
+	@JoinColumn(name = "transfer_goal_id")
+	private TransferGoal transferGoal;
 
 	public abstract <T extends AbstractPlan> T clonePlan() throws CloneNotSupportedException;
 	
@@ -270,6 +272,7 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		clone.setCatalogYearCode(this.getCatalogYearCode());
 		//Copying person by should be changed if we're cloning on saving with a new advisor
 		clone.setOwner(this.getOwner());
+		clone.setTransferGoal(this.getTransferGoal());
 	}
 
 	public Boolean getIsDirty() {
@@ -296,4 +299,11 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		this.catalogYearCode = catalogYearCode;
 	}
 
+	public TransferGoal getTransferGoal() {
+		return transferGoal;
+	}
+
+	public void setTransferGoal(TransferGoal transferGoal) {
+		this.transferGoal = transferGoal;
+	}
 }

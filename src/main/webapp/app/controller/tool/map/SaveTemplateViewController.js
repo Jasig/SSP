@@ -31,7 +31,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
         catalogYearsStore: 'catalogYearsStore',
         mapTemplateTagsStore: 'mapTemplateTagsAllStore',
 		contactPersonStore: 'contactPersonStore',
-		textStore: 'sspTextStore'
+		textStore: 'sspTextStore',
+		transferGoalsStore: 'transferGoalsActiveUnpagedStore'
     },
     
 	control: {
@@ -55,10 +56,13 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.divisionsStore.addListener("load", me.onShow, me, {single:true});
 		me.catalogYearsStore.addListener("load", me.onShow, me, {single:true});
 		me.mapTemplateTagsStore.addListener("load", me.onShow, me, {single:true});
+		me.transferGoalsStore.addListener("load", me.onShow, me, {single:true});
+
 		me.programsStore.load();
 		me.departmentsStore.load();
 		me.divisionsStore.load();
 		me.catalogYearsStore.load();
+        me.transferGoalsStore.load({callback:me.afterTransferGoalStoreLoaded,scope:me,single:true})
 
 		me.mapTemplateTagsStore.clearFilter(true);
        	me.mapTemplateTagsStore.load({callback:me.afterMapTemplateTagStoreLoaded,scope:me,single:true})
@@ -85,6 +89,19 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 
 		return me.callParent(arguments);
     },
+
+	afterTransferGoalStoreLoaded: function() {
+        var me = this;
+        //Add a transfer goal to the store
+		var transferGoal = new Ssp.model.reference.TransferGoal();
+		transferGoal.data.id = null;
+		transferGoal.data.name = '';
+		transferGoal.data.objectStatus = 'ACTIVE';
+        var data = [];
+		data.push(transferGoal);
+		me.transferGoalsStore.insert(0, data);
+		me.transferGoalsStore.commitChanges();
+	},
 
 	afterMapTemplateTagStoreLoaded: function() {
             var me = this;
@@ -176,6 +193,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	me = this;
     	var nameField = me.getView().query('textfield[name="name"]')[0].getValue();
 		var form =  me.getView().query('form')[0].getForm();
+
     	if(!nameField || nameField == '')
     	{
 			Ext.Msg.alert(
@@ -236,8 +254,8 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
     	me = this;
     	if(btnId == 'yes'){
 	    	var form =  me.getView().query('form')[0].getForm();
-	    	
 			form.updateRecord(me.currentMapPlan);
+
 			// Checkbox is disabled in this case, so will be skipped on a Ext.form.Basic.updateRecord()
 			// http://stackoverflow.com/questions/13364510/update-form-record-for-disabled-fields#comment18246782_13365321
 			if(!me.authenticatedPerson.hasAccess('MAP_TOOL_PUBLIC_TEMPLATE_WRITE')){
@@ -327,6 +345,7 @@ Ext.define('Ssp.controller.tool.map.SaveTemplateViewController', {
 		me.divisionsStore.removeListener("load", me.onShow, me, {single:true});
 		me.catalogYearsStore.removeListener("load", me.onShow, me, {single:true});
 		me.mapTemplateTagsStore.removeListener("load", me.onShow, me, {single:true});
+	    me.transferGoalsStore.removeListener("load", me.onShow, me, {single:true});
 	    return me.callParent( arguments );
 	}
 });

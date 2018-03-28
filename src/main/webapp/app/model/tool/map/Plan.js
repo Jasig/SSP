@@ -77,7 +77,8 @@ Ext.define('Ssp.model.tool.map.Plan', {
 					data = (data && !Ext.isArray(data) ) ? [data] : data;
 					return data;
 				}
-            }
+            },
+            {name:'transferGoalId', type:'string'}
 	],
 			
 	hasMany:[{model: 'Ssp.model.tool.map.PlanCourse',
@@ -218,6 +219,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.planStatus = null;
 		me.planStatusDetails = null;
 		me.set('mapTemplateTags', new Array());
+		me.set('transferGoalId','');
 	},
 
 	loadFromServer : function(objectData){
@@ -286,6 +288,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		simpleData.catalogYearCode = me.get('catalogYearCode');
 		simpleData.planCourses = me.get('planCourses');
 		simpleData.planElectiveCourses = me.get('planElectiveCourses');
+		simpleData.transferGoalId = me.get('transferGoalId');
 
 		if(me.get('isTemplate')){
 			simpleData.departmentCode = me.get('departmentCode');

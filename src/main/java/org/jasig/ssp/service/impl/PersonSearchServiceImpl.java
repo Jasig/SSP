@@ -50,6 +50,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -550,11 +552,16 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
 			for (Plan planIterator : plans ) {
 				final AuditPerson modifiedBy = planIterator.getModifiedBy();
+
+				String transferGoalName = "";
+				if (null!=planIterator.getTransferGoal()) {
+					transferGoalName = planIterator.getTransferGoal().getName();
+				}
 				resultMap.get(planIterator.getPerson().getSchoolId()).setMapData(planIterator.getName(),
 						planIterator.getProgramCode(), planIterator.getCatalogYearCode(),
 							planIterator.getOwner().getFullName(), planIterator.getIsFinancialAid(),
 								planIterator.getIsF1Visa(), (modifiedBy.getFirstName() + " " + modifiedBy.getLastName()),
-									planIterator.getModifiedDate());
+									planIterator.getModifiedDate(), transferGoalName);
 			}
 		}
 	}

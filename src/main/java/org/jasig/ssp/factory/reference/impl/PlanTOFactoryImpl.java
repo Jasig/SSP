@@ -32,6 +32,7 @@ import org.jasig.ssp.model.TermNote;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.TemplateService;
+import org.jasig.ssp.service.reference.TransferGoalService;
 import org.jasig.ssp.transferobject.PlanCourseTO;
 import org.jasig.ssp.transferobject.PlanElectiveCourseTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -69,7 +70,10 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 
     @Autowired
     private TemplateService templateService;
-	
+
+    @Autowired
+	private TransferGoalService transferGoalService;
+
 	@Override
 	protected PlanDao getDao() {
 		return dao;
@@ -137,6 +141,11 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 			model.getPlanElectiveCourses().add(planElectiveCourse);
 		}
 
+		if (StringUtils.isNotBlank(tObject.getTransferGoalId())) {
+			model.setTransferGoal(this.transferGoalService.get(UUID.fromString(tObject.getTransferGoalId())));
+		} else {
+			model.setTransferGoal(null);
+		}
 		return model;
 	}
 

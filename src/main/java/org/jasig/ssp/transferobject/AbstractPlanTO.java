@@ -67,6 +67,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	private List<TermNoteTO> termNotes = new ArrayList<TermNoteTO>();
 
 	private String programCode;
+
+	private String transferGoalId;
 	/**
 	 * Empty constructor.
 	 */
@@ -97,6 +99,9 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsValid(model.getIsValid());
 		this.setProgramCode(model.getProgramCode());
 		this.setCatalogYearCode(model.getCatalogYearCode());
+		if (null!=model.getTransferGoal()) {
+			this.setTransferGoalId(model.getTransferGoal().getId().toString());
+		}
 	}
 	
 	public abstract List<? extends AbstractPlanCourseTO<T,? extends AbstractPlanCourse<T>>> getCourses();
@@ -235,6 +240,14 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 
 	public void setTermNotes(List<TermNoteTO> termNotes) {
 		this.termNotes = termNotes;
+	}
+
+	public String getTransferGoalId() {
+		return transferGoalId;
+	}
+
+	public void setTransferGoalId(String transferGoalId) {
+		this.transferGoalId = transferGoalId;
 	}
 
 	/**

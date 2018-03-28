@@ -27,7 +27,8 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		authenticatedPerson: 'authenticatedPerson',
     	mapEventUtils: 'mapEventUtils',
 		contactPersonStore: 'contactPersonStore',
-		textStore: 'sspTextStore'
+		textStore: 'sspTextStore',
+		transferGoalsStore: 'transferGoalsActiveUnpagedStore'
     },
 	control: {
 		view: {
@@ -57,7 +58,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
         me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
         me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
         me.programsStore.load();
-
+        me.transferGoalsStore.load({callback:me.afterTransferGoalStoreLoaded,scope:me,single:true})
         me.checkForContactInfo();
 
         me.appEventsController.removeEvent({eventName: 'doAfterSaveSuccess', callBackFunc: me.doAfterSaveSuccess, scope: me});
@@ -67,6 +68,19 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 
         return me.callParent(arguments);
     },
+
+	afterTransferGoalStoreLoaded: function() {
+        var me = this;
+        //Add a transfer goal to the store
+		var transferGoal = new Ssp.model.reference.TransferGoal();
+		transferGoal.data.id = null;
+		transferGoal.data.name = '';
+		transferGoal.data.objectStatus = 'ACTIVE';
+        var data = [];
+		data.push(transferGoal);
+		me.transferGoalsStore.insert(0, data);
+		me.transferGoalsStore.commitChanges();
+	},
 
     checkForContactInfo: function(){
         var me = this;
@@ -167,7 +181,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 		var validateResult = me.formUtils.validateForms( form );
 
 		if ( validateResult.valid )	{
-			form.updateRecord(me.currentMapPlan);
+		    form.updateRecord(me.currentMapPlan);
 			me.currentMapPlan.set('objectStatus', (me.getView().query('checkbox[name=objectStatus]')[0].checked) ? 'ACTIVE' : 'INACTIVE');
 			me.setField('checkbox[name=isFinancialAid]', 'isFinancialAid');
 			me.setField('checkbox[name=isImportant]', 'isImportant');

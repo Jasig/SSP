@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper<PersonSearchResultFull> {
 
-	private static String[] colHeaders = new String[58];
+	private static String[] colHeaders = new String[59];
 
 	private static String COL_PERSON_ID = "PERSON_ID";
 	private static String COL_SCHOOL_ID = "SCHOOL_ID";
@@ -88,6 +88,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
     private static String COL_HOME_CAMPUS = "HOME_CAMPUS";
     private static String COL_NUM_CONFIGURED_SUCCESS_INDICATORS_LOW = "LOW_SUCCESS_INDICATORS";
     private static String COL_NUM_CONFIGURED_SUCCESS_INDICATORS_MEDIUM = "MEDIUM_SUCCESS_INDICATORS";
+    private static String COL_TRANSFER_GOAL = "TRANSFER_GOAL";
 
     static {
 		colHeaders[0] = COL_PERSON_ID;
@@ -148,6 +149,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
         colHeaders[55] = COL_HOME_CAMPUS;
         colHeaders[56] = COL_NUM_CONFIGURED_SUCCESS_INDICATORS_LOW;
         colHeaders[57] = COL_NUM_CONFIGURED_SUCCESS_INDICATORS_MEDIUM;
+        colHeaders[58] = COL_TRANSFER_GOAL;
     }
 
     private final Map<Integer, Boolean> customOptions;
@@ -245,6 +247,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
                 columns.add(colHeaders[ 51 ]);
                 columns.add(colHeaders[ 52 ]);
                 columns.add(colHeaders[ 53 ]);
+                columns.add(colHeaders[ 58 ]);
             }
             if ( customOptions.get(15) ) {
                 columns.add(colHeaders[ 23 ]); //extra
@@ -347,6 +350,7 @@ public class CustomizableCaseloadCsvWriterHelper extends AbstractCsvWriterHelper
             bodyRowsToReturn.add(formatFriendlyBoolean(model.getPlanRequiredForF1Visa()));
             bodyRowsToReturn.add(model.getLastRevisedBy());
             bodyRowsToReturn.add(formatDate(model.getLastRevisedDate()));
+            bodyRowsToReturn.add(model.getPlanTransferGoal());
         }
         if ( customOptions.get(15) ) {
             bodyRowsToReturn.add(model.getStudentTypeName()); //extra

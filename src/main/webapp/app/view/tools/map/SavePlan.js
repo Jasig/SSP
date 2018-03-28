@@ -27,7 +27,8 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         programsStore: 'programsStore',
         catalogYearsStore: 'catalogYearsStore',
 		currentMapPlan: 'currentMapPlan',
-		textStore: 'sspTextStore'
+		textStore: 'sspTextStore',
+		transferGoalsStore: 'transferGoalsActiveUnpagedStore'
     },
     height: 554,
     width: 684,
@@ -164,6 +165,20 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
         	                        displayField: 'name',
         	                        mode: 'local',
         	                        typeAhead: true,
+									width: '80%',
+        	                        allowBlank: true
+        	                    },{
+        	                        xtype: 'combobox',
+        	                        name: 'transferGoalId',
+									store: me.transferGoalsStore,
+        	                        fieldLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.transfer-goal','Transfer Goal'),
+        	                        emptyText: me.textStore.getValueByCode('ssp.empty-text.map.save-plan.transfer-goal','None Specified'),
+        	                        valueField: 'id',
+        	                        displayField: 'name',
+        	                        mode: 'local',
+									queryMode: 'local',
+        	                        typeAhead: false,
+                                    editable: false,
 									width: '80%',
         	                        allowBlank: true
         	                    } ,{

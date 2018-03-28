@@ -1309,7 +1309,17 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     store: 'planTemplatesSummary',
                     form: 'maptemplatesadmin',
                     leaf: true
-                }]
+                }, {
+                     text: 'Transfer Goals',
+                     title: 'Transfer Goals',
+                     store: 'transferGoalsAll',
+                     interfaceOptions: {
+                         addButtonVisible: true,
+                         deleteButtonVisible: false
+                     },
+                     form: 'AbstractReferenceAdmin',
+                     leaf: true
+                 }]
             }]
         };
         
