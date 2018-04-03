@@ -304,7 +304,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
             simpleData.mapTemplateTags = [];
             if(Array.isArray(mapTemplateTags)){
                 Ext.Array.forEach(mapTemplateTags, function(mapTemplateTag) {
-                    simpleData.mapTemplateTags.push(mapTemplateTag);
+                    simpleData.mapTemplateTags.push(mapTemplateTag.getData());
                 });
             }
 		}else{
