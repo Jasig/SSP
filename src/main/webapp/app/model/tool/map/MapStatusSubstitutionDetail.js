@@ -60,6 +60,7 @@ Ext.define('Ssp.model.tool.map.MapStatusSubstitutionDetail', {
 		me.set('modifiedDate',null);
 		me.set('isValid',true);
 		me.set('isTemplate',false);
+		me.set('isPartial',false);
 		me.dirty = false;
 	}
 			

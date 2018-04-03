@@ -105,6 +105,9 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 	@JoinColumn(name = "transfer_goal_id")
 	private TransferGoal transferGoal;
 
+	@Column(name="is_partial",nullable = false)
+	private Boolean isPartial = false;
+
 	public abstract <T extends AbstractPlan> T clonePlan() throws CloneNotSupportedException;
 	
 	public abstract List<? extends AbstractPlanCourse<?>> getCourses();
@@ -273,6 +276,7 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 		//Copying person by should be changed if we're cloning on saving with a new advisor
 		clone.setOwner(this.getOwner());
 		clone.setTransferGoal(this.getTransferGoal());
+		clone.setIsPartial(this.getIsPartial());
 	}
 
 	public Boolean getIsDirty() {
@@ -305,5 +309,13 @@ public abstract class AbstractPlan extends AbstractAuditable implements Cloneabl
 
 	public void setTransferGoal(TransferGoal transferGoal) {
 		this.transferGoal = transferGoal;
+	}
+
+	public Boolean getIsPartial() {
+		return isPartial;
+	}
+
+	public void setIsPartial(Boolean partial) {
+		isPartial = partial;
 	}
 }

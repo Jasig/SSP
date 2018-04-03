@@ -142,7 +142,9 @@ public class PersonSearchRequest {
 
 	private List<String> configuredSuccessIndicator;
 
-    public PersonSearchRequest() {
+	private Boolean partialPlan;
+
+	public PersonSearchRequest() {
 		super();
 	}
 
@@ -627,4 +629,12 @@ public class PersonSearchRequest {
     public void setConfiguredSuccessIndicator(List<String> configuredSuccessIndicator) {
         this.configuredSuccessIndicator = configuredSuccessIndicator;
     }
+
+	public Boolean getPartialPlan() {
+		return partialPlan;
+	}
+
+	public void setPartialPlan(Boolean partialPlan) {
+		this.partialPlan = partialPlan;
+	}
 }

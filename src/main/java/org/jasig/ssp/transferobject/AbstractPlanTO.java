@@ -69,6 +69,8 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 	private String programCode;
 
 	private String transferGoalId;
+
+	private Boolean isPartial = false;
 	/**
 	 * Empty constructor.
 	 */
@@ -95,6 +97,7 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.setIsF1Visa(model.getIsF1Visa());
 		this.setIsFinancialAid(model.getIsFinancialAid());
 		this.setIsImportant(model.getIsImportant());
+		this.setIsPartial(model.getIsPartial());
 		this.setStudentNotes(model.getStudentNotes());
 		this.setIsValid(model.getIsValid());
 		this.setProgramCode(model.getProgramCode());
@@ -210,6 +213,13 @@ public abstract class AbstractPlanTO<T extends AbstractPlan> extends
 		this.isF1Visa = isF1Visa;
 	}
 
+	public Boolean getIsPartial() {
+		return isPartial;
+	}
+
+	public void setIsPartial(Boolean isPartial) {
+		this.isPartial = isPartial;
+	}
 	public String getAcademicGoals() {
 		return academicGoals;
 	}

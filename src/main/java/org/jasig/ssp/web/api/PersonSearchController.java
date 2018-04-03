@@ -165,6 +165,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 // same thing as mapStatus here and a new param - planExists -
 	 // replaces planStatus
 	 final @RequestParam(required = false) String planStatus,
+	 final @RequestParam(required = false) Boolean partialPlan,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -199,6 +200,7 @@ public class PersonSearchController extends AbstractBaseController {
 				sapStatusCode,
 				mapStatus,
 				planStatus,
+				partialPlan,
 				myCaseload,
 				myPlans,
 				myWatchList,
@@ -253,6 +255,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 // planExists here is essentially a rename of of planStatus /students/search
 	 // see notes in that handler
 	 final @RequestParam(required = false) String planExists,
+	 final @RequestParam(required = false) Boolean partialPlan,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -279,7 +282,7 @@ public class PersonSearchController extends AbstractBaseController {
                 programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				planStatus,planExists,
+				planStatus,planExists, partialPlan,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage));
 
          return new PagedResponse<PersonSearchResult2TO>(true, models.getResults(), factory2.asTOList(models.getRows()));
@@ -314,6 +317,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 // planExists here is essentially a rename of of planStatus /students/search
 	 // see notes in that handler
 	 final @RequestParam(required = false) String planExists,
+	 final @RequestParam(required = false) Boolean partialPlan,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -340,7 +344,7 @@ public class PersonSearchController extends AbstractBaseController {
                 programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				planStatus,planExists,
+				planStatus,planExists, partialPlan,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage));
 	}
 

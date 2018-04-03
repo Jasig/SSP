@@ -39,7 +39,8 @@ Ext.define('Ssp.view.SearchForm',{
         textStore:'sspTextStore',
         termsStore: 'termsStore',
         campusesStore: 'campusesAllUnpagedStore',
-        riskLevels: 'riskLevels'
+        riskLevels: 'riskLevels',
+        partialPlanStore: 'partialPlanStore'
     },
     collapsible: true,
 	hideCollapseTool: true,
@@ -398,7 +399,21 @@ Ext.define('Ssp.view.SearchForm',{
 					displayField: 'displayValue',
 			   		editable: false
 			   		//tpl: comboTPLDisplayValueDisplay
-
+				}]
+			}, {
+				layout: 'column',
+				border: false,
+				items: [{
+					xtype: 'combobox',
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-partial', 'Partial Plan'),
+					columnWidth: 0.5,
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.plan-partial', 'Any'),
+					name: 'partialPlan',
+					itemId: 'partialPlan',
+					store: me.partialPlanStore,
+					valueField: 'code',
+					displayField: 'displayValue',
+			   		editable: false
 				}]
 			}, {
 				layout: {

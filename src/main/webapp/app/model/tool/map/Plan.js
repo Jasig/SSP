@@ -32,6 +32,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
             {name:'isFinancialAid',type:'boolean'},
             {name:'isImportant',type:'boolean'},
             {name:'isF1Visa',type:'boolean'},
+            {name:'isPartial',type:'boolean'},
             {name:'academicGoals',type:'string'},
             {name:'careerLink',type:'string'},
             {name:'academicLink',type:'string'},
@@ -202,6 +203,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
 		me.set('isFinancialAid',false);
 		me.set('isImportant',false);
 		me.set('isF1Visa',false);
+		me.set('isPartial',false);
 		me.set('academicGoals','');
 		me.set('careerLink','');
 		me.set('academicLink','');
@@ -278,6 +280,7 @@ Ext.define('Ssp.model.tool.map.Plan', {
         simpleData.isFinancialAid = me.getBoolean('isFinancialAid');
         simpleData.isImportant = me.getBoolean('isImportant');
         simpleData.isF1Visa = me.getBoolean('isF1Visa');
+        simpleData.isPartial = me.getBoolean('isPartial');
         simpleData.academicGoals = me.get('academicGoals');
         simpleData.careerLink = me.get('careerLink');
         simpleData.academicLink = me.get('academicLink');

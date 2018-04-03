@@ -122,6 +122,18 @@ Ext.define('Ssp.view.tools.map.SaveTemplate', {
 						        		allowBlank: false,
 						        		itemId: 'visibility',
 						        		width: 290
+                                    },
+                			        {
+                                        xtype: 'tbspacer',
+                                        width: 20
+                                    },{
+                                        xtype: 'checkbox',
+                                        boxLabel: me.textStore.getValueByCode('ssp.label.map.save-template.is-partial','Partial'),
+                                        name: 'isPartial',
+                                        labelWidth: 70,
+                                        boxLabelAlign: 'before',
+                                        inputValue: 'isPartial',
+                                        itemId:'isPartial'
 						    		}
                 			    ]},
                 			{

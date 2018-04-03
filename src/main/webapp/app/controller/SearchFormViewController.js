@@ -91,6 +91,9 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 		'planExists':{
 			specialkey: "specialKeyPressed"
 		},
+		'partialPlan':{
+			specialkey: "specialKeyPressed"
+		},
 		'hoursEarnedMin':{
 			specialkey: "specialKeyPressed",
 			blur: "hoursEarnedMinChanged"
@@ -270,6 +273,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				me.getView().query('combobox[name=financialAidSapStatusCode]')[0].value,
 				me.getView().query('combobox[name=planStatus]')[0].value,
 				me.getView().query('combobox[name=planExists]')[0].value,
+				me.getView().query('combobox[name=partialPlan]')[0].value,
 				me.getView().query('checkbox[name=myCaseload]')[0].value,
 				me.getView().query('checkbox[name=myPlans]')[0].value,
 				me.getView().query('checkbox[name=myWatchList]')[0].value,
@@ -963,6 +967,7 @@ Ext.define('Ssp.controller.SearchFormViewController', {
 				earlyAlertResponseLate: me.getView().query('combobox[name=earlyAlertResponseLate]')[0].value,
 				planStatus: me.getView().query('combobox[name=planStatus]')[0].value,
 				planExists: me.getView().query('combobox[name=planExists]')[0].value,
+				partialPlan: me.getView().query('combobox[name=partialPlan]')[0].value,
 				myCaseload: me.getView().query('checkbox[name=myCaseload]')[0].value,
 				myPlans: me.getView().query('checkbox[name=myPlans]')[0].value,
 				myWatchList: me.getView().query('checkbox[name=myWatchList]')[0].value,

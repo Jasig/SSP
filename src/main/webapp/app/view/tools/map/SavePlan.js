@@ -119,6 +119,18 @@ Ext.define('Ssp.view.tools.map.SavePlan', {
                 			    	boxLabelAlign: 'before',
                 			    	inputValue: 'isF1Visa',
 									itemId:'isF1Visa'
+                                },
+                			    {
+                                    xtype: 'tbspacer',
+                                    width: 20
+                                },
+                			    {
+                			    	boxLabel: me.textStore.getValueByCode('ssp.label.map.save-plan.is-partial','Partial'),
+                			    	name: 'isPartial',
+                			    	labelWidth: 70,
+                			    	boxLabelAlign: 'before',
+                			    	inputValue: 'isPartial',
+									itemId:'isPartial'
                 			    }
                 			    ]},
         			    	{

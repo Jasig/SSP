@@ -561,7 +561,7 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 						planIterator.getProgramCode(), planIterator.getCatalogYearCode(),
 							planIterator.getOwner().getFullName(), planIterator.getIsFinancialAid(),
 								planIterator.getIsF1Visa(), (modifiedBy.getFirstName() + " " + modifiedBy.getLastName()),
-									planIterator.getModifiedDate(), transferGoalName);
+									planIterator.getModifiedDate(), transferGoalName, planIterator.getIsPartial());
 			}
 		}
 	}

@@ -437,7 +437,10 @@ public class DirectoryPersonSearchDao  {
 		
 		//planExists
 		buildPlanExists(personSearchRequest,filterTracker, stringBuilder);
-		  
+
+		//partialPlan
+		buildPartialPlan(personSearchRequest,filterTracker, stringBuilder);
+
 		//financialAidStatus
 		buildFinancialAidStatus(personSearchRequest,filterTracker, stringBuilder);
 		
@@ -724,7 +727,11 @@ public class DirectoryPersonSearchDao  {
 			}			
 			params.put("planStatus",param);
 		}
-		
+
+		if (hasPartialPlan(personSearchRequest)) {
+        	params.put("partialPlan", personSearchRequest.getPartialPlan());
+		}
+
 		if (hasAnyGpaCriteria(personSearchRequest)) {
 			if (personSearchRequest.getGpaEarnedMin() != null) {
 				params.put("gpaEarnedMin", personSearchRequest.getGpaEarnedMin());
@@ -892,6 +899,15 @@ public class DirectoryPersonSearchDao  {
 				stringBuilder.append(" and not exists ( from Plan as myPlans where myPlans.person.id = dp.personId and myPlans.objectStatus = "
 						+ ObjectStatus.ACTIVE.ordinal() + " ) ");
 			}
+		}
+	}
+
+	private void buildPartialPlan(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+								 StringBuilder stringBuilder) {
+
+		if (hasPartialPlan(personSearchRequest)) {
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" plan.isPartial = :partialPlan ");
 		}
 	}
 
@@ -1112,7 +1128,7 @@ public class DirectoryPersonSearchDao  {
 
 	private void buildJoins(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 
-		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)) {
+		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest) || hasPartialPlan(personSearchRequest)) {
 			if ( hasPlanExists(personSearchRequest) &&
                                     PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" left join dp.plans as plan ");
@@ -1158,6 +1174,10 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasPlanStatus(PersonSearchRequest personSearchRequest) {
 		return StringUtils.isNotEmpty(personSearchRequest.getPlanStatus());
+	}
+
+	private boolean hasPartialPlan(PersonSearchRequest personSearchRequest) {
+		return personSearchRequest.getPartialPlan()!=null;
 	}
 
 	private boolean hasHoursEarnedCriteria(PersonSearchRequest personSearchRequest) {

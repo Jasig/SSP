@@ -2660,6 +2660,11 @@
                     "path": "/app/store/"
                 }, 
                 {
+                    "clsName": "Ssp.store.PartialPlan",
+                    "name": "PartialPlan.js",
+                    "path": "/app/store/"
+                },
+                {
                     "clsName": "Ssp.store.PersonTableTypes",
                     "name": "PersonTableTypes.js",
                     "path": "/app/store/"

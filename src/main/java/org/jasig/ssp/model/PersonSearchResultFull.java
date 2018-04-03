@@ -162,6 +162,8 @@ public class PersonSearchResultFull {
 
     private boolean planRequiredForF1Visa;
 
+    private boolean planIsPartial;
+
     private String planTransferGoal;
 
     private String lastRevisedBy;
@@ -762,13 +764,15 @@ public class PersonSearchResultFull {
 
     public void setMapData (String planTitle, String planProgram, String planCatalogYear, String planOwner,
                             Boolean planRequiredForFinancialAidSap, Boolean planRequiredForF1Visa,
-                                String lastRevisedBy, Date lastRevisedDate, String planTransferGoal) {
+                            String lastRevisedBy, Date lastRevisedDate, String planTransferGoal,
+                            Boolean planIsPartial) {
         this.planTitle = planTitle;
         this.planProgram = planProgram;
         this.planCatalogYear = planCatalogYear;
         this.planOwner = planOwner;
         this.planRequiredForFinancialAidSap = planRequiredForFinancialAidSap;
         this.planRequiredForF1Visa = planRequiredForF1Visa;
+        this.planIsPartial = planIsPartial;
         this.planTransferGoal = planTransferGoal;
         this.lastRevisedBy = lastRevisedBy;
         this.lastRevisedDate = lastRevisedDate;
@@ -782,5 +786,12 @@ public class PersonSearchResultFull {
         return planRequiredForF1Visa;
     }
 
-    //***End added for CustomExportSearch ***
+    public boolean isPlanIsPartial() {
+        return planIsPartial;
+    }
+
+    public void setPlanIsPartial(boolean planIsPartial) {
+        this.planIsPartial = planIsPartial;
+    }
+//***End added for CustomExportSearch ***
 }

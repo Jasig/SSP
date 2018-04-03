@@ -479,6 +479,7 @@ Ext.require([
     'Ssp.store.reference.ExternalViewTools',
     'Ssp.store.PlanStatus',
     'Ssp.store.PlanExists',
+    'Ssp.store.PartialPlan',
     'Ssp.store.StudentsSearch',
     'Ssp.store.PersonTableTypes',
     'Ssp.store.MapStatusReports',
@@ -2151,6 +2152,7 @@ Ext.onReady(function(){
 					    singleton: true
 					},
 			        planExistsStore: 'Ssp.store.PlanExists',
+			        partialPlanStore: 'Ssp.store.PartialPlan',
 			        personTableTypesStore: 'Ssp.store.PersonTableTypes',
 			        financialAidSAPStatus: 'Ssp.store.FinancialAidSAPStatus',
 			        planStatusStore: 'Ssp.store.PlanStatus',

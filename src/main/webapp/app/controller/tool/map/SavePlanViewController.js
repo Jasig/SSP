@@ -57,6 +57,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
         me.setCheckBox('checkbox[name=isFinancialAid]', 'isFinancialAid');
         me.setCheckBox('checkbox[name=isImportant]', 'isImportant');
         me.setCheckBox('checkbox[name=isF1Visa]', 'isF1Visa');
+        me.setCheckBox('checkbox[name=isPartial]', 'isPartial');
         me.programsStore.load();
         me.transferGoalsStore.load({callback:me.afterTransferGoalStoreLoaded,scope:me,single:true})
         me.checkForContactInfo();
@@ -186,6 +187,7 @@ Ext.define('Ssp.controller.tool.map.SavePlanViewController', {
 			me.setField('checkbox[name=isFinancialAid]', 'isFinancialAid');
 			me.setField('checkbox[name=isImportant]', 'isImportant');
 			me.setField('checkbox[name=isF1Visa]', 'isF1Visa');
+			me.setField('checkbox[name=isPartial]', 'isPartial');
 			me.appEventsController.getApplication().fireEvent("onAfterPlanLoad");
 
 			if (me.currentMapPlan.get('isTemplate') == true) {

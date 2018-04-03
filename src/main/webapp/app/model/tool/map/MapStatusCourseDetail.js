@@ -57,6 +57,7 @@ Ext.define('Ssp.model.tool.map.MapStatusCourseDetail', {
 		me.set('modifiedDate',null);
 		me.set('isValid',true);
 		me.set('isTemplate',false);
+		me.set('isPartial',false);
 		me.dirty = false;
 	}
 			

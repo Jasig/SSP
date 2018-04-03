@@ -109,6 +109,7 @@ public class PlanTOFactoryImpl extends AbstractAuditableTOFactory<PlanTO, Plan>
 		model.setCatalogYearCode(tObject.getCatalogYearCode());
 		model.getTermNotes().clear();
 		model.setIsValid(tObject.getIsValid());
+		model.setIsPartial(tObject.getIsPartial());
 
         if (StringUtils.isNotBlank(tObject.getBasedOnTemplateId())) {
             model.setTemplateBasedOn(templateService.get(UUID.fromString(tObject.getBasedOnTemplateId())));

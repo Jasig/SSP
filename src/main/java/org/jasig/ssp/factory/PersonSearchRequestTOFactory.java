@@ -37,7 +37,7 @@ public interface PersonSearchRequestTOFactory extends
 			BigDecimal gpaEarnedMax, BigDecimal localGpaMin, BigDecimal localGpaMax,
             BigDecimal programGpaMin, BigDecimal programGpaMax,
             String currentlyRegistered, String earlyAlertResponseLate,
-			String sapStatusCode, String planStatus, String planExists,
+			String sapStatusCode, String planStatus, String planExists, Boolean partialPlan,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate,
 			String actualStartTerm, String personTableType, String homeCampus, String successIndicator, SortingAndPaging sAndP) throws ObjectNotFoundException;
 
@@ -48,7 +48,7 @@ public interface PersonSearchRequestTOFactory extends
             BigDecimal gpaEarnedMax, BigDecimal localGpaMin, BigDecimal localGpaMax,
             BigDecimal programGpaMin, BigDecimal programGpaMax,
             String currentlyRegistered, String earlyAlertResponseLate,
-			String sapStatusCode, String planStatus, String planExists,
+			String sapStatusCode, String planStatus, String planExists, Boolean partialPlan,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate, String actualStartTerm) throws ObjectNotFoundException;
 
 }

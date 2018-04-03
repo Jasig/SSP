@@ -92,6 +92,7 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	private List<String> successIndicator;
 
+	private Boolean partialPlan;
 	
 	public String getSchoolId() {
 		return schoolId;
@@ -490,5 +491,13 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 			}
 			this.successIndicator = successIndicators;
 		}
+	}
+
+	public Boolean getPartialPlan() {
+		return partialPlan;
+	}
+
+	public void setPartialPlan(Boolean partialPlan) {
+		this.partialPlan = partialPlan;
 	}
 }

@@ -202,6 +202,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	 final @RequestParam(required = false) String specialServiceGroup,
 	 final @RequestParam(required = false) String planStatus,
 	 final @RequestParam(required = false) String planExists,
+	 final @RequestParam(required = false) Boolean partialPlan,
 	 final @RequestParam(required = false) Boolean myCaseload,
 	 final @RequestParam(required = false) Boolean myPlans,
 	 final @RequestParam(required = false) Boolean myWatchList,
@@ -232,7 +233,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
                 programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				planStatus,planExists,
+				planStatus,planExists, partialPlan,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage);
 
 		service.exportDirectoryPersonSearch(response.getWriter(), form);
@@ -263,6 +264,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 			final @RequestParam(required = false) String specialServiceGroup,
 			final @RequestParam(required = false) String planStatus,
 			final @RequestParam(required = false) String planExists,
+			final @RequestParam(required = false) Boolean partialPlan,
 			final @RequestParam(required = false) Boolean myCaseload,
 			final @RequestParam(required = false) Boolean myPlans,
 			final @RequestParam(required = false) Boolean myWatchList,
@@ -293,7 +295,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				programGpaMin, programGpaMax,
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
-				planStatus,planExists,
+				planStatus,planExists, partialPlan,
 				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage);
 
 		service.exportDirectoryPersonSearchCustomizable(response.getWriter(), form, cleanCustomOptionsAndMapToMaster(customOptions));

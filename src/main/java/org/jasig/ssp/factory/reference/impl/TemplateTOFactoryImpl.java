@@ -105,6 +105,7 @@ public class TemplateTOFactoryImpl extends AbstractAuditableTOFactory<TemplateTO
 		model.setIsF1Visa(tObject.getIsF1Visa());
 		model.setIsFinancialAid(tObject.getIsFinancialAid());
 		model.setIsImportant(tObject.getIsImportant());
+		model.setIsPartial(tObject.getIsPartial());
 		model.setStudentNotes(tObject.getStudentNotes());		
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDivisionCode());

@@ -70,6 +70,7 @@ public class TemplateLiteTOFactoryImpl extends AbstractAuditableTOFactory<Templa
 		model.setContactTitle(tObject.getContactTitle());
 		model.setIsF1Visa(tObject.getIsF1Visa());
 		model.setIsFinancialAid(tObject.getIsFinancialAid());
+		model.setIsPartial(tObject.getIsPartial());
 		model.setStudentNotes(tObject.getStudentNotes());		
 		model.setDepartmentCode(tObject.getDepartmentCode());
 		model.setDivisionCode(tObject.getDivisionCode());
