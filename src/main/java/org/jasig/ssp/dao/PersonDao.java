@@ -473,8 +473,8 @@ public class PersonDao extends AbstractAuditableCrudDao<Person> implements Audit
 			criteria.add(Restrictions.eq("anticipatedStartYear", personSearchTO.getAnticipatedStartYear()));
 		}
 		
-		if (personSearchTO.getActualStartTerm() != null  && personSearchTO.getActualStartTerm().length() > 0) {
-			criteria.add(Restrictions.eq("actualStartTerm", personSearchTO.getActualStartTerm()).ignoreCase());
+		if (personSearchTO.getActualStartTerms() != null  && personSearchTO.getActualStartTerms().size() > 0) {
+			criteria.add(Restrictions.in("actualStartTerm", personSearchTO.getActualStartTerms()));
 		}
 
 		if (personSearchTO.getActualStartYear() != null) {

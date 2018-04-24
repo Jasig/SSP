@@ -477,9 +477,9 @@ private ProjectionList addBasicStudentProperties(ProjectionList projections, Cri
 					personSearchForm.getAnticipatedStartYear()));
 		}
 
-        if (personSearchForm.getActualStartTerm() != null) {
-            criteria.add(Restrictions.eq("person.actualStartTerm",
-                    personSearchForm.getActualStartTerm()));
+        if (personSearchForm.getActualStartTerms() != null) {
+            criteria.add(Restrictions.in("person.actualStartTerm",
+                    personSearchForm.getActualStartTerms()));
         }
 
 		if (personSearchForm.getStudentTypeIds() != null) {

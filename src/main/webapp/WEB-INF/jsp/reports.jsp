@@ -2291,8 +2291,8 @@
 
                 <!-- Actual Start Term -->
                 <div class="ea-input">
-                    <select id="disabilityServicesActualStartTerm" name="actualStartTerm" class="input-term-group">
-                    <   option value="">${not_applicable}</option>
+                    <select id="disabilityServicesActualStartTerm" name="actualStartTerm" class="input-term-group" multiple="multiple">
+                        <option value="">${not_applicable}</option>
                     </select>
                 </div>
                 <div class="ea-label">

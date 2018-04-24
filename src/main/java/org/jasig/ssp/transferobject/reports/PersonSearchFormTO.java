@@ -70,7 +70,7 @@ public class PersonSearchFormTO
 	
 	private Integer actualStartYear;
 	
-	private String actualStartTerm;
+	private List<String> actualStartTerms;
 	
 	private Boolean disabilityIsNotNull = false;
 	
@@ -114,12 +114,12 @@ public class PersonSearchFormTO
 		this.actualStartYear = actualStartYear;
 	}
 
-	public String getActualStartTerm() {
-		return actualStartTerm;
+	public List<String> getActualStartTerms() {
+		return actualStartTerms;
 	}
 
-	public void setActualStartTerm(String actualStartTerm) {
-		this.actualStartTerm = actualStartTerm;
+	public void setActualStartTerms(List<String> actualStartTerms) {
+		this.actualStartTerms = actualStartTerms;
 	}
 
 	public PersonSearchFormTO(){

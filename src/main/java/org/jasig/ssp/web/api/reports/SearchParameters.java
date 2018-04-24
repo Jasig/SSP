@@ -429,19 +429,20 @@ public class SearchParameters {
 		parameters.put(DATA_FILE, dataFile);
 	}
 	
-	final static void addTerm(String label, String valueIsNull, String term, Integer year, Map<String, Object> parameters){
-		if(term != null && term.length() > 0)
-			parameters.put(label, StringUtils.defaultString(term) + " " + (year == null? "" : "and " + year.toString()));
-		else
-			parameters.put(label, (year == null? valueIsNull : year.toString()));
+	final static void addTerm(String label, String valueIsNull, List<String> terms, Integer year, Map<String, Object> parameters) throws ObjectNotFoundException {
+		if (terms != null && terms.size() > 0) {
+			parameters.put(label, concatNamesFromStrings(terms, "") + " " + (year == null? "" : "and " + year.toString()));
+		} else {
+			parameters.put(label, (year == null ? valueIsNull : year.toString()));
+		}
 	}
 	
-	final static void addAnticipatedStartTerm(String anticipatedStartTerm, Integer anticipatedStartYear, Map<String, Object> parameters){
-		addTerm(ANTICIPATED_START_TERM, NOT_USED, anticipatedStartTerm, anticipatedStartYear, parameters);
+	final static void addAnticipatedStartTerm(List<String> anticipatedStartTerms, Integer anticipatedStartYear, Map<String, Object> parameters) throws ObjectNotFoundException {
+		addTerm(ANTICIPATED_START_TERM, NOT_USED, anticipatedStartTerms, anticipatedStartYear, parameters);
 	}
-	
-	final static void addactualStartTerm(String actualStartTerm, Integer actualStartYear, Map<String, Object> parameters){
-		addTerm(ACTUAL_START_TERM, NOT_USED, actualStartTerm, actualStartYear, parameters);	
+
+	final static void addActualStartTerms(List<String> actualStartTerms, Integer actualStartYear, Map<String, Object> parameters) throws ObjectNotFoundException {
+		addTerm(ACTUAL_START_TERM, NOT_USED, actualStartTerms, actualStartYear, parameters);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -601,18 +602,21 @@ public class SearchParameters {
 	
 	static final void addAnticipatedAndActualStartTerms(String anticipatedStartTerm, 
 			Integer anticipatedStartYear, 
-			String actualStartTerm, 
+			List<String> actualStartTerms,
 			Integer actualStartYear,
 			final Map<String, Object> parameters,
-			final PersonSearchFormTO personSearchForm){
-		
-		
-		addAnticipatedStartTerm(anticipatedStartTerm, anticipatedStartYear, parameters);
-		addactualStartTerm(actualStartTerm, actualStartYear, parameters);
+			final PersonSearchFormTO personSearchForm) throws ObjectNotFoundException {
+
+		List<String> anticipatedStartTerms = new ArrayList<String>();
+		if (StringUtils.isNotEmpty(anticipatedStartTerm)) {
+			anticipatedStartTerms.add(anticipatedStartTerm);
+		}
+		addAnticipatedStartTerm(anticipatedStartTerms, anticipatedStartYear, parameters);
+		addActualStartTerms(actualStartTerms, actualStartYear, parameters);
 		
 		personSearchForm.setAnticipatedStartTerm(anticipatedStartTerm);
 		personSearchForm.setAnticipatedStartYear(anticipatedStartYear);
-		personSearchForm.setActualStartTerm(actualStartTerm);
+		personSearchForm.setActualStartTerms(actualStartTerms);
 		personSearchForm.setActualStartYear(actualStartYear);
 	}
 	
