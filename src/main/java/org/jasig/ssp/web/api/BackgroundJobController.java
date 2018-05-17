@@ -51,9 +51,6 @@ public class BackgroundJobController extends AbstractBaseController {
      *  either because they won't be needed or because they are
      *   hard-coded to run frequently enough.
      *
-     *   processCaseloadBulkAddReassignment (every 5 minutes)
-     *   sendMessages (every 2.5 minutes)
-     *   syncCoaches (every 5 minutes)
      *   resetTaskStatus (system only)
      *   cullOAuth1Nonces (keeping system only for now)
      *   scheduledQueuedJobs (system only)
@@ -185,6 +182,50 @@ public class BackgroundJobController extends AbstractBaseController {
     public ServiceResponse runConfiguredSuccessIndicatorCountOrEarlyAlertTask(HttpServletRequest  request) {
         LOGGER.debug("Manually running processConfiguredSuccessIndicators... ");
         scheduledTaskWrapperService.processConfiguredSuccessIndicators();
+        return new ServiceResponse(true, "success");
+    }
+
+    /**
+     * Executes the success indicator background  task.
+     * Runs in batches a bulk add of external-only students into SSP from CSV
+     *   Default is every 10 minutes, but can be scheduled in config.
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/processcaseloadbulkadd", method = RequestMethod.GET)
+    public ServiceResponse runProcessCaseloadBulkAddReassignmentTask(HttpServletRequest  request) {
+        LOGGER.debug("Manually running processCaseloadBulkAddReassignment... ");
+        scheduledTaskWrapperService.processCaseloadBulkAddReassignment();
+        return new ServiceResponse(true, "success");
+    }
+
+    /**
+     * Checks and sends emails from message queue
+     *   Default is every 2.5 minutes, but can be scheduled in config.
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/sendmessages", method = RequestMethod.GET)
+    public ServiceResponse runSendMessagesTask(HttpServletRequest  request) {
+        LOGGER.debug("Manually running sendMessages... ");
+        scheduledTaskWrapperService.sendMessages();
+        return new ServiceResponse(true, "success");
+    }
+
+    /**
+     * Syncs Coaches with current external list of coaches using the coach query.
+     *  Typically this is ldap through SSP-Platform looking for SSP_COACH mapping or group.
+     *   Default is every 5 minutes, but can be scheduled in config.
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/synccoaches", method = RequestMethod.GET)
+    public ServiceResponse runSyncCoachesTask(HttpServletRequest  request) {
+        LOGGER.debug("Manually running processSyncCoaches... ");
+        scheduledTaskWrapperService.syncCoaches();
         return new ServiceResponse(true, "success");
     }
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="nvarchar.type" value="character varying" dbms="postgresql" />
+    <property name="nvarchar.type" value="nvarchar" dbms="mssql" />
+
+    <changeSet author="paul.spaude" id="add config send task trigger" >
+        <insert tableName="config">
+            <column name="id" value="5452d035-3678-4840-800c-c000026b4b95" />
+            <column name="name" value="task_send_task_indicators_trigger" />
+            <column name="description"
+                    value="Frequency at which the job that sends action plan task reminders to students is ran. Specify a number to run the job every x-many milliseconds. Or specify two numbers separated by a slash (60000/1000) to represent both a period and an initial offset. Or specify a cron expression. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'daily at 3AM, server-local time.'" />
+            <column name="value">0 0 2 * * *</column>
+            <column name="default_value">0 0 2 * * *</column>
+            <column name="created_date" valueDate="2018-04-28T12:00:00" />
+            <column name="modified_date" valueDate="2018-04-28T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="207" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='5452d035-3678-4840-800c-c000026b4b95'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="paul.spaude" id="add config send messages trigr" >
+        <insert tableName="config">
+            <column name="id" value="640eadce-bc09-44ca-8385-5ea4b7743020" />
+            <column name="name" value="task_send_messages_trigger" />
+            <column name="description"
+                    value="Frequency at which the job that sends messages/email examines the message queue and sends mail. Specify a number to run the job every x-many milliseconds. Or specify two numbers separated by a slash (60000/1000) to represent both a period and an initial offset. Or specify a cron expression. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'daily at 3AM, server-local time.'" />
+            <column name="value">150000</column>
+            <column name="default_value">150000</column>
+            <column name="created_date" valueDate="2018-04-28T12:00:00" />
+            <column name="modified_date" valueDate="2018-04-28T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="208" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='640eadce-bc09-44ca-8385-5ea4b7743020'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="paul.spaude" id="add config sync coaches triggr" >
+        <insert tableName="config">
+            <column name="id" value="afbe5f20-bbed-4e14-8c38-3520d781badb" />
+            <column name="name" value="task_sync-coaches_trigger" />
+            <column name="description"
+                    value="Frequency at which the job that syncs coaches from external sources (usually LDAP/JDBC) into SSP's database runs. Specify a number to run the job every x-many milliseconds. Or specify two numbers separated by a slash (60000/1000) to represent both a period and an initial offset. Or specify a cron expression. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'daily at 3AM, server-local time.'" />
+            <column name="value">300000</column>
+            <column name="default_value">300000</column>
+            <column name="created_date" valueDate="2018-04-28T12:00:00" />
+            <column name="modified_date" valueDate="2018-04-28T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="209" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='afbe5f20-bbed-4e14-8c38-3520d781badb'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="paul.spaude" id="add bulk add caseload trigger" >
+        <insert tableName="config">
+            <column name="id" value="13276ec4-9c93-4aad-8226-7850b324dacc" />
+            <column name="name" value="task_sync-caseload-bulk-add_trigger" />
+            <column name="description"
+                    value="Frequency at which the job that examines a csv uploaded for students/users to be bulk-added/updated into SSP runs. Specify a number to run the job every x-many milliseconds. Or specify two numbers separated by a slash (60000/1000) to represent both a period and an initial offset. Or specify a cron expression. See http://www.manpagez.com/man/5/crontab/ for cron expression syntax. Default value means 'daily at 3AM, server-local time.'" />
+            <column name="value">900000</column>
+            <column name="default_value">900000</column>
+            <column name="created_date" valueDate="2018-04-28T12:00:00" />
+            <column name="modified_date" valueDate="2018-04-28T12:00:00" />
+            <column name="created_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="modified_by" value="58ba5ee3-734e-4ae9-b9c5-943774b4de41" />
+            <column name="object_status" value="1" />
+            <column name="sort_order" value="210" />
+        </insert>
+        <rollback>
+            <delete tableName="config">
+                <where>id='13276ec4-9c93-4aad-8226-7850b324dacc'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
