@@ -28,6 +28,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -63,7 +64,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/externalpersonsync", method = RequestMethod.GET)
-    public ServiceResponse runExternalPersonSync(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runExternalPersonSync(HttpServletRequest  request) {
         LOGGER.debug("Manually running externalpersonsync... ");
         scheduledTaskWrapperService.syncExternalPersons();
         return new ServiceResponse(true, "success");
@@ -79,7 +80,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/directorypersonrefresh", method = RequestMethod.GET)
-    public ServiceResponse runDirectoryPersonRefresh(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runDirectoryPersonRefresh(HttpServletRequest  request) {
         LOGGER.debug("Manually running refreshDirectoryPerson... ");
         scheduledTaskWrapperService.refreshDirectoryPerson();
         return new ServiceResponse(true, "success");
@@ -91,7 +92,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/directorypesonrefreshblue", method = RequestMethod.GET)
-    public ServiceResponse runDirectoryPersonRefreshBlue(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runDirectoryPersonRefreshBlue(HttpServletRequest  request) {
         LOGGER.debug("Manually running refreshDirectoryPersonBlue... ");
         scheduledTaskWrapperService.refreshDirectoryPersonBlue();
         return new ServiceResponse(true, "success");
@@ -105,7 +106,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/sendearlyalertreminders", method = RequestMethod.GET)
-    public ServiceResponse runSendEarlyAlertReminders(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runSendEarlyAlertReminders(HttpServletRequest  request) {
         LOGGER.debug("Manually running sendearlyalertreminders... ");
         scheduledTaskWrapperService.sendEarlyAlertReminders();
         return new ServiceResponse(true, "success");
@@ -118,7 +119,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/sendtaskreminders", method = RequestMethod.GET)
-    public ServiceResponse runSendTaskReminders(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runSendTaskReminders(HttpServletRequest  request) {
         LOGGER.debug("Manually running sendTaskReminders... ");
         scheduledTaskWrapperService.sendTaskReminders();
         return new ServiceResponse(true, "success");
@@ -132,7 +133,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/prunemessagequeue", method = RequestMethod.GET)
-    public ServiceResponse runPruneMessageQueue(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runPruneMessageQueue(HttpServletRequest  request) {
         LOGGER.debug("Manually running pruneMessageQueue... ");
         scheduledTaskWrapperService.pruneMessageQueue();
         return new ServiceResponse(true, "success");
@@ -146,7 +147,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/mapstatuscalculation", method = RequestMethod.GET)
-    public ServiceResponse runMapStatusCalculation(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runMapStatusCalculation(HttpServletRequest  request) {
         LOGGER.debug("Manually running calcMapStatusReports... ");
         scheduledTaskWrapperService.calcMapStatusReports();
         return new ServiceResponse(true, "success");
@@ -162,7 +163,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/ssgcoursewithdrawnotify", method = RequestMethod.GET)
-    public ServiceResponse runSpecialServiceGroupCourseWithdrawalAdvisorNotification(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runSpecialServiceGroupCourseWithdrawalAdvisorNotification(HttpServletRequest  request) {
         LOGGER.debug("Manually running processSpecialServiceGroupCourseWithdrawal... ");
         scheduledTaskWrapperService.processSpecialServiceGroupCourseWithdrawal();
         return new ServiceResponse(true, "success");
@@ -179,7 +180,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/successindicatorcountalert", method = RequestMethod.GET)
-    public ServiceResponse runConfiguredSuccessIndicatorCountOrEarlyAlertTask(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runConfiguredSuccessIndicatorCountOrEarlyAlertTask(HttpServletRequest  request) {
         LOGGER.debug("Manually running processConfiguredSuccessIndicators... ");
         scheduledTaskWrapperService.processConfiguredSuccessIndicators();
         return new ServiceResponse(true, "success");
@@ -194,7 +195,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/processcaseloadbulkadd", method = RequestMethod.GET)
-    public ServiceResponse runProcessCaseloadBulkAddReassignmentTask(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runProcessCaseloadBulkAddReassignmentTask(HttpServletRequest  request) {
         LOGGER.debug("Manually running processCaseloadBulkAddReassignment... ");
         scheduledTaskWrapperService.processCaseloadBulkAddReassignment();
         return new ServiceResponse(true, "success");
@@ -208,7 +209,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/sendmessages", method = RequestMethod.GET)
-    public ServiceResponse runSendMessagesTask(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runSendMessagesTask(HttpServletRequest  request) {
         LOGGER.debug("Manually running sendMessages... ");
         scheduledTaskWrapperService.sendMessages();
         return new ServiceResponse(true, "success");
@@ -223,7 +224,7 @@ public class BackgroundJobController extends AbstractBaseController {
      * @return
      */
     @RequestMapping(value = "/synccoaches", method = RequestMethod.GET)
-    public ServiceResponse runSyncCoachesTask(HttpServletRequest  request) {
+    public @ResponseBody ServiceResponse runSyncCoachesTask(HttpServletRequest  request) {
         LOGGER.debug("Manually running processSyncCoaches... ");
         scheduledTaskWrapperService.syncCoaches();
         return new ServiceResponse(true, "success");
