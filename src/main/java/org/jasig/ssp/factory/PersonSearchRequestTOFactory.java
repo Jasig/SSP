@@ -39,7 +39,8 @@ public interface PersonSearchRequestTOFactory extends
             String currentlyRegistered, String earlyAlertResponseLate,
 			String sapStatusCode, String planStatus, String planExists, Boolean partialPlan,
 			Boolean myCaseload, Boolean myPlans,Boolean myWatchList, Date birthDate,
-			String actualStartTerm, String personTableType, String homeCampus, String successIndicator, SortingAndPaging sAndP) throws ObjectNotFoundException;
+			String actualStartTerm, String personTableType, String homeCampus, String successIndicator,
+			String transferGoals, SortingAndPaging sAndP) throws ObjectNotFoundException;
 
 	PersonSearchRequest from(String studentId, String firstName, String lastName,
 			String programStatus,String specialServiceGroup,

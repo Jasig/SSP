@@ -122,6 +122,8 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		return programStatus;
 	}
 
+	private List<UUID> transferGoals;
+
 	public void setProgramStatus(List<UUID> programStatus) {
 		if (CollectionUtils.isNotEmpty(programStatus)) {
             this.programStatus = programStatus;
@@ -499,5 +501,24 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 
 	public void setPartialPlan(Boolean partialPlan) {
 		this.partialPlan = partialPlan;
+	}
+
+	public List<UUID> getTransferGoals() {
+		return transferGoals;
+	}
+
+	public void setTransferGoals(List<UUID> transferGoals) {
+		this.transferGoals = transferGoals;
+	}
+
+	public void setTransferGoals(String transferGoals) {
+		if (StringUtils.isNotBlank(transferGoals)) {
+			List<String> items = Arrays.asList(transferGoals.split("\\s*,\\s*"));
+			ArrayList<UUID> transferGoalIds = new ArrayList<UUID>();
+			for (String item: items) {
+				transferGoalIds.add(UUID.fromString(item));
+			}
+			this.transferGoals = transferGoalIds;
+		}
 	}
 }

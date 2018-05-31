@@ -211,6 +211,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 	 final @RequestParam(required = false) String personTableType,
 	 final @RequestParam(required = false) String homeCampus,
 	 final @RequestParam(required = false) String successIndicator,
+	 final @RequestParam(required = false) String transferGoals,
 	 final @RequestParam(required = false) Integer start,
 	 final @RequestParam(required = false) Integer limit,
 	 final @RequestParam(required = false) String sort,
@@ -234,7 +235,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists, partialPlan,
-				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage);
+				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm,
+				personTableType, homeCampus, successIndicator, transferGoals, sortAndPage);
 
 		service.exportDirectoryPersonSearch(response.getWriter(), form);
 		
@@ -273,6 +275,7 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 			final @RequestParam(required = false) String personTableType,
 			final @RequestParam(required = false) String homeCampus,
 			final @RequestParam(required = false) String successIndicator,
+			final @RequestParam(required = false) String transferGoals,
 			final @RequestParam(required = false) Integer start,
 			final @RequestParam(required = false) Integer limit,
 			final @RequestParam(required = false) String sort,
@@ -296,7 +299,8 @@ public class ExportableCaseloadController  extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists, partialPlan,
-				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage);
+				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm,
+				personTableType, homeCampus, successIndicator, transferGoals, sortAndPage);
 
 		service.exportDirectoryPersonSearchCustomizable(response.getWriter(), form, cleanCustomOptionsAndMapToMaster(customOptions));
 	}

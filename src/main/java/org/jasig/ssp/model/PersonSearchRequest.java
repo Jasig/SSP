@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.TransferGoal;
 import org.jasig.ssp.transferobject.PersonSearchResultTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.jasig.ssp.web.api.PersonSearchController;
@@ -144,22 +145,19 @@ public class PersonSearchRequest {
 
 	private Boolean partialPlan;
 
+	private List<TransferGoal> transferGoals;
+
 	public PersonSearchRequest() {
 		super();
 	}
-
-
-
 
     public String getSchoolId() {
 		return schoolId;
 	}
 
-
 	public void setSchoolId(String studentId) {
 		this.schoolId = studentId;
 	}
-
 
 	public List<ProgramStatus> getProgramStatus() {
 		return programStatus;
@@ -173,7 +171,6 @@ public class PersonSearchRequest {
 
 		return retVal;
 	}
-
 
 	public void setProgramStatus(List<ProgramStatus> programStatus) {
 		if (CollectionUtils.isNotEmpty(programStatus)) {
@@ -636,5 +633,13 @@ public class PersonSearchRequest {
 
 	public void setPartialPlan(Boolean partialPlan) {
 		this.partialPlan = partialPlan;
+	}
+
+	public List<TransferGoal> getTransferGoals() {
+		return transferGoals;
+	}
+
+	public void setTransferGoals(List<TransferGoal> transferGoals) {
+		this.transferGoals = transferGoals;
 	}
 }

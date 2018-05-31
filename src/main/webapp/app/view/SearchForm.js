@@ -40,7 +40,8 @@ Ext.define('Ssp.view.SearchForm',{
         termsStore: 'termsStore',
         campusesStore: 'campusesAllUnpagedStore',
         riskLevels: 'riskLevels',
-        partialPlanStore: 'partialPlanStore'
+        partialPlanStore: 'partialPlanStore',
+        transferGoalsActiveUnpagedStore: 'transferGoalsActiveUnpagedStore',
     },
     collapsible: true,
 	hideCollapseTool: true,
@@ -405,14 +406,28 @@ Ext.define('Ssp.view.SearchForm',{
 				border: false,
 				items: [{
 					xtype: 'combobox',
+					columnWidth: 0.3,
 					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-partial', 'Partial Plan'),
-					columnWidth: 0.5,
 					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.plan-partial', 'Any'),
 					name: 'partialPlan',
 					itemId: 'partialPlan',
 					store: me.partialPlanStore,
 					valueField: 'code',
 					displayField: 'displayValue',
+			   		editable: false
+				}, {
+					xtype: 'combobox',
+    				multiSelect: true,
+					columnWidth: 0.7,
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.transfer-goal', 'Transfer Goal'),
+					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.transfer-goal', 'Any'),
+					name: 'transferGoals',
+					itemId: 'transferGoals',
+					labelAlign: 'right',
+					labelWidth:90,
+					store: me.transferGoalsActiveUnpagedStore,
+					valueField: 'id',
+					displayField: 'name',
 			   		editable: false
 				}]
 			}, {

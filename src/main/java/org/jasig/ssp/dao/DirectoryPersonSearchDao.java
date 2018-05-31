@@ -36,6 +36,7 @@ import org.jasig.ssp.model.ScheduledApplicationTaskStatus;
 import org.jasig.ssp.model.ScheduledTaskStatus;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.TransferGoal;
 import org.jasig.ssp.service.ScheduledApplicationTaskStatusService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
@@ -441,6 +442,9 @@ public class DirectoryPersonSearchDao  {
 		//partialPlan
 		buildPartialPlan(personSearchRequest,filterTracker, stringBuilder);
 
+		//transferGoal
+		buildTransferGoal(personSearchRequest,filterTracker, stringBuilder);
+
 		//financialAidStatus
 		buildFinancialAidStatus(personSearchRequest,filterTracker, stringBuilder);
 		
@@ -732,6 +736,14 @@ public class DirectoryPersonSearchDao  {
         	params.put("partialPlan", personSearchRequest.getPartialPlan());
 		}
 
+		if (hasTransferGoal(personSearchRequest)) {
+			final List<UUID> ids = Lists.newArrayList();
+			for (TransferGoal transferGoal : personSearchRequest.getTransferGoals()) {
+				ids.add(transferGoal.getId());
+			}
+			params.put("transferGoals", ids);
+		}
+
 		if (hasAnyGpaCriteria(personSearchRequest)) {
 			if (personSearchRequest.getGpaEarnedMin() != null) {
 				params.put("gpaEarnedMin", personSearchRequest.getGpaEarnedMin());
@@ -908,6 +920,15 @@ public class DirectoryPersonSearchDao  {
 		if (hasPartialPlan(personSearchRequest)) {
 			appendAndOrWhere(stringBuilder,filterTracker);
 			stringBuilder.append(" plan.isPartial = :partialPlan ");
+		}
+	}
+
+	private void buildTransferGoal(PersonSearchRequest personSearchRequest,FilterTracker filterTracker,
+								  StringBuilder stringBuilder) {
+
+		if (hasTransferGoal(personSearchRequest)) {
+			appendAndOrWhere(stringBuilder,filterTracker);
+			stringBuilder.append(" plan.transferGoal.id in (:transferGoals) ");
 		}
 	}
 
@@ -1128,7 +1149,8 @@ public class DirectoryPersonSearchDao  {
 
 	private void buildJoins(PersonSearchRequest personSearchRequest, StringBuilder stringBuilder) {
 
-		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest) || hasPartialPlan(personSearchRequest)) {
+		if (hasMyPlans(personSearchRequest) || hasPlanExists(personSearchRequest)
+				|| hasPartialPlan(personSearchRequest) || hasTransferGoal(personSearchRequest)) {
 			if ( hasPlanExists(personSearchRequest) &&
                                     PersonSearchRequest.PLAN_EXISTS_NONE.equals(personSearchRequest.getPlanExists()) ) {
 				stringBuilder.append(" left join dp.plans as plan ");
@@ -1178,6 +1200,10 @@ public class DirectoryPersonSearchDao  {
 
 	private boolean hasPartialPlan(PersonSearchRequest personSearchRequest) {
 		return personSearchRequest.getPartialPlan()!=null;
+	}
+
+	private boolean hasTransferGoal(PersonSearchRequest personSearchRequest) {
+		return (CollectionUtils.isNotEmpty(personSearchRequest.getTransferGoals()));
 	}
 
 	private boolean hasHoursEarnedCriteria(PersonSearchRequest personSearchRequest) {

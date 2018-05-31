@@ -268,6 +268,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String sortDirection,
 	 final @RequestParam(required = false) String homeCampus,
 	 final @RequestParam(required = false) String successIndicator,
+	 final @RequestParam(required = false) String transferGoals,
 	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
@@ -283,7 +284,8 @@ public class PersonSearchController extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists, partialPlan,
-				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage));
+				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType,
+				homeCampus, successIndicator, transferGoals, sortAndPage));
 
          return new PagedResponse<PersonSearchResult2TO>(true, models.getResults(), factory2.asTOList(models.getRows()));
 	}
@@ -330,6 +332,7 @@ public class PersonSearchController extends AbstractBaseController {
 	 final @RequestParam(required = false) String sortDirection,
 	 final @RequestParam(required = false) String homeCampus,
 	 final @RequestParam(required = false) String successIndicator,
+	 final @RequestParam(required = false) String transferGoals,
 	 final HttpServletRequest request) throws ObjectNotFoundException
 	 {
 		assertSearchApiAuthorization(request);
@@ -345,7 +348,8 @@ public class PersonSearchController extends AbstractBaseController {
 				currentlyRegistered,earlyAlertResponseLate,
 				sapStatusCode,
 				planStatus,planExists, partialPlan,
-				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm, personTableType, homeCampus, successIndicator, sortAndPage));
+				myCaseload,myPlans,myWatchList, birthDate, actualStartTerm,
+				personTableType, homeCampus, successIndicator, transferGoals, sortAndPage));
 	}
 
 

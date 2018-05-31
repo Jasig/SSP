@@ -168,6 +168,7 @@ Ext.define('Ssp.service.SearchService', {
     		 personTableType,
     		 homeCampus,
     		 successIndicator,
+    		 transferGoals,
     		callbacks ){
     	var me = this;
     	
@@ -200,7 +201,8 @@ Ext.define('Ssp.service.SearchService', {
             actualStartTerm: actualStartTerm,
             personTableType: personTableType,
             homeCampus: homeCampus,
-            successIndicator: successIndicator
+            successIndicator: successIndicator,
+            transferGoals
 		}, callbacks);
 	}
 });

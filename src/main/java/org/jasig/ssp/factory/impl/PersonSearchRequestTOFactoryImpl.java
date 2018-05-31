@@ -22,6 +22,7 @@ import org.jasig.ssp.dao.PersonDao;
 import org.jasig.ssp.dao.reference.CampusDao;
 import org.jasig.ssp.dao.reference.ProgramStatusDao;
 import org.jasig.ssp.dao.reference.SpecialServiceGroupDao;
+import org.jasig.ssp.dao.reference.TransferGoalDao;
 import org.jasig.ssp.factory.AbstractTOFactory;
 import org.jasig.ssp.factory.PersonSearchRequestTOFactory;
 import org.jasig.ssp.model.Person;
@@ -29,6 +30,7 @@ import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.TransferGoal;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.PersonSearchRequestTO;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -61,6 +63,9 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 
 	@Autowired
 	private SpecialServiceGroupDao specialServiceGroupDao;
+
+	@Autowired
+    private TransferGoalDao transferGoalDao;
 	
 	public PersonSearchRequestTOFactoryImpl() {
 		super(PersonSearchRequestTO.class, PersonSearchRequest.class);
@@ -138,6 +143,14 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		model.setSortAndPage(to.getSortAndPage());
 		model.setConfiguredSuccessIndicator(to.getSuccessIndicator());
 
+        if (to.getTransferGoals() != null) {
+            ArrayList<TransferGoal> transferGoalList = new ArrayList<TransferGoal>();
+            for (UUID id : to.getTransferGoals()) {
+                transferGoalList.add(getTransferGoalDao().get(id));
+            }
+            model.setTransferGoals(transferGoalList);
+        }
+
         return model;
 	}
 
@@ -160,7 +173,11 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		return specialServiceGroupDao;
 	}
 
-	public void setProgramStatusDao(ProgramStatusDao programStatusDao) {
+    public TransferGoalDao getTransferGoalDao() {
+        return transferGoalDao;
+    }
+
+    public void setProgramStatusDao(ProgramStatusDao programStatusDao) {
 		this.programStatusDao = programStatusDao;
 	}
 
@@ -175,7 +192,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 			String sapStatusCode, String planStatus, String planExists, Boolean partialPlan,
 			Boolean myCaseload, Boolean myPlans, Boolean myWatchList, Date birthDate,
 			String actualStartTerm, String personTableType, String homeCampus, String successIndicator,
-			SortingAndPaging sortAndPage) throws ObjectNotFoundException {
+			String transferGoals, SortingAndPaging sortAndPage) throws ObjectNotFoundException {
 
 		PersonSearchRequestTO to = new PersonSearchRequestTO();
 		to.setSchoolId(schoolId);
@@ -217,6 +234,8 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		to.setSortAndPage(sortAndPage);
 		//comma separated set of UUIDs as a String
 		to.setHomeCampuses(homeCampus);
+		//comma separated set of UUIDs as a String
+		to.setTransferGoals(transferGoals);
 
 		to.setSuccessIndicators(successIndicator);
 		return from(to);
