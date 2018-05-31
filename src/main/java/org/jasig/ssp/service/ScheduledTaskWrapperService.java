@@ -19,6 +19,7 @@
 package org.jasig.ssp.service;
 
 import org.jasig.ssp.service.external.BatchedTask;
+import org.springframework.scheduling.annotation.Async;
 import java.util.UUID;
 
 
@@ -32,12 +33,14 @@ public interface ScheduledTaskWrapperService {
      * Checks and sends emails from message queue
      * Not scheduled through config fires every 2.5 minutes after completion
      */
+    @Async
     public void sendMessages();
 
     /**
      * Runs in batches a bulk add of external-only students into SSP
      * Not scheduled through config fires every 2.5 minutes after completion
      */
+    @Async
 	public void processCaseloadBulkAddReassignment();
 
 	/**
@@ -45,12 +48,14 @@ public interface ScheduledTaskWrapperService {
      *  Typically this is ldap through SSP-Platform looking for SSP_COACH mapping or group.
      *  Not scheduled through config fires every 5 minutes after completion
      */
+    @Async
 	public void syncCoaches();
 
     /**
      * Sends Action Plan Task reminders to students on overdue tasks.
      * Not scheduled through config. runs at 2 am every day
      */
+    @Async
 	public void sendTaskReminders();
 
     /**
@@ -58,12 +63,14 @@ public interface ScheduledTaskWrapperService {
      *   other data such as external SSG. By default runs nightly at 1 a.m., but
      *    can be scheduled in config.
      */
+    @Async
 	public void syncExternalPersons();
 
     /**
      * Refreshes the mv_directory_person materialized view used for Person Search.
      * This is ran after syncExternalPersons() default nightly after 1 a.m.
      */
+    @Async
 	public void refreshDirectoryPerson();
 
     /**
@@ -71,6 +78,7 @@ public interface ScheduledTaskWrapperService {
      *  is used when the main view is being updated. Again updated nightly after
      *   person sync.
      */
+    @Async
 	public void refreshDirectoryPersonBlue();
 
     /**
@@ -78,6 +86,7 @@ public interface ScheduledTaskWrapperService {
      *  plans against the trasncript and other data and marks them On or Off plan.
      *  Runs default 3 a.m. nightly, but can be scheduled in config.
      */
+    @Async
 	public void calcMapStatusReports();
 
     /**
@@ -85,6 +94,7 @@ public interface ScheduledTaskWrapperService {
      *   alert hasn't been responded to in configured a timeframe (default 2 days).
      *   Runs default nightly at 4 a.m, but can be scheduled in config.
      */
+    @Async
 	public void sendEarlyAlertReminders();
 
     /**
@@ -98,6 +108,7 @@ public interface ScheduledTaskWrapperService {
      *   assigned to a configured SSG that has notify turned on. Default is nightly at
      *    5 a.m., but can be scheduled in config.
      */
+    @Async
     public void processSpecialServiceGroupCourseWithdrawal();
 
     /**
@@ -105,6 +116,7 @@ public interface ScheduledTaskWrapperService {
      *  use in Caseload/Watchlist count set, this process will store a count
      *   of low, medium and high or create an EA on low for students inside of SSP.
      */
+    @Async
     public void processConfiguredSuccessIndicators();
 
     /**
@@ -112,6 +124,7 @@ public interface ScheduledTaskWrapperService {
      *   message table after 30 days to an archive table.
      *   Runs default nightly at 10 p.m, but can be scheduled in config.
      */
+    @Async
 	void pruneMessageQueue();
 
     /**

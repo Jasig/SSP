@@ -53,7 +53,6 @@ import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.security.access.intercept.RunAsUserToken;
@@ -112,6 +111,9 @@ public class ScheduledTaskWrapperServiceImpl
 	public static final String SPECIAL_SERVICE_GROUP_COURSE_WITHDRAWAL_TASK_NAME = "special-service-group-course-withdrawal";
     public static final String CALC_SUCCESS_INDICATORS_TASK_NAME = "count-success-indicators";
 
+    private static final String EVERY_2_AND_A_HALF_MINUTES = "150000";
+    private static final String EVERY_5_MINUTES = "300000";
+    private static final String EVERY_15_MINUTES = "900000";
     private static final String EVERY_DAY_10_PM = "0 0 22 * * *";
 	private static final String EVERY_DAY_1_AM = "0 0 1 * * *";
     private static final String EVERY_DAY_2_AM = "0 0 2 * * *";
@@ -171,7 +173,23 @@ public class ScheduledTaskWrapperServiceImpl
     private static final String CALC_SUCCESS_INDICATORS_TASK_TRIGGER_CONFIG_NAME = "task_count_success_indicators_trigger";
     private static final String CALC_SUCCESS_INDICATORS_TASK_DEFAULT_TRIGGER = EVERY_DAY_3_AM; //no real good time to put this, but want it before EA notify
 
-	// see assumptions about grouping in tryExpressionAsPeriodicTrigger()
+    private static final String SEND_TASK_REMINDERS_TASK_ID = "task_send_task_indicators";
+    private static final String SEND_TASK_REMINDERS_TASK_TRIGGER_CONFIG_NAME = "task_send_task_indicators_trigger";
+    private static final String SEND_TASK_REMINDERS_TASK_DEFAULT_TRIGGER = EVERY_DAY_2_AM;
+
+    private static final String SEND_MESSAGES_TASK_ID = "task_send_messages";
+    private static final String SEND_MESSAGES_TASK_TRIGGER_CONFIG_NAME = "task_send_messages_trigger";
+    private static final String SEND_MESSAGES_TASK_DEFAULT_TRIGGER = EVERY_2_AND_A_HALF_MINUTES;
+
+    private static final String SYNC_COACHES_TASK_ID = "task_sync-coaches";
+    private static final String SYNC_COACHES_TASK_TRIGGER_CONFIG_NAME = "task_sync-coaches_trigger";
+    private static final String SYNC_COACHES_TASK_DEFAULT_TRIGGER = EVERY_5_MINUTES;
+
+    private static final String PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_ID = "task_sync-caseload-bulk-add";
+    private static final String PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_TRIGGER_CONFIG_NAME = "task_sync-caseload-bulk-add_trigger";
+    private static final String PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_DEFAULT_TRIGGER = EVERY_15_MINUTES;
+
+    // see assumptions about grouping in tryExpressionAsPeriodicTrigger()
 	private static final Pattern PERIODIC_TRIGGER_WITH_INITIAL_DELAY_PATTERN = Pattern.compile("^(\\d+)/(\\d+)$");
 
 
@@ -383,6 +401,46 @@ public class ScheduledTaskWrapperServiceImpl
                     },
                     CALC_SUCCESS_INDICATORS_TASK_DEFAULT_TRIGGER,
                     CALC_SUCCESS_INDICATORS_TASK_TRIGGER_CONFIG_NAME));
+
+            this.tasks.put(SEND_TASK_REMINDERS_TASK_ID, new Task(SEND_TASK_REMINDERS_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            sendTaskReminders();
+                        }
+                    },
+                    SEND_TASK_REMINDERS_TASK_DEFAULT_TRIGGER,
+                    SEND_TASK_REMINDERS_TASK_TRIGGER_CONFIG_NAME));
+
+            this.tasks.put(SEND_MESSAGES_TASK_ID, new Task(SEND_MESSAGES_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+                            sendMessages();
+                        }
+                    },
+                    SEND_MESSAGES_TASK_DEFAULT_TRIGGER,
+                    SEND_MESSAGES_TASK_TRIGGER_CONFIG_NAME));
+
+            this.tasks.put(SYNC_COACHES_TASK_ID, new Task(SYNC_COACHES_TASK_ID,
+                    new Runnable() {
+                        @Override
+                        public void run () {
+							syncCoaches();
+                        }
+                    },
+                    SYNC_COACHES_TASK_DEFAULT_TRIGGER,
+                    SYNC_COACHES_TASK_TRIGGER_CONFIG_NAME));
+
+			this.tasks.put(PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_ID, new Task(PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_ID,
+					new Runnable() {
+						@Override
+						public void run () {
+							processCaseloadBulkAddReassignment();
+						}
+					},
+					PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_DEFAULT_TRIGGER,
+					PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_TRIGGER_CONFIG_NAME));
 
             // Can't interrupt this on cancel b/c it's responsible for rescheduling
             // itself. A scheduling attempt on an interrupted thread is very
@@ -1100,12 +1158,13 @@ public class ScheduledTaskWrapperServiceImpl
 	}
 
     /**
-     * Runs in batches a bulk add of external-only students into SSP
-     * Not scheduled through config fires every 2.5 minutes after completion
-     */
+     * Runs in batches a bulk add of external-only students into SSP from CSV.
+	 *   Default is every 15 minutes, but can be scheduled in config.
+	 *
+	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
+	 * config polling job.
+	 */
 	@Override
-	@Scheduled(fixedDelay = 300000)
-	// run every 5 minutes
 	public void processCaseloadBulkAddReassignment() {
 		execWithTaskContext(PROCESS_CASELOAD_BULK_ADD_REASSIGNMENT_TASK_NAME, new Runnable() {
 			@Override
@@ -1123,11 +1182,11 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Checks and sends emails from message queue
-     * Not scheduled through config fires every 2.5 minutes after completion
-     */
-	@Override
-	@Scheduled(fixedDelay = 150000)
-	// run 2.5 minutes after the end of the last invocation
+	 *   Default is every 2.5 minutes, but can be scheduled in config.
+	 *
+	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
+	 * config polling job.
+	 */
 	public void sendMessages() {
         if (!backGroundJobsEnabled) {
             return;
@@ -1139,11 +1198,12 @@ public class ScheduledTaskWrapperServiceImpl
     /**
      * Syncs Coaches with current external list of coaches using the coach query.
      *  Typically this is ldap through SSP-Platform looking for SSP_COACH mapping or group.
-     *  Not scheduled through config fires every 5 minutes after completion
-     */
+	 *   Default is every 5 minutes, but can be scheduled in config.
+	 *
+	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
+	 * config polling job.
+	 */
 	@Override
-	@Scheduled(fixedDelay = 300000)
-	// run every 5 minutes
 	public void syncCoaches() {
 		execWithTaskContext(SYNC_COACHES_TASK_NAME, new Runnable() {
 			@Override
@@ -1161,14 +1221,15 @@ public class ScheduledTaskWrapperServiceImpl
 	}
 
     /**
-     * Sends Action Plan Task reminders to students on overdue tasks.
-     * Not scheduled through config. runs at 2 am every day
+     * Sends Action Plan Task reminders to students on overdue tasks. Default is nightly at
+	 *    2 a.m., but can be scheduled in config.
+	 *
+	 * Not {@code @Scheduled} b/c its scheduling is now handled by the
+	 * config polling job.
      */
 	@Override
-	@Scheduled(cron = "0 0 2 * * *")
-	// run at 2 am every day
 	public void sendTaskReminders() {
-		execWithTaskContext(SEND_TASK_REMINDERS_TASK_NAME, new Runnable() {
+        execWithTaskContext(SEND_TASK_REMINDERS_TASK_NAME, new Runnable() {
 			@Override
 			public void run() {
                 if (!backGroundJobsEnabled) {
