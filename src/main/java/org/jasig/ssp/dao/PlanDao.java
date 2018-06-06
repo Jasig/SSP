@@ -28,26 +28,17 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.service.reference.ConfigService;
-import org.jasig.ssp.transferobject.reports.EntityStudentCountByCoachTO;
-import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
-import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
-import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
-import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
-import org.jasig.ssp.transferobject.reports.SearchPlanTO;
+import org.jasig.ssp.transferobject.PersonLiteTO;
+import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
 import org.jasig.ssp.util.hibernate.NamespacedAliasToBeanResultTransformer;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<Plan> {
@@ -352,5 +343,96 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 	public Person getOwnerForPlan(UUID id) {
 		String query = "Select p.owner from org.jasig.ssp.model.Plan p where p.id = :id";
 		return (Person) createHqlQuery(query).setParameter("id", id).uniqueResult();
+	}
+
+	public List<PersonLiteTO> getAllPlanOwners() {
+		String getAllPlanOwners = "select new org.jasig.ssp.transferobject.PersonLiteTO" +
+				"(p.id, p.firstName, p.lastName) " +
+				" from Person p where p.id in (select distinct owner.id from Plan)" +
+				" order by p.lastName, p.firstName";
+		Query query = createHqlQuery(getAllPlanOwners);
+		return query.list();
+	}
+
+	public List<MapTransferGoalReportTO> getTransferGoalReport(List<UUID> transferGoalIds, List<UUID> planOwnerIds,
+															   UUID programStatus, String planExists,
+															   String catalogYearCode, Date modifiedDateFrom,
+															   Date modifiedDateTo){
+		StringBuilder sb = new StringBuilder("select distinct new org.jasig.ssp.transferobject.reports.MapTransferGoalReportTO(" +
+				" plan.person.schoolId, plan.person.firstName, plan.person.lastName, plan.person.primaryEmailAddress," +
+				" plan.createdDate, plan.owner.firstName, plan.owner.lastName, plan.transferGoal.name, plan.isPartial, " +
+				" plan.catalogYearCode)");
+//		sb.append(" from org.jasig.ssp.model.Plan plan");
+        sb.append(" from Plan plan");
+        if (programStatus!=null) {
+//            sb.append(" join org.jasig.ssp.model.PersonProgramStatus pps ");
+            sb.append(" join plan.person.programStatuses pps ");
+        }
+		boolean whereAdded = false;
+		if (!CollectionUtils.isEmpty(transferGoalIds)) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+			sb.append(" plan.transferGoal.id in (:transferGoalIds) ");
+		}
+		if (!CollectionUtils.isEmpty(planOwnerIds)) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+			sb.append(" plan.owner.id in (:planOwnerIds) ");
+		}
+		if (programStatus!=null) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+//			sb.append(" plan.person.id = pps.personId ");
+			sb.append(" pps.programStatus.id = :programStatusId ");
+			sb.append(" and pps.objectStatus = 1 ");
+            sb.append(" and pps.expirationDate is null ");
+		}
+		if (StringUtils.isNotEmpty(planExists)) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+			sb.append(" plan.objectStatus = :objectStatus");
+		}
+		if (StringUtils.isNotEmpty(catalogYearCode)) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+			sb.append(" plan.catalogYearCode = :catalogYearCode");
+		}
+		if (modifiedDateFrom!=null) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+			sb.append(" plan.modifiedDate >= (:modifiedDateFrom)");
+		}
+		if (modifiedDateTo!=null) {
+			sb.append((whereAdded?" and " : " where "));
+			whereAdded = true;
+			sb.append(" plan.modifiedDate <= (:modifiedDateTo)");
+		}
+        sb.append(" order by plan.person.lastName, plan.person.firstName");
+
+		Query query = createHqlQuery(sb.toString());
+
+		if (!CollectionUtils.isEmpty(transferGoalIds)) {
+			query.setParameterList("transferGoalIds", transferGoalIds);
+		}
+		if (!CollectionUtils.isEmpty(planOwnerIds)) {
+			query.setParameterList("planOwnerIds", planOwnerIds);
+		}
+        if (programStatus!=null) {
+			query.setParameter("programStatusId", programStatus);
+		}
+		if (StringUtils.isNotEmpty(planExists)) {
+			query.setParameter("objectStatus",
+                    (planExists.equals("ACTIVE")?ObjectStatus.ACTIVE:ObjectStatus.INACTIVE));
+		}
+		if (StringUtils.isNotEmpty(catalogYearCode)) {
+			query.setParameter("catalogYearCode", catalogYearCode);
+		}
+		if (modifiedDateFrom!=null) {
+			query.setParameter("modifiedDateFrom", modifiedDateFrom);
+		}
+		if (modifiedDateTo!=null) {
+			query.setParameter("modifiedDateTo", modifiedDateTo);
+		}
+		return query.list();
 	}
 }

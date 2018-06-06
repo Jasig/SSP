@@ -24,10 +24,7 @@ import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.permissions.Permission;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonEmailService;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalPersonService;
 import org.jasig.ssp.transferobject.*;
 import org.jasig.ssp.transferobject.form.EmailStudentRequestForm;
@@ -43,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.mail.SendFailedException;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.UUID;
@@ -73,7 +71,10 @@ public class PersonController extends AbstractBaseController {
 
 	@Autowired
 	protected transient SecurityService securityService;
-	
+
+	@Autowired
+	protected PlanService planService;
+
 	@Autowired
 	private WithTransaction withTransaction;
 
@@ -356,6 +357,21 @@ public class PersonController extends AbstractBaseController {
 		// final Person model = service.get(id);
 		// :TODO historyPrint on PersonController
 		throw new NotImplementedException();
+	}
+
+	@RequestMapping(value = "/planOwners", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")
+	public @ResponseBody
+	PagedResponse<PersonLiteTO> getAllPlanOwners(
+			final @RequestParam(required = false) ObjectStatus status,
+			final @RequestParam(required = false) Integer start,
+			final @RequestParam(required = false) Integer limit,
+			final @RequestParam(required = false) String sort,
+			final @RequestParam(required = false) String sortDirection) {
+		final List<PersonLiteTO> createdByList = planService.getAllPlanOwners();
+
+		return new PagedResponse<PersonLiteTO>(true,
+				new Long(createdByList.size()), createdByList);
 	}
 
 	@Override

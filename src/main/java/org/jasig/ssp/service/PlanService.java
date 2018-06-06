@@ -20,18 +20,15 @@ package org.jasig.ssp.service;
 
 import org.jasig.ssp.model.Plan;
 import org.jasig.ssp.model.PlanElectiveCourse;
+import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
-import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
-import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
-import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
-import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
-import org.jasig.ssp.transferobject.reports.SearchPlanTO;
+import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,4 +58,9 @@ PlanOutputTO, MessageTemplatePlanPrintParams> {
 
 	PlanElectiveCourse getPlanElectiveCourse(UUID id) throws ObjectNotFoundException;
 
+	List<PersonLiteTO> getAllPlanOwners();
+
+	List<MapTransferGoalReportTO> getTransferGoalReport(List<UUID> transferGoalIds, List<UUID> planOwnerIds, UUID programStatus,
+														String planExists, String catalogYear, Date modifiedDateFrom,
+														Date modifiedDateTo);
 }

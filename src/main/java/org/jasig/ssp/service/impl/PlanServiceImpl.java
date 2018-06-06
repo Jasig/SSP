@@ -37,27 +37,20 @@ import org.jasig.ssp.service.external.ExternalProgramService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentFinancialAidTO;
 import org.jasig.ssp.transferobject.external.ExternalStudentTranscriptTO;
 import org.jasig.ssp.transferobject.reference.MessageTemplatePlanPrintParams;
-import org.jasig.ssp.transferobject.reports.MapPlanStatusReportCourse;
-import org.jasig.ssp.transferobject.reports.MapStatusReportPerson;
-import org.jasig.ssp.transferobject.reports.PlanAdvisorCountTO;
-import org.jasig.ssp.transferobject.reports.PlanCourseCountTO;
-import org.jasig.ssp.transferobject.reports.PlanStudentStatusTO;
-import org.jasig.ssp.transferobject.reports.SearchPlanTO;
+import org.jasig.ssp.transferobject.reports.*;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Person service implementation
@@ -249,5 +242,18 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	@Override
 	public PlanElectiveCourse getPlanElectiveCourse(UUID id) throws ObjectNotFoundException {
 		return planElectiveCourseDao.get(id);
+	}
+
+	@Override
+	public List<PersonLiteTO> getAllPlanOwners() {
+		return dao.getAllPlanOwners();
+	}
+
+	@Override
+	public List<MapTransferGoalReportTO> getTransferGoalReport(List<UUID> transferGoalIds, List<UUID> planOwnerIds,
+                                                        UUID programStatus, String planExists, String catalogYear,
+														Date modifiedDateFrom, Date modifiedDateTo){
+		return dao.getTransferGoalReport(transferGoalIds, planOwnerIds, programStatus, planExists, catalogYear,
+				modifiedDateFrom, modifiedDateTo);
 	}
 }

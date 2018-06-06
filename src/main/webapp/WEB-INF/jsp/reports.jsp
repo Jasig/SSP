@@ -3224,7 +3224,7 @@
                     </div>
                 </div>
             </form>
-        </div><!-- number studens by status report -->
+        </div><!-- number students by status report -->
 
 
         <div class="hideable-form journal-case-notes-by-student-report" style="display:none">
@@ -3372,6 +3372,110 @@
                 </div>
             </form>
         </div><!-- end journal case notes by student report -->
+
+        <div class="hideable-form transfer-goals-report" style="display:none">
+            <h1>Transfer Goals Report</h1>
+            <form action="/ssp/api/1/report/map/transfergoals" method="get"
+                target="_blank" onSubmit="return validateForm(this);" class="alert-form">
+
+                <!-- Transfer Goal -->
+                <div class="ea-input">
+                    <select class="input-transfer-goal-group" id="transferGoalIds" name="transferGoalIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Transfer Goal:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Plan Owner -->
+                <div class="ea-input">
+                        <select class="input-plan-owner-group" id="planOwnerIds" name="planOwnerIds" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Plan Owner:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Program Status -->
+                <div class="ea-input">
+                    <select id="programStatusGroup" name="programStatus" class="input-program-status-group">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Program Status:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Plan Exists -->
+                <div class="ea-input">
+                    <select  class="input-plan-exists-group" id="planExists" name="planExists">
+                        <option value="">${not_applicable}</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">In Active</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Plan Exists:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Catalog Year -->
+                <div class="ea-input">
+                    <select id="catalogYearGroup" name="catalogYearCode" class="input-catalog-year-group">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Catalog Year:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- MAP Date Last Modified -->
+                <div class="ea-date-range">
+                    <!-- Date From -->
+                    <div class="ea-input">
+                        <input class="input-calendar-type" type="textbox" name="modifiedDateFrom" id="mapModifiedDateFrom">
+                    </div>
+                    <div class="ea-label">
+                        <span>Date MAP Last Modified From:</span>
+                    </div>
+                    <div class="ea-clear"></div>
+                    <!-- Date To -->
+                    <div class="ea-input">
+                        <input class="input-calendar-type" type="textbox" name="modifiedDateTo" id="mapModifiedDateTo">
+                    </div>
+                    <div class="ea-label">
+                        <span>Date MAP Last Modified To:</span>
+                    </div>
+                    <div class="ea-clear"></div>
+                </div>
+
+                <!-- output type -->
+                <div class="ea-input">
+                    <label><span>pdf</span></label>
+                    <input type="radio" name="reportType" value="pdf" checked /><br />
+                    <label><span>csv</span></label><input type="radio" name="reportType" value="csv" />
+                </div>
+
+                <div class="ea-label">
+                    <span>Output Type:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <div class="ea-buttons">
+                    <div class="buttons">
+                        <input class="button primary button-send" type="submit" value="submit" />
+                    </div>
+                </div>
+
+            </form>
+        </div><!-- end transfer goals report -->
+
 
   </div> <!-- end: portlet-body -->
 

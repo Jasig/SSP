@@ -79,8 +79,26 @@ var ssp = ssp || {};
 				handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
 				requests--;
 			});
-		}	
-		
+		}
+
+        var loadCatalogYearInput = function(url, container) {
+            requests++;
+            $.getJSON(url, function(data) {
+                requests--;
+
+   				if(!data || data.length <= 0) {
+   				    return;
+   				}
+                data.forEach(function(row) {
+                    addSelectItem(row.code, row.name, container);
+                });
+
+            }).error(function(jqXHR, textStatus, errorThrown) {
+                handerServerError(jqXHR + " " + textStatus + " " + errorThrown);
+                requests--;
+            });
+        }
+
 		var loadConfigInput = function(url, container) {
 			requests++;
 			$.getJSON(url, function(data) {
@@ -96,7 +114,7 @@ var ssp = ssp || {};
 				requests--;
 			});
 		}
-		
+
 		var loadReportYearInput = function(url, container) {
 			requests++;
 			$.getJSON(url, function(data) {
@@ -265,11 +283,21 @@ var ssp = ssp || {};
 					"/ssp/api/1/reference/confidentialityDisclosureAgreement/getlivecda",
 					that.locate('confidentialityAgreementFormContent'));
 			
-			loadSubjectAbbreviationInput("/ssp/api/1//reference/course/search?sort=name&start=0&limit=-1&sortDirection=ASC", that
+			loadSubjectAbbreviationInput("/ssp/api/1/reference/course/search?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('subjectAbbreviationGroup'));
 
 			loadGroupInput("/ssp/api/1/reference/journalSource/?sort=name&start=0&limit=-1&sortDirection=ASC", that
 					.locate('journalSourceGroup'));
+
+			loadGroupInput("/ssp/api/1/reference/transferGoal/?sort=name&start=0&limit=-1&sortDirection=ASC", that
+					.locate('transferGoalGroup'));
+
+			loadCoachInput("/ssp/api/1/person/planOwners", that
+					.locate('planOwnerGroup'));
+
+			loadCatalogYearInput("/ssp/api/1/reference/catalogYear/all?sort=name&start=0&limit=-1&sortDirection=ASC", that
+					.locate('catalogYearGroup'));
+
 
 			requests--;
 		}
@@ -460,6 +488,7 @@ var ssp = ssp || {};
 					numberCoursesInPlan : '.number-courses-in-plan-report',
 					numberPlansByOwner : '.number-plans-by-owner-report',
 					numberStudentsByStatus : '.number-students-by-status-report',
+					transferGoals : '.transfer-goals-report',
 					disabilityServices : '.disability-services-report',
 					programStatusGroup : '.input-program-status-group',
 					studentTypeGroup : '.input-student-type-group',
@@ -490,7 +519,10 @@ var ssp = ssp || {};
 					hideableform : '.hideable-form',
 					printConfForm : '.print-conf-form',
 					loadingMessage: '.loading-message',
-					journalSourceGroup : '.input-journal-source-group'
+					journalSourceGroup : '.input-journal-source-group',
+					transferGoalGroup : '.input-transfer-goal-group',
+					planOwnerGroup : '.input-plan-owner-group',
+					catalogYearGroup : '.input-catalog-year-group'
 					}
 				});
 })(jQuery, fluid);

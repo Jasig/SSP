@@ -30,17 +30,9 @@ import org.jasig.ssp.model.reference.Campus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.ReferenceService;
+import org.jasig.ssp.service.external.ExternalCatalogYearService;
 import org.jasig.ssp.service.external.TermService;
-import org.jasig.ssp.service.reference.CampusService;
-import org.jasig.ssp.service.reference.DisabilityStatusService;
-import org.jasig.ssp.service.reference.DisabilityTypeService;
-import org.jasig.ssp.service.reference.EarlyAlertOutcomeService;
-import org.jasig.ssp.service.reference.EarlyAlertReferralService;
-import org.jasig.ssp.service.reference.ProgramStatusService;
-import org.jasig.ssp.service.reference.ReferralSourceService;
-import org.jasig.ssp.service.reference.ServiceReasonService;
-import org.jasig.ssp.service.reference.SpecialServiceGroupService;
-import org.jasig.ssp.service.reference.StudentTypeService;
+import org.jasig.ssp.service.reference.*;
 import org.jasig.ssp.transferobject.PersonTO;
 import org.jasig.ssp.transferobject.reports.PersonSearchFormTO;
 import org.jasig.ssp.transferobject.reports.SearchPlanTO;
@@ -86,7 +78,9 @@ public class SearchParameters {
 	private static final String SUBJECT_ABBREVIATION = "subjectAbbreviation";
 	private static final String COURSE_NUMBER = "courseNumber";
 	private static final String PLAN_STATUS = "planStatus";
-    
+	private static final String PLAN_EXISTS = "planExists";
+	private static final String CATALOG_YEAR = "catalogYear";
+
 	private static final String REPORT_TITLE = "ReportTitle";
 	private static final String DATA_FILE = "DataFile";
 	private static final String TERM_CODES = "termCodes";
@@ -94,6 +88,8 @@ public class SearchParameters {
 	private static final String ANTICIPATED_START_TERM = "anticipatedStartTerm";
 	private static final String ACTUAL_START_TERM = "actualStartTerm";
 	private static final String REFERRAL_SOURCE_NAMES = "referralSourceNames";
+	private static final String TRANSFER_GOAL_NAMES = "transferGoalNames";
+	private static final String CREATED_BY_USER_NAMES = "createdByUserNames";
 	private static final String EARLY_ALERT_REFERRAL_NAME = "earlyAlertReferralName";
 	private static final String EARLY_ALERT_REFERRAL_NAMES = "earlyAlertReferralNames";
 	private static final String DISABILITY_STATUS = "disabilityStatus";
@@ -243,6 +239,23 @@ public class SearchParameters {
 			parameters.put(ROSTER_STATUS, rosterStatus);
 	}
 
+	static final void addPlanExistsToMap(final String planExists, final Map<String, Object> parameters) {
+		if(planExists == null || planExists.length() == 0) {
+			parameters.put(PLAN_EXISTS, NOT_USED);
+		} else {
+			parameters.put(PLAN_EXISTS, planExists);
+		}
+	}
+
+	static final void addCatalogYearToMap(final String catalogYearCode, final Map<String, Object> parameters,
+                                          ExternalCatalogYearService externalCatalogYearService) throws ObjectNotFoundException {
+		if(catalogYearCode == null || catalogYearCode.length() == 0) {
+			parameters.put(CATALOG_YEAR, NOT_USED);
+		} else {
+			parameters.put(CATALOG_YEAR, externalCatalogYearService.getByCode(catalogYearCode).getName());
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	static final void addReferralSourcesToMap(final List<UUID> referralSourcesIds,
 			final Map<String, Object> parameters,
@@ -253,6 +266,15 @@ public class SearchParameters {
 	}
 
 	@SuppressWarnings("rawtypes")
+	static final void addTransferGoalsToMap(final List<UUID> transferGoalIds,
+											  final Map<String, Object> parameters,
+											  TransferGoalService transferGoalService)
+			throws ObjectNotFoundException {
+		addUUIDSToMap(TRANSFER_GOAL_NAMES, NOT_USED, transferGoalIds, parameters,
+				(ReferenceService) transferGoalService);
+	}
+
+	@SuppressWarnings("rawtypes")
 	static final void addProgramStatusToMap(final UUID programStatus,
 			final Map<String, Object> parameters,
 			final ProgramStatusService programStatusService)
@@ -260,7 +282,7 @@ public class SearchParameters {
 		addUUIDToMap(PROGRAM_STATUS_NAME, NOT_USED, programStatus, parameters,
 				(ReferenceService) programStatusService);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	static final void addCampusToMap(final UUID campusId,
 			final Map<String, Object> parameters,
@@ -280,7 +302,15 @@ public class SearchParameters {
 		parameters.put(TERM_CODE, dateTerm.getTerm() == null ? NOT_USED : dateTerm.getTermCode());
 		return parameters;
 	}
-	
+
+	static final Map<String, Object> addStartEndDates(final Date startDate, final Date endDate,
+													  final Map<String, Object> parameters) {
+		final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+		parameters.put(START_DATE, startDate == null ? NOT_USED :sdf.format(startDate));
+		parameters.put(END_DATE,  endDate == null ? NOT_USED :sdf.format(endDate));
+		return parameters;
+	}
+
 	static final Map<String, Object> addStudentIntakeDateTermToMap(final DateTerm dateTerm,
 			final Map<String, Object> parameters) {
 		
@@ -365,6 +395,21 @@ public class SearchParameters {
 			return personTOFactory.from(personService.get(personId));
 		}
 		return null;
+	}
+
+	static final void addCreatedByUsersToMap(final List<UUID> personIds, final Map<String, Object> parameters,
+											 PersonService personService, PersonTOFactory personTOFactory) throws ObjectNotFoundException {
+		List<UUID> ids = cleanUUIDListOfNulls(personIds);
+		ArrayList<String> strs = new ArrayList<String>();
+		if (ids != null && ids.size() > 0) {
+			for (UUID id : ids) {
+				PersonTO personTO = getPerson(id, personService, personTOFactory);
+				strs.add(getFullName(personTO, "Unknown User"));
+			}
+
+		}
+		parameters.put(CREATED_BY_USER_NAMES, concatNamesFromStrings(strs, ALL));
+
 	}
 
 	private final static String concatNamesFromStrings(final List<String> strs,

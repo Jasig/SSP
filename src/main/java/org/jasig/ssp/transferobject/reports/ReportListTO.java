@@ -55,6 +55,7 @@ public class ReportListTO {
 		reports.add(new Pair<String,String>("numberCoursesInPlan","Number of Plans by Course Report"));
 		reports.add(new Pair<String,String>("numberPlansByOwner","Number of Plans by Owner Report"));
 		reports.add(new Pair<String,String>("numberStudentsByStatus","Number of Students by Status Report"));
+		reports.add(new Pair<String,String>("transferGoals","Transfer Goals Report"));
 	}
 	
 	public List<Pair<String, String>> getReports() {

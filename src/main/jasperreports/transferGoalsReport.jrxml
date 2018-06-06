@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberCoursesInPlan" pageWidth="792" pageHeight="792" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="164f8d13-17e7-4916-b62f-ad389a420c72">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="79"/>
+	<parameter name="transferGoalNames" class="java.lang.String"/>
+	<parameter name="createdByUserNames" class="java.lang.String"/>
+	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="programStatusName" class="java.lang.String"/>
+	<parameter name="planExists" class="java.lang.String"/>
+	<parameter name="catalogYear" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String"/>
+	<field name="lastName" class="java.lang.String"/>
+	<field name="schoolId" class="java.lang.String"/>
+	<field name="primaryEmailAddress" class="java.lang.String"/>
+	<field name="mapCreatedDate" class="java.util.Date"/>
+	<field name="mapOwnerFirstName" class="java.lang.String"/>
+	<field name="mapOwnerLastName" class="java.lang.String"/>
+	<field name="transferGoal" class="java.lang.String"/>
+	<field name="partial" class="java.lang.Boolean"/>
+	<field name="catalogYearName" class="java.lang.String"/>
+	<variable name="rowIndex" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="130" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="1" width="198" height="16" uuid="255b284c-e962-4bd2-a35c-c07141e46079"/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="17" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Transfer Goals:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="17" width="639" height="16" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{transferGoalNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="1" width="111" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="33" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Plan Owner:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="33" width="639" height="16" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{createdByUserNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="49" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Program Status:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="49" width="639" height="16" isPrintWhenDetailOverflows="true" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{programStatusName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="65" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Plan Exists:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="65" width="639" height="16" isPrintWhenDetailOverflows="true" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{planExists}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="81" width="111" height="16" uuid="19c404ed-3ea9-471d-b290-064b73b2e741"/>
+				<text><![CDATA[Catalog Year:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="81" width="639" height="16" isPrintWhenDetailOverflows="true" uuid="0f41b65d-c192-4158-8ff9-e93b7437f8ce"/>
+				<textFieldExpression><![CDATA[$P{catalogYear}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="97" width="639" height="16" isPrintWhenDetailOverflows="true" uuid="63bab8de-9921-4cd0-ba2f-4706ad1effd8"/>
+				<textFieldExpression><![CDATA[$P{startDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="97" width="111" height="16" uuid="637cd815-b383-427e-aa0d-d13f11ef5543"/>
+				<text><![CDATA[Plan Modified From:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="113" width="639" height="16" isPrintWhenDetailOverflows="true" uuid="47608098-a387-4afb-b90f-8688a868d148"/>
+				<textFieldExpression><![CDATA[$P{endDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="113" width="111" height="16" uuid="5aaa1729-abb6-4122-bd7a-f01dc2b6ddf6"/>
+				<text><![CDATA[Plan Modified To:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="3" width="752" height="26" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="3" width="752" height="26" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Transfer Goals Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="0" width="60" height="22" uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT FIRST NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="61" y="0" width="60" height="22" uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STUDENT LAST NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="351" y="0" width="65" height="22" uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLAN OWNER FIRST NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="121" y="0" width="60" height="22" uuid="8dfc4fc8-42bc-4555-8c12-7ee2773b6fcb"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SCHOOL ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="181" y="0" width="110" height="22" uuid="8d3fd2d9-993c-4f99-9653-9fcf15b4ba67"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMAIL ADDRESS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="291" y="0" width="60" height="22" uuid="51ab3c0e-8105-4b26-9449-fb0ab72798f6"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLAN CREATED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="416" y="0" width="65" height="22" uuid="06409880-f6a4-43b3-88cd-b17d1d6b40fc"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLAN OWNER LAST NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="481" y="0" width="181" height="22" uuid="c8a9b1cb-02e9-4464-9cf5-6466fadc6fe1"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRANSFER GOAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="662" y="0" width="43" height="22" uuid="86badf88-c11e-4c7a-b640-3cbed7d77295"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARTIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="705" y="0" width="46" height="22" uuid="d2042520-0611-444a-a5fd-7dde7747e418"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CATALOG YEAR]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="1" y="2" width="750" height="14" backcolor="#E4E4E4" uuid="2eecc840-e159-457d-817b-71dbb2771e16">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="1" y="2" width="60" height="14" uuid="45da8800-1846-41a1-9882-ff007a48762b"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="61" y="2" width="60" height="14" uuid="45da8800-1846-41a1-9882-ff007a48762b"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="121" y="2" width="60" height="14" uuid="c7c19f18-5a77-4678-b844-67b910a0aad2"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{schoolId}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="181" y="2" width="110" height="14" uuid="27a441fb-9e2a-4fb7-af64-4543fb69d7e0"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{primaryEmailAddress}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="291" y="2" width="60" height="14" uuid="cea63b68-b498-4070-9806-334366ff4772"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mapCreatedDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="351" y="2" width="65" height="14" uuid="a720d354-5713-411a-9046-ae45f457ec39"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mapOwnerFirstName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="416" y="2" width="65" height="14" uuid="85ad231a-0a8f-43cd-8658-bc02e7370884"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mapOwnerLastName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="481" y="2" width="181" height="14" uuid="a5b5ce1c-aa12-41ac-9f34-510b13f55fda"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transferGoal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="662" y="2" width="43" height="14" uuid="a2532058-dbc4-4db8-b534-964b19a97dbf"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partial}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="705" y="2" width="46" height="14" uuid="88560948-a3fa-40e3-92ca-8536c69663e5"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{catalogYearName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
