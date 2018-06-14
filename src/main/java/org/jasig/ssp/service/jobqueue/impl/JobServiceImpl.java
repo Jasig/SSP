@@ -44,6 +44,8 @@ import org.jasig.ssp.util.transaction.WithTransaction;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,25 +141,22 @@ public class JobServiceImpl implements JobService, ApplicationContextAware, Bean
 	public void scheduleQueuedJobs() {
 		final List<JobExecutionWorkflow> jobExecutionWorkflows = Lists.newArrayListWithExpectedSize(10);
 
-		withTransaction.withTransactionAndUncheckedExceptions(new Callable<Object>() {
-			@Override
-			public Object call() throws Exception {
-				final List<Job> jobs = dao.getNextQueuedJobsForExecution(10,getProcessIdentifier());
-				for ( Job job : jobs ) {
-					if ( Thread.currentThread().isInterrupted() ) {
-						LOGGER.info("Abandoning job scheduling because of thread interruption");
-						// force rollback to make it slightly clearer that jobs already
-						// iterated through won't actually be queued into the task executor
-						throw new InterruptedException();
-					}
-					jobExecutionWorkflows.add(new JobExecutionWorkflow(job.getId(),
-							(ScheduledTaskWrapperServiceImpl)scheduledTaskWrapperService, // yes, sucks
-							applicationContext.getBean(beanName, JobService.class))); // make sure we get the proxied version
-					markScheduling(job);
-				}
-				return null;
-			}
-		});
+		withTransaction.withTransactionAndUncheckedExceptions(() -> {
+            final List<Job> jobs = dao.getNextQueuedJobsForExecution(10,getProcessIdentifier());
+            for ( Job job : jobs ) {
+                if ( Thread.currentThread().isInterrupted() ) {
+                    LOGGER.info("Abandoning job scheduling because of thread interruption");
+                    // force rollback to make it slightly clearer that jobs already
+                    // iterated through won't actually be queued into the task executor
+                    throw new InterruptedException();
+                }
+                jobExecutionWorkflows.add(new JobExecutionWorkflow(job.getId(),
+                        (ScheduledTaskWrapperServiceImpl)getTargetObject(scheduledTaskWrapperService), // yes, sucks
+                        applicationContext.getBean(beanName, JobService.class))); // make sure we get the proxied version
+                markScheduling(job);
+            }
+            return null;
+        });
 
 		final List<JobExecutionWorkflow> requeues = Lists.newArrayListWithCapacity(jobExecutionWorkflows.size());
 		final List<Pair<JobExecutionWorkflow,Exception>> errors = Lists.newArrayListWithCapacity(jobExecutionWorkflows.size());
@@ -352,5 +351,16 @@ public class JobServiceImpl implements JobService, ApplicationContextAware, Bean
 	@Override
 	public void setBeanName(String name) {
 		this.beanName = name;
+	}
+
+
+	//Not ideal at all, but implemented for fixing the already not ideal class cast  to ScheduledTaskWrapperServiceImpl
+	//  which was causing proxy class cast exceptions
+	@SuppressWarnings({"unchecked"})
+	private <T> T getTargetObject(Object proxy) throws Exception {
+		if( (AopUtils.isJdkDynamicProxy(proxy))) {
+			return (T) getTargetObject(((Advised)proxy).getTargetSource().getTarget());
+		}
+		return (T) proxy; // expected to be cglib proxy then, which is simply a specialized class
 	}
 }
