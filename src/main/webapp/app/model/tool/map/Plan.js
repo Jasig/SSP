@@ -498,9 +498,6 @@ Ext.define('Ssp.model.tool.map.Plan', {
 			validationResponse.message.slice(0, -2);
     	}
     	
-    	if(requiredCourses.length > requiredCourses.length){
-    		return validationResponse;
-		}
     	var requiringCourseTermIndex = termsStore.findExact("code", requiringCourse.termCode);
     	var startMessageAdded = false;
     	

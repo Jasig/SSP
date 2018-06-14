@@ -41,7 +41,7 @@ Ext.define('Ssp.view.SearchForm',{
         campusesStore: 'campusesAllUnpagedStore',
         riskLevels: 'riskLevels',
         partialPlanStore: 'partialPlanStore',
-        transferGoalsActiveUnpagedStore: 'transferGoalsActiveUnpagedStore',
+        transferGoalsActiveUnpagedStore: 'transferGoalsActiveUnpagedStore'
     },
     collapsible: true,
 	hideCollapseTool: true,
