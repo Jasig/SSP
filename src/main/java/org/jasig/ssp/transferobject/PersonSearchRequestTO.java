@@ -511,14 +511,14 @@ public class PersonSearchRequestTO  implements	TransferObject<PersonSearchReques
 		this.transferGoals = transferGoals;
 	}
 
-	public void setTransferGoals(String transferGoals) {
+	public void setTransferGoalsFromCsv(String transferGoals) {
 		if (StringUtils.isNotBlank(transferGoals)) {
 			List<String> items = Arrays.asList(transferGoals.split("\\s*,\\s*"));
 			ArrayList<UUID> transferGoalIds = new ArrayList<UUID>();
 			for (String item: items) {
 				transferGoalIds.add(UUID.fromString(item));
 			}
-			this.transferGoals = transferGoalIds;
+			this.setTransferGoals(transferGoalIds);
 		}
 	}
 }

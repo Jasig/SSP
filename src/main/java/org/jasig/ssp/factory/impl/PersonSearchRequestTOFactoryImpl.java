@@ -235,7 +235,7 @@ public class PersonSearchRequestTOFactoryImpl extends AbstractTOFactory<PersonSe
 		//comma separated set of UUIDs as a String
 		to.setHomeCampuses(homeCampus);
 		//comma separated set of UUIDs as a String
-		to.setTransferGoals(transferGoals);
+		to.setTransferGoalsFromCsv(transferGoals);
 
 		to.setSuccessIndicators(successIndicator);
 		return from(to);

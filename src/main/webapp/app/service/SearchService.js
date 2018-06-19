@@ -202,7 +202,7 @@ Ext.define('Ssp.service.SearchService', {
             personTableType: personTableType,
             homeCampus: homeCampus,
             successIndicator: successIndicator,
-            transferGoals
+            transferGoals: transferGoals
 		}, callbacks);
 	}
 });
