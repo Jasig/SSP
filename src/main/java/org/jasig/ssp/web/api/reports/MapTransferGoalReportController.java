@@ -20,6 +20,7 @@ package org.jasig.ssp.web.api.reports;
 
 import com.google.common.collect.Maps;
 import org.jasig.ssp.factory.PersonTOFactory;
+import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.external.ExternalCatalogYear;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -144,7 +145,8 @@ public class MapTransferGoalReportController extends ReportBaseController<MapTra
 				"PLAN_OWNER_LAST_NAME",
 				"TRANSFER_GOAL",
 				"PARTIAL",
-				"CATALOG_YEAR"
+				"CATALOG_YEAR",
+				"PLAN_STATUS"
 		};
 	}
 
@@ -161,8 +163,9 @@ public class MapTransferGoalReportController extends ReportBaseController<MapTra
 				reportResultElement.getMapOwnerFirstName(),
 				reportResultElement.getMapOwnerLastName(),
 				reportResultElement.getTransferGoal(),
-				reportResultElement.getPartial() ? "true" : "false",
-				reportResultElement.getCatalogYearName()
+				reportResultElement.getPartial() ? "True" : "False",
+				reportResultElement.getCatalogYearName(),
+				reportResultElement.getObjectStatus()== ObjectStatus.ACTIVE ? "Active" : "Inactive"
 		});
 	}
 }

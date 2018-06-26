@@ -18,6 +18,8 @@
  */
 package org.jasig.ssp.transferobject.reports;
 
+import org.jasig.ssp.model.ObjectStatus;
+
 import java.util.Date;
 
 public class MapTransferGoalReportTO {
@@ -33,6 +35,7 @@ public class MapTransferGoalReportTO {
 	private Boolean partial;
 	private String catalogYearCode;
 	private String catalogYearName;
+	private ObjectStatus objectStatus;
 
 	/**
 	 *
@@ -43,7 +46,7 @@ public class MapTransferGoalReportTO {
 
 	public MapTransferGoalReportTO(String schoolId, String firstName, String lastName, String primaryEmailAddress,
 								   Date mapCreatedDate, String mapOwnerFirstName, String mapOwnerLastName,
-								   String transferGoal, Boolean partial, String catalogYearCode) {
+								   String transferGoal, Boolean partial, String catalogYearCode, ObjectStatus objectStatus) {
 		super();
 		this.schoolId = schoolId;
 		this.firstName = firstName;
@@ -55,6 +58,7 @@ public class MapTransferGoalReportTO {
 		this.transferGoal = transferGoal;
 		this.partial = partial;
 		this.catalogYearCode = catalogYearCode;
+		this.objectStatus = objectStatus;
 	}
 
 	public String getFirstName() {
@@ -144,4 +148,13 @@ public class MapTransferGoalReportTO {
 	public void setCatalogYearName(String catalogYearName) {
 		this.catalogYearName = catalogYearName;
 	}
+
+	public ObjectStatus getObjectStatus() {
+		return objectStatus;
+	}
+
+	public void setObjectStatus(ObjectStatus objectStatus) {
+		this.objectStatus = objectStatus;
+	}
+
 }

@@ -361,7 +361,7 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 		StringBuilder sb = new StringBuilder("select distinct new org.jasig.ssp.transferobject.reports.MapTransferGoalReportTO(" +
 				" plan.person.schoolId, plan.person.firstName, plan.person.lastName, plan.person.primaryEmailAddress," +
 				" plan.createdDate, plan.owner.firstName, plan.owner.lastName, plan.transferGoal.name, plan.isPartial, " +
-				" plan.catalogYearCode)");
+				" plan.catalogYearCode, plan.objectStatus)");
 //		sb.append(" from org.jasig.ssp.model.Plan plan");
         sb.append(" from Plan plan");
         if (programStatus!=null) {

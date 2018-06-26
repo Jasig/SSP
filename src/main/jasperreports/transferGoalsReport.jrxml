@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberCoursesInPlan" pageWidth="792" pageHeight="792" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="164f8d13-17e7-4916-b62f-ad389a420c72">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="79"/>
+	<property name="ireport.x" value="804"/>
+	<property name="ireport.y" value="81"/>
 	<parameter name="transferGoalNames" class="java.lang.String"/>
 	<parameter name="createdByUserNames" class="java.lang.String"/>
 	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
@@ -21,6 +21,7 @@
 	<field name="transferGoal" class="java.lang.String"/>
 	<field name="partial" class="java.lang.Boolean"/>
 	<field name="catalogYearName" class="java.lang.String"/>
+	<field name="objectStatus" class="org.jasig.ssp.model.ObjectStatus"/>
 	<variable name="rowIndex" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -61,7 +62,7 @@
 			</textField>
 			<staticText>
 				<reportElement x="2" y="65" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
-				<text><![CDATA[Plan Exists:]]></text>
+				<text><![CDATA[Plan Status:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="113" y="65" width="639" height="16" isPrintWhenDetailOverflows="true" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
@@ -124,7 +125,7 @@
 				<text><![CDATA[STUDENT LAST NAME]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="351" y="0" width="65" height="22" uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16"/>
+				<reportElement stretchType="RelativeToBandHeight" x="351" y="0" width="62" height="22" uuid="8482b9b3-84b3-4380-b17d-3ef86d0ebb16"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -152,32 +153,40 @@
 				<text><![CDATA[PLAN CREATED]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="416" y="0" width="65" height="22" uuid="06409880-f6a4-43b3-88cd-b17d1d6b40fc"/>
+				<reportElement stretchType="RelativeToBandHeight" x="413" y="0" width="62" height="22" uuid="06409880-f6a4-43b3-88cd-b17d1d6b40fc"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PLAN OWNER LAST NAME]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="481" y="0" width="181" height="22" uuid="c8a9b1cb-02e9-4464-9cf5-6466fadc6fe1"/>
+				<reportElement stretchType="RelativeToBandHeight" x="475" y="0" width="149" height="22" uuid="c8a9b1cb-02e9-4464-9cf5-6466fadc6fe1"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TRANSFER GOAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="662" y="0" width="43" height="22" uuid="86badf88-c11e-4c7a-b640-3cbed7d77295"/>
+				<reportElement stretchType="RelativeToBandHeight" x="624" y="0" width="43" height="22" uuid="86badf88-c11e-4c7a-b640-3cbed7d77295"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PARTIAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="705" y="0" width="46" height="22" uuid="d2042520-0611-444a-a5fd-7dde7747e418"/>
+				<reportElement stretchType="RelativeToBandHeight" x="667" y="0" width="46" height="22" uuid="d2042520-0611-444a-a5fd-7dde7747e418"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CATALOG YEAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="713" y="0" width="38" height="22" uuid="7aefd542-d170-4637-bf87-97170ede47cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLAN
+STATUS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -227,39 +236,46 @@
 				<textFieldExpression><![CDATA[$F{mapCreatedDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="351" y="2" width="65" height="14" uuid="a720d354-5713-411a-9046-ae45f457ec39"/>
+				<reportElement x="351" y="2" width="62" height="14" uuid="a720d354-5713-411a-9046-ae45f457ec39"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mapOwnerFirstName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="416" y="2" width="65" height="14" uuid="85ad231a-0a8f-43cd-8658-bc02e7370884"/>
+				<reportElement x="413" y="2" width="62" height="14" uuid="85ad231a-0a8f-43cd-8658-bc02e7370884"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mapOwnerLastName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="481" y="2" width="181" height="14" uuid="a5b5ce1c-aa12-41ac-9f34-510b13f55fda"/>
+				<reportElement x="475" y="2" width="149" height="14" uuid="a5b5ce1c-aa12-41ac-9f34-510b13f55fda"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{transferGoal}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="662" y="2" width="43" height="14" uuid="a2532058-dbc4-4db8-b534-964b19a97dbf"/>
+				<reportElement x="624" y="2" width="43" height="14" uuid="a2532058-dbc4-4db8-b534-964b19a97dbf"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{partial}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{partial}?"True":"False"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="705" y="2" width="46" height="14" uuid="88560948-a3fa-40e3-92ca-8536c69663e5"/>
+				<reportElement x="667" y="2" width="46" height="14" uuid="88560948-a3fa-40e3-92ca-8536c69663e5"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{catalogYearName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement x="713" y="2" width="38" height="14" uuid="074f64d9-5b01-479c-89ee-3bf704c904dc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{objectStatus}==org.jasig.ssp.model.ObjectStatus.ACTIVE ? "Active" : "Inactive")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

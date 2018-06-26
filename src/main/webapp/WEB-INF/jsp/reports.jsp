@@ -3420,7 +3420,7 @@
                     </select>
                 </div>
                 <div class="ea-label">
-                    <span>Plan Exists:</span>
+                    <span>Plan Status:</span>
                 </div>
                 <div class="ea-clear"></div>
 

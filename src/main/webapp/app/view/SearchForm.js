@@ -388,7 +388,7 @@ Ext.define('Ssp.view.SearchForm',{
 					//tpl: comboTPLDisplayValueDisplay
 				}, {
 					xtype: 'combobox',
-					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-exists', 'Plan Exists'),
+					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-exists', 'Plan Status'),
 					columnWidth: 0.5,
 					emptyText: me.textStore.getValueByCode('ssp.empty-text.search.plan-exists', 'Any'),
 					name: 'planExists',
