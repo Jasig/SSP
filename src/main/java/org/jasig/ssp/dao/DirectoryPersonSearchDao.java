@@ -559,7 +559,8 @@ public class DirectoryPersonSearchDao  {
 	private void addProgramStatusRequired(PersonSearchRequest personSearchRequest, FilterTracker filterTracker,
                                                                                         StringBuilder stringBuilder) {
         appendAndOrWhere(stringBuilder,filterTracker);
-        stringBuilder.append(" dp.programStatusName is not null and dp.programStatusName <> '' ");
+		stringBuilder.append(" ((dp.personId is not null and dp.programStatusName is not null and dp.programStatusName <> '') " +
+				"or dp.personId is null) ");
 	}
 
 	private boolean hasMyPlans(PersonSearchRequest personSearchRequest) {
