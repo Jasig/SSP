@@ -138,9 +138,9 @@ abstract class ReportBaseController<R> extends AbstractBaseController {
 		if (REPORT_TYPE_PDF.equals(reportType)) {
 			DefaultJasperReportsContext context = DefaultJasperReportsContext.getInstance();
 			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
-			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.font.name", "DejaVu Sans");
+//			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.font.name", "DejaVu Sans");
 			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.pdf.embedded", "true");
-			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.pdf.font.name", "DejaVu Sans");
+//			JRPropertiesUtil.getInstance(context).setProperty("net.sf.jasperreports.default.pdf.font.name", "DejaVu Sans");
 
 			if ( !(reportParameters.containsKey("realPath")) ) {
 				reportParameters.put("realPath", servletContext.getRealPath("/"));
