@@ -362,7 +362,7 @@
 
     ${n}.jQuery(function() {
         var $ = up.jQuery;
-        
+
         var options = {
             urls: {
                 person:       '<c:url value="/api/1/person/STUDENTID" />',
@@ -376,7 +376,7 @@
             },
             parameters: {
                 courseName:   '${course.formattedCourse}',
-                courseTitle:  '${course.title}',
+                courseTitle:  "${course.title}",
                 termCode:     '${course.termCode}',
                 termName:     '${courseTermName}',
                 sectionCode:  '${course.sectionCode}',
