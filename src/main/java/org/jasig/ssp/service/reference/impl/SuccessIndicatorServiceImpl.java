@@ -200,9 +200,6 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
             if ( StringUtils.isBlank(spec.getName()) ) {
                 throw new ValidationException("Cannot delete the name field");
             }
-            model.setName(spec.getName());
-            model.setDescription(spec.getDescription()); // deletion fine
-            model.setInstruction(spec.getInstruction()); // deletion fine
             if ( StringUtils.isBlank(spec.getModelCode()) ) {
                 throw new ValidationException("Cannot delete the model code field");
             }
@@ -218,6 +215,9 @@ public class SuccessIndicatorServiceImpl extends AbstractReferenceService<Succes
 
         }
 
+        model.setName(spec.getName());
+        model.setDescription(spec.getDescription()); // deletion fine
+        model.setInstruction(spec.getInstruction()); // deletion fine
         model.setEvaluationType(spec.getEvaluationType());
         model.setScaleEvaluationHighFrom(spec.getScaleEvaluationHighFrom());
         model.setScaleEvaluationHighTo(spec.getScaleEvaluationHighTo());
