@@ -30,6 +30,7 @@ import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.TermCourses;
 import org.jasig.ssp.model.external.ExternalStudentFinancialAid;
 import org.jasig.ssp.model.external.ExternalStudentTranscript;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.PlanService;
@@ -37,6 +38,7 @@ import org.jasig.ssp.service.external.ExternalProgramService;
 import org.jasig.ssp.service.external.ExternalStudentFinancialAidService;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptService;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.service.reference.ProgramStatusService;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.PlanOutputTO;
 import org.jasig.ssp.transferobject.PlanTO;
@@ -70,7 +72,9 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 
 	@Autowired
 	private ConfigService configService;
-	
+
+	@Autowired
+	private transient ProgramStatusService programStatusService;
 
 	@Autowired
 	private ExternalStudentFinancialAidService externalStudentFinancialAidService;
@@ -203,6 +207,12 @@ public class PlanServiceImpl extends AbstractPlanServiceImpl<Plan,PlanTO,PlanOut
 	@Override
 	public List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form){
 		return dao.getPlanStudentStatusByCourse(form);
+	}
+
+	@Override
+	public List<PlanStudentCoursesCountTO> getPlanStudentCoursesCount(SearchPlanTO form) throws ObjectNotFoundException {
+		final ProgramStatus activeStatus = programStatusService.getActiveStatus();
+		return dao.getPlanStudentCoursesCount(form, activeStatus);
 	}
 
 	@Override

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to Apereo under one or more contributor license
+    agreements. See the NOTICE file distributed with this work
+    for additional information regarding copyright ownership.
+    Apereo licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file
+    except in compliance with the License.  You may obtain a
+    copy of the License at the following location:
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="numberStudentsByStatus" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d0d692a3-bed1-4808-8436-99637e102c17">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="termCodes" class="java.lang.String"/>
+	<parameter name="termNames" class="java.lang.String"/>
+	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="subjectAbbreviation" class="java.lang.String"/>
+	<parameter name="courseNumber" class="java.lang.String"/>
+	<parameter name="totalStudents" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<field name="schoolId" class="java.lang.String"/>
+	<field name="username" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String"/>
+	<field name="lastName" class="java.lang.String"/>
+	<field name="primaryEmailAddress" class="java.lang.String"/>
+	<field name="plannedCourses" class="java.lang.Long"/>
+	<variable name="rowIndex" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<textField>
+				<reportElement x="111" y="0" width="198" height="16" uuid="255b284c-e962-4bd2-a35c-c07141e46079"/>
+				<textFieldExpression><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement x="111" y="18" width="461" height="16" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{termNames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="18" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Terms:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="111" height="16" uuid="3186051d-0470-481e-9851-5c18a295e964"/>
+				<text><![CDATA[Report Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="36" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Subject Abbreviation:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="36" width="461" height="16" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{subjectAbbreviation}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="53" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Number:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="53" width="461" height="16" uuid="03790184-2d0c-4374-bcfe-541fd45962df"/>
+				<textFieldExpression><![CDATA[$P{courseNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="111" y="70" width="461" height="16" uuid="2f57f48f-5397-44c0-a084-56cc06441478"/>
+				<textFieldExpression><![CDATA[$P{totalStudents}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="70" width="111" height="16" uuid="9ea8b928-1d15-4ffe-8123-5be60cab7a8e"/>
+				<text><![CDATA[Total Students:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="32" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="3" width="572" height="26" backcolor="#70C2E7" uuid="62b28583-2af5-4e33-a065-0f7b0b5e170d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="3" width="572" height="26" uuid="ee2f9f18-4466-4da5-9768-31f3f6c1f85d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Student Planned Courses Count Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28">
+			<staticText>
+				<reportElement x="5" y="2" width="52" height="15" uuid="6db3bd24-0adc-4817-a493-315b995dd73a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="2" width="66" height="15" uuid="2acc055a-142b-4890-9a37-34331b33002f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[USERNAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="2" width="100" height="15" uuid="4e4b15c9-bba0-4590-bac3-5585dc1726bc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRST NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="255" y="2" width="100" height="15" uuid="8fd36edd-e61c-430f-9848-a3e39e2579d7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAST NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="2" width="100" height="15" uuid="d5f13d0e-7632-45ba-b135-95a7b749fcab"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMAIL (SCHOOL)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="2" width="62" height="25" uuid="05170aeb-4f72-4a1a-9177-71b430576a68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLANNED COURSES]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<rectangle>
+				<reportElement stretchType="RelativeToBandHeight" x="2" y="2" width="570" height="15" backcolor="#E4E4E4" uuid="5c408d3c-6da3-4845-87f2-9ce36e214459">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!(($V{rowIndex} % 2) == 0))]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="#FFFFFF"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="5" y="2" width="75" height="15" uuid="449a8dfc-42da-44d0-9d28-ccd56bbdf249"/>
+				<textFieldExpression><![CDATA[($F{schoolId} == null ? "" : $F{schoolId})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="2" width="75" height="15" uuid="8b17ae35-bb0a-4044-ad25-50e2f90dd696"/>
+				<textFieldExpression><![CDATA[($F{username} == null ? "" : $F{username})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="155" y="2" width="100" height="15" uuid="62160f51-35ca-4803-b9c3-0bec5f0c7b76"/>
+				<textFieldExpression><![CDATA[($F{firstName} == null ? "" : $F{firstName})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="2" width="100" height="15" uuid="c7f8c48f-9f56-45c4-be49-046c821bc54f"/>
+				<textFieldExpression><![CDATA[($F{lastName} == null ? "" : $F{lastName})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="2" width="155" height="15" uuid="f0306e1d-a945-4193-a679-3b19fdc23d05"/>
+				<textFieldExpression><![CDATA[($F{primaryEmailAddress} == null ? "" : $F{primaryEmailAddress})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="2" width="62" height="15" uuid="e06e824d-8026-4671-9a42-2a55fc24cbbe"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[($F{plannedCourses} == null ? "" : $F{plannedCourses})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="18">
+			<textField evaluationTime="Report">
+				<reportElement x="303" y="0" width="40" height="16" uuid="b7e71da8-eba3-4b65-a3b6-bbb7590054cd"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="0" width="80" height="16" uuid="03af5734-6a01-48a7-9533-e87f2c0545a4"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

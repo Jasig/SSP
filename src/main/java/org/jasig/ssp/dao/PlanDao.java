@@ -27,6 +27,7 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.Plan;
+import org.jasig.ssp.model.reference.ProgramStatus;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.jasig.ssp.transferobject.reports.*;
@@ -259,6 +260,37 @@ public class PlanDao extends AbstractPlanDao<Plan> implements AuditableCrudDao<P
 				PlanStudentStatusTO.class, "plan_")).list();
 		
 		return planStudentStatus;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PlanStudentCoursesCountTO> getPlanStudentCoursesCount(SearchPlanTO form, ProgramStatus activeStatus) {
+		final StringBuilder selectAndFrom = new StringBuilder("SELECT ")
+				.append(" p.schoolId as person_schoolId, p.username as person_username, p.firstName as person_firstName, ")
+				.append(" p.lastName as person_lastName, p.primaryEmailAddress as person_primaryEmailAddress, ")
+				.append(" count(distinct pc.id) as person_plannedCourses ");
+
+		selectAndFrom.append(" from Person as p left join p.plans plan ")
+				.append(" join plan.planCourses as pc ")
+				.append(" left join p.programStatuses as pps ");
+		final StringBuilder where = new StringBuilder(" where plan.objectStatus = :planObjectStatus ");
+		where.append(" and pps.programStatus.id = :programStatusId ")
+                .append(" and pps.objectStatus = :ppsObjectStatus ")
+                .append(" and pps.expirationDate is null ");
+
+		buildQueryCourseFilters(form, selectAndFrom, where);
+		final String queryStr = selectAndFrom.append(where)
+                .append(" group by p.schoolId, p.username, p.firstName, ")
+                .append(" p.lastName, p.primaryEmailAddress ")
+				.append(" order by p.lastName, p.firstName ").toString();
+
+		Query query = createHqlQuery(queryStr).setInteger("planObjectStatus", ObjectStatus.ACTIVE.ordinal() );
+        query.setInteger("ppsObjectStatus", ObjectStatus.ACTIVE.ordinal() );
+		query.setParameter("programStatusId", activeStatus.getId());
+		bindSearchPlanQueryParams(form, query);
+		List<PlanStudentCoursesCountTO> planStudentCoursesCountTOs = query.setResultTransformer(new NamespacedAliasToBeanResultTransformer(
+				PlanStudentCoursesCountTO.class, "person_")).list();
+
+		return planStudentCoursesCountTOs;
 	}
 
 	private void buildQueryCourseFilters(SearchPlanTO form, StringBuilder selectAndFrom, StringBuilder where) {

@@ -52,6 +52,8 @@ PlanOutputTO, MessageTemplatePlanPrintParams> {
 	
 	List<PlanStudentStatusTO> getPlanStudentStatusByCourse(SearchPlanTO form);
 
+	List<PlanStudentCoursesCountTO> getPlanStudentCoursesCount(SearchPlanTO form) throws ObjectNotFoundException;
+
 	List<MapStatusReportPerson> getAllActivePlanIds();
 
 	List<MapPlanStatusReportCourse> getAllPlanCoursesForStatusReport(UUID planId);

@@ -3226,6 +3226,63 @@
             </form>
         </div><!-- number students by status report -->
 
+        <div class="hideable-form student-planned-courses-count-report" style="display:none">
+            <h1>Students Planned Courses Count Report</h1>
+            <form action="/ssp/api/1/report/map/studentplannedcoursescount" method="get"
+                target="_blank" onSubmit="return validateForm(this);" class="alert-form">
+
+                <!-- Subject Abbreviations -->
+                <div class="ea-input">
+                    <select  class="input-subject-abbreviation-group" id="studentPlannedCoursesCountSubjectAbbreviations"
+                        name="subjectAbbreviation">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Subject Abbreviations:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Course Numbers -->
+                <div class="ea-input">
+                    <select  class="input-course-number-group" id="studentPlannedCoursesCountCoursesNumbers" name="courseNumber">
+                        <option value="">${select_subject_abbreviation}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Course Numbers:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <!-- Term -->
+                <div class="ea-input">
+                    <select id="studentPlannedCoursesCountTermCodes" name="termCodes" class="input-term-group" multiple="multiple">
+                        <option value="">${not_applicable}</option>
+                    </select>
+                </div>
+                <div class="ea-label">
+                    <span>Term:</span>
+                </div>
+                <div class="ea-clear"></div>
+                <!-- output type -->
+                <div class="ea-input">
+                    <label><span>pdf</span></label><input type="radio" name="reportType"
+                        value="pdf" checked /><br /> <label><span>csv</span></label><input
+                        type="radio" name="reportType" value="csv" />
+                </div>
+
+                <div class="ea-label">
+                    <span>Output Type:</span>
+                </div>
+                <div class="ea-clear"></div>
+
+                <div class="ea-buttons">
+                    <div class="buttons">
+                        <input class="button primary button-send" type="submit" value="submit" />
+                    </div>
+                </div>
+            </form>
+        </div><!-- Student Planned Courses Count report -->
 
         <div class="hideable-form journal-case-notes-by-student-report" style="display:none">
             <h1>Journal Session Details Report</h1>

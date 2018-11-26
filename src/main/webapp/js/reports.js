@@ -488,6 +488,7 @@ var ssp = ssp || {};
 					numberCoursesInPlan : '.number-courses-in-plan-report',
 					numberPlansByOwner : '.number-plans-by-owner-report',
 					numberStudentsByStatus : '.number-students-by-status-report',
+					studentPlannedCoursesCount : '.student-planned-courses-count-report',
 					transferGoals : '.transfer-goals-report',
 					disabilityServices : '.disability-services-report',
 					programStatusGroup : '.input-program-status-group',
