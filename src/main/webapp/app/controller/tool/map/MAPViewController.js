@@ -32,6 +32,7 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		semesterStores: 'currentSemesterStores',
 		authenticatedPerson: 'authenticatedPerson',
 		textStore: 'sspTextStore',
+        toolsStore: 'toolsStore',
 		isTemplateFlag: 'isTemplateMode'
 	},
     control: {
@@ -203,24 +204,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if (me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if (btn === 'yes') {
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav',secondaryNavInfo:toolsRecord.get('toolType'), navController : toolsViewController});
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav',secondaryNavInfo:toolsRecord.get('toolType'), navController : toolsViewController});
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav',secondaryNavInfo:toolsRecord.get('toolType'), navController : toolsViewController});
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doToolsNav',secondaryNavInfo:toolsRecord.get('toolType'), navController : toolsViewController});
+//						me.savePlanPopUp.show();
+//					}
 				} else if (btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -237,26 +242,30 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						searchViewController.updatePerson(records);
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav', secondaryNavInfo:'onPersonNav',navController : searchViewController});
-						me.saveTemplatePopUp.show();
-					} else {
-						searchViewController.updatePerson(records);
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav',navController : searchViewController});
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						searchViewController.updatePerson(records);
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav', secondaryNavInfo:'onPersonNav',navController : searchViewController});
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						searchViewController.updatePerson(records);
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonNav',navController : searchViewController});
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -275,24 +284,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAddPerson'});
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAddPerson'});
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAddPerson'});
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAddPerson'});
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -309,24 +322,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonButtonEdit'});
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonButtonEdit'});
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonButtonEdit'});
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonButtonEdit'});
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -342,24 +359,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonToolbarEdit'});
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonToolbarEdit'});
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonToolbarEdit'});
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonToolbarEdit'});
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -377,24 +398,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doRetrieveCaseload' });
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doRetrieveCaseload' });
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doRetrieveCaseload' });
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doRetrieveCaseload' });
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -410,24 +435,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doAdminNav' });
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -443,24 +472,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if(me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
                 me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-                me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+                me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
             function(btn){
 				if (btn === 'yes') {
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doStudentsNav' });
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doStudentsNav' });
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doStudentsNav' });
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doStudentsNav' });
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};
@@ -478,24 +511,28 @@ Ext.define('Ssp.controller.tool.map.MAPViewController', {
 		if (me.currentMapPlan.isDirty(me.semesterStores)) {
 			Ext.MessageBox.confirm(
 				me.textStore.getValueByCode('ssp.message.map.unsaved-data-title','Unsaved MAP Data'),
-				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to save it?'),
+				me.textStore.getValueByCode('ssp.message.map.unsaved-data-body','You have unsaved MAP data, do you wish to return to the MAP to save it?'),
 				function(btn){
 				if(btn === 'yes'){
-					if ( me.currentMapPlan.get('isTemplate') ) {
-						// Cleanup template popups b/c not sure if they can be reused and if
-						// we just replace it with a new instance, the old one might never
-						// be cleaned up. savePlanPopUp() doesn't get the same treatment
-						// only b/c that code is much older (but still might turn out to need
-						// to be handled similarly)
-						if ( me.saveTemplatePopUp ) {
-							me.saveTemplatePopUp.destroy();
-						}
-						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange', status:action, actionOnPersonId: actionOnPersonId});
-						me.saveTemplatePopUp.show();
-					} else {
-						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange',status: action, actionOnPersonId: actionOnPersonId });
-						me.savePlanPopUp.show();
-					}
+                    var toolsMenu = Ext.getCmp("toolsMenuPanel");
+                    toolsMenu.getSelectionModel().deselectAll();
+                    var tool = me.toolsStore.findExact('toolType', 'map');
+                    toolsMenu.getSelectionModel().select(tool);
+//					if ( me.currentMapPlan.get('isTemplate') ) {
+//						// Cleanup template popups b/c not sure if they can be reused and if
+//						// we just replace it with a new instance, the old one might never
+//						// be cleaned up. savePlanPopUp() doesn't get the same treatment
+//						// only b/c that code is much older (but still might turn out to need
+//						// to be handled similarly)
+//						if ( me.saveTemplatePopUp ) {
+//							me.saveTemplatePopUp.destroy();
+//						}
+//						me.saveTemplatePopUp = Ext.create('Ssp.view.tools.map.SaveTemplate',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange', status:action, actionOnPersonId: actionOnPersonId});
+//						me.saveTemplatePopUp.show();
+//					} else {
+//						me.savePlanPopUp = Ext.create('Ssp.view.tools.map.SavePlan',{hidden:true,saveAs:false,loaderDialogEventName:'doPersonStatusChange',status: action, actionOnPersonId: actionOnPersonId });
+//						me.savePlanPopUp.show();
+//					}
 				} else if(btn === 'no') {
 				    me.currentMapPlan.dirty = false;
 				    me.semesterStores = {};

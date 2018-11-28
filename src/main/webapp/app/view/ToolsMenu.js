@@ -34,7 +34,10 @@ Ext.define('Ssp.view.ToolsMenu', {
         Ext.apply(this, {
             width: '100%',
             height: '100%',
-            store: this.store,
+            id: 'toolsMenuPanel',
+	        name: 'toolsMenuPanel',
+	        itemid: 'toolsMenuPanel',
+	        store: this.store,
 
             features: [{
                 id: 'group',
