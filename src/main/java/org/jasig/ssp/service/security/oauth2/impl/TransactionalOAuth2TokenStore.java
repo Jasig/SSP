@@ -105,8 +105,8 @@ public class TransactionalOAuth2TokenStore implements TokenStore {
 	}
 
 	@Override
-	public Collection<OAuth2AccessToken> findTokensByUserName(String userName) {
-		return delegateTokenStore.findTokensByUserName(userName);
+	public Collection<OAuth2AccessToken> findTokensByClientIdAndUserName(String s, String s1) {
+		return delegateTokenStore.findTokensByClientIdAndUserName(s, s1);
 	}
 
 	@Override

@@ -563,7 +563,7 @@ public class BaseStudentReportTO implements Serializable {
 		setRegistrationStatus(person.getRegistrationStatus());
 		setCreatedDate(person.getCreatedDate());
 		setProgramStatusName(person.getProgramStatusName());
-		if(getStudentTypeName().equals(ILP))
+		if(getStudentTypeName()!=null && getStudentTypeName().equals(ILP))
 			setIsIlp(true);
 		else
 			setIsIlp(false);

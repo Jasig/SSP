@@ -122,7 +122,7 @@
 	<!-- oauth2ClientDetailsService, oauth2ClientDetailsUserService and transactionalOAuth2TokenStore are defined via component scanning -->
 
 	<!-- transactionalOAuth2TokenStore looks for oauth2PhysicalTokenStore -->
-	<beans:bean id="oauth2PhysicalTokenStore" class="org.springframework.security.oauth2.provider.token.JdbcTokenStore">
+	<beans:bean id="oauth2PhysicalTokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore">
 		<beans:constructor-arg ref="sspDataSource" />
 	</beans:bean>
 	

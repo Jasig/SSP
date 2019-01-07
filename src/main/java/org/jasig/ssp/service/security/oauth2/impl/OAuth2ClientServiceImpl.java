@@ -35,16 +35,18 @@ import org.jasig.ssp.service.security.oauth2.OAuth2ClientService;
 import org.jasig.ssp.transferobject.OAuth2ClientTO;
 import org.jasig.ssp.web.api.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.BaseClientDetails;
+import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +66,10 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 
 	@Autowired
 	private ConsumerTokenServices consumerTokenService;
+
+	@Autowired
+	@Qualifier("transactionalOAuth2TokenStore")
+	private TokenStore tokenStore;
 
 	@Autowired
 	private ResourceServerTokenServices resourceServerTokenService;
@@ -100,7 +106,8 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 	 * Overridden to throw an {@link UnsupportedOperationException}. Use
 	 * {@link #save(org.jasig.ssp.transferobject.OAuth2ClientTO)} so the
 	 * service knows exactly what you're trying to do.
-	 *
+	 *findTokensByClientIdAndUserName
+	 * @param client
 	 * @param client
 	 * @return
 	 * @throws ObjectNotFoundException
@@ -132,6 +139,9 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 		clientDetails.setAccessTokenValiditySeconds(client.getAccessTokenValiditySeconds());
 		clientDetails.setAuthorities(client.getAuthorities());
 		clientDetails.setAuthorizedGrantTypes(client.getAuthorizedGrantTypes());
+		Collection<String> scope = new ArrayList<>();
+		scope.add("all");
+		clientDetails.setScope(scope);
 		return clientDetails;
 	}
 
@@ -190,7 +200,7 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 
 	private void invalidateAllTokensByClientId(String clientId) {
 		final Collection<OAuth2AccessToken> tokensByClientId =
-				consumerTokenService.findTokensByClientId(StringUtils.lowerCase(clientId));
+				tokenStore.findTokensByClientId(StringUtils.lowerCase(clientId));
 		for ( OAuth2AccessToken token : tokensByClientId ) {
 			consumerTokenService.revokeToken(token.getValue());
 		}
@@ -198,7 +208,7 @@ public class OAuth2ClientServiceImpl extends AbstractAuditableCrudService<OAuth2
 
 	private void invalidateClientOnlyTokensByClientId(String clientId) {
 		final Collection<OAuth2AccessToken> tokensByClientId =
-				consumerTokenService.findTokensByClientId(StringUtils.lowerCase(clientId));
+				tokenStore.findTokensByClientId(StringUtils.lowerCase(clientId));
 		for ( OAuth2AccessToken token : tokensByClientId ) {
 			final OAuth2Authentication authN =
 					resourceServerTokenService.loadAuthentication(token.getValue());
