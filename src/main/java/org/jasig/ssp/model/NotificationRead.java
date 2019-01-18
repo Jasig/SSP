@@ -20,14 +20,7 @@ package org.jasig.ssp.model;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import javax.annotation.Nullable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
@@ -37,13 +30,13 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class NotificationRecipient
+public class NotificationRead
 		extends AbstractAuditable
 		implements PersonAssocAuditable {
 
 	private static final long serialVersionUID = 27279225191519712L;
 
-	@Nullable
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "person_id", updatable = false, nullable = true)
 	@NotFound(action = NotFoundAction.IGNORE)
@@ -55,22 +48,13 @@ public class NotificationRecipient
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Notification notification;
 
-	@Column(nullable = true, length = 80)
-	private String sspRole;
-
-	public NotificationRecipient() {
+	public NotificationRead() {
 		super();
 	}
 
-	public NotificationRecipient(@NotNull final Person person, @NotNull final Notification notification) {
+	public NotificationRead(@NotNull final Person person, @NotNull final Notification notification) {
 		super();
 		this.setPerson(person);
-		this.setNotification(notification);
-	}
-
-	public NotificationRecipient(@NotNull final String sspRole, @NotNull final Notification notification) {
-		super();
-		this.setSspRole(sspRole);
 		this.setNotification(notification);
 	}
 
@@ -80,7 +64,7 @@ public class NotificationRecipient
 	}
 
 	@Override
-	public void setPerson(final Person person) {
+	public void setPerson(@NotNull final Person person) {
 		this.person = person;
 	}
 
@@ -90,14 +74,6 @@ public class NotificationRecipient
 
 	public void setNotification(Notification notification) {
 		this.notification = notification;
-	}
-
-	public String getSspRole() {
-		return sspRole;
-	}
-
-	public void setSspRole(String sspRole) {
-		this.sspRole = sspRole;
 	}
 
 	@Override
@@ -116,7 +92,6 @@ public class NotificationRecipient
 		// PersonChallenge
 		result *= hashField("notification", getNotification());
 		result *= hashField("person", getPerson());
-		result *= hashField("ssprole", getSspRole());
 
 		return result;
 	}

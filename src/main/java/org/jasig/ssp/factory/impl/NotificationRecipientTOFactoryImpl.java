@@ -18,14 +18,14 @@
  */
 package org.jasig.ssp.factory.impl;
 
-import org.jasig.ssp.dao.NotificationDao;
 import org.jasig.ssp.dao.NotificationRecipientDao;
-import org.jasig.ssp.factory.*;
-import org.jasig.ssp.model.Notification;
+import org.jasig.ssp.factory.AbstractAuditableTOFactory;
+import org.jasig.ssp.factory.NotificationRecipientTOFactory;
+import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.NotificationRecipient;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.transferobject.NotificationTO;
+import org.jasig.ssp.transferobject.NotificationRecipientTO;
 import org.jasig.ssp.transferobject.PersonLiteTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,43 +37,39 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class NotificationTOFactoryImpl extends AbstractAuditableTOFactory<NotificationTO, Notification>
-		implements NotificationTOFactory {
+public class NotificationRecipientTOFactoryImpl extends AbstractAuditableTOFactory<NotificationRecipientTO, NotificationRecipient>
+		implements NotificationRecipientTOFactory {
 
-	public NotificationTOFactoryImpl() {
-		super(NotificationTO.class, Notification.class);
+	public NotificationRecipientTOFactoryImpl() {
+		super(NotificationRecipientTO.class, NotificationRecipient.class);
 	}
 
 	@Autowired
-	private transient NotificationDao dao;
+	private transient NotificationRecipientDao dao;
 
     @Autowired
     private transient PersonTOFactory personTOFactory;
 
-	protected NotificationDao getDao() {
+	protected NotificationRecipientDao getDao() {
 		return dao;
 	}
 
 	@Override
-	public Notification from(final NotificationTO tObject) throws ObjectNotFoundException {
-		final Notification model = super.from(tObject);
+	public NotificationRecipient from(final NotificationRecipientTO tObject) throws ObjectNotFoundException {
+		final NotificationRecipient model = super.from(tObject);
 
-//		if (tObject.getRecipient() != null) {
-//			final PersonLiteTO personLiteTO = tObject.getRecipient();
-//			final Person personFromPersonLite = new Person();
-//			personFromPersonLite.setId(personLiteTO.getId());
-//			personFromPersonLite.setFirstName(personLiteTO.getFirstName());
-//			personFromPersonLite.setLastName(personLiteTO.getLastName());
+		if (tObject.getRecipient() != null) {
+			final PersonLiteTO personLiteTO = tObject.getRecipient();
+			final Person personFromPersonLite = new Person();
+			personFromPersonLite.setId(personLiteTO.getId());
+			personFromPersonLite.setFirstName(personLiteTO.getFirstName());
+			personFromPersonLite.setLastName(personLiteTO.getLastName());
 
-//			model.setPerson(personFromPersonLite);
-//		}
+			model.setPerson(personFromPersonLite);
+		}
 
-//		if (tObject.getSspRole() != null) {
-//			model.setSspRole(tObject.getSspRole());
-//		}
-
-		if (tObject.getSubject() != null) {
-			//TODO ??? model.setNotification(notification.get?());
+		if (tObject.getSspRole() != null) {
+			model.setSspRole(tObject.getSspRole());
 		}
 
 		return model;

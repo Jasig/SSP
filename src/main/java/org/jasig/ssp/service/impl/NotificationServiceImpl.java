@@ -19,8 +19,13 @@
 package org.jasig.ssp.service.impl; // NOPMD
 
 import org.jasig.ssp.dao.NotificationDao;
-import org.jasig.ssp.model.Notification;
+import org.jasig.ssp.model.*;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
+import org.jasig.ssp.model.reference.NotificationReadStatus;
+import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.NotificationService;
+import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -31,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 
 /**
@@ -54,14 +61,134 @@ public class NotificationServiceImpl implements NotificationService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(NotificationServiceImpl.class);
 
-
-	//TODO finish create service and retrieve service below.
-	//  In add need to figure out SSP Role discovery?
-
+	@Override
+	public Notification getNotification(UUID id) throws ObjectNotFoundException {
+		return notificationDao.get(id);
+	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public PagingWrapper<Notification> getNotifications(SortingAndPaging sortingAndPaging) {
+	public PagingWrapper<Notification> getNotifications(final SortingAndPaging sortingAndPaging) {
+		return notificationDao.getAll(ObjectStatus.ALL);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PagingWrapper<Notification> getNotifications(final String sspRole,
+                                                        final NotificationReadStatus notificationReadStatus,
+														final SortingAndPaging sortingAndPaging) {
+		return getNotifications(null, sspRole, notificationReadStatus, sortingAndPaging);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PagingWrapper<Notification> getNotifications(final Person person,
+                                                        final NotificationReadStatus notificationReadStatus,
+														final SortingAndPaging sortingAndPaging) {
+		return getNotifications(person, null, notificationReadStatus, sortingAndPaging);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PagingWrapper<Notification> getNotifications(final Person person, final String sspRole,
+														final NotificationReadStatus notificationReadStatus,
+														final SortingAndPaging sortingAndPaging) {
+		if (person == null && sspRole == null) {
+			throw new IllegalArgumentException("Either Person or SSPRole required for getting Notifications");
+		}
+		UUID personId = null;
+		if (person!=null) {
+			personId = person.getId();
+		}
+		return notificationDao.getNotifications(personId, sspRole,
+                notificationReadStatus==null?NotificationReadStatus.ALL:notificationReadStatus,
+                sortingAndPaging);
+	}
+
+	@Override
+	@Transactional
+	public Notification create(final String subject, final String body, final Date expirationDate,
+						final NotificationPriority notificationPriority, final NotificationCategory notificationCategory,
+						final List<Person> persons, final List<String> sspRoles) {
+		if (subject == null) {
+			throw new IllegalArgumentException("Subject missing.");
+		}
+		if (body == null) {
+			throw new IllegalArgumentException("Body missing.");
+		}
+		if (notificationPriority == null) {
+			throw new IllegalArgumentException("Notification Priority missing.");
+		}
+		if (notificationCategory == null) {
+			throw new IllegalArgumentException("Notification Category missing.");
+		}
+
+		if ((persons == null || persons.size()==0) && (sspRoles == null || sspRoles.size()==0))  {
+			throw new IllegalArgumentException("Person to notify and/or SSP Role must be set to create notification.");
+		}
+
+		final Notification notification = new Notification(subject, body, expirationDate, 0,
+				notificationPriority, notificationCategory);
+
+		Set<NotificationRecipient> recipients = new HashSet<>();
+		if (persons != null && persons.size() > 0) {
+			for (Person person : persons) {
+				NotificationRecipient recipient = new NotificationRecipient(person, notification);
+				recipients.add(recipient);
+			}
+		}
+		if (sspRoles != null && sspRoles.size() > 0) {
+			for (String sspRole : sspRoles) {
+				NotificationRecipient recipient = new NotificationRecipient(sspRole, notification);
+				recipients.add(recipient);
+			}
+		}
+		notification.setNotificationRecipients(recipients);
+		return notificationDao.save(notification);
+	}
+
+	@Override
+    @Transactional
+    public void read(final Notification notification) {
+        upsertNotificationReadStatus(notification, NotificationReadStatus.READ);
+	    notificationDao.save(notification);
+    }
+
+	@Override
+	@Transactional
+	public void unread(final Notification notification) {
+	    upsertNotificationReadStatus(notification, NotificationReadStatus.UNREAD);
+		notificationDao.save(notification);
+	}
+
+	/*
+	 * Marking a notification as read sets the ObjectStatus indicator to INACTIVE.
+	 * Marking a notification as unread sets the ObjectStatus indicator to ACTIVE.
+	 */
+	private void upsertNotificationReadStatus(Notification notification,
+											  NotificationReadStatus notificationReadStatus) {
+        final SspUser sspUser = securityService.currentUser();
+        NotificationRead notificationRead = getNotificationRead(notification, sspUser);
+
+        if (notificationRead==null) {
+            notificationRead = new NotificationRead(sspUser.getPerson(), notification);
+            notification.getNotificationReads().add(notificationRead);
+        }
+
+        notificationRead.setObjectStatus(
+                    notificationReadStatus==NotificationReadStatus.READ?ObjectStatus.INACTIVE:ObjectStatus.ACTIVE);
+
+    }
+	private NotificationRead getNotificationRead(Notification notification, SspUser sspUser) {
+		Set<NotificationRead> notificationReadList = notification.getNotificationReads();
+
+		if (notificationReadList!=null) {
+			for (NotificationRead notificationRead : notificationReadList) {
+				if (notificationRead.getPerson().getId() == sspUser.getPerson().getId()) {
+					return notificationRead;
+				}
+			}
+		}
 		return null;
 	}
 }

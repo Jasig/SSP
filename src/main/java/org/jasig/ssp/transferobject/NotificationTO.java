@@ -18,36 +18,37 @@
  */
 package org.jasig.ssp.transferobject;
 
+import com.google.common.collect.Sets;
 import org.jasig.ssp.model.Notification;
-import org.jasig.ssp.model.NotificationRecipient;
 import java.util.Date;
+import java.util.Set;
 
 
-public class NotificationTO extends AbstractAuditableTO<NotificationRecipient>
-	implements TransferObject<NotificationRecipient> {
+public class NotificationTO extends AbstractAuditableTO<Notification>
+	implements TransferObject<Notification> {
 
 	private String subject;
 	private String body;
-	private PersonLiteTO recipient;   //TODO is there use case for separate notification and notification_recipient TOs?
     private Date expirationDate;
     private Integer duplicateCount;
     private String priority;
     private String category;
-    private String sspRole;
+    private Set<NotificationRecipientTO> notificationRecipients = Sets.newHashSet();
+    private Set<NotificationReadTO> notificationReads = Sets.newHashSet();
 
-	public NotificationTO() {
+
+    public NotificationTO() {
 		super();
 	}
 
-	public NotificationTO(final NotificationRecipient model) {
+	public NotificationTO(final Notification model) {
 		super();
 		from(model);
 	}
 
 	@Override
-	public void from(NotificationRecipient model) {
-        super.from(model);
-        final Notification notification = model.getNotification();
+	public void from(Notification notification) {
+        super.from(notification);
 
         if (notification != null) {
             this.setSubject(notification.getSubject());
@@ -56,15 +57,14 @@ public class NotificationTO extends AbstractAuditableTO<NotificationRecipient>
             this.setPriority(notification.getPriority().getTitle());
             this.setDuplicateCount(notification.getDuplicateCount());
             this.setExpirationDate(notification.getExpirationDate());
-
-            if (model.getPerson() != null) {
-                this.setRecipient(new PersonLiteTO(model.getPerson().getId(), model.getPerson().getFirstName(), model.getPerson().getLastName()));
-            }
-
-            if (model.getSspRole() != null) {
-                this.setSspRole(model.getSspRole());
-            }
-
+        }
+        if (notification.getNotificationRecipients() != null
+                && !notification.getNotificationRecipients().isEmpty()) {
+            notificationRecipients = NotificationRecipientTO.toTOSet(notification.getNotificationRecipients());
+        }
+        if (notification.getNotificationReads() != null
+                && !notification.getNotificationReads().isEmpty()) {
+            notificationReads = NotificationReadTO.toTOSet(notification.getNotificationReads());
         }
     }
 
@@ -82,14 +82,6 @@ public class NotificationTO extends AbstractAuditableTO<NotificationRecipient>
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public PersonLiteTO getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(PersonLiteTO recipient) {
-        this.recipient = recipient;
     }
 
     public Date getExpirationDate() {
@@ -124,11 +116,19 @@ public class NotificationTO extends AbstractAuditableTO<NotificationRecipient>
         this.category = category;
     }
 
-    public String getSspRole() {
-        return sspRole;
+    public Set<NotificationRecipientTO> getNotificationRecipients() {
+        return notificationRecipients;
     }
 
-    public void setSspRole(String sspRole) {
-        this.sspRole = sspRole;
+    public void setNotificationRecipients(Set<NotificationRecipientTO> notificationRecipients) {
+        this.notificationRecipients = notificationRecipients;
+    }
+
+    public Set<NotificationReadTO> getNotificationReads() {
+        return notificationReads;
+    }
+
+    public void setNotificationReads(Set<NotificationReadTO> notificationReads) {
+        this.notificationReads = notificationReads;
     }
 }

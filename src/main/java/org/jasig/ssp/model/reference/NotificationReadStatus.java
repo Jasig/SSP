@@ -16,13 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jasig.ssp.factory;
+package org.jasig.ssp.model.reference;
 
-import org.jasig.ssp.model.Notification;
-import org.jasig.ssp.transferobject.NotificationTO;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.jasig.ssp.transferobject.jsonserializer.CodeAndProperty;
+import org.jasig.ssp.transferobject.jsonserializer.CodeAndPropertySerializer;
 
 
-public interface NotificationTOFactory extends
-		TOFactory<NotificationTO, Notification> {
+@JsonSerialize(using = CodeAndPropertySerializer.class)
+public enum NotificationReadStatus implements CodeAndProperty {
+
+	READ("Read"), UNREAD("Unread"), ALL("All");
+
+	private String title;
+
+	private NotificationReadStatus(final String title) {
+		this.title = title;
+	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
+
+	@Override
+	public String getCode() {
+		return name();
+	}
 }
-

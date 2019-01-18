@@ -18,11 +18,11 @@
  */
 package org.jasig.ssp.factory;
 
-import org.jasig.ssp.model.Notification;
-import org.jasig.ssp.transferobject.NotificationTO;
+import org.jasig.ssp.model.NotificationRecipient;
+import org.jasig.ssp.transferobject.NotificationRecipientTO;
 
 
-public interface NotificationTOFactory extends
-		TOFactory<NotificationTO, Notification> {
+public interface NotificationRecipientTOFactory extends
+		TOFactory<NotificationRecipientTO, NotificationRecipient> {
 }
 

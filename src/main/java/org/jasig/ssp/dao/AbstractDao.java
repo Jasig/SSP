@@ -25,6 +25,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.ResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -112,6 +113,11 @@ public abstract class AbstractDao<T> {
 
 		return query;
 	}
+	protected <Q> PagingWrapper<Q> processCriteriaWithSortingAndPaging(
+			@NotNull final Criteria query, final SortingAndPaging sAndP,
+			final boolean filterByStatus) {
+		return processCriteriaWithSortingAndPaging(query, sAndP, filterByStatus, null);
+	}
 
 	/**
 	 * Run a query and get the total rows and results with out having to define
@@ -119,14 +125,14 @@ public abstract class AbstractDao<T> {
 	 */
 	protected <Q> PagingWrapper<Q> processCriteriaWithSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP,
-			final boolean filterByStatus) {
+			final boolean filterByStatus, ResultTransformer resultTransformer) {
 
 		// get the query results total count
 		Long totalRows = null; // NOPMD by jon on 5/20/12 4:42 PM
 
 		if (sAndP != null) {
 			totalRows = sAndP.applySortingAndPagingToPagedQuery(query,
-					filterByStatus);
+					filterByStatus, resultTransformer);
 		}
 
 		// Query results
@@ -145,8 +151,12 @@ public abstract class AbstractDao<T> {
 	 * the Restrictions twice
 	 */
 	protected PagingWrapper<T> processCriteriaWithStatusSortingAndPaging(
+			@NotNull final Criteria query, final SortingAndPaging sAndP, ResultTransformer resultTransformer) {
+		return processCriteriaWithSortingAndPaging(query, sAndP, true, resultTransformer);
+	}
+	protected PagingWrapper<T> processCriteriaWithStatusSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP) {
-		return processCriteriaWithSortingAndPaging(query, sAndP, true);
+		return processCriteriaWithSortingAndPaging(query, sAndP, true, null);
 	}
 
 	protected int getBatchsize() {

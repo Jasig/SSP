@@ -30,6 +30,7 @@ import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.ResultTransformer;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.util.collections.Pair;
 import java.lang.reflect.Field;
@@ -439,7 +440,7 @@ public final class SortingAndPaging { // NOPMD
 	}
 
 	public Long applySortingAndPagingToPagedQuery(final Criteria query,
-			final boolean filterByStatus) {
+			final boolean filterByStatus, ResultTransformer resultTransformer) {
 
 		if (filterByStatus) {
 			addStatusFilterToCriteria(query);
@@ -459,6 +460,10 @@ public final class SortingAndPaging { // NOPMD
 		// Add Sorting and Paging
 		addPagingToCriteria(query);
 		addSortingToCriteria(query);
+
+		if (resultTransformer!=null) {
+			query.setResultTransformer(resultTransformer);
+		}
 
 		return totalRows;
 	}

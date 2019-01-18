@@ -18,12 +18,21 @@
  */
 package org.jasig.ssp.dao;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.Notification;
+import org.jasig.ssp.model.ObjectStatus;
+import org.jasig.ssp.model.reference.NotificationReadStatus;
 import org.jasig.ssp.service.reference.ConfigService;
+import org.jasig.ssp.util.sort.PagingWrapper;
+import org.jasig.ssp.util.sort.SortingAndPaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
 
 
 /**
@@ -39,7 +48,8 @@ public class NotificationDao extends AbstractAuditableCrudDao<Notification> impl
 
 
 	/**
-	 * Constructor that initializes the instance with the specific class types
+	 * Constructor that initializes the public class NotificationDao extends AbstractReferenceAuditableCrudDao<Notification>
+		implements AuditableCrudDao<Notification> { instance with the specific class types
 	 * for super class method use.
 	 */
 	public NotificationDao() {
@@ -47,4 +57,30 @@ public class NotificationDao extends AbstractAuditableCrudDao<Notification> impl
 	}
 
 	//TODO Need to remove NotificationRecipient Dao or this and combine into one?
+
+	public PagingWrapper<Notification> getNotifications(UUID personId, String sspRole,
+														NotificationReadStatus notificationReadStatus,
+														SortingAndPaging sAndP) {
+		final Criteria criteria = createCriteria(sAndP);
+		criteria.createAlias("notificationRecipients", "notificationRecipients");
+		if (personId!=null) {
+			criteria.add(Restrictions.eq("notificationRecipients.person.id", personId));
+		}
+		if (sspRole!=null) {
+			criteria.add(Restrictions.eq("notificationRecipients.sspRole", sspRole));
+		}
+		criteria.add(Restrictions.eq("notificationRecipients.objectStatus", ObjectStatus.ACTIVE));
+
+		if (notificationReadStatus==NotificationReadStatus.READ) {
+			criteria.createAlias("notificationReads", "notificationReads");
+			criteria.add(Restrictions.eq("notificationReads.objectStatus", ObjectStatus.INACTIVE));
+		} else if (notificationReadStatus==NotificationReadStatus.UNREAD){
+			criteria.createAlias("notificationReads", "notificationReads", JoinType.LEFT_OUTER_JOIN);
+			criteria.add(Restrictions.or(
+					Restrictions.eq("notificationReads.objectStatus", ObjectStatus.ACTIVE),
+					Restrictions.isNull("notificationReads.id")));
+		}
+
+		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP, Criteria.DISTINCT_ROOT_ENTITY);
+	}
 }

@@ -38,6 +38,8 @@ final public class Notification extends AbstractAuditable implements Auditable {
 
     private static final long serialVersionUID = -7643911408668209143L;
 
+    private static final String DATABASE_TABLE_NAME = "notification";
+
     @Column(nullable = false, length = 250)
     private String subject;
 
@@ -57,10 +59,14 @@ final public class Notification extends AbstractAuditable implements Auditable {
     private NotificationCategory category;
 
     @NotNull
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "notification", orphanRemoval=true)
+    @OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval=true)
     @Cascade({CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
     private Set<NotificationRecipient> notificationRecipients;
 
+    @Nullable
+    @OneToMany(mappedBy = DATABASE_TABLE_NAME, orphanRemoval=true)
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE, CascadeType.SAVE_UPDATE })
+    private Set<NotificationRead> notificationReads;
 
     /**
      * Empty constructor
@@ -163,11 +169,20 @@ final public class Notification extends AbstractAuditable implements Auditable {
     }
 
     @Nullable
-    public Set<NotificationRecipient> getRecipients() {
+    public Set<NotificationRecipient> getNotificationRecipients() {
         return notificationRecipients;
     }
 
-    public void setRecipients(@Nullable Set<NotificationRecipient> recipients) {
-        this.notificationRecipients = recipients;
+    public void setNotificationRecipients(@Nullable Set<NotificationRecipient> notificationRecipients) {
+        this.notificationRecipients = notificationRecipients;
+    }
+
+    @Nullable
+    public Set<NotificationRead> getNotificationReads() {
+        return notificationReads;
+    }
+
+    public void setNotificationReads(@Nullable Set<NotificationRead> notificationReads) {
+        this.notificationReads = notificationReads;
     }
 }
