@@ -25,7 +25,11 @@ import org.jasig.ssp.factory.PersonProgramStatusTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ProgramStatusChangeReasonService;
@@ -72,6 +76,9 @@ public class PersonProgramStatusTOFactoryImpl
 	@Autowired
 	private transient ProgramStatusChangeReasonService serviceProgramStatusChangeReasonService;
 
+	@Autowired
+	private transient NotificationService notificationService;
+
 	@Override
 	protected PersonProgramStatusDao getDao() {
 		return dao;
@@ -111,11 +118,13 @@ public class PersonProgramStatusTOFactoryImpl
 
 		if (results.getResults() > 1) {
 			final StringBuilder msg = new StringBuilder(
-					"Multiple active PersonProgramStatuss found for Person: ");
+					"Multiple active PersonProgramStatus found for Person: ");
 			msg.append(person.getId());
 			msg.append(", ProgramStatus: ");
 			msg.append(lite.getId());
 			LOGGER.error(msg.toString());
+			notificationService.create("Multiple active PersonProgramStatus", msg.toString(), null,
+					NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 			throw new ObjectNotFoundException(msg.toString(),
 					"PersonProgramStatus");
 		} else if (results.getResults() == 1) {

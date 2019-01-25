@@ -29,7 +29,11 @@ import org.hibernate.criterion.Restrictions;
 import org.jasig.ssp.model.AuditPerson;
 import org.jasig.ssp.model.RestrictedPersonAssocAuditable;
 import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.security.SspUser;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.util.hibernate.BatchProcessor;
@@ -54,6 +58,9 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 	@Autowired
 	private transient ConfidentialityLevelService confidentialityLevelService;
 
+	@Autowired
+	private transient NotificationService notificationService;
+
 	protected void addConfidentialityLevelsRestriction(
 			final SspUser requestor,
 			final Criteria criteria) {
@@ -67,6 +74,10 @@ public abstract class AbstractRestrictedPersonAssocAuditableCrudDao<T extends Re
 				levels.add(confidentialityLevelService.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
 			} catch (ObjectNotFoundException e) {
 				LOGGER.error(e.getLocalizedMessage());
+				notificationService.create("Missing Confidentiality Level",
+						"The Confidentiality Level for CONFIDENTIALITYLEVEL_EVERYONE, " +
+								ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE + " is missing.", null,
+						NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 			}
 		}
 		criteria.add(Restrictions.or(

@@ -23,6 +23,7 @@ import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.reference.NotificationCategory;
 import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.NotificationReadStatus;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
@@ -37,6 +38,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -74,7 +77,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PagingWrapper<Notification> getNotifications(final String sspRole,
+	public PagingWrapper<Notification> getNotifications(final SspRole sspRole,
                                                         final NotificationReadStatus notificationReadStatus,
 														final SortingAndPaging sortingAndPaging) {
 		return getNotifications(null, sspRole, notificationReadStatus, sortingAndPaging);
@@ -90,7 +93,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PagingWrapper<Notification> getNotifications(final Person person, final String sspRole,
+	public PagingWrapper<Notification> getNotifications(final Person person, final SspRole sspRole,
 														final NotificationReadStatus notificationReadStatus,
 														final SortingAndPaging sortingAndPaging) {
 		if (person == null && sspRole == null) {
@@ -109,7 +112,23 @@ public class NotificationServiceImpl implements NotificationService {
 	@Transactional
 	public Notification create(final String subject, final String body, final Date expirationDate,
 						final NotificationPriority notificationPriority, final NotificationCategory notificationCategory,
-						final List<Person> persons, final List<String> sspRoles) {
+						final Person person) {
+		List<Person> persons = Arrays.asList(person);
+		return create(subject, body, expirationDate, notificationPriority, notificationCategory, persons, null);
+	}
+	@Override
+	@Transactional
+	public Notification create(final String subject, final String body, final Date expirationDate,
+						final NotificationPriority notificationPriority, final NotificationCategory notificationCategory,
+						final SspRole sspRole) {
+		List<SspRole> sspRoles = Arrays.asList(sspRole);
+		return create(subject, body, expirationDate, notificationPriority, notificationCategory, null, sspRoles);
+	}
+	@Override
+	@Transactional
+	public Notification create(final String subject, final String body, Date expirationDate,
+						final NotificationPriority notificationPriority, final NotificationCategory notificationCategory,
+						final List<Person> persons, final List<SspRole> sspRoles) {
 		if (subject == null) {
 			throw new IllegalArgumentException("Subject missing.");
 		}
@@ -126,8 +145,17 @@ public class NotificationServiceImpl implements NotificationService {
 		if ((persons == null || persons.size()==0) && (sspRoles == null || sspRoles.size()==0))  {
 			throw new IllegalArgumentException("Person to notify and/or SSP Role must be set to create notification.");
 		}
+		if (expirationDate==null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			Date date = null;
+			try {
+				expirationDate = sdf.parse("2199/12/31");
+			} catch (ParseException e) {
+				expirationDate = new Date();
+			}
+		}
 
-		final Notification notification = new Notification(subject, body, expirationDate, 0,
+		Notification notification = new Notification(subject, body, expirationDate, 0,
 				notificationPriority, notificationCategory);
 
 		Set<NotificationRecipient> recipients = new HashSet<>();
@@ -138,14 +166,56 @@ public class NotificationServiceImpl implements NotificationService {
 			}
 		}
 		if (sspRoles != null && sspRoles.size() > 0) {
-			for (String sspRole : sspRoles) {
+			for (SspRole sspRole : sspRoles) {
 				NotificationRecipient recipient = new NotificationRecipient(sspRole, notification);
 				recipients.add(recipient);
 			}
 		}
 		notification.setNotificationRecipients(recipients);
+
+		notification = checkForDuplicate(notification);
+
 		return notificationDao.save(notification);
 	}
+
+	private Notification checkForDuplicate(Notification newNotification) {
+        Notification dupNotification = notificationDao.getNotification(newNotification);
+        if (dupNotification==null) {
+            return newNotification;
+        }
+
+        dupNotification.setDuplicateCount(dupNotification.getDuplicateCount() + 1);
+
+        if (newNotification.getNotificationRecipients()!=null) {
+            for (NotificationRecipient newRecipient : newNotification.getNotificationRecipients()) {
+                boolean found = false;
+                if (dupNotification.getNotificationRecipients()!=null) {
+                    for (NotificationRecipient dupRecipient : dupNotification.getNotificationRecipients()) {
+                        if ((newRecipient.getPerson() == null && dupRecipient.getPerson() == null
+                                && newRecipient.getSspRole() != null && dupRecipient.getSspRole() != null
+                                && newRecipient.getSspRole().equals(dupRecipient.getSspRole())) ||
+
+                                (newRecipient.getSspRole() == null && dupRecipient.getSspRole() == null
+                                        && newRecipient.getPerson() != null && dupRecipient.getPerson() != null
+                                        && newRecipient.getPerson().getId().equals(dupRecipient.getPerson().getId())) ||
+
+                                (newRecipient.getSspRole() != null && dupRecipient.getSspRole() != null
+                                        && newRecipient.getSspRole().equals(dupRecipient.getSspRole())
+                                        && newRecipient.getPerson() != null && dupRecipient.getPerson() != null
+                                        && newRecipient.getPerson().getId().equals(dupRecipient.getPerson().getId()))) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    newRecipient.setNotification(dupNotification);
+                    dupNotification.getNotificationRecipients().add(newRecipient);
+                }
+            }
+        }
+        return dupNotification;
+    }
 
 	@Override
     @Transactional

@@ -32,13 +32,8 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSuccessIndicatorAlert;
 import org.jasig.ssp.model.PersonSuccessIndicatorCount;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.SuccessIndicator;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SuccessIndicatorsTask;
+import org.jasig.ssp.model.reference.*;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.reference.CampusService;
 import org.jasig.ssp.service.reference.ConfigException;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -104,6 +99,9 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
 
     @Autowired
     private CampusService campusService;
+
+    @Autowired
+    private transient NotificationService notificationService;
 
     @Autowired
     private PersonSuccessIndicatorCountDao personSuccessIndicatorCountDao;
@@ -512,9 +510,10 @@ public class SuccessIndicatorsTaskImpl implements SuccessIndicatorsTask {
             earlyAlert.setPerson(person);
             Campus campus = getCampus(person);
             if (campus == null) {
-                throw new ConfigException("Error creating Low Success Indicator Early Alert. The Early Alert campus must" +
-                        " be set either as the person's home campus or in Admin/Administrative Tools/System Configuration/Configuration Options: "
-                        + EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME);
+                String message = String.format("Error creating Low Success Indicator Early Alert. The Early Alert campus must be set either as the person's home campus or in Admin/Administrative Tools/System Configuration/Configuration Options: %s" , EARLY_ALERT_CAMPUS_CODE_CONFIG_NAME);
+                notificationService.create("Error creating Low Success Indicator EA", message, null,
+                        NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
+                throw new ConfigException(message);
             }
             earlyAlert.setCampus(campus);
             earlyAlert.setComment("Low Success Indicator Alert: " + successIndicator.getName() + " - " + successIndicator.getDescription());

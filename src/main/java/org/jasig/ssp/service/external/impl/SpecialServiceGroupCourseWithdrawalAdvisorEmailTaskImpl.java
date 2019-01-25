@@ -31,11 +31,11 @@ import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.external.ExternalStudentTranscriptCourse;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
-import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonSearchService;
-import org.jasig.ssp.service.PersonService;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.ExternalStudentTranscriptCourseService;
 import org.jasig.ssp.service.external.SpecialServiceGroupCourseWithdrawalAdvisorEmailTask;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -97,6 +97,9 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
 
 	@Autowired
 	private transient PersonCourseStatusDao personCourseStatusDao;
+
+	@Autowired
+	private transient NotificationService notificationService;
 
 	@Autowired
 	private WithTransaction withTransaction;
@@ -537,8 +540,11 @@ public class SpecialServiceGroupCourseWithdrawalAdvisorEmailTaskImpl implements 
                 messageService.createMessage(emailAddress, null, subjectAndBody);
                 LOGGER.trace("Special Service Group Course Withdrawal Emails Passed to Message Service!");
             } catch (Exception e) {
-                LOGGER.error("Failed to send Special Service Group Course Withdrawal Advisor Email to coach {} at address {}",
-                        new Object[]{coach.getSchoolId(), emailAddress, e});
+            	String message = String.format("Failed to send Special Service Group Course Withdrawal Advisor Email" +
+						" to coach %s at address %s.", coach.getSchoolId(), emailAddress);
+                LOGGER.error(message);
+				notificationService.create("SSG Course Withrawal Email Error", message, null,
+						NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
             }
         }
 	}

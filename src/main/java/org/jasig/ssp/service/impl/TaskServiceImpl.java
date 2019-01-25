@@ -41,16 +41,9 @@ import org.jasig.ssp.model.Strength;
 import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.Task;
 import org.jasig.ssp.model.TaskMessageEnqueue;
-import org.jasig.ssp.model.reference.Challenge;
-import org.jasig.ssp.model.reference.ChallengeReferral;
-import org.jasig.ssp.model.reference.ConfidentialityLevel;
+import org.jasig.ssp.model.reference.*;
 import org.jasig.ssp.security.SspUser;
-import org.jasig.ssp.service.AbstractRestrictedPersonAssocAuditableService;
-import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.TaskMessageEnqueueService;
-import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.reference.ConfidentialityLevelService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.reference.MessageTemplateService;
@@ -106,6 +99,9 @@ public class TaskServiceImpl
 
 	@Autowired
 	private transient ConfigService configService;
+
+	@Autowired
+	private transient NotificationService notificationService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TaskServiceImpl.class);
@@ -277,8 +273,12 @@ public class TaskServiceImpl
 				task.setConfidentialityLevel(confidentialityLevelService
 						.get(ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE));
 			} catch (final ObjectNotFoundException e) {
-				LOGGER.error(
-						"Unable to find the default confidentiality level", e);
+				LOGGER.error("Unable to find the default confidentiality level", e);
+				notificationService.create("Missing Confidentiality Level",
+						"The Confidentiality Level for CONFIDENTIALITYLEVEL_EVERYONE, " +
+								ConfidentialityLevel.CONFIDENTIALITYLEVEL_EVERYONE + " is missing.", null,
+						NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
+
 			}
 		}
 

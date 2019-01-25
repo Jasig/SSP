@@ -27,10 +27,9 @@ import org.jasig.ssp.model.Message;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SubjectAndBody;
-import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.CallableExecutor;
 import org.jasig.ssp.util.collections.Pair;
@@ -90,6 +89,9 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	private transient ConfigService configService;
+
+	@Autowired
+	private transient NotificationService notificationService;
 
 	@Autowired
 	private transient WithTransaction withTransaction;
@@ -441,7 +443,7 @@ public class MessageServiceImpl implements MessageService {
 	/**
 	 * Validate e-mail address via {@link EmailValidator}.
 	 * 
-	 * @param email
+	 * @param emails
 	 *            E-mail address to validate
 	 * @return True if the e-mail is valid
 	 */
@@ -556,6 +558,11 @@ public class MessageServiceImpl implements MessageService {
 
 			message.setSentDate(new Date());
 			save(message);
+
+			if (message.getRecipient() != null) {
+                notificationService.create(message.getSubject(), message.getBody(), null, NotificationPriority.L,
+                        NotificationCategory.E, message.getRecipient());
+            }
 		} catch (final MessagingException e) {
 			LOGGER.error("ERROR : sendMessage() : {}", e);
 			handleSendMessageError(message);
@@ -566,7 +573,7 @@ public class MessageServiceImpl implements MessageService {
 		LOGGER.info("END : sendMessage()");
 		return true;
 	}
-	
+
 	private void handleSendMessageError(Message message) {
 		message.setRetryCount((message.getRetryCount() == null) ? 1 : message.getRetryCount() + 1);
 		

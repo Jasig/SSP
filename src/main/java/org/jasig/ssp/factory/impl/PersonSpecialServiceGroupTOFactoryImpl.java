@@ -23,7 +23,11 @@ import org.jasig.ssp.factory.PersonSpecialServiceGroupTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.SpecialServiceGroupService;
@@ -57,6 +61,9 @@ public class PersonSpecialServiceGroupTOFactoryImpl
 
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient NotificationService notificationService;
 
 	@Override
 	protected PersonSpecialServiceGroupDao getDao() {
@@ -92,10 +99,11 @@ public class PersonSpecialServiceGroupTOFactoryImpl
 						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		if (results.getResults() > 1) {
-			LOGGER.error("Multiple active PersonSpecialServiceGroups found for Person: "
-					+ person.getId().toString()
-					+ "SpecialServiceGroup:"
-					+ lite.getId().toString());
+			String message = String.format("Multiple active PersonSpecialServiceGroups found for Person: %s, " +
+					"SpecialServiceGroup: %s", person.getId(), lite.getId());
+			LOGGER.error(message);
+			notificationService.create("Multiple active PersonServiceReasons", message, null,
+					NotificationPriority.H,	NotificationCategory.S, SspRole.Administrator);
 			return results.getRows().iterator().next();
 		} else if (results.getResults() == 1) {
 			return results.getRows().iterator().next();

@@ -36,7 +36,11 @@ import org.jasig.ssp.model.PersonSearchRequest;
 import org.jasig.ssp.model.PersonSearchResult2;
 import org.jasig.ssp.model.external.PlanStatus;
 import org.jasig.ssp.model.external.Term;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.SecurityService;
 import org.jasig.ssp.service.external.TermService;
@@ -67,7 +71,9 @@ public class PersonSearchDao extends AbstractDao<Person> {
 	@Autowired
 	private transient SecurityService securityService;
 
-	
+	@Autowired
+	private NotificationService notificationService;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(PersonSearchDao.class);
 
 
@@ -190,6 +196,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			term.setName("CURRENT TERM NOT SET");
 			term.setStartDate(Calendar.getInstance().getTime());
 			term.setEndDate(Calendar.getInstance().getTime());
+			notificationService.create("Current term not set", "The current term is not set.", null,
+					NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 		}
 
 		return term;
@@ -205,6 +213,8 @@ public class PersonSearchDao extends AbstractDao<Person> {
 			term.setName("NEXT TERM NOT SET");
 			term.setStartDate(Calendar.getInstance().getTime());
 			term.setEndDate(Calendar.getInstance().getTime());
+			notificationService.create("Next term not set.", "The next term is not set.", null,
+					NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 		}
 
 		return term;

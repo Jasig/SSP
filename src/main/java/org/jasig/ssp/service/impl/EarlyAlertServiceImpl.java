@@ -35,21 +35,9 @@ import org.jasig.ssp.model.SubjectAndBody;
 import org.jasig.ssp.model.WatchStudent;
 import org.jasig.ssp.model.external.FacultyCourse;
 import org.jasig.ssp.model.external.Term;
-import org.jasig.ssp.model.reference.Campus;
-import org.jasig.ssp.model.reference.EarlyAlertReason;
-import org.jasig.ssp.model.reference.EarlyAlertSuggestion;
-import org.jasig.ssp.model.reference.EnrollmentStatus;
-import org.jasig.ssp.model.reference.ProgramStatus;
-import org.jasig.ssp.model.reference.StudentType;
+import org.jasig.ssp.model.reference.*;
 import org.jasig.ssp.security.SspUser;
-import org.jasig.ssp.service.AbstractPersonAssocAuditableService;
-import org.jasig.ssp.service.EarlyAlertRoutingService;
-import org.jasig.ssp.service.EarlyAlertService;
-import org.jasig.ssp.service.MessageService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonProgramStatusService;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.SecurityService;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.FacultyCourseService;
 import org.jasig.ssp.service.external.TermService;
 import org.jasig.ssp.service.reference.ConfigService;
@@ -144,6 +132,8 @@ public class EarlyAlertServiceImpl extends // NOPMD
 	private transient EarlyAlertResponseReminderRecipientsConfig earReminderRecipientConfig;
 	@Autowired
 	private transient EnrollmentStatusService enrollmentStatusService;
+	@Autowired
+	private transient NotificationService notificationService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EarlyAlertServiceImpl.class);
@@ -685,7 +675,13 @@ public class EarlyAlertServiceImpl extends // NOPMD
 				// if no earlyAlert.getCampus()  error thrown by design, should never not be a campus.
 				eaMTO.setCoach(new CoachPersonLiteMessageTemplateTO(personService.get(earlyAlert.getCampus().getEarlyAlertCoordinatorId())));
 			}catch(ObjectNotFoundException exp){
-				LOGGER.error("Early Alert with id: " + earlyAlert.getId() + " does not have valid campus coordinator, no coach assigned: " + earlyAlert.getCampus().getEarlyAlertCoordinatorId(), exp);
+				String message = String.format("Early Alert with id: %s does not have valid campus coordinator, " +
+						"no coach assigned: %s.",
+						earlyAlert.getId(), earlyAlert.getCampus().getEarlyAlertCoordinatorId());
+				LOGGER.error(message, exp);
+
+				notificationService.create("EA does not have a campus coordinator", message, null,
+						NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 			}
 		}
 		
@@ -857,21 +853,39 @@ public class EarlyAlertServiceImpl extends // NOPMD
 			if (includeEarlyAlertCoordinatorAsRecipient || (coach == null && includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach)) {
 				final Campus campus = earlyAlert.getCampus();
 				if (campus == null) {
-					LOGGER.error("Early Alert with id: {} does not have valid a campus, so skipping email to EAC.", earlyAlert.getId());
+					String message = String.format("Early Alert with id: %s does not have valid a campus, " +
+							"so skipping email to EAC.", earlyAlert.getId());
+					LOGGER.error(message);
+					notificationService.create("EA missing campus", message,
+							null, NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 				} else {
 					final UUID earlyAlertCoordinatorId = campus.getEarlyAlertCoordinatorId();
 					if ( earlyAlertCoordinatorId == null ) {
-						LOGGER.error("Early Alert with id: {} has campus with no early alert coordinator, so skipping email to EAC.", earlyAlert.getId());
+						String message = String.format("Early Alert with id: %s has campus with no early alert " +
+								"coordinator, so skipping email to EAC.", earlyAlert.getId());
+						LOGGER.error(message);
+						notificationService.create("EA missing campus", message,null,
+								NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 					} else {
 						try {
 							final Person earlyAlertCoordinator = personService.get(earlyAlertCoordinatorId);
 							if (earlyAlertCoordinator == null) { // guard against change in behavior where ObjectNotFoundException is not thrown (which we've seen)
-								LOGGER.error("Early Alert with id: {} has campus with an early alert coordinator with a bad ID ({}), so skipping email to EAC.", earlyAlert.getId(), earlyAlertCoordinatorId);
+								String message = String.format("Early Alert with id: %s has campus with an early alert " +
+										"coordinator with a bad ID (%s), so skipping email to EAC.",
+										earlyAlert.getId(),	earlyAlertCoordinatorId);
+								LOGGER.error(message);
+								notificationService.create("EA missing campus", message,null,
+										NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 							} else {
 								recipients.add(earlyAlertCoordinator);
 							}
 						} catch(ObjectNotFoundException exp){
-							LOGGER.error("Early Alert with id: {} has campus with an early alert coordinator with a bad ID ({}), so skipping email to coach because no coach can be resolved.", new Object[] { earlyAlert.getId(), earlyAlertCoordinatorId, exp });
+							String message = String.format("Early Alert with id: %s has campus with an early alert " +
+									"coordinator with a bad ID (%s), so skipping email to coach because no coach can " +
+									"be resolved.", new Object[] { earlyAlert.getId(), earlyAlertCoordinatorId, exp });
+							LOGGER.error(message);
+							notificationService.create("EA missing campus", message,null,
+									NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 						}
 					}
 				}

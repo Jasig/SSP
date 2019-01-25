@@ -24,8 +24,12 @@ import org.jasig.ssp.model.EarlyAlert;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonProgramStatus;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.ProgramStatus;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.service.EarlyAlertService;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonProgramStatusService;
 import org.jasig.ssp.service.reference.ProgramStatusService;
@@ -80,6 +84,9 @@ public class PersonEarlyAlertController extends
 	
 	@Autowired
 	private transient PersonProgramStatusService personProgramStatusService;
+
+	@Autowired
+	private transient NotificationService notificationService;
 
 	@Override
 	protected EarlyAlertTOFactory getFactory() {
@@ -159,18 +166,13 @@ public class PersonEarlyAlertController extends
 				&& Boolean.TRUE.equals(obj.getSendEmailToStudent())) {
 			try {
                 service.sendMessageToStudent(service.get(earlyAlertTO.getId()));
-			} catch (final SendFailedException exc) {
-				LOGGER.error(
-						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
-						exc);
-			} catch (final ObjectNotFoundException exc) {
-				LOGGER.error(
-						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
-						exc);
-			} catch (final ValidationException exc) {
-				LOGGER.error(
-						"Send message failed when creating a new early alert. Early Alert was created, but message was not succesfully sent to student.",
-						exc);
+			} catch (final SendFailedException | ObjectNotFoundException | ValidationException exc) {
+				String message = "Send message failed when creating a new early alert. Early Alert was created, but " +
+						"message was not succesfully sent to student.";
+				LOGGER.error(message, exc);
+				notificationService.create("EA Email Error", message, null,
+						NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
+
 			}
 		}
 

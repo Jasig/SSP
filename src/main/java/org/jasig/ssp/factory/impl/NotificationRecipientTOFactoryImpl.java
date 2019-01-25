@@ -24,6 +24,7 @@ import org.jasig.ssp.factory.NotificationRecipientTOFactory;
 import org.jasig.ssp.factory.PersonTOFactory;
 import org.jasig.ssp.model.NotificationRecipient;
 import org.jasig.ssp.model.Person;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.transferobject.NotificationRecipientTO;
 import org.jasig.ssp.transferobject.PersonLiteTO;
@@ -69,7 +70,7 @@ public class NotificationRecipientTOFactoryImpl extends AbstractAuditableTOFacto
 		}
 
 		if (tObject.getSspRole() != null) {
-			model.setSspRole(tObject.getSspRole());
+			model.setSspRole(SspRole.valueOf(tObject.getSspRole()));
 		}
 
 		return model;

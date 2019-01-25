@@ -30,13 +30,8 @@ import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.SuccessIndicatorEvaluationType;
 import org.jasig.ssp.model.external.*;
-import org.jasig.ssp.model.reference.Blurb;
-import org.jasig.ssp.model.reference.SuccessIndicator;
-import org.jasig.ssp.service.EvaluatedSuccessIndicatorService;
-import org.jasig.ssp.service.MapStatusService;
-import org.jasig.ssp.service.ObjectNotFoundException;
-import org.jasig.ssp.service.PersonService;
-import org.jasig.ssp.service.TaskService;
+import org.jasig.ssp.model.reference.*;
+import org.jasig.ssp.service.*;
 import org.jasig.ssp.service.external.*;
 import org.jasig.ssp.service.reference.BlurbService;
 import org.jasig.ssp.service.reference.SuccessIndicatorService;
@@ -161,13 +156,19 @@ public class EvaluatedSuccessIndicatorServiceImpl implements EvaluatedSuccessInd
     @Autowired
     private PlatformTransactionManager platformTransactionManager;
 
-    private ThreadLocal<Map<String,Object>> evaluationResourceCache = new ThreadLocal<>();
+    @Autowired
+    private NotificationService notificationService;
 
+    private ThreadLocal<Map<String,Object>> evaluationResourceCache = new ThreadLocal<>();
 
     @Override
     public List<EvaluatedSuccessIndicatorTO> getForPerson(final UUID personId, final ObjectStatus status, final
                                     List<SuccessIndicator> indicators) throws ObjectNotFoundException {
-
+        Term term = findCurrentTerm();
+        if (term==null) {
+            notificationService.create("Current term not set", "The current term is not set.", null,
+                    NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
+        }
         // Elaborate transaction management workaround b/c we can't avoid opening a transaction, but any exception
         // that crosses a transactional boundary in the code will mark the transaction as rollback only, which is
         // fine except that if we just tag this method with @Transactional(readOnly=true), the transaction manager

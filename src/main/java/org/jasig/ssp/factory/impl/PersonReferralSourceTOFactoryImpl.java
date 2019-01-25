@@ -23,7 +23,11 @@ import org.jasig.ssp.factory.PersonReferralSourceTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonReferralSource;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.ReferralSource;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ReferralSourceService;
@@ -57,6 +61,9 @@ public class PersonReferralSourceTOFactoryImpl
 
 	@Autowired
 	private transient PersonService personService;
+
+	@Autowired
+	private transient NotificationService notificationService;
 
 	@Override
 	protected PersonReferralSourceDao getDao() {
@@ -92,8 +99,11 @@ public class PersonReferralSourceTOFactoryImpl
 						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		if (results.getResults() > 1) {
-			LOGGER.error("Multiple active PersonReferralSources found for Person: "
-					+ person.getId() + ", ReferralSource:" + lite.getId());
+			String message = String.format("Multiple active PersonReferralSources found for Person: %s," +
+					" ReferralSource: %s", person.getId(), lite.getId());
+			LOGGER.error(message);
+			notificationService.create("Multiple active PersonReferralSources", message, null,
+					NotificationPriority.H,	NotificationCategory.S, SspRole.Administrator);
 			return results.getRows().iterator().next();
 		} else if (results.getResults() == 1) {
 			return results.getRows().iterator().next();

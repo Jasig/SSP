@@ -28,6 +28,9 @@ import org.jasig.ssp.factory.reference.PlanTOFactory;
 import org.jasig.ssp.model.*;
 import org.jasig.ssp.model.external.*;
 import org.jasig.ssp.model.reference.EnrollmentStatus;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.permissions.Permission;
 import org.jasig.ssp.service.*;
@@ -157,6 +160,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
     @Autowired
     private transient ExternalStudentTranscriptNonCourseEntityService externalStudentTranscriptNonCourseEntityService;
 
+	@Autowired
+	private transient NotificationService notificationService;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ExternalStudentRecordsController.class);
@@ -258,6 +263,8 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 		{
 			currentTerm = new Term();
 			LOGGER.error("CURRENT TERM NOT SET, org.jasig.ssp.web.api.external.ExternalStudentRecordsController.loadCurrentCourses(UUID) is being called but will not function properly");
+			notificationService.create("Current term not set", "The current term is not set.", null,
+					NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
 		}
 		List<ExternalStudentTranscriptCourseTO> courses = externalStudentTranscriptCourseFactory.asTOList(
 				externalStudentTranscriptCourseService.getTranscriptsBySchoolIdAndTermCode(schoolId, currentTerm.getCode()));

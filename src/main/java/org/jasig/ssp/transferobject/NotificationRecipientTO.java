@@ -51,7 +51,7 @@ public class NotificationRecipientTO extends AbstractAuditableTO<NotificationRec
             }
 
             if (notificationRecipient.getSspRole() != null) {
-                this.setSspRole(notificationRecipient.getSspRole());
+                this.setSspRole(notificationRecipient.getSspRole().getTitle());
             }
         }
     }

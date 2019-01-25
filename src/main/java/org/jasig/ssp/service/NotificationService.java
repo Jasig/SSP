@@ -23,6 +23,7 @@ import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.reference.NotificationCategory;
 import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.NotificationReadStatus;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
 
@@ -63,7 +64,7 @@ public interface NotificationService {
      * @param notificationReadStatus
      * @return
      */
-    PagingWrapper<Notification> getNotifications(final String sspRole,
+    PagingWrapper<Notification> getNotifications(final SspRole sspRole,
                                                  final NotificationReadStatus notificationReadStatus,
                                                  final SortingAndPaging sortingAndPaging);
 
@@ -75,7 +76,7 @@ public interface NotificationService {
      * @param notificationReadStatus
      * @return
      */
-    PagingWrapper<Notification> getNotifications(final Person person, final String sspRole,
+    PagingWrapper<Notification> getNotifications(final Person person, final SspRole sspRole,
                                                  final NotificationReadStatus notificationReadStatus,
                                                  final SortingAndPaging sortingAndPaging);
 
@@ -93,7 +94,37 @@ public interface NotificationService {
     Notification create(final String subject, final String body, final Date expirationDate,
                         final NotificationPriority notificationPriority,
                         final NotificationCategory notificationCategory,
-                        final List<Person> persons, final List<String> sspRoles);
+                        final List<Person> persons, final List<SspRole> sspRoles);
+
+    /**
+     * Creates new notification
+     * @param subject
+     * @param body
+     * @param expirationDate
+     * @param notificationPriority
+     * @param notificationCategory
+     * @param person
+     * @return
+     */
+    Notification create(final String subject, final String body, final Date expirationDate,
+                        final NotificationPriority notificationPriority,
+                        final NotificationCategory notificationCategory,
+                        final Person person);
+
+    /**
+     * Creates new notification
+     * @param subject
+     * @param body
+     * @param expirationDate
+     * @param notificationPriority
+     * @param notificationCategory
+     * @param sspRole
+     * @return
+     */
+    Notification create(final String subject, final String body, final Date expirationDate,
+                        final NotificationPriority notificationPriority,
+                        final NotificationCategory notificationCategory,
+                        final SspRole sspRole);
 
     /**
      * Acknowledge notification

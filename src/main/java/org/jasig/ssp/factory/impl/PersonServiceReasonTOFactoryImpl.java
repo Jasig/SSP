@@ -23,7 +23,11 @@ import org.jasig.ssp.factory.PersonServiceReasonTOFactory;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonServiceReason;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.ServiceReason;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonService;
 import org.jasig.ssp.service.reference.ServiceReasonService;
@@ -61,6 +65,9 @@ public class PersonServiceReasonTOFactoryImpl
 	@Autowired
 	private transient PersonService personService;
 
+	@Autowired
+	private transient NotificationService notificationService;
+
 	@Override
 	protected PersonServiceReasonDao getDao() {
 		return dao;
@@ -92,10 +99,11 @@ public class PersonServiceReasonTOFactoryImpl
 						lite.getId(), new SortingAndPaging(ObjectStatus.ACTIVE));
 
 		if (results.getResults() > 1) {
-			LOGGER.error("Multiple active PersonServiceReasons found for Person: "
-					+ person.getId().toString()
-					+ ", ServiceReason: "
-					+ lite.getId().toString());
+			String message = String.format("Multiple active PersonServiceReasons found for Person: %s, " +
+					"ServiceReason: %s", person.getId(), lite.getId());
+			LOGGER.error(message);
+			notificationService.create("Multiple active PersonServiceReasons", message, null,
+					NotificationPriority.H,	NotificationCategory.S, SspRole.Administrator);
 			return results.getRows().iterator().next();
 		} else if (results.getResults() == 1) {
 			return results.getRows().iterator().next();

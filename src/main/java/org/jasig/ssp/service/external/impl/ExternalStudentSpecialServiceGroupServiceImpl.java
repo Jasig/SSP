@@ -28,7 +28,11 @@ import org.jasig.ssp.dao.external.ExternalStudentSpecialServiceGroupDao;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.model.PersonSpecialServiceGroup;
 import org.jasig.ssp.model.external.ExternalStudentSpecialServiceGroup;
+import org.jasig.ssp.model.reference.NotificationCategory;
+import org.jasig.ssp.model.reference.NotificationPriority;
 import org.jasig.ssp.model.reference.SpecialServiceGroup;
+import org.jasig.ssp.model.reference.SspRole;
+import org.jasig.ssp.service.NotificationService;
 import org.jasig.ssp.service.ObjectNotFoundException;
 import org.jasig.ssp.service.PersonSpecialServiceGroupService;
 import org.jasig.ssp.service.external.ExternalStudentSpecialServiceGroupService;
@@ -66,6 +70,9 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
 
 	@Autowired
 	private transient ExternalStudentSpecialServiceGroupDao dao;
+
+    @Autowired
+    private transient NotificationService notificationService;
 
 	@Override
 	protected ExternalDataDao<ExternalStudentSpecialServiceGroup> getDao() {
@@ -217,8 +224,11 @@ public class ExternalStudentSpecialServiceGroupServiceImpl extends
             try {
                 personSpecialServiceGroupService.save(newSSG);
             } catch (ObjectNotFoundException | ValidationException onfve) {
-                LOGGER.error("SSG_SYNC: Error saving Special Service Group for " +
-                        person.getSchoolId() + " of " + ssg.getCode() + "! ", onfve);
+                String message = String.format("SSG_SYNC: Error saving Special Service Group for %s of %s!",
+                        person.getSchoolId(), ssg.getCode());
+                LOGGER.error(message, onfve);
+                notificationService.create("Error saving Special Service Group", message,null,
+                        NotificationPriority.H, NotificationCategory.S, SspRole.Administrator);
             }
             return newSSG;
         }

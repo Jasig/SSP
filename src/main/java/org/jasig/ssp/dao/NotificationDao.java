@@ -24,6 +24,7 @@ import org.hibernate.sql.JoinType;
 import org.jasig.ssp.model.Notification;
 import org.jasig.ssp.model.ObjectStatus;
 import org.jasig.ssp.model.reference.NotificationReadStatus;
+import org.jasig.ssp.model.reference.SspRole;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.jasig.ssp.util.sort.SortingAndPaging;
@@ -58,7 +59,7 @@ public class NotificationDao extends AbstractAuditableCrudDao<Notification> impl
 
 	//TODO Need to remove NotificationRecipient Dao or this and combine into one?
 
-	public PagingWrapper<Notification> getNotifications(UUID personId, String sspRole,
+	public PagingWrapper<Notification> getNotifications(UUID personId, SspRole sspRole,
 														NotificationReadStatus notificationReadStatus,
 														SortingAndPaging sAndP) {
 		final Criteria criteria = createCriteria(sAndP);
@@ -82,5 +83,15 @@ public class NotificationDao extends AbstractAuditableCrudDao<Notification> impl
 		}
 
 		return processCriteriaWithStatusSortingAndPaging(criteria, sAndP, Criteria.DISTINCT_ROOT_ENTITY);
+	}
+
+	public Notification getNotification(Notification notification) {
+		final Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("subject", notification.getSubject()));
+		criteria.add(Restrictions.eq("body", notification.getBody()));
+		criteria.add(Restrictions.eq("category", notification.getCategory()));
+		criteria.add(Restrictions.eq("priority", notification.getPriority()));
+		criteria.add(Restrictions.eq("expirationDate", notification.getExpirationDate()));
+		return (Notification) criteria.uniqueResult();
 	}
 }

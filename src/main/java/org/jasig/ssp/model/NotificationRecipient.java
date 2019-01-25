@@ -20,14 +20,10 @@ package org.jasig.ssp.model;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.jasig.ssp.model.reference.SspRole;
+
 import javax.annotation.Nullable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
@@ -55,8 +51,9 @@ public class NotificationRecipient
 	@NotFound(action = NotFoundAction.IGNORE)
 	private Notification notification;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = true, length = 80)
-	private String sspRole;
+	private SspRole sspRole;
 
 	public NotificationRecipient() {
 		super();
@@ -68,7 +65,7 @@ public class NotificationRecipient
 		this.setNotification(notification);
 	}
 
-	public NotificationRecipient(@NotNull final String sspRole, @NotNull final Notification notification) {
+	public NotificationRecipient(@NotNull final SspRole sspRole, @NotNull final Notification notification) {
 		super();
 		this.setSspRole(sspRole);
 		this.setNotification(notification);
@@ -92,11 +89,11 @@ public class NotificationRecipient
 		this.notification = notification;
 	}
 
-	public String getSspRole() {
+	public SspRole getSspRole() {
 		return sspRole;
 	}
 
-	public void setSspRole(String sspRole) {
+	public void setSspRole(SspRole sspRole) {
 		this.sspRole = sspRole;
 	}
 
@@ -116,7 +113,7 @@ public class NotificationRecipient
 		// PersonChallenge
 		result *= hashField("notification", getNotification());
 		result *= hashField("person", getPerson());
-		result *= hashField("ssprole", getSspRole());
+		result *= hashField("ssprole", getSspRole().getCode());
 
 		return result;
 	}
