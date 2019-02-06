@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
@@ -32,10 +31,14 @@ import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
 import javax.portlet.filter.RenderFilter;
 
-import org.jasig.portal.api.permissions.Assignment;
-import org.jasig.portal.api.permissions.PermissionsService;
+//import org.jasig.portal.api.permissions.Assignment;         // TODO: remove!
+//import org.jasig.portal.api.permissions.PermissionsService; // TODO: remove!
+import org.jasig.ssp.service.uportal.Permission;
+import org.jasig.ssp.service.uportal.UPortalApiService;
+import org.jasig.ssp.util.StaticApplicationContextProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -80,22 +83,38 @@ public final class UPortalSecurityFilter implements RenderFilter {
 	private void populateAuthorites(final RenderRequest req, final String principal) {
 
 		// But the user's access has not yet been established...
-		final Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		final Set<GrantedAuthority> authorities = new HashSet<>();
 
-		PortletContext ctx = req.getPortletSession(true).getPortletContext();
-		PermissionsService permissionsService = (PermissionsService) 
-				ctx.getAttribute(PermissionsService.PORTLET_CONTEXT_ATTRIBUTE_NAME);
+		final ApplicationContext applicationContext = StaticApplicationContextProvider.getApplicationContext();
+		final UPortalApiService apiService = applicationContext.getBean(UPortalApiService.class);
 
-		Set<Assignment> assignments = permissionsService.getAssignmentsForPerson(principal, true);
+		final Set<Permission> permissions = apiService.getPermissionsForPrincipal(principal);
+		permissions.forEach(permission -> {
+				if (permission.getOwner().equals(SSP_OWNER)) {
+					authorities.add(new GrantedAuthorityImpl("ROLE_" + permission.getActivity()));
+				}
+		});
 
-		// Find SSP-related permissions in the assignments collection
-		for (Assignment a : assignments) {
-			if (a.getOwner().getKey().equals(SSP_OWNER)) {
-				// This one pertains to us...
-				String activity = a.getActivity().getKey();
-				authorities.add(new GrantedAuthorityImpl("ROLE_" + activity));
-			}
-		}
+
+
+
+
+
+
+//		PortletContext ctx = req.getPortletSession(true).getPortletContext();
+//		PermissionsService permissionsService = (PermissionsService)
+//				ctx.getAttribute(PermissionsService.PORTLET_CONTEXT_ATTRIBUTE_NAME);
+//
+//		Set<Assignment> assignments = permissionsService.getAssignmentsForPerson(principal, true);
+
+//		// Find SSP-related permissions in the assignments collection
+//		for (Assignment a : assignments) {
+//			if (a.getOwner().getKey().equals(SSP_OWNER)) {
+//				// This one pertains to us...
+//				String activity = a.getActivity().getKey();
+//				authorities.add(new GrantedAuthorityImpl("ROLE_" + activity));
+//			}
+//		}
 
 		LOGGER.debug("Setting up GrantedAutorities for user '{}' -- {}",
 				principal, authorities.toString());
@@ -114,7 +133,7 @@ public final class UPortalSecurityFilter implements RenderFilter {
 	}
 
 	@Override
-	public void init(final FilterConfig config) throws PortletException {
+	public void init(final FilterConfig config) {
 		// nothing to do
 	}
 
