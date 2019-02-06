@@ -66,21 +66,39 @@ public class ExternalConfigLoader implements
 	private void initConfigDirectory(final ServletContextEvent sce) {
 		final StringBuffer configLocation = new StringBuffer();
 
-		final String environmentDefinedConf = System.getenv("SSP_CONFIGDIR");
+		/*
+		 * In uPortal 5, the Tomcat process is always initiated with a JVM argument pointing to
+		 * the configDir.
+		 */
+		final String jvmDefinedConf = System.getProperty("portal.home");
+		if (StringUtils.isNotBlank(jvmDefinedConf)) {
+			configLocation.append(jvmDefinedConf);
+		}
 
-		if (StringUtils.isBlank(environmentDefinedConf)) {
+		/*
+		 * Fallback #1:  Pre-uP5 configDir based on an environment variable.  (remove?)
+		 */
+		if (configLocation.length() == 0) {
+			final String environmentDefinedConf = System.getenv("SSP_CONFIGDIR");
+			if (StringUtils.isNotBlank(environmentDefinedConf)) {
+				configLocation.append(environmentDefinedConf);
+			}
+		}
 
+		/*
+		 * Fallback #2:  configDir based on a context init param.
+		 */
+		if (configLocation.length() == 0) {
 			final String contextDefinedConf = sce.getServletContext()
 					.getInitParameter("SSP_CONFIGDIR");
-
-			if (StringUtils.isBlank(contextDefinedConf)) {
-				LOGGER.error("Unable to set config directory.");
-			} else {
+			if (StringUtils.isNotBlank(contextDefinedConf)) {
 				configLocation.append(contextDefinedConf);
 			}
+		}
 
-		} else {
-			configLocation.append(environmentDefinedConf);
+		if (configLocation.length() == 0) {
+			// Nothing worked
+			LOGGER.error("Unable to set config directory.");
 		}
 
 		configDir = configLocation.toString();
