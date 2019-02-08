@@ -113,7 +113,7 @@ public class NotificationRecipient
 		// PersonChallenge
 		result *= hashField("notification", getNotification());
 		result *= hashField("person", getPerson());
-		result *= hashField("ssprole", getSspRole().getCode());
+		result *= hashField("ssprole", getSspRole() == null ? null : getSspRole().getCode());
 
 		return result;
 	}

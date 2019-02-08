@@ -3330,6 +3330,41 @@
                     "path": "/app/controller/admin/config/"
                 },
                 {
+                    "clsName": "Ssp.controller.admin.config.NotificationAdminViewController",
+                    "name": "NotificationAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.controller.admin.config.NotificationDisplayAdminViewController",
+                    "name": "NotificationDisplayAdminViewController.js",
+                    "path": "/app/controller/admin/config/"
+                },
+                {
+                    "clsName": "Ssp.model.Notification",
+                    "name": "Notification.js",
+                    "path": "/app/model/"
+                },
+                {
+                    "clsName": "Ssp.store.Notifications",
+                    "name": "Notifications.js",
+                    "path": "/app/store/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.NotificationDetails",
+                    "name": "NotificationDetails.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.NotificationAdmin",
+                    "name": "NotificationAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
+                    "clsName": "Ssp.view.admin.forms.config.NotificationDisplayAdmin",
+                    "name": "NotificationDisplayAdmin.js",
+                    "path": "/app/view/admin/forms/config/"
+                },
+                {
                     "clsName": "Ssp.controller.admin.config.EnrollmentStatusAdminViewController",
                     "name": "EnrollmentStatusAdminViewController.js",
                     "path": "/app/controller/admin/config/"

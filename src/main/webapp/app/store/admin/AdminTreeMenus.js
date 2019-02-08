@@ -836,6 +836,12 @@ Ext.define('Ssp.store.admin.AdminTreeMenus', {
                     form: 'messagequeueadmin',
                     leaf: true
                 }, {
+                    text: 'Notifications',
+                    title: 'Notifications',
+                    store: 'notifications',
+                    form: 'notificationadmin',
+                    leaf: true
+                }, {
                     text: 'Text',
                     title: 'Text',
                     store: 'text',

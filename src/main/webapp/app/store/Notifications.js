@@ -16,26 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.admin.forms.config.BackgroundJobAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.backgroundjobadmin',
-	title: 'Background Job Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-   controller: 'Ssp.controller.admin.config.BackgroundJobAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'vbox',
-        align: 'stretch'
+Ext.define('Ssp.store.Notifications', {
+    extend: 'Ext.data.Store',
+    model: 'Ssp.model.Notification',
+    mixins: [ 'Deft.mixin.Injectable' ],
+    inject: {
+        apiProperties: 'apiProperties'
     },
-    initComponent: function(){
-		Ext.apply(this,{
-		items: [{
-			xtype: 'backgroundjobdisplayadmin',
-			anchor: '100%',
-			flex: 1
-	  	}]});
-    	return this.callParent(arguments);
+	remoteSort: true,
+	constructor: function(){
+		var me=this;
+		Ext.apply(me, {
+            proxy: me.apiProperties.getProxy(me.apiProperties.getItemUrl('notification')),
+            autoLoad: false,
+            autoSync: false,
+            pageSize: me.apiProperties.getPagingSize(),
+            params : {
+                page : 0,
+                start : 0,
+                limit : me.apiProperties.getPagingSize()
+            },
+            extraParams: this.extraParams
+        });
+		return me.callParent(arguments);
     }
 });

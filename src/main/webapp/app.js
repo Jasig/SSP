@@ -255,6 +255,9 @@ Ext.require([
     'Ssp.view.admin.forms.config.BackgroundJobAdmin',
     'Ssp.view.admin.forms.config.BackgroundJobDisplayAdmin',
     'Ssp.view.admin.forms.config.BackgroundJobDetails',
+    'Ssp.view.admin.forms.config.NotificationAdmin',
+    'Ssp.view.admin.forms.config.NotificationDisplayAdmin',
+    'Ssp.view.admin.forms.config.NotificationDetails',
 
     //OAUTH2 ADMIN VIEWS
     'Ssp.view.admin.forms.apikey.oauth2.OAuth2ClientAdmin',
@@ -598,6 +601,7 @@ var apiUrls = [
   {name: 'messageTemplate', url: 'reference/messageTemplate'},
   {name: 'messageTemplatePreview', url: 'messageTemplatePreview'},
   {name: 'messageQueue', url: 'message'},
+  {name: 'notification', url: 'notification/all'},
   {name: 'studentStatus', url: 'reference/studentStatus'},
   {name: 'veteranStatus', url: 'reference/veteranStatus'},
   {name: 'careerstatus', url: 'reference/careerstatus'},
@@ -1166,6 +1170,12 @@ Ext.onReady(function(){
                     currentMessage:{
                         fn: function(){
                             return new Ssp.model.Message({id:""});
+                        },
+                        singleton: true
+                    },
+                    currentNotification:{
+                        fn: function(){
+                            return new Ssp.model.Notification({id:""});
                         },
                         singleton: true
                     },
@@ -1928,6 +1938,7 @@ Ext.onReady(function(){
 					},
 					messageTemplatesStore: 'Ssp.store.reference.MessageTemplates',
                     messageQueueStore: 'Ssp.store.Messages',
+                    notificationStore: 'Ssp.store.Notifications',
                     backgroundJobStore: 'Ssp.store.BackgroundJobs',
                     personalityTypesStore: 'Ssp.store.reference.PersonalityTypes',
 			    	placementStore: 'Ssp.store.Placement',

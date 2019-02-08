@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.admin.forms.config.BackgroundJobAdmin', {
+Ext.define('Ssp.view.admin.forms.config.NotificationAdmin', {
 	extend: 'Ext.container.Container',
-	alias : 'widget.backgroundjobadmin',
-	title: 'Background Job Admin',
+	alias : 'widget.notificationadmin',
+	title: 'Notification Admin',
     mixins: [ 'Deft.mixin.Injectable',
               'Deft.mixin.Controllable'],
-   controller: 'Ssp.controller.admin.config.BackgroundJobAdminViewController',
+   controller: 'Ssp.controller.admin.config.NotificationAdminViewController',
 	height: '100%',
 	width: '100%',
 	layout: {
@@ -32,7 +32,7 @@ Ext.define('Ssp.view.admin.forms.config.BackgroundJobAdmin', {
     initComponent: function(){
 		Ext.apply(this,{
 		items: [{
-			xtype: 'backgroundjobdisplayadmin',
+			xtype: 'notificationdisplayadmin',
 			anchor: '100%',
 			flex: 1
 	  	}]});

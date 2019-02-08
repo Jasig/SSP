@@ -72,7 +72,7 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	@Transactional(readOnly = true)
 	public PagingWrapper<Notification> getNotifications(final SortingAndPaging sortingAndPaging) {
-		return notificationDao.getAll(ObjectStatus.ALL);
+		return notificationDao.getAll(sortingAndPaging);
 	}
 
 	@Override

@@ -16,26 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-Ext.define('Ssp.view.admin.forms.config.BackgroundJobAdmin', {
-	extend: 'Ext.container.Container',
-	alias : 'widget.backgroundjobadmin',
-	title: 'Background Job Admin',
-    mixins: [ 'Deft.mixin.Injectable',
-              'Deft.mixin.Controllable'],
-   controller: 'Ssp.controller.admin.config.BackgroundJobAdminViewController',
-	height: '100%',
-	width: '100%',
-	layout: {
-        type: 'vbox',
-        align: 'stretch'
-    },
-    initComponent: function(){
-		Ext.apply(this,{
-		items: [{
-			xtype: 'backgroundjobdisplayadmin',
-			anchor: '100%',
-			flex: 1
-	  	}]});
-    	return this.callParent(arguments);
-    }
+Ext.define('Ssp.model.Notification', {
+    extend: 'Ssp.model.AbstractBase',
+    fields: [{name:'subject',type:'string'},
+             {name:'body',type:'string'},
+             {name:'expirationDate',type: 'date', dateFormat: 'time'},
+             {name:'duplicateCount',type:'int'},
+             {name:'priority',type:'string'},
+             {name:'category',type:'string'},
+			 {name:'notificationReads',type:'auto',defaultValue:[]},
+			 {name:'notificationRecipients',type:'auto',defaultValue:[]}
+			]
 });
