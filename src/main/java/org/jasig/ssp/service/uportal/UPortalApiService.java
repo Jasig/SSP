@@ -1,6 +1,7 @@
 package org.jasig.ssp.service.uportal;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +12,9 @@ import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UPortalApiService {
@@ -34,9 +34,17 @@ public class UPortalApiService {
     private String accessTokenUri;
 
     // @Value("${uportal_api_permissions_uri_format:/uPortal/api/assignments/principal/%s.json}")
-    @Value("${uportal_api_permissions_uri_format:/uPortal/api/v5-5/assignments/users/%s?includeInherited=true}")
+    @Value("${uportal_api_permissions_uri_format:/uPortal/api/v5-5/permissions/assignments/users/%s?includeInherited=true}")
     private String assignmentsUriFormat;
 
+    @Value("${uportal_api_people_uri_format:/uPortal/api/v5-0/people/%s}")
+    private String peopleUriFormat;
+
+    @Value("${uportal_api_search_uri_format:/uPortal/api/people.json?searchTerms[]=}")
+    private String searchUriFormat;
+
+    private static final String PARAM_SEARCH_TERMS = "searchTerms";
+    private static final String REST_URI_SEARCH_PREFIX = "/uPortal/api/people.json?searchTerms%5B%5D={" + PARAM_SEARCH_TERMS + "}";
     private OAuth2RestTemplate oAuth2RestTemplate;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -98,11 +106,73 @@ public class UPortalApiService {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Unable to optain permissions for principal: " + principal, e);
+            throw new RuntimeException("Unable to obtain permissions for principal: " + principal, e);
         }
 
         return rslt;
 
+    }
+
+    public Map<String, List<String>> getAttributesForPrincipal(String principal) {
+        logger.debug("Obtaining attributes from uPortal for principal='{}'", principal);
+
+        try {
+            final String apiUrl =
+                    uPortalServer + String.format(peopleUriFormat, URLEncoder.encode(principal, "UTF-8"));
+            final JsonNode node = oAuth2RestTemplate.getForObject(apiUrl, JsonNode.class);
+
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, List<String>> result = mapper.convertValue(node, Map.class);
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to obtain attributes for principal: " + principal, e);
+        }
+    }
+
+    public List<Map<String, Object>> searchForUsers(final Map<String, String> query) {
+
+        logger.debug("Searching for users with query terms '{}'", query);
+
+        // Assemble searchTerms[] in expected way
+        final List<String> searchTerms = new ArrayList<>();
+        final Map<String, String[]> params = new HashMap<>();
+        for (final Map.Entry<String, String> y : query.entrySet()) {
+            searchTerms.add(y.getKey());
+            params.put(y.getKey(), new String[] { y.getValue() });
+        }
+
+        try {
+            String uri = searchUriFormat + URLEncoder.encode(String.join(",", searchTerms), "UTF-8");
+            // Build the URL
+            final StringBuilder bld = new StringBuilder(uPortalServer + uri);
+            for (final String key : params.keySet()) {
+                bld.append("&").append(key).append("={").append(key).append("}");
+            }
+            final String url = bld.toString();
+
+            logger.debug("Invoking REST enpoint with URL '{}'", url);
+
+            JsonNode node = oAuth2RestTemplate.getForObject(url, JsonNode.class, params);
+
+            final JsonNode people = node.get("people");
+
+            final ObjectMapper mapper = new ObjectMapper();
+            List<Map<String, Object>> rslt = null;
+            try {
+                rslt = mapper.convertValue(people, List.class);
+            } catch (final Exception e) {
+                final String msg = "Failed to search for users with the specified query:  "
+                        + query;
+                throw new RuntimeException(msg, e);
+            }
+
+            logger.debug("Retrieved the following people for query {}:  {}",
+                    query, rslt);
+
+            return rslt;
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException("Unable to obtain users for query: " + query, ex);
+        }
     }
 
 }

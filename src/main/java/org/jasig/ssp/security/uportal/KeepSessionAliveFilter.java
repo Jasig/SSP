@@ -102,7 +102,7 @@ public class KeepSessionAliveFilter implements Filter {
                 request.removeAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE);
                 try {
                     final Map<String, String[]> params = new HashMap<String, String[]>();
-                    final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/ssp-platform/api/session.json", params);
+                    final RestResponse rr = rest.invoke(wrap, httpServletResponse, "/uPortal/api/session.json", params);
                     session.setAttribute(SESSION_KEEP_ALIVE_ATTRIBUTE_KEY,System.currentTimeMillis());
                 } finally {
                     request.setAttribute(WebAsyncUtils.WEB_ASYNC_MANAGER_ATTRIBUTE, origWebAsyncManager);

@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class PortalLoginServiceImpl implements PortalLoginService {
 
-    private static final String PORTAL_NAME = "/ssp-platform/";
+    private static final String PORTAL_NAME = "/uPortal/";
     private static final String LOGIN_POST_URI = PORTAL_NAME + "Login";
     private static final String LOGOUT_GET_URI = PORTAL_NAME +"Logout";
     private static final String PORTLET_COOKIE = "org.jasig.portal.PORTLET_COOKIE";

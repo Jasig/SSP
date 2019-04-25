@@ -23,8 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.jasig.portal.api.permissions.Assignment;
-import org.jasig.portal.api.permissions.PermissionsService;
 import org.jasig.ssp.model.Person;
 import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.security.uportal.UPortalSecurityFilter;
@@ -37,7 +35,10 @@ import org.jasig.ssp.service.jobqueue.JobService;
 import org.jasig.ssp.service.reference.ConfigService;
 import org.jasig.ssp.service.security.oauth.OAuth1NonceServiceMaintenance;
 import org.jasig.ssp.service.tool.CaseloadService;
+import org.jasig.ssp.service.uportal.Permission;
+import org.jasig.ssp.service.uportal.UPortalApiService;
 import org.jasig.ssp.util.CallableExecutor;
+import org.jasig.ssp.util.StaticApplicationContextProvider;
 import org.jasig.ssp.util.collections.Pair;
 import org.jasig.ssp.util.sort.PagingWrapper;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
@@ -878,18 +880,18 @@ public class ScheduledTaskWrapperServiceImpl
 							throw new ObjectNotFoundException(runAsId, Person.class.getName());
 						}
 
-						// mostly copy/paste from UPortalSecurityFilter
-						final Set<Assignment> assignments = PermissionsService.IMPL.get().getAssignmentsForPerson(person.getUsername(), true);
-
 						// Find SSP-related permissions in the assignments collection
 						final Set<GrantedAuthority> authorities = Sets.newHashSet();
-						for (Assignment a : assignments) {
-							if (a.getOwner().getKey().equals(UPortalSecurityFilter.SSP_OWNER)) {
-								// This one pertains to us...
-								String activity = a.getActivity().getKey();
-								authorities.add(new GrantedAuthorityImpl("ROLE_" + activity));
+
+						final ApplicationContext applicationContext = StaticApplicationContextProvider.getApplicationContext();
+						final UPortalApiService apiService = applicationContext.getBean(UPortalApiService.class);
+
+						final Set<Permission> permissions = apiService.getPermissionsForPrincipal(person.getUsername());
+						permissions.forEach(permission -> {
+							if (permission.getOwner().equals(UPortalSecurityFilter.SSP_OWNER)) {
+								authorities.add(new GrantedAuthorityImpl("ROLE_" + permission.getActivity()));
 							}
-						}
+						});
 
 						final SspUser user = new SspUser(person.getUsername(), "", true,
 								true, true, true, authorities);

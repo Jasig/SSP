@@ -78,7 +78,7 @@
 								<p>Please log in.</p>
 							</c:otherwise>
 						</c:choose>
-						<form id="loginForm" action="/ssp-platform/Login" method="post" data-ajax="false">
+						<form id="loginForm" action="/uPortal/Login" method="post" data-ajax="false">
 						<div data-role="fieldcontain">
 						    <label for="j_username">Username:</label>
 						    <input type="text" id="j_username" name="userName" />

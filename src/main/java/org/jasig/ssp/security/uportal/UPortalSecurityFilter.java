@@ -31,8 +31,6 @@ import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
 import javax.portlet.filter.RenderFilter;
 
-//import org.jasig.portal.api.permissions.Assignment;         // TODO: remove!
-//import org.jasig.portal.api.permissions.PermissionsService; // TODO: remove!
 import org.jasig.ssp.service.uportal.Permission;
 import org.jasig.ssp.service.uportal.UPortalApiService;
 import org.jasig.ssp.util.StaticApplicationContextProvider;
@@ -94,27 +92,6 @@ public final class UPortalSecurityFilter implements RenderFilter {
 					authorities.add(new GrantedAuthorityImpl("ROLE_" + permission.getActivity()));
 				}
 		});
-
-
-
-
-
-
-
-//		PortletContext ctx = req.getPortletSession(true).getPortletContext();
-//		PermissionsService permissionsService = (PermissionsService)
-//				ctx.getAttribute(PermissionsService.PORTLET_CONTEXT_ATTRIBUTE_NAME);
-//
-//		Set<Assignment> assignments = permissionsService.getAssignmentsForPerson(principal, true);
-
-//		// Find SSP-related permissions in the assignments collection
-//		for (Assignment a : assignments) {
-//			if (a.getOwner().getKey().equals(SSP_OWNER)) {
-//				// This one pertains to us...
-//				String activity = a.getActivity().getKey();
-//				authorities.add(new GrantedAuthorityImpl("ROLE_" + activity));
-//			}
-//		}
 
 		LOGGER.debug("Setting up GrantedAutorities for user '{}' -- {}",
 				principal, authorities.toString());
