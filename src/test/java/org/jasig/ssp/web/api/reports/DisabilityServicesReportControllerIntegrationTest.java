@@ -92,7 +92,7 @@ public class DisabilityServicesReportControllerIntegrationTest
                 null, //anticipatedStartYear
                 null, //anticipatedStartTerm
                 2013, //actualStartYear
-                "FA12", //actualStartTerm
+                Lists.newArrayList("FA12"), //actualStartTerm
                 null, //startDate
                 null, //endDate
                 "FA12", //termRange

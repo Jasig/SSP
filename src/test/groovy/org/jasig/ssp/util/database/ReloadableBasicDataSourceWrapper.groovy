@@ -18,7 +18,7 @@
  */
 package org.jasig.ssp.util.database
 
-import org.apache.commons.dbcp.BasicDataSource
+import org.apache.commons.dbcp2.BasicDataSource
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext

@@ -65,6 +65,7 @@ public class JournalSessionDetailsReportIntegrationTest extends
 						Lists.newArrayList(Stubs.StudentTypeFixture.ILP.id()),
 						Lists.newArrayList(Stubs.ServiceReasonFixture.TEST_SERVICE_REASON.id()),
 						Lists.newArrayList(Stubs.JournalStepDetail.TEST_JOURNAL_STEP_DETAIL.id()),
+						null,
 						Stubs.DateFixture.START_FALL_2012.date(),
 						Stubs.DateFixture.END_FALL_2012.date(),
 						Stubs.TermFixture.FALL_2012.code(),
@@ -105,6 +106,7 @@ public class JournalSessionDetailsReportIntegrationTest extends
 				null,
 				null,
 				null,
+				null,
 				"csv");
 		final List<String> expectedReportBodyLines = new ArrayList<String>(4);
 		//TODO Eliminate ,, from code
@@ -128,6 +130,7 @@ public class JournalSessionDetailsReportIntegrationTest extends
 				null,
 				null,
 				false,
+				null,
 				null,
 				null,
 				null,
