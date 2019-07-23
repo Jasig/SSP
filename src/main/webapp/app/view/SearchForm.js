@@ -74,7 +74,7 @@ Ext.define('Ssp.view.SearchForm',{
 			fieldDefaults: {
 			            anchor: '100%'
 			},
-		    bodyPadding: '0 4 0 4',
+		    bodyPadding: '0 4 4 4',
 			defaults:{
 			    	 enableKeyEvents:true
 			},
