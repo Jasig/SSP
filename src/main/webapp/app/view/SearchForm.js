@@ -51,7 +51,7 @@ Ext.define('Ssp.view.SearchForm',{
 	layout: {
         type: 'vbox',
         align: 'stretch'
-    },    
+    },
     width: '100%',
     height: '100%',
     scroll: 'vertical',
@@ -142,6 +142,7 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
                 border: false,
+				padding: '0 0 4 0',
                 items: [{
 					xtype: 'textfield',
 					fieldLabel: me.textStore.getValueByCode('ssp.label.search.first-name', 'First'),
@@ -188,9 +189,10 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 				border: false,
+				padding: '0 0 4 0',
 				items: [
-	        
-				        {					
+
+				        {
 					xtype: 'combobox',
 					fieldLabel: me.textStore.getValueByCode('ssp.label.search.student-exists-in', 'Student Exists In'),
 					store: me.personTableTypesStore,
@@ -225,6 +227,7 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 			    border: false,
+				padding: '0 0 4 0',
 			    items: [
 			            {
 		   		    xtype: 'combobox',
@@ -258,6 +261,7 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 				border: false,
+				padding: '0 0 4 0',
 				items: [{
                     xtype: 'combobox',
                     multiSelect: true,
@@ -343,6 +347,7 @@ Ext.define('Ssp.view.SearchForm',{
 			},	{
 				layout: 'column',
 				border: false,
+				padding: '0 0 4 0',
 				items: [{
 					xtype: 'combobox',
 					fieldLabel: me.textStore.getValueByCode('ssp.label.search.early-alert-status', 'Early Alert Status'),
@@ -374,6 +379,7 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 				border: false,
+				padding: '0 0 4 0',
 				items: [{
 					xtype: 'combobox',
 					fieldLabel: me.textStore.getValueByCode('ssp.label.search.plan-status','Plan Status'),
@@ -404,6 +410,7 @@ Ext.define('Ssp.view.SearchForm',{
 			}, {
 				layout: 'column',
 				border: false,
+				padding: '0 0 4 0',
 				items: [{
 					xtype: 'combobox',
 					columnWidth: 0.3,
