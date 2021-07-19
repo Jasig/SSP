@@ -63,7 +63,7 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -889,7 +889,7 @@ public class ScheduledTaskWrapperServiceImpl
 						final Set<Permission> permissions = apiService.getPermissionsForPrincipal(person.getUsername());
 						permissions.forEach(permission -> {
 							if (permission.getOwner().equals(UPortalSecurityFilter.SSP_OWNER)) {
-								authorities.add(new GrantedAuthorityImpl("ROLE_" + permission.getActivity()));
+								authorities.add(new SimpleGrantedAuthority("ROLE_" + permission.getActivity()));
 							}
 						});
 

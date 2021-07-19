@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
@@ -175,7 +175,7 @@ public class SecurityServiceTest {
 	private List<GrantedAuthority> getAuthList(final String... permissions) {
 		final List<GrantedAuthority> authorities = Lists.newArrayList();
 		for (String permission : permissions) {
-			authorities.add(new GrantedAuthorityImpl(permission));
+			authorities.add(new SimpleGrantedAuthority(permission));
 		}
 		return authorities;
 	}

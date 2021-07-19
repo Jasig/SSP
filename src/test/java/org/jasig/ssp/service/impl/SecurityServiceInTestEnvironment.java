@@ -28,7 +28,7 @@ import org.jasig.ssp.security.SspUser;
 import org.jasig.ssp.service.SecurityService;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.google.common.collect.Lists;
 
@@ -157,7 +157,7 @@ public class SecurityServiceInTestEnvironment implements SecurityService, Dispos
 		}
 
 		for (final String authority : authorities) {
-			grantedAuthorities.add(new GrantedAuthorityImpl(authority)); // NOPMD
+			grantedAuthorities.add(new SimpleGrantedAuthority(authority)); // NOPMD
 		}
 
 		setCurrent(current, grantedAuthorities);

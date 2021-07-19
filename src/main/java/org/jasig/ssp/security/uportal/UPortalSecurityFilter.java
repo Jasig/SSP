@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 /**
@@ -89,7 +89,7 @@ public final class UPortalSecurityFilter implements RenderFilter {
 		final Set<Permission> permissions = apiService.getPermissionsForPrincipal(principal);
 		permissions.forEach(permission -> {
 				if (permission.getOwner().equals(SSP_OWNER)) {
-					authorities.add(new GrantedAuthorityImpl("ROLE_" + permission.getActivity()));
+					authorities.add(new SimpleGrantedAuthority("ROLE_" + permission.getActivity()));
 				}
 		});
 

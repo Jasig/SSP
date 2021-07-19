@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.jasig.ssp.transferobject.PermissionTO;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  * Permissions
@@ -117,7 +117,7 @@ public enum ServicePermissions {
 	}
 
 	public GrantedAuthority asGrantedAuthority() {
-		return new GrantedAuthorityImpl(asPermissionString());
+		return new SimpleGrantedAuthority(asPermissionString());
 	}
 
 	public static final List<PermissionTO> PERMISSION_TRANSFER_OBJECTS
