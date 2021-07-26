@@ -67,12 +67,18 @@ This project includes:
   AntLR Parser Generator under BSD License
   AOP alliance under Public Domain
   Apache Commons BeanUtils under The Apache Software License, Version 2.0
+  Apache Commons Codec under Apache License, Version 2.0
   Apache Commons Collections under Apache License, Version 2.0
+  Apache Commons DBCP under The Apache Software License, Version 2.0
+  Apache Commons FileUpload under Apache License, Version 2.0
+  Apache Commons Pool under The Apache Software License, Version 2.0
   Apache Directory ASN.1 Shared under The Apache Software License, Version 2.0
   Apache Directory MINA ASN.1 Codec Shared under The Apache Software License, Version 2.0
   Apache Directory Protocol Ldap Shared under The Apache Software License, Version 2.0
   Apache Directory Protocol Ldap Shared Constants under The Apache Software License, Version 2.0
   Apache Groovy under The Apache Software License, Version 2.0
+  Apache HttpClient under Apache License, Version 2.0
+  Apache HttpCore under Apache License, Version 2.0
   Apache MINA Core under Apache 2.0 License
   Apache Pluto Portlet Tag Library under The Apache Software License, Version 2.0
   Apache Velocity under The Apache Software License, Version 2.0
@@ -106,19 +112,16 @@ This project includes:
   Bouncy Castle CMS and S/MIME API under Bouncy Castle Licence
   Bouncy Castle OpenPGP API under Bouncy Castle Licence
   Bouncy Castle Provider under Bouncy Castle Licence
-  c3p0:JDBC DataSources/Resource Pools under GNU LESSER GENERAL PUBLIC LICENSE
+  c3p0 under GNU Lesser General Public License, Version 2.1 or Eclipse Public License, Version 1.0
   Castor CORE - Core code/functionality under Apache License, Version 2.0
   Castor XML - core under Apache License, Version 2.0
   classworlds under BSD Style License
   Code Generation Library under ASF 2.0
-  Commons Codec under The Apache Software License, Version 2.0
+  com.lowagie:itext under Mozilla Public License, Version 1.1
   Commons Configuration under The Apache Software License, Version 2.0
-  Commons DBCP under The Apache Software License, Version 2.0
   Commons Digester under The Apache Software License, Version 2.0
-  Commons FileUpload under The Apache Software License, Version 2.0
   Commons IO under The Apache Software License, Version 2.0
   Commons Lang under The Apache Software License, Version 2.0
-  Commons Pool under The Apache Software License, Version 2.0
   Cursor implementation under The Apache Software License, Version 2.0
   Data Mapper for Jackson under The Apache Software License, Version 2.0
   Default Plexus Container under Apache License, Version 2.0
@@ -138,10 +141,8 @@ This project includes:
   Hamcrest All under New BSD License
   Hibernate Commons Annotations under GNU LESSER GENERAL PUBLIC LICENSE
   Hibernate Validator under Apache License, Version 2.0
-  HttpClient under Apache License
-  HttpCore under Apache License
+  HikariCP under The Apache Software License, Version 2.0
   HttpMime under Apache License
-  iText, a Free Java-PDF library under Mozilla Public License
   Jackson under The Apache Software License, Version 2.0
   Jackson-annotations under The Apache Software License, Version 2.0
   Jackson-core under The Apache Software License, Version 2.0
@@ -151,7 +152,6 @@ This project includes:
   JasperReports Font Extension under GNU Lesser General Public License
   Java Portlet Specification V2.0 under Commons Development and Distribution License, Version 1.0
   Java Servlet API under CDDL + GPLv2 with classpath exception
-  Java Transaction API under Commons Development and Distribution License, Version 1.0
   JavaBeans Activation Framework (JAF) under Common Development and Distribution License (CDDL) v1.0
   JavaMail API (compat) under CDDL or GPLv2+CE
   JavaServer Pages(TM) API under CDDL + GPLv2 with classpath exception
@@ -188,18 +188,19 @@ This project includes:
   Maven Project Builder under The Apache Software License, Version 2.0
   Maven Repository Metadata Model under The Apache Software License, Version 2.0
   Maven Wagon API under The Apache Software License, Version 2.0
+  mchange-commons-java under GNU Lesser General Public License, Version 2.1 or Eclipse Public License, Version 1.0
   Mockito under The MIT License
   OAuth 1(a) for Spring Security under Apache 2.0
   OAuth2 for Spring Security under Apache 2.0
   Objenesis under Apache 2
-  olap4j under Apache License, Version 2.0
   opencsv under Apache 2
+  org.olap4j:olap4j under Apache License, Version 2.0
   oro under Apache License, Version 2.0
   Plexus Common Utilities under The Apache Software License, Version 2.0
   Portal REST API under Apache License Version 2.0
-  PostgreSQL JDBC Driver under BSD License
+  PostgreSQL JDBC Driver - JDBC 4.2 under BSD-2-Clause
   Properties Maven Plugin under The Apache Software License, Version 2.0
-  Quartz Enterprise Job Scheduler under Apache 2.0
+  quartz under The Apache Software License, Version 2.0
   Resource Server API under Apache License Version 2.0
   Resource Server Content under Apache License Version 2.0
   Resource Server Core under Apache License Version 2.0
@@ -210,21 +211,21 @@ This project includes:
   SLF4J API Module under MIT License
   Spock Framework - Core Module under The Apache Software License, Version 2.0
   Spock Framework - Spring Module under The Apache Software License, Version 2.0
-  Spring AOP under The Apache Software License, Version 2.0
-  Spring Aspects under The Apache Software License, Version 2.0
-  Spring Beans under The Apache Software License, Version 2.0
-  Spring Context under The Apache Software License, Version 2.0
-  Spring Context Support under The Apache Software License, Version 2.0
-  Spring Core under The Apache Software License, Version 2.0
-  Spring Expression Language (SpEL) under The Apache Software License, Version 2.0
-  Spring JDBC under The Apache Software License, Version 2.0
+  Spring AOP under Apache License, Version 2.0
+  Spring Aspects under Apache License, Version 2.0
+  Spring Beans under Apache License, Version 2.0
+  Spring Context under Apache License, Version 2.0
+  Spring Context Support under Apache License, Version 2.0
+  Spring Core under Apache License, Version 2.0
+  Spring Expression Language (SpEL) under Apache License, Version 2.0
+  Spring JDBC under Apache License, Version 2.0
   Spring LDAP Core under Apache License, Version 2.0
-  Spring Object/Relational Mapping under The Apache Software License, Version 2.0
-  Spring TestContext Framework under The Apache Software License, Version 2.0
-  Spring Transaction under The Apache Software License, Version 2.0
-  Spring Web under The Apache Software License, Version 2.0
-  Spring Web MVC under The Apache Software License, Version 2.0
-  Spring Web Portlet under The Apache Software License, Version 2.0
+  Spring Object/Relational Mapping under Apache License, Version 2.0
+  Spring TestContext Framework under Apache License, Version 2.0
+  Spring Transaction under Apache License, Version 2.0
+  Spring Web under Apache License, Version 2.0
+  Spring Web MVC under Apache License, Version 2.0
+  Spring Web Portlet under Apache License, Version 2.0
   spring-security-acl under The Apache Software License, Version 2.0
   spring-security-config under The Apache Software License, Version 2.0
   spring-security-core under The Apache Software License, Version 2.0

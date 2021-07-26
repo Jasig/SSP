@@ -56,4 +56,10 @@
         <version>0.9.7.309-JS-3</version>
         <license>Apache License, Version 2.0</license>
     </artifact>
+    <artifact>
+        <groupId>com.lowagie</groupId>
+        <artifactId>itext</artifactId>
+        <version>2.1.7.js4</version>
+        <license>Mozilla Public License, Version 1.1</license>
+    </artifact>
 </license-lookup>
