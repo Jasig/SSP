@@ -46,6 +46,7 @@ public class PlanTO extends AbstractPlanTO<Plan> {
 	}
 	/**
 	 * Empty constructor.
+	 * @param model the plan model object
 	 */
 	public PlanTO(Plan model) {
 		super();

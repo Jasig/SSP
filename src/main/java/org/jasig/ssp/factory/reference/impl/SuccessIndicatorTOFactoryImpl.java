@@ -37,9 +37,7 @@ public class SuccessIndicatorTOFactoryImpl extends AbstractReferenceTOFactory<Su
     }
 
     /**
-     * Overriden to throw {@code UnsupportedOperationException}. See
-     * <a href="this page">https://wiki.jasig.org/display/SSP/SSP+Technical+Design+Proposal%3A+Application+Layering</a>.
-     * Encapsulate all db access via {@link org.jasig.ssp.service.reference.SuccessIndicatorService}.
+     * Overriden to throw {@code UnsupportedOperationException}.
      *
      * @return
      */
@@ -51,37 +49,30 @@ public class SuccessIndicatorTOFactoryImpl extends AbstractReferenceTOFactory<Su
     }
 
     /**
-     * Overriden to throw {@code UnsupportedOperationException}. See
-     * <a href="this page">https://wiki.jasig.org/display/SSP/SSP+Technical+Design+Proposal%3A+Application+Layering</a>.
-     * Use {@link org.jasig.ssp.service.reference.SuccessIndicatorService#save(SuccessIndicatorTO} or
-     * {@link org.jasig.ssp.service.reference.SuccessIndicatorService#create(SuccessIndicatorTO)} instead
+     * Overriden to throw {@code UnsupportedOperationException}.
      *
      * @param tObject
      *            Transfer object to copy
-     * @return
-     * @throws ObjectNotFoundException
+     * @return SuccessIndicator
      */
     @Override
     @Deprecated
-    public SuccessIndicator from(final SuccessIndicatorTO tObject) throws ObjectNotFoundException {
+    public SuccessIndicator from(final SuccessIndicatorTO tObject) {
         throw new UnsupportedOperationException("Not allowed to edit SuccessIndicator entities by rote. Use " +
                 "SuccessIndicatorService.create() or SuccessIndicatorService.save()");
     }
 
     /**
-     * Overriden to throw {@code UnsupportedOperationException}. See
-     * <a href="this page">https://wiki.jasig.org/display/SSP/SSP+Technical+Design+Proposal%3A+Application+Layering</a>.
-     * Use {@link org.jasig.ssp.service.reference.SuccessIndicatorService#get(java.util.UUID)} instead.
+     * Overriden to throw {@code UnsupportedOperationException}.
      *
      * @param id
      *            Load model for this identifier
      *
-     * @return
-     * @throws ObjectNotFoundException
+     * @return SuccessIndicator
      */
     @Override
     @Deprecated
-    public SuccessIndicator from(final UUID id) throws ObjectNotFoundException {
+    public SuccessIndicator from(final UUID id) {
         throw new UnsupportedOperationException("Not allowed to access the db from this factory implementation. Use " +
                 "SuccessIndicatorService.get()");
     }

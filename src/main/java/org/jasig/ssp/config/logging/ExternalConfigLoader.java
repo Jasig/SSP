@@ -28,13 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Simple utility listener to load certain properties before Spring Starts up.
  * 
- * Add this entry to your web.xml:
- * 
- * <pre>
- * <listener>
- *     <listener-class>org.jasig.ssp.config.logging.ExternalConfigLoaderContextListener</listener-class>
- *   </listener>
- * </pre>
+ * In your web.xml, add org.jasig.ssp.config.logging.ExternalConfigLoaderContextListener as a listener-class.
  */
 public class ExternalConfigLoader implements
 		ServletContextListener {

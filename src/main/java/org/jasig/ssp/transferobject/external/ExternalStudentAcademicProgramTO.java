@@ -37,10 +37,11 @@ public class ExternalStudentAcademicProgramTO implements Serializable,
 	
 	
 	/**
-	 * @param degreeCode
-	 * @param degreeName
-	 * @param programCode
-	 * @param programName
+	 * @param degreeCode the degree code
+	 * @param degreeName the degree name
+	 * @param programCode the program code
+	 * @param programName the program name
+	 * @param intendedProgramAtAdmit  the intended program at admit
 	 */
 	public ExternalStudentAcademicProgramTO(String degreeCode,
 			String degreeName, String programCode, String programName, String intendedProgramAtAdmit) {

@@ -55,7 +55,7 @@ public class JournalStepSearchFormTO extends PersonSearchFormTO {
 		return journalStepDetailIds;
 	}
 	/**
-	 * @param journalStepDetails the journalSteps to set
+	 * @param journalStepDetailsId the journalStepDetailsId to set
 	 */
 	public  void setJournalStepDetailIds(List<UUID> journalStepDetailsId) {
 		this.journalStepDetailIds = journalStepDetailsId;

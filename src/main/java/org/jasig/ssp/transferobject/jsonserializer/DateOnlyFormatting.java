@@ -36,7 +36,7 @@ public class DateOnlyFormatting {
 	 * timezone to interpret date-only time values, both in the JSON API and
 	 * the db layer.
 	 *
-	 * @return
+	 * @return the simple date format
 	 */
 	public static SimpleDateFormat dateFormatter() {
 		return new SimpleDateFormat(DEFAULT_DATE_PATTERN);

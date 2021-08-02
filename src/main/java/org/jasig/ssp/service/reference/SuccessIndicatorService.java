@@ -31,7 +31,7 @@ public interface SuccessIndicatorService extends ReferenceService<SuccessIndicat
     /**
      * Same as {@link ReferenceService#create(org.jasig.ssp.model.Auditable)}
      * but accepts a TO representation of the entity to be created. This is
-     * the preferred way to create a {@SuccessIndicator} and the other may
+     * the preferred way to create a {@link SuccessIndicator} and the other may
      * even be disabled in the implementation.
      *
      * @param obj
@@ -43,7 +43,7 @@ public interface SuccessIndicatorService extends ReferenceService<SuccessIndicat
     /**
      * Same as {@link ReferenceService#save(org.jasig.ssp.model.Auditable)}
      * but accepts a TO representation of the entity to be modified. This is
-     * the preferred way to modify a {@SuccessIndicator} and the other may
+     * the preferred way to modify a {@link SuccessIndicator} and the other may
      * even be disabled in the implementation.
      *
      * @param obj

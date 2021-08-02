@@ -54,6 +54,7 @@ public class TemplateLiteTO extends AbstractPlanTO<Template> {
 	}
 	/**
 	 * Empty constructor.
+	 * @param model the Template model object
 	 */
 	public TemplateLiteTO(Template model) {
 		super();

@@ -35,8 +35,8 @@ public class ExternalCareerDecisionStatusTO implements Serializable,
 	}
 
 	/**
-	 * @param schoolId
-	 * @param code
+	 * @param schoolId the school id
+	 * @param code the code
 	 */
 	public ExternalCareerDecisionStatusTO(String schoolId, String code) {
 		super();

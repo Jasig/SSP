@@ -50,7 +50,7 @@ public abstract class AbstractAuditableCrudService<T extends Auditable>
 	/**
 	 * Need access to the data access instance, so make children provide it.
 	 * 
-	 * @return
+	 * @return the auditable crud dao object
 	 */
 	protected abstract AuditableCrudDao<T> getDao();
 

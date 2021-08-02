@@ -28,9 +28,9 @@ public class ExternalStudentFinancialAidFileTO implements Serializable,
 		ExternalDataTO<ExternalStudentFinancialAidFile> {
 
 	/**
-	 * @param schoolId
-	 * @param financialFileCode
-	 * @param fileStatus
+	 * @param schoolId the school id
+	 * @param financialFileCode the financial file code
+	 * @param fileStatus the file status
 	 */
 	public ExternalStudentFinancialAidFileTO(String schoolId,
 			String financialFileCode,

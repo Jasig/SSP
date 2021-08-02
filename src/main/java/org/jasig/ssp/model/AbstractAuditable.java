@@ -83,7 +83,7 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * Person that created this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.jasig.ssp.transferobject.AbstractAuditableTO#from(org.jasig.ssp.model.AbstractAuditable)}
+	 * {@link org.jasig.ssp.transferobject.AbstractAuditableTO#from(Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses {@link AbstractAuditable} transfer objects).
@@ -104,7 +104,7 @@ public abstract class AbstractAuditable implements Auditable { // NOPMD
 	 * Last person to modify this entity.
 	 * 
 	 * Set to load eagerly because
-	 * {@link org.jasig.ssp.transferobject.AbstractAuditableTO#from(org.jasig.ssp.model.AbstractAuditable)}
+	 * {@link org.jasig.ssp.transferobject.AbstractAuditableTO#from(Auditable)}
 	 * pulls the ID from the full Person object and would require an extra
 	 * lookup for every entity sent through the Controllers (or anything that
 	 * uses AbstractAuditable transfer objects).

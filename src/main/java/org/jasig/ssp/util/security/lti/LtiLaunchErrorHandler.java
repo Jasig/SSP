@@ -48,7 +48,7 @@ import java.util.UUID;
 
 /**
  * Centralized error handling for both the LTI OAuth filter and processing that occurs downstream.
- * Has to extend {@link OAuthProcessingFilterEntryPoint} to satisfy {@link OAuthProviderProcessingFilter}.
+ * Has to extend {@link OAuthProcessingFilterEntryPoint}.
  * Implementing {@link AuthenticationEntryPoint} is not sufficient.
  */
 @Service("ltiLaunchErrorHandler")

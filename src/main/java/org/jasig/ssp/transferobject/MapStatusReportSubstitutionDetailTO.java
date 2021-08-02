@@ -51,6 +51,8 @@ AbstractAuditableTO<MapStatusReportSubstitutionDetails> implements TransferObjec
 	}
 	/**
 	 * Empty constructor.
+	 *
+	 * @param model The MapStatusReportSubstitutionDetails model
 	 */
 	public MapStatusReportSubstitutionDetailTO(MapStatusReportSubstitutionDetails model) {
 		super();

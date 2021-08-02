@@ -43,7 +43,7 @@ public abstract class AbstractReferenceAuditableCrudDao<T extends Auditable>
 	/**
 	 * Constructor that initializes the instance with the specific type.
 	 * 
-	 * @param persistentClass
+	 * @param persistentClass the class representing the persistence layer
 	 */
 	protected AbstractReferenceAuditableCrudDao(final Class<T> persistentClass) {
 		super(persistentClass);

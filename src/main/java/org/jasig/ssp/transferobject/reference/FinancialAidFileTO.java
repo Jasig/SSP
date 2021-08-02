@@ -65,7 +65,7 @@ public class FinancialAidFileTO
 	}
 	
 	/**
-	 * @param financial aid file external ref code
+	 * @param code aid file external ref code
 	 * 				the financial aid file code to set
 	 */
 	public void setCode(final String code) {

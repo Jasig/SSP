@@ -35,7 +35,7 @@ public class ExternalStudentTranscriptNonCourseDao extends AbstractExternalDataD
 
     /**
      * No sorting and paging
-     * @return
+     * @return the list of all external student transcript non course entity objects
      */
     @SuppressWarnings("unchecked")
     public List<ExternalStudentTranscriptNonCourseEntity> getAllNonCourseTranscripts() {

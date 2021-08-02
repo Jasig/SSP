@@ -121,8 +121,6 @@ public class ConfidentialityDisclosureAgreementController
 	 *
 	 * @param id
 	 *            Explicit id to the instance to persist.
-	 * @param obj
-	 *            Full instance to persist.
 	 * @return The update data object instance.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
@@ -141,10 +139,6 @@ public class ConfidentialityDisclosureAgreementController
 	/**
 	 * Persist any changes to the specified instance.
 	 *
-	 * @param id
-	 *            Explicit id to the instance to persist.
-	 * @param obj
-	 *            Full instance to persist.
 	 * @return The update data object instance.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.

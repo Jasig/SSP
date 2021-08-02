@@ -441,7 +441,7 @@ public class MessageServiceImpl implements MessageService {
 	/**
 	 * Validate e-mail address via {@link EmailValidator}.
 	 * 
-	 * @param email
+	 * @param emails
 	 *            E-mail address to validate
 	 * @return True if the e-mail is valid
 	 */

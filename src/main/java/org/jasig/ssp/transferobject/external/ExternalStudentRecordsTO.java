@@ -182,7 +182,7 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
 	}
 
     /**
-     * @param financialAidFiles
+     * @param financialAidFiles the list of financial aid files
      */
 	public void setFinancialAidFiles(List<ExternalStudentFinancialAidFileTO> financialAidFiles) {
 		this.financialAidFiles = financialAidFiles;
@@ -196,7 +196,7 @@ public class ExternalStudentRecordsTO implements ExternalDataTO<ExternalStudentR
     }
 
     /**
-     * @param nonCourseEntities
+     * @param nonCourseEntities the list of non course entities
      */
     public void setNonCourseEntities(List<ExternalStudentTranscriptNonCourseEntityTO> nonCourseEntities) {
         this.nonCourseEntities = nonCourseEntities;

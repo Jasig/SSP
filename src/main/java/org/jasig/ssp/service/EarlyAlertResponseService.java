@@ -52,10 +52,12 @@ public interface EarlyAlertResponseService
 	/**
 	 * Same as {@link EarlyAlertResponseService#create(org.jasig.ssp.model.Auditable)}
 	 * but accepts a TO representation of the entity to be created. This is
-	 * the preferred way to create an {@EarlyAlertResponse}.
+	 * the preferred way to create an {@link org.jasig.ssp.model.EarlyAlertResponse}.
 	 *
-	 * @param obj
-	 * @return
+	 * @param obj The EarlyAlertResponseTO transfer object
+	 * @return EarlyAlertResponse
+	 * @throws ValidationException
+	 * 			If EA Response object is not valid
 	 */
 	EarlyAlertResponse create(EarlyAlertResponseTO obj) throws ValidationException;
 
@@ -64,6 +66,7 @@ public interface EarlyAlertResponseService
 	 * and early alert.
 	 * 
 	 * @param earlyAlert
+	 * 			  The EarlyAlert model
 	 * @param sAndP
 	 *            Sorting and paging options
 	 * @return All entities in the database filtered by the supplied status.
@@ -89,27 +92,23 @@ public interface EarlyAlertResponseService
 	/**
 	 * Retrieves counts of Distinct Students and EarlyAlertResponses Grouped by Coaches
 	 * Returned As EntityStudentCountByCoachTO
-	 * @param coaches
-	 * @param createDateFrom
-	 * @param createDateTo
-	 * @param studentTypeIds
-	 * @param serviceReasonIds
-	 * @param sAndP
-	 * @return
+	 * @param form The EntityCountByCoachSearchForm
+	 * @return The EntityStudentCountByCoachTO wrapper
 	 */
 	public PagingWrapper<EntityStudentCountByCoachTO> getStudentEarlyAlertResponseCountByCoaches(EntityCountByCoachSearchForm form);
 
 	
 	/**
 	 * Gets a list of {@link Person} objects based on the specified criteria and
-	 * {@link Early Alert Referral} identifiers.
+	 * {@link org.jasig.ssp.model.reference.EarlyAlertReferral} identifiers.
 	 * 
 	 * @param earlyAlertStudentSearchTO
 	 *            list of {@link EarlyAlertStudentSearchTO} early alert student search transfer object
 	 *          
-	 * @param addressLabelSearchTO
+	 * @param earlyAlertStudentSearchTO
 	 *            set of standard search criteria see peopleFromCriteria
-	 * @param createForSingleSort
+	 * @param sAndP
+	 * 			  Sorting and paging options
 	 * @return A list of {@link EarlyAlertStudentReportTO} objects based on the specified criteria
 	 *         and special service groups.
 	 * @throws ObjectNotFoundException
@@ -121,8 +120,8 @@ public interface EarlyAlertResponseService
 
 	/**
 	 * Get count of all early alerts which have one or more responses.  No selection criteria other than earlyAlertId
-	 * @param earlyAlertIds
-	 * @return
+	 * @param earlyAlertIds the list of EA UUIDs
+	 * @return the Response counts
 	 */
 	EarlyAlertResponseCounts getCountEarlyAlertRespondedToForEarlyAlerts(List<UUID> earlyAlertIds);
 	

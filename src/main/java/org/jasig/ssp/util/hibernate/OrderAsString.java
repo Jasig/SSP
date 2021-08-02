@@ -50,7 +50,7 @@ public class OrderAsString extends Order {
 
 	/**
 	 * Overriden b/c underlying field is hidden in {@link Order}.
-	 * @return
+	 * @return The Order
 	 */
 	@Override
 	public Order ignoreCase() {
@@ -62,7 +62,7 @@ public class OrderAsString extends Order {
 	/**
 	 * Ascending order. Same as {@link Order#asc(String)} but
 	 *
-	 * @param propertyName
+	 * @param propertyName The propertyName string
 	 * @return Order
 	 */
 	public static OrderAsString asc(String propertyName) {
@@ -72,7 +72,7 @@ public class OrderAsString extends Order {
 	/**
 	 * Descending order
 	 *
-	 * @param propertyName
+	 * @param propertyName The propertyName string
 	 * @return Order
 	 */
 	public static OrderAsString desc(String propertyName) {
@@ -88,10 +88,10 @@ public class OrderAsString extends Order {
 	 * is much less risky than an impl that might accidentally replace
 	 * substrings instead of entire column names.
 	 *
-	 * @param criteria
-	 * @param criteriaQuery
-	 * @return
-	 * @throws HibernateException
+	 * @param criteria The Criteria
+	 * @param criteriaQuery The CriteriaQuery
+	 * @return The SQL string
+	 * @throws HibernateException Hibernate Exceptions
 	 */
 	@Override
 	public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery)
@@ -127,10 +127,10 @@ public class OrderAsString extends Order {
 	 * + " name in the given criteria context) as raw SQL. Mostly a copy/paste
 	 * from {@link MultipleCountProjection}.
 	 *
-	 * @param column
-	 * @param columnType
-	 * @param criteriaQuery
-	 * @return
+	 * @param column The column
+	 * @param columnType The Type of column
+	 * @param criteriaQuery The CriteriaQuery
+	 * @return The SQL string
 	 */
 	private String castToSqlString(String column, Type columnType, CriteriaQuery criteriaQuery) {
 		return getFunction("cast", criteriaQuery).render(columnType,
@@ -143,9 +143,9 @@ public class OrderAsString extends Order {
 	 * failing if such a function cannot be found. Copy/paste from
 	 * <code>org.hibernate.criterion.AggregateProjection</code>.
 	 *
-	 * @param functionName
-	 * @param criteriaQuery
-	 * @return
+	 * @param functionName The functionName
+	 * @param criteriaQuery The CriteriaQuery
+	 * @return The SQLFunction
 	 * @throws HibernateException if the function does not exist
 	 */
 	protected SQLFunction getFunction(String functionName, CriteriaQuery criteriaQuery)

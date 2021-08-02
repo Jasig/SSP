@@ -21,8 +21,8 @@ package org.jasig.ssp.service.jobqueue;
 import java.util.List;
 
 /**
- * Standard representation of {@link Job} <em>workflow</em> progress in terms of "messages". That is, this qualifies
- * and provides details for {@link Job#getWorkflowStatus()} in the form of free-form strings. Over the long-term, it
+ * Standard representation of {@link org.jasig.ssp.model.jobqueue.Job} <em>workflow</em> progress in terms of "messages". That is, this qualifies
+ * and provides details for {@link org.jasig.ssp.model.jobqueue.Job#getWorkflowStatus()} in the form of free-form strings. Over the long-term, it
  * is intended to provide a generic means for tracking progress quantitatively, e.g. with completion percentage. Clients
  * should make an effort to ensure messages placed into these fields are suitable for display to end users.
  *

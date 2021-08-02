@@ -33,7 +33,7 @@ import liquibase.logging.LogFactory;
  * is still referenced by the {@link SpringLiquibase} javadoc but which is
  * no longer implemented. Setting that value to <code>false</code> will
  * short-circuit execution on initialization. If set, the
- * @{link Liquibase#SHOULD_RUN_SYSTEM_PROPERTY} system property overrides this
+ * Liquibase#SHOULD_RUN_SYSTEM_PROPERTY system property overrides this
  * property.
  */
 public class ExtendedSpringLiquibase extends SpringLiquibase {
@@ -70,7 +70,7 @@ public class ExtendedSpringLiquibase extends SpringLiquibase {
 	/**
 	 * See class javadoc.
 	 *
-	 * @return
+	 * @return True if enabled
 	 */
 	public boolean isExecuteEnabled() {
 		return executeEnabled;
@@ -79,7 +79,7 @@ public class ExtendedSpringLiquibase extends SpringLiquibase {
 	/**
 	 * See class javadoc.
 	 *
-	 * @param executeEnabled
+	 * @param executeEnabled boolean
 	 */
 	public void setExecuteEnabled(boolean executeEnabled) {
 		this.executeEnabled = executeEnabled;

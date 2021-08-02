@@ -492,12 +492,11 @@ public class ScheduledTaskWrapperServiceImpl
 	 * simply can't be read at all, e.g. network outage, that will just be
 	 * logged and the {@link Task}'s config will be unchanged.
 	 *
-	 * <p>This also handles initialization of the {@link Task's}
+	 * <p>This also handles initialization of the {@link Task}
 	 * default {@link Trigger} <em>every time</em>. Which means you can
 	 * technically change the default and it will be picked up.</p>
 	 *
-	 * @param task
-	 * @return
+	 * @param task the task
 	 * @throws BadTriggerConfigException if the default configuration for the
 	 *   given {@link Task} is broken. Exceptions during read of latest config
 	 *   from {@link ConfigService} are caught and handled.
@@ -861,9 +860,8 @@ public class ScheduledTaskWrapperServiceImpl
 	 * than let obscure Hibernate extension internals make up the rules as we
 	 * go.</p>
 	 *
-	 * @see #withMaybeSudo(Runnable)
-	 * @param work
-	 * @return
+	 * @param work the runnable work
+	 * @return runabble
 	 * @throws AuthenticationException
 	 */
 	protected Runnable withSudo(final Runnable work, final UUID runAsId) throws AuthenticationException {
@@ -1083,9 +1081,9 @@ public class ScheduledTaskWrapperServiceImpl
 	}
 
 	/**
-	 * Basically a deferred form of {@link #execWithTaskContext(Runnable)}.
+	 * Basically a deferred form of {@link #execWithTaskContext(String, Runnable)}.
 	 * Useful when you have a scheduled job that does its work in batches and
-	 * you'd like the effect of {@link #execWithTaskContext(Runnable)}
+	 * you'd like the effect of {@link #execWithTaskContext(String, Runnable)}
 	 * (except for the thread naming decoration) applied
 	 * independently for each batch. This is advisable for any long-running
 	 * job (which is probably why it was batched in the first place) b/c

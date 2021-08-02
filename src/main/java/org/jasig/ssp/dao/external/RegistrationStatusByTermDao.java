@@ -82,7 +82,10 @@ public class RegistrationStatusByTermDao extends
 	 * Dubious whether any of the above methods should be filtering on {@code registeredCourseCount}, but they've
 	 * been doing so for a very long time, so we leave them alone and introduce this ugly beast.
 	 *
-	 * @return
+	 * @param person the person object
+	 * @param sAndP Sorting, paging and status filter
+	 *
+	 * @return the wrapped rRegistrationStatusByTerm object
 	 */
 	public PagingWrapper<RegistrationStatusByTerm> getAllForPersonWithAnyCourseCount(
 			final Person person, final SortingAndPaging sAndP) {

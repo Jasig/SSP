@@ -109,6 +109,10 @@ public class EarlyAlertReferralTO extends
 	 *            reference objects to the user
 	 * @param acronym
 	 *            acronym (a.k.a. code)
+	 * @param recipientEmailAddress
+	 * 			  the recipient email address
+	 * @param carbonCopy
+	 * 			  the carbon copy
 	 */
 	public EarlyAlertReferralTO(@NotNull final UUID id,
 			@NotNull final String name,

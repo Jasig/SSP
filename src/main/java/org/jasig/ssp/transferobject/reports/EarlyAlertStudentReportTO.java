@@ -38,6 +38,12 @@ public class EarlyAlertStudentReportTO extends BaseStudentReportTO {
 	 * 
 	 * @param model
 	 *            Initialize instance from the data in this model
+	 * @param total
+	 * 			  the total to use for the report
+	 * @param pending
+	 * 		      the long to use for the report
+	 * @param closed
+	 *            the closed to use for the report
 	 */
 	public EarlyAlertStudentReportTO(final Person model, Long total, Long pending, Long closed) {	
 		super(model);

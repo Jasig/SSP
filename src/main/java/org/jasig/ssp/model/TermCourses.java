@@ -93,7 +93,7 @@ public class TermCourses<T extends AbstractPlan, TO extends AbstractPlanTO<T>> {
 		}
 	}
 	/**
-	 * @param term
+	 * @param term The term model object
 	 */
 	public TermCourses(Term term) {
 		super();

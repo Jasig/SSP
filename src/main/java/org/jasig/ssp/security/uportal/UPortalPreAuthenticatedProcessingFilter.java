@@ -186,6 +186,10 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 	/**
 	 * Puts the <code>Authentication</code> instance returned by the
 	 * authentication manager into the secure context.
+	 *
+	 * @param request The request
+	 * @param response The response
+	 * @param authResult The Authentication result
 	 */
 	protected void successfulAuthentication(final HttpServletRequest request,
 			final HttpServletResponse response, final Authentication authResult) {
@@ -205,6 +209,10 @@ public class UPortalPreAuthenticatedProcessingFilter extends GenericFilterBean
 	/**
 	 * Ensures the authentication object in the secure context is set to null
 	 * when authentication fails.
+	 *
+	 * @param request The request
+	 * @param response The response
+	 * @param failed The failed AuthenticationException
 	 */
 	protected void unsuccessfulAuthentication(final HttpServletRequest request,
 			final HttpServletResponse response,

@@ -71,7 +71,7 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
 
     /**
      * Retrives the last two revisions showing the current coach and previous coach using Envers
-     * @param personId
+     * @param personId the person UUID
      * @return PersonCoachAuditTO
      */
     public PersonCoachAuditTO getPreviousCoach(final UUID personId) {
@@ -136,6 +136,10 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
     /**
      * Normally Coach changes are automatically logged by Envers, but in the case of Bulk Coach Re-Assign,
      *  which uses HQL, it cannot be intercepted by Envers.
+     *
+     * @param coachToSet the coach to set Person object
+     * @param batchOfStudentSchoolIds the list of batched student school ids
+     *
      * @return int saved result count (-1) on error/null parameter or (0) on empty parameter
      */
     public int auditBatchCoachAssignment (Person coachToSet, List<String> batchOfStudentSchoolIds) {
@@ -178,6 +182,10 @@ public class PersonCoachAuditDao extends AbstractDao<PersonCoachAuditTO> {
      *  a different modifier (AuditPerson) than the current user must be set. This method
      *   uses HQL, which cannot be intercepted by Envers (PersonCoachRevisionListener) and
      *   records the audit manually.
+     *
+     * @param personId the person UUID
+     * @param coachId the coach UUID
+     * @param auditPerson the AuditPerson object
      *
      * @return int saved result count, (-1) on error/null parameter
      */

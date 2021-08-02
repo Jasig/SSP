@@ -105,8 +105,7 @@ public abstract class AbstractAuditableReferenceController<T extends AbstractRef
 	/**
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 
-	 * @param status@ResponseBody
-	PagedResponse<TO>
+	 * @param status
 	 *            Filter by this status.
 	 * @param start
 	 *            First result (0-based index) to return. Parameter must be a

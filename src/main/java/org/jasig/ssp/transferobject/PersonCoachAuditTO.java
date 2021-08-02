@@ -47,11 +47,11 @@ public class PersonCoachAuditTO implements Serializable {
 
 	/**
 	 * Constructs a CoachAuditTO. Needs personId and modifiedDate as that's what makes this unique.
-	 * @param personId
-	 * @param currentCoach
-	 * @param previousCoach
-	 * @param modifiedDate
-	 * @param modifiedBy
+	 * @param personId The person id UUID
+	 * @param currentCoach The currentCoach
+	 * @param previousCoach The previousCoach
+	 * @param modifiedDate The date modified
+	 * @param modifiedBy The person that modified the data
 	 */
 	public PersonCoachAuditTO (@NotNull final UUID personId, final PersonLiteTO currentCoach, final PersonLiteTO previousCoach,
 							   @NotNull final Date modifiedDate, final PersonLiteTO modifiedBy) {

@@ -37,11 +37,13 @@ public class SearchPlanTO {
 	
 	
 	/**
-	 * @param subjectAbbreviation
-	 * @param number
-	 * @param terms
-	 * @param dateFrom
-	 * @param dateTo
+	 * @param planStatus the PlanStatus object
+	 * @param subjectAbbreviation the subject abbreviation
+	 * @param number the number
+	 * @param formattedCourse the formatted course
+	 * @param terms the list of Terms
+	 * @param dateFrom the from date
+	 * @param dateTo the to date
 	 */
 	public SearchPlanTO(PlanStatus planStatus, String subjectAbbreviation, String number, String formattedCourse, List<Term> terms,
 			Date dateFrom, Date dateTo) {

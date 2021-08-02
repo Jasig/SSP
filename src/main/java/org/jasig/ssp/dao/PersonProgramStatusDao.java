@@ -93,8 +93,8 @@ public class PersonProgramStatusDao
 	 * unnecessarily complex for current call sites. And the likelyhood
 	 * of a user having hundreds or thousand of alerts seems low.
 	 *
-	 * @param personId
-	 * @return
+	 * @param personId the person UUID
+	 * @return the list of person program statuses
 	 */
 	public List<PersonProgramStatus> getAllForPersonId(UUID personId) {
 		final Criteria criteria = createCriteria();
@@ -110,7 +110,8 @@ public class PersonProgramStatusDao
 	 * e.g. such that the table is never in an inconsistent state w/r/t a person
 	 * having multiple active statuses.
 	 *
-	 * @param pps
+	 * @param pps the PersonProgramStatus object to save
+	 * @return the saved PersonProgramStatus object
 	 */
 	public PersonProgramStatus saveAndFlush(PersonProgramStatus pps) {
 		final UUID id = pps.getId();

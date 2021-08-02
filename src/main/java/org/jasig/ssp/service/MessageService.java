@@ -38,8 +38,8 @@ public interface MessageService {
 
     /**
      * Returns all messages based on sortingAndPaging
-     * @param sortingAndPaging
-     * @return
+     * @param sortingAndPaging Sorting, paging and status filters
+     * @return the wrapped message
      */
     PagingWrapper<Message> getMessages(final SortingAndPaging sortingAndPaging);
 
@@ -58,6 +58,7 @@ public interface MessageService {
 	 * @param to
 	 *            Send e-mail to this {@link Person}
 	 * @param emailCC
+	 *            the email address to carbon copy
 	 * @param subjAndBody
 	 *            SubjectAndBody subjAndBody
 	 * @return Generated message.
@@ -66,8 +67,6 @@ public interface MessageService {
 	 *         Already saved to queue, does not need further processing.)
 	 * @throws ObjectNotFoundException
 	 *             If the current user or administrator could not be loaded.
-	 * @throws SendFailedException
-	 *             If message could not be created and put in the message queue.
 	 * @throws ValidationException
 	 *             If any data was missing or invalid.
 	 */
@@ -81,7 +80,7 @@ public interface MessageService {
 	 * @param to
 	 *            Email address to send this message
 	 * @param emailCC
-	 * 
+	 * 	          the email address to carbon copy
 	 * @param subjAndBody
 	 *            SubjectAndBody subjAndBody
 	 * @return Generated message.
@@ -90,6 +89,8 @@ public interface MessageService {
 	 *         Already saved to queue, does not need further processing.)
 	 * @throws ObjectNotFoundException
 	 *             If the current user or administrator could not be loaded.
+	 * @throws ValidationException
+	 *             If there is a validation error.
 	 */
 	Message createMessage(@NotNull String to, String emailCC,
 			@NotNull SubjectAndBody subjAndBody)
@@ -99,9 +100,14 @@ public interface MessageService {
 	 * Create a new {@link Message} entity but do not persist it.
 	 *
 	 * @param to
+	 *            Email address to send this message
 	 * @param cc
+	 * 	          the email address to carbon copy
 	 * @param subjectAndBody
-	 * @return
+	 *            SubjectAndBody subjAndBody
+	 * @return the message
+	 * @throws ObjectNotFoundException
+	 *            If the user is not found
 	 */
 	Message createMessageNoSave(String to, String cc, SubjectAndBody subjectAndBody) throws ObjectNotFoundException;
 
@@ -115,16 +121,14 @@ public interface MessageService {
 
 	/**
 	 * Send a specific e-mail message immediately instead of relying on a
-	 * scheduled call to {@link #sendQueuedMessages()}.
+	 * scheduled call to {@link #sendQueuedMessages(CallableExecutor)}.
 	 * 
 	 * <p>
 	 * The use of this method is discouraged unless it is called by the
-	 * implementation of {@link #sendQueuedMessages()}.
+	 * implementation of {@link #sendQueuedMessages(CallableExecutor)}.
 	 * 
 	 * @param message
 	 *            Email message to send
-	 * @param emailCC
-	 *            Additional CC to add to the message; optional, can be null
 	 * @return True if the mail provider accepted the message for sending. A
 	 *         true response from this method is not a guarantee of delivery to
 	 *         the recipient!
@@ -133,7 +137,8 @@ public interface MessageService {
 	 * @throws ObjectNotFoundException
 	 *             If current user or the administrator info could not be
 	 *             loaded.
-	 * @throws UnsupportedEncodingException 
+	 * @throws UnsupportedEncodingException
+	 * 			   If encoding not supported
 	 */
 	boolean sendMessage(Message message) throws SendFailedException,
 			ObjectNotFoundException, UnsupportedEncodingException, ValidationException;

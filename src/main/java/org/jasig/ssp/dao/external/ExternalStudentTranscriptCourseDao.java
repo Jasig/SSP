@@ -65,11 +65,11 @@ public class ExternalStudentTranscriptCourseDao extends AbstractExternalDataDao<
      * Returns SSG Course Report TOs by specified criteria.
      *  SchoolIds *must* be populated! The rest can be empty/null.
      *   This is batched.
-     * @param schoolIds
-     * @param termCodes
-     * @param grades
-     * @param statuses
-     * @return
+     * @param schoolIds the list of school ids
+     * @param termCodes the list of term codes
+     * @param grades the list of grades
+     * @param statuses the list of statuses
+     * @return the list of special service student course transfer objects
      */
     public List<SpecialServiceStudentCoursesTO> getTranscriptCoursesBySchoolIds(
             final List<String> schoolIds, final List<String> termCodes, final List<String> grades,

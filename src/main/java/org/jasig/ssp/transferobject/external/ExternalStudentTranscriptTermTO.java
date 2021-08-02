@@ -32,15 +32,15 @@ public class ExternalStudentTranscriptTermTO implements Serializable,
 		ExternalDataTO<ExternalStudentTranscriptTerm> {
 
 	/**
-	 * @param schoolId
-	 * @param creditHoursForGpa
-	 * @param creditHoursEarned
-	 * @param creditHoursAttempted
-	 * @param creditHoursNotCompleted
-	 * @param creditCompletionRate
-	 * @param totalQualityPoints
-	 * @param gradePointAverage
-	 * @param termCode
+	 * @param schoolId the school id
+	 * @param creditHoursForGpa the credit hours for GPA
+	 * @param creditHoursEarned the credit hours earned
+	 * @param creditHoursAttempted the credit hours attempted
+	 * @param creditHoursNotCompleted the credit hours not completed
+	 * @param creditCompletionRate the credit completion rate
+	 * @param totalQualityPoints the total quality points
+	 * @param gradePointAverage the GPA
+	 * @param termCode the term code
 	 */
 	public ExternalStudentTranscriptTermTO(String schoolId,
 			BigDecimal creditHoursForGpa, BigDecimal creditHoursEarned,

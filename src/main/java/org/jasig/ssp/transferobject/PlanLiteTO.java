@@ -40,6 +40,8 @@ public class PlanLiteTO extends AbstractPlanTO<Plan> {
 	}
 	/**
 	 * Empty constructor.
+	 *
+	 * @param model The Plan model
 	 */
 	public PlanLiteTO(Plan model) {
 		super();

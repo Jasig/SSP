@@ -86,7 +86,7 @@ public class EntityStudentCountByCoachTO {
 	 * logical setters. That said, are fairly weak justifications, though, so if a need arises in the future, it's
 	 * probably OK to go ahead and add them.</p>
 	 *
-	 * @param id
+	 * @param id the coach UUID to set
 	 */
 	public void setCoachId(UUID id) {
 		if ( this.coach == null ) {
@@ -102,7 +102,7 @@ public class EntityStudentCountByCoachTO {
 	/**
 	 * See {@link #setCoachId(java.util.UUID)}
 	 *
-	 * @param firstName
+	 * @param firstName the coach first name to set
 	 */
 	public void setCoachFirstName(String firstName) {
 		if ( this.coach == null ) {
@@ -119,7 +119,7 @@ public class EntityStudentCountByCoachTO {
 	/**
 	 * See {@link #setCoachId(java.util.UUID)}.
 	 *
-	 * @param lastName
+	 * @param lastName the coach last name to set
 	 */
 	public void setCoachLastName(String lastName) {
 		if ( this.coach == null ) {

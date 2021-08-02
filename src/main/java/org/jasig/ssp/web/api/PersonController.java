@@ -177,8 +177,6 @@ public class PersonController extends AbstractBaseController {
 	 * @return The specified instance if found.
 	 * @throws ObjectNotFoundException
 	 *             If specified object could not be found.
-	 * @throws ValidationException
-	 *             If that specified data is not invalid.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ROLE_PERSON_READ') or hasRole('ROLE_PERSON_FILTERED_READ')")

@@ -73,7 +73,8 @@ public enum ObjectStatus {
 
 	/**
 	 * Filter a collection to return only those that have the specified status.
-	 * 
+	 *
+	 * @param <T> Auditable model object
 	 * @param list
 	 *            List of {@link AbstractAuditable}
 	 * @param status

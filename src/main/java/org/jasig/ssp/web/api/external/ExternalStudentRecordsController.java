@@ -489,7 +489,9 @@ public class ExternalStudentRecordsController extends AbstractBaseController {
 	 *            Student identifier Any errors will throw this generic
 	 *            exception.
 	 * @return Service response with success value, in the JSON format.
-	 * @throws ObjectNotFoundException, IOException
+	 * @throws ObjectNotFoundException
+	 *             If any reference data could not be found.
+	 * @throws IOException
 	 *             If any reference data could not be loaded.
 	 */
 	@RequestMapping(value = "/test/details", method = RequestMethod.GET)

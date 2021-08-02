@@ -70,7 +70,7 @@ public class ObjectExistsException extends RuntimeException {
 	 * @param name the object's type name, usually a fully-qualified class name
 	 * @param lookupFields
 	 *            Names and values of the criteria that were used to look up
-	 *            the object. Typically <code>{"id" => "foo"}</code>
+	 *            the object. Typically {"id" greater than or equal to "foo"}
 	 * @return A user-readable object found message string.
 	 */
 	public static String message(final String name,

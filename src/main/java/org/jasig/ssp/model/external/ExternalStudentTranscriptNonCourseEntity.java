@@ -233,14 +233,14 @@ public class ExternalStudentTranscriptNonCourseEntity extends AbstractExternalDa
 	}
 
 	/**
-	 * @return the status_code
+	 * @return the statusCode
 	 */
 	public String getStatusCode() {
 		return statusCode;
 	}
 
 	/**
-	 * @param status_code the status_code to set
+	 * @param statusCode the status_code to set
 	 */
 	public void setStatusCode(final String statusCode) {
 		this.statusCode = statusCode;

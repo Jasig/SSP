@@ -214,10 +214,8 @@ public interface TaskService
 	 *            the strengths
 	 * @param student
 	 *            the student
-	 * @param emailAddresses
-	 *            e-mail addresses
-	 * @param recipients
-	 *            the recipients
+	 * @param form
+	 *            the emailPersonTasksForm
 	 * @throws ObjectNotFoundException
 	 *             If the specified tasks or any referenced data could not be
 	 *             found.

@@ -100,7 +100,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	 * Finds and executes the given {@link Job} transactionally in {@link #executeInTransaction(java.util.UUID)}.
 	 * Expects that method to raise exceptions if the transaction should be rolled back. In the case of a
 	 * {@link org.jasig.ssp.service.jobqueue.JobExecutionException}, the {@link JobExecutionResult} is unpacked. If that object's and
-	 * {@link JobExecutionStatus} indicates the job should be retried, {@link executionState} is written in
+	 * {@link JobExecutionStatus} indicates the job should be retried, {@link JobExecutionStatus} is written in
 	 * a separate transaction {@link #prepareRetryInTransaction(java.util.UUID, org.jasig.ssp.service.jobqueue.JobExecutionResult)}.
 	 * {@link #toNonExceptionalWorkflowResult(org.jasig.ssp.service.jobqueue.JobExecutionResult, java.util.UUID)}
 	 * and {@link #toExceptionalWorkflowResult(org.jasig.ssp.service.jobqueue.JobExecutionResult, org.jasig.ssp.service.jobqueue.JobExecutionException, java.util.UUID)}
@@ -222,7 +222,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	}
 
 	/**
-	 * Deserializes the job spec and state and passes them to {@link #executeJobDeserialized(Object, Object)}
+	 * Deserializes the job spec and state and passes them to {@link #executeJobDeserialized(Object, Object, UUID)}
 	 * @param job
 	 * @return
 	 * @throws JobExecutionException
@@ -358,7 +358,7 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	}
 
 	/**
-	 * Same as {@link #toNonExceptionalWorkflowResult(org.jasig.ssp.service.jobqueue.JobExecutionResult)} but for
+	 * Same as {@link #toNonExceptionalWorkflowResult(JobExecutionResult, UUID)} but for
 	 * the exceptional exit case.
 	 *
 	 * @param e

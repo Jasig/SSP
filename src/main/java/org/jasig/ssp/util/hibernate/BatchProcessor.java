@@ -36,15 +36,15 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author jamesstanley
  * Example Usage:
- * BatchProcessor<UUID, T> processor =  new BatchProcessor<UUID,T>(ids, sAndP);
+ * BatchProcessor processor =  new BatchProcessor(ids, sAndP);
  *		do{
  *			final Criteria criteria = createCriteria();
  *			processor.process(criteria, "id");
  *		}while(processor.moreToProcess());
  *
  *	return processor.getPagedResults();
- * @param <I>
- * @param <O>
+ * @param <I> The ids
+ * @param <O> The sorting and paging object
  */
 public class BatchProcessor<I, O> {
 

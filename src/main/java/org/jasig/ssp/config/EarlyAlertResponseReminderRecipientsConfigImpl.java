@@ -73,7 +73,7 @@ public class EarlyAlertResponseReminderRecipientsConfigImpl implements EarlyAler
 	}
 
 	/**
-	 * @see org.jasig.ssp.config.EarlyAlertResponseReminderRecipientsConfig#includeEarlyAlertCoordinatorAsRecipientOnlIfStudentHasNoCoach()
+	 * @see org.jasig.ssp.config.EarlyAlertResponseReminderRecipientsConfig#includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach()
 	 */
 	@Override
 	public boolean includeEarlyAlertCoordinatorAsRecipientOnlyIfStudentHasNoCoach() {

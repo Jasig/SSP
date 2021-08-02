@@ -987,7 +987,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	/**
 	 * Gives the database value of the column, which may be null.
 	 * 
-	 * @return
+	 * @return True if enabled
 	 */
 	public Boolean getEnabled() {
 		return enabled;
@@ -997,7 +997,7 @@ public class Person extends AbstractAuditable implements Auditable { // NOPMD
 	 * Indicates whether the account is disabled according to the business rules 
 	 * of SSP.
 	 * 
-	 * @return
+	 * @return True if enabled
 	 */
 	public boolean isDisabled() {
 		return enabled != null && enabled.equals(Boolean.FALSE);

@@ -70,7 +70,7 @@ public interface EarlyAlertService
 	 * Mark an EarlyAlert closed by the current user. No-op if the alert
 	 * is already closed.
 	 *
-	 * @param earlyAlertId
+	 * @param earlyAlertId the EA UUID
 	 * @throws ObjectNotFoundException if the referenced EarlyAlert does
 	 *   not exist
 	 * @throws ValidationException if a business rule is violated
@@ -81,7 +81,7 @@ public interface EarlyAlertService
 	 * Mark an EarlyAlert open by the current user. No-op if the alert
 	 * is already open.
 	 *
-	 * @param earlyAlertId
+	 * @param earlyAlertId the EA UUID
 	 * @throws ObjectNotFoundException if the referenced EarlyAlert does
 	 *   not exist
 	 * @throws ValidationException if a business rule is violated
@@ -111,8 +111,8 @@ public interface EarlyAlertService
 	 * Same as {@link #getCountOfActiveAlertsForPeopleIds(java.util.Collection)}
 	 * but for closed alerts.
 	 *
-	 * @param peopleIds
-	 * @return
+	 * @param peopleIds the collection of people UUIDs
+	 * @return count of closed EAs for the passed people UUIDs
 	 */
 	Map<UUID, Number> getCountOfClosedAlertsForPeopleIds(
 			final Collection<UUID> peopleIds);
@@ -120,6 +120,8 @@ public interface EarlyAlertService
 	/**
 	 * Similar to {@link org.jasig.ssp.service.external.RegistrationStatusByTermService#applyRegistrationStatusForCurrentTerm(org.jasig.ssp.model.Person)},
 	 * but for early alerts.
+	 *
+	 * @param person the person object
 	 */
 	void applyEarlyAlertCounts(Person person);
 
@@ -150,7 +152,7 @@ public interface EarlyAlertService
 	 * Also used by early alert response since messages have similar template
 	 * parameters.
 	 * 
-	 * @param earlyAlert
+	 * @param earlyAlert the EA
 	 * @return Map of template parameters
 	 */
 	Map<String, Object> fillTemplateParameters(final EarlyAlert earlyAlert);

@@ -61,11 +61,11 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 	}
 
 	/**
-	 * @param schoolId
-	 * @param creditHoursForGpa
-	 * @param creditHoursAttempted
-	 * @param totalQualityPoints
-	 * @param gradePointAverrage
+	 * @param schoolId the school id
+	 * @param creditHoursForGpa the credit hours for GPA
+	 * @param creditHoursAttempted the credit hours attempted
+	 * @param totalQualityPoints the total quality points
+	 * @param gradePointAverrage the GPA
 	 */
 	public ExternalStudentTranscriptTO(final String schoolId,
 			final BigDecimal creditHoursForGpa, final BigDecimal creditHoursAttempted,
@@ -204,7 +204,7 @@ public class ExternalStudentTranscriptTO implements ExternalDataTO<ExternalStude
 	}
 
 	/**
-	 * @param CurrentRestrictions the CurrentRestrictions to set
+	 * @param currentRestrictions the CurrentRestrictions to set
 	 */
 	public void setCurrentRestrictions(String currentRestrictions) {
 		this.currentRestrictions = currentRestrictions;

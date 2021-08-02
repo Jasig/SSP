@@ -50,9 +50,10 @@ public class RecentActivityTO {
 
 	private UUID coachId;
 	/**
-	 * @param coachName
-	 * @param activity
-	 * @param activityDate
+	 * @param coachId the id of the coach
+	 * @param coachName the name of the coach
+	 * @param activity the activity
+	 * @param activityDate the activity date
 	 */
 	public RecentActivityTO(UUID coachId, String coachName, String activity, Date activityDate) {
 		super();

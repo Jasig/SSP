@@ -90,7 +90,7 @@ public class SspTimeZones implements InitializingBean {
 	/**
 	 * Ensures configured IDs are resolved to <code>TimeZones</code> and
 	 * registers this instance as the global configuration.
-	 * @throws Exception
+	 * @throws Exception Any and all exceptions
 	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -125,7 +125,7 @@ public class SspTimeZones implements InitializingBean {
 	 * <em>actual</em> semantics of these dates is always "institution-local
 	 * time" for all our current use cases.
 	 *
-	 * @return
+	 * @return The TimeZone
 	 */
 	public TimeZone getDateOnlyDbTimeZone() {
 		return TimeZone.getDefault();

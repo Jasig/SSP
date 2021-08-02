@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Maps {@link OAuth2Client} instances to {@link SspUser} instances to satisfy
+ * Maps {@link org.jasig.ssp.model.security.oauth2.OAuth2Client} instances to {@link SspUser} instances to satisfy
  * the {@link UserDetailsService} interface. That is, it makes it appear to
  * SpringSecurity as if an authenticated {@code ClientDetails} can be treated
  * just like any other {@link UserDetails}.

@@ -67,15 +67,16 @@ public class ExternalStudentTranscriptNonCourseEntityTO implements ExternalDataT
 
 
 	/**
-	 * @param schoolId
-	 * @param targetFormattedCourse
-	 * @param termCode
-	 * @param title
-	 * @param description
-	 * @param grade
-	 * @param creditEarned
-	 * @param creditType
-     * @param statusCode
+	 * @param schoolId the school id
+	 * @param targetFormattedCourse the target formatted course
+	 * @param termCode the term code
+	 * @param nonCourseCode  the non course code
+	 * @param title the title
+	 * @param description the description
+	 * @param grade the grade
+	 * @param creditEarned the credit earned
+	 * @param creditType the credit type
+     * @param statusCode the status code
 	 */
 	public ExternalStudentTranscriptNonCourseEntityTO (final String schoolId, final String targetFormattedCourse,
                                                        final String termCode, final String nonCourseCode,

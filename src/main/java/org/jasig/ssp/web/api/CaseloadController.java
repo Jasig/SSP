@@ -197,8 +197,10 @@ public class CaseloadController extends AbstractBaseController {
 	/**
 	 * Retrieves the specified list from persistent storage.
 	 *
-	 * @param id
-	 *            The specific id to use to lookup the associated data.
+	 * @param uploadItem
+	 *            The bulk add caseload reassignment transfer object
+	 * @param result
+	 *            The binding result
 	 * @return The specified instance if found.
 	 * @throws IOException
 	 * @throws IllegalStateException

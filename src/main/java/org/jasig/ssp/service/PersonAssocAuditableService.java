@@ -29,6 +29,7 @@ public interface PersonAssocAuditableService<T extends PersonAssocAuditable>
 	 * Retrieve every instance in the database filtered by the supplied status.
 	 * 
 	 * @param person
+	 *            the person object
 	 * @param sAndP
 	 *            Sorting and paging options
 	 * @return All entities in the database filtered by the supplied status.

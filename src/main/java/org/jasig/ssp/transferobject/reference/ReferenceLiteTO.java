@@ -95,12 +95,12 @@ public class ReferenceLiteTO<T extends AbstractReference> implements
 	 * might have its own {@link ObjectStatus}, independent of the underlying
 	 * reference's {@link ObjectStatus}. The <code>ObjectStatus</code> set on
 	 * the resulting TO represents the status for the entire association as
-	 * defined by {@link ObjectStatus#and(org.jasig.ssp.model.ObjectStatus)}.
+	 * defined by {@link org.jasig.ssp.model.ObjectStatus}.
 	 *
-	 * @param model
-	 * @param associationStatus
-	 * @param <T>
-	 * @return
+	 * @param model the model
+	 * @param associationStatus the association status
+	 * @param <T> the AbstractReference TO
+	 * @return the AbstractReference TO
 	 */
 	public static <T extends AbstractReference> ReferenceLiteTO<T> fromModelAssociation(
 			final T model, final ObjectStatus associationStatus) {

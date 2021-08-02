@@ -44,7 +44,7 @@ import java.util.Map;
  * Keeps the current session alive. Useful for circumstances where servlet/api
  * calls are being made with few, or no, portlet calls.
  *
- * @author Chris Waymire <chris@waymire.net>
+ * @author Chris Waymire chris@waymire.net
  */
 public class KeepSessionAliveFilter implements Filter {
     private final String SESSION_KEEP_ALIVE_ATTRIBUTE_KEY = KeepSessionAliveFilter.class.getName() +"_SESSION_KEEP_ALIVE";
@@ -57,7 +57,7 @@ public class KeepSessionAliveFilter implements Filter {
      * to a value less than zero. To run on every request set to zero. Default
      * is 10 minutes.
      *
-     * @param interval
+     * @param interval The interval integer
      */
     public void setInterval(int interval)
     {

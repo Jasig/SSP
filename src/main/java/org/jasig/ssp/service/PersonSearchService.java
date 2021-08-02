@@ -103,7 +103,6 @@ public interface PersonSearchService {
 	 *         (advisor) filtered by the specified parameters
 	 * @throws ObjectNotFoundException
 	 *             If any referenced data could not be loaded.
-	 * @throws ValidationException 
 	 */
 	PagingWrapper<PersonSearchResult2> caseLoadFor(ProgramStatus programStatus,
 			Person coach, 
@@ -131,10 +130,10 @@ public interface PersonSearchService {
 	 * read the entire report set into memory, there was no point in returning
 	 * a paged response.</p>
 	 *
-	 * @param studentTypeIds filter the results to only count students having
+	 * @param searchForm filter the results to only count students having
 	 *                       one of these types. <code>null</code> or empty
 	 *                       collection is a wildcard
-	 * @return
+	 * @return Collection of CoachCaseloadRecordCountForProgramStatus objects
 	 */
 	Collection<CoachCaseloadRecordCountForProgramStatus>
 		currentCaseloadCountsByStatus(CaseLoadSearchTO searchForm);
@@ -142,7 +141,7 @@ public interface PersonSearchService {
 	/**
 	 * Count caseloads overlapping the given date range for <em>all</em>
 	 * current coaches. This is very similar to
-	 * {@link #currentCaseloadCountsByStatus(java.util.List)} except that
+	 * {@link #currentCaseloadCountsByStatus(CaseLoadSearchTO)} except that
 	 * counted caseloads must have been/will be current during the given
 	 * date range. I.e. they needn't be current when this method is executed.
 	 *

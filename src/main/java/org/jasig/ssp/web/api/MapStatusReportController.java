@@ -278,8 +278,8 @@ public class MapStatusReportController  extends AbstractBaseController {
 	 * @param id
 	 *            The id of the data instance to mark deleted.
 	 * @return Success boolean.
-	 * @throws ObjectNotFoundException
-	 *             If specified object could not be found.
+	 * @throws OperationNotSupportedException
+	 *             This operation is not supported
 	 */
 	@PreAuthorize("hasRole('ROLE_PERSON_MAP_WRITE')")
 	@RequestMapping(method = RequestMethod.DELETE)

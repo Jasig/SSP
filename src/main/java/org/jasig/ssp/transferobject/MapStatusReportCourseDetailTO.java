@@ -43,6 +43,8 @@ AbstractAuditableTO<MapStatusReportCourseDetails> implements TransferObject<MapS
 	}
 	/**
 	 * Empty constructor.
+	 *
+	 * @param model The MapStatusReportCourseDetails model
 	 */
 	public MapStatusReportCourseDetailTO(MapStatusReportCourseDetails model) {
 		super();

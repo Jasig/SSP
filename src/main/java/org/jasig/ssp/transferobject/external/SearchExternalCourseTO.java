@@ -28,11 +28,11 @@ public class SearchExternalCourseTO {
 	private String courseNumber;
 	private String tag;
 	/**
-	 * @param programCode
-	 * @param termCode
-	 * @param subjectAbbreviation
-	 * @param courseNumber
-	 * @param tag
+	 * @param programCode the program code
+	 * @param termCode the term code
+	 * @param subjectAbbreviation the subject abbreviation
+	 * @param courseNumber the course number
+	 * @param tag the tag
 	 */
 	public SearchExternalCourseTO(String programCode, String termCode,
 			String subjectAbbreviation, String courseNumber, String tag) {

@@ -40,10 +40,12 @@ public final class SetOps {
 	}
 
 	/**
-	 * Soft delete ones in existing that are not in replacingWith <br />
-	 * Ignore ones in existing that are in replacingWith <br />
+	 * Soft delete ones in existing that are not in replacingWith
+	 * Ignore ones in existing that are in replacingWith
 	 * Add from replacingWith where not in existing.
-	 * 
+	 *
+	 * @param <T>
+	 *           Auditable model object
 	 * @param existing
 	 *            Existing set
 	 * @param replacingWith
@@ -106,7 +108,9 @@ public final class SetOps {
 
 	/**
 	 * Mark each item {@link ObjectStatus#INACTIVE}.
-	 * 
+	 *
+	 * @param <T>
+	 *           The Auditable model object
 	 * @param items
 	 *            Items to be marked as {@link ObjectStatus#INACTIVE}
 	 */

@@ -32,12 +32,12 @@ import org.springframework.util.PropertyPlaceholderHelper;
  *
  * <p>E.g. this:</p>
  *
- * <p><code>foo=bar<br/>
+ * <p><code>foo=bar<br>
  * baz=${foo}</code></p>
  *
  * <p>Becomes:</p>
  *
- * <p><code>foo=bar<br/>
+ * <p><code>foo=bar<br>
  * baz=bar</code></p>
  *
  * Useful when you want the property placeholder dereferencing behavior of the

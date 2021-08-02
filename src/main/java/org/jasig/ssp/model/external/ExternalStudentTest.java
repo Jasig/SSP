@@ -235,7 +235,7 @@ public class ExternalStudentTest extends AbstractExternalData implements
 
 
 	/**
-	 * @param status the outcome to set
+	 * @param outcome the outcome to set
 	 */
 	public void setOutcome(final String outcome) {
 		this.outcome = outcome;

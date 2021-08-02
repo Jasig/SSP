@@ -54,7 +54,7 @@ public class MyGpsSelfHelpGuidePortletController extends
 		return new ModelAndView("self-help-guide", "model", model);
 	}
 
-/**	
+/*
 	@RequestMapping(params = "action=showGuides")
 	public String showGuides() {
 		return "guides";
@@ -79,7 +79,7 @@ public class MyGpsSelfHelpGuidePortletController extends
 	public String accessDenied() {
 		return "accessDenied";
 	}
- **/
+ */
 
 	@Override
 	protected Logger getLogger() {

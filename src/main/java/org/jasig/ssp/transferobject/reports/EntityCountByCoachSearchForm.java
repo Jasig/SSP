@@ -41,13 +41,13 @@ public class EntityCountByCoachSearchForm {
 	}
 	
 	/**
-	 * @param coaches
-	 * @param createDateFrom
-	 * @param createDateTo
-	 * @param studentTypeIds
-	 * @param serviceReasonIds
-	 * @param specialServiceGroupIds
-	 * @param sAndP
+	 * @param coaches the list of coaches person objects
+	 * @param createDateFrom the created date from
+	 * @param createDateTo the created date to
+	 * @param studentTypeIds the list of student type UUIDs
+	 * @param serviceReasonIds the list of service reason UUIDs
+	 * @param specialServiceGroupIds the list of special service group UUIDs
+	 * @param sAndP Sorting and paging options
 	 */
 	public EntityCountByCoachSearchForm(List<Person> coaches,
 			Date createDateFrom, Date createDateTo, List<UUID> studentTypeIds,

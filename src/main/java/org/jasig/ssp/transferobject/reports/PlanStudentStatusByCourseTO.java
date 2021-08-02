@@ -43,8 +43,8 @@ public class PlanStudentStatusByCourseTO {
 	private List<PlanStudentStatusTO> studentStatusByCourse = new ArrayList<PlanStudentStatusTO>();
 	
 	/**
-	 * @param formattedCourse
-	 * @param courseTitle
+	 * @param formattedCourse the formatted course
+	 * @param courseTitle the course title
 	 */
 	public PlanStudentStatusByCourseTO(String formattedCourse,
 			String courseTitle) {

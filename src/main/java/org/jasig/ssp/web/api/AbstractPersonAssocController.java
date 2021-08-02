@@ -52,7 +52,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 
  * Basic REST command implementation to respond with standard transfer objects
- * in JSON format for entities associated with a Person. <br />
+ * in JSON format for entities associated with a Person. <br>
  * Largely based on AbstractAuditableReferenceController
  * 
  * @param <T>

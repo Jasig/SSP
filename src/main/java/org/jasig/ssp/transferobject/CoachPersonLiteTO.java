@@ -156,6 +156,12 @@ public class CoachPersonLiteTO implements Serializable {
 	 *            office location
 	 * @param departmentName
 	 *            department name
+	 * @param workPhone
+	 * 			  work phone
+	 * @param photoUrl
+	 * 			  photo URL
+	 * @param homeCampusName
+	 * 			  home campus name
 	 */
 	public CoachPersonLiteTO(@NotNull final UUID id,
 			@NotNull final String firstName,
@@ -333,8 +339,8 @@ public class CoachPersonLiteTO implements Serializable {
 	 * Not <code>equals()</code> because the convention seems to be to
 	 * not do that for TO classes.
 	 *
-	 * @param o
-	 * @return
+	 * @param o The Object to comapre
+	 * @return True if equal
 	 */
 	public boolean equalsAllFields(Object o) {
 		if (this == o) return true;
@@ -367,7 +373,7 @@ public class CoachPersonLiteTO implements Serializable {
 	 * Not conventional to override <code>toString()</code> in TO classes,
 	 * but makes debugging tests so much easier.
 	 *
-	 * @return
+	 * @return The string of all the fields in the CoachPersonLiteTO
 	 */
 	@Override
 	public String toString() {

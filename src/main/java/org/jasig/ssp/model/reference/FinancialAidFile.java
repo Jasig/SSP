@@ -89,8 +89,7 @@ public class FinancialAidFile extends AbstractReference implements Auditable {
 	}
 	
 	/**
-	 * @param race external ref code
-	 * 				the race code to set
+	 * @param code The race code to set
 	 */
 	public void setCode(final String code) {
 		this.code = code;

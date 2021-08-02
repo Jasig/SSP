@@ -162,6 +162,8 @@ public class DirectoryPersonSearchDao  {
 	/**
 	 * Search people by the specified terms.
 	 *
+	 * @param personSearchRequest the PersonSearchRequest object
+	 *
 	 * @return List of people that match the specified filters
 	 */
 	@SuppressWarnings("unchecked")
@@ -179,6 +181,8 @@ public class DirectoryPersonSearchDao  {
     /**
      * Search people by the specified terms. Return full result.
      *
+	 * @param personSearchRequest the PersonSearchRequest object
+	 *
      * @return List of people that match the specified filters
      */
     @SuppressWarnings("unchecked")

@@ -99,6 +99,8 @@ public class OAuth2Client extends Person {
 	/**
 	 * Should only be invoked by {@link OAuth2ClientService}, which knows how
 	 * to properly encode the value.
+	 *
+	 * @param secret The secret value to set
 	 */
 	public void setSecret(String secret) {
 		this.secret = secret;

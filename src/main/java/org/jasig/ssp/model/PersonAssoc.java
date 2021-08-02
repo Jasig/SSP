@@ -33,7 +33,7 @@ public interface PersonAssoc {
 	/**
 	 * Sets the associated {@link Person} reference.
 	 * 
-	 * @param person
+	 * @param person The person model to set
 	 */
 	void setPerson(Person person);
 }

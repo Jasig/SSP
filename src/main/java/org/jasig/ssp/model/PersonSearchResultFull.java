@@ -185,7 +185,7 @@ public class PersonSearchResultFull {
     /**
      * Alias for {@link #getActiveAlerts()} for legacy reasons.
      *
-     * @return
+     * @return Number of Early Alerts
      */
     public int getNumberOfEarlyAlerts() {
         return activeAlerts;

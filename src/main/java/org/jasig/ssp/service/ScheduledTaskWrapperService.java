@@ -138,7 +138,7 @@ public interface ScheduledTaskWrapperService {
 	void scheduledQueuedJobs();
 
     /**
-     * Basically a deferred form of {@link #execWithTaskContext(Runnable)}.
+     * Basically a deferred form of {@link #execWithTaskContext(String, Runnable, boolean, UUID)}.
      * See comments in implementation ScheduledTaskWrapperServiceImpl.java
      * @param taskName
      * @param batchedTask

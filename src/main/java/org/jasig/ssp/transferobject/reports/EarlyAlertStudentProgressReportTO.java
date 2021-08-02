@@ -32,6 +32,10 @@ public class EarlyAlertStudentProgressReportTO extends BaseStudentReportTO {
 	 * 
 	 * @param model
 	 *            Initialize instance from the data in this model
+	 * @param earlyAlertsInitialTerm
+	 * 			  the EA initial term
+	 * @param earlyAlertsComparisonTerm
+	 * 			  the EA comparison term
 	 */
 	public EarlyAlertStudentProgressReportTO(final Person model, Long earlyAlertsInitialTerm, Long earlyAlertsComparisonTerm) {		
 		super(model);

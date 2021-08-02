@@ -19,7 +19,7 @@
 package org.jasig.ssp.service.jobqueue;
 
 /**
- * Describes the state of {@link Job} execution, i.e. the overall status of the work being performed, as opposed to the
+ * Describes the state of {@link org.jasig.ssp.model.jobqueue.Job} execution, i.e. the overall status of the work being performed, as opposed to the
  * job's <em>workflow</em>, the latter having more to do with the job management infrastructure.
  */
 public enum JobExecutionStatus {

@@ -143,10 +143,10 @@ public final class SortingAndPaging { // NOPMD
 	
 	/**
 	 * 
-	 * @param status
-	 * @param sortFields
-	 * @param defaultSortProperty
-	 * @param defaultSortDirection
+	 * @param status The status
+	 * @param sortFields The sortFields
+	 * @param defaultSortProperty The defaultSortProperty
+	 * @param defaultSortDirection The defaultSortDirection
 	 * 
 	 * Use this constructor if there is to be no paging.  firstResult and maxResults are set to null
 	 */
@@ -353,6 +353,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @param query
 	 *            Paging filter will be added to this criteria
+	 * @return The Query
 	 */
 	public Query addPagingToQuery(final Query query) {
 		if (isPaged()) {
@@ -487,6 +488,7 @@ public final class SortingAndPaging { // NOPMD
 	 * 
 	 * @param query
 	 *            Paging filter will be added to this criteria
+	 * @return The query StringBuilder
 	 */
 	public StringBuilder addSortingToQuery(final StringBuilder query) {
 		if (isSorted()) {

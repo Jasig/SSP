@@ -882,7 +882,7 @@ public class BaseStudentReportTO implements Serializable {
 	}
 
 	/**
-	 * @param academicPrograms the programs to set (will overwrite existing)
+	 * @param externalAcademicPrograms the programs to set (will overwrite existing)
 	 */
 	public void setAcademicPrograms(final List<ExternalStudentAcademicProgram> externalAcademicPrograms) {
 		if (externalAcademicPrograms != null && !externalAcademicPrograms.isEmpty()) {
@@ -899,7 +899,7 @@ public class BaseStudentReportTO implements Serializable {
 	}
 
 	/**
-	 * @param academicProgram the program to add to current list
+	 * @param externalAcademicProgram the program to add to current list
 	 */
 	public void addAcademicProgram(final ExternalStudentAcademicProgram externalAcademicProgram) {
 

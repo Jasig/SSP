@@ -26,9 +26,9 @@ public class ExternalStudentFinancialAidAwardTermTO implements Serializable,
 		ExternalDataTO<ExternalStudentFinancialAidAwardTerm> {
 
 	/**
-	 * @param schoolId
-	 * @param accepted
-	 * @param termCode
+	 * @param schoolId the school id
+	 * @param accepted the accepted string
+	 * @param termCode the term code
 	 */
 	public ExternalStudentFinancialAidAwardTermTO(String schoolId,
 			String accepted,

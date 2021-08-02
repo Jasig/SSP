@@ -161,7 +161,7 @@ public class CoachCaseloadRecordCountForProgramStatus {
 	 * two instances with different {@link #toString()} results
 	 * could be considered equal or might hash identically.
 	 *
-	 * @return
+	 * @return All if the CoachCaseloadRecordCountForProgramStatus fields as a string
 	 */
 	@Override
 	public String toString() {
@@ -191,8 +191,8 @@ public class CoachCaseloadRecordCountForProgramStatus {
 	 * <p>Note that two instances with different {@link #toString()} results
 	 * could be considered equal.</p>
 	 *
-	 * @param o
-	 * @return
+	 * @param o The CoachCaseloadRecordCountForProgramStatus model object to compare
+	 * @return True if equal
 	 */
 	@Override
 	public boolean equals(Object o) {
@@ -215,8 +215,8 @@ public class CoachCaseloadRecordCountForProgramStatus {
 	 * Compare state of all fields, not just the domain identity fields
 	 * compared by {@link #equals(Object)}. Mainly useful for testing.
 	 *
-	 * @param o
-	 * @return
+	 * @param o The CoachCaseloadRecordCountForProgramStatus model object to compare
+	 * @return True if equal
 	 */
 	public boolean equalsAllFields(Object o) {
 		if (this == o) return true;

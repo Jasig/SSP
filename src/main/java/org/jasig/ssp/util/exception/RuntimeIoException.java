@@ -19,7 +19,7 @@
 package org.jasig.ssp.util.exception;
 
 /**
- * Unchecked variation on {@link IOException}.
+ * Unchecked variation on {@link java.io.IOException}.
  *
  * <p>Copied nearly verbatim from the Apache Mina project v2.0.0-M6.</p>
  */

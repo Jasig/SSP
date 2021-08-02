@@ -35,9 +35,10 @@ public class CaseLoadSearchTO {
 	}
 	
 	/**
-	 * @param studentTypeIds
-	 * @param serviceReasonIds
-	 * @param homeDepartment
+	 * @param studentTypeIds the list of student type UUIDs
+	 * @param serviceReasonIds the list of service reason UUIDs
+	 * @param specialServiceGroupIds the list of special service group UUIDs
+	 * @param homeDepartment the home department
 	 */
 	public CaseLoadSearchTO(List<UUID> studentTypeIds,
 			List<UUID> serviceReasonIds, List<UUID> specialServiceGroupIds, String homeDepartment) {

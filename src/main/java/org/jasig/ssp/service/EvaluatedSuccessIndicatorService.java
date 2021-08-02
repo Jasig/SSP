@@ -30,10 +30,10 @@ public interface EvaluatedSuccessIndicatorService {
 
     /**
      * Evaluates Success Indicators for given person.
-     * @param personId
-     * @param status
+     * @param personId the person UUID
+     * @param status the person status
      * @param indicators  if null all indicators will be evaluated for person
-     * @return
+     * @return the list of evaluated success indicator transfer objects
      * @throws ObjectNotFoundException
      */
     List<EvaluatedSuccessIndicatorTO> getForPerson(UUID personId, ObjectStatus status,

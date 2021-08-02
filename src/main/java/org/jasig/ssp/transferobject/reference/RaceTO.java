@@ -65,7 +65,7 @@ public class RaceTO
 	}
 	
 	/**
-	 * @param race external ref code
+	 * @param code external ref code
 	 * 				the race code to set
 	 */
 	public void setCode(final String code) {

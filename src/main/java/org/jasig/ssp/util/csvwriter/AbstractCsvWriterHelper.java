@@ -105,8 +105,8 @@ public abstract class AbstractCsvWriterHelper<T> {
 	 * null values. Makes it easier for certain types of clients to consume,
 	 * e.g. HSQLDB CSV tables.
 	 *
-	 * @param line
-	 * @return
+	 * @param line The line array
+	 * @return The normalizedLine string array
 	 */
 	protected String[] normalizeLine(String[] line) {
 		for (int i = 0; i < line.length; i++) {
@@ -145,8 +145,8 @@ public abstract class AbstractCsvWriterHelper<T> {
 	 * of field values. Allowing multiple rows to be returned allows for support of nested models which need
 	 * to be flatted for CSV representation.
 	 *
-	 * @param model
-	 * @return
+	 * @param model The model object
+	 * @return The List of string arrays
 	 */
 	protected abstract List<String[]> csvBodyRows(T model);
 
@@ -154,8 +154,8 @@ public abstract class AbstractCsvWriterHelper<T> {
 	 * Utility to support the common case where {@link #csvBodyRows(Object)} only needs to return a single-element
 	 * list.
 	 *
-	 * @param row
-	 * @return
+	 * @param row The string array
+	 * @return The List of string arrays
 	 */
 	public List<String[]> wrapCsvRowInList(String[] row) {
 		final List<String[]> wrapper = Lists.newArrayListWithCapacity(1);

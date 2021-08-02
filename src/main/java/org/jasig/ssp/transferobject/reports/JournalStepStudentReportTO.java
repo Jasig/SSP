@@ -40,7 +40,7 @@ public class JournalStepStudentReportTO extends BaseStudentReportTO {
 	}
 
 	/**
-	 * @param person
+	 * @param person the BaseStudentReportTO
 	 */
 	public JournalStepStudentReportTO(BaseStudentReportTO person) {
 		super(person);
@@ -55,7 +55,7 @@ public class JournalStepStudentReportTO extends BaseStudentReportTO {
 	}
 
 	/**
-	 * @param journalStepName the journalStepName to set
+	 * @param journalStepDetailName the journalStepDetailName to set
 	 */
 	public void setJournalStepDetailName(String journalStepDetailName) {
 		this.journalStepDetailName = journalStepDetailName;

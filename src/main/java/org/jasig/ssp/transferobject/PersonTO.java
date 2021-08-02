@@ -809,7 +809,7 @@ public class PersonTO // NOPMD
 
     /**
      * Can be null, changes here are ignored; use Program Status API instead.
-     * @param programStatusChangeReasonName
+     * @param programStatusChangeReasonName The programStatusChangeReasonName to sets
      */
     public void setProgramStatusChangeReasonName(
             final String programStatusChangeReasonName) {

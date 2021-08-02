@@ -56,6 +56,8 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements Aud
 
 	/**
 	 * Return messages that have not been sent, up to the specified maximum
+	 *
+	 * @param batchSize the batch size
 	 * 
 	 * @return Returns up to <code>batchSize</code> messages that have not been
 	 *   sent.
@@ -72,9 +74,9 @@ public class MessageDao extends AbstractAuditableCrudDao<Message> implements Aud
     /**
      * Returns messages that have not been sent using sorting and paging
      *  Note: does not return messages that have failed
-     *    (retryCount > retryConfiguration)
-     * @param sAndP
-     * @return
+     *    (retryCount greater than retryConfiguration)
+     * @param sAndP Sorting, paging and status filters
+     * @return the wrapped Message object
      */
 	public PagingWrapper<Message> queued(SortingAndPaging sAndP) {
 		int retryConfig = configService.getByNameExceptionOrDefaultAsInt("mail_delivery_retry_limit");

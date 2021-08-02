@@ -367,12 +367,10 @@ public class PersonTaskController extends
 	/**
 	 * bulk save changes to the specified IDs and objects, for the specified person.
 	 * 
-	 * @param id
-	 *            the instance to update
 	 * @param personId
 	 *            the person
-	 * @param obj
-	 *            the full instance data to update
+	 * @param maps
+	 *            the list of maps to update
 	 * @return the updated instance
 	 * @throws ObjectNotFoundException
 	 *             If the specified ID could not be found.

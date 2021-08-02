@@ -61,7 +61,7 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 
     /**
      * Constructor uses model calls from method
-     * @param model
+     * @param model the transcript course model to copy
      */
     public ExternalStudentTranscriptCourseTO(ExternalStudentTranscriptCourse model) {
         super();
@@ -71,17 +71,24 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	/**
      * Constructor
      *
-	 * @param schoolId
-	 * @param subjectAbbreviation
-	 * @param number
-	 * @param formattedCourse
-	 * @param sectionNumber
-	 * @param title
-	 * @param description
-	 * @param grade
-	 * @param creditEarned
-	 * @param termCode
-	 * @param creditType
+	 * @param schoolId the school id
+	 * @param firstName the first name
+	 * @param middleName the middle name
+	 * @param lastName the last name
+	 * @param subjectAbbreviation the subject abbreviation
+	 * @param number the number
+	 * @param formattedCourse the formatted course
+	 * @param sectionNumber the section number
+	 * @param title the title
+	 * @param description the description
+	 * @param grade the grade
+	 * @param creditEarned the credit earned
+	 * @param termCode the term code
+	 * @param creditType the credit type
+	 * @param sectionCode the section code
+	 * @param facultySchoolId the faculty school id
+	 * @param audited auditited
+	 * @param participation participation
 	 */
 	public ExternalStudentTranscriptCourseTO(
 	        final String schoolId,

@@ -57,13 +57,14 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	}
 
 	/**
-	 * @param schoolId
-	 * @param testName
-	 * @param subTestCode
-	 * @param subTestName
-	 * @param testDate
-	 * @param score
-	 * @param status
+	 * @param schoolId the school id
+	 * @param testCode the test code
+	 * @param testName the test name
+	 * @param subTestCode the sub test code
+	 * @param subTestName the sub test name
+	 * @param testDate the test date
+	 * @param score the score
+	 * @param status the status
 	 */
 	public ExternalStudentTestTO(final String schoolId,  final String testCode, 
 			final String testName,
@@ -81,14 +82,15 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	}
 	
 	/**
-	 * @param schoolId
-	 * @param testName
-	 * @param subTestCode
-	 * @param subTestName
-	 * @param testDate
-	 * @param score
-	 * @param status
-	 * @param outcome
+	 * @param schoolId the school id
+	 * @param testCode the test code
+	 * @param testName the test name
+	 * @param subTestCode the sub test code
+	 * @param subTestName the sub test name
+	 * @param testDate the test date
+	 * @param score the score
+	 * @param status the status
+	 * @param outcome the outcome
 	 */
 	public ExternalStudentTestTO(final String schoolId,  final String testCode, 
 			final String testName,
@@ -259,7 +261,7 @@ public class ExternalStudentTestTO implements Serializable, ExternalDataTO<Exter
 	}
 
 	/**
-	 * @param status the outcome to set
+	 * @param outcome the outcome to set
 	 */
 	public void setOutcome(final String outcome) {
 		this.outcome = outcome;

@@ -332,14 +332,14 @@ public class ExternalStudentTranscriptCourse extends AbstractExternalData
 	}
 
 	/**
-	 * @return the status_code
+	 * @return the statusCode
 	 */
 	public String getStatusCode() {
 		return statusCode;
 	}
 
 	/**
-	 * @param status_code the status_code to set
+	 * @param statusCode the status_code to set
 	 */
 	public void setStatusCode(String statusCode) {
 		this.statusCode = statusCode;

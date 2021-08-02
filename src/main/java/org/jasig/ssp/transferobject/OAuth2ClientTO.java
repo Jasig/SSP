@@ -131,12 +131,12 @@ public class OAuth2ClientTO extends AbstractAuditableTO<OAuth2Client>
 	}
 
 	/**
-	 * Use this to set a secret change, including a {@link null} to delete the
+	 * Use this to set a secret change, including a null to delete the
 	 * existing secret. But because we do support that sort of deletion, you
-	 * also need to set {@link secretChange} otherwise whatever is set here
+	 * also need to set secretChange otherwise whatever is set here
 	 * will be ignored.
 	 *
-	 * @param secret
+	 * @param secret The secret string
 	 */
 	@JsonProperty
 	public void setSecret(String secret) {

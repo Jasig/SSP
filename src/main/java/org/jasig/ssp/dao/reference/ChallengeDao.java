@@ -98,7 +98,8 @@ public class ChallengeDao extends AbstractReferenceAuditableCrudDao<Challenge>
 	 * @param query
 	 *            Text string to compare with a SQL LIKE clause on the
 	 *            SelfHelpGuide Question, Description, and Tags fields
-	 * @param selfHelpGuide 
+	 * @param selfHelpGuide
+	 * 			  boolean to filter for challenges shown in self help guide
 	 * @return All Challenges that match the specified criteria.
 	 */
 	@SuppressWarnings(UNCHECKED)

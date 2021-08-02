@@ -99,7 +99,7 @@ public class ExternalPersonNote extends AbstractExternalReferenceData implements
 	}
 
 	/**
-	 * @param note_type the note_type to set
+	 * @param noteType the note_type to set
 	 */
 	public void setNote_type(String noteType) {
 		this.noteType = noteType;
@@ -141,7 +141,7 @@ public class ExternalPersonNote extends AbstractExternalReferenceData implements
 	}
 
 	/**
-	 * @param date the date to set
+	 * @param dateNoteTaken the date to set
 	 */
 	public void setDateNoteTaken(Date dateNoteTaken) {
 		this.dateNoteTaken = dateNoteTaken;

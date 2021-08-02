@@ -42,7 +42,7 @@ public interface ExternalData {
 	 * Only used by Hibernate. Setting this does not matter as changes are never
 	 * persisted.
 	 * 
-	 * @param id
+	 * @param id the id to set
 	 */
 	@Deprecated
 	void setId(Serializable id);

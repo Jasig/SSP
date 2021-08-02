@@ -65,7 +65,7 @@ public class SapStatusTO
 	}
 	
 	/**
-	 * @param sapstatus external ref code
+	 * @param code external ref code
 	 * 				the sapstatus code to set
 	 */
 	public void setCode(final String code) {

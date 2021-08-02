@@ -37,8 +37,8 @@ public class SQLServerViolatedConstraintNameExtractor
 	 * Works around default SQLServer dialect behavior which never finds a
 	 * violated constraint name.
 	 *
-	 * @param sqle
-	 * @return
+	 * @param sqle The SQLException
+	 * @return The constraint name
 	 */
 	@Override
 	public String extractConstraintName(SQLException sqle) {

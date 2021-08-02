@@ -63,7 +63,7 @@ public class CareerDecisionStatusTO
 	}
 	
 	/**
-	 * @param careerstatus external ref code
+	 * @param code external ref code
 	 * 				the careerstatus code to set
 	 */
 	public void setCode(final String code) {

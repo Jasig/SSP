@@ -46,7 +46,7 @@ ExternalData, Serializable {
 		return code;
 	}
 	/**
-	 * @param term the term to set
+	 * @param code the code to set
 	 */
 	public void setCode(String code) {
 		this.code = code;

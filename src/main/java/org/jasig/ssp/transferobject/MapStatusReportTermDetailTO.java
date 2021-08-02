@@ -40,6 +40,8 @@ AbstractAuditableTO<MapStatusReportTermDetails> implements TransferObject<MapSta
 	}
 	/**
 	 * Empty constructor.
+	 *
+	 * @param model The MapStatusReportTermDetails model
 	 */
 	public MapStatusReportTermDetailTO(MapStatusReportTermDetails model) {
 		super();

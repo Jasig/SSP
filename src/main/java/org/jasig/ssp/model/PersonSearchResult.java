@@ -66,6 +66,8 @@ public class PersonSearchResult {
 	 *            PersonProgramStatus for looking up data.
 	 * @throws ObjectNotFoundException
 	 *             If Person was not found when looking up data.
+	 * @throws ValidationException
+	 *             If Person is invalid
 	 */
 	public PersonSearchResult(@NotNull final Person person,
 			@NotNull final PersonProgramStatusService personProgramStatusService)

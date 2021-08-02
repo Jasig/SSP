@@ -63,7 +63,7 @@ public class PlanCourseCountTO {
 		return studentCount;
 	}
 	/**
-	 * @param count the count to set
+	 * @param studentCount the count to set
 	 */
 	public void setStudentCount(Long studentCount) {
 		this.studentCount = studentCount;

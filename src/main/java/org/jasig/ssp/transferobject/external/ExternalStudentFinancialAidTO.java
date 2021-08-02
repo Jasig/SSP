@@ -78,17 +78,17 @@ public class ExternalStudentFinancialAidTO implements Serializable,
 	}
 	
 	/**
-	 * @param schoolId
-	 * @param financialAidGpa
-	 * @param gpa20bHrsNeeded
-	 * @param gpa20aHrsNeeded
-	 * @param neededFor67PtcCompletion
-	 * @param currentYearFinancialAidAward
-	 * @param sapStatus
-	 * @param fafsaDate
-	 * @param financialAidRemaining
-	 * @param originalLoanAmount
-	 * @param remainingLoanAmount
+	 * @param schoolId the school id
+	 * @param financialAidGpa the financial aid GPA
+	 * @param gpa20bHrsNeeded the GPA 20b hours needed
+	 * @param gpa20aHrsNeeded the GPA 20a hours needed
+	 * @param neededFor67PtcCompletion the amount needed for 67% completion
+	 * @param currentYearFinancialAidAward the current year financial aid award
+	 * @param sapStatus the SAP status
+	 * @param fafsaDate the FASFA date
+	 * @param financialAidRemaining the amount of financial aid remaining
+	 * @param originalLoanAmount the original loan amount
+	 * @param remainingLoanAmount the remaining load amount
 	 */
 	public ExternalStudentFinancialAidTO(String schoolId,
 			BigDecimal financialAidGpa, BigDecimal gpa20bHrsNeeded,

@@ -76,6 +76,8 @@ public class CampusTO extends AbstractReferenceTO<Campus>
 	 *            description shown to the user in detail views
 	 * @param earlyAlertCoordinatorId
 	 *            Early Alert coordinator
+	 * @param code
+	 * 			  the code
 	 */
 	public CampusTO(@NotNull final UUID id, @NotNull final String name,
 			final String description,

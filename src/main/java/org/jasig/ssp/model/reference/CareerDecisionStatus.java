@@ -87,8 +87,7 @@ public class CareerDecisionStatus extends AbstractReference implements Auditable
 	}
 	
 	/**
-	 * @param career status external ref code
-	 * 				the career status code to set
+	 * @param code The career status code to set
 	 */
 	public void setCode(final String code) {
 		this.code = code;

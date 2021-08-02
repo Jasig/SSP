@@ -64,7 +64,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * Retrieves the specified instance from persistent storage. DOES NOT check
 	 * {@link ObjectStatus}.
 	 * 
-	 * @param id
+	 * @param id the UUID to get
 	 * @return The specified instance if found
 	 * @throws ObjectNotFoundException
 	 *             If object was not found.
@@ -89,7 +89,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	 * Exception will be thrown later, on usage, if any, if the object is not
 	 * found. DOES NOT check for {@link ObjectStatus#ACTIVE} status.
 	 * 
-	 * @param id
+	 * @param id the UUID to load
 	 * @return The specified instance.
 	 */
 	T load(UUID id);
@@ -97,7 +97,7 @@ public interface AuditableCrudDao<T extends Auditable> {
 	/**
 	 * Save instance to persistent storage.
 	 * 
-	 * @param obj
+	 * @param obj the object to save
 	 * @return The update data object instance.
 	 */
 	T save(T obj);

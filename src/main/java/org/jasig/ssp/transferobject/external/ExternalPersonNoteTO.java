@@ -127,7 +127,7 @@ public class ExternalPersonNoteTO implements ExternalDataTO<ExternalPersonNote> 
 	}
 
 	/**
-	 * @param date the dateNoteTaken to set
+	 * @param dateNoteTaken the dateNoteTaken to set
 	 */
 	public void setDateNoteTaken(Date dateNoteTaken) {
 		this.dateNoteTaken = dateNoteTaken;

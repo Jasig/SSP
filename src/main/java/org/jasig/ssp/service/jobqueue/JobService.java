@@ -92,7 +92,7 @@ public interface JobService {
 			   String executionSpec, String executionState) throws ValidationException;
 
 	/**
-	 * Transition the given job to {@link WorkflowStatus#EXECUTING}.
+	 * Transition the given job to {@link org.jasig.ssp.model.jobqueue.WorkflowStatus#EXECUTING}.
 	 *
 	 * @param jobId
 	 * @return

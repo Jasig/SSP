@@ -49,9 +49,9 @@ public class ExtendedSQLServer2008Dialect extends SQLServer2008Dialect {
 	 * really needed to do was override {@code insertRowNumberFunction()},
 	 * which was static.
 	 *
-	 * @param querySqlString
-	 * @param hasOffset
-	 * @return
+	 * @param querySqlString The string representing the query SQL
+	 * @param hasOffset The boolean representing the offset
+	 * @return the string limit
 	 */
 	@Override
 	public String getLimitString(String querySqlString, boolean hasOffset) {
@@ -79,14 +79,10 @@ public class ExtendedSQLServer2008Dialect extends SQLServer2008Dialect {
 	}
 
 	/**
-	 * Actually an override of
-	 * {@link SQLServer2005Dialect#insertRowNumberFunctionOverride}, which
-	 * is static. (Had to change the name else the compiler will complain.)
-	 *
 	 * <p>Fixes <a href="https://issues.jasig.org/browse/SSP-1681">SSP-1681</a></p>
 	 *
-	 * @param sql
-	 * @param orderby
+	 * @param sql The sql
+	 * @param orderby The orderby
 	 */
 	protected void insertRowNumberFunctionOverride(StringBuilder sql, CharSequence orderby) {
 		// Find the end of the select statement but be sure to skip any

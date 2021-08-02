@@ -67,6 +67,8 @@ public interface TOFactory<TObject extends TransferObject<M>, M> {
 	 * 
 	 * @return Model loaded from persistent storage
 	 * @throws ObjectNotFoundException
+	 *             If any referenced objects could not be loaded from persistent
+	 *             storage
 	 */
 	M from(UUID id) throws ObjectNotFoundException;
 
