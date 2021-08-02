@@ -113,7 +113,7 @@ public class StudentType
 	}
 	
 	/**
-	 * @param studentTypeCode
+	 * @param code
 	 * 				the student type code to set
 	 */
 	public void setCode(final String code) {

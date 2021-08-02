@@ -89,7 +89,7 @@ public class SapStatus extends AbstractReference implements Auditable {
 	}
 	
 	/**
-	 * @param race external ref code
+	 * @param code
 	 * 				the race code to set
 	 */
 	public void setCode(final String code) {
