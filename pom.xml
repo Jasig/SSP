@@ -5,7 +5,7 @@
 	<artifactId>ssp</artifactId>
 	<packaging>war</packaging>
 	<name>SSP</name>
-	<version>2.9.0</version>
+	<version>2.9-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.jasig.parent</groupId>
@@ -40,7 +40,7 @@
 		<connection>scm:git:git://github.com/Jasig/SSP.git</connection>
 		<developerConnection>scm:git:git@github.com:Jasig/SSP.git</developerConnection>
 		<url>https://github.com/Jasig/SSP</url>
-		<tag>ssp-2.9.0</tag>
+		<tag>rel-2-8-patches</tag>
 	</scm>
 
 	<repositories>
