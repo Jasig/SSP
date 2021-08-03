@@ -117,9 +117,11 @@ public abstract class AbstractDao<T> {
 	 * Run a query and get the total rows and results with out having to define
 	 * the Restrictions twice
 	 *
+	 * @param <Q> model object
 	 * @param query the query to process
 	 * @param sAndP Sorting, paging, and status filters
 	 * @param filterByStatus filter by status boolean
+	 * @return wrapped result
 	 */
 	protected <Q> PagingWrapper<Q> processCriteriaWithSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP,
@@ -150,6 +152,7 @@ public abstract class AbstractDao<T> {
 	 *
 	 * @param query the query to process
 	 * @param sAndP Sorting, paging, and status filters
+	 * @return wrapped result
 	 */
 	protected PagingWrapper<T> processCriteriaWithStatusSortingAndPaging(
 			@NotNull final Criteria query, final SortingAndPaging sAndP) {

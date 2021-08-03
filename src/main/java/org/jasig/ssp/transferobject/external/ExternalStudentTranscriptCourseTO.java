@@ -88,6 +88,7 @@ public class ExternalStudentTranscriptCourseTO implements ExternalDataTO<Externa
 	 * @param sectionCode the section code
 	 * @param facultySchoolId the faculty school id
 	 * @param audited auditited
+	 * @param statusCode statusCode
 	 * @param participation participation
 	 */
 	public ExternalStudentTranscriptCourseTO(

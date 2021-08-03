@@ -39,7 +39,7 @@ public class SuccessIndicatorTOFactoryImpl extends AbstractReferenceTOFactory<Su
     /**
      * Overriden to throw {@code UnsupportedOperationException}.
      *
-     * @return
+     * @return SuccessIndicatorDao
      */
     @Override
     @Deprecated

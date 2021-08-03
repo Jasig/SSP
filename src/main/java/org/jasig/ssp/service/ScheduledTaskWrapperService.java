@@ -140,10 +140,10 @@ public interface ScheduledTaskWrapperService {
     /**
      * Basically a deferred form of {@link #execWithTaskContext(String, Runnable, boolean, UUID)}.
      * See comments in implementation ScheduledTaskWrapperServiceImpl.java
-     * @param taskName
-     * @param batchedTask
-     * @param isStatusedTask
-     * @param runAs
+     * @param taskName the task name
+     * @param batchedTask the batched task
+     * @param isStatusedTask true if statused task
+     * @param runAs person UUID to run as
      */
 	void execBatchedTaskWithName(String taskName, BatchedTask batchedTask, boolean isStatusedTask, UUID runAs);
 
@@ -151,10 +151,10 @@ public interface ScheduledTaskWrapperService {
      * Wraps the given {@code Runnable} in the "standard" decorators you'd
      * typically need for execution of a background task and returns the
      * resulting {@code Runnable} for subsequent execution.
-     * @param taskName
-     * @param work
-     * @param isStatusedTask
-     * @param runAsId
+     * @param taskName the task name
+     * @param work the work to perform
+     * @param isStatusedTask true if statused task
+     * @param runAsId person UUID to run as
      */
 	void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId);
 }

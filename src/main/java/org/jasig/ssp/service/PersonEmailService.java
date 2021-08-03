@@ -41,10 +41,10 @@ public interface PersonEmailService extends InitializingBean {
 	 *
 	 *
 	 *
-	 * @param emailRequest
-	 * @return
-	 * @throws ObjectNotFoundException
-	 * @throws ValidationException
+	 * @param emailRequest the email request
+	 * @return a MAP of descriptors enumerating the entities created
+	 * @throws ObjectNotFoundException if data was not present
+	 * @throws ValidationException if data is invalid
 	 */
 	Map<String, UUID> emailStudent(EmailStudentRequestForm emailRequest) throws ObjectNotFoundException, ValidationException;
 
@@ -52,8 +52,12 @@ public interface PersonEmailService extends InitializingBean {
 	 * Send an email message to potentially n-many students. This operation is expected to be implemented asynchronously
 	 * so the return is a pointer to a work queue job.
 	 *
-	 * @param emailRequest
-	 * @return
+	 * @param emailRequest the email request
+	 * @return the transfer object
+	 * @throws ObjectNotFoundException if data was not present
+	 * @throws IOException if file io issue
+	 * @throws ValidationException if data is invalid
+	 * @throws SecurityException if security issue
 	 */
 	JobTO emailStudentsInBulk(BulkEmailStudentRequestForm emailRequest) throws ObjectNotFoundException, IOException,
 			ValidationException, SecurityException;

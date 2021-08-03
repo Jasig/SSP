@@ -45,6 +45,8 @@ public interface PersonProgramStatusService
 	 *         one
 	 * @throws ObjectNotFoundException
 	 *             If personId was not found.
+	 * @throws ValidationException
+	 *             If data is not valid.
 	 */
 	PersonProgramStatus getCurrent(@NotNull UUID personId)
 			throws ObjectNotFoundException, ValidationException;
@@ -52,9 +54,9 @@ public interface PersonProgramStatusService
     /**
      * Set the program status for the specified student to Active
      *
-     * @param person
-     * @throws ObjectNotFoundException
-     * @throws ValidationException
+     * @param person the person object
+     * @throws ObjectNotFoundException If data is not found
+     * @throws ValidationException If data is not valid.
      */
     void setActiveForStudent(@NotNull Person person) throws ObjectNotFoundException, ValidationException;
 
@@ -74,21 +76,21 @@ public interface PersonProgramStatusService
 
 	/**
 	 * Expires any active Program Statuses for a student
-	 * @param person
-	 * @param savingStatus
-	 * @throws ValidationException
+	 * @param person the Person object
+	 * @param savingStatus the PersonProgramStatus object
+	 * @throws ValidationException if data is not valid
 	 */
 	void expireActive(Person person, PersonProgramStatus savingStatus)
 			throws ValidationException;
 
     /**
      * Bulk Changes Program Status for Several Students
-     * @param form
-     * @return
-     * @throws IOException
-     * @throws ObjectNotFoundException
-     * @throws ValidationException
-     * @throws SecurityException
+     * @param form the bulk program status change request form
+     * @return the job
+     * @throws IOException if file access exception
+     * @throws ObjectNotFoundException if data not found
+     * @throws ValidationException if data invalid
+     * @throws SecurityException if security issue
      */
 	JobTO changeInBulk(BulkProgramStatusChangeRequestForm form) throws IOException, ObjectNotFoundException,
 			ValidationException, SecurityException;

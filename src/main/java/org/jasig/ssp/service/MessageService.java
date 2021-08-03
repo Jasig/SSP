@@ -114,6 +114,8 @@ public interface MessageService {
 	/**
 	 * Send any queued messages. Should be set to run regularly via some kind of
 	 * scheduling system.
+	 *
+	 * @param batchExec batched message to exec
 	 */
 	void sendQueuedMessages(CallableExecutor<Pair<PagingWrapper<Message>, Collection<Throwable>>> batchExec);
 

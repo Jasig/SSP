@@ -34,7 +34,7 @@ public interface EvaluatedSuccessIndicatorService {
      * @param status the person status
      * @param indicators  if null all indicators will be evaluated for person
      * @return the list of evaluated success indicator transfer objects
-     * @throws ObjectNotFoundException
+     * @throws ObjectNotFoundException if the data does not exist
      */
     List<EvaluatedSuccessIndicatorTO> getForPerson(UUID personId, ObjectStatus status,
                                      List<SuccessIndicator> indicators) throws ObjectNotFoundException;

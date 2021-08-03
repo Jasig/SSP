@@ -42,7 +42,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	/**
 	 * Gets all Persons based on sorting and paging
 	 * @param sAndP SortingAndPaging
-     * @return
+     * @return the wrapped person
      */
 	@Override
 	PagingWrapper<Person> getAll(SortingAndPaging sAndP);
@@ -62,24 +62,24 @@ public interface PersonService extends AuditableCrudService<Person> {
 
     /**
      * Returns internal-only person by Username (Doesn't sync from external)
-     * @param username
-     * @return
-     * @throws ObjectNotFoundException
+     * @param username the users name
+     * @return the person object
+     * @throws ObjectNotFoundException if data is not found
      */
 	Person personFromUsername(String username) throws ObjectNotFoundException;
 
     /**
      * Returns internal-only person by SchoolId (Doesn't sync from external!)
-     * @param schoolId
-     * @return
-     * @throws ObjectNotFoundException
+     * @param schoolId the person's school id
+     * @return the person object
+     * @throws ObjectNotFoundException if data is not found
      */
     Person personFromSchoolId(String schoolId) throws ObjectNotFoundException;
 
     /**
      * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
      *  saving a Person but where getInternalOrExternalPersonBySchoolId was run with commit == false.
-     * @param studentToSync
+     * @param studentToSync the person object with which to synchronize
      */
     void syncSpecialServiceGroups(Person studentToSync);
 
@@ -118,8 +118,8 @@ public interface PersonService extends AuditableCrudService<Person> {
 	/**
 	 * Return a person object for every personId where available.
 	 * 
-	 * @param personIds
-	 * @param sAndP
+	 * @param personIds the list of person UUIDs
+	 * @param sAndP Sorting, paging and status filters
 	 * @return A person object for every personId where available
 	 */
 	List<Person> peopleFromListOfIds(List<UUID> personIds, SortingAndPaging sAndP);
@@ -149,6 +149,7 @@ public interface PersonService extends AuditableCrudService<Person> {
      *            Also searches the External Database for the identifier, creating a Person if an ExternalPerson
      *            record exists.
      * @param commitPerson If true, saves the syncd person in the database.
+	 * @param isStudent isStudent boolean
      * @return The specified Person instance.
      * @throws ObjectNotFoundException If the supplied identifier does not exist in the database at all
      */
@@ -168,6 +169,8 @@ public interface PersonService extends AuditableCrudService<Person> {
      *            be null.
      *            Also searches the External Database for the identifier,
      *            creating a Person if an ExternalPerson record exists..
+	 * @param commit commit boolean
+	 * @param isStudent the isStudent boolean
      * @exception ObjectNotFoundException
      *                If the supplied identifier does not exist in the database.
      * @return The specified Person instance.
@@ -183,7 +186,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * @param sAndP
 	 *            Sorting and paging parameters
 	 * @return List of person objects based on specified criteria
-	 * @throws ObjectNotFoundException
+	 * @throws ObjectNotFoundException if data not found
 	 */
 	List<Person> peopleFromCriteria(PersonSearchFormTO addressLabelSearchTO, final SortingAndPaging sAndP)
             throws ObjectNotFoundException;
@@ -220,9 +223,9 @@ public interface PersonService extends AuditableCrudService<Person> {
      * This method only returns coaches that have already been sync'd into
      * local person records by some other mechanism.</em>
      *
-     * @param sAndP
-     * @param HomeDepartment
-     * @return
+     * @param sAndP Sorting and paging parameters
+     * @param HomeDepartment the home department
+     * @return List of all coaches
      */
 	PagingWrapper<CoachPersonLiteTO> getAllCoachesLite(final SortingAndPaging sAndP, String HomeDepartment);
 
@@ -244,8 +247,8 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
 	 * Get a list of all assigned Coaches where you don't need the complete Person graphs by sAndP and homeDepartment.
      *
-	 * @param sAndP
-	 * @return
+	 * @param sAndP Sorting and paging parameters
+	 * @return List of all <em>assigned</em> coaches
 	 */
 	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP);
 
@@ -254,9 +257,9 @@ public interface PersonService extends AuditableCrudService<Person> {
      * {@link #getAllAssignedCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}.
      * Get a list of all assigned Coaches where you don't need the complete Person graphs by sAndP and homeDepartment.
      *
-     * @param sAndP
-     * @param homeDepartment
-     * @return
+     * @param sAndP sorting and paging parameters
+     * @param homeDepartment the home department
+     * @return list of all assigned coaches
      */
 	PagingWrapper<CoachPersonLiteTO> getAllAssignedCoachesLite(SortingAndPaging sAndP, String homeDepartment);
 
@@ -279,7 +282,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * <code>PagingWrapper</code></p>
 	 *
 	 * @param personNameComparator null OK
-	 * @return
+	 * @return list of persons
 	 */
 	SortedSet<Person> getAllCurrentCoaches(Comparator<Person> personNameComparator);
 
@@ -294,36 +297,36 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * to {@link #getAllCurrentCoaches(java.util.Comparator)}'s
 	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}</em>
 	 *
-	 * @param sortBy
-	 * @return
+	 * @param sortBy sorting and paging parameters
+	 * @return list of coaches
 	 */
 	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy, String homeDepartment);
 
     /**
      * Gets all current coaches use CoachLite model
-     * @param sortBy
-     * @return
+     * @param sortBy sorting and paging parameters
+     * @return list of coaches
      */
 	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy);
 
     /**
      * Loads a Person
-     * @param id
-     * @return
+     * @param id person UUID to load
+     * @return the Person object
      */
 	Person load(UUID id);
 
     /**
      * Create a user account with specified authorities
-     * @param username
-     * @param authorities
-     * @return
+     * @param username the username
+     * @param authorities collection of authorities
+     * @return teh Person object
      */
 	Person createUserAccount(String username, Collection<GrantedAuthority> authorities);
 
     /**
      * Sets the PersonAttributes Service
-     * @param personAttributesService
+     * @param personAttributesService the PersonAttributesService to set
      */
 	void setPersonAttributesService(final PersonAttributesService personAttributesService);
 
@@ -352,7 +355,7 @@ public interface PersonService extends AuditableCrudService<Person> {
     /**
      * Get DisabilityReport for person(s) by criteria in the PersonSearchForm
      * @param form
-     * @param sAndP
+     * @param sAndP Sorting and paging parameters
      * @return
      * @throws ObjectNotFoundException
      */
@@ -361,10 +364,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 
     /**
      * Get Student Report(s) based on Sorting and Paging and criteria in PersonSearchForm
-     * @param personSearchFormTO
-     * @param sAndP
-     * @return
-     * @throws ObjectNotFoundException
+     * @param personSearchFormTO the person search form transfer object
+     * @param sAndP Sorting and paging parameters
+     * @return the list of student report transfer objects
+     * @throws ObjectNotFoundException if data is not found
      */
 	 PagingWrapper<BaseStudentReportTO> getStudentReportTOsFromCriteria(final PersonSearchFormTO personSearchFormTO,
                                                         final SortingAndPaging sAndP) throws ObjectNotFoundException;
@@ -377,22 +380,22 @@ public interface PersonService extends AuditableCrudService<Person> {
 
     /**
      * Returns a Person's school_id based on their UUID person.id
-     * @param personId
-     * @return
-     * @throws ObjectNotFoundException
+     * @param personId the person UUID
+     * @return the school id
+     * @throws ObjectNotFoundException if person is not found
      */
 	String getSchoolIdForPersonId(UUID personId) throws ObjectNotFoundException;
 
     /**
      * Removes from session the supplied model
-     * @param model
+     * @param model the Person model
      */
 	void evict(Person model);
 
     /**
      * Get a student's assigned coach uuid that corresponds to the coaches person.id (if set)
-     * @param obj
-     * @return
+     * @param obj the person transfer object
+     * @return the coach UUID
      */
 	UUID getCoachIdForStudent(PersonTO obj);
 }

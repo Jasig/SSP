@@ -47,9 +47,9 @@ public interface TaskService
 	/**
 	 * Get all tasks for the Person in the given completion state
 	 * 
-	 * @param person
-	 * @param complete
-	 * @param requester
+	 * @param person the person object
+	 * @param complete true if complete
+	 * @param requester the SspUser making the request
 	 * @param sAndP
 	 *            sorting and paging options
 	 * @return All tasks for the Person in the given completion state
@@ -60,8 +60,8 @@ public interface TaskService
 	/**
 	 * Get all tasks for the Session
 	 * 
-	 * @param sessionId
-	 * @param sAndP
+	 * @param sessionId the session id
+	 * @param sAndP sorting and paging options
 	 * @return All tasks for the Session
 	 */
 	List<Task> getAllForSessionId(final String sessionId,
@@ -70,9 +70,9 @@ public interface TaskService
 	/**
 	 * Get all tasks for the Session in the given completion state
 	 * 
-	 * @param sessionId
-	 * @param complete
-	 * @param sAndP
+	 * @param sessionId the session id
+	 * @param complete true if complete
+	 * @param sAndP sorting and paging options
 	 * @return All tasks for the Session in the given completion state
 	 */
 	List<Task> getAllForSessionId(String sessionId, boolean complete,
@@ -81,7 +81,7 @@ public interface TaskService
 	/**
 	 * Get all tasks which need to have reminders sent
 	 * 
-	 * @param sAndP
+	 * @param sAndP sorting and paging options
 	 * @return All tasks which need to have reminders sent
 	 */
 	List<Task> getAllWhichNeedRemindersSent(SortingAndPaging sAndP);
@@ -89,40 +89,40 @@ public interface TaskService
 	/**
 	 * Mark the task as complete
 	 * 
-	 * @param taskId
+	 * @param taskId the Task object
 	 */
 	void markTaskComplete(Task taskId);
 
 	/**
 	 * Mark the task as incomplete
 	 * 
-	 * @param taskId
+	 * @param taskId the Task object
 	 */
 	void markTaskIncomplete(Task taskId);
 
 	/**
 	 * Mark the task with the given completion status;
-	 * 
-	 * @param task
-	 * @param complete
+	 *
+	 * @param task the Task object
+	 * @param complete true if complete
 	 */
 	void markTaskCompletion(Task task, boolean complete);
 
 	/**
 	 * Set the sent date for the task to today
-	 * 
-	 * @param taskId
+	 *
+	 * @param taskId the Task object
 	 */
 	void setReminderSentDateToToday(Task taskId);
 
 	/**
 	 * Get all tasks for the person, challenge referral, and completion status.
 	 * 
-	 * @param person
-	 * @param complete
-	 * @param challengeReferral
-	 * @param requester
-	 * @param sAndP
+	 * @param person the person object
+	 * @param complete true if complete
+	 * @param challengeReferral the challenge referral
+	 * @param requester the SspUser making the request
+	 * @param sAndP sorting and paging options
 	 * @return All tasks for the person, challenge referral, and completion
 	 *         status.
 	 */
@@ -134,9 +134,9 @@ public interface TaskService
 	/**
 	 * Get all tasks for the session, challenge referral, and completion status.
 	 * 
-	 * @param sessionId
-	 * @param complete
-	 * @param challengeReferral
+	 * @param sessionId the session id
+	 * @param complete true if complete
+	 * @param challengeReferral the challenge referral
 	 * @param sAndP
 	 *            sorting and paging options
 	 * @return All tasks for the session, challenge referral, and completion
@@ -152,6 +152,7 @@ public interface TaskService
 	 * @param person
 	 *            Person
 	 * @param requester
+	 *            the SspUser making the request
 	 * @param sAndP
 	 *            sorting and paging options
 	 * @return All tasks for the person, grouped by Task Group
@@ -163,14 +164,15 @@ public interface TaskService
 	/**
 	 * Create a task for a person using the challenge referral and sessionId
 	 * 
-	 * @param challenge
-	 * @param challengeReferral
-	 * @param person
-	 * @param sessionId
+	 * @param challenge the challenge
+	 * @param challengeReferral the challenge referral
+	 * @param person the person object
+	 * @param sessionId the session id
 	 * @return Created task
 	 * @throws ObjectNotFoundException
 	 *             If referenced data does not exist
 	 * @throws ValidationException
+	 *             If data is not valid
 	 */
 	Task createForPersonWithChallengeReferral(Challenge challenge,
 			ChallengeReferral challengeReferral, Person person, String sessionId)
@@ -179,13 +181,13 @@ public interface TaskService
 	/**
 	 * Create a custom task for a person
 	 * 
-	 * @param name
-	 * @param description
-	 * @param student
-	 * @param sessionId
+	 * @param name the task name
+	 * @param description the task description
+	 * @param student the student
+	 * @param sessionId the session id
 	 * @return Created task
-	 * @throws ObjectNotFoundException
-	 * @throws ValidationException
+	 * @throws ObjectNotFoundException If referenced data does not exist
+	 * @throws ValidationException If data is not valid
 	 */
 	Task createCustomTaskForPerson(String name, String description,
 			Person student, String sessionId) throws ObjectNotFoundException,
@@ -194,10 +196,10 @@ public interface TaskService
 	/**
 	 * Send a notice to the student about the task
 	 * 
-	 * @param customTask
-	 * @throws ObjectNotFoundException
-	 * @throws ValidationException
-	 * @throws SendFailedException
+	 * @param customTask the task
+	 * @throws ObjectNotFoundException if data is not found
+	 * @throws ValidationException if data is invalid
+	 * @throws SendFailedException if unable to send notice
 	 */
 	void sendNoticeToStudentOnCustomTask(Task customTask
 			) throws ObjectNotFoundException,

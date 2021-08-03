@@ -61,6 +61,8 @@ public interface PersonSearchService {
 	 * @throws ObjectNotFoundException
 	 *             if program status or other reference data passed does not
 	 *             exist in the database.
+	 * @throws ValidationException
+	 *             if data not found
 	 */
 	@Deprecated
 	PagingWrapper<PersonSearchResult> searchBy(ProgramStatus programStatus,
@@ -72,8 +74,8 @@ public interface PersonSearchService {
 	/**
 	 * @deprecated Likely overly restrictive for most use cases. Consider using
 	 *   {@link #searchPersonDirectory(org.jasig.ssp.model.PersonSearchRequest)} instead.
-	 * @param from
-	 * @return
+	 * @param from the person search request form
+	 * @return the wrapped search result
 	 */
 	@Deprecated
 	PagingWrapper<PersonSearchResult2> search2(PersonSearchRequest from);
@@ -97,6 +99,8 @@ public interface PersonSearchService {
 	 *            {@link ProgramStatus#ACTIVE_ID}.
 	 * @param coach
 	 *            coach (advisor); required
+	 * @param personTableType
+	 *            the person table type
 	 * @param sAndP
 	 *            Sorting and paging parameters
 	 * @return the case load for the specified {@link CoachPersonLiteTO}
@@ -156,7 +160,7 @@ public interface PersonSearchService {
 	 * results are not necessarily reliable for tracking individual coach
 	 * caseloads, especially if students are reassigned frequently.</p>
 	 *
-	 * @param studentTypeIds
+	 * @param studentTypeIds the list of student type UUIDs
 	 * @param programStatusDateFrom status effectiveness lower bound, inclusive.
 	 *                              null is a wildcard, i.e. "beginning of time".
 	 *                              Statuses with effectiveness starting prior
@@ -171,7 +175,8 @@ public interface PersonSearchService {
 	 *                            effective range just needs to
 	 *                            <em>intersect</em> the range from this to
 	 *                            <code>programStatusDateFrom</code>
-	 * @return
+	 * @param homeDepartment the home department
+	 * @return the case load counts
 	 */
 	Collection<CoachCaseloadRecordCountForProgramStatus>
 		caseLoadCountsByStatus(List<UUID> studentTypeIds,
