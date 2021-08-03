@@ -358,8 +358,8 @@ public class PersonSearchServiceImpl implements PersonSearchService {
 
     /**
      * Returns full result. Probably slow, not for regular or quick searching!
-     * @param form
-     * @return
+     * @param form the person search request form data
+     * @return the list of search results
      */
     @Override
     @Transactional

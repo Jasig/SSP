@@ -114,7 +114,7 @@ public class SecurityServiceImpl implements SecurityService {
 	 * call sites before changing behaviors here. This is an idiosyncratic
 	 * function, but some of those idiosyncracies are depended on.
 	 *
-	 * @return
+	 * @return the current user
 	 */
 	@Override
 	public SspUser currentUser() {
@@ -249,7 +249,7 @@ public class SecurityServiceImpl implements SecurityService {
 	 * is not considered authenticated (b/c that's not how SpringSecurity thinks
 	 * about it), but we do have code that depends on that fact.
 	 *
-	 * @return
+	 * @return the ssp user
 	 */
 	@Override
 	public SspUser currentlyAuthenticatedUser() {

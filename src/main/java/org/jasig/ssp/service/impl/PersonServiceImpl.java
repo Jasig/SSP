@@ -469,9 +469,9 @@ public class PersonServiceImpl implements PersonService {
 	 *            be null.
 	 *            Also searches the External Database for the identifier,
 	 *            creating a Person if an ExternalPerson record exists..
-	 * @param commitPerson
-	 * @return
-	 * @throws ObjectNotFoundException
+	 * @param commitPerson commits if true
+	 * @return the person object
+	 * @throws ObjectNotFoundException if the data is not found
      */
 	@Override
 	public Person getSyncedByUsername(final String username, final boolean commitPerson,
@@ -501,9 +501,9 @@ public class PersonServiceImpl implements PersonService {
 
     /**
      * Returns internal-only person by Username (Doesn't sync from external)
-     * @param username
-     * @return
-     * @throws ObjectNotFoundException
+     * @param username the user name
+     * @return the person object
+     * @throws ObjectNotFoundException if data is not found
      */
 	@Override
 	public Person personFromUsername(final String username) throws ObjectNotFoundException {
@@ -519,9 +519,9 @@ public class PersonServiceImpl implements PersonService {
 
     /**
      * Returns internal-only person by SchoolId (Doesn't sync from external)
-     * @param schoolId
-     * @return
-     * @throws ObjectNotFoundException
+     * @param schoolId the school id
+     * @return the person object
+     * @throws ObjectNotFoundException if the person is not found
      */
     @Override
     public Person personFromSchoolId(final String schoolId) throws ObjectNotFoundException {
@@ -538,7 +538,7 @@ public class PersonServiceImpl implements PersonService {
     /**
      * Syncs SpecialServiceGroups for specified Person. Helper method to sync SSGs after
      *  saving a Person but where getInternalOrExternalPersonBySchoolId was run with commit == false.
-     * @param studentToSync
+     * @param studentToSync the person to sync
      */
     @Override
     public void syncSpecialServiceGroups(final Person studentToSync) {

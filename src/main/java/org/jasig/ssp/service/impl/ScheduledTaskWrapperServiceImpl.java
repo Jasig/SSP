@@ -1,4 +1,4 @@
-/**
+	/**
  * Licensed to Apereo under one or more contributor license
  * agreements. See the NOTICE file distributed with this work
  * for additional information regarding copyright ownership.
@@ -545,7 +545,7 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Tries to reschedule task
-     * @param task
+     * @param task the task to reschedule
      */
 	protected void maybeReschedule(Task task) {
 		Pair<String,Trigger> configuredOrDefault = configuredOrDefaultTrigger(task);
@@ -589,7 +589,7 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Cancels execution of task
-     * @param task
+     * @param task the task to cancel
      */
 	protected void cancel(Task task) {
 		if ( task.execution != null ) {
@@ -604,8 +604,8 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Schedules task
-     * @param task
-     * @param triggerAndExpression
+     * @param task the task to schedule
+     * @param triggerAndExpression the trigger and expression pair
      */
 	protected void schedule(Task task, Pair<String,Trigger> triggerAndExpression) {
 		if ( triggerAndExpression == null ) {
@@ -620,8 +620,8 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Helper method to return configured trigger or if misconfiguration or invalid, uses default.
-     * @param task
-     * @return
+     * @param task the task
+     * @return the trigger configured
      */
 	protected Pair<String,Trigger> configuredOrDefaultTrigger(Task task) {
 		if ( task.configuredTrigger == null || task.configuredTrigger instanceof BadConfigTrigger ) {
@@ -632,9 +632,9 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Reads trigger config checking if invalid.
-     * @param configName
-     * @return
-     * @throws BadTriggerConfigException
+     * @param configName the configuration name
+     * @return the tirgger configured
+     * @throws BadTriggerConfigException the data is not found
      */
 	protected Pair<String,Trigger> readNewTriggerConfig(String configName)
 	throws BadTriggerConfigException {
@@ -657,9 +657,9 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Parses trigger config checking for mis-configuration periodic vs cron
-     * @param configValue
-     * @return
-     * @throws BadTriggerConfigException
+     * @param configValue the configuration value
+     * @return the trigger
+     * @throws BadTriggerConfigException the data is not found
      */
 	protected Trigger parseTriggerConfig(String configValue)
 	throws BadTriggerConfigException {
@@ -687,9 +687,9 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Used above for checking if trigger is periodic
-     * @param configValue
-     * @return
-     * @throws BadTriggerConfigException
+     * @param configValue the configuration value
+     * @return the trigger
+     * @throws BadTriggerConfigException the data is not found
      */
 	protected Trigger tryExpressionAsPeriodicTrigger(String configValue)
 	throws BadTriggerConfigException {
@@ -766,9 +766,9 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Used above to check if trigger is cron
-     * @param configValue
-     * @return
-     * @throws BadTriggerConfigException
+     * @param configValue the configuration value
+     * @return the trigger
+     * @throws BadTriggerConfigException the data is not found
      */
 	protected Trigger tryExpressionAsCronTrigger(String configValue)
 	throws BadTriggerConfigException {
@@ -793,8 +793,10 @@ public class ScheduledTaskWrapperServiceImpl
 	 * the replace/restore actually works.</p>
 	 *
 	 * @see #isCurrentAuthenticationAuditable()
-	 * @param work
-	 * @throws AuthenticationException
+	 * @param work the runnable work
+	 * @param runAsId the UUID to which to run as
+	 * @return runnable
+	 * @throws AuthenticationException if invalid authentication
 	 */
 	protected Runnable withMaybeSudo(final Runnable work, final UUID runAsId) throws AuthenticationException {
 		return new Runnable() {
@@ -834,7 +836,7 @@ public class ScheduledTaskWrapperServiceImpl
 	 * </ol>
 	 *
 	 * @see #withSudo(Runnable)
-	 * @return
+	 * @return true if current authentication is auditable
 	 */
 	protected boolean isCurrentAuthenticationAuditable() {
 		return securityService.currentlyAuthenticatedUser() != null;
@@ -861,8 +863,9 @@ public class ScheduledTaskWrapperServiceImpl
 	 * go.</p>
 	 *
 	 * @param work the runnable work
-	 * @return runabble
-	 * @throws AuthenticationException
+	 * @param runAsId the UUID to which to run as
+	 * @return runnable
+	 * @throws AuthenticationException if authentication error
 	 */
 	protected Runnable withSudo(final Runnable work, final UUID runAsId) throws AuthenticationException {
 		return new Runnable() {
@@ -924,9 +927,9 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Helper method to call as sudo see above withSudo method
-     * @param work
-     * @return
-     * @throws AuthenticationException
+     * @param work the runnable work
+     * @return runnable
+     * @throws AuthenticationException if authentication is invalid
      */
 	protected Runnable withSudo(Runnable work) throws AuthenticationException {
 		return withSudo(work, null);
@@ -937,6 +940,8 @@ public class ScheduledTaskWrapperServiceImpl
 	 * depend on after a HTTP request. In particular, this is necessary to
 	 * ensure release of {@code ThreadLocals} set by virtue of {@link SspUser}
 	 * interactions.
+	 * @param work the runnable work
+	 * @return runnable
 	 */
 	protected Runnable withTaskCleanup(final Runnable work) {
 		return new Runnable() {
@@ -957,8 +962,8 @@ public class ScheduledTaskWrapperServiceImpl
     /**
      * Joins existing hibernate session or creates a new
      *  one when a task needs to run and cleanup.
-     * @param work
-     * @return
+     * @param work the runnable work
+     * @return runnable
      */
 	protected Runnable withHibernateSession(final Runnable work) {
 		return new Runnable() {
@@ -999,10 +1004,10 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Helper method for job scheduling and threading
-     * @param taskName
-     * @param work
-     * @param isStatusedTask
-     * @return
+     * @param taskName the task name
+     * @param work the runnable work
+     * @param isStatusedTask true if statused task
+     * @return runnable
      */
 	protected Runnable withTaskName(final String taskName, final Runnable work, final boolean isStatusedTask) {
 		return new Runnable() {
@@ -1043,7 +1048,11 @@ public class ScheduledTaskWrapperServiceImpl
 	 * typically need for execution of a background task and returns the
 	 * resulting {@code Runnable} for subsequent execution.
 	 *
-	 * @param work
+	 * @param taskName the task name
+	 * @param work the runnable work
+	 * @param isStatusedTask true if task is statused
+	 * @param runAsId the UUID to which to run as
+	 * @return runnable
 	 */
 	protected Runnable withTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId) {
 		return withTaskName(taskName, withHibernateSession(withTaskCleanup(withMaybeSudo(work, runAsId))), isStatusedTask);
@@ -1056,7 +1065,10 @@ public class ScheduledTaskWrapperServiceImpl
 	 * for why it's important to have a non-anonymous current
 	 * {@link Authentication} before actually executing a background task.
 	 *
-	 * @param work
+	 * @param taskName the task name
+	 * @param work the runnable work
+	 * @param isStatusedTask true if task is statused
+	 * @param runAsId the UUID to which to run as
 	 */
 	@Override
 	public void execWithTaskContext(String taskName, Runnable work, boolean isStatusedTask, UUID runAsId) {
@@ -1073,8 +1085,8 @@ public class ScheduledTaskWrapperServiceImpl
      * executed the result. Please see {@link #withSudo(Runnable)} in particular
      * for why it's important to have a non-anonymous current
      * {@link Authentication} before actually executing a background task.
-     * @param taskName
-     * @param work
+     * @param taskName the task name
+     * @param work the runnable work
      */
 	public void execWithTaskContext(String taskName, Runnable work) {
 		execWithTaskContext(taskName, work, true, null);
@@ -1099,9 +1111,11 @@ public class ScheduledTaskWrapperServiceImpl
 	 * task invocation with that behavior, if necessary. E.g. see
 	 * {@link #execBatchedTaskWithName(String, org.jasig.ssp.service.external.BatchedTask)}</p>
 	 *
-	 * @param batchReturnType
-	 * @param <T>
-	 * @return
+	 * @param batchReturnType the batch return type
+	 * @param <T> callable
+	 * @param isStatusedTask true if task is statused
+	 * @param runAsId the uuid to which to run as
+	 * @return callable
 	 */
 	protected <T> CallableExecutor<T> newTaskBatchExecutor(final Class<T> batchReturnType, final boolean isStatusedTask, final UUID runAsId) {
 		return new CallableExecutor<T>() {
@@ -1129,10 +1143,10 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Used to run a batched task checking if background jobs turned off or not for this server
-     * @param taskName
-     * @param batchedTask
-     * @param isStatusedTask
-     * @param runAsId
+     * @param taskName the task name
+     * @param batchedTask the batched task
+     * @param isStatusedTask true if the task is statused
+     * @param runAsId the UUID to which to run as
      */
 	@Override
 	public void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask, final boolean isStatusedTask, final UUID runAsId) {
@@ -1150,8 +1164,8 @@ public class ScheduledTaskWrapperServiceImpl
 
     /**
      * Helper method to execute Scheduled Task using above execBatchedTaskWithName method above.
-     * @param taskName
-     * @param batchedTask
+     * @param taskName the task name
+     * @param batchedTask the batched task
      */
 	protected void execBatchedTaskWithName(final String taskName, final BatchedTask batchedTask) {
 		execBatchedTaskWithName(taskName, batchedTask, true, null);

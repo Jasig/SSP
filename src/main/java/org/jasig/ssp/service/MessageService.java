@@ -141,6 +141,8 @@ public interface MessageService {
 	 *             loaded.
 	 * @throws UnsupportedEncodingException
 	 * 			   If encoding not supported
+	 * @throws ValidationException
+	 * 			   If data is invalid
 	 */
 	boolean sendMessage(Message message) throws SendFailedException,
 			ObjectNotFoundException, UnsupportedEncodingException, ValidationException;

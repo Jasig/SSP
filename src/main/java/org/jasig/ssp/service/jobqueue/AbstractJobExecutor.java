@@ -43,8 +43,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * (Hopefully) generically useful common behavior for any {@link JobExecutor}
- * @param <P>
- * @param <T>
+ * @param <P> P
+ * @param <T> T
  */
 public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 
@@ -107,8 +107,8 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	 * can be overriden to control how execution results are translated to workflow results.
 	 *
 	 *
-	 * @param jobId
-	 * @return
+	 * @param jobId the job id
+	 * @return the job execution result
 	 */
 	@Override
 	public JobExecutionResult<JobWorkflowStatusDescription> execute(final UUID jobId) {
@@ -196,9 +196,9 @@ public abstract class AbstractJobExecutor<P,T> implements JobExecutor<P> {
 	 * is typically handled by
 	 * {@link #afterExecuteJob(org.jasig.ssp.model.jobqueue.Job, org.jasig.ssp.service.jobqueue.JobExecutionResult)}</p>
 	 *
-	 * @param jobId
-	 * @return
-	 * @throws JobExecutionException
+	 * @param jobId the job id
+	 * @return the job execution result
+	 * @throws JobExecutionException if job execution is not successful
 	 */
 	protected JobExecutionResult<T> executeInTransaction(UUID jobId) throws JobExecutionException {
 		final Job job = findJobOrFail(jobId);

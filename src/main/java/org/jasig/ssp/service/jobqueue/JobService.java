@@ -44,14 +44,14 @@ public interface JobService {
 	 *
 	 * <p>Implemention may choose to support {@code null} names, but this is discouraged.</p>
 	 *
-	 * @param jobExecutor
+	 * @param jobExecutor the job executor
 	 */
 	void registerJobExecutor(JobExecutor jobExecutor);
 
 	/**
 	 * The opposite of {@link #registerJobExecutor(JobExecutor)}.
 	 *
-	 * @param name
+	 * @param name the name
 	 * @return the deregistered executor, if any
 	 */
 	JobExecutor deregisterJobExecutor(String name);
@@ -59,7 +59,7 @@ public interface JobService {
 	/**
 	 * Get a reference to a {@link JobExecutor} registered under the given name
 	 *
-	 * @param name
+	 * @param name the name
 	 * @return {@code null} if no executor registered under the given name
 	 */
 	JobExecutor findRegisteredJobExecutor(String name);
@@ -86,7 +86,7 @@ public interface JobService {
 	 * @param executionSpec serialized representation of the work parameters to be passed to the {@link JobExecutor}
 	 * @param executionState initial state of the work to be performed; typically {@code null}
 	 * @return the created {@link Job}
-	 * @throws ValidationException
+	 * @throws ValidationException if the data is invalid
 	 */
 	Job queue(UUID ownerPersonId, UUID runAsPersonId, String executionComponentName,
 			   String executionSpec, String executionState) throws ValidationException;
@@ -94,8 +94,8 @@ public interface JobService {
 	/**
 	 * Transition the given job to {@link org.jasig.ssp.model.jobqueue.WorkflowStatus#EXECUTING}.
 	 *
-	 * @param jobId
-	 * @return
+	 * @param jobId the job id
+	 * @return the job
 	 * @throws ObjectNotFoundException if the {@link Job} is not on file
 	 */
 	Job markExecuting(UUID jobId) throws ObjectNotFoundException;
@@ -103,9 +103,9 @@ public interface JobService {
 	/**
 	 * Transition the job to a workflow-terminated state described by the given {@link JobExecutionResult}
 	 *
-	 * @param jobId
-	 * @param result
-	 * @return
+	 * @param jobId the job id
+	 * @param result the job execution result
+	 * @return the job
 	 * @throws ObjectNotFoundException if the {@link Job} is not on file
 	 */
 	Job markTerminated(UUID jobId, JobExecutionResult<JobWorkflowStatusDescription> result)  throws ObjectNotFoundException;
@@ -115,17 +115,17 @@ public interface JobService {
 	 * store incremental, batched progress against the total work requested, sometimes in a different transaction
 	 * from the work itself.
 	 *
-	 * @param execState
-	 * @param job
-	 * @return
+	 * @param execState the execution state
+	 * @param job the job
+	 * @return the job
 	 */
 	Job updateExecutionState(String execState, Job job);
 
 	/**
 	 * Look up a {@link Job} by its PK.
 	 *
-	 * @param jobId
-	 * @return
+	 * @param jobId the job id
+	 * @return the job
 	 */
 	Job get(UUID jobId);
 }

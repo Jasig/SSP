@@ -298,6 +298,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 	 * {@link #getAllCoaches(org.jasig.ssp.util.sort.SortingAndPaging)}</em>
 	 *
 	 * @param sortBy sorting and paging parameters
+	 * @param homeDepartment  the home department
 	 * @return list of coaches
 	 */
 	SortedSet<CoachPersonLiteTO> getAllCurrentCoachesLite(Comparator<CoachPersonLiteTO> sortBy, String homeDepartment);
@@ -354,10 +355,10 @@ public interface PersonService extends AuditableCrudService<Person> {
 
     /**
      * Get DisabilityReport for person(s) by criteria in the PersonSearchForm
-     * @param form
+     * @param form the person search form transfer object
      * @param sAndP Sorting and paging parameters
-     * @return
-     * @throws ObjectNotFoundException
+     * @return list of disability services report transfer objects
+     * @throws ObjectNotFoundException if data is not found
      */
 	PagingWrapper<DisabilityServicesReportTO> getDisabilityReport(PersonSearchFormTO form, final SortingAndPaging sAndP)
             throws ObjectNotFoundException;
@@ -374,7 +375,7 @@ public interface PersonService extends AuditableCrudService<Person> {
 
     /**
      * Syncs Coaches between internal and external
-     * @return
+     * @return list of persons
      */
 	PagingWrapper<Person> syncCoaches();
 

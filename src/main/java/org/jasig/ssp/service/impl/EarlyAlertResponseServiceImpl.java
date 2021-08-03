@@ -166,10 +166,10 @@ public class EarlyAlertResponseServiceImpl extends // NOPMD by jon.adams
 	 * @deprecated Use {@link EarlyAlertResponseServiceImpl#create(org.jasig.ssp.transferobject.EarlyAlertResponseTO)}
 	 * instead. <em>This has already been reimplemented to throw an
 	 * <code>UnsupportedOperationException</code></em>
-	 * @param earlyAlertResponse
-	 * @return
-	 * @throws ObjectNotFoundException
-	 * @throws ValidationException
+	 * @param earlyAlertResponse the EA response
+	 * @return the newly created EA response
+	 * @throws ObjectNotFoundException if data is not found
+	 * @throws ValidationException if the data is invalid
 	 */
 	@Deprecated
 	@Override

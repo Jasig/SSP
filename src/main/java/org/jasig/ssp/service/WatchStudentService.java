@@ -51,8 +51,8 @@ public interface WatchStudentService extends PersonAssocAuditableService<WatchSt
 	JobTO changeInBulk(BulkWatchChangeRequestForm form) throws IOException, ObjectNotFoundException, ValidationException;
 
     /** Returns a list of watchers for a student
-     * @param studentId
-     * @return
+     * @param studentId the student UUID
+     * @return list of watchers for a student
      */
 	PagingWrapper<Person> getWatchersForStudent(UUID studentId);
 }
